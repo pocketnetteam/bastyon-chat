@@ -4,7 +4,7 @@
     "private": true,
     "scripts": {
         "serve": "vue-cli-service serve",
-        "build": "node themes.js && vue-cli-service build --dest ../pocketnet/chat",
+        "build": "node themes.js && vue-cli-service build --dest C:/inetpub/wwwroot/pocketnet/chat",
         "lint": "vue-cli-service lint",
         "themes": "node themes.js",
         "buildpocketnet": "npm run build -- --target wc-async --inline-vue --name matrix-element src/App.vue",

@@ -332,7 +332,7 @@ export default {
 			setTimeout(() => {
 
 				if (this.$route.name !== 'chats' &&
-					this.$route.name !== 'chat' &&
+					/*this.$route.name !== 'chat' &&*/
 					this.$route.name !== 'contact' &&
 					this.$route.name !== 'chatInfo' &&
 					this.$route.name !== 'publicPreview' &&
@@ -723,7 +723,7 @@ export default {
 				core.user.getContacts()
 
 				if (this.$route.name !== 'chats' &&
-					this.$route.name !== 'chat' &&
+					/*this.$route.name !== 'chat' &&*/
 					this.$route.name !== 'chatInfo' &&
 					this.$route.name !== 'publicPreview' &&
 					this.$route.name !== 'chatSettings' &&
