@@ -1,0 +1,77 @@
+.nameWrapper
+  display: flex
+  align-items: center
+  justify-content: center
+.roomMuted
+    margin-left: 3px
+    i
+      font-size: 0.7em
+.editButton
+  display: flex
+  justify-content: center
+  align-items: center
+
+  i
+    font-size: 1.5em
+
+.nameline
+  overflow: hidden
+  white-space: nowrap
+  text-overflow: ellipsis
+
+/deep/
+.nameline
+  max-width: 250px
+  overflow: hidden
+  white-space: nowrap
+  text-overflow: ellipsis
+
+/deep/
+#topheader
+  &.minimized
+    &.fix
+      background: transparent
+      overflow: inherit
+
+
+
+.donationModalBody
+	padding: 1em
+	display: flex
+	flex-direction: column
+
+	span
+		color: $black-color-text-main
+
+	input,
+	select
+		margin-top: 0.5em
+		margin-bottom: 1.5em
+		border: 1px solid $black-color-text-main
+		border-radius: 3px
+		padding: .5em
+
+		&.disabled
+			color: rgba($black-color-text-light, 0.8)
+			border: 1px solid rgba($black-color-text-light, 0.5)
+
+	button
+		margin-top: 1em
+
+		i
+			margin-right: .2em
+
+	.totalAmount
+		font-weight: bold
+		margin-left: .5em
+		margin-top: .5em
+		margin-bottom: 1em
+
+	.error
+		color: $black-color-bad
+		text-align: center
+
+	.linepreloader
+		text-align: center
+		height: 29px
+		margin-top: 1em

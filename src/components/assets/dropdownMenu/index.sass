@@ -1,0 +1,149 @@
+.outer-div
+  line-height: inherit
+  border-radius: 50%
+
+.dropDownIcon
+  width: 35px
+  height: 35px
+  line-height: 35px
+  i
+    line-height: 35px!important
+
+.menuwrapper
+  padding-left : 2 * $r
+  padding-right : 2 * $r
+  padding-bottom : 2 * $r
+  position: absolute
+  z-index : 100
+  bottom : 0
+  left : 0
+  right : 0
+
+  /deep/ .items
+    max-height: 500px
+    overflow-y: auto
+    border-radius: 3px
+    padding-left: $r
+    padding-right: $r
+    padding-bottom : $r
+
+.dropdown
+  z-index: 10000
+  position: absolute
+  width : 100%
+  right : 0
+  height: auto
+  color: $color-text-common
+  +transition(0.3s)
+  bottom: -200 * $r
+  top : 200 * $r
+
+
+  .backgr
+    background: transparentize($color-bg-clear, 0.85)
+    backdrop-filter: blur(5px)
+    -webkit-backdrop-filter: blur(5px)
+    position: fixed
+    z-index : 100
+    left : 0
+    right : 0
+    top : 0
+    bottom : 0
+    opacity: 0
+    +transition(0.3s)
+
+
+  &.visible
+    bottom: 0
+    top : 0
+
+    .backgr
+      opacity: 1
+
+  /deep/
+    .contentWrapper
+      margin-top : 0.5 * $r
+      border-radius: 10px
+      overflow: hidden
+      border-top : 1px solid fade($color-text-slight, 0.5)
+      +shadowSmaller()
+
+  .cancelWrapper
+    .menu-item
+      margin-top : 0
+      background: transparent
+      box-shadow: none
+      +shadowSmallers()
+      
+  .menu-item
+    padding: $r
+    background: $color-bg-clear
+    border-top : 1px solid fade($color-text-slight, 0.5)
+    line-height: 44px
+    margin-top : 0.5 * $r
+    display: flex
+    border-radius: 10px
+    +shadowSmaller()
+
+    .title
+      flex-grow: 2
+      padding-right: 44px
+      text-align: center
+
+    .iconWrapper
+      width: 44px
+      text-align: center
+
+  .blocker
+    position: fixed
+    top: 0
+    left: 0
+    bottom: 0
+    right: 0
+    content: ' '
+
+.cancelWrapper
+  border-radius: 3px
+  padding-left: $r
+  padding-right: $r
+  color : $color-text-slight
+
+.small
+  font-size: 0.85em
+/*.chatRightMenu
+  &.minimized
+    .dropdown
+      bottom: -300px*/
+/*.chatOneToOne
+  .dropdown
+      bottom: -294px*/
+
+.outer-div
+  &.mobile
+    .menuwrapper
+      position: fixed
+  &.minimized
+    position: static
+
+    .backgr
+      border-radius: 4px
+      height: 1000px
+      bottom : 0
+      top : auto
+      background: transparent
+      position: absolute
+
+    .dropdown
+      z-index: 10000
+      right : 0
+
+
+    .menuwrapper
+      border-radius: 4px
+      padding-top : $r
+
+      /deep/
+        .menu-item
+          margin-top : 0.5 * $r
+          border-radius: 5px
+          background: transparentize($color-bg-clear, 0.05)

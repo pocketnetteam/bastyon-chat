@@ -1,0 +1,169 @@
+
+.removeRoom
+  width: 62px
+  height: 100%
+  background: $color-bad
+  border-radius: 3px
+  i
+    color: white
+
+
+.generatekeys,
+.inviteUserDiv
+    margin-top: 0.5em
+    margin-bottom: 1em
+
+    .generatekeysButton,
+    .inviteButton
+      background-color: $color-orange
+      color: white
+      width: 100%
+      height: 34px
+      font-size: 0.9em
+      border-radius: 30px
+      position: relative
+      cursor: pointer
+
+      i
+        position : absolute
+        right : 0
+        top : 0
+        line-height : 34px
+        width : 50px
+        text-align : center
+        
+/deep/
+  .statusIcon
+    font-size: 0.8em
+.desktopList
+  .card-content
+    position: absolute
+    width: 100%
+    left : 0
+    right: 0
+    height: 60px
+    overflow: hidden
+
+.bout
+  .desktopList
+    .card-content
+      height: 70px
+
+.selectedForShare
+  background: transparentize(#000, 0.2)!important
+
+  .paddingwrapper
+    position: absolute
+    left : 50px
+    top : 100px
+    bottom : 100px
+    right : 50px
+    overflow: hidden
+    border-radius: 50%
+
+    .chatwrapper
+      position: absolute
+      background: #fff
+      left : -50px
+      top : -100px
+      bottom : -100px
+      right : -50px
+
+  /deep/ .chatInputWrapper
+    display: none
+
+
+
+.previewWrapper
+
+  &:nth-last-child(1)
+    border-bottom: 0
+
+.swipeout-list
+  display: flex
+  flex-direction: column
+
+.swipeout-action
+  display: flex
+  
+
+  >div
+    display: flex
+    align-items: center
+    padding: 0 3rem
+    cursor: pointer
+
+    &.action-panel-right
+      > div
+        background-color: dodgerblue
+        color: white
+
+        &:hover
+          background-color: darken(dodgerblue, 5%)
+
+  &.action-panel-left
+    > div:nth-of-type(even)
+      background-color: darkorchid
+      color: white
+
+      &:hover
+        background-color: darken(darkorchid, 5%)
+
+    > div:nth-of-type(odd)
+      background-color: dodgerblue
+      color: white
+
+      &:hover
+        background-color: darken(dodgerblue, 5%)
+
+.swipeout-list-item
+  flex: 1
+
+  &:last-of-type
+    border-bottom: none
+
+.swipeout-left
+  transform: translateX(-100%)
+
+/deep/ .swipeout 
+  
+  .swipeout-right
+    right: -1px
+
+
+.unauthorized,
+.startnewchat
+  padding : 4 * $r 0
+  text-align: center
+
+.unauthorized,
+.startnewchat
+  .buttonWrapper
+    padding : 2 * $r
+  .captionWrapper
+    padding : 2 * $r
+    text-align: center
+    span
+      font-size: 1.5em
+      font-weight: 100      
+
+
+.card
+  width: 100%
+  border-radius: 3px
+
+.inviteUserDivWrapper
+  +transition(0.3s)
+
+.chats-list
+  &.minimized
+    &:not(.active)
+      .unauthorized
+        display: none  
+      .startnewchat
+        display: none
+      .inviteUserDivWrapper
+        display: none
+
+.unauthorized.minimized:not(.active)
+  display: none

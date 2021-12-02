@@ -1,0 +1,62 @@
+
+.namebuttoncreate,
+.selectedtype,
+.type
+    padding :  2 * $r
+    display: flex
+    align-items: center
+    border-bottom: 1px solid transparentize($color-text-slight, 0.8)
+    white-space: nowrap
+    text-overflow: ellipsis
+    overflow: hidden
+    .icon
+        i
+            width: 30px
+            opacity: 0.7
+            font-size: 0.8em
+
+    span
+        font-size: 0.9em
+
+    button
+        white-space: nowrap
+        min-width: 0!important
+        width: 100%
+    input
+        width: auto
+
+    .completewrapper
+        flex-grow: 1
+        text-align: right
+
+.namebuttoncreate
+    padding-top : 0
+    padding-bottom: 0
+    >div
+        flex-grow: 1
+    input
+        width: 100%
+        padding-top : 2 * $r
+        padding-bottom: 2 * $r
+
+.selectedtype
+    background: $color-bg-clear
+    position: sticky
+    top : -1px
+    z-index: 12
+
+    .label
+        font-weight: 700
+        font-size: 0.8em
+
+.contactswrapper
+    /deep/
+        .namebuttoncreate
+            display: none
+        .searchWrapperEA
+            background: $color-bg-clear
+            position: sticky
+            top : -1px
+            z-index: 12
+            padding-bottom: $r
+

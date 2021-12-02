@@ -1,0 +1,53 @@
+.userspicwrapper
+  width: 44px
+  height: 44px
+  border-radius: 50%
+  background: $color-bg-gen
+  line-height: 44px
+  text-align: center
+  font-size: 0.8em
+  color : $color-text-light
+  position: relative
+
+  /deep/ .bgimage
+    border-radius: 50%
+.swiperWrapperFlex
+  margin : 0 auto
+.icon
+  position: absolute
+  right : 70%
+  top : 70%
+  font-size: 1em
+  width : 20px
+  height: 20px
+  line-height: 20px
+  background: transparent
+  border-radius: 20px
+  color : $color-text-slight
+  opacity: 0.8
+  z-index: 3
+
+  &.active
+    color: $color-text-second
+
+.unseen
+  position: absolute
+  width : 22px
+  height : 22px
+  right : -10%
+  bottom : -10%
+  background: transparentize($color-text-main, 0.1)
+  line-height:  22px
+  text-align: center
+  font-weight: 500
+  border-radius: 50%
+  z-index: 5
+  font-size: 0.6em
+  color : #fff
+
+.userspic
+  position: relative
+.iconPreview
+  width: 44px
+  height: 44px
+  border-radius: 50%

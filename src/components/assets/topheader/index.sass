@@ -1,0 +1,117 @@
+#topheader
+    background: $color-bg-clear
+    top : 0
+    left: 0
+    right: 0
+    z-index: 4
+    color : $color-text-common2
+    border-bottom : 1px solid $color-bg-common
+
+    .iconbutton
+        cursor: pointer
+
+    .headerLine
+        display: flex
+        align-items: center
+        padding: 0
+        height: 54px
+
+        >div
+            text-align: center
+
+        .iconsmall
+            width : 22px
+            min-width: 22px
+
+        .icon
+            color : $color-text-main
+            width : 44px
+            min-width: 44px
+
+        .rightaddIcons
+            margin-right: 11px
+
+        .leftaddIcon
+            margin-left: 11px
+
+        .infoPart
+            flex-grow: 1
+            padding : 0 2 * $r
+            overflow: hidden
+
+            /deep/ span,
+            span
+                font-size: 0.9em
+                font-weight: 500
+
+    .rightaddIcons,
+    .rightIcons
+        justify-content: space-between
+
+    &.bin
+        position: relative
+
+    &.minimized
+        right: auto
+        
+        +transition(0.3s)
+
+        &.fix
+            width: 344px
+            position: absolute
+            background: transparent
+            overflow: hidden
+            will-change: transform
+
+            .headerLine
+                padding : 0
+
+            .icon
+                width: 44px
+                height: 44px
+                line-height: 44px
+               
+                
+                +transitionopt(0.3s, transform)
+
+                .iconbutton
+                    border-radius: 50%
+                    background: transparentize($color-text-slight, 0.9)
+                    color :  $color-text-main
+                    cursor: pointer
+
+                    &:hover
+                        background: transparentize($color-text-slight, 0.95)
+
+                /deep/
+                    .iconbutton
+                        border-radius: 50%
+                        background: transparentize($color-text-slight, 0.9)
+                        color :  $color-text-main
+                        cursor: pointer
+
+                        &:hover
+                            background: transparentize($color-text-slight, 0.95)
+               
+        
+            .leftIcon,
+            .infoPart
+                display: none
+
+            &.active
+                right: 0
+                transform: translate3d(-300px, -56px, 0)
+                border-radius: 8px
+                border-bottom-left-radius: 0
+                border-bottom-right-radius: 0
+                background: $color-bg-clear
+                border: 1px solid transparentize($color-text-slight, 0.8)
+                +shadowSmaller()
+                
+                .leftIcon,
+                .infoPart
+                    display: block
+
+                
+            &:not(.active)
+                border-bottom : 0!important

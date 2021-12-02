@@ -1,0 +1,88 @@
+@at-root #matrix-root[theme="black"] 
+	#maincontent
+	
+	    .expandp
+	
+	        .etablew
+	
+	        .etable
+	
+	
+	
+	            >div
+	                +transition(0.3s)
+	                color : #fff
+	
+	        &::before
+	            background: radial-gradient(circle closest-side, #00183059, transparent)
+	            +transition(0.3s)
+	
+	        &:hover
+	            .etable
+	                >div
+	
+	        &:hover::before
+	
+	
+	    &.bout
+	        .expandp
+	
+	    &.bout
+	        .headerSpacer
+	
+	           
+	
+	    /deep/
+	        .resize-observer
+	
+	    .headerSpacer
+	
+	    .headerSpacerWrapper
+	        
+	
+	    .headerSpacerWrapperOvf
+	        
+	
+	    &.minimized
+	
+	        &.fix
+	
+	            .headerSpacerWrapper
+	                +transitionopt(0.3s, transform)
+	                
+	
+	            &:not(.active)
+	                .headerSpacerWrapperOvf
+	                    -webkit-mask-image: linear-gradient(to top, transparent 3%, black 10%)
+	                    mask-image: linear-gradient(to top, transparent 3%, black 10%)
+	
+	                /deep/
+	                    .maskedtop
+	                        -webkit-mask-image: linear-gradient(to bottom, transparent 3%, black 10%)
+	                        mask-image: linear-gradient(to bottom, transparent 3%, black 10%)
+	
+	            .headerSpacerWrapperOvf
+	                +transition(0.3s)
+	
+	            .headerSpacer
+	                +transitionopt(0.3s, transform)
+	
+	            &.active
+	
+	                .expandp
+	
+	                .headerSpacerWrapper
+	
+	                .headerSpacerWrapperOvf
+	
+	                    .headerSpacer
+	                        border-top-left-radius: 0
+	                        border-top-right-radius: 0
+	                        background: $black-color-bg-clear
+	                        border: 1px solid transparentize($black-color-text-slight, 0.8)
+	                        +shadowSmaller()
+	                   
+	
+	.modalcommoncontent
+	    /deep/ 
+	        .previewContact

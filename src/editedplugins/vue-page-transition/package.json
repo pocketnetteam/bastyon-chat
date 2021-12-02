@@ -1,0 +1,86 @@
+{
+  "_from": "vue-page-transition",
+  "_id": "vue-page-transition@0.2.2",
+  "_inBundle": false,
+  "_integrity": "sha512-qOx+llJ28XX0VwJNJ4GVaeNBPRmPMZac2QQgrIHVUhpXyJx2CQ2XvoQOpGD1ge7QMY3PjZ6fwTbdBwZkA3I9qA==",
+  "_location": "/vue-page-transition",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "tag",
+    "registry": true,
+    "raw": "vue-page-transition",
+    "name": "vue-page-transition",
+    "escapedName": "vue-page-transition",
+    "rawSpec": "",
+    "saveSpec": null,
+    "fetchSpec": "latest"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/vue-page-transition/-/vue-page-transition-0.2.2.tgz",
+  "_shasum": "a7c607ccc8dc67e7c05e66a5a9d54bd27d252d56",
+  "_spec": "vue-page-transition",
+  "_where": "C:\\inetpub2020\\wwwroot\\wellairep\\assistant",
+  "author": {
+    "name": "Orlando Wenzinger",
+    "email": "orlando.wenzinger@bluewin.ch"
+  },
+  "bugs": {
+    "url": "https://github.com/Orlandster/vue-page-transition/issues"
+  },
+  "bundleDependencies": false,
+  "deprecated": false,
+  "description": "A lean Vue.js plugin for page / route transitions.",
+  "devDependencies": {
+    "babel-core": "^6.0.0",
+    "babel-eslint": "^7.1.1",
+    "babel-loader": "^6.0.0",
+    "babel-preset-es2015": "^6.14.0",
+    "babel-preset-stage-0": "^6.16.0",
+    "cross-env": "^3.1.3",
+    "css-loader": "^0.26.1",
+    "eslint": "^3.12.1",
+    "eslint-config-standard": "^6.2.1",
+    "eslint-loader": "^1.6.1",
+    "eslint-plugin-html": "^1.6.0",
+    "eslint-plugin-promise": "^3.4.0",
+    "eslint-plugin-standard": "^2.0.1",
+    "extract-text-webpack-plugin": "^2.0.0-beta.4",
+    "node-sass": "^4.0.0",
+    "sass-loader": "^4.1.0",
+    "vue-loader": "^10.0.0",
+    "vue-template-compiler": "^2.1.6",
+    "webpack": "^2.1.0-beta.28",
+    "webpack-merge": "^1.1.2"
+  },
+  "homepage": "https://orlandster.github.io/vue-page-transition/#/",
+  "keywords": [
+    "vue",
+    "vuejs",
+    "vuejs2",
+    "vue plugin",
+    "vue route transition",
+    "vue router",
+    "vue routing",
+    "vue transition",
+    "vue animation"
+  ],
+  "license": "MIT",
+  "main": "dist/vue-page-transition.common.js",
+  "module": "index.js",
+  "name": "vue-page-transition",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Orlandster/vue-page-transition.git"
+  },
+  "scripts": {
+    "build": "npm run build:browser && npm run build:common",
+    "build:browser": "cross-env NODE_ENV=production webpack --config config/webpack.config.browser.js --progress --hide-modules",
+    "build:common": "cross-env NODE_ENV=production webpack --config config/webpack.config.common.js --progress --hide-modules",
+    "dev": "cross-env NODE_ENV=development webpack --config config/webpack.config.dev.js --progress --watch"
+  },
+  "unpkg": "dist/vue-page-transition.browser.js",
+  "version": "0.2.2"
+}

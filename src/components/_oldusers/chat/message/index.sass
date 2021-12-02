@@ -1,0 +1,38 @@
+.message
+    margin-bottom: $r*4
+
+    &.chat__own
+        display: flex
+        justify-content: flex-end
+        & .message__content:after
+            content: ''
+            position: absolute
+            right: -8px
+            bottom: 10px
+            width: 0
+            height: 0
+            border: 10px solid transparent
+            border-right-width: 0
+            border-left-color: #bad3ff
+
+    &.chat__others
+        display: flex
+        justify-content: flex-start
+
+        &.message__content:before
+            content: ''
+            position: absolute
+            left: -8px
+            bottom: 10px
+            width: 0
+            height: 0
+            border: 10px solid transparent
+            border-right-color: #bad3ff
+            border-left-width: 0
+
+    &__content
+        background: $color-bg-light
+        border-radius: 4px
+        padding: $r
+        position: relative
+

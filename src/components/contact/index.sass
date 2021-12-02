@@ -1,0 +1,45 @@
+.viewWrapper
+    padding : 2 * $r 0
+    background: transparentize($color-bg-light, 0.5)
+    position: relative
+
+.actionsWrapper
+    padding : $r 0
+
+.youw
+    text-align: center
+    padding : 3 * $r
+    font-size: 0.9em
+
+#contact
+    &.minimized
+        &:not(.active)
+            /deep/
+                .gotoprofile
+                    display: none
+                .userpic
+                    height: 44px
+                    width: 44px
+                    line-height: 44px
+                .name
+                    display: none
+                .viewWrapper
+                    width: 44px
+                    background: transparent!important
+                .haskeys
+                    display: none
+
+                .info
+                    flex-direction: column
+                    box-shadow: none
+                    padding : 0
+                    background: transparent!important
+                    margin : 0
+
+                    .infoPart
+                        width : 100%
+                        padding-left: 0
+                        padding-right: 0
+
+                        .label
+                            font-size: 0.8em

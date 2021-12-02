@@ -1,0 +1,121 @@
+@at-root #matrix-root[theme="white"] 
+	.attachements
+	
+	    .attachementsWrapper
+	
+	        /deep/ #chatAttachement
+	
+	.cantchatmessage
+	
+	    .proceed
+	
+	        button
+	
+	    .refresh
+	
+	    .msg
+	    
+	.encryptedInfo
+	    #slide
+	        background: $white-color-bg-clear
+	        border-bottom-right-radius: 8px
+	        border-top-right-radius: 8px
+	        -webkit-animation: slide 0.1s forwards
+	        -webkit-animation-delay: .3s
+	        animation: slide 0.1s forwards
+	        animation-delay: .3s
+	    @-webkit-keyframes slide
+	        100%
+	    @keyframes slide
+	        100%
+	    button
+	        i
+	    .encryptedTxtIcon
+	        span
+	            color: $white-color-good
+	        i
+	            color: $white-color-good
+	
+	.blockedcaption
+	
+	    span
+	
+	.relationEvent
+	
+	    .relationEventWrapper
+	    .relationEventCaption
+	        span
+	            color : $white-color-text-main
+	
+	       
+	    .relationEventPreview
+	
+	    /deep/
+	        .previewMessage
+	
+	    .relationEventActions
+	        .item
+	
+	.chatInputWrapper
+	    background: transparent
+	    background: $white-color-bg-clear
+	
+	    &.bin
+	#chat
+	    &.minimized
+	        .chatInputWrapper
+	
+	        &:not(.active)
+	            /deep/
+	
+	                .statusWrapper
+	                    i
+	                        color : $white-color-text-main
+	
+	                    span
+	                
+	                .messageRow
+	                    background: transparent!important
+	           
+	
+	                .event
+	
+	                #events
+	
+	                .iconWrapper
+	
+	                [my="true"]
+	                    .iconWrapper
+	
+	                /*.event.my,*/
+	                .linkPreview,
+	                .labelwrapper,
+	                .timeWrapper,
+	                .maxcontent,
+	                .messageImg,
+	                .actionsWrapper,
+	                .filePreview
+	
+	        &.active
+	            .chatInputWrapper
+	
+	
+	.encrypted
+	    color : $white-color-good
+	
+	    i
+	.roomMuted
+	    color : $white-color-text-slight
+	    i
+	
+	.chatEmpty
+	    color : $white-color-text-slight
+	
+	    span
+	
+	.preview-wrapper
+	    border : 1px solid transparentize($white-color-text-slight, 0.7)
+	
+	    &::-webkit-scrollbar
+	
+	

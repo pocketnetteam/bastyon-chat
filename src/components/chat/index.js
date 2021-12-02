@@ -1,0 +1,429 @@
+import {mapState} from 'vuex';
+
+import list from '@/components/chat/list/index.vue'
+
+import chatInput from '@/components/chat/input/index.vue'
+import join from '@/components/chat/join/index.vue'
+import attachement from '@/components/chat/attachement/index.vue'
+import url from '@/components/events/event/url/index.vue'
+import _ from 'underscore'
+import moment from "moment";
+import f from "@/application/functions";
+import userRoomStatus from "@/components/chat/userRoomStatus/index.vue"
+
+export default {
+  name: 'chat',
+  props: {
+    chat: Object,
+    u: String
+  },
+
+  components: {
+    list,
+    chatInput,
+    join,
+    url,
+    attachement,
+    userRoomStatus
+
+  },
+
+  data: function () {
+
+    return {
+      roomUserBanned: false,
+      roomUserKicked: false,
+      hoverEncrypt: false,
+      roomMuted: false,
+      loading: false,
+      ready: false,
+      encrypted: false,
+      usersinfo: [],
+      chatEvents: {},
+      relationEvent: null,
+      key: '',
+      sendingDataStore: {},
+      esize: {},
+      fsize: {},
+      cantchat: false,
+      cantchatexc: false
+    }
+
+  },
+
+  created() {
+
+  },
+
+  mounted() {
+
+    this.getuserinfo()
+    this.$store.commit('active', true)
+    this.$store.commit('blockactive', {value: true, item: 'chat'})
+
+  },
+
+  destroyed() {
+    this.$store.commit('blockactive', {value: false, item: 'chat'})
+    this.$store.commit('SET_CURRENT_ROOM', false)
+
+    this.clearintrv()
+  },
+
+  watch: {
+
+    needcreatekey: function () {
+      if (this.needcreatekey) {
+
+        if (!this.intrv) {
+          this.intrv = setInterval(() => {
+            this.refreshkeys(true)
+          }, 20000)
+        }
+
+
+      } else {
+        this.clearintrv()
+      }
+    },
+
+    chatusers: function () {
+
+
+      if (this.m_chat && this.m_chat.pcrypto) {
+        this.m_chat.pcrypto.userschanded().then(r => {
+          this.checkcrypto()
+        })
+
+      }
+
+    },
+    m_chat: {
+      immediate: true,
+      handler: function () {
+
+        
+        if (this.m_chat && !_.isEmpty(this.m_chat)) {
+          this.core.mtrx.kit.prepareChat(this.m_chat).then(r => {
+            this.ready = true
+
+            this.checkcrypto()
+            /*this.encrypted = this.m_chat.pcrypto.canBeEncrypt()
+            this.cantchat = this.m_chat.pcrypto.cantchat()*/
+
+          })
+
+        }
+
+      }
+    },
+    chat: {
+      immediate: true,
+      handler: function () {
+
+        this.ready = false
+        this.encrypted = false
+        this.$store.commit('setmodal', null)
+        if (this.chat) {
+          this.$store.commit('SET_CURRENT_ROOM', this.chat.roomId)
+        } else
+          this.$store.commit('SET_CURRENT_ROOM', false)
+      }
+
+    },
+  },
+  computed: mapState({
+
+    pocketnet: state => state.pocketnet,
+    minimized: state => state.minimized,
+    active: state => state.active,
+    auth: state => state.auth,
+    m_chat: function () {
+
+      if (this.chat && this.chat.roomId) {
+
+        let pushRules = this.core.mtrx.client._pushProcessor.getPushRuleById(this.chat.roomId)
+        if (pushRules !== null) {
+          this.roomMuted = true
+        }
+
+        var m_chat = this.core.mtrx.client.getRoom(this.chat.roomId)
+
+        return m_chat || {}
+      }
+
+    },
+
+    keyproblem: function () {
+      if (this.core.user.userinfo.keys.length < 12) {
+        return 'younotgen'
+      } else return 'usernotgen'
+    },
+
+    needcreatekey: function () {
+      return this.keyproblem == 'younotgen' && this.cantchat && !this.cantchatexc
+    },
+
+    membership: function () {
+
+      if (this.m_chat) {
+        if (this.m_chat.timeline.length > 0) {
+          var id = this.core.mtrx.client.credentials.userId
+          var lastEvent = this.m_chat.timeline[this.m_chat.timeline.length - 1]
+          if (lastEvent.event.state_key === id && lastEvent.event.content.reason === 'admin ban') {
+            this.roomUserBanned = true
+          }
+        }
+
+
+        return this.m_chat.getMyMembership()
+      }
+
+    },
+
+    blockedUser: function () {
+
+      if (this.u) {
+        return this.core.mtrx.blockeduser(this.u[0])
+      }
+
+      if (this.chat) {
+        var users = this.core.mtrx.anotherChatUsers(this.chat.roomId)
+
+        if (users.length == 1) {
+          return this.core.mtrx.blockeduser(users[0].userId)
+        }
+      }
+
+      /* if(this.m_chat){
+
+          var me = this.m_chat.myUserId
+          var anotherUser = this.chat.members.filter(member => member.userId !== me)
+          this.core.mtrx.client.isUserIgnored(anotherUser[0].userId)
+
+          
+       }*/
+    },
+    openInviteModal: function () {
+      return this.openInviteModal
+    },
+
+    attachements: function () {
+      return _.toArray(this.sendingDataStore)
+    },
+
+    chatusers: function () {
+      if (this.m_chat)
+        return this.core.store.state.chatusers[this.m_chat.roomId]
+    }
+
+  }),
+  methods: {
+
+    clearintrv: function () {
+      if (this.intrv) {
+        clearInterval(this.intrv)
+        this.intrv = null
+      }
+    },
+
+    checkcrypto: function () {
+      this.encrypted = this.m_chat.pcrypto.canBeEncrypt()
+      this.cantchat = this.m_chat.pcrypto.cantchat()
+    },
+
+    force: function () {
+      this.key = f.makeid()
+    },
+
+    clearRelationEvent: function () {
+
+      if (this.relationEvent && this.relationEvent.type == 'm.replace' && this.$refs['chatInput']) {
+        this.$refs['chatInput'].setText('')
+      }
+
+      this.relationEvent = null
+    },
+
+    newchat: function (chat) {
+      this.$emit("newchat", chat)
+
+
+      this.m_chat.pcrypto.userschanded()
+    },
+
+    getuserinfo: function () {
+      if (this.u) {
+        this.core.user.usersInfo(this.u).then(info => {
+          this.usersinfo = info
+        })
+      }
+    },
+
+    cantchatcrypto: function () {
+      this.cantchat = true
+    },
+
+    proceedwithoutkeys: function () {
+      this.cantchatexc = true
+    },
+
+    refreshkeys: function () {
+
+      this.core.user.userInfo(true).then(r => {
+
+
+        if (this.u) {
+          this.core.user.usersInfo(this.u, false, true).then(info => {
+
+            var _info = info[0]
+
+            if (_info && _info.keys && _info.keys.length >= 12 && this.core.user.userinfo.keys.length >= 12) {
+              this.cantchat = false
+            }
+
+            this.usersinfo = info
+
+            //this.m_chat.pcrypto.userschanded()
+          })
+
+        } else {
+          this.core.store.dispatch('RELOAD_CHAT_USERS', [this.m_chat]).then(r => {
+            /*this.m_chat.pcrypto.userschanded()
+    
+            this.checkcrypto()*/
+          })
+        }
+
+
+      })
+
+
+    },
+
+    closing: function (e) {
+      this.PNmetaPreview = e
+    },
+
+    usersinfoNames: function () {
+      return _.map(this.usersinfo, function (u) {
+        return u.name
+      }).join(', ')
+    },
+
+    replyEvent: function ({event}) {
+
+      this.relationEvent = {
+        type: 'm.reference',
+        event: event,
+        action: this.$i18n.t("caption.replyOnMessage")
+      }
+      if (this.$refs['chatInput']) {
+        this.$refs['chatInput'].focus()
+      }
+
+    },
+
+    editingEvent: function ({event, text}) {
+
+      this.relationEvent = {
+        type: 'm.replace',
+        event: event,
+        action: this.$i18n.t("caption.editMessage")
+      }
+
+      if (this.$refs['chatInput']) {
+        this.$refs['chatInput'].setText(text)
+      }
+
+    },
+
+    focused: function () {
+      this.fsize = _.clone(this.esize)
+    },
+
+    scroll(size) {
+      this.esize = size
+
+      var ns = this.esize.scrollTop || 0
+      var fs = this.fsize.scrollTop || 0
+
+      if (ns - 450 > fs) {
+        this.$refs['chatInput'].blurifempty()
+      }
+
+    },
+
+    events(data) {
+      this.$emit('getEvents', data)
+      this.chatEvents = data
+    },
+
+    galleryImage(e) {
+
+      this.core.store.dispatch('SHOW_GALLERY_FROMEVENTS', {
+        events: this.chatEvents,
+        event: e
+      })
+
+    },
+
+    sending: function () {
+
+      console.log('sending')
+
+      this.$emit('sending')
+
+      this.$refs['list'].scrollToNew(0)
+
+      ///$(this.$el).find('.eventsflex').scrollTop(0) ??? 
+    },
+
+    sent: function () {
+
+      if (this.relationEvent && this.relationEvent.type == 'm.reference') {
+        this.relationEvent = null
+      }
+
+      this.$emit('sent')
+    },
+
+    sendingData: function (meta) {
+
+      this.$set(this.sendingDataStore, meta.id, meta);
+    },
+
+    sentData: function (meta) {
+      this.clearMeta(meta)
+    },
+
+    sentError: function (meta) {
+      if (meta && meta.id) this.clearMeta(meta);
+    },
+
+    abortSending: function (id) {
+      var meta = this.sendingDataStore[id]
+
+      if (meta.abort) meta.abort()
+
+      meta.aborted = true
+
+      ///
+
+      this.clearMeta(meta)
+
+    },
+    brokenInvitedRoom(val) {
+      this.$emit('removeBrokenRoom', val)
+    },
+
+    clearMeta: function (meta) {
+      this.$delete(this.sendingDataStore, meta.id);
+    },
+
+    menuIsVisibleHandler: function(isVisible) {
+      this.$emit('menuIsVisible', isVisible);
+    }
+
+  }
+}

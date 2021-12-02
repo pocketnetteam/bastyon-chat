@@ -1,0 +1,171 @@
+#maincontent
+
+    .expandp
+        position: absolute
+        left: 0
+        right: -$r
+        top : 0
+        bottom : 0
+        cursor: pointer
+        overflow-y: hidden
+        z-index: 3
+
+        .etablew
+            position: absolute
+            left: 0
+            right: 0
+            top : 0
+            bottom : 0
+            z-index: 2
+
+        .etable
+
+            height: 100%
+            width: 100%
+
+
+            >div
+                +transition(0.3s)
+                opacity: 0
+                color : #fff
+                vertical-align: middle
+                text-align: center
+
+        &::before
+            --size: 0
+            content: ''
+            position: absolute
+            left: var(--x)
+            top: 50%
+            width: var(--size)
+            height: var(--size)
+            background: radial-gradient(circle closest-side, #00183059, transparent)
+            transform: translate(-50%, -50%)
+            +transition(0.3s)
+
+        &:hover
+            .etable
+                >div
+                    opacity: 1
+
+        &:hover::before
+            --size: 400px
+
+
+    &.bout
+        .expandp
+            display: none
+
+    &.bout
+        .headerSpacer
+
+           
+
+    /deep/
+        .resize-observer
+            height: 1px
+            overflow: hidden
+
+    .headerSpacer
+        position: static
+        left : 0
+        right : 0
+        top : 0
+        bottom : 0
+        padding-bottom : 0
+        margin : 0 auto
+        max-width: 768px
+
+    .headerSpacerWrapper
+        position: absolute
+        left : 0
+        right : 0
+        top : 55px
+        bottom : 90px
+        overflow-y: auto
+        overflow-x: hidden
+        
+
+    .headerSpacerWrapperOvf
+        position: absolute
+        left : 0
+        right : 0
+        top : 0
+        bottom : 0
+        overflow-y: scroll
+        overflow-x: hidden
+        overscroll-behavior : contain
+        
+
+    &.minimized
+
+        &.fix
+
+            .headerSpacerWrapper
+                overflow-y: inherit
+                overflow-x: inherit
+                top : 0
+                bottom : 103px
+                will-change: transform
+                +transitionopt(0.3s, transform)
+                
+
+            &:not(.active)
+                .headerSpacerWrapperOvf
+                    -webkit-mask-image: linear-gradient(to top, transparent 3%, black 10%)
+                    mask-image: linear-gradient(to top, transparent 3%, black 10%)
+
+                /deep/
+                    .maskedtop
+                        -webkit-mask-image: linear-gradient(to bottom, transparent 3%, black 10%)
+                        mask-image: linear-gradient(to bottom, transparent 3%, black 10%)
+
+            .headerSpacerWrapperOvf
+                position: relative
+                width: 344px
+                height: 100%
+                overflow: visible
+                will-change: transform
+                +transition(0.3s)
+
+            .headerSpacer
+                position: absolute
+                height: 100%
+                left: 0px
+                width : 344px
+                padding: 0
+                overflow-x: hidden
+                will-change: transform
+                +transitionopt(0.3s, transform)
+                overscroll-behavior: contain
+
+            &.active
+
+                .expandp
+                    display: none
+
+                .headerSpacerWrapper
+                    /*top : 60px*/
+                    transform: translate3d(0, 0, 0)
+                    z-index: 130
+
+                .headerSpacerWrapperOvf
+                    right: 0px
+                    transform: translate3d(-300px, 4px, 0)
+                    width: 344px
+
+                    .headerSpacer
+                        border-radius: 8px
+                        border-top-left-radius: 0
+                        border-top-right-radius: 0
+                        background: $color-bg-clear
+                        border: 1px solid transparentize($color-text-slight, 0.8)
+                        +shadowSmaller()
+                        right : 0
+                        left: 0
+                   
+
+.modalcommoncontent
+    /deep/ 
+        .previewContact
+            padding-left: 1.5 * $r

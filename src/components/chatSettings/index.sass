@@ -1,0 +1,43 @@
+.inSettings
+  margin: 30px auto
+  display: block
+.chatIconWrapper
+  width : 120px
+  margin : 0 auto
+.linkPlace
+  margin-top: 30px
+  padding: $r 0
+  cursor: pointer
+  border-top: 1px solid $color-bg-light
+  span
+    font-size: 1em
+    display: block
+    text-align: left
+    max-width: 400px
+    overflow: hidden
+    white-space: nowrap
+    text-overflow: ellipsis
+  .shareLink
+    &:hover
+      color: $black-color-text-main
+.chatSettingAbout
+  //background: transparentize($color-bg-gen, 0.5)
+  padding: .5em 1em
+  .chatNameEdit
+    margin-top: 20px
+    input
+      padding: $r 0
+      display: block
+      width: 100%
+      border-bottom: 1px solid $color-bg-light!important
+      border-top: 1px solid $color-bg-light!important
+      &:focus
+       border-bottom: 1px solid $color-bg-light!important
+       border-top: 1px solid $color-bg-light!important
+  .chatDescription
+    textarea
+      font-size: 0.9em
+      display: block
+      width: 100%
+      resize: none
+      padding: $r 0

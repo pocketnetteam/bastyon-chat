@@ -1,0 +1,43 @@
+.membersList
+
+  .roomMember
+    border-bottom: 1px solid $color-bg-gen
+    &:last-child
+      border-bottom: 0
+
+
+
+    &.invite
+
+    &:hover
+      .leftWrapper
+        .nameRole
+          .name
+            color: $color-text-slight
+    .leftWrapper
+
+      .avatarNameWrapper
+        .avatar
+          background: $color-bg-gen
+          color: $color-text-light
+
+          /deep/ .bgimage
+
+          img
+
+
+      .nameRole
+
+        .memberRole
+          color: #919191
+
+    .rightWrapper
+      /deep/ .icon 
+      .adminActionsList
+        .fa-caret-up
+          color: $color-bg-gen
+
+     
+.invitedAvatar
+    &:after
+        background: transparentize($color-text-common, 0.2)

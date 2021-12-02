@@ -1,0 +1,51 @@
+.searchWrapper
+    display: flex
+    overflow: hidden
+    background: transparentize($color-bg-gen , 0.5)
+    border-radius: 30px
+    color : $color-text-mlight
+    align-items: center
+
+    .inputWrapper
+        flex-grow: 1
+
+        input
+            padding : 1.5 * $r 2 * $r
+            padding-right: 0
+            width : 100%
+            font-size: 0.9em
+
+    .iconWrapper
+        text-align: center
+        width: 50px
+
+        i
+            font-size: 0.8em
+            
+
+#search
+    &.minimized
+        &:not(.active)
+                
+            .searchWrapper
+                
+                border-radius: 0
+                background: transparent
+                padding : 0
+                .inputWrapper
+                    display: none
+
+                .iconWrapper
+                    text-align: center
+                    width: 44px
+                    height: 44px
+                    line-height: 44px
+                    padding : 0
+                    border-radius: 50%
+                    background: transparentize($color-text-slight, 0.6)
+                    color :  transparentize($color-text-slight, 0.2)
+                    i
+                        font-size: 0.8em
+
+       
+            

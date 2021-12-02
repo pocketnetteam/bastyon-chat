@@ -1,0 +1,101 @@
+@at-root #matrix-root[theme="white"] 
+	
+	.fade-enter,
+	.fade-leave-to
+	    .modal-backdrop 
+	    .modal-wrapper
+	
+	
+	.fade-enter-active,
+	.fade-leave-active
+	    +transition(0.3s)
+	    
+	.modal-backdrop 
+	    background: transparentize($white-color-bg-clear, 0.85)
+	    
+	    +transition(0.3s)
+	
+	#modal.mobile
+	    .modal-wrapper,
+	    .modal-backdrop 
+	
+	#modal.bout
+	    .modal-backdrop 
+	
+	    .modal-wrapper
+	
+	#modal
+	    &.minimized
+	        .modal-wrapper
+	            border : 1px solid transparentize($white-color-text-slight, 0.8)
+	            background: transparentize($white-color-bg-clear, 0.03)
+	            border-bottom : 0
+	
+	        .modal-backdrop 
+	
+	        .modal
+	            &::-webkit-scrollbar
+	
+	        &.bin
+	            
+	            &.active
+	
+	            .modal-backdrop,
+	            .modal-wrapper
+	
+	
+	.modal-wrapper
+	    +transition(0.3s)
+	    border-top-left-radius: 10px
+	    border-top-right-radius: 10px
+	    border-top : 1px solid transparentize($white-color-text-slight, 0.9)
+	
+	.modal 
+	    background: $white-color-bg-clear   
+	    //color : $white-color-text-common
+	    +shadowSmall()
+	
+	.modal-close
+	    color : $white-color-text-slight
+	    +transition(0.3s)
+	
+	    &:hover
+	        color : $white-color-text-common
+	
+	.modal-header,
+	.modal-footer 
+	
+	
+	.modal-header 
+	    color: $white-color-text-common
+	
+	
+	.modal-footer 
+	
+	.mwork
+	
+	.modal-body 
+	   
+	.eff
+	    color : $white-color-text-second2
+	
+	    i
+	
+	.btn-close 
+	    border: none
+	    color: $white-color-text-slight
+	    background: transparent
+	
+	
+	.btn-success 
+	    color: white
+	    background: $white-color-bg-main
+	    border: 1px solid $white-color-bg-main
+	
+	
+	@media only screen and (max-width: 640px) 
+	    .modal 
+	
+	    .modal-footer
+	
+	.separator

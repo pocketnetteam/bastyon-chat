@@ -1,0 +1,44 @@
+@at-root #matrix-root[theme="black"] 
+	.membersList
+	
+	  .roomMember
+	    border-bottom: 1px solid $black-color-bg-gen
+	    &:last-child
+	      border-bottom: 0
+	
+	
+	
+	    &.invite
+	
+	    &:hover
+	      .leftWrapper
+	        .nameRole
+	          .name
+	            color: $black-color-text-slight
+	    .leftWrapper
+	
+	      .avatarNameWrapper
+	        .avatar
+	          background: $black-color-bg-gen
+	          color: $black-color-text-light
+	
+	          /deep/ .bgimage
+	
+	          img
+	
+	
+	      .nameRole
+	
+	        .memberRole
+	          color: #919191
+	
+	    .rightWrapper
+	      /deep/ .icon 
+	      .adminActionsList
+	        .fa-caret-up
+	          color: $black-color-bg-gen
+	
+	     
+	.invitedAvatar
+	    &:after
+	        background: transparentize($black-color-text-common, 0.2)

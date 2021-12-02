@@ -1,0 +1,85 @@
+{
+  "_args": [
+    [
+      "v-photoswipe@1.0.3-1",
+      "C:\\inetpub\\wwwroot\\matrix"
+    ]
+  ],
+  "_from": "v-photoswipe@1.0.3-1",
+  "_id": "v-photoswipe@1.0.3-1",
+  "_inBundle": false,
+  "_integrity": "sha512-I/eWd4N4hR0U59aJ0XqjHL0xwdHAOv3lQFHRLjYZ3NvRKruWrqBINAgHX0ohRcG/PXLVO9VYNCli1btK9oPzJA==",
+  "_location": "/v-photoswipe",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "version",
+    "registry": true,
+    "raw": "v-photoswipe@1.0.3-1",
+    "name": "v-photoswipe",
+    "escapedName": "v-photoswipe",
+    "rawSpec": "1.0.3-1",
+    "saveSpec": null,
+    "fetchSpec": "1.0.3-1"
+  },
+  "_requiredBy": [
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/v-photoswipe/-/v-photoswipe-1.0.3-1.tgz",
+  "_spec": "1.0.3-1",
+  "_where": "C:\\inetpub\\wwwroot\\matrix",
+  "author": {
+    "name": "Leesson",
+    "email": "shclixian@163.com"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not ie <= 8"
+  ],
+  "bugs": {
+    "url": "https://github.com/Leesson/v-photoswipe/issues"
+  },
+  "dependencies": {
+    "photoswipe": "^4.1.2"
+  },
+  "description": "Vue plugin for image preview base on PhotoSwipe",
+  "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-preset-env": "^1.6.0",
+    "babel-preset-stage-3": "^6.24.1",
+    "cross-env": "^5.0.5",
+    "css-loader": "^0.28.7",
+    "file-loader": "^1.1.4",
+    "url-loader": "^1.0.1",
+    "vue-loader": "^14.2.2",
+    "vue-template-compiler": "^2.5.0",
+    "webpack": "^4.30.0",
+    "webpack-cli": "^3.3.0",
+    "webpack-dev-server": "^2.9.1",
+    "webpack-node-externals": "^1.7.2"
+  },
+  "homepage": "https://github.com/Leesson/v-photoswipe#readme",
+  "keywords": [
+    "vue",
+    "photoswipe",
+    "images",
+    "preview",
+    "image gallery"
+  ],
+  "license": "MIT",
+  "main": "dist/v-photoswipe.js",
+  "name": "v-photoswipe",
+  "peerDependencies": {
+    "vue": "^2.5.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Leesson/v-photoswipe.git"
+  },
+  "scripts": {
+    "build": "cross-env NODE_ENV=production webpack --progress --hide-modules",
+    "dev": "cross-env NODE_ENV=development webpack-dev-server --open --hot"
+  },
+  "version": "1.0.3-1"
+}

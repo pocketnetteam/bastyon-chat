@@ -1,0 +1,716 @@
+
+
+body
+    color : $color-text-common
+    background: #FFF
+
+a
+    text-decoration: none
+
+select
+    -moz-appearance: none!important
+    -webkit-appearance: none!important
+    appearance: none!important
+
+input
+    outline: none
+
+    &:focus
+        border: 10px
+
+.unselectable
+    -webkit-touch-callout: none
+    -webkit-user-select: none
+    -khtml-user-select: none
+    -moz-user-select: none
+    -ms-user-select: none
+    user-select: none
+
+
+.loadinggradient
+    background: linear-gradient(-45deg, $color-bg-gen, $color-bg-second,  $color-text-slight) 
+    background-size: 400% 400%
+    animation: gradient 2s ease infinite
+
+.messagesLine
+    display: flex
+    justify-content: flex-start
+    align-items: center
+    margin: 20px 0
+    +transition(0.3s)
+.circlePreview
+    width: 22px
+    height: 22px
+    margin: 0 10px 0 0
+    background-color: black
+    border-radius: 50%
+    +transition(0.3s)
+.messageLine
+    margin: 0 auto 0 0
+    border-radius: 13px
+    //width: 200px
+    height: 34px
+    +transition(0.3s)
+.myMessageLine
+    margin: 0 0 0 auto
+    border-radius: 13px
+    +transition(0.3s)
+    //width: 200px
+    height: 34px
+
+
+.dg-container
+    font-family: 'Segoe UI', SegoeUI, "Helvetica Neue", Helvetica, Arial, sans-serif
+
+    .dg-main-content
+        padding : 3 * $r
+
+    .dg-main-content
+        border : 0
+        border-radius: 0
+        background: $color-bg-common
+        color : $color-text-common
+
+    .dg-content-footer
+        overflow: hidden
+
+        button
+            margin-left: $r
+            display: block
+            float: right
+            font-size: 1em
+            font-weight: 400
+            color : $color-text-main
+            background: transparent
+            border : 1px solid transparent
+
+            &.dg-pull-right
+                border : 1px solid $color-text-main
+                background: $color-text-main
+                color : #fff
+
+    .dg-content-body
+        border : 0
+        padding-bottom: 0
+        
+
+        .dg-content
+            font-size: 2em
+            font-weight: 100
+
+
+@keyframes gradient
+	0%
+		background-position: 0% 50%
+	50%
+		background-position: 100% 50%
+	100%
+		background-position: 0% 50%
+
+mark
+    background-color : #2a9fff!important 
+
+button.button
+    background: $color-bg-main
+    border : 1px solid $color-bg-main
+    outline: none
+    color : #ffffff
+    padding : 2 * $r
+    text-align: center
+    +transition(0.3s)
+    min-width: 200px
+    cursor: pointer
+    outline: none
+    text-decoration: none
+
+    &.small
+        padding : $r 2 * $r
+        min-width: 150px
+        font-size: 0.8em
+
+    &.good
+        background: $color-good
+        border : 1px solid $color-good
+
+        &:hover
+            background: transparentize($color-good, 0.1)
+            color : #fff
+
+    &.black
+        background: $color-bg-light
+        border : 1px solid $color-bg-light
+        color : $color-text-light
+
+        &:hover
+            background: transparentize($color-bg-light, 0.1)
+            color : #fff
+
+    &.orange
+        background: $color-text-orange
+        border : 1px solid $color-text-orange
+
+        &:hover
+            background: transparentize($color-text-orange, 0.1)
+            color : #fff
+
+    &.round
+        width: 44px
+        height: 44px
+        border-radius: 50%
+        font-size: 0.8em
+        min-width: 0
+        padding : 0
+        line-height: 42px
+
+    &.rounded
+        border-radius: 22px
+
+    &.border
+        background: transparent
+        color : $color-bg-main
+        font-size: 0.8em
+
+    &.ghost
+        background: transparent
+        border : 1px solid transparent
+        color : $color-bg-main
+
+        &:hover
+            color : $color-text-light
+
+    &:hover
+        background: transparent
+        color : $color-bg-main
+
+    &.underscored
+        text-decoration: underline
+
+    &.badbutton
+        background: transparent
+        border : 1px solid transparent
+        font-weight: 500
+        color : $color-bad
+
+    &[disabled="disabled"]
+        cursor: default
+        background : $color-text-mlight
+        border-color : $color-text-mlight
+
+        &:hover
+            color : #fff
+            background : $color-text-mlight
+            border-color : $color-text-mlight
+
+
+.bout
+    .emojipicker
+        display: none!important
+.iconbuttonRound
+    width : 44px
+    height: 44px
+    line-height: 42px
+    text-align: center
+    cursor: pointer
+    color : $color-text-main
+    font-size: 0.9em
+    border-radius: 50%
+    +transition(0.3s)
+
+    &:hover
+        color : $color-text-light
+
+    &.second
+        background: $color-bg-light
+
+        &:hover
+            color : $color-text-second
+
+    &.bright
+        color : #fff
+        background: $color-text-main
+
+        &:hover
+            color : $color-text-second
+
+.iconbuttonsmall
+    cursor: pointer
+    color : $color-text-main
+    text-align: center
+    +transition(0.3s)
+
+    i
+        font-size: 0.8em
+
+    &:hover
+        color : $color-text-light
+
+.iconbutton
+    // padding : 2 * $r
+    cursor: pointer
+    color : $color-text-main
+    text-align: center
+    +transition(0.3s)
+
+    &:hover
+        color : $color-text-light
+
+.internalpocketnetlink
+    a
+        cursor: pointer
+        display : block
+        text-align: center
+        padding : 3 * $r
+        font-size: 0.8em
+        background: transparentize($color-text-slight, 0.9)
+        color : $color-text-mlight
+        border-radius: 5px
+    
+.rootcontent
+    -webkit-font-smoothing: antialiased
+    -moz-osx-font-smoothing: grayscale
+    font-family: 'Segoe UI', SegoeUI, "Helvetica Neue", Helvetica, Arial, sans-serif
+    color : $color-text-common
+    font-size: 1.1em
+
+    &.mobile
+        -webkit-touch-callout: none
+        -webkit-user-select: none
+        -khtml-user-select: none
+        -moz-user-select: none
+        -ms-user-select: none
+        user-select: none
+    
+    *
+        scrollbar-width: none
+        &::-webkit-scrollbar
+            width: 0!important
+        
+    .backface
+        position: fixed
+        left : 100%
+        top : 100%
+        bottom : -1%
+        right: -1%
+        +transitionopt(0.3s, background)
+        background: transparent
+
+    .chatwrapper
+        position: absolute
+        left : 0
+        right: 0
+        top : 0
+        bottom: 0
+
+        .main-wrapper
+            position: absolute
+            left: 0
+            top : 0
+            right : 0
+            bottom : 0
+
+    &.bout
+        /deep/ 
+            .main-wrapper
+                padding-top : 50px
+
+
+    &.fix
+        font-size: 0.9em
+        .chatwrapper
+            +transition(0.3s)
+            position: fixed
+            width : 340px
+            top : 70px
+            left : auto
+            right : $r
+            bottom : $r
+            z-index: 1000
+
+        .likeoffline
+            bottom : 103px    
+
+        &.minimized
+            #modal .work,
+            .page .work
+                +transition(0.3s)
+            .work
+                padding : 0
+
+            #modal .work
+                padding : 0 $r
+
+            .chatwrapper
+                width: 44px
+
+            &:not(.active)
+                .likeoffline,
+                .offline
+                    background: transparent
+                    display: none
+
+            &.active
+                .chatwrapper
+                .page .work
+                    padding : 0 $r / 2
+
+                .backface
+                    top : 0
+                    bottom : 0
+                    right: 0
+                    left: 0
+                    //background: transparentize(#FFF, 0.9)
+                    //backdrop-filter: grayscale(50%)
+                    //-webkit-backdrop-filter: grayscale(50%)
+           
+    .likeoffline,
+    .offline
+        color : $color-text-slight
+        background: $color-bg-clear
+        .table
+            width : 100%
+            height: 100%
+            >div
+                vertical-align: middle
+                text-align: center
+                padding-bottom: 45%
+
+                .icon
+                    font-size: 2.3em
+                    padding : $r
+                    color : $color-text-second2
+
+                .label
+                    font-size: 1em
+                    padding : 0 8 * $r
+
+    .likeoffline
+        background: transparent
+
+    .callmenu
+        position: fixed
+        bottom : 4 * $r
+        left : 0
+        right : 0
+        z-index: 2022
+        text-align: center
+
+        button.button
+            margin-right : 3 * $r
+
+            +transition(0.3s)
+
+            &.round
+                width : 55px
+                height : 55px
+                line-height: 53px
+
+            &.cancel,
+            &.callcancel
+                border : 1px solid $color-bad
+                color : #fff
+                background: $color-bad
+
+            &.callup
+                border : 1px solid $color-text-slight
+                color : $color-text-slight
+                background: transparentize($color-bg-backface, 0.3)
+
+                &.active
+                    border : 1px solid $color-bg-main
+                    color : $color-bg-main
+                    animation: pulse 2s infinite
+
+            &.callupvideo
+                border : 1px solid $color-text-slight
+                color : $color-text-slight
+                background: transparentize($color-bg-backface, 0.3)
+
+                &.active
+                    border : 1px solid $color-bg-main
+                    color : $color-bg-backface
+                    background : $color-bg-main
+
+            &:nth-last-child(1)
+                margin-right : 0
+
+    .fixedallwrapperDisplayed,
+    .preloaderWrapper,
+    .fixedallwrapper
+        position: absolute
+        left : 0
+        right : 0
+        top : 0
+        bottom : 0
+        z-index : 998
+        +transition(0.3s)
+
+    .fixedallwrapperDisplayed
+        background: #fff
+    /*.fixedallwrapper
+        display: none!important*/
+
+    .fixedOnPageBottom
+        +transition(0.3s)
+    .fixedOnPageTop
+        +transition(0.3s)
+
+    .fade-in-right-leave-to,
+    .fade-in-right-enter,
+    .fade-in-right-enter-to
+
+        .preloaderWrapper,
+        .fixedallwrapper
+            opacity: 0
+
+
+    .fade-in-right-leave-to,
+    .fade-in-right-enter,
+    .fade-in-right-enter-to
+
+        .fixedOnPageBottom
+            opacity: 0
+            bottom : -3 * $r 
+
+        .fixedOnPageTop
+            opacity: 0
+            top : -3 * $r 
+
+    .content
+        padding-top : 66px
+
+    .work
+        padding : 0 $r
+        margin : 0 auto
+        max-width: 768px
+
+    .pwork
+        max-width: 768px
+        background: transparent
+        margin : 0 auto
+        padding : 0 8 * $r
+
+    .effects
+        position: fixed
+        left : 0
+        top : 0
+        bottom : 0
+        right : 0
+        z-index: 2020
+
+    .speechWrapper
+        position: fixed
+        left : 0
+        bottom : 0
+        padding-bottom : 4 * $r
+        right : 0
+        z-index: 2000
+        height: 80px
+
+        .speechAbsWrapper
+            position: relative
+            width : 100%
+            height : 100%
+
+    .emptyRec
+        padding : 20 * $r 4 * $r
+        text-align: center
+        font-size: 0.8em
+
+    .enablevoice
+        .forbutton
+            margin-top : 4 * $r
+
+.table
+    display: table
+    table-layout: fixed
+    width : 100%
+    >div
+        display: table-cell
+
+
+
+
+.m-message-container.is-bottom-right
+    padding : 0
+    right: 56px
+    bottom : 1.5 * $r
+    width: auto
+
+.notificationWrapper
+    display: block
+    max-width: none
+    /*width: 100%*/
+    font-family: 'Segoe UI', SegoeUI, "Helvetica Neue", Helvetica, Arial, sans-serif
+
+    &.m-message-wrapper + .m-message-wrapper
+        margin-top : $r
+
+    .m-message
+        padding : $r $r
+        border : 1px solid transparentize($color-bg-backface, 0.1)
+        border-radius: 5px
+        box-shadow: none
+        background: $color-bg-common
+        font-size: 1em
+
+    .m-message--title
+        font-weight: bold
+        color : $color-text-light
+        font-size: 0.8em
+        &:first-letter
+            text-transform: capitalize
+
+    .m-message--description
+        margin-top: 0
+
+
+    .m-message-content
+        flex-grow: 1
+        .listPreview
+          cursor: pointer
+
+          .invitedEvent
+            width: 180px
+            text-overflow: ellipsis
+            white-space: nowrap
+            overflow: hidden
+            display: flex
+            justify-content: space-between
+            align-items: center
+            span
+              display: block
+              font-size: .8em
+            .txt
+              color: $color-text-mlight
+            .txtNew
+              color: $color-good
+              
+          .linkPreview
+            span
+              &:first-letter
+                text-transform: uppercase
+            .senderName
+              font-weight: bold
+              color: $color-text-common2
+            .linkTitle
+              color: $color-text-mlight
+            .pocketnetLink
+              color: $color-text-common2
+
+          .previewMessageList
+            span
+              color: $color-text-mlight
+              text-overflow: ellipsis
+              overflow: hidden
+              white-space: nowrap
+              text-align: left
+
+          .previewMessage
+            display: flex
+            justify-content: flex-start
+            align-items: center
+            width: 100%
+
+            span
+              display: block
+              color: $color-text-mlight
+              font-size: 0.8em
+              text-overflow: ellipsis
+              overflow: hidden
+              white-space: nowrap
+              text-align: left
+              max-width: 150px
+
+    .m-message-icons
+        float: none
+
+    .m-message--icon
+        display: block
+        vertical-align: top
+
+    .m-message--button.m-message--arrow-down
+        display: none
+
+.is-top-left
+    padding : $r
+    .notificationWrapper
+        width: 100%
+        box-shadow: 0 5px 7px -5px rgba(0,0,0,.4)
+
+@-webkit-keyframes pulse
+  0% 
+    -webkit-box-shadow: 0 0 0 0 #2c49cc66
+
+  70% 
+    -webkit-box-shadow: 0 0 0 30px #2c5fcc00
+
+  100% 
+    -webkit-box-shadow: 0 0 0 0 #2c9fcc00
+
+@keyframes pulse
+    0%
+        -moz-box-shadow: 0 0 0 0 #2c51cc66
+        box-shadow: 0 0 0 0 #2c77cc66
+
+    70%
+        -moz-box-shadow: 0 0 0 30px #2c57cc00
+        box-shadow: 0 0 0 30px #2c6ccc00
+
+    100%
+        -moz-box-shadow: 0 0 0 0 #2f2ccc00
+        box-shadow: 0 0 0 0 #2c44cc00
+
+@media only screen and (max-width: 640px)
+    #app
+        width: 100%
+        .pwork
+            padding: 0 $r
+        .work
+            padding: 0 $r 10px
+
+
+.collapse 
+  max-width: 768px
+  margin: 0 auto
+  position: relative
+  z-index: 999
+  padding: 0.5em 0
+
+  .iconbutton
+        width: 50px  
+        margin-left: auto
+        color: grey
+        opacity: 0.5
+
+        &:hover
+            opacity: 1
+
+
+.collapsed 
+  display: flex
+  justify-content: space-between
+  padding: 1em 0
+  max-width: 768px
+  margin: auto
+
+
+.angle
+  display: flex
+  justify-content: center
+  width: 50px
+  cursor: pointer
+
+
+.expand
+  margin-right: 0.5em
+
+
+.bout
+    .collapse
+        display: none
+.resize-observer
+  position: absolute
+  right: -20000px
+
+.pswp__img
+    object-fit: contain

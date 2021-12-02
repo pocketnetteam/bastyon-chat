@@ -1,0 +1,120 @@
+.footer-chat
+    bottom: 0
+    left: 0
+    right: 0
+    background: $color-bg-common
+    position: absolute
+    height: 90px
+    padding-bottom : 30px
+
+    .work
+        height: 100%
+        padding : 0!important
+    &.bin
+        position: static
+
+    &.fix
+        position: absolute
+        height: auto
+
+        &.minimized
+            background: transparent
+            padding-bottom : 0
+            
+            .menuItems
+                display: block
+                +transition(0.3s)
+                padding-top : $r
+                a
+                    padding: 0
+
+                .menuItem
+                    width: 44px
+                    height: 44px
+                    background: transparentize($color-text-slight, 0.6)
+                    color :  transparentize($color-text-slight, 0.2)
+                    border-radius: 50%
+                    border : 1px solid transparent
+                    margin-bottom : $r / 2
+                    line-height: 40px
+                    +transition(0.3s)
+                    .icon
+                        color : #fff
+                    .label
+                        display: none
+
+                    i
+                        
+                        vertical-align: middle
+                        font-size: 0.8em
+                        
+
+                    &.active
+                        
+                        text-shadow: 0px 0px 20px $color-text-second, 0px 0px 20px $color-text-second, 0px 0px 20px $color-text-second, 0px 0px 20px $color-text-second, 0px 0px 20px $color-text-second
+                        background: transparentize($color-text-second, 0.14)
+                        border : 1px solid transparentize($color-text-second, 0.06)
+                        color : $color-bg-clear
+
+                        .icon
+                            color : $color-bg-clear
+
+                    &:hover
+                        &:not(.active)
+                            background: transparentize($color-text-second, 0.15)
+                            color : $color-bg-clear
+                            text-shadow: 0px 0px 10px $color-text-second, 0px 0px 15px $color-text-second, 0px 0px 20px $color-text-second, 0px 0px 25px $color-text-second, 0px 0px 30px $color-text-common, 0px 0px 35px $color-text-second, 0px 0px 40px $color-text-common
+
+            &.active         
+                .menuItems
+                    border-top : 0
+
+    
+.menuItems
+    display: flex
+    justify-content: space-around
+    align-items: center
+    height: 100%
+    
+    a
+        display: block
+        flex-grow: 1
+        text-align: center
+        padding : 2 * $r
+        color : $color-text-light
+    
+
+    .icon
+        font-size: 0.9em
+        color : transparentize($color-text-light, 0.4)
+
+    .label
+        font-size: 0.8em
+
+    .menuItem
+        position: relative
+        text-align: center
+        cursor: pointer
+        width: 64px
+        height: 44px
+        line-height: 44px
+
+        &.active
+            .icon
+                color : $color-text-main
+
+        .unseen
+            position: absolute
+            width : 22px
+            height : 22px
+            right : -10%
+            bottom : -10%
+            
+            background: transparentize($color-text-main, 0.1)
+            line-height:  22px
+            text-align: center
+            font-weight: 500
+            border-radius: 50%
+            z-index: 2
+            font-size: 0.6em
+            color : #fff

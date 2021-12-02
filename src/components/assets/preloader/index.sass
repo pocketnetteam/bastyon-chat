@@ -1,0 +1,87 @@
+#preloader
+    position: fixed
+    top : 0
+    left : 0
+    right : 0
+    bottom : 0
+    background: transparent
+    z-index: 3500
+
+
+    .iospreloadercenter
+        position: absolute
+        left : 50%
+        top : 50%
+        margin-left : -33px
+        margin-top : -33px
+
+  
+
+    &.minimized
+        display: none
+
+        &.active
+            display: block
+            width: 344px
+            right: $r
+            bottom : 2 * $r
+            top : 124px
+            left: auto
+
+.default
+        
+    .preloader
+        height : 90px
+        text-align : center
+        overflow : hidden
+        padding: 10px 0px
+        margin: 0 auto
+        -webkit-filter: url(#love)
+        filter: url(#love)
+        position: absolute
+        left : 50%
+        top : 50%
+        margin-top : -45px
+        margin-left : -60px
+        opacity: 0.85
+        
+        
+
+    .preloader span
+        width : 20px
+        height : 20px
+        background-color : transparent
+        display : inline-block
+        border-radius : 50%
+        margin : 10px
+
+
+
+
+
+
+$spinner-dimensions : 66px
+.spinner-eff 
+  position: relative
+  width: $spinner-dimensions
+  height: $spinner-dimensions
+  
+  &:before,
+  &:after 
+    content: ""
+    display: block
+  
+  
+  .spinner-bar 
+    
+    &:before,
+    &:after 
+      content: ""
+      display: block
+    
+  
+
+
+
+    
+  

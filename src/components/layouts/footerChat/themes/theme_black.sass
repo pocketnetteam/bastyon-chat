@@ -1,0 +1,71 @@
+@at-root #matrix-root[theme="black"] 
+	.footer-chat
+	    background: $black-color-bg-common
+	
+	    .work
+	    &.bin
+	
+	    &.fix
+	
+	        &.minimized
+	            background: transparent
+	            
+	            .menuItems
+	                +transition(0.3s)
+	                a
+	
+	                .menuItem
+	                    background: transparentize($black-color-text-slight, 0.6)
+	                    color :  transparentize($black-color-text-slight, 0.2)
+	                    border : 1px solid transparent
+	                    +transition(0.3s)
+	                    .icon
+	                        color : #fff
+	                    .label
+	
+	                    i
+	                        
+	                        
+	
+	                    &.active
+	                        
+	                        text-shadow: 0px 0px 20px $black-color-text-second, 0px 0px 20px $black-color-text-second, 0px 0px 20px $black-color-text-second, 0px 0px 20px $black-color-text-second, 0px 0px 20px $black-color-text-second
+	                        background: transparentize($black-color-text-second, 0.14)
+	                        border : 1px solid transparentize($black-color-text-second, 0.06)
+	                        color : $black-color-bg-clear
+	
+	                        .icon
+	                            color : $black-color-bg-clear
+	
+	                    &:hover
+	                        &:not(.active)
+	                            background: transparentize($black-color-text-second, 0.15)
+	                            color : $black-color-bg-clear
+	                            text-shadow: 0px 0px 10px $black-color-text-second, 0px 0px 15px $black-color-text-second, 0px 0px 20px $black-color-text-second, 0px 0px 25px $black-color-text-second, 0px 0px 30px $black-color-text-common, 0px 0px 35px $black-color-text-second, 0px 0px 40px $black-color-text-common
+	
+	            &.active         
+	                .menuItems
+	                    border-top : 0
+	
+	    
+	.menuItems
+	    
+	    a
+	        color : $black-color-text-light
+	    
+	
+	    .icon
+	        color : transparentize($black-color-text-light, 0.4)
+	
+	    .label
+	
+	    .menuItem
+	
+	        &.active
+	            .icon
+	                color : $black-color-text-main
+	
+	        .unseen
+	            
+	            background: transparentize($black-color-text-main, 0.1)
+	            color : #fff

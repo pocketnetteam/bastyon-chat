@@ -1,0 +1,61 @@
+.previewWrapper
+    height: 60px
+    position: absolute
+    top: 0
+    width: 100%
+    display: flex
+    align-items: center
+    justify-content: flex-start
+    .previewContact
+        width: 100%
+    .previewContactSelect
+        width: 100%
+    .previewBox
+        width: 100%
+        display: flex
+        justify-content: space-between
+        align-items: center
+
+        .previewWrapper
+            flex-grow: 1
+            width: 100%
+
+    .checkBox
+        text-align: center
+        position: absolute
+        right: 12px
+        top: 50%
+        transform: translateY(-50%)
+
+    padding: 0
+    border-bottom : 1px solid $color-bg-gen
+
+  
+
+    &:nth-last-child(1)
+        border-bottom : 0
+
+
+       
+.contactList
+    margin-bottom: 8px
+    .title
+        padding: 0 .5em
+
+
+
+    &.minimized
+        .title
+            display: none
+
+        .previewWrapper
+            padding : $r 0
+            border-bottom : 0
+            cursor: pointer
+
+            &:nth-last-child(1)
+                border-bottom : 0
+
+            /deep/
+                .previewWrapper
+                    padding : 0

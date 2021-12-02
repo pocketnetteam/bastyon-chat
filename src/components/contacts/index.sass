@@ -1,0 +1,305 @@
+.searchWrapperEA.work
+  margin-bottom: $r!important
+  padding-top : $r!important
+
+#contacts.minimized:not(.active)
+
+  .inviteUserDiv
+    width: 44px
+
+    .inviteButton
+      height: 44px
+      text-align: center
+      line-height: 44px
+
+      i
+        width: auto
+        position: relative
+      
+    span
+      display: none
+  .titleContacts
+    display: none
+
+.titleSearchResult,
+.titleContacts
+  text-align: center
+
+  span
+    font-size: 0.8em
+
+  &.empty
+    padding : 4 * $r
+    text-align: center
+
+    span
+      font-size: 1.5em
+      font-weight: 100
+
+.searchResult
+  position: relative
+
+  .linepreloaderWrapper
+    padding : $r
+    text-align: center
+
+  .noSearchResult
+    left: 0
+    right: 0
+    top: 50%
+    padding : 6 * $r
+    text-align: center
+
+    i
+      display: block
+      font-size: 1.5em
+      color: $color-text-mlight
+
+    span
+      color: $color-text-mlight
+      display: block
+      margin: 1em 0
+      //font-weight: bold
+      font-size: 2em
+      font-weight: 100
+
+.groupNameInputCaption
+  padding : $r 0
+  text-align: center
+  span
+    font-size: 0.8em
+
+
+
+.groupList
+  
+  .groupCaption
+    position: relative
+    padding : $r
+    text-align: center
+    display: flex
+    justify-content: space-between
+    align-items: center
+    .label
+      font-size: 0.8em
+      font-weight: 500
+    .selectWrapper
+      position: relative
+      i
+        position: absolute
+        right: 0
+        top: 4px
+        color: $black-color-text-main
+      .selectRoomVisible
+        padding-right: 15px
+        font-size: .8em
+        cursor: pointer
+        color: $black-color-text-main
+        -webkit-appearance: none
+        -moz-appearance: none
+        appearance: none
+        overflow: hidden
+        position: relative
+        &::-ms-expand
+          display: none
+        option
+          font-size: .8em
+    .switchToggleWrapper
+      width: 75px
+      height: 66px
+      border-radius: 16px
+      background-color: #ffffff
+      position: absolute
+      right: 0
+      top: 30px
+      .switcher
+        .switch
+          margin-top: 10px
+      span
+        font-size: .8em
+    .dropdownSwitchBtn
+      font-size: 0.8em
+      display: flex
+      align-items: center
+      justify-content: flex-start
+      cursor: pointer
+      &:hover
+        color: $black-color-text-main
+        i
+          color: $black-color-text-main
+      i
+        margin-left: 5px
+        font-size: 1.5em
+        color: $black-color-bg-common
+
+.participants
+  display: flex
+  background: transparentize($color-text-main, 0.94)
+  flex-wrap: wrap
+  border-radius: 15px
+  padding : $r
+  margin-bottom: $r
+  max-height: 123px
+  overflow-y: auto
+
+  >div
+    flex-grow: 1
+
+  .groupListName
+    margin-bottom: 0.5 * $r
+
+  /deep/
+    .iconWrapper
+      width: 33px
+      .userpic
+        width : 33px
+        height: 33px
+        line-height: 33px
+        
+    .summaryLine
+      font-size: 0.8em
+
+  .groupListName
+    margin-right : 2 * $r
+    margin-top : 0
+    border-radius: 1em
+    display: flex
+    align-items: center
+    
+    span
+      color: #FFFFFF
+      font-size: 0.9em
+      display: block
+      margin-right: 5px
+    i
+      text-align: center
+      width: 33px
+
+.inviteBtnWrapper,
+.chatBtnWrapper,
+.GroupBtnWrapper
+  z-index: 2
+  padding : $r
+  text-align: center
+  left : 0
+  right: 0
+
+.minimized
+  .inviteBtnWrapper,
+  .chatBtnWrapper,
+  .GroupBtnWrapper
+    position: sticky
+#contacts
+  &.minimized
+    .inviteUserDiv
+      margin-top : $r
+
+
+.unauthorized.minimized:not(.active)
+  display: none
+ 
+.unauthorized
+  padding : 6 * $r 0
+  text-align: center
+
+.unauthorized
+  .buttonWrapper
+    padding : 2 * $r
+  .captionWrapper
+    padding : 2 * $r
+    text-align: center
+    span
+      font-size: 1.5em
+      font-weight: 100   
+
+.groupNameInput
+  padding: $r 2 * $r
+  label
+    display: block
+  input
+    height: 35px
+    width: 100%
+    padding-right: 0
+
+#contacts
+
+  .inviteUserDiv
+    margin-top: 0.4em
+
+    &.bright
+
+    
+    .inviteButton
+      background-color: $color-text-second2
+      color: white
+      width: 100%
+      height: 34px
+      font-size: 0.9em
+      border-radius: 30px
+      position: relative
+      cursor: pointer
+
+      i
+        position : absolute
+        right : 0
+        top : 0
+        line-height : 34px
+        width : 50px
+        text-align : center
+
+      &.colored
+        background-color: $color-orange
+
+.switcher
+  .switch
+    position: relative
+    display: inline-block
+    width: 36px
+    height: 18px
+
+  input
+    opacity: 0
+    width: 0
+    height: 0
+
+  .slider
+    position: absolute
+    cursor: pointer
+    top: 0
+    left: 0
+    right: 0
+    bottom: 0
+    background-color: #ccc
+    -webkit-transition: .1s
+    transition: .1s
+
+    &:before
+      position: absolute
+      content: ""
+      height: 13px
+      width: 13px
+      left: 3px
+      bottom: 3px
+      background-color: white
+      -webkit-transition: .1s
+      transition: .1s
+
+  input
+    &:checked + .slider
+      background-color: $black-color-text-main
+
+    &:focus + .slider
+      box-shadow: 0 0 1px $black-color-text-main
+
+    &:checked + .slider:before
+      -webkit-transform: translateX(17px)
+      -ms-transform: translateX(17px)
+      transform: translateX(17px)
+
+  /* Rounded sliders
+
+  .slider.round
+    border-radius: 34px
+
+    &:before
+      border-radius: 50%

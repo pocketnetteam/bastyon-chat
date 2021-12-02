@@ -1,0 +1,153 @@
+<template>
+  <div id="url" class="urlMessage">
+    <div class="urlwrapper" v-if="urltype!= 'impty' && !error">
+        <metaMessage
+            v-if="!loading"
+            ref="metamessage"
+            :type="urltype"
+            :name="meta['og:site_name']"
+            :title="meta['og:title']"
+            :description="meta['og:description']"
+            :image="previewImageUrl"
+            :video="meta['og:video:url'] || (urltype == 'video' ? this.url : null)"
+            :url="url"
+            :h="meta['og:image:height']"
+            :w="meta['og:image:width']"
+            @updatedSize="updatedSize"
+        />
+
+        <div v-else>
+            <div class="preloaderWrapperLocal">
+                <linepreloader />
+            </div>
+        </div>
+    </div>
+  
+  </div>
+</template>
+
+<style scoped lang="sass">
+    .preloaderWrapperLocal
+        padding : $r 0
+        text-align: center
+
+    .urlwrapper
+        margin-top: 0.5 * $r
+</style>
+
+<script>
+import { mapState } from 'vuex';
+import metaMessage from "@/components/events/event/metaMessage/index.vue";
+export default {
+    name: 'eventsurl',
+    props: {
+        url : String,
+        preview : Boolean,
+        data : Object
+    },
+    components : {
+        metaMessage
+    },
+    data : function(){
+        return {
+            meta : {},
+            loading : true,
+            error : false,
+            groups : {
+                p : ['pocketnet.app', 'bastyon.com'],
+                pt : ['test.pocketnet.app', 'test.bastyon.com']
+            }
+        }
+    },
+    computed: mapState({
+        auth : state => state.auth,
+        clearurl : function(){
+            var u = (this.url || "")
+
+            u = u.replace('http://', 'https://')
+
+            if (u.indexOf('https://') == -1){
+                u = 'https://' + u
+            }
+
+            return u
+        },
+        previewImageUrl() {
+            if (this.meta['og:image'])
+                return this.core.mtrx.client.mxcUrlToHttp(this.meta['og:image']);
+        },
+        urltype : function(){
+
+            if(!this.url) return 'empty'
+
+
+            if(this.url.indexOf('embedVideo.php') > -1){
+         
+                return 'video'
+            }   
+
+            var url = {}
+
+            try{
+                url = new URL(this.url)
+            }
+            catch(e){
+                this.error = e
+            }
+
+            if(!url.pathname || url.pathname == '/') return 'custom'
+
+            var domain = window.pocketnetdomain || 'pocketnet.app'
+
+            if (this.url.indexOf('publicroom=') > -1) return 'matrix'
+            if (this.url.indexOf('connect=') > -1) return 'matrix'
+
+            if (this.url.indexOf('bastyon://') > -1) return 'pocketnet'
+
+            if (this.url.indexOf('pocketnet://') > -1) return 'pocketnet'
+            if (this.url.indexOf('bastyon://') > -1) return 'pocketnet'
+
+            var m = _.find(this.groups, function(g){
+                return _.indexOf(g, url.host) > -1 &&  _.indexOf(g, domain) > -1
+            })
+
+            if (m && this.url.indexOf('embedVideo.php') == -1) {
+                return 'pocketnet'
+            }
+
+            return 'custom'
+        },
+
+    }),
+
+    mounted : function(){
+        if (this.urltype == 'custom'){
+            this.geturl()
+        }
+        else{
+            this.loading = false
+        }
+    },
+
+    methods : {
+        updatedSize: function(before) {
+            this.$emit('updatedSize', before)
+        },
+        geturl : function(){
+
+            this.loading = true
+
+            this.core.mtrx.client.getUrlPreview(this.clearurl, 0).then(response => {
+                this.loading = false
+                this.meta = response
+
+            }).catch(error => {
+                this.meta = {}
+                this.loading = false
+            })
+
+        }
+
+    },
+}
+</script>

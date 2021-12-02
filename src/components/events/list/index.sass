@@ -1,0 +1,174 @@
+.eventWrapper
+  /deep/
+    .event
+      padding : 0.5 * $r 0
+
+
+.list-enter-active, .list-leave-active
+  transition: all 1s
+
+.list-enter, .list-leave-to
+  opacity: 0
+
+#events
+  left : 0
+  right : 0
+  top : 0
+  bottom : 0
+  padding-bottom : 46px
+  position: absolute
+  +transition(0.3s)
+  &.mobile
+    padding-bottom : 77px
+
+    .scrollbottom
+      bottom : 10 * $r
+
+.dummyheight
+  height: 100%
+  width: 2px
+  left : 0
+  right : 0
+  top : 0
+  bottom : 0
+  background: #000
+
+.preloadingWrapper
+  padding : 4 * $r
+  text-align: center
+  opacity: 0.5
+  color: $color-text-common
+
+.scrollbottom
+  position: absolute
+  right : $r
+  bottom : 8 * $r
+  cursor: pointer
+  border-radius: 50%
+  background: $color-bg-clear
+  +shadowSmaller()
+  color : $color-text-common2
+  width: 35px
+  height: 35px
+  line-height: 35px
+  text-align: center
+  z-index: 3
+
+  i
+    font-size: 0.7em
+
+.eventsflex
+  display: flex
+  flex-flow: column
+  overflow-y: overlay
+  overflow-x: hidden
+  max-width: 768px
+  margin: 0 auto
+  -webkit-overflow-scrolling: touch
+  overscroll-behavior: contain
+  flex-wrap: nowrap
+  width: 100%
+  height: 100%
+  scroll-behavior: auto
+  continue: fragments
+  justify-content: flex-start
+  transform: scaleY(-1)
+
+  &.freeze
+    overflow-y: hidden
+
+  .ewr,
+  .eventspage
+    width : 100%
+    display: flex
+    flex-flow: column
+    flex-wrap: nowrap
+    justify-content: flex-start
+
+  .eventWrapper
+    width: 100%
+    transform: scaleY(-1)
+
+  &.mobile
+    scroll-behavior: smooth
+    /deep/
+      .dropdown.visible
+        top : -55px
+
+      .outer-div
+        .backgr
+          position: absolute
+        .menuwrapper
+          position: absolute
+    &.ios
+      &.menuOpen
+        overflow: visible
+
+
+.galleryRow
+  display: flex
+  align-items: flex-end
+
+  .messageImg
+    max-width: 50%
+    margin: 0 10px
+    position: relative
+
+    .img
+      display: block
+      border-radius: .5em
+      position: relative
+      max-width: 100%
+
+    .loadingImg
+      display: flex
+      align-items: center
+      justify-content: center
+      border-radius: .5em
+      position: relative
+      max-width: 300px
+      height: 250px
+
+      .imgPreview
+        border-radius: .5em
+        position: relative
+        max-width: 100%
+        height: 100%
+        opacity: .6
+
+      .clipLoader
+        position: absolute
+        z-index: 9999
+        left: 50%
+        right: 0
+        top: 50%
+        bottom: 0
+        transform: translate(-50, 50)
+        display: flex
+        align-items: center
+        justify-content: center
+
+    .imgMsg
+      img
+        max-width: 100%
+        object-fit: cover
+        border-radius: 1em
+        display: block
+
+    .metaLink
+      background: black
+      .metaMessageLink
+        .metaTitle
+          font-weight: bold
+          font-size: 0.9em
+        .metaDescription
+          margin: .5em 0
+          font-size: 0.8em
+        .metaImgWrapper
+          display: block
+          max-width: 300px
+          object-fit: cover
+          img
+            display: block
+            width: 100%
+            height: 100%

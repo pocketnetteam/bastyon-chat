@@ -1,0 +1,129 @@
+.metaMsg
+  width: 100%
+  padding: 0
+  height: auto
+
+  .plyr
+    margin-bottom: 0.5 *$r
+    margin-top: 0.5 * $r
+    border-radius: 5px
+
+  .customURL
+    display: flex
+    flex-direction: column-reverse
+
+  .pocketnet_iframe,
+  .customURL
+    border-top : 1px solid transparentize($color-bg-clear, 0.5)
+    +shadowSmaller()
+    border-radius: 5px
+    overflow: hidden
+
+  .pocketnet_iframe
+    background: $color-bg-clear
+    font-size: 0.9em
+
+    /deep/
+      iframe
+        width: 100%
+        height: 100%
+
+  .openlink
+    padding : $r
+    text-align: center
+
+  .link
+    max-width: 90%
+    margin-left : auto
+    margin-right: $r
+    padding :  $r $r
+    padding-top :  $r
+    overflow: hidden
+    text-overflow: ellipsis
+    text-align: right
+    padding-right: 0
+    line-height: 1em
+    cursor: pointer
+    word-wrap: break-word
+
+    i
+      opacity: 0.5
+      font-size: 0.7em
+    span
+      opacity: 0.7
+      text-decoration: underline
+      font-size: 0.7em
+
+  .header
+    display: flex
+
+    .header-text
+      flex-direction: column
+      padding : $r
+      max-height: 100px
+      overflow: hidden
+      text-overflow: ellipsis
+      padding-bottom: 0
+
+      .title
+        font-weight: 700
+        margin: 0
+        
+    .pocketnet
+      font-size: 11px
+      font-weight: 500
+      color: gray
+
+  .bgimage
+    width : 50px
+    height: 50px
+    border-radius: 5px
+    border-bottom-left-radius: 0
+    border-top-right-radius: 0
+  .textMsg
+    word-break: break-all
+    font-size: 0.8em
+    cursor: pointer
+    &:hover
+     a
+       display: block
+       width: 100%
+       height: 100%
+       color: #62bcf9
+
+    a
+      font-weight: bold
+      color: #0059ff
+
+  .title
+    font-weight: bold
+    display: block
+    font-size: 0.9em
+    margin: 0.4em 0
+    span
+      display: block
+
+
+
+    
+  .description
+    font-size: 0.8em
+    
+
+  .image
+    margin: 0.2em 0
+
+    img
+      display: block
+      object-fit: contain
+      border-radius: .5em
+      width: 100%
+      object-fit: cover
+  .video
+    margin: .5em 0
+    iframe
+      border: 0
+      border-radius: .5em
+
+  /deep/ .videoTips
+    display: none!important

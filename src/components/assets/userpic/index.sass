@@ -1,0 +1,93 @@
+.userpic
+    width: 100%
+    border-radius: 50%
+    background: transparentize($color-text-second2, 0.9)
+    line-height: 44px
+    text-align: center
+    font-size: 0.8em
+    color : $color-text-light
+    position: relative
+
+    /deep/ .bgimage
+        width: 100%
+        height: 100%
+        border-radius: 50%
+
+    .userpicSquareWrapper
+        padding-top : 100%
+        position: relative
+
+    .userpicSquareInnerWrapper
+        position : absolute
+        left : 0
+        right : 0
+        top : 0
+        bottom : 0
+
+.icon
+    position: absolute
+    right : 70%
+    top : 70%
+    font-size: 1em
+    width : 20px
+    height: 20px
+    line-height: 20px
+    background: transparent
+    border-radius: 20px
+    color : $color-text-slight
+    opacity: 0.8
+    z-index: 3
+
+    &.active
+        color: $color-text-second
+
+.charAvatar
+    text-transform: uppercase
+
+.charAvatar,
+.statusIcon
+    position: absolute
+    left : 0
+    right : 0
+    top : 0
+    bottom : 0
+    display: flex
+    align-items: center
+    text-align: center
+    z-index: 2
+    font-size: 1.5em
+    opacity: 0.7
+    span,
+    i
+        flex-grow: 1
+        color : #fff
+
+.invite
+    &:after
+        content : ""
+        position: absolute
+        left : 0
+        right : 0
+        top : 0
+        bottom : 0
+        background: transparentize($color-text-second2, 0.3)
+        border-radius : 50%
+    i
+        display: flex
+        height: 100%
+        justify-content: center
+        align-items: center
+
+.blocked, .ban
+    &:after
+        content : ""
+        position: absolute
+        left : 0
+        right : 0
+        top : 0
+        bottom : 0
+        background: $color-text-mlight!important
+        opacity: .7
+        border-radius : 50%
+
+

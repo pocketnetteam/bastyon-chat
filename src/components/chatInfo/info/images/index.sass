@@ -1,0 +1,81 @@
+.chatInfoMedia
+  .emptyBlock
+    text-align: center
+    padding : 3 * $r 0
+    span
+      font-size: 0.9em
+  .roomAboutWrapper
+    display: flex
+    justify-content: flex-start
+    flex-wrap: wrap
+    padding: 0 .8em
+    position: relative
+    height: 430px
+
+    #chatList
+      width: 100%
+    .roomAboutImage
+      cursor: pointer
+      padding: .5em .2em
+      position: relative
+      img
+        display: block
+        width: 100px
+        height: 100px
+        object-fit: cover
+        border-radius: 2 * $r
+
+      .encryptedDataIcon
+        left : 0
+        top : 0
+        position: absolute
+        color : #fff
+        opacity: 0.3
+        padding : 0.5 * $r $r
+        text-shadow: 1px 1px 2px black
+
+        i
+          font-size: 0.7em
+
+    /deep/
+      #events
+        padding-bottom: 0
+        .scrollbottom
+          display: none
+        .eventsflex
+          transform: initial
+          padding: 1em 0
+          .ewr
+            display: grid
+            grid-template-columns: repeat(3, 1fr)
+            padding: 0 1em
+            row-gap: 5px
+            column-gap: 5px
+            flex-direction: row
+            flex-wrap: wrap
+            transform: initial
+            .eventWrapper
+              padding: 0
+              transform: initial
+              .event
+                padding: 0
+                .eventsMessage
+                  .messageRow
+                    padding: 0
+                    .fromimagesfiles
+                      display: none
+                    .iconWrapper
+                      display: none
+                    .actionsWrapper
+                      display: none
+                    .timeWrapper
+                      display: none
+                    .messageImg
+                      width: 100%
+                      padding: 0
+                      margin: 0
+                      .imgMsg
+                        .abswrapper
+                          border-radius: 1em
+
+

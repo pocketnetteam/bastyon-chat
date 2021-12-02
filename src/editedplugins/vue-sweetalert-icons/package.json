@@ -1,0 +1,98 @@
+{
+  "_args": [
+    [
+      "vue-sweetalert-icons@4.3.0",
+      "C:\\inetpub\\wwwroot\\matrix"
+    ]
+  ],
+  "_from": "vue-sweetalert-icons@4.3.0",
+  "_id": "vue-sweetalert-icons@4.3.0",
+  "_inBundle": false,
+  "_integrity": "sha512-8SgzgyqppIj/gQt6Y5JLXPnqt1pEq50w6TeQ1B3aVd1mWm3gHTeWHWujiycjouo8too1fgtWkn3mi16vumKSJw==",
+  "_location": "/vue-sweetalert-icons",
+  "_phantomChildren": {
+    "clone-deep": "4.0.1",
+    "loader-utils": "1.4.0",
+    "neo-async": "2.6.2",
+    "semver": "6.3.0"
+  },
+  "_requested": {
+    "type": "version",
+    "registry": true,
+    "raw": "vue-sweetalert-icons@4.3.0",
+    "name": "vue-sweetalert-icons",
+    "escapedName": "vue-sweetalert-icons",
+    "rawSpec": "4.3.0",
+    "saveSpec": null,
+    "fetchSpec": "4.3.0"
+  },
+  "_requiredBy": [
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/vue-sweetalert-icons/-/vue-sweetalert-icons-4.3.0.tgz",
+  "_spec": "4.3.0",
+  "_where": "C:\\inetpub\\wwwroot\\matrix",
+  "author": {
+    "name": "JorgenVatle"
+  },
+  "browser": {
+    "./sfc": "src/components/icon.vue"
+  },
+  "bugs": {
+    "url": "https://github.com/JorgenVatle/vue-sweetalert-icons/issues"
+  },
+  "dependencies": {
+    "color": "^3.1.2",
+    "node-sass": "^4.12.0",
+    "sass-loader": "^7.1.0",
+    "validate-color": "^2.1.0"
+  },
+  "description": "A super simple Vue wrapper for the beautiful animated SweetAlert status icons",
+  "devDependencies": {
+    "acorn": "^6.1.1",
+    "autoprefixer": "^9.6.0",
+    "cross-env": "^5.2.0",
+    "minimist": "^1.2.0",
+    "rollup": "^1.12.1",
+    "rollup-plugin-buble": "^0.19.6",
+    "rollup-plugin-commonjs": "^10.0.0",
+    "rollup-plugin-postcss": "^2.0.3",
+    "rollup-plugin-replace": "^2.2.0",
+    "rollup-plugin-terser": "^4.0.4",
+    "rollup-plugin-typescript2": "^0.21.1",
+    "rollup-plugin-vue": "^5.0.0",
+    "vue": "^2.6.10",
+    "vue-template-compiler": "^2.6.10"
+  },
+  "files": [
+    "dist/*",
+    "src/**"
+  ],
+  "homepage": "https://github.com/JorgenVatle/vue-sweetalert-icons#readme",
+  "keywords": [
+    "vue",
+    "sweetalert",
+    "icons",
+    "animated"
+  ],
+  "license": "ISC",
+  "main": "dist/sweetalert-icon.ssr.js",
+  "module": "dist/sweetalert-icon.esm.js",
+  "name": "vue-sweetalert-icons",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JorgenVatle/vue-sweetalert-icons.git"
+  },
+  "scripts": {
+    "build": "cross-env NODE_ENV=production rollup --config ./build/rollup.config.js",
+    "build:es": "cross-env NODE_ENV=production rollup --config ./build/rollup.config.js --format es",
+    "build:ssr": "cross-env NODE_ENV=production rollup --config ./build/rollup.config.js --format cjs",
+    "build:unpkg": "cross-env NODE_ENV=production rollup --config ./build/rollup.config.js --format iife",
+    "postpublish": "git push && git push --tags",
+    "prepareexample": "npm link && cd example && npm i && npm link vue-sweetalert-icons && npm run generate",
+    "prepublish": "npm run build",
+    "preversion": "npm run build"
+  },
+  "unpkg": "dist/sweetalert-icon.min.js",
+  "version": "4.3.0"
+}

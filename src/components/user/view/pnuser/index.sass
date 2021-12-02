@@ -1,0 +1,53 @@
+.name
+    text-align: center
+    span
+        font-size: 2em
+        font-weight: 100
+.gotoprofile
+    text-align: center
+    padding : 2 * $r
+    padding-top : 0
+
+.imageWrapper
+    padding : 2 * $r 0
+    padding-top : 0
+    max-width: 120px
+    margin : 0 auto
+
+.info
+    display: flex
+    padding : $r
+    width: 95%
+    border-radius: 35px
+    background: transparentize($color-bg-clear, 0.5)
+    margin : 0 auto
+    margin-bottom: $r
+    +shadowSmallers()
+
+    .infoPart
+        width : 33.3%
+        padding : $r
+        text-align: center
+        
+        span
+            font-size: 0.8em
+
+        .value
+            font-size: 1.3em
+            font-weight: 700
+/deep/
+    .userpic
+        width: 120px
+        height: 120px
+        line-height: 120px
+        margin : 0 auto
+
+
+.haskeys
+    position: absolute
+    left : $r
+    top : $r
+    color : $color-good
+
+    i
+        font-size : 0.8em

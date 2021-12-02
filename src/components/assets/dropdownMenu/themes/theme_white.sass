@@ -1,0 +1,72 @@
+@at-root #matrix-root[theme="white"] 
+	.outer-div
+	
+	.dropDownIcon
+	  i
+	
+	.menuwrapper
+	
+	  /deep/ .items
+	
+	.dropdown
+	  color: $white-color-text-common
+	  +transition(0.3s)
+	
+	
+	  .backgr
+	    background: transparentize($white-color-bg-clear, 0.85)
+	    +transition(0.3s)
+	
+	
+	  &.visible
+	
+	    .backgr
+	
+	  /deep/
+	    .contentWrapper
+	      border-top : 1px solid fade($white-color-text-slight, 0.5)
+	      +shadowSmaller()
+	
+	  .cancelWrapper
+	    .menu-item
+	      background: transparent
+	      +shadowSmallers()
+	      
+	  .menu-item
+	    background: $white-color-bg-clear
+	    border-top : 1px solid fade($white-color-text-slight, 0.5)
+	    +shadowSmaller()
+	
+	    .title
+	
+	    .iconWrapper
+	
+	  .blocker
+	
+	.cancelWrapper
+	  color : $white-color-text-slight
+	
+	.small
+	/*.chatRightMenu
+	  &.minimized
+	    .dropdown
+	/*.chatOneToOne
+	  .dropdown
+	
+	.outer-div
+	  &.mobile
+	    .menuwrapper
+	  &.minimized
+	
+	    .backgr
+	      background: transparent
+	
+	    .dropdown
+	
+	
+	    .menuwrapper
+	
+	      /deep/
+	        .menu-item
+	          background: transparentize($white-color-bg-clear, 0.05)
+	

@@ -1,0 +1,49 @@
+.message
+    font-weight: 400
+    text-align: center
+
+    div
+        margin : 0 auto
+        padding : $r 2 * $r
+        background: $color-bg-clear
+        border : 1px solid transparentize($color-text-slight, 0.8)
+        border-radius: 30px
+        width: 200px
+        font-size: 0.8em
+        +shadowSmaller()
+
+
+.iconWrapper
+    transform: scale(0.5)
+
+.wrapper
+    position: absolute
+    left : 0
+    right : 0
+    top : 0
+    bottom : 0
+    z-index : 2900
+    background: transparentize($color-bg-clear, 0)
+    background: radial-gradient(circle, transparentize($color-bg-clear, 0) 0%, transparentize($color-bg-clear, 1) 100%)
+    +transition(0.3s)
+    .table
+        height: 100%
+        >div
+            vertical-align: middle
+
+#wai-fixedmessageicon
+    +transition(0.3s)
+    &.minimized
+        .wrapper
+            top : 60px
+            bottom : 100px
+
+        &:not(.active)
+            opacity: 0
+
+    &.active
+        .wrapper
+            width: 344px
+            transform: translateX(-300px)
+
+        

@@ -1,0 +1,182 @@
+@at-root #matrix-root[theme="black"] 
+	.addTopic
+	  button
+	  span
+	    color: $black-color-text-main
+	  .inputWrapper
+	
+	    textarea
+	      background: transparentize($black-color-bg-gen , 0.5)
+	      color: $black-color-text-common
+	
+	.linkwrapper
+	
+	  button
+	
+	.linkPlace
+	  
+	  i
+	
+	  span
+	    
+	  .shareLink
+	    &:hover
+	      color: $black-color-text-main
+	
+	
+	.chatIconWrapper
+	  /deep/ .swiperWrapperFlex .imageSwiper
+	
+	  /deep/
+	
+	    .swiperWrapperFlex
+	
+	    .threeAvatars,
+	    .fourAvatars,
+	    .twoAvatars
+	      +shadowSmaller()
+	      background: transparentize($black-color-bg-clear, 0.7)
+	
+	    .oneuser
+	
+	    .bgimage
+	      +shadowSmaller()
+	
+	      
+	
+	.biggest
+	
+	.icon
+	  background: transparent
+	  color: $black-color-text-slight
+	
+	  &.active
+	    color: $black-color-text-second
+	
+	.unseen
+	  background: transparentize($black-color-good, 0.2)
+	  color: #fff
+	
+	.userpic
+	  background: $black-color-bg-gen
+	  color: $black-color-text-light
+	
+	  /deep/ .bgimage
+	
+	  i
+	    color: $black-color-text-second2
+	
+	
+	
+	.icon
+	  background: transparent
+	  color: $black-color-text-slight
+	
+	  &.active
+	    color: $black-color-text-second
+	
+	.unseen
+	  background: transparentize($black-color-text-main, 0.1)
+	  color: #fff
+	
+	.aboutRoom
+	
+	  .roomInfoWrapper
+	    background: transparentize($black-color-bg-gen, 0.5)
+	    .roomNameLine
+	    .namewrapper
+	      input
+	      .active
+	        border-bottom: 1px solid $black-color-bg-gen
+	      .iconwrapper
+	
+	    .userpicWrapper
+	      border-bottom: 1px solid $black-color-bg-gen
+	
+	    .roomInfo
+	      .name
+	        label
+	          border-bottom: 1px solid $black-color-bg-gen
+	          input
+	            border: 0
+	        span
+	    .topicTxt
+	
+	
+	
+	  .roomAccordionsList
+	    .active
+	      .body
+	        border-bottom: 1px solid $black-color-bg-gen
+	    .accordion
+	      .membersCount
+	      .aHeader
+	        .head
+	          border-bottom: 1px solid $black-color-bg-gen
+	          +transition(0.3s)
+	
+	
+	          .leftBlock
+	            
+	            i
+	              color: $black-color-text-slight
+	
+	
+	      .body
+	        .membersList
+	
+	          .roomMember
+	            border-bottom: 1px solid $black-color-bg-gen
+	
+	            .leftWrapper
+	              .avatarNameWrapper
+	
+	                .avatar
+	                  background: $black-color-bg-gen
+	                  color: $black-color-text-light
+	
+	                  /deep/ .bgimage
+	
+	                  img
+	
+	
+	              .nameRole
+	                .memberRole
+	                  color: #919191
+	            .rightWrapper
+	              .adminActionsList
+	                .fa-caret-up
+	                 color: $black-color-bg-gen
+	
+	                ul
+	                  background: $black-color-applebuttontext
+	                  li
+	                    &:last-child
+	                      border: 0
+	                    border-bottom: 1px solid $black-color-bg-gen
+	                    i
+	                      color: $black-color-text-main
+	                    span
+	
+	        .roomAboutWrapper
+	
+	          .roomAboutImage
+	            img
+	          .aboutRoomFileWrapper
+	            .aboutRoomFile
+	              border-bottom: 1px solid $black-color-bg-gen
+	
+	              a
+	              i
+	.roomActionsList
+	  background: $black-color-bg-clear
+	
+	
+	  .button
+	    
+	      
+	  .actionsItem
+	
+	/deep/
+	  #modal
+	    .modal-wrapper

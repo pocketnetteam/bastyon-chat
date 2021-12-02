@@ -1,0 +1,89 @@
+
+.caption
+  padding : 2 * $r
+  span
+      font-size: 1.5em
+      font-weight: 700
+
+#chatJoin
+
+.tip
+    padding : 3 * $r
+    text-align: center
+
+    span
+        font-size: 0.8em
+
+.blocked
+  width : 100%
+  text-align: center
+
+  span
+    font-size: 0.9em
+
+.joinAction
+    position: fixed
+    bottom : 0
+    left : 0
+    right : 0
+    background: $color-bg-second
+    padding : 2 * $r 0
+    text-align: center
+    z-index: 3
+
+    &.bin
+      position: sticky
+
+    .actions
+        display: flex
+        .action
+          padding: $r
+          flex-grow: 1
+          button
+            min-width: 0
+            width : 100%
+.my-swipe
+  height: 200px
+  color: #fff
+  font-size: 30px
+  text-align: center
+
+.slide1
+  background-color: #0089dc
+  color: #fff
+
+
+.slide2
+  background-color: #ffd705
+  color: #000
+
+
+.slide3
+  background-color: #ff2d4b
+  color: #fff
+
+.minimized
+    &:not(.active)
+      .caption
+        width: 52px
+        text-align: center
+        span
+          color : $color-text-main
+          font-size: 0.6em
+      .joinAction 
+        display: none
+
+
+      .chatPreview
+        display: none
+
+      /deep/
+
+        .userinfoWrapper
+          background: transparent!important
+          box-shadow: none
+        .haskeys
+          display: none
+        
+
+        

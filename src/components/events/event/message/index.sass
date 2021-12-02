@@ -1,0 +1,470 @@
+
+
+.referenceTop
+  margin-left: 0.5 * $r
+  margin-right: 0.5 * $r
+  border-radius: 10px
+  border-bottom-left-radius: 0
+  overflow: hidden
+  margin-bottom: $r
+
+  &.my
+    border-bottom-right-radius: 0
+    border-bottom-left-radius: 10px
+
+.showImage
+  width: 100%
+  position: relative
+  overflow: hidden
+
+  .abswrapper
+    position : absolute
+    left : 0
+    top : 0
+    bottom : 0
+    right : 0
+    display: flex
+    text-align: center
+    align-items: center
+    justify-content: center
+    transparentize($color-text-common, 0.98)
+
+
+.preloaderImage
+  padding-bottom: 100px
+  border-radius: 10px
+  background: transparentize($color-text-common, 0.95)
+  width: 100%
+  position: relative
+
+  .abswrapper
+    position : absolute
+    left : 0
+    top : 0
+    bottom : 0
+    right : 0
+    display: flex
+    text-align: center
+    align-items: center
+    justify-content: center
+
+    >div
+      opacity: 0.2
+
+.statusWrapper
+  padding: $r
+  margin-top : $r
+  border-top : $r solid transparentize($color-text-light, 0.97)
+  .my
+    font-size: 0.7em
+    opacity: 0.5
+    text-align: center
+
+.messageRow
+  display: flex
+  align-items: flex-end
+  padding-left: $r / 2
+  min-height: 34px
+
+  &.my
+    padding-left : 0
+    padding-right: $r / 2
+
+    .messageImg
+      .imgMsg
+        .showImage
+          .abswrapper
+            border-radius: 1em
+            border-top-right-radius: 0
+            border-top-left-radius: 1em
+
+  .maxcontent
+    max-width: 82%
+
+    &.my
+      max-width: 87%
+
+  &.allscreen
+    flex-wrap : wrap
+
+    /deep/
+      .userpic
+        position: relative
+        &::after
+          border-radius: 50%
+          content: ''
+          position: absolute
+          left : -5px
+          right : -5px
+          top : -5px
+          bottom : -5px
+          border : 5px solid $color-bg-clear
+          z-index: 1
+          +shadowSmaller()
+
+  /*.clear
+    width: 100%
+    border: 0
+    clear: both
+    height: 0*/
+
+  .metaMsg
+    width : 100%
+
+  .badencrypted
+    position: absolute
+    background: transparentize($color-bg-backface, 0.05)
+    left : 0
+    right: 0
+    top : 0
+    bottom : 0
+    padding : $r
+
+
+  .encryptedDataIcon
+    position: absolute
+    color : #fff
+    opacity: 0.3
+    padding : 0.5 * $r $r
+    text-shadow: 1px 1px 2px black
+    left : 0
+    top : 0
+
+    i
+      font-size: 0.7em
+
+  .filePreview
+    position: relative
+
+    .encryptedDataIcon
+      color : $color-text-slight
+      text-shadow: none
+      color 
+      right: 0
+      left : auto
+
+  .messageImg
+    width: 85%
+    position: relative
+    margin-top : 0.25 * $r
+    
+    .img
+      display: block
+      border-radius: .5em
+      position: relative
+      max-width: 100%
+
+    .loadingImg
+      display: flex
+      align-items: center
+      justify-content: center
+      border-radius: .5em
+      position: relative
+      max-width: 300px
+      height: 250px
+
+      .imgPreview
+        border-radius: .5em
+        position: relative
+        max-width: 100%
+        height: 100%
+        opacity: .6
+
+      .clipLoader
+        position: absolute
+        z-index: 9999
+        left: 50%
+        right: 0
+        top: 50%
+        bottom: 0
+        transform: translate(-50, 50)
+        display: flex
+        align-items: center
+        justify-content: center
+    .imgMsg
+
+      .showImage
+        display: flex
+      
+      img
+        max-width: 100%
+        object-fit: cover
+        display: block
+      .abswrapper
+        border-radius: 1em
+        border-top-left-radius: 0
+        overflow: hidden
+        background: transparentize($color-text-mlight, 0.8)
+
+    .metaLink
+  
+      background: black
+      .metaMessageLink
+        .metaTitle
+          font-weight: bold
+          font-size: 0.9em
+        .metaDescription
+          margin: .5em 0
+          font-size: 0.8em
+        .metaImgWrapper
+          display: block
+          max-width: 300px
+          object-fit: cover
+          img
+            display: block
+            width: 100%
+            height: 100%
+
+  .filePreview
+    width : 90%
+    border : 1px solid transparentize($color-text-mlight, 0.8)
+    overflow: hidden
+    border-radius: 10px
+    position: relative
+    margin-top : $r
+    height: 100px
+
+    .table
+      height: 100%
+
+  .linkPreview
+    width : 100%
+    
+  .messagePreview
+    width: 100%
+    overflow: hidden
+    text-overflow: ellipsis
+
+    span
+      word-break: break-all
+      white-space: normal
+
+  .fromimagesfiles
+    order: 5
+    
+    padding: $r $r / 2
+
+    padding-right : $r
+    .fromCaption
+      font-size: 0.8em
+
+  .actionsWrapper
+    order: 4
+    flex-grow: 1
+    padding-left : $r
+    padding-right: 2.5 * $r
+    cursor: pointer
+    text-align: right
+    
+    i
+      font-size: 0.7em
+      opacity: 0.3
+
+    &:hover
+      i
+        opacity: 1
+
+  
+  .statusWrapper
+    order: 5
+    padding: $r $r / 2
+    opacity: 0.6
+
+    div,
+    span
+      font-size: 0.7em
+
+  .sendername
+    order: 3
+    opacity: 0.6
+    overflow: hidden
+    font-size: 0.7em
+    span
+      
+
+  .timeWrapper
+    text-align: left
+    order: 2
+    padding: 0 $r / 2
+    line-height: 33px
+    opacity: 0.6
+    flex-grow: 1
+
+    span
+      white-space: nowrap
+      font-size: 0.7em
+
+  .showreference
+    cursor: pointer
+
+  &.referenceshowed
+ 
+    .messageText
+      background: transparentize($color-text-slight, 0.8)!important
+      color : #181717!important
+
+    .reference
+      padding-bottom: 0!important
+
+    .referenceCaption
+      button
+        width: 100%
+
+
+  .messageText
+    margin-left: 0.5 * $r
+    background: transparentize($color-text-slight, 0.8)
+    color: $color-text-common
+    padding: $r 1.5 * $r
+    padding-top : $r
+    border-radius: 2 * $r
+    border-bottom-left-radius: 0
+    font-weight: 400
+    white-space: normal
+    display: flex
+    flex-direction: column-reverse
+
+    .msgtext
+      text-align: left
+      white-space: pre-wrap
+
+    .reference
+      height: 32px
+
+    .from,
+    .reference
+      opacity: 0.8
+      border-bottom : 1px solid #fff
+      padding : $r 0
+      padding-top : 0
+      margin-bottom : $r
+      display: flex
+
+      .event
+        max-height: 38px
+        text-align: left
+
+      i
+        width : 30px
+        text-align: center
+        font-size: 0.8em
+
+      .referenceCaption
+        min-width: 28px
+
+      .fromCaption,
+      .referenceCaption
+        font-size: 0.8em
+
+      .sendername
+        white-space: nowrap
+
+      /deep/
+        .messagePreview
+          font-size: 0.9em
+          height: 22px
+          .previewMessage
+            white-space: nowrap
+
+
+    .edited
+      font-size: 0.7em
+      opacity: 0.5
+      text-align: right
+
+    div
+      overflow: hidden
+      text-overflow: ellipsis
+
+
+  .badenctyptedText
+    margin-left: $r
+    color: #fff
+    padding: $r 1.5 * $r
+    border-radius: 2 * $r
+    background: $color-text-mlight
+    word-break: break-all
+    white-space: normal
+
+    span
+      font-size: 0.9em
+
+  .iconWrapper
+    width: 33px
+    min-width: 33px
+
+  .withsendername
+    position: relative
+    .sendername
+      position: absolute
+      top : 100%
+      margin-top : -5px
+      left: 20px
+      color : #727272
+      span
+        font-size: 0.7em
+
+  &[my="true"]
+    justify-content: flex-end
+    
+
+    .iconWrapper
+      margin-left: $r
+      order : 1
+      align-self: flex-start
+
+    .fromimagesfiles
+      order: -5
+    .actionsWrapper
+      text-align: left
+      padding-left : 1.5 * $r
+      padding-right : 0.5 *$r
+      order: -4
+    .statusWrapper
+      order: -3
+
+    .timeWrapper
+      order: -2
+      text-align: right
+
+    .messageText
+      background: $color-bg-main
+      color : #fff
+      text-align: right
+      border-radius: 2 * $r
+      border-bottom-left-radius: 2 * $r
+      border-top-right-radius: 0
+  &.urlpreview
+    background: transparentize($color-text-slight, 0.95)
+    padding : $r
+    padding-left: 0.5 * $r
+    padding-bottom: 2 * $r
+
+    .actionsWrapper
+      padding-right: $r
+      padding-left: $r
+
+  &.allscreen
+    .linkPreview,
+    .filePreview,
+    .metaMsg,
+    .messageImg
+      order: 4
+      padding-left: 0.25 * $r
+
+    &[my="true"]
+      .linkPreview,
+      .filePreview,
+      .metaMsg,
+      .messageImg
+        order: 6
+
+  &.not-preview
+    align-items: center
+    justify-content: center
+    color: $color-text-mlight
+    text-align: center
+    flex-direction: column-reverse
+
+    .messageNoticeWithLink
+      color: $color-text-second

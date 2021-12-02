@@ -1,0 +1,34 @@
+@at-root #matrix-root[theme="black"] 
+	
+	.namebuttoncreate,
+	.selectedtype,
+	.type
+	    border-bottom: 1px solid transparentize($black-color-text-slight, 0.8)
+	    .icon
+	        i
+	
+	    span
+	
+	    button
+	    input
+	
+	    .completewrapper
+	
+	.namebuttoncreate
+	    >div
+	    input
+	
+	.selectedtype
+	    background: $black-color-bg-clear
+	
+	    .icon
+	        +transition(0.3s)
+	        &:hover
+	
+	    .label
+	
+	.oneonone
+	    /deep/
+	        .namebuttoncreate
+	        .searchWrapperEA
+	            background: $black-color-bg-clear

@@ -1,0 +1,29 @@
+@at-root #matrix-root[theme="white"] 
+	.message
+	
+	    div
+	        background: $white-color-bg-clear
+	        border : 1px solid transparentize($white-color-text-slight, 0.8)
+	        +shadowSmaller()
+	
+	
+	.iconWrapper
+	
+	.wrapper
+	    background: transparentize($white-color-bg-clear, 0)
+	    background: radial-gradient(circle, transparentize($white-color-bg-clear, 0) 0%, transparentize($white-color-bg-clear, 1) 100%)
+	    +transition(0.3s)
+	    .table
+	        >div
+	
+	#wai-fixedmessageicon
+	    +transition(0.3s)
+	    &.minimized
+	        .wrapper
+	
+	        &:not(.active)
+	
+	    &.active
+	        .wrapper
+	
+	        
