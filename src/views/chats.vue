@@ -4,7 +4,7 @@
     <topheader
       class="topheader" :share="share" @newchat="newchat"
     />
-    <maincontent ref="maincontent" :rbackexp="true">
+    <maincontent ref="maincontent" :rbackexp="true" > 
 
       <template v-slot:content>
         
@@ -106,7 +106,9 @@ export default {
 
     scrolltop : function(){
       this.$refs['maincontent'].scroll(0)
-    }
+    },
+
+    
   },
 
   mounted() {

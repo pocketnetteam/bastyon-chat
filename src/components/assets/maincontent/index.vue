@@ -6,6 +6,7 @@
         <div 
           class='headerSpacer'
           ref="scrollable"
+
         >
           <slot name="content">
             &nbsp;

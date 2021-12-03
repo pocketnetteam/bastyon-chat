@@ -178,9 +178,15 @@ var store = new Vuex.Store({
     },
 
     SET_LAST_ROOM(state, value) {
-      state.lastroom = value
 
-      console.log('state.lastroom', state.lastroom)
+      if(!value) state.lastroom = null
+
+      else
+        state.lastroom = {
+          id : value,
+          time : new Date()
+        }
+
     },
 
     active(state, value) {

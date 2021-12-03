@@ -77,6 +77,8 @@ export default {
 
         scroll : function(v){
             this.$refs['scrollable'].scrollTop = v || 0
-        }
+        },
+        
+      
     },
 }
