@@ -125,7 +125,10 @@
                     bottom : 100px
 
                 &:not(.active)
-                    opacity: 0
+                    width : 44px
+
+                    .actions
+                        display: none
 
             &.active
                 .wrapper

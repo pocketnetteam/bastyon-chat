@@ -135,6 +135,8 @@ export default {
 		stateChat: function () {
 			var id = this.$route.query.id
 			return this.$store.state.chatsMap[id]
+
+			
 		},
 		invited: function () {
 

@@ -70,11 +70,12 @@ class Notifier {
 
 		var lastsounddate = localStorage['lastsounddate'] || null
 
-
 		if (lastsounddate) {
 			lastsounddate = new Date(lastsounddate)
 
-			if (f.date.addseconds(lastsounddate, 10) > new Date) {
+			console.log(f.date.addseconds(lastsounddate, 10) > (new Date()), lastsounddate)
+
+			if (f.date.addseconds(lastsounddate, 10) > (new Date())) {
 				return
 			}
 		}
@@ -134,27 +135,27 @@ class Notifier {
 	event(event, chat) {
 		let pushAction = this.core.mtrx.client.getPushActionsForEvent(event)
 
+		if(!pushAction.notify) return
+
 		//let timeFromNow = moment(moment.utc(event.event.origin_server_ts).toDate()).local().fromNow()
 
 		var date = moment(moment.utc(event.event.origin_server_ts).toDate()).local().toDate()
 		var iftime = f.date.addseconds(date, 10) > moment().toDate()
 
-
+		if(!iftime) return
 
 		this.core.mtrx.isReaded(event, true).then(r => {
 
-			if (!this.core.mtrx.me(event.getSender()) && event.getSender() && !r && event.getSender() !== this.core.mtrx.client.credentials.userId) {
+			if (r) return
+
+			if (!this.core.mtrx.me(event.getSender()) && event.getSender() && event.getSender() !== this.core.mtrx.client.credentials.userId) {
+
+				console.log("get usersInfo")
 
 				this.core.user.usersInfo([f.getmatrixid(event.getSender())]).then(info => {
 
 					if (
-						info && info[0] &&
-						pushAction.notify &&
-						iftime
-
-						/// for history of development
-						/*(timeFromNow === 'in a few seconds' || timeFromNow === 'a few seconds ago')*/
-
+						info && info[0]
 					) {
 
 						this.message(event, info[0], chat)

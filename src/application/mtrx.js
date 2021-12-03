@@ -427,10 +427,12 @@ class MTRX {
 
 					if (message.event.content['m.relates_to'] && message.event.content['m.relates_to']["rel_type"] == 'm.replace') return false
 
-					if (m_chat)
-						this.core.mtrx.kit.prepareChat(m_chat).then(r => {
-							this.core.notifier.event(message, m_chat)
-						})
+					if (m_chat && this.core.pcrypto.rooms[message.event.room_id]) this.core.notifier.event(message, m_chat)
+
+
+						//this.core.mtrx.kit.prepareChat(m_chat).then(r => {
+							//this.core.notifier.event(message, m_chat)
+						//})
 
 					
 				}

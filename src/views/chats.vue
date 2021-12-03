@@ -7,6 +7,7 @@
     <maincontent ref="maincontent" :rbackexp="true">
 
       <template v-slot:content>
+        
         <list :share="share" @scrolltop="scrolltop"/>
 
         <modal @close="closeNewChat" v-if="newChat && !hiddenInParent">
@@ -109,6 +110,7 @@ export default {
   },
 
   mounted() {
+    
   }
 
 }

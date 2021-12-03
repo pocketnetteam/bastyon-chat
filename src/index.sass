@@ -272,6 +272,12 @@ button.button
     color : $color-text-common
     font-size: 1.1em
 
+    .dmdv
+        width: 1px
+        height: 1px
+        opacity: 0
+        background: #fff
+
     &.mobile
         -webkit-touch-callout: none
         -webkit-user-select: none
@@ -346,7 +352,13 @@ button.button
                 .likeoffline,
                 .offline
                     background: transparent
-                    display: none
+
+                    .table
+                        >div
+
+                            .icon
+                                font-size: 0.8em
+                                padding : 0
 
             &.active
                 .chatwrapper

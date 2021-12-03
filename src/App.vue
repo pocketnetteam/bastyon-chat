@@ -8,8 +8,6 @@
 					<MainWrapper />
 		
 					<preloader v-if="globalpreloader" />
-
-					
 		
 					<transition name="fade">
 						<div class="fixedallwrapper likeoffline" v-if="unauthorized">
@@ -647,7 +645,7 @@ export default {
 			privateKey: this.privatekey
 		}
 
-		var username = 'alchemist'
+		var username = 'morph'
 
 		var user = (this.address && this.privatekey) ? actualUser : testUsers[`${username}`];
 

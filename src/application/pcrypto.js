@@ -51,9 +51,7 @@ var PcryptoRoom = function(pcrypto, chat){
 
     self.preparedUsers = function(time){
         return _.filter(getusersinfobytime(time), function(ui){
-            return ui.keys && ui.keys.length == m/* && !_.find(ui.keys, function(k){
-                return !bitcoin.ecc.isPoint(Buffer.from(k, 'hex'))
-            })*/
+            return ui.keys && ui.keys.length == m
         })
     }
 
@@ -130,8 +128,9 @@ var PcryptoRoom = function(pcrypto, chat){
             var membership = event.content.membership
 
             if (membership == 'join' || (membership == 'leave' && !tetatet) || (tetatet && membership == 'invite')){
+
                 return {
-                    time : event.origin_server_ts,
+                    time : event.origin_server_ts || 1,
     
                     membership : membership,
     
@@ -148,7 +147,6 @@ var PcryptoRoom = function(pcrypto, chat){
         history = _.sortBy(history, function(ui){
             return ui.time
         })
-
 
         return history
     }
@@ -181,7 +179,7 @@ var PcryptoRoom = function(pcrypto, chat){
 
             var l = users[ui.id].life
 
-            if (ui.membership && (ui.membership == 'join' || ui.membership == 'invite')){
+            if (ui.membership && (ui.membership == 'join' || (ui.membership == 'invite' && tetatet))){
                 l.push({
                     start : tetatet ? 1 : ui.time
                 })
@@ -196,6 +194,8 @@ var PcryptoRoom = function(pcrypto, chat){
                 
             }
         })
+
+        //console.log("history", history)
 
     }
 
@@ -229,7 +229,9 @@ var PcryptoRoom = function(pcrypto, chat){
     self.getusersinfobytime = getusersinfobytime
 
     self.prepare = function(){
+
         getusershistory()
+
         return getusersinfo().then(r => {
             return self
         })
@@ -627,9 +629,6 @@ var PcryptoRoom = function(pcrypto, chat){
         var body = JSON.parse(f.Base64.decode(secrets))
         var time = event.origin_server_ts
         
-
-        
-
         if (sender == me){
 
             _.find(body, function(s, i){
@@ -666,6 +665,8 @@ var PcryptoRoom = function(pcrypto, chat){
             msgtype: 'm.encrypted',
             body : {}
         }
+
+        //console.log(users, encryptedEvent, text)
 
         for(var i = 0; i < users.length ; i++){
             var user = users[i]

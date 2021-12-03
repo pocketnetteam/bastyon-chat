@@ -136,10 +136,12 @@ export default {
   mounted() {
     setTimeout(() => {
 
-      this.leaveIfBroken().catch(e => {
+      if(!this.leaveIfBroken()){
 
-      })
+        
+      }
 
+     
     }, 2000)
   },
   methods: {
@@ -171,18 +173,22 @@ export default {
     leaveIfBroken(){
       if (this.brokenRoom) {
 
-      this.core.mtrx.client.leave(from.query.id).then(r => {
-        this.core.mtrx.client.forget(from.query.id, true).then(r => {
-          return r
-        }).then(r => {
-          this.$store.commit('DELETE_ROOM', from.query.id);
+        this.core.mtrx.client.leave(from.query.id).then(r => {
+          this.core.mtrx.client.forget(from.query.id, true).then(r => {
+            return r
+          }).then(r => {
+            this.$store.commit('DELETE_ROOM', from.query.id);
+          })
+
         })
 
-      })
-    } else {
-      return Promise.resolve()
+        return true
 
-    }
+      } else {
+        
+        return false
+
+      }
     }
   },
 

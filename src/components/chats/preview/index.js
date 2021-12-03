@@ -9,6 +9,7 @@ export default {
   props: {
     chat: Object,
     dummy: Boolean,
+   
     room: {}
   },
 
@@ -46,12 +47,9 @@ export default {
 
     if (this.m_chat && !_.isEmpty(this.m_chat)) {
 
-      console.log('preparechat')
-
       this.core.mtrx.kit.prepareChat(this.m_chat).then(r => {
         this.ready = true
       })
-
     }
   },
 

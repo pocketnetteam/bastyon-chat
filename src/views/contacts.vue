@@ -69,7 +69,7 @@ export default {
   },
 
   mounted() {
-    
+    this.$store.commit('SET_LAST_ROOM', null);
   }
 }
 </script>

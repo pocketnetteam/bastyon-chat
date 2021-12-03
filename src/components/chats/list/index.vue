@@ -1,38 +1,46 @@
 <template>
 
 
-  <div class='chats-list' v-if="!unauthorized" :class="{'bin' : pocketnet, 'bout' : !pocketnet, minimized, fix : pocketnet, active, empty}">
-    
-    <teamroom v-if="this.chats.length <= 2 && chatsready == true" @click="openTeamRoom"></teamroom>
-    
-    <div class="listChatLoading" v-if="(chatsready !== true) && this.chats.length === 0">
-      <dummypreviews/>
-    </div>
-    
-    <div class="Swipes" v-else>
-      <transition name="fade">
-        <div class="desktopList">
+  <div class='chats-list'  :class="{'bin' : pocketnet, 'bout' : !pocketnet, minimized, fix : pocketnet, active, empty}">
 
-         
-          <RecycleScroller
-              page-mode
-              class="scroller"
-              :items="chats"
-              :item-size="pocketnet ? 60 : 70"
-              key-field="roomId"
+    <div v-if="!unauthorized">
+
+      <teamroom v-if="this.chats.length <= 2 && chatsready == true" @click="openTeamRoom"></teamroom>
       
-          >
-            <template v-slot="{ item }">
-              <div ref="content" class="card-content" v-if="item" @click="e=>itemClick(item)">
-                  <preview
-                    :chat="item"
-                  />
-              </div>
-            </template>
+      <div class="listChatLoading" v-if="(chatsready !== true) && this.chats.length === 0">
+        <dummypreviews/>
+      </div>
+      
+      <div class="Swipes" v-else>
+        <transition name="fade">
+          <div class="desktopList">
 
-          </RecycleScroller>
-        </div>
-      </transition>
+          
+            <RecycleScroller
+                page-mode
+                class="scroller"
+                :items="chats"
+                :item-size="pocketnet ? 60 : 70"
+                key-field="roomId"
+                :buffer="pocketnet ? 60 : 70"
+        
+            >
+              <template v-slot="{ item, active }">
+                <div ref="content" class="card-content" v-if="item" @click="e=>itemClick(item)">
+                    <preview
+                      v-if="active"
+                      :chat="item"
+                    />
+                </div>
+              </template>
+
+            </RecycleScroller>
+          </div>
+        </transition>
+      </div>
+      </div>
+
+    <div v-else class="dmdv">
     </div>
 
   </div>

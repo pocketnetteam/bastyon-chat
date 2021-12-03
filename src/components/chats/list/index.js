@@ -188,6 +188,11 @@ export default {
         this.$store.commit('blockactive', {value : true, item : 'main'})
         this.$store.commit('setiteraction', true)
 
+
+        if(!this.share && this.$store.state.lastroom){
+          this.$router.push('chat?id=' + this.$store.state.lastroom)
+        }
+
       }
       else{
 
@@ -308,6 +313,14 @@ export default {
     // ideally should be in some global handler/store
     window.addEventListener('keydown', this.onKeyDown);
     window.addEventListener('keyup', this.onKeyUp);
+
+
+    if(!this.hmode){
+      this.$store.commit('SET_LAST_ROOM', null);
+    }
+    else{
+      console.log("IN MODE")
+    }
 
 
   }

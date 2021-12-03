@@ -108,6 +108,10 @@ export default {
             this.ready = true
 
             this.checkcrypto()
+
+
+            
+
             /*this.encrypted = this.m_chat.pcrypto.canBeEncrypt()
             this.cantchat = this.m_chat.pcrypto.cantchat()*/
 
@@ -126,6 +130,7 @@ export default {
         this.$store.commit('setmodal', null)
         if (this.chat) {
           this.$store.commit('SET_CURRENT_ROOM', this.chat.roomId)
+          this.$store.commit('SET_LAST_ROOM', this.chat.roomId);
         } else
           this.$store.commit('SET_CURRENT_ROOM', false)
       }

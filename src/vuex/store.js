@@ -75,7 +75,8 @@ var store = new Vuex.Store({
     hiddenInParent : false,
     modalShowed : null,
     menu : null,
-    closebybg : true
+    closebybg : true,
+    lastroom : null
     //share : {url : 'https://yandex.ru/'} //null
   },
   getters: {
@@ -127,6 +128,7 @@ var store = new Vuex.Store({
       state.modalShowed = null
       state.menu = null
       state.closebybg = true
+      state.lastroom = null
 
       // state.share = null
 
@@ -173,6 +175,12 @@ var store = new Vuex.Store({
 
     closebybg(state, value){
       state.closebybg = value
+    },
+
+    SET_LAST_ROOM(state, value) {
+      state.lastroom = value
+
+      console.log('state.lastroom', state.lastroom)
     },
 
     active(state, value) {
@@ -611,7 +619,6 @@ var store = new Vuex.Store({
       })
 
       commit('SET_PRECHATS_TO_STORE', chats)
-      
 
       return store._vm.core.mtrx.kit.allchatmembers(m_chats).then(r => {
 
