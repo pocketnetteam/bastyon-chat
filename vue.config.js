@@ -16,7 +16,7 @@ module.exports = {
     loaderOptions: {
       sass: {
         prependData: prependcssvars
-      }
+      },
     }
   },
  
