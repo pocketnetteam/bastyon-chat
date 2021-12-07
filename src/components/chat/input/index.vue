@@ -8,6 +8,7 @@
 
           <InputField
             ref="newinput"
+
             @transaction="sendtransaction"
             @chatMessage="sendinput"
             @setMetaUrl="emitUrl"
@@ -15,6 +16,8 @@
             @FilledInput="HideUploadPic"
             @base64="pasteImage"
             @focused="focused"
+
+            :storagekey="'chatinput' + chat.roomId"
           />
 
           <div class="left" v-if="upload && chat">

@@ -89,6 +89,7 @@ export default {
 
                     this.send = true
                     this.$emit('FilledInput')
+
                 } else {
 
                     this.send = false
@@ -104,8 +105,6 @@ export default {
 
     computed: {
         mobile : function(){
-
-
             return !this.$store.state.pocketnet && this.$store.state.mobile
         }
        
@@ -115,6 +114,9 @@ export default {
 
         setText : function(text){
 			this.text = text
+
+            this.savetextinstorage()
+
             setTimeout(() => {
                 this.textarea_resize()
                 this.focus()
@@ -128,6 +130,14 @@ export default {
 
         textchange : function(e){
             this.text = e.target.value || ''
+
+            this.savetextinstorage()
+
+        },
+        savetextinstorage : function(){
+            if (this.storagekey){
+                localStorage[this.storagekey] = this.text || ''
+            }
         },
         focus(){
             this.$refs['textarea'].focus()
@@ -195,17 +205,17 @@ export default {
 
             }
 
+            this.savetextinstorage()
+
         },
         insert_emoji(emoji) {
             this.text += emoji.native;
+
+            this.savetextinstorage()
         },
         paste_image(event) {
 
             this.get_base64(event)
-
-           
-
-            
 
         },
         get_base64(event) {
@@ -213,40 +223,36 @@ export default {
 
             if(this.pasted_data.length) {
 
-               
+                for(let index in this.pasted_data) {
+                    let item = this.pasted_data[index]
 
-                   
+                    let correct_image_type = this.upload.extensions.includes(item.type)
+
+                    if (correct_image_type) {
+
+
+                        var blob = item.getAsFile()
+                        var reader = new FileReader();
+
+                        reader.onload = event => {
+
+                            this.$dialog.confirm(
+                                'Do you really want to send attachment?', {
+                                okText: 'Yes',
+                                cancelText : 'No, cancel'
+                            })
                     
-                    for(let index in this.pasted_data) {
-                        let item = this.pasted_data[index]
+                            .then((dialog) => {
+                                var base64 = event.target.result
+                                this.resize_image(base64, item.type)
 
-                        let correct_image_type = this.upload.extensions.includes(item.type)
+                            })
+                        }
+                        reader.readAsDataURL(blob)
 
-                        if (correct_image_type) {
-
-
-                            var blob = item.getAsFile()
-                            var reader = new FileReader();
-
-                            reader.onload = event => {
-
-                                this.$dialog.confirm(
-                                    'Do you really want to send attachment?', {
-                                    okText: 'Yes',
-                                    cancelText : 'No, cancel'
-                                })
                         
-                                .then((dialog) => {
-                                    var base64 = event.target.result
-                                    this.resize_image(base64, item.type)
-
-                                })
-                            }
-                            reader.readAsDataURL(blob)
-
-                            
-                        }   
-                    }
+                    }   
+                }
                 
             }
         },
@@ -264,6 +270,7 @@ export default {
     },  
 
     props : {
+        storagekey : String
     },
 
     data() {
@@ -319,6 +326,11 @@ export default {
         })
 
         this.$refs.textarea.style.height = '26px'
+
+
+        if (this.storagekey && localStorage[this.storagekey]){
+            this.text = localStorage[this.storagekey]
+        }
     }
 }
 </script>

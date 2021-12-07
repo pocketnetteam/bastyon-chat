@@ -983,6 +983,8 @@ class MTRX {
 		return this.core.store.state.chatusers[roomId] || []
 	}
 
+	
+
 	anotherChatUsers(roomId){
 		return _.filter(this.chatUsers(roomId), (user)=>{
 			return user.userId != this.core.user.userinfo.id

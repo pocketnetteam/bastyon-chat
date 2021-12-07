@@ -9,9 +9,9 @@
       </template>
 
       <template v-slot:leftadd >
-        <div class="iconbuttonsmall" :class="{active : !closebybg}" @click="changeCloseByBg" v-if="minimized">
+        <!--<div class="iconbuttonsmall" :class="{active : !closebybg}" @click="changeCloseByBg" v-if="minimized">
           <i class="fas fa-map-pin"></i>
-        </div>
+        </div>-->
       </template>
       
 
@@ -21,11 +21,13 @@
       </template>
 
       
-      <!--<template v-slot:rightadd >
-        <div class="iconbuttonsmall">
-           <i class="fas fa-cog"></i>
-        </div>
-      </template>-->
+      <template v-slot:rightadd >
+        <router-link to="settings">
+          <div class="iconbuttonsmall">
+            <i class="fas fa-cog"></i>
+          </div>
+        </router-link>
+      </template>
      
 
       <template v-slot:right>

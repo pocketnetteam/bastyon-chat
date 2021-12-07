@@ -71,6 +71,8 @@ export default {
 
     auth: state => state.auth,
 
+    settings_read : state => !state.dontreadreceipts,
+
     eventsTypes: function () {
       var types = {
         'm.room.message': true,
@@ -380,7 +382,11 @@ export default {
     },
     readAll: function () {
 
-      if (
+      if(!this.settings_read) return
+
+      console.log("READ")
+
+      if(
         document.hasFocus() &&
         (!this.pocketnet || (this.active)) &&
         !this.core.hiddenInParent &&

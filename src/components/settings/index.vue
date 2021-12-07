@@ -4,23 +4,20 @@
   
     <div class="infoPart">
 
-      <div class="inputWrapper">
-        <div class="label">
-          <label for="theme">{{ $t("caption.theme") }}</label>
-        </div>
+
+      <div class="inputWrapper" v-for="value in settings">
+
         <div class="forInput">
-          <select id="theme" @change="setTheme">
-            <option 
-              v-for="(name, i) in themes" 
-              :key="i"
-              :selected="i == theme" 
-              :value="i"
-            >
-              {{name}}
-            </option>
-          </select>
+          <toggle-button @change="e => set_settings(value.id, e)" :value="get_settings(value.id)"/>
         </div>
+
+        <div class="label">
+          <label :for="'settings_' + value.id">{{ $t(value.label) }}</label>
+        </div>
+
       </div>
+        
+        
     </div>
   
   </div>

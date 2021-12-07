@@ -3,7 +3,9 @@
 
     <div class="teamChatWrapper" @click="click">
         <div class="iconWrapper">
-            <div class="logo"><img src="https://pocketnet.app/img/logo20.svg"/></div>
+            <div class="logo">
+              <img src="https://pocketnet.app/img/logo20.svg"/>
+            </div>
             <div class="unseen" v-if="teamNotifications > 0"> {{ teamNotifications }} </div>
         </div>
         <div class="infoWrapper">

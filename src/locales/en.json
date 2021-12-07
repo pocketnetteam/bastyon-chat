@@ -187,5 +187,11 @@
         "2-list3": "Video and Live Streaming",
         "2-message2": "Invite your friends now and be a part of the big future of decentralized internet!",
         "2-button": "Invite friends"
-    }
+    },
+
+
+    "settings_pin" : "Pin chat window",
+    "checked" : "Yes",
+    "unchecked" : "No",
+    "settings_read" : "Send read receipts"
 }

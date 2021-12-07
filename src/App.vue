@@ -48,6 +48,8 @@ import 'vue-plyr/dist/vue-plyr.css'
 import VuejsDialog from 'vuejs-dialog';
 Vue.use(VuejsDialog);
 
+import ToggleButton from 'vue-js-toggle-button'
+
 import eventsEvent from "@/components/events/event/index.vue";
 Vue.component('eventsEvent', eventsEvent)
 ////////
@@ -60,6 +62,7 @@ Vue.use(Vuelidate)
 //Vue.use(VueObserveVisibility)
 Vue.use(Vue2TouchEvents)
 Vue.use(VuePlyr)
+Vue.use(ToggleButton)
 
 ////////
 
@@ -317,7 +320,7 @@ export default {
 		},
 
 		closebybg : function() {
-			return this.$store.state.closebybg
+			return !this.$store.state.pinchat
 		},
 
 	},
@@ -472,6 +475,8 @@ export default {
 		this.$store.commit('setPocketnet', this.pocketnet);
 		this.$store.commit('setMobile', this.mobile);
 		this.$store.commit('clearall')
+
+		this.$store.commit('ls')
 
 		this.importInitialScripts()
 

@@ -75,8 +75,9 @@ var store = new Vuex.Store({
     hiddenInParent : false,
     modalShowed : null,
     menu : null,
-    closebybg : true,
-    lastroom : null
+    pinchat : false,
+    lastroom : null,
+    dontreadreceipts : false
     //share : {url : 'https://yandex.ru/'} //null
   },
   getters: {
@@ -127,7 +128,8 @@ var store = new Vuex.Store({
       state.gallery = null
       state.modalShowed = null
       state.menu = null
-      state.closebybg = true
+      state.pinchat = false
+      state.dontreadreceipts = false
       state.lastroom = null
 
       // state.share = null
@@ -143,6 +145,7 @@ var store = new Vuex.Store({
         clearTimeout(activetimeout)
         activetimeout = null
       }
+
     },
 
     blockactive(state, a) {
@@ -173,8 +176,15 @@ var store = new Vuex.Store({
       state.hiddenInParent = value
     },
 
-    closebybg(state, value){
-      state.closebybg = value
+    pinchat(state, value){
+      state.pinchat = value
+      localStorage['pinchat'] = value ? true : ''
+    },
+
+    dontreadreceipts(state, value){
+      state.dontreadreceipts = value
+
+      localStorage['dontreadreceipts'] = value ? true : ''
     },
 
     SET_LAST_ROOM(state, value) {
@@ -255,11 +265,19 @@ var store = new Vuex.Store({
       state.mobile = mobile;
     },
 
+    ls(state){
+      if(typeof localStorage.getItem('pinchat') != 'undefined')
+        state.pinchat = localStorage.getItem('pinchat') ? true : false
+
+      if(typeof localStorage.getItem('dontreadreceipts') != 'undefined')
+        state.dontreadreceipts = localStorage.getItem('dontreadreceipts') ? true : false
+    },
+
     init(state) {
       mex.theme(state, localStorage.getItem('theme') || 'white')
 
-      if(typeof localStorage.getItem('closebybg') != 'undefined')
-        state.closebybg = localStorage.getItem('closebybg')
+      
+
     },
     INVITED_CHATS_COUNT(state, rooms) {
 

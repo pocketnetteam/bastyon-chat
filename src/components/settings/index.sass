@@ -11,31 +11,23 @@
             padding-left: 2 * $r
 
 .inputWrapper
-    margin-bottom : 2 * $r
+    padding : $r 2 * $r
+    display: flex
 
     .label
-        padding : $r 4 * $r
+        padding : 0 $r
         color : $color-text-light
-        label,
-        span
+
+        label
             display: inline-block
             font-size: 0.8em
             font-weight: 700
             width : 100%
 
-    select,
-    input
-        width : 100%
-        padding : 0 4 * $r
-        height: 82px
-        background: $color-bg-second
-
-    select
-        text-indent: 0
-        
-        border : 0
-        border-right : 3 * $r solid $color-bg-second
 
 .forInput
     &.work
         padding : 0 * $r 4 * $r
+
+#settings
+    padding-top: 2 * $r

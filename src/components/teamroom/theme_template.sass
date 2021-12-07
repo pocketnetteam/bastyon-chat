@@ -1,11 +1,12 @@
 #teamroom
 
 
-    &.active
+
 
     &:hover
 
     .teamChatWrapper
+        +transition(0.3s)
 
         .iconWrapper
 
@@ -33,8 +34,4 @@
                 span
                     color: $color-text-mlight
 
-    &:not(.active)
         .teamChatWrapper
-    
-    &.mobile
-        .teamChatWrapper
