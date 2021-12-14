@@ -10,6 +10,7 @@ import imagesLoaded from 'vue-images-loaded'
 
 import dummypreviews from "@/components/chats/dummypreviews";
 import moment from "moment";
+import IncomingMessage from "./incomingMessage/incomingMessage.vue"
 
 export default {
   name: 'eventsMessage',
@@ -59,7 +60,8 @@ export default {
     VuePictureSwipe,
     listPreview,
     url,
-    dummypreviews
+    dummypreviews,
+    IncomingMessage
   },
   computed: {
 
@@ -150,7 +152,7 @@ export default {
     textWithoutLinks: function () {
 
       var trimmed = this.$f.trim(this.body)
-
+    
       if (!this.urlpreview || this.urlpreview.length < 10 ||
         (trimmed.indexOf(this.urlpreview) > 0 && trimmed.indexOf(this.urlpreview) + this.urlpreview.length < trimmed.length)
       ) {
