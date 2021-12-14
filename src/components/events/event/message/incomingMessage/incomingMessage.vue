@@ -1,10 +1,11 @@
 <template>
-    <div>
-        <span v-for="(elem, index) in message.split(/[\s]/)" v-bind:key="index">  
-            <span v-if="userCalled.test(elem)" class="likelink"> {{ elem.replace(user_id, '') }} </span>
-            <span v-else> {{ elem }}</span>
-        </span>
-    </div>
+    <label>
+        <label v-for="(elem, index) in message.split(/[\s]/)" v-bind:key="index">  
+            <label class="likelink" v-if="userCalled.test(elem)" @click="core.mtrx.opencontact(getUser(elem.replace(user_id, '')))"> 
+                {{ elem.replace(user_id, '') }} </label>
+            <label v-else> {{ elem }}</label>
+        </label>
+    </label>
 </template>
 
 <script>
@@ -14,21 +15,36 @@ export default {
         message: {
             type: String,
             default: ''
+        },
+        roomId: {
+            type: String
         }
     },
     data() {
         return {
-            user_id: /\d{15}\w{1}\d{5}\w{1}\d{1}\w{1}\d{7}\w{1}\d{3}\w{1}\d{17}\w{1}\d{11}\w{1}\d{1}\w{1}/,
-            userCalled: /(^|\s)@\d{15}\w{1}\d{5}\w{1}\d{1}\w{1}\d{7}\w{1}\d{3}\w{1}\d{17}\w{1}\d{11}\w{1}\d{1}\w{1}\w{1,50}/,
+            user_id: /\w{68}:/,
+            userCalled: /(^|\s)@\w{68}:\w{1,50}/,
         }
     },
+    methods: {
+        getUser(userName){
+            let user = this.core.mtrx.chatUsersInfo(this.roomId, 'anotherChatUsers')
+            .filter(word => word.name === userName.trim().slice(1))[0]
+            return user
+        }
+    }
 }
 </script>
 
 <style lang="sass" scoped>
 
 .likelink 
-    color: black
+    color: #f44336
     cursor: pointer
+    content: attr(data-text)
+
+.likelink:hover
+    color: red
+    
 
 </style>

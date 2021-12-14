@@ -330,7 +330,7 @@ export default {
 
         create_username_message(text, userList, i, j){
             return text.slice(0, i + 1) 
-                    + userList[0].id 
+                    + userList[0].id + ':'
                     + userList[0].name 
                     + ' '
                     + text.slice(j+1, text.length)
