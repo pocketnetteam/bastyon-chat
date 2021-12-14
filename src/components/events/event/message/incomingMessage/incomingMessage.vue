@@ -29,7 +29,7 @@ export default {
     methods: {
         getUser(userName){
             let user = this.core.mtrx.chatUsersInfo(this.roomId, 'anotherChatUsers')
-            .filter(word => word.name === userName.trim().slice(1))[0]
+            .filter(word => word.name === userName.trim().slice(1).toLowerCase())[0]
             return user
         }
     }

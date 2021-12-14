@@ -178,11 +178,11 @@ export default {
                 }
             }
         },
-        show_usernames : function(caretPosition, isTab){
+        show_usernames : function(caretPosition, isRightArrow){
             for(let i=caretPosition; i>=0 && i<=caretPosition; i--) {
                 if(this.text[i] === '@' && this.text[caretPosition] !== '@') {
                     if(i === 0) {
-                        if(isTab) {
+                        if(isRightArrow) {
                             this.setFirstUser(i, caretPosition)
                             break;
                         }
@@ -192,7 +192,7 @@ export default {
                         }
                     }
                     else if(i > 0 && (this.text[i-1] === ' ' || this.text[i-1] === '\n')) {
-                        if(isTab) {
+                        if(isRightArrow) {
                             this.setFirstUser(i, caretPosition)
                             break;
                         }
@@ -212,7 +212,7 @@ export default {
         },
         search_for_username(index, caretPosition) {
             this.$emit('userSearched' ,this.core.mtrx.chatUsersInfo(this.chat.roomId, 'anotherChatUsers')
-            .filter(word => word.name.indexOf(this.text.slice(index + 1, caretPosition)) > -1))
+            .filter(word => word.name.indexOf(this.text.slice(index + 1, caretPosition).toLowerCase()) > -1))
             
 
             this.savetextinstorage()
@@ -220,7 +220,7 @@ export default {
         },
         setFirstUser(index, caretPosition) {
             let userList = this.core.mtrx.chatUsersInfo(this.chat.roomId, 'anotherChatUsers')
-            .filter(word => word.name.indexOf(this.text.slice(index + 1, caretPosition)) > -1)
+            .filter(word => word.name.indexOf(this.text.slice(index + 1, caretPosition).toLowerCase()) > -1)
             this.addUsername(userList[0]?.name || '')
             
         },
@@ -308,18 +308,18 @@ export default {
                    for(let j=i; j < text.length; j++) {
                        if(text[j] === ' ' || text[j] === '\n') {
                            let userList = this.core.mtrx.chatUsersInfo(this.chat.roomId, 'anotherChatUsers')
-                           .filter(word => word.name.indexOf(text.slice(i + 1, j)) > -1)
-                           
-                           if(userList.length === 1 && userList[0].name === text.slice(i + 1, j)) {
+                           .filter(word => word.name.indexOf(text.slice(i + 1, j).toLowerCase()) > -1)
+                           if(userList.length === 1 && userList[0].name.toLowerCase() === text.slice(i + 1, j).toLowerCase()) {
                                 text = this.create_username_message(text, userList, i, j)
+                                break;
                            }
                        }
                        if(j === text.length - 1) {
                            let userList = this.core.mtrx.chatUsersInfo(this.chat.roomId, 'anotherChatUsers')
-                           .filter(word => word.name.indexOf(text.slice(i + 1, j + 1)) > -1)
-                           
-                           if(userList.length === 1 && userList[0].name === text.slice(i + 1, j + 1)) {
+                           .filter(word => word.name.indexOf(text.slice(i + 1, j + 1).toLowerCase()) > -1)
+                           if(userList.length === 1 && userList[0].name.toLowerCase() === text.slice(i + 1, j + 1).toLowerCase()) {
                                text = this.create_username_message(text, userList, i, j)
+                               break;
                            }
                        }
                    }
