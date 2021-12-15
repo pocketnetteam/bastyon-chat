@@ -4,6 +4,16 @@
 
       <div class="inputWrapper" v-if="chat">
 
+        <div class="users" 
+                   v-if="usersList && usersList.length"
+        >
+          <ul class="list" v-for="(user, index) in usersList" v-bind:key="index">
+              <li class="element" 
+                  @click="pickUser(user.name)">
+                  <UserCard :image="user.image" :name="user.name"></UserCard>
+              </li>
+          </ul>
+        </div>
         <div class="center">
 
           <InputField
@@ -16,6 +26,8 @@
             @FilledInput="HideUploadPic"
             @base64="pasteImage"
             @focused="focused"
+            :chat="chat"
+            @userSearched="setUsersList"
 
             :storagekey="'chatinput' + chat.roomId"
           />

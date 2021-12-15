@@ -1,5 +1,6 @@
 import f from "@/application/functions";
 import InputField from './InputField/InputField.vue'
+import UserCard from './UserCard/UserCard.vue'
 import _ from "underscore";
 import { mapState } from "vuex";
 
@@ -15,7 +16,7 @@ export default {
 	},
 
 
-	components: { InputField, contacts },
+	components: { InputField, UserCard, contacts },
 
 	data: function () {
 
@@ -31,7 +32,8 @@ export default {
 			userId: '',
 			showuserselect : null,
 			anyUrlMeta: String,
-			joinedMembers: []
+			joinedMembers: [],
+			usersList: [],
 		}
 
 	},
@@ -135,8 +137,6 @@ export default {
 		stateChat: function () {
 			var id = this.$route.query.id
 			return this.$store.state.chatsMap[id]
-
-			
 		},
 		invited: function () {
 
@@ -188,6 +188,7 @@ export default {
 				return Promise.resolve()
 			})
 		}
+		
 	},
 
 	methods: {
@@ -728,7 +729,31 @@ export default {
 		uploadUploadedAll(item, result) {
 			this.$store.state.loading = false
 			this.$refs.dropdownMenu.hidePopup();
-		}
+		},
+		setUsersList(list) {
+			this.usersList = list;
+		},
 
+		async pickUser(name) {
+			let caretPos = this.$refs.newinput.addUsername(name)
+			await this.setUsersList([])
+			this.setCaretPosition(document.getElementById('textInput'), caretPos)
+
+		},
+		setCaretPosition(elem, caretPos) {
+            if(elem.createTextRange) {
+                var range = elem.createTextRange();
+                range.move('character', caretPos);
+                range.select();
+            }
+            else {
+                if(elem.selectionStart) {
+                    elem.focus();
+                    elem.setSelectionRange(caretPos, caretPos);
+                }
+                else
+                    elem.focus();
+            }
+		},
 	},
 }
