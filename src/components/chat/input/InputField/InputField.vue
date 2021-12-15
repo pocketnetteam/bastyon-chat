@@ -3,6 +3,7 @@
         <div class="input-wrapper">
             <div class="textarea">
                 <textarea
+                    id="textInput"
                     :value="text"
                     ref="textarea"
                     class="chat-input"
@@ -11,11 +12,9 @@
                     spellcheck="true"
                     @focus="focused"
                     @keydown.enter.prevent.exact="send_text_enter"
-                    @keyup="textchange"
                     @input="textchange"
                     @paste="paste_image"
-                    placeholder="Send message"
-                   
+                    placeholder="Send message"                   
                 ></textarea>
                 <transition name="fade" mode="out-in" v-if="!mobile">
                     <picker
@@ -66,6 +65,7 @@ let emojiIndex = new EmojiIndex(data)
 import vClickOutside from 'v-click-outside'
 
 import picturePreview from '@/components/chat/input/picturePreview/picturePreview'
+import func from 'vue-editor-bridge';
 
 let images = new Images()
 
@@ -73,7 +73,7 @@ export default {
     name: 'InputField',
     components: {
         Picker,
-        picturePreview
+        picturePreview,
     },
 
     directives: {
@@ -98,7 +98,7 @@ export default {
 
                 this.textarea_resize()
             }
-        }
+        },
     },
 
    
@@ -124,21 +124,115 @@ export default {
             
 		},
 
+        addUsername: function(name) {
+            let element = document.getElementById('textInput');
+            if(element) {
+                let caretPos = element.selectionStart;
+                let atPosition = () => {
+                    for(let i=caretPos; i>=0;i--) {
+                        if(this.text[i] === '@') {
+                            return i;
+                        }
+                    }
+                }
+
+                let slicedAtText = this.text.slice(0, atPosition() + 1);
+                let plusSpaceLength = 1;
+                this.text = slicedAtText + name + ' '
+                + this.text.slice(this.sliceAfterUsernameText(caretPos, slicedAtText.length + name.length) + plusSpaceLength, this.text.length);
+                return this.text.indexOf(' ', caretPos) + plusSpaceLength;
+            }
+            return 0;
+        },
+        sliceAfterUsernameText(caretPos, curNamePos) {
+            return this.text.indexOf(' ', caretPos) > 0 ? this.text.indexOf(' ', caretPos) : curNamePos
+        },
+
+
         focused : function(){
             this.$emit('focused')
         },
 
         textchange : function(e){
-            this.text = e.target.value || ''
+            this.text = e.target.value || ''    
+        },
+
+        show_usernames : function(text, caretPosition){
+            
+            for(let i=caretPosition; i>=0 && i<=caretPosition; i--) {
+                if(text[i] === '@' && text[caretPosition] !== '@') {
+                     if(i === 0) {
+                        this.search_for_username(text, i, caretPosition)
+                        break;
+                    }
+                    else if(i > 0 && (text[i-1] === ' ' || text[i-1] === '\n')) {
+                        this.search_for_username(text, i, caretPosition)
+                        break;
+                    }
+                    else {
+                        this.send_empty_array()
+                    }
+                }
+                else {
+                    this.send_empty_array()
+                }
+            }
+        },
+        show_usernames : function(caretPosition, isRightArrow){
+            for(let i=caretPosition; i>=0 && i<=caretPosition; i--) {
+                if(this.text[i] === '@' && this.text[caretPosition] !== '@') {
+                    if(i === 0) {
+                        if(isRightArrow) {
+                            this.setFirstUser(i, caretPosition)
+                            break;
+                        }
+                        else {
+                            this.search_for_username(i, caretPosition)
+                            break;
+                        }
+                    }
+                    else if(i > 0 && (this.text[i-1] === ' ' || this.text[i-1] === '\n')) {
+                        if(isRightArrow) {
+                            this.setFirstUser(i, caretPosition)
+                            break;
+                        }
+                        else {
+                            this.search_for_username(i, caretPosition)
+                            break;
+                        }
+                    }
+                    else {
+                        this.send_empty_array()
+                    }
+                }
+                else {
+                    this.send_empty_array()
+                }
+            }
+        },
+        search_for_username(index, caretPosition) {
+            this.$emit('userSearched' ,this.core.mtrx.chatUsersInfo(this.chat.roomId, 'anotherChatUsers')
+            .filter(word => word.name.indexOf(this.text.slice(index + 1, caretPosition).toLowerCase()) > -1))
+            
 
             this.savetextinstorage()
 
+        },
+        setFirstUser(index, caretPosition) {
+            let userList = this.core.mtrx.chatUsersInfo(this.chat.roomId, 'anotherChatUsers')
+            .filter(word => word.name.indexOf(this.text.slice(index + 1, caretPosition).toLowerCase()) > -1)
+            this.addUsername(userList[0]?.name || '')
+            
         },
         savetextinstorage : function(){
             if (this.storagekey){
                 localStorage[this.storagekey] = this.text || ''
             }
         },
+        send_empty_array(){
+            this.$emit('userSearched', [])
+        },
+
         focus(){
             this.$refs['textarea'].focus()
         },
@@ -190,10 +284,9 @@ export default {
                 this.send_text(event)
             }
         },
-    
-        send_text(event) {
 
-            event.textContent = this.text
+        send_text(event) {
+            event.textContent = this.replace_username(this.text).split(',')
 
             if(this.text && this.text !== '\n') {
 
@@ -208,6 +301,41 @@ export default {
             this.savetextinstorage()
 
         },
+
+        replace_username(text) {
+            for(let i=text.length; i>=0;i--) {
+               if((text[i] === '@' && i === 0) || (text[i] === '@' && text[i-1] === ' ')) {
+                   for(let j=i; j < text.length; j++) {
+                       if(text[j] === ' ' || text[j] === '\n') {
+                           let userList = this.core.mtrx.chatUsersInfo(this.chat.roomId, 'anotherChatUsers')
+                           .filter(word => word.name.indexOf(text.slice(i + 1, j).toLowerCase()) > -1)
+                           if(userList.length === 1 && userList[0].name.toLowerCase() === text.slice(i + 1, j).toLowerCase()) {
+                                text = this.create_username_message(text, userList, i, j)
+                                break;
+                           }
+                       }
+                       if(j === text.length - 1) {
+                           let userList = this.core.mtrx.chatUsersInfo(this.chat.roomId, 'anotherChatUsers')
+                           .filter(word => word.name.indexOf(text.slice(i + 1, j + 1).toLowerCase()) > -1)
+                           if(userList.length === 1 && userList[0].name.toLowerCase() === text.slice(i + 1, j + 1).toLowerCase()) {
+                               text = this.create_username_message(text, userList, i, j)
+                               break;
+                           }
+                       }
+                   }
+               }
+            }
+            return text;
+        },
+
+        create_username_message(text, userList, i, j){
+            return text.slice(0, i + 1) 
+                    + userList[0].id + ':'
+                    + userList[0].name 
+                    + ' '
+                    + text.slice(j+1, text.length)
+        },
+
         insert_emoji(emoji) {
             this.text += emoji.native;
 
@@ -266,10 +394,14 @@ export default {
 
                 }).catch(error => console.error('Failed to resize image', error))
             }).catch(error => console.error('Failed to resize image', error))
-        }   
+        },
     },  
 
     props : {
+        chat: {
+            type: Object,
+            default: {}
+        },
         storagekey : String
     },
 
@@ -327,7 +459,22 @@ export default {
 
         this.$refs.textarea.style.height = '26px'
 
+        let _this = this;
+        $("#textInput").bind("keyup click", function(event) {
+            if(event.keyCode === 39) {
+                _this.show_usernames(this.selectionStart, true)
+            }
+            else {
+                _this.show_usernames(this.selectionStart, false)
+                
+            }
+        });
 
+
+        // (event.type === "click" || 
+        //       (event.type === "keyup" && (event.keyCode >= 35 && event.keyCode <= 40)))
+
+        
         if (this.storagekey && localStorage[this.storagekey]){
             this.text = localStorage[this.storagekey]
         }

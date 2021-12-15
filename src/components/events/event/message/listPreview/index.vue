@@ -46,11 +46,13 @@
 
 
     <div v-if="(content.msgtype === 'm.text') && !urlpreview" class="previewMessage">
-      <span v-if="senderName && senderName!= 'You'" class="txt sname" >{{ senderName }}:&nbsp;</span><span class="txt">{{ content.body }}</span>
+
+      <span v-if="senderName && senderName!= 'You'" class="txt sname" >{{ senderName }}:&nbsp;</span><span class="txt"><IncomingMessage :message="content.body"></IncomingMessage></span>
     </div>
 
     <div v-if="content.msgtype === 'm.encrypted' && !urlpreview" class="previewMessage">
-      <span v-if="senderName && senderName!= 'You'" class="txt sname" >{{ senderName }}:&nbsp;</span><span class="txt">{{ decryptEvent.body }}</span>
+      <span v-if="senderName && senderName!= 'You'" class="txt sname" >{{senderName}}:&nbsp;</span><span class="txt"><IncomingMessage :message="decryptEvent.body"></IncomingMessage></span>
+
     </div>
 
     <div v-if="content.membership === 'invite'" class="invitedEvent">
@@ -88,6 +90,7 @@
 <script>
 import _ from "underscore";
 import f from '@/application/functions'
+import IncomingMessage from '../incomingMessage/incomingMessage.vue'
 
 export default {
   props: {
@@ -99,6 +102,7 @@ export default {
     readed: Object,
     my : Boolean
   },
+  components: {IncomingMessage},
   data: function () {
     return {
       meta: {},
