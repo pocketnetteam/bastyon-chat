@@ -46,6 +46,10 @@ class MTRXKIT {
     return hash
   }
 
+  unknowngroupusers(m_chat){
+    return m_chat && m_chat._selfMembership === 'invite' && !m_chat.summary.members && !this.tetatetchat(this.m_chat)
+  }
+
   usersFromChats(m_chats){
     var users = {}
     
@@ -103,63 +107,67 @@ class MTRXKIT {
     })
   }
 
-  allchatmembers(m_chats, reload){
+  allchatmembers(m_chats, reload, withinvite){
     var members = []
+    var promises = []
 
-    var promises = _.map(m_chats, (chat) => {
+
+    if(withinvite){
+      var promises = _.map(m_chats, (chat) => {
 
 
-      if(chat._selfMembership === 'invite' && (!chat.summary.members || reload) && !chat.summary.membersloading){
-
-        chat.summary.membersloading = true
-
-        return chat._loadMembersFromServer().then(r => {
-
-          chat.summary.membersloading = false
-
-          chat.summary.members = _.map(r,  (user) => {
+        if(chat._selfMembership === 'invite' && (!chat.summary.members || reload) && !chat.summary.membersloading){
   
-            return {
-              name: f.getmatrixid(user.state_key),
-              membership: user.content.membership,
-              user: user,
-              userId : user.state_key,
-              powerLevel : user.content.powerLevel || 0
+          chat.summary.membersloading = true
+  
+          return chat._loadMembersFromServer().then(r => {
+  
+            chat.summary.membersloading = false
+  
+            chat.summary.members = _.map(r,  (user) => {
+    
+              return {
+                name: f.getmatrixid(user.state_key),
+                membership: user.content.membership,
+                user: user,
+                userId : user.state_key,
+                powerLevel : user.content.powerLevel || 0
+              }
+    
+            })
+  
+            if(chat._selfMembership === 'invite' && this.core.user.userinfo){
+  
+              if(!_.find(chat.summary.members, (m) => {
+                return m.userId == this.core.user.matrixId(this.core.user.userinfo.id)
+              } )){
+  
+                chat.summary.members.push({
+                  name: this.core.user.userinfo.id,
+                  membership: 'invite',
+                  user: this.core.user.userinfo,
+                  userId : this.core.user.matrixId(this.core.user.userinfo.id),
+                  powerLevel : 0
+                })
+  
+              }
+  
             }
   
+            return Promise.resolve()
+    
+          }).catch(e => {
+              
+            chat.summary.membersloading = false
+  
+            return Promise.resolve()
           })
-
-          if(chat._selfMembership === 'invite' && this.core.user.userinfo){
-
-            if(!_.find(chat.summary.members, (m) => {
-              return m.userId == this.core.user.matrixId(this.core.user.userinfo.id)
-            } )){
-
-              chat.summary.members.push({
-                name: this.core.user.userinfo.id,
-                membership: 'invite',
-                user: this.core.user.userinfo,
-                userId : this.core.user.matrixId(this.core.user.userinfo.id),
-                powerLevel : 0
-              })
-
-            }
-
-          }
-
-          return Promise.resolve()
+        }
   
-        }).catch(e => {
-            
-          chat.summary.membersloading = false
-
-          return Promise.resolve()
-        })
-      }
-
-      return Promise.resolve()
-
-    })
+        return Promise.resolve()
+  
+      })
+    }
 
     return Promise.all(promises).then(r => {
 
@@ -183,7 +191,6 @@ class MTRXKIT {
 
       return this.usersInfo(members, reload)
     })
-
     
   }
 

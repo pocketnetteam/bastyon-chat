@@ -35,6 +35,7 @@
 
              @remove="removeEvent"
              @download="downloadFile"
+             @decryptagain="decryptAgain"
              @editing="editing"
              @reply="reply"
              @share="share"
@@ -200,7 +201,6 @@ export default {
   },
 
   mounted: function () {
-    console.log("messagemounted")
     this.$emit('mounted')
   },
   
@@ -226,13 +226,27 @@ export default {
         this.checkReaded()
         this.relations()
 
-        if(this.encryptedData){
-          this.decryptImage()
+        if(this.encryptedData || this.subtype == 'm.encrypted'){
+
+          f.pretry(() => {
+
+            return this.chat.pcrypto
+
+          }, 20, 10000).then(() => {
+
+            if(this.encryptedData){
+              this.decryptImage()
+            }
+
+            if(this.subtype == 'm.encrypted'){
+              this.decrypt()
+            }
+
+          })
+
         }
 
-        if(this.subtype == 'm.encrypted'){
-          this.decrypt()
-        }
+        
       }
     }
   },
@@ -371,6 +385,8 @@ export default {
 
     async decryptImage(){
 
+      //if(!this.chat.pcrypto) return
+
       this.core.mtrx.getImage(this.chat, this.event).then(url => {
 
         this.decryptedImage = url
@@ -384,9 +400,16 @@ export default {
       
     },
 
+    async decryptAgain() {
+      this.event.event.decrypted = null
+      return this.decrypt()
+    },
+
     async decrypt() {
 
-        if(this.event.event.decrypted){
+        //if(!this.chat.pcrypto) return
+
+        if (this.event.event.decrypted){
 
           this.decryptEvent = this.event.event.decrypted
 
@@ -398,6 +421,8 @@ export default {
           this.event.event.decrypted = this.decryptEvent
         }
         catch(e){
+
+          console.error(e, this.event)
 
           this.event.event.decrypted = this.decryptEvent = {
             msgtype : 'm.bad.encrypted'

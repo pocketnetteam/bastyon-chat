@@ -45,6 +45,7 @@
         "messageDeleted" : "Mensaje eliminado",
         "sentImage" : "Imagen enviada",
         "invitationToChat" : "Invitación al chat",
+        "invitationToRoom" : "Invitation to room",
         "leftChat" : "abandonó el chat",
         "joined" : "unido",
         "chatRenamed" : "Chat renombrado a ",

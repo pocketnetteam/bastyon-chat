@@ -72,7 +72,7 @@
 
       <div class="maxcontent" :class="{'my' : my }" v-if="content.msgtype === 'm.encrypted' && !textWithoutLinks && badenctypted">
         <div class="badenctyptedText">
-          <span>{{ $t("caption.unabletoDecrypt") }}</span>
+          <span>{{ $t("caption.unabletoDecrypt") }}</span> <i class="fas fa-undo decryptagain" @click="decryptagain"></i>
         </div>
       </div>
 

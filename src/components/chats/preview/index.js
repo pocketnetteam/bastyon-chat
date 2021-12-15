@@ -9,8 +9,6 @@ export default {
   props: {
     chat: Object,
     dummy: Boolean,
-   
-    room: {}
   },
 
   components: {
@@ -36,6 +34,16 @@ export default {
       immediate: true,
       handler: function () {
 
+        this.ready = false
+
+        if (this.m_chat && !_.isEmpty(this.m_chat)) {
+
+          console.log('this.m_chat', this.m_chat, this.m_chat.currentState._joinedMemberCount)
+
+          this.core.mtrx.kit.prepareChat(this.m_chat).then(r => {
+            this.ready = true
+          })
+        }
         
       }
     }
@@ -45,12 +53,7 @@ export default {
 
   mounted : function(){
 
-    if (this.m_chat && !_.isEmpty(this.m_chat)) {
-
-      this.core.mtrx.kit.prepareChat(this.m_chat).then(r => {
-        this.ready = true
-      })
-    }
+    
   },
 
   computed: mapState({
@@ -90,6 +93,12 @@ export default {
 
       return 'key'
     },
+
+    unknowngroupusers : function(){
+      return this.core.mtrx.kit.unknowngroupusers(this.chat)
+    },
+
+  
 
     event: function () {
 

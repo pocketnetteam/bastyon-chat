@@ -233,7 +233,7 @@ var ApiWrapper = function (core) {
 
 			return crequest(addresses, 'pocketnet_userInfo', 'address', reload).catch(sh => {
 
-				var parameters = [sh.id];
+				var parameters = [sh.id, '1'];
 
 				return self.pocketnet.common({ parameters }, 'getuserprofile').then(results => {
 

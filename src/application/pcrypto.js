@@ -240,6 +240,14 @@ var PcryptoRoom = function(pcrypto, chat){
 
 
     var ls = {
+        clear : function(k){
+            try{
+                delete localStorage[lcachekey + pcrypto.user.userinfo.id + '-' + k]
+            }
+            catch(e){
+               
+            }
+        },
         set : function(k, v){
             try{
                 localStorage[lcachekey + pcrypto.user.userinfo.id + '-' + k] = JSON.stringify(v)
@@ -336,13 +344,15 @@ var PcryptoRoom = function(pcrypto, chat){
                 keys = eaac.aeskeys(time, block)
 
                 if(self.preparedUsers(time).length > 1){
+
                     ls.set(k, convert.aeskeys.inp(keys))
+
                 }
-                    
                 
             }
+            
 
-            return keys
+            return { keys, k }
 
         },
         aeskeys : function(time, block){
@@ -483,18 +493,35 @@ var PcryptoRoom = function(pcrypto, chat){
     }
 
     self.decrypt = async function(userid, {encrypted, nonce}, time, block){
-        var keys = eaac.aeskeysls(time, block)
+
+        var { keys, k } = eaac.aeskeysls(time, block)
+
+        var error = null
+
+       
 
         if (keys[userid]){
-            return await decrypt(keys[userid], {encrypted, nonce})
+            try{
+
+                return await decrypt(keys[userid], {encrypted, nonce})
+            }
+            catch(e){
+                error = e
+            }
+            
+        }
+        else{
+            error = 'emptykey'
         }
 
-        throw new Error('emptykey')
+        ls.clear(k)
+
+        throw new Error(error)
 
     }
 
     self.encrypt = async function(userid, text){
-        var keys = eaac.aeskeysls()
+        var { keys } = eaac.aeskeysls()
 
         if (keys[userid]){
             return await encrypt(text, keys[userid])
@@ -522,7 +549,7 @@ var PcryptoRoom = function(pcrypto, chat){
             bodyindex = null;
 
         var body = JSON.parse(f.Base64.decode(event.content.body))
-        var time = event.origin_server_ts
+        var time = event.origin_server_ts || 1
         var block = event.content.block
 
         if (sender == me){
@@ -548,6 +575,7 @@ var PcryptoRoom = function(pcrypto, chat){
 
 
         var decrypted = await self.decrypt(keyindex, body[bodyindex], time, block)
+
 
         /*lse.set(event.event_id, {
             body : decrypted,
@@ -627,7 +655,7 @@ var PcryptoRoom = function(pcrypto, chat){
             bodyindex = null;
 
         var body = JSON.parse(f.Base64.decode(secrets))
-        var time = event.origin_server_ts
+        var time = event.origin_server_ts || 1
         
         if (sender == me){
 

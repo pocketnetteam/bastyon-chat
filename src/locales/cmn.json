@@ -45,6 +45,7 @@
         "messageDeleted" : "信息已删除",
         "sendImage" : "已发送的图片",
         "invitationToChat" : "邀请聊天",
+        "invitationToRoom" : "Invitation to room",
         "leftChat" : "离开聊天",
         "joined" : "加入",
         "chatRenamed" : "聊天记录重命名为" ,

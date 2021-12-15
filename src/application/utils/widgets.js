@@ -89,6 +89,8 @@ var PNWIDGETS = function(){
 
         var id = action === 'channel' ? parsed_url.pathname.replace('/', '') : postid
 
+        if(id == 'author' && action === 'channel' ) id = parsed_url.searchParams.get('address')
+
         var connect = parsed_url.searchParams.get('connect')
         var publicroom = parsed_url.searchParams.get('publicroom')
 
