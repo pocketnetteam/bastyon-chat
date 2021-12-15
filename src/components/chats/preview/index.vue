@@ -8,8 +8,10 @@
         </div>
 
         <div class="infoWrapper">
+          
           <div class="summaryLine" v-if="!dummy && ready">
             <div class="caption flexBlock">
+      
               <chatName :preview="true" :chat="chat" :m_chat="m_chat"/>
               <div class="roomMuted" v-if="roomMuted">
                 <i class="fas fa-bell-slash"></i>
@@ -23,13 +25,7 @@
           </div>
 
           <div class="eventsLine maxwidth" v-if="!dummy && ready">
-            <eventsEvent :event="event" :chat="m_chat" :preview="true"
-                         v-if="event"/>
-
-            <div v-else class="invitation">
-              <span>{{ $t("caption.invitationToChat") }}</span>
-            </div>
-
+            <eventsEvent :event="event" :chat="m_chat" :preview="true" v-if="event"/>
           </div>
 
           <div class="eventsLine" v-if="dummy">

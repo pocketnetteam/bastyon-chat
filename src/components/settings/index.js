@@ -43,7 +43,8 @@ export default {
         theme: state => state.theme,
 
         settings_pin : state => state.pinchat,
-        settings_read : state => !state.dontreadreceipts
+        settings_read : state => !state.dontreadreceipts,
+        pocketnet : state => state.pocketnet
 
     }),
 
@@ -62,12 +63,10 @@ export default {
         },  
 
         set_settings: function(id, e){
-            console.log("E", e)
             return this['set_settings_' + id](e.value)
         },
 
         get_settings : function(id){
-            console.log("settings_pin", this.settings_pin)
             return this['settings_' + id]
         },
     },

@@ -14,7 +14,7 @@
 
 
     <div class="swiperWrapper" v-else>
-      <div class="swiperWrapperFlex">
+      <div class="swiperWrapperFlex noswipepnt">
         <div class="imageSwiper" v-for="(user, i) in userinfo">
           <userpic :status="status[user.id]" :userinfo="user"/>
         </div>

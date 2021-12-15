@@ -23,14 +23,14 @@
 
     <div class="info">
 
-      <div class="infoPart" v-if="userinfo.source && userinfo.source.subscribers">
+      <div class="infoPart" v-if="userinfo.source">
         <div class="label">
           <span>
             {{ $t("caption.followers") }} 
           </span>
         </div>
         <div class="value">
-          <span>{{ userinfo.source.subscribers.length }}</span>
+          <span>{{ userinfo.source.subscribers_count }}</span>
         </div>
         
       </div>
@@ -49,7 +49,7 @@
         
       </div>
 
-      <div class="infoPart" v-if="userinfo.source && userinfo.source.subscribes">
+      <div class="infoPart" v-if="userinfo.source">
 
         <div class="label">
           <span>
@@ -57,7 +57,7 @@
           </span>
         </div>
         <div class="value">
-          <span>{{ userinfo.source.subscribes.length }}</span>
+          <span>{{ userinfo.source.subscribes_count }}</span>
         </div>
        
       </div>

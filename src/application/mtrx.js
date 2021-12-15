@@ -10,7 +10,6 @@ import fileSaver from 'file-saver';
 
 
 
-
 var axios = require('axios');
 
 
@@ -159,7 +158,18 @@ class MTRX {
 		return result.visitorId + this.dversion
 	}
 
-	
+	createMtrxClient (opts) {
+		var client = sdk.createClient(opts);
+
+			client.getProfileInfo = function(){
+				return Promise.resolve({
+					avatar_url: '',
+					displayname: 'test'
+				})
+			}
+
+		return client
+	}
 
 	async getClient() {
 
@@ -176,8 +186,7 @@ class MTRX {
 		if(this.customrequest)
 			opts.request = this.request
 
-		var client = sdk.createClient(opts);
-
+		var client = this.createMtrxClient(opts);
 
 		try {
 			var userData = await client.login('m.login.password', {
@@ -220,7 +229,7 @@ class MTRX {
 			userClientData.request = this.request
 
 
-		var userClient = sdk.createClient(userClientData)
+		var userClient = this.createMtrxClient(userClientData)
 		window.client = userClient
 		window.core = this.core
 

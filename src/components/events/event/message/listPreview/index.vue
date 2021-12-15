@@ -46,15 +46,16 @@
 
 
     <div v-if="(content.msgtype === 'm.text') && !urlpreview" class="previewMessage">
-      <span v-if="senderName" class="txt sname" >{{ senderName }}:&nbsp;</span><span class="txt">{{ content.body }}</span>
+      <span v-if="senderName && senderName!= 'You'" class="txt sname" >{{ senderName }}:&nbsp;</span><span class="txt">{{ content.body }}</span>
     </div>
 
     <div v-if="content.msgtype === 'm.encrypted' && !urlpreview" class="previewMessage">
-      <span v-if="senderName" class="txt sname" >{{ senderName }}:&nbsp;</span><span class="txt">{{ decryptEvent.body }}</span>
+      <span v-if="senderName && senderName!= 'You'" class="txt sname" >{{ senderName }}:&nbsp;</span><span class="txt">{{ decryptEvent.body }}</span>
     </div>
 
     <div v-if="content.membership === 'invite'" class="invitedEvent">
-      <span class="txt">{{ $t("caption.invitationToChat") }}</span>
+      <span class="txt" v-if="tetatetchat">{{ $t("caption.invitationToChat") }}</span>
+      <span class="txt" v-if="!tetatetchat">{{ $t("caption.invitationToRoom") }}</span>
     </div>
 
     <div v-if="content.membership === 'leave'" class="previewMessage">
@@ -119,8 +120,13 @@ export default {
       }
     },
 
+    tetatetchat : function(){
+      return this.core.mtrx.kit.tetatetchat(this.chat)
+    },
     
-    
+    unknowngroupusers : function(){
+      return this.core.mtrx.kit.unknowngroupusers(this.m_chat)
+    },
 
     senderName: function () {
 

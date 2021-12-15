@@ -45,6 +45,7 @@
         "messageDeleted" : "메시지 삭제됨",
         "sentImage" : "전송된 이미지",
         "invitationToChat" : "채팅 초대",
+        "invitationToRoom" : "Invitation to room",
         "leftChat" : "채팅에서 나감",
         "joined" : "가입",
         "chatRenamed" : "채팅 이름이 (으)로 변경되었습니다 ",

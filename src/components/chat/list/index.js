@@ -382,10 +382,6 @@ export default {
     },
     readAll: function () {
 
-      if(!this.settings_read) return
-
-      console.log("READ")
-
       if(
         document.hasFocus() &&
         (!this.pocketnet || (this.active)) &&
@@ -415,7 +411,9 @@ export default {
           this.core.mtrx.client.setRoomReadMarkers(
             this.chat.currentState.roomId,
             e.eventId,
-            e).then(r => {
+            e, {
+              hidden : !this.settings_read ? true : false
+            }).then(r => {
 
             return r
           })

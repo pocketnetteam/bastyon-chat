@@ -22,7 +22,7 @@
 
       
       <template v-slot:rightadd >
-        <router-link to="settings">
+        <router-link to="settings" v-if="!share">
           <div class="iconbuttonsmall">
             <i class="fas fa-cog"></i>
           </div>

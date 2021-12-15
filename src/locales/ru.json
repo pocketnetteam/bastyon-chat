@@ -45,6 +45,7 @@
         "messageDeleted" : "Сообщение удалено",
         "sentImage" : "отправлено изображение",
         "invitationToChat" : "Приглашение в чат",
+        "invitationToRoom" : "Приглашение в комнату",
         "leftChat" : "покинул чат",
         "joined" : "присоединился",
         "chatRenamed" : "Чат переименован в ",

@@ -1,11 +1,11 @@
 <template>
-  <div id="settings">
+  <div id="settings" :class="{mobile : !pocketnet}">
   
   
     <div class="infoPart">
 
 
-      <div class="inputWrapper" v-for="value in settings">
+      <div :class="'inputWrapper ' + value.id"  v-for="value in settings">
 
         <div class="forInput">
           <toggle-button @change="e => set_settings(value.id, e)" :value="get_settings(value.id)"/>

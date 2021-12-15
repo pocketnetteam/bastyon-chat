@@ -1,13 +1,36 @@
 <template>
-  <div class="chatIcon">
+  <div class="chatIcon" :class="{unknowngroupusers}">
     <userspic :slidesPerView="slidesPerView" :users="usersinfo" :status="status" :unseen="unseen"
               :key="allnotifications" :single="singleAvatar"/>
+
+    <div class="unknowngroupusersicon" v-if="unknowngroupusers">
+      <i class="fas fa-question"></i>
+    </div>
   </div>
 </template>
 
 <style scoped lang="sass">
   .chatIcon
     width: 100%
+    position: relative
+
+  .unknowngroupusersicon
+    position: absolute
+    left: 0
+    top : 0
+    bottom : 0
+    right: 0
+    font-size: 0.7em
+    display: flex
+    justify-content: center
+    align-items: center
+    color : #fff
+    text-shadow: 0px 0px 2px rgba(0, 11, 58, 0.714), 0 0 3px rgba(0, 8, 43, 0.519)
+
+  .unknowngroupusers
+    /deep/
+      .bgimage
+        transform: scale(0.7)
 
 </style>
 
@@ -98,6 +121,10 @@ export default {
       })
 
       return us
+    },
+
+    unknowngroupusers : function(){
+      return this.core.mtrx.kit.unknowngroupusers(this.m_chat)
     }
 
   },
