@@ -374,8 +374,6 @@ export default {
 
     sending: function () {
 
-      console.log('sending')
-
       this.$emit('sending')
 
       this.$refs['list'].scrollToNew(0)

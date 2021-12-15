@@ -122,7 +122,6 @@ var store = new Vuex.Store({
       state.allnotifications = 0
       state.pocketteammessages = []
       state.readedteammessages = {}
-      state.invitedRoomsCount = 0
       state.chatsready = false
       state.autohide = false
       state.gallery = null
@@ -279,14 +278,7 @@ var store = new Vuex.Store({
       
 
     },
-    INVITED_CHATS_COUNT(state, rooms) {
-
-      var count = _.filter(rooms, room => room._selfMembership === 'invite')
-
-      state.invitedRoomsCount = count.length
-
-
-    },
+  
     ALL_NOTIFICATIONS_COUNT(state, rooms) {
 
       var n = new Date()
@@ -306,10 +298,10 @@ var store = new Vuex.Store({
 
       state.allnotifications = _.reduce(rooms, (s, chat) => {
 
-
         return s + (chat.getUnreadNotificationCount() || 0)
 
       }, 0) + count.length
+      
 
       if (state.chats.length <= 3) {
         // Count notifications from pocketnet team room
@@ -318,6 +310,7 @@ var store = new Vuex.Store({
         }).length;
         state.allnotifications += pocketMessages
       }
+
         
       var external = f.deep(store, '_vm.core.external.clbks.ALL_NOTIFICATIONS_COUNT') || {}
 

@@ -425,7 +425,6 @@ class MTRX {
 
 			this.waitchats().then(r => {
 
-				//console.log("Room.timeline")
 
 				/////replace to last events
 				
@@ -464,10 +463,10 @@ class MTRX {
 
 			this.core.store.dispatch('FETCH_CHATS').then(r => {
 				this.core.store.dispatch('FETCH_EVENTS')
+				this.core.store.commit('ALL_NOTIFICATIONS_COUNT', this.client.getRooms())
 			})
 
-			this.core.store.commit('INVITED_CHATS_COUNT', this.client.getRooms())
-			this.core.store.commit('ALL_NOTIFICATIONS_COUNT', this.client.getRooms())
+			
 
 		});
 

@@ -55,8 +55,6 @@ export default {
 
         if(this.core.mtrx.chatUsers(this.chat.roomId).length){
 
-            console.log('this.$store.state.users', this.$store.state.users, this.core.mtrx.chatUsers(this.chat.roomId))
-
           return 'Empty chat: ' + this.chat.roomId
         }
 

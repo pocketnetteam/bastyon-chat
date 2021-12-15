@@ -86,7 +86,6 @@ export default {
         var member = this.m_chat.currentState.getMembers()[0]
         var data = this.$store.state.users[f.getmatrixid(member.userId)]
         if(data){
-          console.log(data, "ready")
           data.status = member.membership
           data.image = data.source.i
           return data

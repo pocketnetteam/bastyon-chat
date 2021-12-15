@@ -113,6 +113,32 @@ var rand = function (min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
+f.permutations = function (array, k) {
+
+    k || (k = 1)
+
+    var m = [];
+    var combinations = [];
+    var indices = [];
+    var len = array.length;
+    function run(level) {
+        for (var i = 0; i < len; i++) {
+            if (!indices[i]) {
+                indices[i] = true;
+                combinations[level] = array[i];
+                if (level < k - 1) {
+                    run(level + 1, i + 1);
+                } else {
+                    m.push(([]).concat(combinations));
+                }
+                indices[i] = false;
+            }
+        }
+    }
+    run(0);
+    return m;
+}
+
 var copytext = function (text) {
     if (window.clipboardData && window.clipboardData.setData) {
         // IE specific code path to prevent textarea being shown while dialog is visible.
@@ -508,7 +534,7 @@ var hexstorage = {}
 
 var hexDecode = function (hex) {
 
-    if(hexstorage[hex]) return hexstorage[hex]
+    if (hexstorage[hex]) return hexstorage[hex]
 
     var ch = 0;
     var result = "";
@@ -533,8 +559,8 @@ var imgDimensions = function (data) {
 
 var knsites = ['bastyon.com', 'pocketnet.app', 'zoom.us', 'youtube', 'facebook', 'instagram', 'vk.com', 'twitter', 'pinterest', 'vimeo', 'ask.fm', 'change.org', 'wikipedia', 'livejournal', 'linkedin', 'myspace', 'reddit', 'tumblr', 'ok.ru', 'flickr', 'google', 'yandex', 'yahoo', 'bing', 'gmail', 'mail']
 
-var knsite = function(url){
-    return _.find(knsites, function(u){
+var knsite = function (url) {
+    return _.find(knsites, function (u) {
         return url.indexOf(u) > -1
     })
 }
@@ -553,23 +579,23 @@ var getTxt = function (data) {
 var getmatrixid = function (str) {
     return str.split(":")[0].replace("@", '')
 }
-var getMatrixIdFull  = function(id, domain) {
-  id || (id = '')
+var getMatrixIdFull = function (id, domain) {
+    id || (id = '')
 
-  if (id.indexOf("@") == 0) return id
-  return '@' + id + ':' + domain
+    if (id.indexOf("@") == 0) return id
+    return '@' + id + ':' + domain
 }
 var ObjDiff = function (x, y) {
-  var target = {};
-  var diffProps = Object.keys(x).filter(function (i) {
-    return x[i] !== y[i];
+    var target = {};
+    var diffProps = Object.keys(x).filter(function (i) {
+        return x[i] !== y[i];
 
-  }).map(function (j) {
-    var obj = {};
-    obj[j] = x[j];
-    target = Object.assign(target, obj)
-  });
-  return target;
+    }).map(function (j) {
+        var obj = {};
+        obj[j] = x[j];
+        target = Object.assign(target, obj)
+    });
+    return target;
 }
 var filterByUserId = function (arr, data) {
     var a = arr.map(function (e) {
@@ -843,84 +869,82 @@ var Base64 = {
         return string;
     },
 
-    fromFile : file => new Promise((resolve, reject) => {
+    fromFile: file => new Promise((resolve, reject) => {
         const reader = new FileReader();
-        
+
         reader.readAsDataURL(file);
         reader.onloadend = () => resolve(reader.result);
         reader.onerror = error => reject(error);
     }),
 
-    toFileFetch : function(base64){
+    toFileFetch: function (base64) {
         return fetch(base64).then(res => {
-			return res.blob()
-		}).then(blob => {
-			return new (window.wFile || window.File)([blob], "File name", { type: "image/png" })
-		})
+            return res.blob()
+        }).then(blob => {
+            return new (window.wFile || window.File)([blob], "File name", { type: "image/png" })
+        })
     },
 
-    toFile : function(base64){
+    toFile: function (base64) {
 
-        console.log('base64', base64)
-
-        try{
+        try {
             var arr = base64.split(','),
                 mime = arr[0].match(/:(.*?);/)[1],
-                bstr = atob(arr[1]), 
-                n = bstr.length, 
+                bstr = atob(arr[1]),
+                n = bstr.length,
                 u8arr = new Uint8Array(n);
 
-            while(n--){
+            while (n--) {
                 u8arr[n] = bstr.charCodeAt(n);
             }
 
-            var file = new (window.wFile || window.File)([u8arr], "Filename", {type:mime});
+            var file = new (window.wFile || window.File)([u8arr], "Filename", { type: mime });
 
             return Promise.resolve(file)
         }
-        catch(e) {
+        catch (e) {
             return Promise.reject(e)
         }
 
-      
+
 
     }
 
-    
+
 
 }
 
-f.readFile = function(file) {
-      
+f.readFile = function (file) {
+
     let reader = new FileReader();
-  
+
     reader.readAsArrayBuffer(file);
 
     return new Promise((resolve, reject) => {
-        
-        reader.onload = function() {
+
+        reader.onload = function () {
             resolve(reader.result);
         };
-        
-        reader.onerror = function() {
+
+        reader.onerror = function () {
             reject(reader.error);
         };
     })
 }
 
-f.fetchLocal = function(url) {
+f.fetchLocal = function (url) {
     return new Promise(function (resolve, reject) {
         var xhr = new XMLHttpRequest
 
         xhr.onload = function () {
 
-            var type =  xhr.getResponseHeader('content-type')
+            var type = xhr.getResponseHeader('content-type')
 
             resolve({
-                data : new Blob([xhr.response], {type: type, name : 'file'}) 
+                data: new Blob([xhr.response], { type: type, name: 'file' })
             })
-          
-           // resolve()
+
+            // resolve()
         }
 
         xhr.onerror = function () {
@@ -935,7 +959,7 @@ f.fetchLocal = function(url) {
 
 
 
-f.saveFileCordova = function(file, name, clbk){
+f.saveFileCordova = function (file, name, clbk) {
 
     var storageLocation = "";
 
@@ -951,62 +975,62 @@ f.saveFileCordova = function(file, name, clbk){
     var blob = new Blob([file], { type: file.type })
 
     window.resolveLocalFileSystemURL(storageLocation, function (fileSystem) {
-        
+
         fileSystem.getDirectory('Download', {
             create: true,
             exclusive: false
         },
-        
-        function (directory) {
 
-            directory.getFile(name, { create: true, exclusive: false }, function (entry) {
+            function (directory) {
 
-                var myFileUrl = entry.toURL();
+                directory.getFile(name, { create: true, exclusive: false }, function (entry) {
 
-                entry.createWriter(function (writer) {
+                    var myFileUrl = entry.toURL();
 
-                    writer.onwriteend = function (evt) {
+                    entry.createWriter(function (writer) {
 
-                        cordova.plugins.fileOpener2.open(
-                            myFileUrl,
-                            file.type,
-                            {
-                                error : function(){ },
-                                success : function(){ }
-                            }
-                        );
+                        writer.onwriteend = function (evt) {
 
-                        /*if (window.galleryRefresh){
-                            window.galleryRefresh.refresh(myFileUrl, function (msg) {}, function (err) {})
-                        }*/
+                            cordova.plugins.fileOpener2.open(
+                                myFileUrl,
+                                file.type,
+                                {
+                                    error: function () { },
+                                    success: function () { }
+                                }
+                            );
 
-                        if (clbk)
-                            clbk(myFileUrl)
-                        
-                    };
-           
-                    writer.seek(0);
-                    writer.write(blob);
+                            /*if (window.galleryRefresh){
+                                window.galleryRefresh.refresh(myFileUrl, function (msg) {}, function (err) {})
+                            }*/
+
+                            if (clbk)
+                                clbk(myFileUrl)
+
+                        };
+
+                        writer.seek(0);
+                        writer.write(blob);
+                    }, function (error) {
+                        if (clbk) clbk(null, error)
+
+                    });
                 }, function (error) {
-                    if(clbk) clbk(null, error)
-
+                    if (clbk) clbk(null, error)
                 });
+
             }, function (error) {
-                if(clbk) clbk(null, error)
-            });
+                if (clbk) clbk(null, error)
 
-        }, function (error) {
-            if(clbk) clbk(null, error)
-
-        })
+            })
 
 
-        
+
     }, function (evt) {
 
         dialog({
-            html : "Error: Could not create file, " + evt.target.error.code,
-            class : "one"
+            html: "Error: Could not create file, " + evt.target.error.code,
+            class: "one"
         })
 
     });
@@ -1014,21 +1038,21 @@ f.saveFileCordova = function(file, name, clbk){
 }
 
 f.isios = function () {
-    return (window.cordova && window.device && f.deep(window, 'device.platform') == 'iOS') || (navigator || {}).platform &&  /iPad|iPhone|iPod/.test(navigator.platform || '')
+    return (window.cordova && window.device && f.deep(window, 'device.platform') == 'iOS') || (navigator || {}).platform && /iPad|iPhone|iPod/.test(navigator.platform || '')
 }
 
-f.now = function(date){
-    var now = date ||(new Date);
-    var UTCseconds = (now.getTime() + now.getTimezoneOffset()*60*1000);
+f.now = function (date) {
+    var now = date || (new Date);
+    var UTCseconds = (now.getTime() + now.getTimezoneOffset() * 60 * 1000);
     var d = new Date(UTCseconds);
-        d.toString();
+    d.toString();
 
     return d
 }
 
 f.date = {
-    addseconds : function(now, seconds){
-        if(!now) now = new Date
+    addseconds: function (now, seconds) {
+        if (!now) now = new Date
 
         var ntime = now.getTime() + seconds * 1000
         var d = new Date(ntime);
@@ -1036,6 +1060,148 @@ f.date = {
         return d
     }
 }
+
+f.getservers = function(arr, mult, address) {
+
+    if(!arr.length) return []
+
+    mult || (mult = 1)
+
+    if(mult > arr.length) mult = arr.length
+
+    var mutations = f.permutations(arr, mult);
+
+    var index = f.helpers.base58.decode(address) % mutations.length;
+
+    return mutations[index]
+}
+
+f.helpers = {
+    base58: {
+        ALPHABET: '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz',
+        ALPHABET_MAP: {},
+        i: 0,
+
+        encode(buffer) {
+            const { ALPHABET, ALPHABET_MAP } = this;
+            let { i } = this;
+
+            if (!Object.keys(ALPHABET_MAP).length) {
+                while (i < ALPHABET.length) {
+                    ALPHABET_MAP[ALPHABET.charAt(i)] = i;
+                    i++;
+                }
+            }
+
+            var carry, digits, j;
+            if (buffer.length === 0) {
+                return '';
+            }
+            i = void 0;
+            j = void 0;
+            digits = [0];
+            i = 0;
+            while (i < buffer.length) {
+                j = 0;
+                while (j < digits.length) {
+                    digits[j] <<= 8;
+                    j++;
+                }
+                digits[0] += buffer[i];
+                carry = 0;
+                j = 0;
+                while (j < digits.length) {
+                    digits[j] += carry;
+                    carry = (digits[j] / 58) | 0;
+                    digits[j] %= 58;
+                    ++j;
+                }
+                while (carry) {
+                    digits.push(carry % 58);
+                    carry = (carry / 58) | 0;
+                }
+                i++;
+            }
+            i = 0;
+            while (buffer[i] === 0 && i < buffer.length - 1) {
+                digits.push(0);
+                i++;
+            }
+            return digits
+                .reverse()
+                .map(function (digit) {
+                    return ALPHABET[digit];
+                })
+                .join('');
+        },
+
+        decode(string) {
+            const { ALPHABET, ALPHABET_MAP } = this;
+            let { i } = this;
+
+            if (!Object.keys(ALPHABET_MAP).length) {
+                while (i < ALPHABET.length) {
+                    ALPHABET_MAP[ALPHABET.charAt(i)] = i;
+                    i++;
+                }
+            }
+
+            var bytes, c, carry, j;
+            if (string.length === 0) {
+                return new (
+                    typeof Uint8Array !== 'undefined' && Uint8Array !== null
+                        ? Uint8Array
+                        : Buffer
+                )(0);
+            }
+            i = void 0;
+            j = void 0;
+            bytes = [0];
+            i = 0;
+            while (i < string.length) {
+                c = string[i];
+                if (!(c in ALPHABET_MAP)) {
+                    throw (
+                        "Base58.decode received unacceptable input. Character '" +
+                        c +
+                        "' is not in the Base58 alphabet."
+                    );
+                }
+                j = 0;
+                while (j < bytes.length) {
+                    bytes[j] *= 58;
+                    j++;
+                }
+                bytes[0] += ALPHABET_MAP[c];
+                carry = 0;
+                j = 0;
+                while (j < bytes.length) {
+                    bytes[j] += carry;
+                    carry = bytes[j] >> 8;
+                    bytes[j] &= 0xff;
+                    ++j;
+                }
+                while (carry) {
+                    bytes.push(carry & 0xff);
+                    carry >>= 8;
+                }
+                i++;
+            }
+            i = 0;
+            while (string[i] === '1' && i < string.length - 1) {
+                bytes.push(0);
+                i++;
+            }
+
+            const outputArray = new Uint8Array(bytes.reverse());
+
+            let buffer = Buffer.from(outputArray);
+            return buffer.readUIntBE(0, outputArray.length);
+        },
+    },
+};
+
+
 f.ObjDiff = ObjDiff
 f._arrayBufferToBase64 = _arrayBufferToBase64
 f._base64ToArrayBuffer = _base64ToArrayBuffer

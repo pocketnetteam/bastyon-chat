@@ -38,8 +38,6 @@ export default {
 
         if (this.m_chat && !_.isEmpty(this.m_chat)) {
 
-          console.log('this.m_chat', this.m_chat, this.m_chat.currentState._joinedMemberCount)
-
           this.core.mtrx.kit.prepareChat(this.m_chat).then(r => {
             this.ready = true
           })

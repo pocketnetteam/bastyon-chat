@@ -26,12 +26,6 @@ export default {
     active: state => state.active,
     auth: state => state.auth,
     notificationCount : state => state.allnotifications,
-    invitedRoomsCount : function (){
-      if(this.$store.state.chatsready){
-              return this.$store.state.invitedRoomsCount
-      }
-    },
-
 
     current : function(){
       return this.$route.name

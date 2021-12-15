@@ -467,6 +467,8 @@ export default {
 		this.$store.commit('init');
 	},
 
+	
+
 	created() {
 
     	/*this.pocketnet = true
@@ -691,6 +693,15 @@ export default {
 
 		core.init()	
 
+		/*
+
+		////////// new server
+
+
+		var sarr = ['vamily.ru', 'pnt.com','bst.app', 'sd.ci']
+
+		console.log(f.getservers(sarr, 3, 'PR7srzZt4EfcNb3s27grgmiG8aB9vYNV82'))
+		console.log(f.getservers(sarr, 3, 'PP582V47P8vCvXjdV3inwYNgxScZCuTWsq'))*/
 		/*
 		
 		this.$dialog.confirm(
