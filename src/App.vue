@@ -674,6 +674,18 @@ export default {
             }*/
         ]
 
+		/*
+
+		////////// new server
+
+
+		var sarr = ['vamily.ru', 'pnt.com','bst.app', 'sd.ci']
+
+		console.log(f.getservers(sarr, 3, 'PR7srzZt4EfcNb3s27grgmiG8aB9vYNV82'))
+		console.log(f.getservers(sarr, 3, 'PP582V47P8vCvXjdV3inwYNgxScZCuTWsq'))
+		
+		*/
+
 		var domain = f.deep(window, 'window.POCKETNETINSTANCE.options.matrix') || 'vamily.ru'
 
 		core = new Core(this, {
@@ -693,15 +705,7 @@ export default {
 
 		core.init()	
 
-		/*
-
-		////////// new server
-
-
-		var sarr = ['vamily.ru', 'pnt.com','bst.app', 'sd.ci']
-
-		console.log(f.getservers(sarr, 3, 'PR7srzZt4EfcNb3s27grgmiG8aB9vYNV82'))
-		console.log(f.getservers(sarr, 3, 'PP582V47P8vCvXjdV3inwYNgxScZCuTWsq'))*/
+		
 		/*
 		
 		this.$dialog.confirm(
