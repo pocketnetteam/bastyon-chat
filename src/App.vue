@@ -471,8 +471,8 @@ export default {
 
 	created() {
 
-    	/*this.pocketnet = true
-		this.mobile = !this.pocketnet*/
+    	this.pocketnet = false
+		this.mobile = !this.pocketnet
 
 		this.$store.commit('setPocketnet', this.pocketnet);
 		this.$store.commit('setMobile', this.mobile);
@@ -683,7 +683,7 @@ export default {
 
 		console.log(f.getservers(sarr, 3, 'PR7srzZt4EfcNb3s27grgmiG8aB9vYNV82'))
 		console.log(f.getservers(sarr, 3, 'PP582V47P8vCvXjdV3inwYNgxScZCuTWsq'))
-		
+
 		*/
 
 		var domain = f.deep(window, 'window.POCKETNETINSTANCE.options.matrix') || 'vamily.ru'

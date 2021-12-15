@@ -286,7 +286,7 @@ export default {
         },
 
         send_text(event) {
-            event.textContent = this.replace_username(this.text).split(',')
+            event.textContent = this.replace_username(this.text)
 
             if(this.text && this.text !== '\n') {
 

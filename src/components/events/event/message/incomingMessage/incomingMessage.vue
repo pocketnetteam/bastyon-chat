@@ -1,9 +1,9 @@
 <template>
     <label>
         <label v-for="(elem, index) in message.split(/[\s]/)" v-bind:key="index">  
-            <label class="likelink" v-if="userCalled.test(elem)" @click="core.mtrx.opencontact(getUser(elem.replace(user_id, '')))"> 
-                {{ elem.replace(user_id, '') }} </label>
-            <label v-else> {{ elem }}</label>
+            <label class="likelink" v-if="userCalled.test(elem)" 
+            @click="core.mtrx.opencontact(getUser(elem.replace(user_id, '')))">{{ elem.replace(user_id, '') }}</label>
+            <label v-else>{{ elem }}</label>
         </label>
     </label>
 </template>
@@ -39,12 +39,8 @@ export default {
 <style lang="sass" scoped>
 
 .likelink 
-    color: #f44336
+    text-decoration: underline
     cursor: pointer
-    content: attr(data-text)
 
-.likelink:hover
-    color: red
-    
 
 </style>
