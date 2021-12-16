@@ -1,8 +1,8 @@
 <template>
     <label>
-        <label v-for="(elem, index) in message.split(userCalled)" v-bind:key="index">  
-            <label class="likelink" v-if="userCalled.test(elem)" @click="show(elem)">{{ elem.replace(user_id, '') }}</label>
-            <label v-else>{{ elem }}</label>
+        <label :chunks="chunks" v-for="(chunk, index) in chunks" v-bind:key="index">  
+            <label class="likelink" v-if="chunk.id" @click="show(chunk)">@{{ chunk.name }}</label>
+            <label v-else>{{ chunk }}</label>
         </label>
     </label>
 </template>
@@ -14,41 +14,54 @@ export default {
         message: {
             type: String,
             default: ''
-        },
-        roomId: {
-            type: String
         }
     },
     data() {
         return {
             user_id: /\w{68}:/,
-            userCalled: /(^|\s)@\w{68}:\w{1,50}/g,
+            userCalled: /@\w{68}:\w{1,50}/g,
         }
     },
     computed : {
         chunks : function(){
-            var c = message.split(userCalled);
 
-            var wordCap = message.replace(this.userCalled, function (l) { return l.toUpperCase() });
+            if(this.message.indexOf('@') == -1) return [this.message]
+
+            var c = this.message.split(this.userCalled);
+            var us = Array.from(this.message.matchAll(this.userCalled), m => m[0]);
+
+            var r = []
+
+            _.each(c, function(v, i){
+
+                r.push(v)
+
+                if (us[i]) {
+
+                    var ch = us[i].replace('@', '').split(':')
+
+                    ch.length == 2 ? r.push({
+                        id : ch[0],
+                        name : ch[1]
+                    }) : r.push(us[i])
+
+                }
+                   
+            })
+
+            return r
+
         }
     },
+    
     methods: {
-        getUser(userName){
 
-            console.log(this.message)
+        show : function(chunk){
 
-            var user = this.core.mtrx.chatUsersInfo(this.roomId, 'anotherChatUsers').filter(word => word.name === userName.trim().slice(1).toLowerCase())[0]
-            
-            
-            return user
-        },
-
-        show : function(elem){
-
-            var user = getUser(elem.replace(this.user_id, ''))
-
-            if(user)
-                core.mtrx.opencontact(getUser(elem.replace(this.user_id, '')))
+            this.core.mtrx.kit.usersInfoById(chunk.id).then(r => {
+                core.mtrx.opencontact(r)
+            })
+                
         }
     }
 }

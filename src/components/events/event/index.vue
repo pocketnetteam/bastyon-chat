@@ -422,8 +422,6 @@ export default {
         }
         catch(e){
 
-          console.error(e, this.event)
-
           this.event.event.decrypted = this.decryptEvent = {
             msgtype : 'm.bad.encrypted'
           }

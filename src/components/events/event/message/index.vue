@@ -83,7 +83,7 @@
             <i class="fas fa-pen"></i> {{ $t("caption.edited") }}
           </div>
           <div class="msgtext">
-            <IncomingMessage :message="textWithoutLinks" :roomId="chat.roomId"></IncomingMessage>
+            <IncomingMessage :message="textWithoutLinks"></IncomingMessage>
           </div>
           <div class="sendername" v-if="(!content.from && !my && showmeta) || (showmyicon && !my)">
             <span><b>{{userinfo.name}}</b></span> 

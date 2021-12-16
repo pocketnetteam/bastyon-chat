@@ -567,8 +567,6 @@ var knsite = function (url) {
 
 var getUrl = function (data) {
 
-    console.log("Data", data)
-
     var links = linkify.find(data)
 
     if (links.length) {

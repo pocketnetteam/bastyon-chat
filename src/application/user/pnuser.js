@@ -224,30 +224,15 @@ class PNUser extends User {
 		if(!str) str = 'pocketnetproxy'
 		if(!exp) exp = 360
 
-
         try{
-
-        
-
-            console.log('str, exp', str, exp)
-            console.log('this.credentials', this.credentials)
-
 
             var keyPair = bitcoin.ECPair.fromPrivateKey(Buffer.from(this.credentials.privateKey, 'hex'))
 
-            console.log('keyPair', keyPair)
-
             const currentMomentInUTC = (new Date()).toISOString();
-
-            console.log("n")
 
             var nonce = 'date=' + currentMomentInUTC + ",exp=" + exp + ',s=' + f.hexEncode(str);
 
-            console.log('nonce', nonce)
-
             var signature = keyPair.sign(bitcoin.crypto.sha256(Buffer.from(nonce)))	
-
-            console.log('sobj', sobj)
 
             var sobj = {
 
@@ -260,11 +245,8 @@ class PNUser extends User {
             }
 
         }catch(e){
-            console.log("E", e)
-
             return null
         }
-
 
 		return sobj
 	}

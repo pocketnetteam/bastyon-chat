@@ -194,6 +194,15 @@ class MTRXKIT {
     
   }
 
+  usersInfoById(id) {
+
+    var ids = [f.getmatrixid(id)]
+
+    return this.core.user.usersInfo(ids, false).then( r => {
+      return Promise.resolve(r[0])
+    })
+  }
+
   usersInfo(members, reload) {
 
     var ids = _.map(members, function (m) {

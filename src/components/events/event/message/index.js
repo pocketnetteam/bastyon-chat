@@ -128,6 +128,14 @@ export default {
       }
     },
 
+    replacedmintionsbody:function(){
+      return this.body.replace(/@\w{68}:(\w{1,50})/g, function(str, l){
+        console.log("L", l)
+        return '@' + l
+      })
+
+    },
+
     body: function () {
 
       var bc = this.origin.event.content
@@ -338,7 +346,10 @@ export default {
       return Promise.resolve()
     },
     menucopy: function () {
-      this.$f.copytext(this.body)
+
+      
+
+      this.$f.copytext(this.replacedmintionsbody)
 
       return Promise.resolve()
     },
