@@ -188,6 +188,9 @@ class MTRX {
 
 		var client = this.createMtrxClient(opts);
 
+
+		console.log("this.user.signature('matrix')", this.core.user.signature('matrix'))
+
 		try {
 			var userData = await client.login('m.login.password', {
 				user: this.credentials.username,
@@ -202,7 +205,10 @@ class MTRX {
 					this.credentials.username,
 					this.credentials.password,
 					null,
-					{ type: 'm.login.dummy' }
+					{ 
+						type: 'm.login.dummy', 
+						//signature : this.core.user.signature('matrix')
+					}
 				)
 
 			} 

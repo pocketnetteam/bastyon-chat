@@ -1203,6 +1203,47 @@ f.helpers = {
     },
 };
 
+f.getCaretPosition = function(ctrl){
+    // IE < 9 Support 
+    if (document.selection) {
+        ctrl.focus();
+        var range = document.selection.createRange();
+        var rangelen = range.text.length;
+        range.moveStart('character', -ctrl.value.length);
+        var start = range.text.length - rangelen;
+        return {
+            'start': start,
+            'end': start + rangelen
+        };
+    } // IE >=9 and other browsers
+    else if (ctrl.selectionStart || ctrl.selectionStart == '0') {
+        return {
+            'start': ctrl.selectionStart,
+            'end': ctrl.selectionEnd
+        };
+    } else {
+        return {
+            'start': 0,
+            'end': 0
+        };
+    }
+}
+
+f.setCaretPosition = function(ctrl, start, end) {
+    // IE >= 9 and other browsers
+    if (ctrl.setSelectionRange) {
+        ctrl.focus();
+        ctrl.setSelectionRange(start, end);
+    }
+    // IE < 9 
+    else if (ctrl.createTextRange) {
+        var range = ctrl.createTextRange();
+        range.collapse(true);
+        range.moveEnd('character', end);
+        range.moveStart('character', start);
+        range.select();
+    }
+}
 
 f.ObjDiff = ObjDiff
 f._arrayBufferToBase64 = _arrayBufferToBase64

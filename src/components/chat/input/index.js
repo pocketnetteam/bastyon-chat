@@ -1,11 +1,11 @@
 import f from "@/application/functions";
 import InputField from './InputField/InputField.vue'
-import UserCard from './UserCard/UserCard.vue'
+
 import _ from "underscore";
 import { mapState } from "vuex";
 
 import contacts from '@/components/contacts/list/index.vue'
-
+import preview from '@/components/contacts/preview/index.vue'
 
 export default {
 	name: 'chatInput',
@@ -15,8 +15,7 @@ export default {
 		relationEvent : Object
 	},
 
-
-	components: { InputField, UserCard, contacts },
+	components: { InputField, contacts, preview },
 
 	data: function () {
 
@@ -33,7 +32,9 @@ export default {
 			showuserselect : null,
 			anyUrlMeta: String,
 			joinedMembers: [],
-			usersList: [],
+			tipvalue : null,
+			tipuserindex : 0,
+			
 		}
 
 	},
@@ -44,6 +45,21 @@ export default {
 			//immediate: true,
 			handler: function () {
 			}
+		},
+		tipusers : function(){
+
+			if(!this.tipusers.length){
+				this.tipuserindex = 0
+			}
+			else{
+				if (this.tipuserindex > this.tipusers.length - 1){
+					this.tipuserindex = this.tipusers.length - 1
+				}
+			}
+
+			
+
+			
 		}
 	},
 
@@ -112,6 +128,17 @@ export default {
 			'chats'
 		]),
 
+		
+
+		userlist : function(){
+
+
+			if(!this.chat) return []
+
+			return this.core.mtrx.chatUsersInfo(this.chat.roomId, 'anotherChatUsers')
+
+		},
+
 		transaction : function(){
 			return f.deep(window, 'POCKETNETINSTANCE.platform.ui.wallet.send')
 		},
@@ -170,6 +197,30 @@ export default {
 			return arr
 		},
 
+		tipusers : function(){
+
+			if(this.tipvalue === null) return []
+			if(this.tipvalue === '') return this.userlist
+
+			var	value = this.tipvalue.toLowerCase()
+
+			var u = _.filter(this.userlist, function(u){
+				return u.name.toLowerCase().indexOf(value) == 0 && u.name.toLowerCase() != value
+			})
+
+			return u
+
+		},
+
+		maintipuser : function(){
+			if(this.tipusers.length){
+				return this.tipusers[this.tipuserindex || 0]
+			}
+
+			return null
+		}
+
+		
 
 	},
 
@@ -197,15 +248,37 @@ export default {
 				return this.core.mtrx.client && this.core.mtrx.access
 			})
 		},
+		
+		browsetip : function(increase){
 
-		/*closeShowuserselect : function(){
-			this.showuserselect = null
-		},*/
+			increase ? this.tipuserindex++ : this.tipuserindex--
+
+			if (this.tipuserindex > this.tipusers.length - 1){
+				this.tipuserindex = 0
+			}
+
+			if (this.tipuserindex < 0){
+				this.tipuserindex = this.tipusers.length - 1
+			}
+
+		},
+
+		selectcurrenttip : function(){
+			this.insertuser(this.tipusers[this.tipuserindex || 0])
+		},
+
+		insertuser : function(user = {}){
+			var name = user.name || ''
+
+			this.$refs['newinput'].inserttip(name)
+		},
+
+		tipBySearch:function(value){
+			this.tipvalue = value
+		},
 
 		showuserselected : function(contact, action){
 			this[action](contact)
-
-			//this.showuserselect = null
 		},
 
 		sendtransactionWrapper : function(){
@@ -282,9 +355,6 @@ export default {
 		},
 
 		newchat() {
-
-			
-			
 
 			if (this.u) {
 				this.$store.state.globalpreloader = true
@@ -399,9 +469,11 @@ export default {
 		},
 
 		sendinput(text) {
-			this.send(text.textContent).then(r => {
+
+			this.send(text).then(r => {
 				return Promise.resolve(r)
 			})
+
 		},
 
 		textCutLimit: function (text, limit) {
@@ -411,6 +483,15 @@ export default {
 			text = text.slice(0, limit);
 
 			return text.trim() + "...";
+		},
+
+		replaceMentions(text){
+
+			_.each(this.userlist, function(user){
+				text = text.replaceAll('@' + user.name, '@' + user.id + ':' + user.name)
+			})	
+
+			return text
 		},
 
 		send(text) {
@@ -433,6 +514,12 @@ export default {
 			}).then((r) => {
 
 				this.$emit('sent')
+
+				console.log('text', text)
+
+				text = this.replaceMentions(text)
+
+				/// text
 
 				if(this.relationEvent){
 
@@ -483,9 +570,7 @@ export default {
 		},
 	
 		pasteImage(data) {
-
 			this.sendImage({ base64: data })
-
 		},
 
 		sendImage: function ({base64, file}) {
@@ -536,7 +621,6 @@ export default {
 		},
 
 		canencryptfilesize : function(file){
-
 
 			var s = 10 * 1024 * 1024
 
@@ -612,6 +696,7 @@ export default {
 
 
 		},
+
 		focus: function () {
 			if (this.$refs['newinput'])
 				this.$refs['newinput'].focus()
@@ -668,6 +753,7 @@ export default {
 		menuItemClick(item, rowObject) {
 			this[item.click](rowObject);
 		},
+		
 		menuItemLoadedHandler: function (value) {
 
 			this.menuIsVisible = value
@@ -720,40 +806,14 @@ export default {
 				}
 
 				img.src = file.base64
-				//this.info = imgInfo
-
 			})
-
 
 		},
 		uploadUploadedAll(item, result) {
 			this.$store.state.loading = false
 			this.$refs.dropdownMenu.hidePopup();
 		},
-		setUsersList(list) {
-			this.usersList = list;
-		},
+		
 
-		async pickUser(name) {
-			let caretPos = this.$refs.newinput.addUsername(name)
-			await this.setUsersList([])
-			this.setCaretPosition(document.getElementById('textInput'), caretPos)
-
-		},
-		setCaretPosition(elem, caretPos) {
-            if(elem.createTextRange) {
-                var range = elem.createTextRange();
-                range.move('character', caretPos);
-                range.select();
-            }
-            else {
-                if(elem.selectionStart) {
-                    elem.focus();
-                    elem.setSelectionRange(caretPos, caretPos);
-                }
-                else
-                    elem.focus();
-            }
-		},
 	},
 }

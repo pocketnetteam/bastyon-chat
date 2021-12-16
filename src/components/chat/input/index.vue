@@ -4,16 +4,16 @@
 
       <div class="inputWrapper" v-if="chat">
 
-        <div class="users" 
-                   v-if="usersList && usersList.length"
-        >
-          <ul class="list" v-for="(user, index) in usersList" v-bind:key="index">
-              <li class="element" 
-                  @click="pickUser(user.name)">
-                  <UserCard :image="user.image" :name="user.name"></UserCard>
-              </li>
-          </ul>
+
+        <div class="tipusers" v-if="tipusers.length">
+
+          <div @click="insertuser(user)" class="previewWrapperExt" :class="{selected : tipuserindex == i}" :key="user.id" v-for="(user, i) in tipusers">
+            <preview :contact="user" mode=""/>
+          </div>
+          
         </div>
+
+
         <div class="center">
 
           <InputField
@@ -26,10 +26,12 @@
             @FilledInput="HideUploadPic"
             @base64="pasteImage"
             @focused="focused"
-            :chat="chat"
-            @userSearched="setUsersList"
+            @tipsearchrequest="tipBySearch"
+            @browsetip="browsetip"
+            @selectcurrenttip="selectcurrenttip"
 
             :storagekey="'chatinput' + chat.roomId"
+            :tipusers="tipusers"
           />
 
           <div class="left" v-if="upload && chat">
@@ -98,16 +100,6 @@
       <linepreloader />
     </div>
 
-    <!--<modal @close="closeShowuserselect" v-if="showuserselect">
-      <template v-slot:header>
-        <span>{{showuserselect.caption}}</span>
-      </template>
-      <template v-slot:body>
-        <contacts :users="showuserselect.users" :mode="`Select`" @close="closeShowuserselect" @select="contact => {showuserselected(contact)}"/>
-      </template>
-      <template v-slot:footer></template>
-    </modal>
-    -->
     
   
   </div>

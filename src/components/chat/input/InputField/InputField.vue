@@ -11,8 +11,11 @@
                     row="1"
                     spellcheck="true"
                     @focus="focused"
-                    @keydown.enter.prevent.exact="send_text_enter"
+                    @blur="blured"
+                    @keydown="keydown"
                     @input="textchange"
+                    @keyup="keyup"
+                    @click="keyup"
                     @paste="paste_image"
                     placeholder="Send message"                   
                 ></textarea>
@@ -58,6 +61,7 @@
 import Images from '@/application/utils/images.js'
 import data from "emoji-mart-vue-fast/data/all.json";
 import "emoji-mart-vue-fast/css/emoji-mart.css";
+import f from "@/application/functions";
 import { Picker, EmojiIndex } from 'emoji-mart-vue-fast'
 
 let emojiIndex = new EmojiIndex(data)
@@ -65,7 +69,6 @@ let emojiIndex = new EmojiIndex(data)
 import vClickOutside from 'v-click-outside'
 
 import picturePreview from '@/components/chat/input/picturePreview/picturePreview'
-import func from 'vue-editor-bridge';
 
 let images = new Images()
 
@@ -101,8 +104,6 @@ export default {
         },
     },
 
-   
-
     computed: {
         mobile : function(){
             return !this.$store.state.pocketnet && this.$store.state.mobile
@@ -124,106 +125,17 @@ export default {
             
 		},
 
-        addUsername: function(name) {
-            let element = document.getElementById('textInput');
-            if(element) {
-                let caretPos = element.selectionStart;
-                let atPosition = () => {
-                    for(let i=caretPos; i>=0;i--) {
-                        if(this.text[i] === '@') {
-                            return i;
-                        }
-                    }
-                }
-
-                let slicedAtText = this.text.slice(0, atPosition() + 1);
-                let plusSpaceLength = 1;
-                this.text = slicedAtText + name + ' '
-                + this.text.slice(this.sliceAfterUsernameText(caretPos, slicedAtText.length + name.length) + plusSpaceLength, this.text.length);
-                return this.text.indexOf(' ', caretPos) + plusSpaceLength;
-            }
-            return 0;
-        },
-        sliceAfterUsernameText(caretPos, curNamePos) {
-            return this.text.indexOf(' ', caretPos) > 0 ? this.text.indexOf(' ', caretPos) : curNamePos
-        },
-
-
         focused : function(){
             this.$emit('focused')
         },
 
         textchange : function(e){
-            this.text = e.target.value || ''    
+            this.text = e.target.value || ''   
+             
         },
 
-        show_usernames : function(text, caretPosition){
-            
-            for(let i=caretPosition; i>=0 && i<=caretPosition; i--) {
-                if(text[i] === '@' && text[caretPosition] !== '@') {
-                     if(i === 0) {
-                        this.search_for_username(text, i, caretPosition)
-                        break;
-                    }
-                    else if(i > 0 && (text[i-1] === ' ' || text[i-1] === '\n')) {
-                        this.search_for_username(text, i, caretPosition)
-                        break;
-                    }
-                    else {
-                        this.send_empty_array()
-                    }
-                }
-                else {
-                    this.send_empty_array()
-                }
-            }
-        },
-        show_usernames : function(caretPosition, isRightArrow){
-            for(let i=caretPosition; i>=0 && i<=caretPosition; i--) {
-                if(this.text[i] === '@' && this.text[caretPosition] !== '@') {
-                    if(i === 0) {
-                        if(isRightArrow) {
-                            this.setFirstUser(i, caretPosition)
-                            break;
-                        }
-                        else {
-                            this.search_for_username(i, caretPosition)
-                            break;
-                        }
-                    }
-                    else if(i > 0 && (this.text[i-1] === ' ' || this.text[i-1] === '\n')) {
-                        if(isRightArrow) {
-                            this.setFirstUser(i, caretPosition)
-                            break;
-                        }
-                        else {
-                            this.search_for_username(i, caretPosition)
-                            break;
-                        }
-                    }
-                    else {
-                        this.send_empty_array()
-                    }
-                }
-                else {
-                    this.send_empty_array()
-                }
-            }
-        },
-        search_for_username(index, caretPosition) {
-            this.$emit('userSearched' ,this.core.mtrx.chatUsersInfo(this.chat.roomId, 'anotherChatUsers')
-            .filter(word => word.name.indexOf(this.text.slice(index + 1, caretPosition).toLowerCase()) > -1))
-            
-
-            this.savetextinstorage()
-
-        },
-        setFirstUser(index, caretPosition) {
-            let userList = this.core.mtrx.chatUsersInfo(this.chat.roomId, 'anotherChatUsers')
-            .filter(word => word.name.indexOf(this.text.slice(index + 1, caretPosition).toLowerCase()) > -1)
-            this.addUsername(userList[0]?.name || '')
-            
-        },
+    
+      
         savetextinstorage : function(){
             if (this.storagekey){
                 localStorage[this.storagekey] = this.text || ''
@@ -270,28 +182,20 @@ export default {
 
         textarea_resize_reset() {
             this.$refs.textarea.style.height = '26px'
-            console.log('textarea_resize_reset')
         },
         toggle_emoji_picker() {
             this.display_emoji = !this.display_emoji
         },
         
-        send_text_enter(event){
-            if(this.mobile){
-                this.text = this.text + '\n'
-            }
-            else{
-                this.send_text(event)
-            }
-        },
+       
 
         send_text(event) {
-            event.textContent = this.replace_username(this.text)
 
-            if(this.text && this.text !== '\n') {
+            if (this.text && this.text !== '\n') {
 
                 this.display_emoji = false
-                this.$emit('chatMessage', event)
+                this.$emit('chatMessage', this.text)
+                
                 this.$emit('emptyInput')
                 this.send = false
                 this.text = ''
@@ -300,40 +204,6 @@ export default {
 
             this.savetextinstorage()
 
-        },
-
-        replace_username(text) {
-            for(let i=text.length; i>=0;i--) {
-               if((text[i] === '@' && i === 0) || (text[i] === '@' && text[i-1] === ' ')) {
-                   for(let j=i; j < text.length; j++) {
-                       if(text[j] === ' ' || text[j] === '\n') {
-                           let userList = this.core.mtrx.chatUsersInfo(this.chat.roomId, 'anotherChatUsers')
-                           .filter(word => word.name.indexOf(text.slice(i + 1, j).toLowerCase()) > -1)
-                           if(userList.length === 1 && userList[0].name.toLowerCase() === text.slice(i + 1, j).toLowerCase()) {
-                                text = this.create_username_message(text, userList, i, j)
-                                break;
-                           }
-                       }
-                       if(j === text.length - 1) {
-                           let userList = this.core.mtrx.chatUsersInfo(this.chat.roomId, 'anotherChatUsers')
-                           .filter(word => word.name.indexOf(text.slice(i + 1, j + 1).toLowerCase()) > -1)
-                           if(userList.length === 1 && userList[0].name.toLowerCase() === text.slice(i + 1, j + 1).toLowerCase()) {
-                               text = this.create_username_message(text, userList, i, j)
-                               break;
-                           }
-                       }
-                   }
-               }
-            }
-            return text;
-        },
-
-        create_username_message(text, userList, i, j){
-            return text.slice(0, i + 1) 
-                    + userList[0].id + ':'
-                    + userList[0].name 
-                    + ' '
-                    + text.slice(j+1, text.length)
         },
 
         insert_emoji(emoji) {
@@ -395,14 +265,184 @@ export default {
                 }).catch(error => console.error('Failed to resize image', error))
             }).catch(error => console.error('Failed to resize image', error))
         },
+
+        getsearchposition(position){
+
+            if(!position.start || !this.text.length) return null
+
+            var sposition = {start : position.start, middle : 0, end : position.end}
+
+            var i = position.start
+            var dg = false
+            var br = false
+
+            var reg = /[a-zA-Z0-9]{1}/
+
+                sposition.middle = i
+
+            do{
+
+                var char = this.text[i]
+
+                if (char == '@') {
+
+                    if ( position.start == i || (i > 0 && reg.test(this.text[i - 1]))  ){
+                        br = true
+                    }
+                    else{
+                        dg = true
+                    }
+                }
+                else{
+
+                    if (reg.test(char)){
+                        sposition.start = i
+                    } 
+                    else br = true
+                }
+
+                i--
+
+            } while(i >= 0 && i <= position.start && !dg && !br)
+
+            if(!dg){
+               sposition = null
+            }
+            else{
+
+                br = false
+                i = position.end
+
+                do{
+                    if (!this.text[i] || reg.test(this.text[i])){
+                        sposition.end = i
+                    }
+                    else{
+                        br = true
+                    }
+
+                    i++
+
+                } while(i <= this.text.length && !br)
+            }
+
+            return sposition
+
+        },
+
+        
+
+        getsearch(position){
+
+            var sposition = this.getsearchposition(position)
+
+            if(!sposition) return null
+
+            return this.text.substring(sposition.start, sposition.middle)    
+
+        },
+
+
+        keydown(event){
+
+            if (event.keyCode === 40 || event.keyCode === 38) {
+
+                if(this.tipusers && this.tipusers.length){
+
+                    this.$emit('browsetip', event.keyCode === 40 ? true : false)
+
+                    event.preventDefault()
+
+                    return false
+                }
+
+            }
+
+            
+
+            if (event.keyCode === 39 || event.keyCode === 13) {
+
+                if(this.tipusers && this.tipusers.length){
+
+                    this.$emit('selectcurrenttip')
+
+                    event.preventDefault()
+
+                    return false
+
+                }
+                
+            }
+
+            if(event.keyCode === 13){
+                if (this.mobile){
+                    this.text = this.text + '\n'
+                }
+                else{
+                    this.send_text(event)
+                }
+
+                event.preventDefault()
+
+                return false
+            }
+        },
+
+        keyup(event){
+
+            if(this.block){
+                event.preventDefault()
+
+                return false
+            }
+
+            var position = f.getCaretPosition(this.$refs['textarea'])
+
+            var value = this.getsearch(position)
+
+            this.$emit('tipsearchrequest', value)
+
+            this.savetextinstorage()
+        },
+
+        blured(){
+            setTimeout(() => {
+                this.$emit('tipsearchrequest', null)
+            }, 50)
+            
+        },
+
+        inserttip(text){
+
+            this.$emit('tipsearchrequest', null)
+
+            this.block = true
+            this.$refs['textarea']
+
+            var position = this.getsearchposition(f.getCaretPosition(this.$refs['textarea']))
+
+            this.text = this.text.substring(0, position.start) + text + this.text.substring(position.end + 1)
+
+
+
+            if(!this.text[position.end + 1]) {
+                this.text = this.text + ' '
+            }
+
+            if(!this.text[position.end + 1] == ' ')  position.end ++
+
+            f.setCaretPosition(this.$refs['textarea'], position.end + 1, position.end + 1)
+
+            setTimeout(() => {
+                this.block = false
+            }, 350)
+
+        }
     },  
 
     props : {
-        chat: {
-            type: Object,
-            default: {}
-        },
-        storagekey : String
+        storagekey : String,
+        tipusers : Array
     },
 
     data() {
@@ -427,6 +467,7 @@ export default {
             display_emoji: false,
             content_height: 26,
             pasted_data: [],
+            block : false,
             
             upload: {
                 multiple: true,
@@ -446,10 +487,8 @@ export default {
     },
 
     mounted() {
-        //console.log('this.mobile', this.mobile)
-        //////////////// not for mobiles
+
         if(!this.mobile){
-            console.log("FOCUS")
             this.focus()
         }
 
@@ -458,22 +497,6 @@ export default {
         })
 
         this.$refs.textarea.style.height = '26px'
-
-        let _this = this;
-        $("#textInput").bind("keyup click", function(event) {
-            if(event.keyCode === 39) {
-                _this.show_usernames(this.selectionStart, true)
-            }
-            else {
-                _this.show_usernames(this.selectionStart, false)
-                
-            }
-        });
-
-
-        // (event.type === "click" || 
-        //       (event.type === "keyup" && (event.keyCode >= 35 && event.keyCode <= 40)))
-
         
         if (this.storagekey && localStorage[this.storagekey]){
             this.text = localStorage[this.storagekey]

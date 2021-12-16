@@ -10,6 +10,7 @@
 /deep/ .previewWrapper
     padding-left: $r!important
     padding-right: $r!important
+
 .inputWrapper
     display: flex
 
@@ -82,24 +83,35 @@
     .iconWrapper
         width: 44px
 
-.users
-    position: absolute;
-    transform: translate(0, calc(-100% - 8px));
-    width: 315px
-    min-height: 68px
-    max-height: 232px
-    border-radius: 10px
-    border: 1px solid gray
+.tipusers
+    position: absolute
+    max-height: 300px
+    border-radius: $r
+    border: 1px solid transparentize($color-bg-second, 0.1)
     overflow-y: overlay
-    animation: fade-out-opacity .2s ease-in-out forwards
-    background-color: white
-    padding: 8px 0 8px 0
+    background-color: transparentize($color-bg-clear, 0.05)
+    backdrop-filter: blur(4px)
+    -webkit-backdrop-filter: blur(4px)
+    padding: 0.5 * $r 0
+    bottom : 100%
+    margin-bottom: $r
+    left: 0.5 * $r
+    right: 0.5 * $r
 
-ul 
-        padding-inline-start: 0
-.list 
-    list-style-type: none
-    margin: 0
+    .previewWrapperExt
+        border-radius: 1.5 * $r
+        margin-left: 0.5 *$r
+        margin-right: 0.5 *$r
+        padding-top : 0.5 *$r
+        padding-bottom : 0.5 *$r
+
+        /deep/ .previewWrapper
+            padding-left: 0.5 *$r!important
+            padding-right: 0.5 * $r!important
+            
+        &.selected
+            background: transparentize($color-text-common2, 0.95)
+
 
 
 
