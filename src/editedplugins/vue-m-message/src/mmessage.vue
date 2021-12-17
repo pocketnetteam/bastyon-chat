@@ -24,8 +24,6 @@
 
 <script>
 
-import event from '@/components/events/event/index.vue'
-import f from '@/application/functions'
 export default {
   name: 'm-mmessage',
   props: {
@@ -50,7 +48,7 @@ export default {
   },
   
   components: {
-    event
+    'event': () => import('@/components/events/event/index.vue')
   },
   methods: {
     

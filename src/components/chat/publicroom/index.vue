@@ -81,6 +81,9 @@ export default {
 
   mounted() {
 
+
+    //////////////// get public room by id
+
     this.core.mtrx.wait().then(r => {
 
       this.core.mtrx.client.publicRooms().then(r => {

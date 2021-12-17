@@ -84,13 +84,40 @@ class PNUser extends User {
         return "m/33'/0'/0'/" + n + "'"
     }
 
-    generateKeys (key){
+    generateKeysLS (key, address){
+
+        var lsstorage = {}
+        
+        try{
+            lsstorage = JSON.parse(localStorage['wifkeya'] || '{}')
+        }
+        catch(e) {}
+
+        if (lsstorage.address != address) lsstorage = {}
+
+        lsstorage.address = address
+        lsstorage.storage || (lsstorage.storage = [])
+        
+        var {ckeys} = this.generateKeys(key, lsstorage.storage)
+
+        localStorage['wifkeya'] = JSON.stringify(lsstorage)
+
+        return ckeys
+
+
+    }
+
+    generateKeys (key, storage){
         
         var ckeys = [];
 
+        if(!storage) storage = []
+
         if(key){
             for(var i = 1; i < 13; i++){
-                var d = bitcoin.bip32.fromSeed(key).derivePath(this.path33(i)).toWIF()
+                var d = storage[i - 1] || (bitcoin.bip32.fromSeed(key).derivePath(this.path33(i)).toWIF())
+
+                storage[i - 1] = d
     
                 var keyPair = bitcoin.ECPair.fromWIF(d)
     
@@ -102,7 +129,7 @@ class PNUser extends User {
             }
         }
 
-        return ckeys;
+        return {ckeys, storage};
 
     }
 
@@ -126,8 +153,7 @@ class PNUser extends User {
                 this.credentials.address = f.hexEncode(address)
             }
 
-
-            this.private = this.generateKeys(key)
+            this.private = this.generateKeysLS(key, address)
 
 		}
 		catch (e){

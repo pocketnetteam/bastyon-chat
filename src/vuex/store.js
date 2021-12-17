@@ -77,7 +77,9 @@ var store = new Vuex.Store({
     menu : null,
     pinchat : false,
     lastroom : null,
-    dontreadreceipts : false
+    dontreadreceipts : false,
+
+    deletedrooms : {}
     //share : {url : 'https://yandex.ru/'} //null
   },
   getters: {
@@ -386,9 +388,12 @@ var store = new Vuex.Store({
       allTrue(data.typing)
 
     },
-    DELETE_ROOM(state, room) {
-      var index = state.chats.findIndex(c => c.roomId === room);
-      state.chats.splice(index, 1);
+    DELETE_ROOM(state, roomid) {
+
+      Vue.set(state.deletedrooms, roomid, true)
+
+
+
     },
     SET_CONTACTS(state, v) {
       var mp = {}

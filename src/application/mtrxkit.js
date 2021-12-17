@@ -23,8 +23,7 @@ class MTRXKIT {
     if(users.length == 2){
       tt = m_chat.name == '#' + this.tetatetid(users[0], users[1])
     }
-    if(users.length > 1)
-      m_chat.tetatet = tt
+    if(users.length > 1) m_chat.tetatet = tt
 
     return tt
   }

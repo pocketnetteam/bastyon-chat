@@ -116,11 +116,7 @@ class Core {
 
             return this.mtrx.init()
 
-        })/*.then(r => {
-
-            return this.init()
-
-        })*/.then(r => {
+        }).then(r => {
             this.loading = false
             this.setUnauthorized(null)
 
@@ -133,20 +129,14 @@ class Core {
             return Promise.resolve()
 
         }).catch(e => {
+
+            console.error(e)
+            
             this.loading = false
+
             if(e == 'unauthorized' || e == 'unknown'){
                 this.setUnauthorized(e)
             }
-
-            /*if(e == 'unknown'){
-
-                return new Promise((resolve, reject) => {
-                    setTimeout(() => {
-                        this.initWithUserBase().then(resolve).catch(resolve)
-                    }, 10000)
-                })
-
-            }*/
 
             return Promise.resolve()
 

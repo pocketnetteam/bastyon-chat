@@ -31,26 +31,23 @@
         </div>
       </div>
 
-      <Player v-if="video" :video="video_url" :autoplay="false" />
+      <!--<Player v-if="video" :video="video_url" :autoplay="false" />-->
 
     </div>
 
   </div>
 </template>
 <script>
-import Player from '@/components/chat/player/Player.vue'
+//import Player from '@/components/chat/player/Player.vue'
 import Widgets from '@/application/utils/widgets.js'
 import matrixlink from '@/components/events/event/metaMessage/matrixlink.vue'
-
 import imagesLoaded from 'vue-images-loaded'
 
-import f from '@/application/functions'
-import { createLogger } from 'node_modules/vuex/types'
-// import Plyr from 'plyr'
 
 export default {
   components: {
-    Player, matrixlink
+    //Player, 
+    matrixlink
   },
   directives: {
     imagesLoaded
@@ -122,7 +119,7 @@ export default {
   },
 
   beforeMount() {
-    if(this.video) this.video_url = this.video
+    //if(this.video) this.video_url = this.video
   },
   mounted() {
     

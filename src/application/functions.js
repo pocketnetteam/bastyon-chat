@@ -1,8 +1,6 @@
-import { _ } from 'core-js';
-
 const linkify = require('linkifyjs');
-linkify.registerCustomProtocol('pocketnet')
-linkify.registerCustomProtocol('bastyon')
+    linkify.registerCustomProtocol('pocketnet')
+    linkify.registerCustomProtocol('bastyon')
 var f = {}
 
 

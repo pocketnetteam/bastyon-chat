@@ -31,6 +31,7 @@ export * from "./crypto/store/memory-crypto-store";
 export * from "./crypto/store/indexeddb-crypto-store";
 export * from "./content-repo";
 export * as ContentHelpers from "./content-helpers";
+
 export { createNewMatrixCall, setAudioOutput as setMatrixCallAudioOutput, setAudioInput as setMatrixCallAudioInput, setVideoInput as setMatrixCallVideoInput, } from "./webrtc/call";
 /**
  * The function used to perform HTTP requests. Only use this if you want to

@@ -3,28 +3,16 @@ import Router from 'vue-router'
 
 Vue.use(Router);
 
-import contacts from '@/views/contacts'
 import contact from '@/views/contact'
 import pageinvite from '@/views/invite'
 
 const router = new Router({
     routes: [
-        /*{
-            path: '/',
-            name: 'contacts',
-            component: ContactList
-        },
-        {
-            path: '/contact',
-            name: 'contact',
-            component: ContactList,
-            props: true
-        },*/
-
+      
         {
             path: '/contacts',
             name: 'contacts',
-            component: contacts
+            component: () => import ('@/views/contacts')
         },
         {
             path: '/contact',
@@ -73,17 +61,11 @@ const router = new Router({
             component: pageinvite
         },
 
-        /*{
-            path: '/chat',
-            name: 'chat',
-            component: UserChat,
-            props: true
-        }*/
+      
     ],
+    
     mode: document.getElementById('automomous') ? 'history' : 'abstract',
-    /*scrollBehavior(to, from, savedPosition) {
-        return { x: 0, y: 0 }
-    }*/
+  
 })
 
 

@@ -313,8 +313,11 @@ class MTRX {
 	}
 
 	waitchats() {
+
 		return f.pretry(() => {
+
 			return this.chatsready
+
 		}).then(() => {
 
 			if (this.error) {
@@ -431,10 +434,6 @@ class MTRX {
 
 			this.waitchats().then(r => {
 
-
-				/////replace to last events
-				
-
 				if (message.getSender() !== userId) {
 
 					var m_chat = this.core.mtrx.client.getRoom(message.event.room_id)
@@ -443,12 +442,6 @@ class MTRX {
 
 					if (m_chat && this.core.pcrypto.rooms[message.event.room_id]) this.core.notifier.event(message, m_chat)
 
-
-						//this.core.mtrx.kit.prepareChat(m_chat).then(r => {
-							//this.core.notifier.event(message, m_chat)
-						//})
-
-					
 				}
 
 			})
@@ -479,10 +472,12 @@ class MTRX {
 	}
 
 	setready () {
+
 		if(!this.chatsready){
 			this.chatsready = true
 			this.core.store.commit('SET_CHATS_READY', true)
 		}
+
 	}
 
 	init() {
@@ -492,13 +487,6 @@ class MTRX {
 
 			return Promise.resolve()
 		})
-
-		/*return this.wait().then(r => {
-
-			this.initEvents()
-
-			return Promise.resolve()
-		})*/
 	}
 
 	destroy() {

@@ -398,9 +398,11 @@ export default {
             this.core.mtrx.client.forget(this.chat.roomId, true).then(r => {
               return r
             }).then(r => {
+
               this.$store.commit('DELETE_ROOM', this.chat.roomId);
-              console.log(this.$store.state.chats, "chats new")
+
               this.$router.push({path: '/chats'})
+              
             })
           })
 

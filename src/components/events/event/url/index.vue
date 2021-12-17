@@ -9,7 +9,6 @@
             :title="meta['og:title']"
             :description="meta['og:description']"
             :image="previewImageUrl"
-            :video="meta['og:video:url'] || (urltype == 'video' ? this.url : null)"
             :url="url"
             :h="meta['og:image:height']"
             :w="meta['og:image:width']"
@@ -37,7 +36,6 @@
 
 <script>
 import { mapState } from 'vuex';
-import metaMessage from "@/components/events/event/metaMessage/index.vue";
 export default {
     name: 'eventsurl',
     props: {
@@ -46,7 +44,7 @@ export default {
         data : Object
     },
     components : {
-        metaMessage
+        'metaMessage': () => import('@/components/events/event/metaMessage/index.vue')
     },
     data : function(){
         return {

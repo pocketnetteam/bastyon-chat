@@ -22,22 +22,10 @@
 
       <div class="actionsWrapper" v-if="content.msgtype !== 'm.file'" @click="setmenu">
         <i class="fas fa-ellipsis-h"></i>
-       <!-- <dropdownMenu
-          @itemClicked="menuItemClickHandler"
-          @menuIsVisible="menuIsVisibleHandler"
-          ref="dropdownMenu"
-          :menuItems="menuItems"
-          :rowObject="{}"
-          icon="fas fa-ellipsis-h"
-        />-->
-     
       </div>
     
       <div class="iconWrapper" v-if="!my || showmyicon" @click="core.mtrx.opencontact(userinfo)">
-
-        <!--<router-link v-if="chat" :to="'contact?id=' + userinfo.id">-->
           <userpic :userinfo="userinfo"/>
-        <!--</router-link>-->
       </div>
 
       <div class="fromimagesfiles" v-if="(content.from || imageFrom) && (file || (content.msgtype === 'm.image' && imageUrl))">

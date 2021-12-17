@@ -7,7 +7,6 @@ import f from '@/application/functions'
 import VuePictureSwipe from 'vue-picture-swipe';
 import url from '@/components/events/event/url/index.vue'
 import imagesLoaded from 'vue-images-loaded'
-
 import dummypreviews from "@/components/chats/dummypreviews";
 import moment from "moment";
 import IncomingMessage from "./incomingMessage/incomingMessage.vue"

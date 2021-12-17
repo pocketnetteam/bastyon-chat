@@ -4,11 +4,11 @@ const SHA2 = require("sha2");
 const BN = require('bn.js')
 import * as miscreant from "miscreant";
 var pbkdf2 = require('pbkdf2')
-const EC = require('elliptic').ec
-const secp256k1 = new EC('secp256k1')
-var salt = 'PR7srzZt4EfcNb3s27grgmiG8aB9vYNV82'
 import cryptoRandomString from 'crypto-random-string';
 
+var salt = 'PR7srzZt4EfcNb3s27grgmiG8aB9vYNV82'
+const EC = require('elliptic').ec
+const secp256k1 = new EC('secp256k1')
 
 const n = secp256k1.curve.n
 
@@ -23,6 +23,8 @@ var PcryptoRoom = function(pcrypto, chat){
 
     var users = {}
     var m = 12
+
+    console.log("n!", n)
 
     var usersinfo = {}
     var usershistory = []

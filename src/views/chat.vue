@@ -109,30 +109,7 @@ export default {
     }),
 
   },
-  /*beforeRouteLeave: function (to, from, next) {
-
-    if (this.brokenRoom) {
-
-      this.core.mtrx.client.leave(from.query.id).then(r => {
-        this.core.mtrx.client.forget(from.query.id, true).then(r => {
-
-          return r
-
-        }).then(r => {
-
-          this.$store.commit('DELETE_ROOM', from.query.id);
-
-        }).then(r => {
-
-          next();
-
-        })
-      })
-    } else {
-      next()
-
-    }
-  },*/
+  
   mounted() {
     setTimeout(() => {
 

@@ -32,19 +32,14 @@ import modal from '@/components/assets/modal/index.vue'
 import pmenu from '@/components/assets/pmenu/index.vue'
 import _ from 'underscore';
 
-
-//import VueObserveVisibility from 'vue-observe-visibility'
 import VuePageTransition from '@/editedplugins/vue-page-transition/src/index.js'
 import TextareaAutosize from 'vue-textarea-autosize'
 import VueI18n from 'vue-i18n'
-import Vuelidate from 'vuelidate'
 import Message from '@/editedplugins/vue-m-message/src/index.js'
 import '@/editedplugins/vue-m-message/dist/index.css'
 import Vue2TouchEvents from 'vue2-touch-events'
-import VuePlyr from 'vue-plyr'
-import 'vue-plyr/dist/vue-plyr.css'
 
-//var VueScrollTo = require('vue-scrollto');
+
 import VuejsDialog from 'vuejs-dialog';
 Vue.use(VuejsDialog);
 
@@ -58,10 +53,7 @@ Vue.use(Message)
 Vue.use(TextareaAutosize)
 Vue.use(VuePageTransition)
 Vue.use(VueI18n)
-Vue.use(Vuelidate)
-//Vue.use(VueObserveVisibility)
 Vue.use(Vue2TouchEvents)
-Vue.use(VuePlyr)
 Vue.use(ToggleButton)
 
 ////////
@@ -83,7 +75,6 @@ Vue.prototype.$f = f
 if(!window._) window._ = _
 
 import VueVirtualScroller from 'vue-virtual-scroller'
-//import SweetAlertIcons from 'vue-sweetalert-icons';
 import preloader from '@/components/assets/preloader/index.vue'
 import fixedmessageicon from '@/components/assets/fixedmessageicon/index.vue'
 import date from '@/components/assets/date/index.vue'
@@ -123,24 +114,6 @@ Vue.component('maincontent', maincontent)
 Vue.component('search', search)
 Vue.component('upload', upload)
 Vue.component('linepreloader', linepreloader)
-
-
-/*
-Vue.use(VueScrollTo, {
-	container: "html",
-	duration: 200,
-	easing: "ease",
-	offset: 0,
-	force: true,
-	cancelable: true,
-	onStart: false,
-	onDone: false,
-	onCancel: false,
-	x: false,
-	y: true
-})*/
-
-//Vue.use(SweetAlertIcons);
 
 
 Vue.use(VueVirtualScroller)
@@ -379,26 +352,12 @@ export default {
 				// Wait for Matrix client
 				this.core.mtrx.wait().then(r => {
 
-					// Delete the old one first, if needed
 					this.core.mtrx.deletePusher();
 
 					var data = {
 						url: this.core.mtrx.baseUrl + '/_matrix/push/v1/notify'
 					}
 
-					/*
-					if(typeof device != 'undefined' && device.platform == 'iOS'){
-						data.default_payload = {
-							aps : {
-								"sound": "default",
-								"content-available": 1,
-                                "topic" : "DEFAULT"
-							}
-						}
-					}
-					*/
-
-					// Prepare to create a new pusher
 					var appName = 'pocketnet';
 					var pusherData = {
 						app_display_name: appName,
@@ -411,8 +370,6 @@ export default {
 						pushkey: fcmtoken
 					};
 
-
-					// Create the new pusher
 					this.core.mtrx.client.setPusher(pusherData).then(() => {
 						localStorage.setItem('fcmtoken5', fcmtoken);
 					}, (err) => {
@@ -726,15 +683,6 @@ export default {
         })*/
 
 		core.initWithUser(user).then(r => {
-
-			/*core.mtrx.waitchats().then(r => {
-
-				if(_.toArray(this.$store.state.chats).length <= 3 && this.pocketnet){
-					this.$store.commit('active', true)
-					this.$store.commit('blockactive', {value: true, item: 'initial'})
-				}
-				
-			})*/
 
 			return core.mtrx.wait().then(() => {
 
