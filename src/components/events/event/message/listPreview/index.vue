@@ -120,6 +120,9 @@ export default {
 
     urlpreview: function () {
       if (this.content.msgtype !== 'm.file') {
+
+        return ''
+
         if (this.content.body) return f.getUrl(this.content.body) || ""
       }
     },

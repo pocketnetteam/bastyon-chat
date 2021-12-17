@@ -194,6 +194,7 @@ export default {
   },
   
   beforeDestroy : function(){
+    
     if(this.readedInterval){
       clearInterval(this.readedInterval)
       this.readedInterval = null

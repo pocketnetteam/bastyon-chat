@@ -120,7 +120,7 @@
           <url :url="urlpreview" :urllink="urlpreview" :preview="true" @updatedSize="updatedSize" v-if="!origin.localRedactionEvent() && !origin.getRedactionEvent()"/>
         </div>
         <div v-else>
-          <linepreloader  />
+          <linepreloader/>
         </div>
       </div>
       

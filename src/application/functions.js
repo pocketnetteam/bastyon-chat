@@ -1,8 +1,18 @@
+var createHash = require('create-hash')
 const linkify = require('linkifyjs');
     linkify.registerCustomProtocol('pocketnet')
     linkify.registerCustomProtocol('bastyon')
 var f = {}
 
+var gsha = null
+
+f.sha224 = function(text){
+
+    var hash = createHash('sha224')
+        hash.update(text)
+    return hash.digest()
+
+}
 
 
 f.language = function () {
@@ -409,6 +419,14 @@ var pretry = function (_function, time, totaltime) {
 }
 
 var retry = function (_function, clbk, time, totaltime) {
+
+    if (_function()){
+
+        if (clbk) clbk();
+
+        return
+    }
+
     if (!time) time = 20;
 
     var totalTimeCounter = 0

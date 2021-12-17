@@ -1,14 +1,10 @@
 import { mapActions, mapState } from 'vuex'
 import dummypreviews from '@/components/chats/dummypreviews/index.vue'
 import preview from '@/components/chats/preview/index.vue'
-import contact from '@/components/contact/index.vue'
-//import { SwipeList, SwipeOut } from 'vue-swipe-actions';
-import userspic from '@/components/assets/userspic/index.vue'
 import teamroom from '@/components/teamroom/index.vue'
 import f from "@/application/functions";
 import moment from "moment";
 import _ from "underscore";
-import chat from '@/components/chat/index.vue';
 
 export default {
 	name: "list",
@@ -29,10 +25,7 @@ export default {
 		preview,
 		/* SwipeOut,*
 		 SwipeList,*/
-		userspic,
 		dummypreviews,
-		contact,
-		chat,
 		teamroom
 	},
 

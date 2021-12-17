@@ -1,5 +1,4 @@
 var _ = require('underscore');
-const SHA2 = require("sha2");
 import f from "@/application/functions";
 
 var cachestorage = {}
@@ -38,7 +37,7 @@ class MTRXKIT {
 
     if(cachestorage[id]) return cachestorage[id]
 
-    var hash = SHA2.sha224(id.toString()).toString('hex')
+    var hash = f.sha224(id.toString()).toString('hex')
 
     cachestorage[id] = hash
 
@@ -230,7 +229,7 @@ class MTRXKIT {
 
     const groupNameId = id.reduce((product, n) => product * n, 1);
     const mGroupNamId = f.makeid(groupNameId)
-    let hash = SHA2.sha224(mGroupNamId.toString()).toString('hex')
+    let hash = f.sha224(mGroupNamId.toString()).toString('hex')
 
     return {hash: hash, idForInviting: idForInviting}
 
@@ -264,7 +263,7 @@ class MTRXKIT {
     const groupNameId = id.reduce((product, n) => product * n, 1);
     const mGroupNamId = f.makeid(groupNameId)
 
-    let hash = SHA2.sha224(mGroupNamId.toString()).toString('hex')
+    let hash = f.sha224(mGroupNamId.toString()).toString('hex')
     return {hash: hash, idForInviting: idForInviting}
   }
 

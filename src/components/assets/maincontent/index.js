@@ -1,7 +1,5 @@
 import { mapState } from 'vuex';
-import contact from '@/components/contact/index.vue'
-import contacts from '@/components/contacts/list/index.vue'
-import complain from '@/components/complain/index.vue'
+
 export default {
     name: 'maincontent',
     props: {
@@ -9,7 +7,10 @@ export default {
     },
 
     components : {
-        contact, contacts, complain
+
+        'contact': () => import('@/components/contact/index.vue'),
+        'contacts': () => import('@/components/contacts/list/index.vue'),
+        'complain': () => import('@/components/complain/index.vue')
     },
 
     data : function(){

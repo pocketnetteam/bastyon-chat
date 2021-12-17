@@ -1,13 +1,9 @@
 import {mapState} from 'vuex';
 
 import list from '@/components/chat/list/index.vue'
-
-import chatInput from '@/components/chat/input/index.vue'
 import join from '@/components/chat/join/index.vue'
 import attachement from '@/components/chat/attachement/index.vue'
-import url from '@/components/events/event/url/index.vue'
 import _ from 'underscore'
-import moment from "moment";
 import f from "@/application/functions";
 import userRoomStatus from "@/components/chat/userRoomStatus/index.vue"
 
@@ -20,12 +16,10 @@ export default {
 
   components: {
     list,
-    chatInput,
+    chatInput : () => import('@/components/chat/input/index.vue'),
     join,
-    url,
     attachement,
     userRoomStatus
-
   },
 
   data: function () {

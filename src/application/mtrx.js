@@ -415,16 +415,20 @@ class MTRX {
 
 		this.client.on("RoomMember.membership", (event, member) => {
 
-			this.waitchats().then(r => {
+			if(!this.chatsready) return
 
-				if ((member.membership === "invite" || member.membership === "join") && event.getSender() !== userId) {
-					this.core.notifier.event(event)
-				}
 
-			})
+			if ((member.membership === "invite" || member.membership === "join") && event.getSender() !== userId) {
+				this.core.notifier.event(event)
+			}
+
 		});
 
 		this.client.on("Room.timeline", (message, member) => {
+
+			if(!this.chatsready) return
+
+			console.log("timeline")
 
 			if(!message.event.content) return
 
@@ -432,19 +436,17 @@ class MTRX {
 				message.event.content.pbody = JSON.parse(message.event.content.body)
 			}
 
-			this.waitchats().then(r => {
 
-				if (message.getSender() !== userId) {
+			if (message.getSender() !== userId) {
 
-					var m_chat = this.core.mtrx.client.getRoom(message.event.room_id)
+				var m_chat = this.core.mtrx.client.getRoom(message.event.room_id)
 
-					if (message.event.content['m.relates_to'] && message.event.content['m.relates_to']["rel_type"] == 'm.replace') return false
+				if (message.event.content['m.relates_to'] && message.event.content['m.relates_to']["rel_type"] == 'm.replace') return false
 
-					if (m_chat && this.core.pcrypto.rooms[message.event.room_id]) this.core.notifier.event(message, m_chat)
+				if (m_chat && this.core.pcrypto.rooms[message.event.room_id]) this.core.notifier.event(message, m_chat)
 
-				}
+			}
 
-			})
 
 
 		});
@@ -455,6 +457,8 @@ class MTRX {
 
 
 		this.client.on('sync', (state, prevState, res) => {
+
+			console.log("SYNC!!!")
 
 			if (state === 'PREPARED') {
 				this.setready()

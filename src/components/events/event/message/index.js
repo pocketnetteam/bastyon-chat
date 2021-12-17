@@ -249,7 +249,8 @@ export default {
 
 
     urlpreview: function () {
-      if (this.content.msgtype !== 'm.file') {
+      if (!this.preview && this.content.msgtype !== 'm.file') {
+
 
         var url = f.getUrl(this.body)
 

@@ -7,7 +7,7 @@
 
       <teamroom v-if="this.chats.length <= 2 && chatsready == true" @click="openTeamRoom"></teamroom>
       
-      <div class="listChatLoading" v-if="(chatsready !== true) && this.chats.length === 0">
+      <div class="listChatLoading" v-if="chatsready !== true">
         <dummypreviews/>
       </div>
       
@@ -22,7 +22,7 @@
                 :items="chats"
                 :item-size="pocketnet ? 60 : 70"
                 key-field="roomId"
-                :buffer="pocketnet ? 60 : 70"
+                :buffer="pocketnet ? 400 : 700"
         
             >
               <template v-slot="{ item, active }">

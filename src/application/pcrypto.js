@@ -1,6 +1,6 @@
 var _ = require('underscore');
 import f from "@/application/functions";
-const SHA2 = require("sha2");
+
 const BN = require('bn.js')
 import * as miscreant from "miscreant";
 var pbkdf2 = require('pbkdf2')
@@ -10,27 +10,21 @@ var salt = 'PR7srzZt4EfcNb3s27grgmiG8aB9vYNV82'
 const EC = require('elliptic').ec
 const secp256k1 = new EC('secp256k1')
 
+
 const n = secp256k1.curve.n
 
 
 var PcryptoRoom = function(pcrypto, chat){
     var self = this
-        this.configurable = false
+    this.configurable = false
 
-
-    var mtrxkit = pcrypto.core.mtrx.kit
     var hashes = {}
 
     var users = {}
     var m = 12
 
-    console.log("n!", n)
-
     var usersinfo = {}
     var usershistory = []
-
-    var tetatet = pcrypto.core.mtrx.kit.tetatetchat(chat)
-
 
     var pcryptoFile = new PcryptoFile()
 
@@ -381,7 +375,7 @@ var PcryptoRoom = function(pcrypto, chat){
 
         cuhash : function(users, num, block){
 
-            return pbkdf2.pbkdf2Sync(SHA2.sha224(_.map(users, function(u){
+            return pbkdf2.pbkdf2Sync(f.sha224(_.map(users, function(u){
                 return u.keys[num]
             }).join('') + (block || pcrypto.currentblock.height)).toString('hex'), salt, 1, 32, 'sha256') 
 

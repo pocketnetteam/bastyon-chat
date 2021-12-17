@@ -49,9 +49,7 @@
 
       <div>
 
-        <!--<div class="preview-wrapper" v-if="urlpreview">
-          <url :url="urlpreview" :preview="true"/>
-        </div>-->
+      
 
         <div class="relationEvent" v-if="relationEvent">
           
