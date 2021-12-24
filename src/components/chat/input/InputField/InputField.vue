@@ -406,9 +406,10 @@ export default {
         },
 
         blured(){
+            
             setTimeout(() => {
                 this.$emit('tipsearchrequest', null)
-            }, 50)
+            }, 300)
             
         },
 

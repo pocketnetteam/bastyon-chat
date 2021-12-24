@@ -12,12 +12,35 @@ class Core {
     constructor(vm, p){
         if(!p) p = {}
 
-        if(!p.mtrx) p.mtrx = {}
-            p.mtrx.baseUrl = 'https://' + p.domain
-
         this.options = {
             listofproxies : p.listofproxies
         }
+
+        if(!p.mtrx) p.mtrx = {}
+            p.mtrx.baseUrl = 'https://' + p.domain
+
+        if (p.mtrx.baseUrl == 'https://vamily.ru'){
+
+            p.mtrx.baseUrl = 'http://vamily.ru:5009'
+            p.domain = 'vamily.ru:5009'
+
+            this.options.burn = {
+                v : 'minutes',
+                w : 120,
+                m : 30,
+                b : 15
+            }
+        }
+        else{
+            this.options.burn = {
+                v : 'days',
+                w : 7,
+                m : 2,
+                b : 1
+            }
+        }
+
+        
 
         this.apiHandlers = {
             error : function(){},
@@ -39,7 +62,6 @@ class Core {
         this.focus = true
         this.store = vm.$store
         this.loading = true
-
 
         this.external = {}
         this.hiddenInParent = false
@@ -302,6 +324,12 @@ class Core {
 
             return Promise.resolve()
         })
+    }
+
+    cancelshare(){
+        this.store.commit('SHARE', null)
+
+        return Promise.resolve()
     }
 
     share(share){

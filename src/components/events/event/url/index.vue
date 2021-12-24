@@ -101,9 +101,7 @@ export default {
             if (this.url.indexOf('connect=') > -1) return 'matrix'
 
             if (this.url.indexOf('bastyon://') > -1) return 'pocketnet'
-
             if (this.url.indexOf('pocketnet://') > -1) return 'pocketnet'
-            if (this.url.indexOf('bastyon://') > -1) return 'pocketnet'
 
             var m = _.find(this.groups, function(g){
                 return _.indexOf(g, url.host) > -1 &&  _.indexOf(g, domain) > -1

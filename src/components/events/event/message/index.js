@@ -63,6 +63,22 @@ export default {
     IncomingMessage
   },
   computed: {
+    showburn : function(){
+
+
+      if( - moment().diff(this.willburn, this.core.options.burn.v) < this.core.options.burn.b) return 'big'
+
+      if( - moment().diff(this.willburn, this.core.options.burn.v) < this.core.options.burn.m) return 'medium'
+
+      return ''
+    },
+    willburn : function(){
+
+      var d = moment(this.origin._localTimestamp).add(this.core.options.burn.w, this.core.options.burn.v)
+
+      return d
+
+    },
 
     readyToRender : function(){
 
@@ -286,6 +302,15 @@ export default {
       this.$emit('gotoreference', id)
     },
 
+    showwhenburn : function(){
+
+      this.$store.commit('icon', {
+				icon: 'info',
+				message: 'The message will be deleted around ' + this.willburn.locale(this.$i18n.locale).format('DD MMMM YYYY')
+			})
+
+    },
+
     imagesLoaded: function () {
       this.updatedSize()
     },
@@ -410,8 +435,6 @@ export default {
       this.$emit('openImg', img)
     },
 
-
-
     format_date(value) {
       if (value) {
         if ((moment().diff(value, 'days')) === 0) {
@@ -420,7 +443,7 @@ export default {
           if (moment().year() === moment(value).year()) {
             return moment(value).locale(this.$i18n.locale).format('D MMMM')
           } else {
-            return moment(value).locale(this.$i18n.locale).format('D.MMMM.YYYY')
+            return moment(value).locale(this.$i18n.locale).format('D MMMM YYYY')
           }
         }
       }
