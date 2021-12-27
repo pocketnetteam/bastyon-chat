@@ -145,15 +145,19 @@ class PNUser extends User {
 
             var key = Buffer.from(this.credentials.privateKey, 'hex')
 
-            let keyPair = bitcoin.ECPair.fromPrivateKey(key)
+            /*let keyPair = bitcoin.ECPair.fromPrivateKey(key)
 
             let address = bitcoin.payments['p2pkh']({ pubkey: keyPair.publicKey }).address
 
             if (address != decodedAddress){
                 this.credentials.address = f.hexEncode(address)
-            }
+            }*/
 
-            this.private = this.generateKeysLS(key, address)
+            setTimeout(() => {
+                this.private = this.generateKeysLS(key, decodedAddress)
+            }, 1000)
+
+            
 
 		}
 		catch (e){

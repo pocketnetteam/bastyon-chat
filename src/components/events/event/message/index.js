@@ -63,8 +63,11 @@ export default {
     IncomingMessage
   },
   computed: {
-    showburn : function(){
+    showburn : function(){  
 
+      if(new Date() < new Date(2021,11,28)) {
+        return ''
+      }
 
       if( - moment().diff(this.willburn, this.core.options.burn.v) < this.core.options.burn.b) return 'big'
 

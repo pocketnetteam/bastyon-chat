@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import f from '@/application/functions.js'
-import _, {each} from 'underscore'
+import _ from 'underscore'
 
 
 Vue.use(Vuex);

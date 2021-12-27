@@ -7,12 +7,8 @@ var pbkdf2 = require('pbkdf2')
 import cryptoRandomString from 'crypto-random-string';
 
 var salt = 'PR7srzZt4EfcNb3s27grgmiG8aB9vYNV82'
-const EC = require('elliptic').ec
-const secp256k1 = new EC('secp256k1')
 
-
-const n = secp256k1.curve.n
-
+var secp256k1CurveN = null
 
 var PcryptoRoom = function(pcrypto, chat){
     var self = this
@@ -68,7 +64,7 @@ var PcryptoRoom = function(pcrypto, chat){
 
         if (
 
-            pcrypto.user && pcrypto.user.private && 
+            pcrypto.user && pcrypto.user.private && pcrypto.user.private.length == 12 && 
             users[pcrypto.user.userinfo.id] && 
             pcrypto.core.mtrx.kit.tetatetchat(chat) &&
             usersinfoArray.length > 1 && usersinfoArray.length < 5 && 
@@ -427,13 +423,13 @@ var PcryptoRoom = function(pcrypto, chat){
 
                 var a = new BN(scalars[i], 16);
 
-                var mul = a.mul(ch).umod(n)
+                var mul = a.mul(ch).umod(secp256k1CurveN)
     
                 if(!i){
                     sum = mul
                 }
                 else{
-                    sum = sum.add(mul).umod(n)
+                    sum = sum.add(mul).umod(secp256k1CurveN)
                 }
             }
 
@@ -903,6 +899,11 @@ var PcryptoFile = function(){
 
 var Pcrypto = function(core, p){
 
+    const EC = require('elliptic').ec
+    const secp256k1 = new EC('secp256k1')
+
+    secp256k1CurveN = secp256k1.curve.n
+
     var self = this
 
     self.core = core
@@ -935,15 +936,25 @@ var Pcrypto = function(core, p){
 
     self.addroom = function(chat){
 
-        if (self.rooms[chat.roomId]){
-            return self.rooms[chat.roomId].prepare()
-        }
+        return pretry(() => {
 
-        var room = new PcryptoRoom(self, chat)
+            return core.user.private && core.user.private.length == 12
 
-        self.rooms[chat.roomId] = room
+        }).then(r => {
 
-        return room.prepare()
+            if (self.rooms[chat.roomId]){
+                return self.rooms[chat.roomId].prepare()
+            }
+    
+            var room = new PcryptoRoom(self, chat)
+    
+            self.rooms[chat.roomId] = room
+    
+            return room.prepare()
+            
+        })
+
+        
     }
 
 
@@ -963,7 +974,7 @@ var Pcrypto = function(core, p){
 
     self.helpers = {
         checkuser : function(){
-            if(core.user && core.user.private && core.user.userinfo && core.user.userinfo.keys && core.user.userinfo.keys.length){
+            if(core.user && core.user.private && core.user.private.length == 12 && core.user.userinfo && core.user.userinfo.keys && core.user.userinfo.keys.length){
 
                 var pk = core.user.userinfo.keys.join(',')
 

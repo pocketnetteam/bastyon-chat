@@ -1,12 +1,14 @@
-var createHash = require('create-hash')
-const linkify = require('linkifyjs');
-    linkify.registerCustomProtocol('pocketnet')
-    linkify.registerCustomProtocol('bastyon')
+
+var createHash = null
+var linkify = null
+
 var f = {}
 
-var gsha = null
-
 f.sha224 = function(text){
+
+    if(!createHash){
+        createHash = require('create-hash')
+    }
 
     var hash = createHash('sha224')
         hash.update(text)
@@ -582,6 +584,12 @@ var knsite = function (url) {
 }
 
 var getUrl = function (data) {
+
+    if(!linkify){
+        linkify = require('linkifyjs');
+        linkify.registerCustomProtocol('pocketnet')
+        linkify.registerCustomProtocol('bastyon')
+    }
 
     var links = linkify.find(data)
 
