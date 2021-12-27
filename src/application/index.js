@@ -21,8 +21,8 @@ class Core {
 
         if (p.mtrx.baseUrl == 'https://vamily.ru'){
 
-            p.mtrx.baseUrl = 'http://vamily.ru:5009'
-            p.domain = 'vamily.ru:5009'
+           /* p.mtrx.baseUrl = 'http://vamily.ru:5009'
+            p.domain = 'vamily.ru:5009'*/
 
             this.options.burn = {
                 v : 'minutes',
