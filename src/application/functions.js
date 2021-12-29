@@ -1,3 +1,4 @@
+import axios from "axios";
 
 var createHash = null
 var linkify = null
@@ -1085,7 +1086,36 @@ f.date = {
     }
 }
 
-f.getservers = function(arr, mult, address) {
+f.getMainMyselfMatrixServer = async function (address) {
+    const matrixServers = this.getMatrixServers(2, address);
+
+    if (!matrixServers.length) {
+        throw ('Impossible to pick up matrix servers');
+    }
+
+    for (let i = 0; i < matrixServers.length; i++) {
+        const url = 'http://' + matrixServers[i] + '/_matrix/client/r0/register/available?username=test';
+
+        const result = await axios
+            .get(url)
+            .then(({data}) => {
+                return true;
+            })
+            .catch((err)=> {
+                return err.response.data.errcode === 'M_USER_IN_USE';
+            })
+
+        if (result) {
+            return matrixServers[i];
+        }
+    }
+
+    throw ('Impossible to pick up main matrix server');
+}
+
+f.getMatrixServers = function(mult, address) {
+    //temp fixed servers list
+    const arr = ['64.235.46.85:5501', '64.235.46.85:5502','65.21.110.139:5501', '65.21.110.139:5502']
 
     if(!arr.length) return []
 

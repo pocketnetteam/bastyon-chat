@@ -226,7 +226,7 @@ class MTRX {
 			accessToken: userData.access_token,
 			unstableClientRelationAggregation : true,
 			timelineSupport : true,
-			store: store,
+			//store: store,
 			
 			// deviceId: userData.device_id,
 		})

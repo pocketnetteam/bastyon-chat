@@ -17,7 +17,7 @@ class Core {
         }
 
         if(!p.mtrx) p.mtrx = {}
-            p.mtrx.baseUrl = 'https://' + p.domain
+            p.mtrx.baseUrl = 'http://' + p.domain
 
         if (p.mtrx.baseUrl == 'https://vamily.ru'){
 

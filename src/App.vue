@@ -426,7 +426,7 @@ export default {
 
 	
 
-	created() {
+	async created() {
 
     	/*this.pocketnet = false
 		this.mobile = !this.pocketnet*/
@@ -609,7 +609,7 @@ export default {
 			privateKey: this.privatekey
 		}
 
-		var username = 'nevermore'
+		var username = 'alchemist'
 
 		var user = (this.address && this.privatekey) ? actualUser : testUsers[`${username}`];
 
@@ -635,7 +635,6 @@ export default {
 
 		////////// new server
 
-
 		var sarr = ['vamily.ru', 'pnt.com','bst.app', 'sd.ci']
 
 		console.log(f.getservers(sarr, 3, 'PR7srzZt4EfcNb3s27grgmiG8aB9vYNV82'))
@@ -643,7 +642,9 @@ export default {
 
 		*/
 
-		var domain = f.deep(window, 'window.POCKETNETINSTANCE.options.matrix') || 'vamily.ru'
+		var domain = f.deep(window, 'window.POCKETNETINSTANCE.options.matrix') || await f.getMainMyselfMatrixServer(user.address);
+
+    console.log(domain);
 
 		core = new Core(this, {
 			domain : domain,
