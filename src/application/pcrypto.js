@@ -10,7 +10,188 @@ var salt = 'PR7srzZt4EfcNb3s27grgmiG8aB9vYNV82'
 
 var secp256k1CurveN = null
 
-var PcryptoRoom = function(pcrypto, chat){
+/**
+ * PcryptoStorage annotations:
+ *
+ * 1. New IndexedDB structure must be handled
+ *    if there are any in new release inside of
+ *    onupgradeneeded listener.
+ *
+ * 2. New version number must be assigned on
+ *    new releases of this object.
+ */
+const PcryptoStorage = function(storageName, version) {
+    let db;
+
+    /** Set this flag to TRUE if debug logs needed */
+    const DebugFlag = false;
+
+    let debugLog = () => {};
+
+    if (DebugFlag) {
+        debugLog = console.log;
+    }
+
+    /** Time constants */
+    const SecondsInHour = 60 * 60;
+    const SecondsInDay = SecondsInHour * 24;
+    const SecondsInMonth = SecondsInDay * 30;
+
+    let openRequest = indexedDB.open(storageName, version);
+
+    openRequest.onupgradeneeded = function() {
+        let db = openRequest.result;
+
+        if (!db.objectStoreNames.contains('items')) {
+            db.createObjectStore('items', { keyPath: 'id' });
+        }
+    };
+
+    /**
+     * Function generates UNIX timestamp
+     * floored to current hour.
+     *
+     * @return {number}
+     */
+    function getHourUnixtime() {
+        const dateNow = Math.floor(Date.now() / 1000);
+        const hourUnix = dateNow - (dateNow % SecondsInHour);
+
+        return hourUnix;
+    }
+
+    /**
+     * Function removes items cached
+     * 30 days ago
+     */
+    function clearOldItems() {
+        const timeFromCurrent = getHourUnixtime() - SecondsInMonth;
+
+        const transaction = db.transaction('items', 'readwrite');
+        const items = transaction.objectStore('items');
+
+        const req = items.openCursor();
+
+        req.onsuccess = (data) => {
+            const cursor = data.target.result;
+
+            if(cursor) {
+                if (timeFromCurrent >= cursor.value.cachedAt) {
+                    debugLog('PCryptoStorage CLEAR OUTDATED log', data);
+                    cursor.delete();
+                }
+
+                cursor.continue();
+            }
+        };
+
+        req.onerror = (data) => {
+            debugLog('PCryptoStorage CLEAR OUTDATED error', data);
+        };
+    }
+
+    const instanceFunctions = {
+        clear: (itemId) => {
+            function executor(resolve, reject) {
+                const transaction = db.transaction('items', 'readwrite');
+                const items = transaction.objectStore('items');
+
+                const req = items.delete(itemId);
+
+                req.onsuccess = (data) => {
+                    debugLog('PCryptoStorage CLEAR log', data);
+                    resolve(true);
+                };
+
+                req.onerror = (data) => {
+                    debugLog('PCryptoStorage CLEAR error', data);
+                    reject('PCryptoStorage CLEAR error', data);
+                };
+            }
+
+            return new Promise(executor);
+        },
+        set: (itemId, message) => {
+            function executor(resolve, reject) {
+                const transaction = db.transaction('items', 'readwrite');
+                const items = transaction.objectStore('items');
+
+                const unixtime = getHourUnixtime();
+
+                const item = {
+                    id: itemId,
+                    message,
+                    cachedAt: unixtime,
+                };
+
+                const req = items.add(item);
+
+                req.onsuccess = function (data) {
+                    debugLog('PCryptoStorage SET log', data);
+                    resolve(true);
+                };
+
+                req.onerror = function (data) {
+                    debugLog('PCryptoStorage SET error', data);
+                    reject('PCryptoStorage SET error');
+                };
+            }
+
+            return new Promise(executor);
+        },
+        get: (itemId) => {
+            function executor(resolve, reject) {
+                const transaction = db.transaction('items', 'readonly');
+                const items = transaction.objectStore('items');
+
+                const req = items.get(itemId);
+
+                req.onsuccess = (data) => {
+                    if (!req.result) {
+                        reject('PCryptoStorage GET error. Result is empty');
+                        return;
+                    }
+
+                    const foundMessage = 'message' in req.result;
+
+                    if (!foundMessage) {
+                        reject('PCryptoStorage GET error. Message is not set');
+                        return;
+                    }
+
+                    debugLog('PCryptoStorage GET log', data, req.result.message);
+                    resolve(req.result.message);
+                };
+
+                req.onerror = (data) => {
+                    console.log('PCryptoStorage GET error', data);
+                    reject('PCryptoStorage GET error');
+                };
+            }
+
+            return new Promise(executor);
+        },
+    }
+
+    function executor(resolve, reject) {
+        openRequest.onerror = function(err) {
+            debugLog('PcryptoStorage error occured:', err);
+            reject('PCryptoStorage error initiating IndexedDB');
+        };
+
+        openRequest.onsuccess = function() {
+            db = openRequest.result;
+
+            clearOldItems();
+
+            resolve(instanceFunctions);
+        };
+    }
+
+    return new Promise(executor);
+};
+
+var PcryptoRoom = async function(pcrypto, chat){
     var self = this
     this.configurable = false
 
@@ -231,62 +412,13 @@ var PcryptoRoom = function(pcrypto, chat){
     }
 
 
-    var ls = {
-        clear : function(k){
-            try{
-                delete localStorage[lcachekey + pcrypto.user.userinfo.id + '-' + k]
-            }
-            catch(e){
-               
-            }
-        },
-        set : function(k, v){
-            try{
-                localStorage[lcachekey + pcrypto.user.userinfo.id + '-' + k] = JSON.stringify(v)
-            }
-            catch(e){
-               // console.error(e)
-            }
-        },
+    let ls = PcryptoStorage('messages', 1);
+    let lse = PcryptoStorage('events', 1);
 
-        get : function(k){
-            var v = null;
+    await Promise.all([ls, lse]);
 
-            try{
-                v = JSON.parse(localStorage[lcachekey + pcrypto.user.userinfo.id + '-' + k])
-            }
-            catch(e){
-                //console.error(e)
-            }
-            
-            return v
-        }
-    }
-
-    var lse = {
-        set : function(eventid, v){
-            try{
-                localStorage[ecachekey + pcrypto.user.userinfo.id + '-' + eventid] = JSON.stringify(v)
-            }
-            catch(e){
-                console.log("E", e)
-               // console.error(e)
-            }
-        },
-
-        get : function(eventid){
-            var v = null;
-
-            try{
-                v = JSON.parse(localStorage[ecachekey + pcrypto.user.userinfo.id + '-' + eventid])
-            }
-            catch(e){
-                //console.error(e)
-            }
-            
-            return v
-        }
-    }
+    ls = await ls;
+    lse = await lse;
 
     var convert = {
         aeskeys : {
@@ -326,26 +458,30 @@ var PcryptoRoom = function(pcrypto, chat){
 
             //console.log('getusersbytime', getusersbytime(time), users, time, chat.currentState.getStateEvents("m.room.member"))
             //debugger
-            var keys = ls.get(k)
 
+            function executor(resolve) {
+                ls.get(`${lcachekey + pcrypto.user.userinfo.id}-${k}`)
+                    .then((keys) => {
+                        const keysPrepared = convert.aeskeys.out(keys);
 
-            if (keys){
-                keys = convert.aeskeys.out(keys)
+                        resolve({ keys: keysPrepared, k });
+                    })
+                    .catch(async () => {
+                        const keysPrepared = eaac.aeskeys(time, block);
+
+                        if(self.preparedUsers(time).length > 1){
+                            const itemId = `${lcachekey + pcrypto.user.userinfo.id}-${k}`;
+                            await ls.set(itemId, convert.aeskeys.inp(keysPrepared))
+                                .catch(() => {
+                                    console.error('Error writing item on LS.SET');
+                                });
+                        }
+
+                        resolve({ keys: keysPrepared, k });
+                    });
             }
-            else{
-                keys = eaac.aeskeys(time, block)
 
-                if(self.preparedUsers(time).length > 1){
-
-                    ls.set(k, convert.aeskeys.inp(keys))
-
-                }
-                
-            }
-            
-
-            return { keys, k }
-
+            return new Promise(executor);
         },
         aeskeys : function(time, block){
 
@@ -486,7 +622,7 @@ var PcryptoRoom = function(pcrypto, chat){
 
     self.decrypt = async function(userid, {encrypted, nonce}, time, block){
 
-        var { keys, k } = eaac.aeskeysls(time, block)
+        let { keys, k } = await eaac.aeskeysls(time, block);
 
         var error = null
 
@@ -506,14 +642,17 @@ var PcryptoRoom = function(pcrypto, chat){
             error = 'emptykey'
         }
 
-        ls.clear(k)
+        await ls.clear(`${lcachekey + pcrypto.user.userinfo.id}-${k}`)
+            .catch((err) => {
+                console.error('Error clearing item on LS.CLEAR');
+            });
 
         throw new Error(error)
 
     }
 
     self.encrypt = async function(userid, text){
-        var { keys } = eaac.aeskeysls()
+        let { keys } = await eaac.aeskeysls();
 
         if (keys[userid]){
             return await encrypt(text, keys[userid])
@@ -523,62 +662,58 @@ var PcryptoRoom = function(pcrypto, chat){
     }   
 
     self.decryptEvent = async function(event){
-
-        if(!pcrypto.user.userinfo){
-            throw new Error('userinfo')
+        if(!pcrypto.user.userinfo) {
+            throw new Error('userinfo');
         }
 
-        var stored = lse.get(event.event_id)
+        function executor(resolve) {
+            lse.get(`${ecachekey + pcrypto.user.userinfo.id}-${event.event_id}`)
+                .then((stored) => {
+                    resolve(stored);
+                })
+                .catch(async (err) => {
+                    const sender = f.getmatrixid(event.sender);
+                    const me = pcrypto.user.userinfo.id;
 
-        if (stored){
-            return stored
-        }
-        
-        var sender = f.getmatrixid(event.sender)
-        var me = pcrypto.user.userinfo.id
+                    let keyindex, bodyindex;
 
-        var keyindex = null,
-            bodyindex = null;
+                    const body = JSON.parse(f.Base64.decode(event.content.body));
+                    const time = event.origin_server_ts || 1;
+                    const block = event.content.block;
 
-        var body = JSON.parse(f.Base64.decode(event.content.body))
-        var time = event.origin_server_ts || 1
-        var block = event.content.block
+                    if (sender == me) {
+                        _.find(body, function(s, i) {
+                            if (i != me) {
+                                keyindex = i;
+                                bodyindex = i;
 
-        if (sender == me){
+                                return true;
+                            }
+                        });
+                    } else {
+                        bodyindex = me;
+                        keyindex = sender;
+                    }
 
-            _.find(body, function(s, i){
+                    if(!body[bodyindex]) {
+                        throw new Error('emptyforme');
+                    }
 
-                if (i != me){
+                    const decrypted = await self.decrypt(keyindex, body[bodyindex], time, block);
 
-                    keyindex = i
-                    bodyindex = i
+                    /* lse.set(`${ecachekey + pcrypto.user.userinfo.id}-${event.event_id}`, {
+                        body : decrypted,
+                        msgtype: 'm.text'
+                    }) */
 
-                    return true
-                }
-                
-            })
-        }
-        else{
-            bodyindex = me
-            keyindex = sender
-        }
-
-        if(!body[bodyindex]) throw new Error('emptyforme')
-
-
-        var decrypted = await self.decrypt(keyindex, body[bodyindex], time, block)
-
-
-        /*lse.set(event.event_id, {
-            body : decrypted,
-            msgtype: 'm.text'
-        })*/
-
-        return {
-            body : decrypted,
-            msgtype: 'm.text'
+                    resolve({
+                        body: decrypted,
+                        msgtype: 'm.text'
+                    });
+                });
         }
 
+        return new Promise(executor);
     }
 
     self.encryptFile = async function(file, p){
@@ -940,14 +1075,14 @@ var Pcrypto = function(core, p){
 
             return core.user.private && core.user.private.length == 12
 
-        }).then(r => {
+        }).then(async (r) => {
 
             if (self.rooms[chat.roomId]){
                 return self.rooms[chat.roomId].prepare()
             }
-    
-            var room = new PcryptoRoom(self, chat)
-    
+
+            var room = await new PcryptoRoom(self, chat)
+
             self.rooms[chat.roomId] = room
     
             return room.prepare()
