@@ -10,37 +10,101 @@ var salt = 'PR7srzZt4EfcNb3s27grgmiG8aB9vYNV82'
 
 var secp256k1CurveN = null
 
+/**
+ * PcryptoStorage annotations:
+ *
+ * 1. New IndexedDB structure must be handled
+ *    if there are any in new release inside of
+ *    onupgradeneeded listener.
+ *
+ * 2. New version number must be assigned on
+ *    new releases of this object.
+ */
 const PcryptoStorage = function(storageName, version) {
     let db;
+
+    /** Set this flag to TRUE if debug logs needed */
+    const DebugFlag = false;
+
+    let debugLog = () => {};
+
+    if (DebugFlag) {
+        debugLog = console.log;
+    }
+
+    /** Time constants */
+    const SecondsInHour = 60 * 60;
+    const SecondsInDay = SecondsInHour * 24;
+    const SecondsInMonth = SecondsInDay * 30;
 
     let openRequest = indexedDB.open(storageName, version);
 
     openRequest.onupgradeneeded = function() {
         let db = openRequest.result;
 
-        /** TODO: If version changed */
-
         if (!db.objectStoreNames.contains('items')) {
             db.createObjectStore('items', { keyPath: 'id' });
         }
     };
 
+    /**
+     * Function generates UNIX timestamp
+     * floored to current hour.
+     *
+     * @return {number}
+     */
+    function getHourUnixtime() {
+        const dateNow = Math.floor(Date.now() / 1000);
+        const hourUnix = dateNow - (dateNow % SecondsInHour);
+
+        return hourUnix;
+    }
+
+    /**
+     * Function removes items cached
+     * 30 days ago
+     */
+    function clearOldItems() {
+        const timeFromCurrent = getHourUnixtime() - SecondsInMonth;
+
+        const transaction = db.transaction('items', 'readwrite');
+        const items = transaction.objectStore('items');
+
+        const req = items.openCursor();
+
+        req.onsuccess = (data) => {
+            const cursor = data.target.result;
+
+            if(cursor) {
+                if (timeFromCurrent >= cursor.value.cachedAt) {
+                    debugLog('PCryptoStorage CLEAR OUTDATED log', data);
+                    cursor.delete();
+                }
+
+                cursor.continue();
+            }
+        };
+
+        req.onerror = (data) => {
+            debugLog('PCryptoStorage CLEAR OUTDATED error', data);
+        };
+    }
+
     const instanceFunctions = {
         clear: (itemId) => {
-            console.log('PCRYPTO_STORAGE :: CLEAR');
             function executor(resolve, reject) {
-                let transaction = db.transaction('items', 'readwrite');
-                let msgs = transaction.objectStore('items');
+                const transaction = db.transaction('items', 'readwrite');
+                const items = transaction.objectStore('items');
 
-                let req = msgs.delete(itemId);
+                const req = items.delete(itemId);
 
                 req.onsuccess = (data) => {
-                    console.log('PCryptoStorage CLEAR log', data);
+                    debugLog('PCryptoStorage CLEAR log', data);
                     resolve(true);
                 };
 
                 req.onerror = (data) => {
-                    console.log('PCryptoStorage CLEAR error', data);
+                    debugLog('PCryptoStorage CLEAR error', data);
                     reject('PCryptoStorage CLEAR error', data);
                 };
             }
@@ -48,25 +112,27 @@ const PcryptoStorage = function(storageName, version) {
             return new Promise(executor);
         },
         set: (itemId, message) => {
-            console.log('PCRYPTO_STORAGE :: SET');
             function executor(resolve, reject) {
-                let transaction = db.transaction('items', 'readwrite');
-                let msgs = transaction.objectStore('items');
+                const transaction = db.transaction('items', 'readwrite');
+                const items = transaction.objectStore('items');
 
-                let msg = {
+                const unixtime = getHourUnixtime();
+
+                const item = {
                     id: itemId,
                     message,
+                    cachedAt: unixtime,
                 };
 
-                let req = msgs.add(msg);
+                const req = items.add(item);
 
                 req.onsuccess = function (data) {
-                    console.log('PCryptoStorage SET log', data);
+                    debugLog('PCryptoStorage SET log', data);
                     resolve(true);
                 };
 
                 req.onerror = function (data) {
-                    console.log('PCryptoStorage SET error', data);
+                    debugLog('PCryptoStorage SET error', data);
                     reject('PCryptoStorage SET error');
                 };
             }
@@ -74,12 +140,11 @@ const PcryptoStorage = function(storageName, version) {
             return new Promise(executor);
         },
         get: (itemId) => {
-            console.log('PCRYPTO_STORAGE :: GET', itemId);
             function executor(resolve, reject) {
-                let transaction = db.transaction('items', "readonly");
-                let msgs = transaction.objectStore('items');
+                const transaction = db.transaction('items', 'readonly');
+                const items = transaction.objectStore('items');
 
-                let req = msgs.get(itemId);
+                const req = items.get(itemId);
 
                 req.onsuccess = (data) => {
                     if (!req.result) {
@@ -94,7 +159,7 @@ const PcryptoStorage = function(storageName, version) {
                         return;
                     }
 
-                    console.log('PCryptoStorage GET log', data, req.result.message);
+                    debugLog('PCryptoStorage GET log', data, req.result.message);
                     resolve(req.result.message);
                 };
 
@@ -110,12 +175,15 @@ const PcryptoStorage = function(storageName, version) {
 
     function executor(resolve, reject) {
         openRequest.onerror = function(err) {
-            console.error('PcryptoStorage error occured:', err);
+            debugLog('PcryptoStorage error occured:', err);
             reject('PCryptoStorage error initiating IndexedDB');
         };
 
         openRequest.onsuccess = function() {
             db = openRequest.result;
+
+            clearOldItems();
+
             resolve(instanceFunctions);
         };
     }
