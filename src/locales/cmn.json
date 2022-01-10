@@ -169,5 +169,13 @@
         "2-list3": "视频和实时流媒体",
         "2-message2": "现在就邀请你的朋友，成为去中心化的互联网大未来的一部分吧",
         "2-button": "邀请朋友"
-    }
+    },
+
+
+    "settings_pin" : "Pin chat window",
+    "checked" : "Yes",
+    "unchecked" : "No",
+    "settings_read" : "Send read receipts",
+    "messagewasburn" : "This message remains only in the memory of your device",
+    "messagewillburn" : "The message will be deleted soon"
 }

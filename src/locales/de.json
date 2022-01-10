@@ -168,5 +168,13 @@
         "2-list3": "Video- und Live-Streaming",
         "2-message2": "Laden Sie jetzt Ihre Freunde ein und werden Sie Teil der großen Zukunft des dezentralen Internets!",
         "2-button": "Freunde einladen"
-    }
+    },
+
+
+    "settings_pin" : "Pin chat window",
+    "checked" : "Yes",
+    "unchecked" : "No",
+    "settings_read" : "Send read receipts",
+    "messagewasburn" : "This message remains only in the memory of your device",
+    "messagewillburn" : "The message will be deleted soon"
 }
