@@ -455,30 +455,31 @@ var PcryptoRoom = async function(pcrypto, chat){
            // block = 100 * (block / 100).toFixed(0)
 
             var k = period(time) + '-' + block
+            var itemId = `${lcachekey + pcrypto.user.userinfo.id}-${k}`;
 
             //console.log('getusersbytime', getusersbytime(time), users, time, chat.currentState.getStateEvents("m.room.member"))
             //debugger
 
             function executor(resolve) {
-                ls.get(`${lcachekey + pcrypto.user.userinfo.id}-${k}`)
-                    .then((keys) => {
-                        const keysPrepared = convert.aeskeys.out(keys);
 
-                        resolve({ keys: keysPrepared, k });
-                    })
-                    .catch(async () => {
-                        const keysPrepared = eaac.aeskeys(time, block);
+                ls.get(itemId).then((keys) => {
 
-                        if(self.preparedUsers(time).length > 1){
-                            const itemId = `${lcachekey + pcrypto.user.userinfo.id}-${k}`;
-                            await ls.set(itemId, convert.aeskeys.inp(keysPrepared))
-                                .catch(() => {
-                                    console.error('Error writing item on LS.SET');
-                                });
-                        }
+                    const keysPrepared = convert.aeskeys.out(keys);
 
-                        resolve({ keys: keysPrepared, k });
-                    });
+                    resolve({ keys: keysPrepared, k });
+
+                }).catch(async () => {
+
+                    const keysPrepared = eaac.aeskeys(time, block);
+
+                    if (self.preparedUsers(time).length > 1){
+                        await ls.set(itemId, convert.aeskeys.inp(keysPrepared)).catch((e) => {
+                            console.error('Error writing item on LS.SET', e);
+                        });
+                    }
+
+                    resolve({ keys: keysPrepared, k });
+                });
             }
 
             return new Promise(executor);
@@ -626,11 +627,9 @@ var PcryptoRoom = async function(pcrypto, chat){
 
         var error = null
 
-       
-
         if (keys[userid]){
-            try{
 
+            try{
                 return await decrypt(keys[userid], {encrypted, nonce})
             }
             catch(e){
@@ -642,10 +641,11 @@ var PcryptoRoom = async function(pcrypto, chat){
             error = 'emptykey'
         }
 
-        await ls.clear(`${lcachekey + pcrypto.user.userinfo.id}-${k}`)
-            .catch((err) => {
-                console.error('Error clearing item on LS.CLEAR');
-            });
+        console.log("er", error)
+
+        await ls.clear(`${lcachekey + pcrypto.user.userinfo.id}-${k}`).catch((err) => {
+            console.error('Error clearing item on LS.CLEAR', err);
+        });
 
         throw new Error(error)
 
