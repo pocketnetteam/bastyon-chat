@@ -39,9 +39,26 @@ const PcryptoStorage = function(storageName, version) {
 
     let openRequest = indexedDB.open(storageName, version);
 
-    openRequest.onupgradeneeded = function() {
+    openRequest.onupgradeneeded = function(e) {
         let db = openRequest.result;
 
+        const isVersionChanged = (e.oldVersion !== e.newVersion);
+        const didExistBefore = (e.oldVersion === 0);
+
+        /**
+         * If PCryptoStorage version is changed,
+         * then ObjectStore could be removed.
+         */
+        if(isVersionChanged && !didExistBefore) {
+            if (!db.objectStoreNames.contains('items')) {
+                db.deleteObjectStore('items');
+            }
+        }
+
+        /**
+         * Here PCryptoStorage creates ObjectStore
+         * needed to function correctly.
+         */
         if (!db.objectStoreNames.contains('items')) {
             db.createObjectStore('items', { keyPath: 'id' });
         }
@@ -90,10 +107,38 @@ const PcryptoStorage = function(storageName, version) {
         };
     }
 
+    /**
+     * Function opens IDBDatabase transaction.
+     *
+     * @param {string} name - Name of IDBDatabase store
+     * @param {boolean} writeMode - Enable write mode
+     *
+     * @return {IDBTransaction}
+     */
+    function openTransaction(name, writeMode = false) {
+        const transaction = db.transaction('items', 'readwrite');
+
+        transaction.onsuccess = function(data) {
+            debugLog('PCryptoStorage TRANSACTION finished', data);
+        };
+
+        transaction.onabort = function (data) {
+            debugLog('PCryptoStorage TRANSACTION abort', data.target.error);
+        }
+
+        transaction.onerror = function(data) {
+            debugLog('PCryptoStorage TRANSACTION error', data.target.error);
+        };
+
+        return transaction;
+    }
+
     const instanceFunctions = {
         clear: (itemId) => {
+            debugLog('PCryptoStorage clearing', itemId);
+
             function executor(resolve, reject) {
-                const transaction = db.transaction('items', 'readwrite');
+                const transaction = openTransaction('items', true);
                 const items = transaction.objectStore('items');
 
                 const req = items.delete(itemId);
@@ -104,16 +149,18 @@ const PcryptoStorage = function(storageName, version) {
                 };
 
                 req.onerror = (data) => {
-                    debugLog('PCryptoStorage CLEAR error', data);
-                    reject('PCryptoStorage CLEAR error', data);
+                    debugLog('PCryptoStorage CLEAR error', data.target.error);
+                    reject(data.target.error);
                 };
             }
 
             return new Promise(executor);
         },
         set: (itemId, message) => {
+            debugLog('PCryptoStorage writing', itemId);
+
             function executor(resolve, reject) {
-                const transaction = db.transaction('items', 'readwrite');
+                const transaction = openTransaction('items', true);
                 const items = transaction.objectStore('items');
 
                 const unixtime = getHourUnixtime();
@@ -139,40 +186,43 @@ const PcryptoStorage = function(storageName, version) {
                 };
 
                 req.onerror = function (data) {
-                    debugLog('PCryptoStorage SET error', data);
-                    reject('PCryptoStorage SET error');
+                    debugLog('PCryptoStorage SET error', data.target.error);
+                    reject(data.target.error);
                 };
             }
 
             return new Promise(executor);
         },
         get: (itemId) => {
+            debugLog('PCryptoStorage reading', itemId);
+
             function executor(resolve, reject) {
-                const transaction = db.transaction('items', 'readonly');
+                const transaction = openTransaction('items');
                 const items = transaction.objectStore('items');
 
                 const req = items.get(itemId);
 
                 req.onsuccess = (data) => {
+                    debugLog('PCryptoStorage GET log', data, req.result);
+
                     if (!req.result) {
-                        reject('PCryptoStorage GET error. Result is empty');
+                        reject('Data does not exist');
                         return;
                     }
 
-                    const foundMessage = 'message' in req.result;
+                    const foundMessage = ('message' in req.result);
 
                     if (!foundMessage) {
-                        reject('PCryptoStorage GET error. Message is not set');
+                        reject('Message property does not exist');
                         return;
                     }
 
-                    debugLog('PCryptoStorage GET log', data, req.result.message);
                     resolve(req.result.message);
                 };
 
                 req.onerror = (data) => {
                     console.log('PCryptoStorage GET error', data);
-                    reject('PCryptoStorage GET error');
+                    reject(data.target.error);
                 };
             }
 
@@ -182,7 +232,7 @@ const PcryptoStorage = function(storageName, version) {
 
     function executor(resolve, reject) {
         openRequest.onerror = function(err) {
-            debugLog('PcryptoStorage error occured:', err);
+            debugLog('PCryptoStorage error occurred:', err);
             reject('PCryptoStorage error initiating IndexedDB');
         };
 
@@ -422,8 +472,19 @@ var PcryptoRoom = async function(pcrypto, chat){
     let ls = PcryptoStorage('messages', 1);
     let lse = PcryptoStorage('events', 1);
 
+    /**
+     * Non blocking await.
+     * If one of storages fails to start,
+     * chat launch will be break.
+     *
+     * TODO: Catch error on Promise.all(...)
+     */
     await Promise.all([ls, lse]);
 
+    /**
+     * Await used here only to receive results
+     * of the promise. They doesn't block.
+     */
     ls = await ls;
     lse = await lse;
 
