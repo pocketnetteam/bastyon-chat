@@ -124,7 +124,14 @@ const PcryptoStorage = function(storageName, version) {
                     cachedAt: unixtime,
                 };
 
-                const req = items.add(item);
+                /**
+                 * FIXME: It is not the best practice to use
+                 *        here put() instead of add(), but it
+                 *        solves vue.js repeating decryption
+                 *        requests as it doesn't throw Error
+                 *        on data update...
+                 */
+                const req = items.put(item);
 
                 req.onsuccess = function (data) {
                     debugLog('PCryptoStorage SET log', data);
