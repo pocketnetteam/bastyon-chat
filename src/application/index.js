@@ -142,8 +142,11 @@ class Core {
             this.loading = false
             this.setUnauthorized(null)
 
-            
-            var r = this.pcrypto.helpers.checkuser()
+            return this.pcrypto.prepare()
+
+        }).then(r => {
+
+            this.pcrypto.helpers.checkuser()
 
             if (f.deep(this.user,'userinfo.name'))
                 this.mtrx.client.setDisplayName(f.deep(this.user,'userinfo.name'))
