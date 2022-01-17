@@ -4,7 +4,9 @@ import f from "@/application/functions";
 const BN = require('bn.js')
 import * as miscreant from "miscreant";
 var pbkdf2 = require('pbkdf2')
-import cryptoRandomString from 'crypto-random-string';
+//import cryptoRandomString from 'crypto-random-string';
+
+//var ncrypto = require('crypto')
 
 var salt = 'PR7srzZt4EfcNb3s27grgmiG8aB9vYNV82'
 
@@ -769,7 +771,7 @@ var PcryptoRoom = async function(pcrypto, chat, {ls, lse}){
     }
 
     self.encryptFile = async function(file, p){
-        var secret = pcryptoFile.randomkey()
+        var secret = await pcryptoFile.randomkey()
 
         var secrets = await self.encryptKey(secret)
 
@@ -782,6 +784,11 @@ var PcryptoRoom = async function(pcrypto, chat, {ls, lse}){
             result.file = file
 
             return Promise.resolve(result)
+        }).catch(e => {
+
+            console.error(e)
+
+            return Promise.reject(e)
         })
     }
 
@@ -964,7 +971,26 @@ var PcryptoFile = function(){
 	}
 
     self.randomkey = function(){
-        return cryptoRandomString({length: 24});
+
+        return new Promise((resolve) => {
+
+            var array = new Uint32Array(24);
+
+            var token = window.crypto.getRandomValues(array).toString('hex');
+            console.log('token', token)
+            resolve(token)
+
+            /*ncrypto.randomBytes(24, function(err, buffer) {
+                var token = buffer.toString('hex');
+
+                console.log('token', token)
+
+                resolve(token)
+            });*/
+        })
+       
+
+        //return cryptoRandomString({length: 24});
     }
 
     self.key = function(str){

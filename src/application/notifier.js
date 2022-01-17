@@ -73,8 +73,6 @@ class Notifier {
 		if (lastsounddate) {
 			lastsounddate = new Date(lastsounddate)
 
-			console.log(f.date.addseconds(lastsounddate, 10) > (new Date()), lastsounddate)
-
 			if (f.date.addseconds(lastsounddate, 10) > (new Date())) {
 				return
 			}
@@ -149,8 +147,6 @@ class Notifier {
 			if (r) return
 
 			if (!this.core.mtrx.me(event.getSender()) && event.getSender() && event.getSender() !== this.core.mtrx.client.credentials.userId) {
-
-				console.log("get usersInfo")
 
 				this.core.user.usersInfo([f.getmatrixid(event.getSender())]).then(info => {
 

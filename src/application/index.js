@@ -155,7 +155,6 @@ class Core {
 
         }).catch(e => {
 
-            console.error(e)
             
             this.loading = false
 
