@@ -21,10 +21,9 @@ var secp256k1CurveN = null
  *    new releases of this object.
  */
 const PcryptoStorage = function(storageName, version) {
-    let db;
-
     /** Set this flag to TRUE if debug logs needed */
     const DebugFlag = false;
+    const DebugForceLocalStorage = false;
 
     let debugLog = () => {};
 
@@ -36,33 +35,6 @@ const PcryptoStorage = function(storageName, version) {
     const SecondsInHour = 60 * 60;
     const SecondsInDay = SecondsInHour * 24;
     const SecondsInMonth = SecondsInDay * 30;
-
-    let openRequest = indexedDB.open(storageName, version);
-
-    openRequest.onupgradeneeded = function(e) {
-        let db = openRequest.result;
-
-        const isVersionChanged = (e.oldVersion !== e.newVersion);
-        const didExistBefore = (e.oldVersion === 0);
-
-        /**
-         * If PCryptoStorage version is changed,
-         * then ObjectStore could be removed.
-         */
-        if(isVersionChanged && !didExistBefore) {
-            if (!db.objectStoreNames.contains('items')) {
-                db.deleteObjectStore('items');
-            }
-        }
-
-        /**
-         * Here PCryptoStorage creates ObjectStore
-         * needed to function correctly.
-         */
-        if (!db.objectStoreNames.contains('items')) {
-            db.createObjectStore('items', { keyPath: 'id' });
-        }
-    };
 
     /**
      * Function generates UNIX timestamp
@@ -78,174 +50,304 @@ const PcryptoStorage = function(storageName, version) {
     }
 
     /**
-     * Function removes items cached
-     * 30 days ago
+     * Using IndexedDB initializer
+     * if it is supported.
      */
-    function clearOldItems() {
-        const timeFromCurrent = getHourUnixtime() - SecondsInMonth;
+    function initIndexedDb() {
+        let db;
 
-        const transaction = db.transaction('items', 'readwrite');
-        const items = transaction.objectStore('items');
+        let openRequest = indexedDB.open(storageName, version);
 
-        const req = items.openCursor();
+        openRequest.onupgradeneeded = function (e) {
+            let db = openRequest.result;
 
-        req.onsuccess = (data) => {
-            const cursor = data.target.result;
+            const isVersionChanged = (e.oldVersion !== e.newVersion);
+            const didExistBefore = (e.oldVersion === 0);
 
-            if(cursor) {
-                if (timeFromCurrent >= cursor.value.cachedAt) {
-                    debugLog('PCryptoStorage CLEAR OUTDATED log', data);
-                    cursor.delete();
+            /**
+             * If PCryptoStorage version is changed,
+             * then ObjectStore could be removed.
+             */
+            if (isVersionChanged && !didExistBefore) {
+                if (!db.objectStoreNames.contains('items')) {
+                    db.deleteObjectStore('items');
                 }
+            }
 
-                cursor.continue();
+            /**
+             * Here PCryptoStorage creates ObjectStore
+             * needed to function correctly.
+             */
+            if (!db.objectStoreNames.contains('items')) {
+                db.createObjectStore('items', {keyPath: 'id'});
             }
         };
 
-        req.onerror = (data) => {
-            debugLog('PCryptoStorage CLEAR OUTDATED error', data);
-        };
+        /**
+         * Function removes items cached
+         * in IndexedDB 30 days ago
+         */
+        function clearOldItems() {
+            const timeFromCurrent = getHourUnixtime() - SecondsInMonth;
+
+            const transaction = db.transaction('items', 'readwrite');
+            const items = transaction.objectStore('items');
+
+            const req = items.openCursor();
+
+            req.onsuccess = (data) => {
+                const cursor = data.target.result;
+
+                if (cursor) {
+                    if (timeFromCurrent >= cursor.value.cachedAt) {
+                        debugLog('PCryptoStorage CLEAR OUTDATED log', data);
+                        cursor.delete();
+                    }
+
+                    cursor.continue();
+                }
+            };
+
+            req.onerror = (data) => {
+                debugLog('PCryptoStorage CLEAR OUTDATED error', data);
+            };
+        }
+
+        /**
+         * Function opens IDBDatabase transaction.
+         *
+         * @param {string} name - Name of IDBDatabase store
+         * @param {boolean} writeMode - Enable write mode
+         *
+         * @return {IDBTransaction}
+         */
+        function openTransaction(name, writeMode = false) {
+            const transaction = db.transaction('items', 'readwrite');
+
+            transaction.onsuccess = function (data) {
+                debugLog('PCryptoStorage TRANSACTION finished', data);
+            };
+
+            transaction.onabort = function (data) {
+                debugLog('PCryptoStorage TRANSACTION abort', data.target.error);
+            }
+
+            transaction.onerror = function (data) {
+                debugLog('PCryptoStorage TRANSACTION error', data.target.error);
+            };
+
+            return transaction;
+        }
+
+        const instanceFunctions = {
+            clear: (itemId) => {
+                debugLog('PCryptoStorage clearing', itemId);
+
+                function executor(resolve, reject) {
+                    const transaction = openTransaction('items', true);
+                    const items = transaction.objectStore('items');
+
+                    const req = items.delete(itemId);
+
+                    req.onsuccess = (data) => {
+                        debugLog('PCryptoStorage CLEAR log', data);
+                        resolve(true);
+                    };
+
+                    req.onerror = (data) => {
+                        debugLog('PCryptoStorage CLEAR error', data.target.error);
+                        reject(data.target.error);
+                    };
+                }
+
+                return new Promise(executor);
+            },
+            set: (itemId, message) => {
+                debugLog('PCryptoStorage writing', itemId);
+
+                function executor(resolve, reject) {
+                    const transaction = openTransaction('items', true);
+                    const items = transaction.objectStore('items');
+
+                    const unixtime = getHourUnixtime();
+
+                    const item = {
+                        id: itemId,
+                        message,
+                        cachedAt: unixtime,
+                    };
+
+                    /**
+                     * FIXME: It is not the best practice to use
+                     *        here put() instead of add(), but it
+                     *        solves vue.js repeating decryption
+                     *        requests as it doesn't throw Error
+                     *        on data update...
+                     */
+                    const req = items.put(item);
+
+                    req.onsuccess = function (data) {
+                        debugLog('PCryptoStorage SET log', data);
+                        resolve(true);
+                    };
+
+                    req.onerror = function (data) {
+                        debugLog('PCryptoStorage SET error', data.target.error);
+                        reject(data.target.error);
+                    };
+                }
+
+                return new Promise(executor);
+            },
+            get: (itemId) => {
+                debugLog('PCryptoStorage reading', itemId);
+
+                function executor(resolve, reject) {
+                    const transaction = openTransaction('items');
+                    const items = transaction.objectStore('items');
+
+                    const req = items.get(itemId);
+
+                    req.onsuccess = (data) => {
+                        debugLog('PCryptoStorage GET log', data, req.result);
+
+                        if (!req.result) {
+                            reject('Data does not exist');
+                            return;
+                        }
+
+                        const foundMessage = ('message' in req.result);
+
+                        if (!foundMessage) {
+                            reject('Message property does not exist');
+                            return;
+                        }
+
+                        resolve(req.result.message);
+                    };
+
+                    req.onerror = (data) => {
+                        console.log('PCryptoStorage GET error', data);
+                        reject(data.target.error);
+                    };
+                }
+
+                return new Promise(executor);
+            },
+        }
+
+        function executor(resolve, reject) {
+            openRequest.onerror = function (err) {
+                debugLog('PCryptoStorage error occurred:', err);
+                reject('PCryptoStorage error initiating IndexedDB');
+            };
+
+            openRequest.onsuccess = function () {
+                db = openRequest.result;
+
+                clearOldItems();
+
+                resolve(instanceFunctions);
+            };
+        }
+
+        return new Promise(executor);
     }
 
     /**
-     * Function opens IDBDatabase transaction.
-     *
-     * @param {string} name - Name of IDBDatabase store
-     * @param {boolean} writeMode - Enable write mode
-     *
-     * @return {IDBTransaction}
+     * Using LocalStorage initializer
+     * if IndexedDB is not supported.
      */
-    function openTransaction(name, writeMode = false) {
-        const transaction = db.transaction('items', 'readwrite');
+    function initLocalStorage() {
+        /**
+         * Function removes items cached
+         * in LocalStorage 7 days ago
+         */
+        function clearOldItems() {
+            const timeFromCurrent = getHourUnixtime() - SecondsInDay * 7;
 
-        transaction.onsuccess = function(data) {
-            debugLog('PCryptoStorage TRANSACTION finished', data);
-        };
+            let k = Object.keys(localStorage);
 
-        transaction.onabort = function (data) {
-            debugLog('PCryptoStorage TRANSACTION abort', data.target.error);
+            let msgItems = k.filter(item => item.includes(storageName));
+
+            msgItems.forEach((msgItem) => {
+                const msg = JSON.parse(localStorage[msgItem]);
+
+                console.log(msg);
+
+                if (timeFromCurrent >= msg.cachedAt) {
+                    console.log('PCryptoStorage CLEAR OUTDATED log', msg);
+
+                    delete localStorage[msgItem];
+                }
+            });
         }
 
-        transaction.onerror = function(data) {
-            debugLog('PCryptoStorage TRANSACTION error', data.target.error);
-        };
+        const instanceFunctions = {
+            clear: async (itemId) => {
+                debugLog('PCryptoStorage clearing localstorage', itemId);
 
-        return transaction;
-    }
+                const itemName = `${storageName}_${itemId}`;
 
-    const instanceFunctions = {
-        clear: (itemId) => {
-            debugLog('PCryptoStorage clearing', itemId);
+                const isItemSet = (itemName in localStorage);
 
-            function executor(resolve, reject) {
-                const transaction = openTransaction('items', true);
-                const items = transaction.objectStore('items');
+                if (!isItemSet) {
+                    throw Error('Data does not exist');
+                }
 
-                const req = items.delete(itemId);
+                const foundMessage = ('message' in localStorage[itemName]);
 
-                req.onsuccess = (data) => {
-                    debugLog('PCryptoStorage CLEAR log', data);
-                    resolve(true);
-                };
+                if (!foundMessage) {
+                    throw Error('Message property does not exist');
+                }
 
-                req.onerror = (data) => {
-                    debugLog('PCryptoStorage CLEAR error', data.target.error);
-                    reject(data.target.error);
-                };
-            }
+                delete localStorage[itemName];
 
-            return new Promise(executor);
-        },
-        set: (itemId, message) => {
-            debugLog('PCryptoStorage writing', itemId);
+                return new Promise(executor);
+            },
+            set: async (itemId, message) => {
+                debugLog('PCryptoStorage writing localstorage', itemId);
 
-            function executor(resolve, reject) {
-                const transaction = openTransaction('items', true);
-                const items = transaction.objectStore('items');
-
+                const itemName = `${storageName}_${itemId}`;
                 const unixtime = getHourUnixtime();
 
                 const item = {
-                    id: itemId,
                     message,
                     cachedAt: unixtime,
                 };
 
-                /**
-                 * FIXME: It is not the best practice to use
-                 *        here put() instead of add(), but it
-                 *        solves vue.js repeating decryption
-                 *        requests as it doesn't throw Error
-                 *        on data update...
-                 */
-                const req = items.put(item);
+                localStorage[itemName] = JSON.stringify(item);
+            },
+            get: async (itemId) => {
+                debugLog('PCryptoStorage reading', itemId);
 
-                req.onsuccess = function (data) {
-                    debugLog('PCryptoStorage SET log', data);
-                    resolve(true);
-                };
+                const itemName = `${storageName}_${itemId}`;
 
-                req.onerror = function (data) {
-                    debugLog('PCryptoStorage SET error', data.target.error);
-                    reject(data.target.error);
-                };
-            }
+                const isItemSet = (itemName in localStorage);
 
-            return new Promise(executor);
-        },
-        get: (itemId) => {
-            debugLog('PCryptoStorage reading', itemId);
+                if (!isItemSet) {
+                    throw Error('Data does not exist');
+                }
 
-            function executor(resolve, reject) {
-                const transaction = openTransaction('items');
-                const items = transaction.objectStore('items');
-
-                const req = items.get(itemId);
-
-                req.onsuccess = (data) => {
-                    debugLog('PCryptoStorage GET log', data, req.result);
-
-                    if (!req.result) {
-                        reject('Data does not exist');
-                        return;
-                    }
-
-                    const foundMessage = ('message' in req.result);
-
-                    if (!foundMessage) {
-                        reject('Message property does not exist');
-                        return;
-                    }
-
-                    resolve(req.result.message);
-                };
-
-                req.onerror = (data) => {
-                    console.log('PCryptoStorage GET error', data);
-                    reject(data.target.error);
-                };
-            }
-
-            return new Promise(executor);
-        },
-    }
-
-    function executor(resolve, reject) {
-        openRequest.onerror = function(err) {
-            debugLog('PCryptoStorage error occurred:', err);
-            reject('PCryptoStorage error initiating IndexedDB');
+                return localStorage[itemName];
+            },
         };
 
-        openRequest.onsuccess = function() {
-            db = openRequest.result;
+        /** Clearing old items on init */
+        clearOldItems();
 
-            clearOldItems();
-
-            resolve(instanceFunctions);
-        };
+        return instanceFunctions;
     }
 
-    return new Promise(executor);
+    /**
+     * Is IndexedDB supported?
+     */
+    if(!window.indexedDB || DebugForceLocalStorage) {
+        debugLog('PCryptoStorage LOCALSTORAGE_FALLBACK');
+        return initLocalStorage();
+    }
+
+    return initIndexedDb();
 };
 
 var PcryptoRoom = async function(pcrypto, chat, {ls, lse}){
