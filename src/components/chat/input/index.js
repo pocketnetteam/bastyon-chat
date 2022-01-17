@@ -515,8 +515,6 @@ export default {
 
 				this.$emit('sent')
 
-				console.log('text', text)
-
 				text = this.replaceMentions(text)
 
 				/// text

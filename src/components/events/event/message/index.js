@@ -307,9 +307,24 @@ export default {
 
     showwhenburn : function(){
 
+      var text = ''
+
+      //console.log(this.willburn.toDate(), new Date(), this.willburn.toDate() > new Date())
+
+      if(this.willburn.toDate() < new Date()){
+        text = this.$i18n.t("messagewasburn")
+      }
+      else{
+        text = this.$i18n.t("messagewillburn")
+
+        //this.willburn.locale(this.$i18n.locale).format('DD MMMM YYYY')
+      }
+
       this.$store.commit('icon', {
 				icon: 'info',
-				message: 'The message will be deleted around ' + this.willburn.locale(this.$i18n.locale).format('DD MMMM YYYY')
+				message: text
+        
+        
 			})
 
     },

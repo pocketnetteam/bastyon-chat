@@ -25,7 +25,9 @@ module.exports = {
     resolve: {
       extensions: ['.js', '.ts']
     },
-
+    output: {
+      pathinfo: false,
+    },
 
     module: {
 

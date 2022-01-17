@@ -428,8 +428,6 @@ class MTRX {
 
 			if(!this.chatsready) return
 
-			console.log("timeline")
-
 			if(!message.event.content) return
 
 			if (message.event.content.msgtype === 'm.file') {
@@ -457,8 +455,6 @@ class MTRX {
 
 
 		this.client.on('sync', (state, prevState, res) => {
-
-			console.log("SYNC!!!")
 
 			if (state === 'PREPARED') {
 				this.setready()

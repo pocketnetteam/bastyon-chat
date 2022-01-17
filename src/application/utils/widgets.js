@@ -17,7 +17,6 @@ var PNWIDGETS = function(){
 
         var elem = document.getElementById('pocketnet_' + seed);
 
-        console.log('additionaladditionaladditional', additional)
  
         if (window.POCKETNETINSTANCE && fast){
 
@@ -37,7 +36,6 @@ var PNWIDGETS = function(){
 
             embeddingSettigns = _.extend(embeddingSettigns, additional)
 
-            console.log('embeddingSettigns', embeddingSettigns)
 
             elem.addClass('openapipnet')
 

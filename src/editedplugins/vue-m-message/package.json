@@ -84,7 +84,7 @@
         "m-message"
     ],
     "license": "MIT",
-    "main": "dist/index.umd.js",
+    "main": "src/index.js",
     "name": "vue-m-message",
     "postcss": {
         "plugins": {

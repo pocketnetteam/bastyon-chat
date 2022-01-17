@@ -42,6 +42,7 @@ export default {
 
 
     this.init()
+
     if (this.chat) {
       this.readAll()
     }
@@ -298,7 +299,7 @@ export default {
 
           }).then(r => {
 
-            setTimeout(async () => {
+            setTimeout( () => {
 
               this.events = this.getEvents();
 
@@ -312,6 +313,11 @@ export default {
 
           })
 
+        }
+        else{
+
+            this.readAll();
+          
         }
 
       }
