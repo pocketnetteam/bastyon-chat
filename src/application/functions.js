@@ -1125,7 +1125,7 @@ f.getMatrixServers = function(mult, address) {
 
     var mutations = f.permutations(arr, mult);
 
-    var index = f.helpers.base58.decode(address) % mutations.length;
+    var index = f.helpers.base58.decode(f.hexDecode(address)) % mutations.length;
 
     return mutations[index]
 }

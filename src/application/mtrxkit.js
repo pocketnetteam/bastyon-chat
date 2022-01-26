@@ -236,23 +236,35 @@ class MTRXKIT {
   }
 
   groupIdLight(ids) {
-
     let id = [];
     let idForInviting = []
     let self = this
 
-    var domains = [null]
+    const currentUserAddress = this.core.user.credentials.address;
+    const currentMatrixDomain = this.core.domain;
 
-    if (window.chatinvitedomains) domains = [].concat(domains, window.chatinvitedomains)
+    const currentUserDomains = f.getMatrixServers(2, currentUserAddress);
 
-    _.each(domains, (domain) => {
+    _.each(currentUserDomains, (domain => {
+      if (domain !== currentMatrixDomain) {
+        idForInviting.push(this.core.user.matrixId(currentUserAddress, domain));
+      }
+    }))
 
-      _.each(ids, (id) => {
-        idForInviting.push( this.core.user.matrixId(id, domain) )
-      })
+    _.each(ids, (id => {
+      console.log('current id: ' + JSON.stringify(currentUserAddress));
+      console.log('id: ' + JSON.stringify(id));
 
-    })
+      const domains = f.getMatrixServers(2, id);
 
+      console.log('domains: ' + JSON.stringify(domains));
+
+      _.each(domains, (domain => {
+        idForInviting.push(this.core.user.matrixId(id, domain))
+      }))
+    }))
+
+    console.log('idForInviting: ' + JSON.stringify(idForInviting));
    
     _.each(ids, (_id) => {
       let idsForHash = parseInt(_id, 16)
