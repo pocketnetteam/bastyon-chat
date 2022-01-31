@@ -643,10 +643,12 @@ export default {
 
 		*/
 
-		var domain = f.deep(window, 'window.POCKETNETINSTANCE.options.matrix') || 'vamily.ru'
+		var domain = f.deep(window, 'window.POCKETNETINSTANCE.options.matrix') || 'vamily.ru:5009'
+    var ip = f.deep(window, 'window.POCKETNETINSTANCE.options.matrixIp') || '65.21.110.139:5009'
 
 		core = new Core(this, {
 			domain : domain,
+      ip: ip,
 			mtrx: {
 				logger: function() {
 
