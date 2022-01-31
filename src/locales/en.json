@@ -194,5 +194,8 @@
     "settings_pin" : "Pin chat window",
     "checked" : "Yes",
     "unchecked" : "No",
-    "settings_read" : "Send read receipts"
+    "settings_read" : "Send read receipts",
+    "messagewasburn" : "This message remains only in the memory of your device",
+    "messagewillburn" : "The message will be deleted soon"
+
 }
