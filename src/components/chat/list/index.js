@@ -8,7 +8,8 @@ export default {
   name: 'chatList',
   props: {
     chat: Object,
-    filterType: String
+    filterType: String,
+    error : [Object, Error, String]
   },
 
   components: {
@@ -25,7 +26,7 @@ export default {
       cancelNextScroll: false,
       timeline: null,
       lastEvent: {},
-        scrollType: String,
+      scrollType: String,
       esize : {},
       p_b: false,
       p_f: false,

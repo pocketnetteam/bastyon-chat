@@ -78,8 +78,14 @@ export default {
 			'share',
 			'pocketteammessages',
 			'readedteammessages',
-			'deletedrooms'
+			'deletedrooms',
+			'hideOptimization',
+			'wasunhidden'
 		]),
+
+		showchatslist : function(){
+			return !this.hideOptimization || this.wasunhidden
+		},
 
 		rooms: function () {
 			return this.core.mtrx.client.getRooms()

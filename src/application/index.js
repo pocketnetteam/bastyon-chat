@@ -70,9 +70,20 @@ class Core {
 
     }
 
+    hideOptimization = function(v){
+
+        this.hideOptimization = v
+        this.store.commit('hideOptimization', v)
+
+    }
+
     hideInParent = function(v){
         this.hiddenInParent = v
         this.store.commit('hiddenInParent', v)
+
+
+        if(!v)
+            this.store.commit('wasunhidden', true)
     }
 
     canback = function(){
@@ -82,6 +93,21 @@ class Core {
     update = function({block}){
 
         this.pcrypto.set.block(block)
+    }
+
+    logerror = function(type, data){
+
+        console.log("type", type, data)
+
+        if (window.POCKETNETINSTANCE){
+
+            window.POCKETNETINSTANCE.Logger.error({
+                err: type,
+                payload: data,
+                code: 402,
+            });
+
+        }
     }
 
     destroy = function(){
@@ -114,7 +140,6 @@ class Core {
             window.POCKETNETINSTANCE.platform.matrixchat.link(this)
         }
     }
-
     
 
     setUnauthorized = function(v){

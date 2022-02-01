@@ -471,7 +471,9 @@ export default {
 		sendinput(text) {
 
 			this.send(text).then(r => {
+				
 				return Promise.resolve(r)
+
 			})
 
 		},
@@ -488,7 +490,7 @@ export default {
 		replaceMentions(text){
 
 			_.each(this.userlist, function(user){
-				text = text.replaceAll('@' + user.name, '@' + user.id + ':' + user.name)
+				text = text.replace(new RegExp('@' + user.name, 'g'), '@' + user.id + ':' + user.name)
 			})	
 
 			return text
@@ -516,8 +518,6 @@ export default {
 				this.$emit('sent')
 
 				text = this.replaceMentions(text)
-
-				/// text
 
 				if(this.relationEvent){
 
@@ -563,6 +563,13 @@ export default {
 				return this.core.mtrx.sendtext(this.chat, text, {relation : this.relationEvent})
 
 			}).catch(e => {
+
+				
+
+				this.$emit('sentMessageError', {
+					error : e
+				})
+
 			})
 
 		},
@@ -607,7 +614,8 @@ export default {
 				}).catch(e => {
 
 					this.$emit('sentError', {
-						id : id
+						id : id,
+						error : e
 					})
 	
 					return Promise.resolve()
@@ -688,7 +696,8 @@ export default {
 			}).catch(e => {
 
 				this.$emit('sentError', {
-					id : id
+					id : id,
+					error : e
 				})
 			})
 
