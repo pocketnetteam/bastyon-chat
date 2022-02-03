@@ -643,24 +643,28 @@ export default {
 
 		*/
 
-		var domain = f.deep(window, 'window.POCKETNETINSTANCE.options.matrix') || 'vamily.ru:5009'
+    var isElectron = f.deep(window, 'window._Electron') || false
+    var useHttpsOnly = f.deep(window, 'window.app.platform.sdk.usersettings.meta.onlysecureconnection.value') || false
+    var domain = f.deep(window, 'window.POCKETNETINSTANCE.options.matrix') || 'vamily.ru:5009'
     var ip = f.deep(window, 'window.POCKETNETINSTANCE.options.matrixIp') || '65.21.110.139:5009'
 
-		core = new Core(this, {
-			domain : domain,
-      ip: ip,
-			mtrx: {
-				logger: function() {
+    core = new Core(this, {
+      isElectron,
+      useHttpsOnly,
+      domain,
+      ip,
+      mtrx: {
+        logger: function() {
 
-				}
-			},
+        }
+      },
 
-			listofproxies : listofproxies,
+      listofproxies,
 
-			servers: {
-				pocketnet: 'https://pocketnet.app:8888'
-			}
-		})
+      servers: {
+        pocketnet: 'https://pocketnet.app:8888'
+      }
+    })
 
 		core.init()	
 
