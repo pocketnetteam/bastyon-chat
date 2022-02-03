@@ -644,7 +644,7 @@ export default {
 		*/
 
     var isElectron = f.deep(window, 'window._Electron') || false
-    var useHttpsOnly = f.deep(window, 'app.platform.sdk.usersettings.meta.onlysecureconnection.value') || false
+    var useHttpsOnly = f.deep(window, 'window.app.platform.sdk.usersettings.meta.onlysecureconnection.value') || false
     var domain = f.deep(window, 'window.POCKETNETINSTANCE.options.matrix') || 'vamily.ru:5009'
     var ip = f.deep(window, 'window.POCKETNETINSTANCE.options.matrixIp') || '65.21.110.139:5009'
 
