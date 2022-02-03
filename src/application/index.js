@@ -17,7 +17,7 @@ class Core {
         }
 
         if(!p.mtrx) p.mtrx = {}
-        if (p.ip && !p.useHttps && p.isElectron) {
+        if (p.ip && !p.useHttpsOnly && p.isElectron) {
             p.mtrx.baseUrl = 'http://' + p.ip
         }
         else {
