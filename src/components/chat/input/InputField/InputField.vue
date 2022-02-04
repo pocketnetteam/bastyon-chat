@@ -2,6 +2,10 @@
     <div class="input-component">
         <div class="input-wrapper">
             <div class="textarea">
+
+
+
+
                 <textarea
                     id="textInput"
                     :value="text"
@@ -10,6 +14,7 @@
                     type="text"
                     row="1"
                     spellcheck="true"
+                    autocorrect="on"
                     @focus="focused"
                     @blur="blured"
                     @keydown="keydown"
