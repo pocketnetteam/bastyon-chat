@@ -62,7 +62,7 @@ export default {
         },
         gotoapp : function(){
             if (this.core.backtoapp)
-                this.core.backtoapp('index')
+                this.core.backtoapp()
         },  
         cordovashare : function(){
             console.log(this.share);

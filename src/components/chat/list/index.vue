@@ -16,7 +16,7 @@
           @menuIsVisible="menuIsVisibleHandler"
 
           ref="eventslist"
-          
+          :error="error"
           :timeline="timeline"
           :events="events"
           :chat="chat"

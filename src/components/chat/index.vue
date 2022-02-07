@@ -24,7 +24,7 @@
     <list 
     
       ref="list"
-
+      :error="error"
       :key="key" :chat="m_chat"
        @editingEvent="editingEvent"
        @replyEvent="replyEvent"
@@ -82,6 +82,7 @@
             @sending="sending"
             @sent="sent"
             @sentError="sentError"
+            @sentMessageError="sentMessageError"
             @sendingData="sendingData"
             @sentData="sentData"
             @force="force"

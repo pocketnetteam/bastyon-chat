@@ -72,7 +72,9 @@ var store = new Vuex.Store({
     joinroom : null,
     chatusers : {},
     force : {},
+    wasunhidden : false,
     hiddenInParent : false,
+    hideOptimization : false,
     modalShowed : null,
     menu : null,
     pinchat : false,
@@ -173,8 +175,20 @@ var store = new Vuex.Store({
 
     },
 
+    wasunhidden(state, value){
+      state.wasunhidden = true
+
+      console.log('wasunhidden optimization')
+    },
+
     hiddenInParent(state, value){
       state.hiddenInParent = value
+    },
+
+    hideOptimization(state, value){
+      state.hideOptimization = value
+
+      console.log('enable optimization', value)
     },
 
     pinchat(state, value){

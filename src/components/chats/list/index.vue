@@ -13,7 +13,7 @@
       
       <div class="Swipes" v-else>
         <transition name="fade">
-          <div class="desktopList">
+          <div class="desktopList" v-if="showchatslist">
 
           
             <RecycleScroller

@@ -546,6 +546,22 @@ var hexEncode = function (text) {
     return result;
 }
 
+var stringify = function(e){
+
+    if(!e) return null
+
+    if(e.toString) {
+
+        var s = e.toString()
+
+        if (s != '[object Object]')
+            return s
+    }
+
+    if(_.isObject(e)) return JSON.stringify(e)
+
+    return e
+}
 
 var hexstorage = {}
 
@@ -1308,4 +1324,5 @@ f.isVisible = isVisible
 f.copytext = copytext
 f.md5 = md5
 f.knsite = knsite
+f.stringify = stringify
 export default f

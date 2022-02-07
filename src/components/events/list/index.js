@@ -11,7 +11,8 @@ export default {
         events: Array,
         chat: Object,
         loading: Boolean,
-        scrollType: ''
+        scrollType: '',
+        error : [Object, Error, String]
 
 
     },
@@ -64,6 +65,10 @@ export default {
 
 
             return ps
+        },
+
+        stringifyiedError : function(){
+            return f.stringify(this.error)
         }
     },
     destroyed: function () {
@@ -73,6 +78,17 @@ export default {
     },
 
     methods: {
+
+        showerror : function(){
+           // stringifyiedError
+
+            return this.$dialog.alert(this.stringifyiedError, {
+                okText: 'Ok',
+                backdropClose: true
+            }).catch(e => {
+
+            })
+        },
 
         dupdated: _.debounce(function () {
             this.$emit('updated', this.size())
