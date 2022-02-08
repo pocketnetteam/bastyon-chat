@@ -16,14 +16,14 @@ class Core {
             listofproxies : p.listofproxies
         }
 
-        const isElectron = true; //TODO
+        const isElectron = false; //TODO
 
         if(!p.mtrx) p.mtrx = {}
         if (p.ip && isElectron) {
             p.mtrx.baseUrl = 'http://' + p.ip
         }
         else {
-            p.mtrx.baseUrl = 'https://' + p.domain
+            p.mtrx.baseUrl = 'http://' + p.domain //TEMP http for test
         }
 
 
