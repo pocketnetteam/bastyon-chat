@@ -18,9 +18,7 @@ export default {
 <style lang="sass">
   .previewMetaLink
     padding: 0 1em
-    -webkit-box-shadow: 0px -1px 15px -5px #0059ff
-    -moz-box-shadow: 0px -1px 15px -5px #0059ff
-    box-shadow: 0px -1px 15px -5px #0059ff
+    +shadowSmaller()
 
     .header
       display: flex
@@ -31,7 +29,7 @@ export default {
         font-weight: bold
         display: block
         font-size: 0.9em
-        border-left: .3em solid #0059ff
+        border-left: .3em solid srgb(--neutral-grad-3)
         padding: 5px
 
       .image
@@ -47,10 +45,10 @@ export default {
     .metaUrl
       font-size: 0.9em
       display: flex
-      color: #0059ff
+      color: srgb(--neutral-grad-3)
       width: 100%
       justify-content: flex-start
       padding-bottom: .4em
       &:hover
-        color: #62bcf9
+        color: srgb(--color-txt-ac)
 </style>

@@ -1,12 +1,12 @@
 #topheader
-    background: $color-bg-clear
+    background: srgb(--background-total-theme)
     top : 0
     left: 0
     right: 0
     position: absolute
     z-index: 4
-    color : $color-text-common2
-    border-bottom : 1px solid $color-bg-common
+    color : srgb(--text-color)
+    border-bottom : 1px solid srgb(--neutral-grad-0)
 
     .iconbutton
         cursor: pointer
@@ -25,7 +25,7 @@
             min-width: 22px
 
         .icon
-            color : $color-text-main
+            color : srgb(--color-txt-ac)
             width : 44px
             min-width: 44px
 
@@ -80,22 +80,22 @@
 
                 .iconbutton
                     border-radius: 50%
-                    background: transparentize($color-text-slight, 0.9)
-                    color :  $color-text-main
+                    background: srgba(--neutral-grad-4, 0.1)
+                    color :  srgb(--color-txt-ac)
                     cursor: pointer
 
                     &:hover
-                        background: transparentize($color-text-slight, 0.95)
+                        background: srgba(--neutral-grad-4, 0.05)
 
                 /deep/
                     .iconbutton
                         border-radius: 50%
-                        background: transparentize($color-text-slight, 0.9)
-                        color :  $color-text-main
+                        background: srgba(--neutral-grad-4, 0.1)
+                        color : srgb(--color-txt-ac)
                         cursor: pointer
 
                         &:hover
-                            background: transparentize($color-text-slight, 0.95)
+                            background: srgba(--neutral-grad-4, 0.05)
                
         
             .leftIcon,
@@ -108,8 +108,8 @@
                 border-radius: 8px
                 border-bottom-left-radius: 0
                 border-bottom-right-radius: 0
-                background: $color-bg-clear
-                border: 1px solid transparentize($color-text-slight, 0.8)
+                background: srgb(--background-total-theme)
+                border: 1px solid  srgba(--neutral-grad-4, 0.2)
                 +shadowSmaller()
                 
                 .leftIcon,

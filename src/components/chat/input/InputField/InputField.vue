@@ -2,10 +2,6 @@
     <div class="input-component">
         <div class="input-wrapper">
             <div class="textarea">
-
-
-
-
                 <textarea
                     id="textInput"
                     :value="text"
@@ -40,8 +36,6 @@
                 </transition>
             </div>
         </div>
-
-  
 
         <div class="iconbutton emojipicker" @click="toggle_emoji_picker()" v-if="!mobile">
             <div class="leftdummy">

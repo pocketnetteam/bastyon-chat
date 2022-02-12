@@ -2,17 +2,19 @@
   width: 44px
   height: 44px
   border-radius: 50%
-  background: $color-bg-gen
+  background: srgb(--background-main)
   line-height: 44px
   text-align: center
   font-size: 0.8em
-  color : $color-text-light
+  color : srgb(--color-bg-ac-1)
   position: relative
 
   /deep/ .bgimage
     border-radius: 50%
+
 .swiperWrapperFlex
   margin : 0 auto
+
 .icon
   position: absolute
   right : 70%
@@ -23,12 +25,12 @@
   line-height: 20px
   background: transparent
   border-radius: 20px
-  color : $color-text-slight
+  color : srgb(--color-txt-gray)
   opacity: 0.8
   z-index: 3
 
   &.active
-    color: $color-text-second
+    color: srgb(--color-txt-ac)
 
 .unseen
   position: absolute
@@ -36,14 +38,14 @@
   height : 22px
   right : -10%
   bottom : -10%
-  background: transparentize($color-text-main, 0.1)
+  background: srgba(--color-bg-ac, 0.9)
   line-height:  22px
   text-align: center
   font-weight: 500
   border-radius: 50%
   z-index: 5
   font-size: 0.6em
-  color : #fff
+  color : srgb(--text-on-bg-ac-color)
 
 .userspic
   position: relative

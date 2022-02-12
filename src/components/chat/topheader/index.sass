@@ -41,19 +41,19 @@
 	flex-direction: column
 
 	span
-		color: $black-color-text-main
+		color: srgb(--color-txt-ac)
 
 	input,
 	select
 		margin-top: 0.5em
 		margin-bottom: 1.5em
-		border: 1px solid $black-color-text-main
+		border: 1px solid srgb(--color-txt-ac)
 		border-radius: 3px
 		padding: .5em
 
 		&.disabled
-			color: rgba($black-color-text-light, 0.8)
-			border: 1px solid rgba($black-color-text-light, 0.5)
+			color: srgb(--neutral-grad-2)
+			border: 1px solid srgba(--neutral-grad-2, 0.5)
 
 	button
 		margin-top: 1em
@@ -68,7 +68,7 @@
 		margin-bottom: 1em
 
 	.error
-		color: $black-color-bad
+		color: srgb(--color-bad)
 		text-align: center
 
 	.linepreloader

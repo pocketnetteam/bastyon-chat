@@ -4,7 +4,7 @@
     border-radius: 5px
     overflow: hidden
     position: relative
-    background: $color-bg-light
+    background: srgb(--background-secondary-theme)
 
     >div
         width: 100%
@@ -20,13 +20,13 @@
     font-size: 3em
     left : 0
     top : 0
-    background: transparentize($color-bg-backface, 0.2)
-    color : transparentize($color-text-common2, 0.8)
+    background: srgba(--background-main, 0.8)
+    color : srgba(--text-color, 0.2)
 
 .cancel
     background: transparent
     font-size: 1.2em
-    color : $color-text-common2
+    color : srgb(--text-color)
 
 .file
     text-align: center

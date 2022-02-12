@@ -94,7 +94,7 @@ export default {
   color : #fff
   opacity: 0.3
   padding : 0.5 * $r $r
-  text-shadow: 1px 1px 2px black
+  +shadowSmaller()
   left : 0
   top : 0
 
@@ -104,7 +104,7 @@ export default {
 .filePreview
   position: relative
   .encryptedDataIcon
-    color : $color-text-slight
+    color : srgb(--neutral-grad-3)
     text-shadow: none
     color 
     right: 0
@@ -116,14 +116,11 @@ export default {
     display: flex
     justify-content: flex-start
     align-items: flex-start
-    
     margin-bottom: $r
     padding: $r 
-    
-    
 
     .filePreview
-      border: 1px solid $color-bg-gen
+      border: 1px solid srgb(--background-main)
       border-radius: 10px
       position: relative
       overflow: hidden

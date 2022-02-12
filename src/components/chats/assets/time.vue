@@ -9,7 +9,7 @@
 
 <style scoped lang="sass">
   .new
-    color: $color-good
+    color: srgb(--color-good)
 </style>
 
 <script>

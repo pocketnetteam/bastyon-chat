@@ -8,7 +8,7 @@
   margin-top: 30px
   padding: $r 0
   cursor: pointer
-  border-top: 1px solid $color-bg-light
+  border-top: 1px solid srgb(--background-main)
   span
     font-size: 1em
     display: block
@@ -19,9 +19,9 @@
     text-overflow: ellipsis
   .shareLink
     &:hover
-      color: $black-color-text-main
+      color: srgb(--color-txt-ac)
+
 .chatSettingAbout
-  //background: transparentize($color-bg-gen, 0.5)
   padding: .5em 1em
   .chatNameEdit
     margin-top: 20px
@@ -29,11 +29,12 @@
       padding: $r 0
       display: block
       width: 100%
-      border-bottom: 1px solid $color-bg-light!important
-      border-top: 1px solid $color-bg-light!important
+      border-bottom: 1px solid srgb(--neutral-grad-1)
+      border-top: 1px solid srgb(--neutral-grad-1)
       &:focus
-       border-bottom: 1px solid $color-bg-light!important
-       border-top: 1px solid $color-bg-light!important
+       border-bottom: 1px solid srgb(--neutral-grad-1)
+       border-top: 1px solid srgb(--neutral-grad-1)
+
   .chatDescription
     textarea
       font-size: 0.9em

@@ -1,3 +1,10 @@
+@function srgb($var)
+    @return unquote("rgb(var(#{$var}))")
+
+
+@function srgba($var, $alpha)
+    @return unquote("rgba(var(#{$var}), #{$alpha})")
+    
 =transition($param)
     -moz-transition: $param
     -o-transition: $param
@@ -9,3 +16,21 @@
     -o-transition: $opt $param
     -webkit-transition: $opt $param
     transition: $opt $param
+
+=shadow()
+	box-shadow: 0 10px 20px -4px srgba(--color-shadow-base, 0.7)
+
+=shadowSmall()
+	box-shadow: 0 7px 12px -5px srgba(--color-shadow-base, 0.7)
+
+=shadowSmaller()
+	box-shadow: 0 5px 7px -5px srgba(--color-shadow-base, 0.7)
+
+=shadowSmallers()
+	box-shadow: 0 5px 5px -3px srgba(--color-shadow-base, 0.4)
+
+=shadowText()
+    text-shadow: 0px 0px 2px srgba(--color-shadow-base, 0.714), 0 0 3px srgba(--color-shadow-base, 0.519)
+
+
+

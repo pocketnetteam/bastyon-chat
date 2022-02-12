@@ -40,7 +40,7 @@
 
 
   .backgr
-    background: transparentize($color-bg-clear, 0.85)
+    background: srgba(--background-total-theme, 0.15)
     backdrop-filter: blur(5px)
     -webkit-backdrop-filter: blur(5px)
     position: fixed
@@ -65,7 +65,7 @@
       margin-top : 0.5 * $r
       border-radius: 10px
       overflow: hidden
-      border-top : 1px solid fade($color-text-slight, 0.5)
+      border-top : 1px solid srgba(--neutral-grad-1, 0.5)
       +shadowSmaller()
 
   .cancelWrapper
@@ -77,8 +77,8 @@
       
   .menu-item
     padding: $r
-    background: $color-bg-clear
-    border-top : 1px solid fade($color-text-slight, 0.5)
+    background: srgb(--background-total-theme)
+    border-top : 1px solid srgba(--neutral-grad-1, 0.5)
     line-height: 44px
     margin-top : 0.5 * $r
     display: flex
@@ -106,17 +106,10 @@
   border-radius: 3px
   padding-left: $r
   padding-right: $r
-  color : $color-text-slight
+  color : srgb(--neutral-grad-3)
 
 .small
   font-size: 0.85em
-/*.chatRightMenu
-  &.minimized
-    .dropdown
-      bottom: -300px*/
-/*.chatOneToOne
-  .dropdown
-      bottom: -294px*/
 
 .outer-div
   &.mobile
@@ -146,4 +139,4 @@
         .menu-item
           margin-top : 0.5 * $r
           border-radius: 5px
-          background: transparentize($color-bg-clear, 0.05)
+          background: srgba(--background-total-theme, 0.95)

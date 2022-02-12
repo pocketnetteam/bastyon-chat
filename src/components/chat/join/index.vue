@@ -56,8 +56,6 @@
 <style src="../../../../node_modules/swiper/swiper-bundle.css"></style>
 
 <!-- THEMES BEGIN -->
-<style scoped lang="sass" src="./themes/theme_white.sass"></style>
-<style scoped lang="sass" src="./themes/theme_black.sass"></style>
 <!-- THEMES END -->
 
 

@@ -48,12 +48,10 @@
 </template>
 <script src="./index.js"></script>
 <style scoped lang="sass" src="./index.sass"></style>
-<style src="vue-swipe-actions/dist/vue-swipe-actions.css"></style>
+<!--<style src="vue-swipe-actions/dist/vue-swipe-actions.css"></style>-->
 
 
 <!-- THEMES BEGIN -->
-<style scoped lang="sass" src="./themes/theme_white.sass"></style>
-<style scoped lang="sass" src="./themes/theme_black.sass"></style>
 <!-- THEMES END -->
 
 

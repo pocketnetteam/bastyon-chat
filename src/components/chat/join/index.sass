@@ -26,7 +26,7 @@
     bottom : 0
     left : 0
     right : 0
-    background: $color-bg-second
+    background: srgb(--neutral-grad-0)
     padding : 2 * $r 0
     text-align: center
     z-index: 3
@@ -42,25 +42,26 @@
           button
             min-width: 0
             width : 100%
+
 .my-swipe
   height: 200px
-  color: #fff
+  color: srgb(--text-on-bg-ac-color)
   font-size: 30px
   text-align: center
 
 .slide1
-  background-color: #0089dc
-  color: #fff
+  background-color: srgb(--color-bg-ac)
+  color: srgb(--text-on-bg-ac-color)
 
 
 .slide2
-  background-color: #ffd705
+  background-color: srgb(--color-bg-orange)
   color: #000
 
 
 .slide3
-  background-color: #ff2d4b
-  color: #fff
+  background-color: srgb(--color-bg-ac-2)
+  color: srgb(--text-on-bg-ac-color)
 
 .minimized
     &:not(.active)
@@ -68,7 +69,7 @@
         width: 52px
         text-align: center
         span
-          color : $color-text-main
+          color : srgb(--color-txt-ac)
           font-size: 0.6em
       .joinAction 
         display: none

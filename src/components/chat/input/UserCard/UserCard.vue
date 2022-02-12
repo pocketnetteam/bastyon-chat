@@ -31,7 +31,7 @@ export default {
     padding-left: 8px
 
 .card:hover 
-    background-color: rgba(112, 117, 121, 0.08);
+    background-color: srgba(--neutral-grad-2, 0.08)
 
 .picture
     width: 30px

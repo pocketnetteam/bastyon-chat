@@ -10,11 +10,9 @@
     align-items: center
     cursor: pointer
     justify-content: space-between
-    border-bottom: 1px solid $color-bg-gen
+    border-bottom: 1px solid srgb(--background-main)
     &:last-child
       border-bottom: 0
-
-
 
     &.invite
       //opacity: 0.6
@@ -23,7 +21,7 @@
       .leftWrapper
         .nameRole
           .name
-            color: $color-text-slight
+            color: srgb(--neutral-grad-3)
     .leftWrapper
       display: flex
       justify-content: flex-start
@@ -37,30 +35,6 @@
         width: 44px
         height: 44px
         font-size: 0.5em
-        .avatar
-          display: flex
-          align-items: center
-          justify-content: center
-          width: 44px
-          height: 44px
-          border-radius: 50%
-          background: $color-bg-gen
-          line-height: 44px
-          text-align: center
-          font-size: 0.8em
-          color: $color-text-light
-          position: relative
-
-          /deep/ .bgimage
-            border-radius: 50%
-
-          img
-            display: block
-            width: 100%
-            height: 100%
-            object-fit: cover
-            border-radius: 50%
-
 
       .nameRole
         display: flex
@@ -71,18 +45,19 @@
 
         .memberRole
           font-size: 0.7em
-          color: #919191
+          color: srgb(--neutral-grad-3)
 
     .rightWrapper
       padding-right: $r
       /deep/ .icon 
         width: 100%
         text-align: center
+
       .adminActionsList
         .fa-caret-up
           font-size: 2em
           left: 0
-          color: $color-bg-gen
+          color: srgb(--neutral-grad-1)
           z-index: 99
           top: 10px
 
@@ -95,5 +70,5 @@
         right : 0
         top : 0
         bottom : 0
-        background: transparentize($color-text-common, 0.2)
+        background: srgba(--color-txt-ac, 0.5)
         border-radius : 50%

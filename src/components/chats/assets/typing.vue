@@ -54,7 +54,7 @@ export default {
 
       span
         font-size: 0.7em
-        color : $color-text-mlight
+        color : srgb(--neutral-grad-3)
         opacity: 0.8
     
 </style>
