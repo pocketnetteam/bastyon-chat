@@ -1,7 +1,7 @@
 module.exports = {
   presets: [
     '@vue/cli-plugin-babel/preset',
-    'es2020'
+    '@babel/preset-env'
   ],
   plugins: [
     '@babel/plugin-transform-typescript',
