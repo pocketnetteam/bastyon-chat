@@ -34,11 +34,11 @@ export default {
 
 .modal-window
     width: 100%
-    border : 1px solid $color-bg-gen
+    border : 1px solid srgb(--background-main)
     display: flex
     flex-direction: column
     align-items: center
-    background-color: white
+    background-color: srgb(--background-total-theme)
     padding: 2 * $r
     max-width: 300px
     margin : 0 auto
@@ -48,7 +48,7 @@ export default {
         width: 85%
         padding: 10px 5px
         margin-top: 25px
-        background-color: blue
+        background-color: srgb(--color-bg-ac)
         border-radius: 5px
         color: white
         cursor: pointer

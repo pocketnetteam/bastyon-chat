@@ -31,6 +31,10 @@ export default {
       return this.$route.name
     },
 
+    activesettings : function(){
+      return this.current == 'settings'
+    },
+
     activecontacts : function(){
       return this.current == 'contact' || this.current == 'contacts'
     },

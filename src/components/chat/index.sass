@@ -51,13 +51,15 @@
         -webkit-animation-delay: .3s
         animation: slide 0.1s forwards
         animation-delay: .3s
-        box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px
+        +shadowSmaller()
+
     @-webkit-keyframes slide
         100%
             left: 0px
     @keyframes slide
         100%
             left: 0px
+
     button
         cursor: pointer
         display: flex
@@ -66,6 +68,7 @@
         text-align: left
         i
             margin-right: 5px
+
     .encryptedTxtIcon
         flex-direction: column
         align-items: center
@@ -73,10 +76,10 @@
         padding : $r / 2 $r / 2
         text-align: center
         span
-            color: $color-good
+            color: srgb(--color-good)
             font-size: 0.8em
         i
-            color: $color-good
+            color: srgb(--color-good)
             display: none
 
 .blockedcaption
@@ -98,7 +101,7 @@
         span
             font-size: 0.8em
             font-weight: 700
-            color : $color-text-main
+            color : srgb(--color-txt-ac)
 
        
     .relationEventPreview
@@ -127,7 +130,7 @@
     left: 0
     right: 0
     padding-bottom : 31px
-    background: $color-bg-clear
+    background: srgb(--background-total-theme)
 
     &.bin
         position: absolute
@@ -135,6 +138,8 @@
         right: 1px
         bottom : 0
         border-radius: 5px
+
+
 #chat
     &.minimized
         .chatInputWrapper
@@ -147,7 +152,7 @@
                 .statusWrapper
                     width: 33px
                     i
-                        color : $color-text-main
+                        color : srgb(--color-txt-ac)
 
                     span
                         display: none
@@ -195,7 +200,7 @@
     left : 0
     top : 0
     z-index: 2
-    color : $color-good
+    color : srgb(--color-good)
     padding : $r / 2 $r
 
     i
@@ -206,14 +211,14 @@
     left: 5px
     top: 20px
     z-index: 2
-    color : $color-text-slight
+    color : srgb(--neutral-grad-3)
     i
         font-size: 0.8em
 
 .chatEmpty
     padding : 8 * $r
     text-align: center
-    color : $color-text-slight
+    color : srgb(--neutral-grad-3)
 
     span
         font-size: 0.8em
@@ -221,7 +226,7 @@
 .preview-wrapper
     max-height: 350px
     overflow-y: auto
-    border : 1px solid transparentize($color-text-slight, 0.7)
+    border : 1px solid srgb(srgb(--neutral-grad-2))
     border-radius: 10px
     margin : 0 auto
     width: 98%

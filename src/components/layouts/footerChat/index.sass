@@ -2,7 +2,7 @@
     bottom: 0
     left: 0
     right: 0
-    background: $color-bg-common
+    background: srgb(--background-main)
     position: absolute
     height: 90px
     padding-bottom : 30px
@@ -31,15 +31,15 @@
                 .menuItem
                     width: 44px
                     height: 44px
-                    background: transparentize($color-text-slight, 0.6)
-                    color :  transparentize($color-text-slight, 0.2)
+                    background: srgba(--neutral-grad-3, 0.4)
+                    color : srgba(--neutral-grad-3, 0.8)
                     border-radius: 50%
                     border : 1px solid transparent
                     margin-bottom : $r / 2
                     line-height: 40px
                     +transition(0.3s)
                     .icon
-                        color : #fff
+                        color : srgb(--background-total-theme)
                     .label
                         display: none
 
@@ -51,19 +51,19 @@
 
                     &.active
                         
-                        text-shadow: 0px 0px 20px $color-text-second, 0px 0px 20px $color-text-second, 0px 0px 20px $color-text-second, 0px 0px 20px $color-text-second, 0px 0px 20px $color-text-second
-                        background: transparentize($color-text-second, 0.14)
-                        border : 1px solid transparentize($color-text-second, 0.06)
-                        color : $color-bg-clear
+                        text-shadow: 0px 0px 20px srgb(--color-bg-ac-bright), 0px 0px 20px srgb(--color-bg-ac-bright), 0px 0px 20px srgb(--color-bg-ac-bright), 0px 0px 20px srgb(--color-bg-ac-bright), 0px 0px 20px srgb(--color-bg-ac-bright)
+                        background: srgba(--color-bg-ac-bright, 0.9)
+                        border : 1px solid srgba(--color-bg-ac-bright, 0.9)
+                        color : srgb(--background-total-theme)
 
                         .icon
-                            color : $color-bg-clear
+                            color : srgb(--background-total-theme)
 
                     &:hover
                         &:not(.active)
-                            background: transparentize($color-text-second, 0.15)
+                            background: srgba(--color-bg-ac-bright, 0.95)
                             color : $color-bg-clear
-                            text-shadow: 0px 0px 10px $color-text-second, 0px 0px 15px $color-text-second, 0px 0px 20px $color-text-second, 0px 0px 25px $color-text-second, 0px 0px 30px $color-text-common, 0px 0px 35px $color-text-second, 0px 0px 40px $color-text-common
+                            text-shadow: 0px 0px 10px srgb(--color-bg-ac-bright), 0px 0px 15px srgb(--color-bg-ac-bright), 0px 0px 20px srgb(--color-bg-ac-bright), 0px 0px 25px srgb(--color-bg-ac-bright), 0px 0px 30px $color-text-common, 0px 0px 35px srgb(--color-bg-ac-bright), 0px 0px 40px $color-text-common
 
             &.active         
                 .menuItems
@@ -86,10 +86,17 @@
 
     .icon
         font-size: 0.9em
-        color : transparentize($color-text-light, 0.4)
+        color : srgba(--color-txt-gray-dark, 0.7)
 
     .label
-        font-size: 0.8em
+        font-size: 0.7em
+        position: absolute
+        bottom: 0
+        left : 0
+        right : 0
+        line-height: 1em
+        text-align: center
+        opacity: 0.7
 
     .menuItem
         position: relative
@@ -101,7 +108,7 @@
 
         &.active
             .icon
-                color : $color-text-main
+                color : srgb(--color-txt-ac)
 
         .unseen
             position: absolute
@@ -110,11 +117,11 @@
             right : -10%
             bottom : -10%
             
-            background: transparentize($color-text-main, 0.1)
+            background: srgba(--color-txt-ac, 0.9)
             line-height:  22px
             text-align: center
             font-weight: 500
             border-radius: 50%
             z-index: 2
             font-size: 0.6em
-            color : #fff
+            color : srgb(--text-on-bg-ac-color)

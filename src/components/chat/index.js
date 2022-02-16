@@ -40,7 +40,8 @@ export default {
       esize: {},
       fsize: {},
       cantchat: false,
-      cantchatexc: false
+      cantchatexc: false,
+      error : null
     }
 
   },
@@ -382,6 +383,8 @@ export default {
       }
 
       this.$emit('sent')
+
+      this.error = null
     },
 
     sendingData: function (meta) {
@@ -391,10 +394,27 @@ export default {
 
     sentData: function (meta) {
       this.clearMeta(meta)
+
+      this.error = null
     },
 
     sentError: function (meta) {
-      if (meta && meta.id) this.clearMeta(meta);
+
+      if (meta && meta.id) {
+        this.clearMeta(meta);
+      }
+
+      if (meta && meta.error) {
+        this.error = meta.error
+      }
+      
+    },
+
+    sentMessageError : function(e){
+
+      this.error = e.error
+      this.core.logerror('sentMessageError', f.stringify(this.error))
+
     },
 
     abortSending: function (id) {

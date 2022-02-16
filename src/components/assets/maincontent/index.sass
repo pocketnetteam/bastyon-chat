@@ -27,7 +27,7 @@
             >div
                 +transition(0.3s)
                 opacity: 0
-                color : #fff
+                color : srgb(--text-on-bg-ac-color)
                 vertical-align: middle
                 text-align: center
 
@@ -161,8 +161,8 @@
                         border-radius: 8px
                         border-top-left-radius: 0
                         border-top-right-radius: 0
-                        background: $color-bg-clear
-                        border: 1px solid transparentize($color-text-slight, 0.8)
+                        background: srgb(--background-total-theme)
+                        border: 1px solid srgba(--neutral-grad-2, 0.2)
                         +shadowSmaller()
                         right : 0
                         left: 0

@@ -10,6 +10,7 @@
                     type="text"
                     row="1"
                     spellcheck="true"
+                    autocorrect="on"
                     @focus="focused"
                     @blur="blured"
                     @keydown="keydown"
@@ -35,8 +36,6 @@
                 </transition>
             </div>
         </div>
-
-  
 
         <div class="iconbutton emojipicker" @click="toggle_emoji_picker()" v-if="!mobile">
             <div class="leftdummy">

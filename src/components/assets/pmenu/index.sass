@@ -40,7 +40,7 @@
   right : 0
 
 .backgr
-  background: transparentize($color-bg-clear, 0.85)
+  background: srgba(--background-total-theme, 0.15)
   backdrop-filter: blur(5px)
   -webkit-backdrop-filter: blur(5px)
   position: absolute
@@ -55,14 +55,14 @@
     margin-top : 0.5 * $r
     border-radius: 10px
     overflow: hidden
-    border-top : 1px solid fade($color-text-slight, 0.5)
+    border-top : 1px solid srgba(--neutral-grad-3, 0.5)
     +shadowSmaller()
 
 .cancelWrapper
   border-radius: 3px
   padding-left: $r
   padding-right: $r
-  color : $color-text-slight
+  color : srgb(--neutral-grad-3)
   .menu-item
     margin-top : 0
     background: transparent
@@ -71,8 +71,8 @@
       
 .menu-item
   padding: $r
-  background: $color-bg-clear
-  border-top : 1px solid fade($color-text-slight, 0.5)
+  background: srgb(--background-total-theme)
+  border-top : 1px solid srgba(--neutral-grad-3, 0.5)
   line-height: 44px
   margin-top : 0.5 * $r
   display: flex

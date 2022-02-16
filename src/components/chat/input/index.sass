@@ -1,8 +1,6 @@
 
 #chatInput
     padding-bottom : $r 
-    
-    /*padding-top : $r   */
 
 /deep/ #modal.minimized .modal-wrapper
     left : 0
@@ -13,10 +11,6 @@
 
 .inputWrapper
     display: flex
-
-    
-
-    .right
 
     .left
         width: 35px
@@ -39,12 +33,12 @@
         border: 1px solid transparent
         border-radius: 30px
         padding-right: $r
-        background: $color-bg-backface
+        background: srgb(--background-secondary-theme)
         
 
     input
-        border : 1px solid transparentize($color-text-mlight, 0.7)
-        background: transparentize($color-bg-second, 0.5)
+        border : 1px solid srgb(--neutral-grad-0)
+        background: srgba(--background-main, 0.5)
         border-radius: 30px
         width : 100%
         padding : $r 2 * $r
@@ -69,7 +63,7 @@
 
 .menu-item
     padding: $r
-    background: $color-bg-clear
+    background: srgb(--background-total-theme)
     line-height: 44px
     border-radius: 5px
 
@@ -87,9 +81,9 @@
     position: absolute
     max-height: 300px
     border-radius: $r
-    border: 1px solid transparentize($color-bg-second, 0.1)
+    border: 1px solid srgba(--neutral-grad-0, 0.9)
     overflow-y: overlay
-    background-color: transparentize($color-bg-clear, 0.05)
+    background-color: srgba(--background-total-theme, 0.95)
     backdrop-filter: blur(4px)
     -webkit-backdrop-filter: blur(4px)
     padding: 0.5 * $r 0
@@ -110,7 +104,7 @@
             padding-right: 0.5 * $r!important
             
         &.selected
-            background: transparentize($color-text-common2, 0.95)
+            background: srgb(--background-main)
 
 
 

@@ -13,28 +13,37 @@
             <div class="icon">
               <i class="fas fa-user-friends"></i>
             </div>
-            <!--<div class="label">
-              Contacts
-            </div>-->
+            <div class="label">
+              {{ $t("caption.contacts") }}
+            </div>
           </div>
 
           <div class="menuItem bottom-nav__icon" :class="{active : activechats}" @click="gotona('/chats')">
             <div class="icon">
               <i class="fas fa-comments"></i>
             </div>
-            <!--<div class="label">
-              Chats
-            </div>-->
+            <div class="label">
+              {{ $t("caption.chats") }}
+            </div>
             <div class="unseen chatMessages" v-if="notificationCount">
               {{notificationCount > 99 ? '99' : notificationCount}}
             </div>
           </div>
 
-          <div class="menuItem bottom-nav__icon" v-if="mobile" @click="movefromchat">
+          <div class="menuItem bottom-nav__icon" v-if="!pocketnet"  :class="{active : activesettings}" @click="gotona('/settings')">
+            <div class="icon">
+              <i class="fas fa-cog"></i>
+            </div>
+            <div class="label">
+              {{ $t("caption.settings") }}
+            </div>
+          </div>
+
+          <!--<div class="menuItem bottom-nav__icon" v-if="mobile" @click="movefromchat">
             <div class="icon">
               <i class="fas fa-chevron-right"></i>
             </div>
-          </div>
+          </div>-->
 
         <!--<router-link to="/calls" class="bottom-nav__icon">
           <div class="menuItem">
@@ -62,6 +71,4 @@
 <style scoped lang="sass" src="./index.sass"></style>
 
 <!-- THEMES BEGIN -->
-<style scoped lang="sass" src="./themes/theme_white.sass"></style>
-<style scoped lang="sass" src="./themes/theme_black.sass"></style>
 <!-- THEMES END -->

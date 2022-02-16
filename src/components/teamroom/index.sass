@@ -29,7 +29,7 @@
                 margin-left: 0px
                 margin-top: 0px
                 position: absolute
-                background: #fff
+                background: srgb(--text-on-bg-ac-color)
                 border-radius: 50%
                 padding-top : 8px
                 text-align: center
@@ -40,8 +40,8 @@
                     margin : 0 auto
 
             .unseen
-                background: rgba(0,164,255,.9)
-                color: #fff
+                background: srgba(--color-bg-ac, 0.9)
+                color: srgb(--text-on-bg-ac-color)
                 position: absolute
                 width: 22px
                 height: 22px
@@ -69,7 +69,7 @@
                 font-weight: 700
                 display: inline-block
                 max-width: 190px
-                color : $color-text-common
+                color : srgb(--text-color)
 
             .previewMessage
                 display: flex
@@ -79,7 +79,7 @@
 
                 span
                     display: block
-                    color: $color-text-mlight
+                    color: srgb(--color-txt-gray)
                     font-size: .9em
                     text-overflow: ellipsis
                     overflow: hidden

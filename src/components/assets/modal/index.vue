@@ -43,8 +43,6 @@
 <style  lang="sass" src="./index.sass"></style>
 
 <!-- THEMES BEGIN -->
-<style lang="sass" src="./themes/theme_white.sass"></style>
-<style lang="sass" src="./themes/theme_black.sass"></style>
 <!-- THEMES END -->
 
 

@@ -1,7 +1,11 @@
 <template>
   <div id="events" class="maskedtop" :class="{mobile, ios, menuOpen, imagesList: (this.scrollType === 'custom' ? 'imagesList' : '')}">
-    <div class="eventsflex" v-on="" @mousewheel="mousewheel" ref="container" @scroll="dscroll" :class="{mobile, ios, menuOpen}">
+    <div class="eventsflex" @mousewheel="mousewheel" ref="container" @scroll="dscroll" :class="{mobile, ios, menuOpen}">
       <div class="ewr">
+
+          <div class="errorWrapper" v-if="stringifyiedError" >
+            <div class="error"><div>{{ $t("sendingerror") }}</div><div class="btnwrp"><button @click="showerror" class="button small">{{ $t("details") }}</button></div></div>
+          </div>
             
           <div class="eventWrapper"
               v-for="(event, i) in events"
@@ -50,8 +54,6 @@
 <style scoped lang="sass" src="./index.sass"></style>
 
 <!-- THEMES BEGIN -->
-<style scoped lang="sass" src="./themes/theme_white.sass"></style>
-<style scoped lang="sass" src="./themes/theme_black.sass"></style>
 <!-- THEMES END -->
 
 

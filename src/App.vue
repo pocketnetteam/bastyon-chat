@@ -747,6 +747,4 @@ if (module.hot) {
 <style src="../node_modules/swiper/swiper-bundle.css"></style>
 
 <!-- THEMES BEGIN -->
-<style lang="sass" src="./themes/theme_white.sass"></style>
-<style lang="sass" src="./themes/theme_black.sass"></style>
 <!-- THEMES END -->

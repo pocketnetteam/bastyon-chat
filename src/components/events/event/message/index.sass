@@ -14,7 +14,7 @@
 
 .burn
   &.big
-    color : $color-bad
+    color : srgb(--color-bad)
   &.medium
     opacity: 0.8
 
@@ -33,13 +33,11 @@
     text-align: center
     align-items: center
     justify-content: center
-    transparentize($color-text-common, 0.98)
-
 
 .preloaderImage
   padding-bottom: 100px
   border-radius: 10px
-  background: transparentize($color-text-common, 0.95)
+  background: srgba(--neutral-grad-0, 0.5)
   width: 100%
   position: relative
 
@@ -60,7 +58,7 @@
 .statusWrapper
   padding: $r
   margin-top : $r
-  border-top : $r solid transparentize($color-text-light, 0.97)
+  border-top : $r solid srgb(--neutral-grad-0)
   .my
     font-size: 0.7em
     opacity: 0.5
@@ -104,15 +102,9 @@
           right : -5px
           top : -5px
           bottom : -5px
-          border : 5px solid $color-bg-clear
+          border : 5px solid srgb(--neutral-grad-0)
           z-index: 1
           +shadowSmaller()
-
-  /*.clear
-    width: 100%
-    border: 0
-    clear: both
-    height: 0*/
 
   .badenctyptedText
     .decryptagain
@@ -123,7 +115,7 @@
 
   .badencrypted
     position: absolute
-    background: transparentize($color-bg-backface, 0.05)
+    background: srgb(--background-main)
     left : 0
     right: 0
     top : 0
@@ -133,10 +125,10 @@
 
   .encryptedDataIcon
     position: absolute
-    color : #fff
+    color : srgb(--text-on-bg-ac-color)
     opacity: 0.3
     padding : 0.5 * $r $r
-    text-shadow: 1px 1px 2px black
+    +shadowText()
     left : 0
     top : 0
 
@@ -147,9 +139,8 @@
     position: relative
 
     .encryptedDataIcon
-      color : $color-text-slight
-      text-shadow: none
-      color 
+      color : srgb(--neutral-grad-2)
+      text-shadow: none 
       right: 0
       left : auto
 
@@ -191,6 +182,7 @@
         display: flex
         align-items: center
         justify-content: center
+
     .imgMsg
 
       .showImage
@@ -200,11 +192,12 @@
         max-width: 100%
         object-fit: cover
         display: block
+
       .abswrapper
         border-radius: 1em
         border-top-left-radius: 0
         overflow: hidden
-        background: transparentize($color-text-mlight, 0.8)
+        background: srgb(--neutral-grad-0)
 
     .metaLink
   
@@ -227,7 +220,7 @@
 
   .filePreview
     width : 90%
-    border : 1px solid transparentize($color-text-mlight, 0.8)
+    border : 1px solid srgb(--neutral-grad-1)
     overflow: hidden
     border-radius: 10px
     position: relative
@@ -310,8 +303,8 @@
   &.referenceshowed
  
     .messageText
-      background: transparentize($color-text-slight, 0.8)!important
-      color : #181717!important
+      background: srgba(--neutral-grad-1, 0.8)!important
+      color : srgb(--color-txt-gray)!important
 
     .reference
       padding-bottom: 0!important
@@ -323,8 +316,8 @@
 
   .messageText
     margin-left: 0.5 * $r
-    background: transparentize($color-text-slight, 0.8)
-    color: $color-text-common
+    background: srgba(--neutral-grad-1, 0.8)
+    color: srgb(--text-color)
     padding: $r 1.5 * $r
     padding-top : $r
     border-radius: 2 * $r
@@ -344,7 +337,7 @@
     .from,
     .reference
       opacity: 0.8
-      border-bottom : 1px solid #fff
+      border-bottom : 1px solid srgb(--text-on-bg-ac-color)
       padding : $r 0
       padding-top : 0
       margin-bottom : $r
@@ -389,10 +382,10 @@
 
   .badenctyptedText
     margin-left: $r
-    color: #fff
+    color: srgb(--text-on-bg-ac-color)
     padding: $r 1.5 * $r
     border-radius: 2 * $r
-    background: $color-text-mlight
+    background: srgb(--neutral-grad-3)
     word-break: break-all
     white-space: normal
 
@@ -410,13 +403,12 @@
       top : 100%
       margin-top : -5px
       left: 20px
-      color : #727272
+      color : srgb(--neutral-grad-3)
       span
         font-size: 0.7em
 
   &[my="true"]
     justify-content: flex-end
-    
 
     .iconWrapper
       margin-left: $r
@@ -438,14 +430,15 @@
       text-align: right
 
     .messageText
-      background: $color-bg-main
-      color : #fff
+      background: srgb(--color-bg-ac-bright)
+      color : srgb(--text-on-bg-ac-color)
       text-align: right
       border-radius: 2 * $r
       border-bottom-left-radius: 2 * $r
       border-top-right-radius: 0
+      
   &.urlpreview
-    background: transparentize($color-text-slight, 0.95)
+    background: srgb(--background-total-theme)
     padding : $r
     padding-left: 0.5 * $r
     padding-bottom: 2 * $r
@@ -472,7 +465,7 @@
   &.not-preview
     align-items: center
     justify-content: center
-    color: $color-text-mlight
+    color: srgb(--neutral-grad-3)
     text-align: center
     flex-direction: column-reverse
 

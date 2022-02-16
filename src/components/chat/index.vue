@@ -24,7 +24,7 @@
     <list 
     
       ref="list"
-
+      :error="error"
       :key="key" :chat="m_chat"
        @editingEvent="editingEvent"
        @replyEvent="replyEvent"
@@ -82,6 +82,7 @@
             @sending="sending"
             @sent="sent"
             @sentError="sentError"
+            @sentMessageError="sentMessageError"
             @sendingData="sendingData"
             @sentData="sentData"
             @force="force"
@@ -134,8 +135,6 @@
 <style scoped lang="sass" src="./index.sass"></style>
 
 <!-- THEMES BEGIN -->
-<style scoped lang="sass" src="./themes/theme_white.sass"></style>
-<style scoped lang="sass" src="./themes/theme_black.sass"></style>
 <!-- THEMES END -->
 
 

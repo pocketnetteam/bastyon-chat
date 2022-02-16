@@ -31,13 +31,13 @@
   right : 0
   top : 0
   bottom : 0
-  background: #000
+  background: srgb(--color-shadow-base)
 
 .preloadingWrapper
   padding : 4 * $r
   text-align: center
   opacity: 0.5
-  color: $color-text-common
+  color: srgb(--text-color)
 
 .scrollbottom
   position: absolute
@@ -45,9 +45,9 @@
   bottom : 8 * $r
   cursor: pointer
   border-radius: 50%
-  background: $color-bg-clear
+  background: srgb(--background-main)
   +shadowSmaller()
-  color : $color-text-common2
+  color : srgb(--color-txt-gray-dark)
   width: 35px
   height: 35px
   line-height: 35px
@@ -85,6 +85,19 @@
     flex-wrap: nowrap
     justify-content: flex-start
 
+  .errorWrapper
+    padding : $r
+
+    .btnwrp
+      padding-top : $r
+
+    .error
+      padding : 2 * $r
+      border-radius: 1em
+      background: srgb(--neutral-grad-0)
+
+
+  .errorWrapper,
   .eventWrapper
     width: 100%
     transform: scaleY(-1)

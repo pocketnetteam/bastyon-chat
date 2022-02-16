@@ -143,7 +143,7 @@ export default {
 
         i
             font-size: 1.2em
-            color: $color-text-main
+            color: srgb(--color-txt-ac)
             margin: 20px 0 10px 0
 
     .actions

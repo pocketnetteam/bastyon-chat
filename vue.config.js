@@ -1,10 +1,4 @@
-var themes = [
-  'white', 'black', 'classic'
-]
-
-var prependcssvars = `@import "@/styles/variables/common.sass"; @import "@/styles/variables/theme_template_notrewrite.sass"; @import "@/styles/mixins/common.sass"; @import "@/styles/mixins/theme_template_notrewrite.sass"; ` + themes.map((v, i) => {
-  return `@import "@/styles/variables/theme_` + v + `.sass"; @import "@/styles/mixins/theme_` + v + `.sass";`
-}).join(" ")
+var prependcssvars = `@import "@/styles/variables/common.sass"; @import "@/styles/mixins/common.sass";`
 
 
 module.exports = {
@@ -15,7 +9,7 @@ module.exports = {
   css: {
     loaderOptions: {
       sass: {
-        prependData: prependcssvars
+        prependData: prependcssvars,
       },
     }
   },

@@ -4,6 +4,8 @@ var parser = require('gitignore-parser'),
 var _ = require('underscore');
 var path = require('path');
 
+var clear = true;
+
 var thm = function(){
 
     var self = this
@@ -330,7 +332,12 @@ var thm = function(){
 
                 if (file.indexOf('index.sass') > -1) {
                     clearThemeFilesAll(path.dirname(file))
-                    divideIndexSass(file, next)
+
+                    if(!clear)
+                        divideIndexSass(file, next)
+                    else{
+                        if(next) next()
+                    }
                 }
 
                 else{
@@ -361,7 +368,9 @@ var thm = function(){
         
                         if (file.indexOf('index.vue' > -1)){
                             clearThemeUsageFile(file, function(){
-                                changeThemeUsageFile(file)
+
+                                if(!clear)
+                                    changeThemeUsageFile(file)
                             })
                             
                         }

@@ -5,8 +5,8 @@
     div
         margin : 0 auto
         padding : $r 2 * $r
-        background: $color-bg-clear
-        border : 1px solid transparentize($color-text-slight, 0.8)
+        background: srgb(--background-total-theme)
+        border : 1px solid srgba(--neutral-grad-1, 0.3)
         border-radius: 30px
         width: 200px
         font-size: 0.8em
@@ -23,8 +23,8 @@
     top : 0
     bottom : 0
     z-index : 2900
-    background: transparentize($color-bg-clear, 0)
-    background: radial-gradient(circle, transparentize($color-bg-clear, 0) 0%, transparentize($color-bg-clear, 1) 100%)
+    background: srgba(--background-total-theme, 1)
+    background: radial-gradient(circle, srgba(--background-total-theme, 1) 0%, srgba(--background-total-theme, 1) 100%)
     +transition(0.3s)
     .table
         height: 100%

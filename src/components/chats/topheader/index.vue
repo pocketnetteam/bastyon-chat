@@ -3,9 +3,9 @@
 
     <topheader>
       <template v-slot:left>
-        <div class="iconbutton" @click="cancelShare" v-if="share"><i class="fas fa-ban"></i></div>
+        <div class="iconbutton" @click="cancelShare" v-if="share"><i class="fas fa-times"></i></div>
         <div class="iconbutton" @click="minimizeall" v-if="(!minimized || active) && pocketnet && !share"><i class="fas fa-times"></i></div>
-        <div class="iconbutton" @click="gotoapp" v-if="!pocketnet && !share"><img class="logo20" src="@/assets/logo20.svg"></div>
+        <div class="iconbutton" @click="gotoapp" v-if="!pocketnet && !share"><i class="fas fa-angle-left"></i></div>
       </template>
 
       <template v-slot:leftadd >
@@ -22,7 +22,7 @@
 
       
       <template v-slot:rightadd >
-        <router-link to="settings" v-if="!share">
+        <router-link to="settings" v-if="!share && pocketnet">
           <div class="iconbuttonsmall">
             <i class="fas fa-cog"></i>
           </div>
@@ -53,8 +53,6 @@
 <style scoped lang="sass" src="./index.sass"></style>
 
 <!-- THEMES BEGIN -->
-<style scoped lang="sass" src="./themes/theme_white.sass"></style>
-<style scoped lang="sass" src="./themes/theme_black.sass"></style>
 <!-- THEMES END -->
 
 

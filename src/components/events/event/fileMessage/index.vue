@@ -80,7 +80,7 @@ export default {
       
       width: 60px
       text-align: center
-      background: transparentize($color-text-mlight, 0.9)
+      background: srgb(--neutral-grad-0)
 
       i
         font-size: 1.2em
@@ -97,16 +97,16 @@ export default {
         overflow: hidden
 
       .size
-        color : $color-text-main
+        color : srgb(--color-txt-ac)
 
       button.button
         padding : 0.5 * $r
         margin-top : $r
 
         &.downloaded
-          background: $color-good
-          border-color : $color-good
-          color : #fff
+          background: srgb(--color-good)
+          border-color : srgb(--color-good)
+          color : srgb(--text-on-bg-ac-color)
   
 
 </style>

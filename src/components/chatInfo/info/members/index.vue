@@ -2,7 +2,7 @@
   <div class="membersList" v-if="membersList">
     <div class="roomMember" :class="user.membership" v-for="(user, index) in membersList" :key="user.userId" @click="core.mtrx.opencontact(userinfo(user))" >
 
-          <div class="leftWrapper">
+      <div class="leftWrapper">
         <div class="avatarNameWrapper">
           <userpic :userinfo="userinfo(user)" :status="user.membership"/>
         </div>

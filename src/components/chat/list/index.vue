@@ -16,7 +16,7 @@
           @menuIsVisible="menuIsVisibleHandler"
 
           ref="eventslist"
-          
+          :error="error"
           :timeline="timeline"
           :events="events"
           :chat="chat"
@@ -35,8 +35,6 @@
 <style scoped lang="sass" src="./index.sass"></style>
 
 <!-- THEMES BEGIN -->
-<style scoped lang="sass" src="./themes/theme_white.sass"></style>
-<style scoped lang="sass" src="./themes/theme_black.sass"></style>
 <!-- THEMES END -->
 
 
