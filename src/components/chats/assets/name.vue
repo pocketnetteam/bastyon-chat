@@ -63,6 +63,7 @@ export default {
       }
 
       if(this.m_chat.name.indexOf("@") == 0) return this.m_chat.name.replace('@', '')
+      
       return names.join(', ')
     },
 

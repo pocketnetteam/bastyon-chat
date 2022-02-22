@@ -122,7 +122,8 @@
         "younotgen" : "Please wait a minute, Your encryption keys are being generated...",
         "messageRead" : "Сообщение прочитано",
         "open" : "Открыть",
-        "You" : "Вы"
+        "You" : "Вы",
+        "chatsearchingempty" : "Чатов по данному фильтру не найдено"
     },
 
     "input" : {

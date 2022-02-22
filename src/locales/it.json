@@ -122,7 +122,8 @@
     "younotgen" : "Per favore aspetta un minuto mentre generiamo le tue chiavi crittografiche",
     "messageRead" : "Messaggio letto",
     "open" : "Apri",
-    "You" : "Tu"
+    "You" : "Tu",
+    "chatsearchingempty" : "No chats found for the specified filter"
   },
 
   "input" : {

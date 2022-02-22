@@ -120,8 +120,6 @@ export default {
     },
 
     toggleUser : function(id){
-      console.log("cliecked select")
-
 
       if(!this.selected[id]){
         

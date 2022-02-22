@@ -116,7 +116,8 @@
         "emptyContactList" : "La lista de contactos está vacía",
         "joinApp" : "Unirse a Pocketnet",
         "hasInvitedToJoin" : "te ha invitado a unirte a Pocketnet",
-        "contactsempty" : "Todavía no tienes contactos, encuéntralos en la búsqueda"
+        "contactsempty" : "Todavía no tienes contactos, encuéntralos en la búsqueda",
+        "chatsearchingempty" : "No chats found for the specified filter"
     },
 
     "input" : {

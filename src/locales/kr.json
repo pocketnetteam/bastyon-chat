@@ -116,7 +116,8 @@
         "emptyContactList" : "연락처 목록이 비어 있습니다",
         "joinApp" : "포켓넷 가입",
         "hasInvitedToJoin" : "Pocketnet에 가입하도록 초대했습니다",
-        "contactsempty" : "아직 연락처가 없습니다. 검색에서 찾으십시오"
+        "contactsempty" : "아직 연락처가 없습니다. 검색에서 찾으십시오",
+        "chatsearchingempty" : "No chats found for the specified filter"
     },
 
     "input" : {

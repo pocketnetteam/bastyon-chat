@@ -5,8 +5,12 @@
 
     <div v-if="!unauthorized">
 
-      <teamroom v-if="this.chats.length <= 2 && chatsready == true" @click="openTeamRoom"></teamroom>
-      
+      <div class="work searchWrapperEA" v-if="!minimized || active">
+        <search @search="search" :minimize="minimized"/>
+      </div>
+
+      <teamroom v-if="!searchText && this.chats.length <= 2 && chatsready == true" @click="openTeamRoom"></teamroom>
+
       <div class="listChatLoading" v-if="chatsready !== true">
         <dummypreviews/>
       </div>
@@ -15,26 +19,36 @@
         <transition name="fade">
           <div class="desktopList" v-if="showchatslist">
 
+            <div class="chatswrapper" v-if="filteredchats.length || !searchText">
           
-            <RecycleScroller
-                page-mode
-                class="scroller"
-                :items="chats"
-                :item-size="pocketnet ? 60 : 70"
-                key-field="roomId"
-                :buffer="pocketnet ? 400 : 700"
-        
-            >
-              <template v-slot="{ item, active }">
-                <div ref="content" class="card-content" v-if="item" @click="e=>itemClick(item)">
-                    <preview
-                      v-if="active"
-                      :chat="item"
-                    />
-                </div>
-              </template>
+              <RecycleScroller
+                  page-mode
+                  class="scroller"
+                  :items="filteredchats"
+                  :item-size="pocketnet ? 60 : 70"
+                  key-field="roomId"
+                  :buffer="pocketnet ? 400 : 700"
+          
+              >
+                <template v-slot="{ item, active }">
+                  <div ref="content" class="card-content" v-if="item" @click="e=>itemClick(item)">
+                      <preview
+                        v-if="active"
+                        :chat="item"
+                      />
+                  </div>
+                </template>
 
-            </RecycleScroller>
+              </RecycleScroller>
+            </div>
+
+            <div class="work" v-else>
+              <div class="chatsearchingempty">
+                <span>{{ $t("caption.chatsearchingempty") }}</span>
+              </div>
+            </div>
+
+
           </div>
         </transition>
       </div>

@@ -12,12 +12,12 @@ export default {
 
 		return {
 			loading: false,
-			textValue: '',
 			enabled: true,
 			page: 0,
 			revealed: {},
 			lastEventDescription: '',
-			blocked: false
+			blocked: false,
+			searchText : ''
 		}
 
 	},
@@ -45,6 +45,10 @@ export default {
 			if (this.hmode) {
 				this.$emit('scrolltop')
 			}
+		},
+
+		active : function(){
+			this.searchText = ''
 		}
 		//$route: 'getdata'
 	},
@@ -111,8 +115,6 @@ export default {
 
 				this.core.mtrx.kit.tetatetchat(this.m_chat)
 
-				
-
 				var users = this.core.mtrx.chatUsersInfo(chat.roomId, 'anotherChatUsers')
 
 				if (
@@ -134,6 +136,65 @@ export default {
 			}).reverse()
 
 		},
+
+		filteredchats : function(){
+
+			var chats = this.chats;
+
+
+			if (this.searchText){
+
+				var mc = _.filter(_.map(chats, (c) => {
+
+					var users = this.core.mtrx.chatUsersInfo(c.roomId, 'anotherChatUsers')
+					var m_chat = this.core.mtrx.client.getRoom(c.roomId)
+
+					var usersnamestring = _.reduce(users, function(m, u){
+						return m + u.name.toLowerCase()
+					}, '')
+
+					var chatname = ''
+
+					if(m_chat && m_chat.getJoinRule() === 'public' && m_chat.currentState.getStateEvents('m.room.name').length > 0){
+						chatname = m_chat.currentState.getStateEvents('m.room.name')[0].getContent().name
+					  }
+
+					if(!chatname){
+						chatname = m_chat.name
+
+						if(chatname[0] == '#') chatname = ''
+					}
+
+					var sstring = (chatname + usersnamestring).toLowerCase()
+
+					var point = 0
+
+					if(sstring.indexOf(this.searchText) > -1){
+						point = this.searchText.length / sstring.length
+					}
+
+					return {
+						chat : m_chat.summary,
+						point
+					}
+
+				}), function(cc){
+					return cc.point
+				})
+
+				mc = _.sortBy(mc, function (cc) {
+					return cc.point
+				}).reverse()
+
+				chats = _.map(mc, (c) => {
+					return c.chat
+				} )
+
+			}
+
+			return chats
+		},	
+
 		withoutBlockedChats: function () {
 			var self = this
 			if (this.share) {
@@ -152,6 +213,26 @@ export default {
 
 	}),
 	methods: {
+
+		search(text) {
+
+			this.searchText = text.toLowerCase()
+			
+			/*if(!this.inputText){
+				this.fromSearch = []
+			}
+			else{
+			  this.core.user.searchContacts(this.inputText).then(users => {
+	  
+				this.fromSearch = _.filter(users || [], (u) => {
+				  return u.id != this.core.user.userinfo.id
+				})
+			  }).finally(() => {
+				this.searching = false
+			  });
+			}*/
+		  },
+
 		invitepnt() {
 			this.core.invitepnt()
 		},
@@ -248,7 +329,6 @@ export default {
 		sbClick(e) {
 		},
 		openTeamRoom: function () {
-			console.log('this.hmode', this.hmode)
 			if (this.hmode) {
 
 				this.$store.commit('active', true)
@@ -325,7 +405,6 @@ export default {
 			this.$store.commit('SET_LAST_ROOM', null);
 		}
 		else {
-			console.log("IN MODE")
 		}
 
 

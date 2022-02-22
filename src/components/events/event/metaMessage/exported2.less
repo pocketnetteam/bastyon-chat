@@ -24,11 +24,6 @@
         margin-right: 0;
     }
 
-    .forstars .count i{
-        opacity: .5;
-        font-size: .3em;
-        vertical-align: middle;
-    }
 
     #comments.fromtop .list{
         border-top : 0;
@@ -61,6 +56,28 @@
     #lenta .loader{
         display: none;
     }
+
+    #lenta{
+		.jsPlayerLoading,
+		.video-js{
+			max-height: 80vh;
+		}
+
+		.share{
+
+			.jsPlayerLoading,
+			.video-js{
+				max-height: 80vh;
+			}
+			
+			&.fullScreenVideo{
+				.jsPlayerLoading,
+				.video-js{
+					max-height: none;
+				}
+			}
+		}
+	}
 
 
     #lenta.loading .loader{
@@ -201,8 +218,8 @@
                 &.owlcar{
                     height: auto;
                     width: 100%;
-                    max-width: 400px;
-                    
+                    max-width: 500px;
+                    margin : 0 auto;
             
                     .imagesWrapper{
                         height: 500px;
@@ -290,6 +307,69 @@
             }
         }
 
+    }
+
+
+    .owl-dots {
+        text-align: center;
+        margin-top: 0.5em;
+    }
+    .owl-carousel button.owl-dot {
+        width: 0.5em;
+        height: 0.5em;
+        border-radius: 50%;
+        background: srgb(--neutral-grad-2);
+        margin: 0 0.5 * 0.5em;
+    }
+    
+    .owl-carousel button.owl-dot.active {
+        background: srgb(--color-bg-ac-bright);
+    }
+
+    .owl-carousel .owl-nav{
+        opacity: 0;
+    }
+
+    .owl-carousel .owl-nav button{
+        text-align: center;
+        position: absolute;
+        top : 50%;
+        margin-top : -33px;
+        width: 44px;
+        height: 44px;
+        line-height: 44px;
+        color: srgba(--text-on-bg-ac-color, 0.5);
+        border-radius: 50%;
+        i{
+            font-size: 0.7em;
+            opacity: 0.7;
+        }
+
+        &:hover{
+            i{
+                opacity: 0.87;
+            }
+        }
+    }
+
+    .owl-carousel{
+        &:hover{
+            .owl-nav{
+                opacity: 1;
+            }
+        }
+    }
+
+    .owl-carousel .owl-nav button.owl-next{
+        right: 0;
+    }
+
+    .owl-carousel .owl-nav button.owl-prev{
+        left: 0;
+    }
+
+    .owl-carousel .owl-nav button.disabled {
+        opacity: .5;
     }
 
 

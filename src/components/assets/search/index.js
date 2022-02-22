@@ -46,12 +46,13 @@ export default {
 
   methods: {
     change : function(event){
-      
       this.searchTxt = event.target.value
-
     },
- 
 
+    clear : function(event){
+      this.searchTxt = ''
+    }, 
+ 
     clickicon: function () {
       this.$refs['input'].focus()
     },

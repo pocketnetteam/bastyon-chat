@@ -33,7 +33,7 @@
   width : 100%
   right : 0
   height: auto
-  color: $color-text-common
+  color: srgb(--text-color)
   +transition(0.3s)
   bottom: -200 * $r
   top : 200 * $r
@@ -73,11 +73,13 @@
       margin-top : 0
       background: transparent
       box-shadow: none
+      color : srgb(--neutral-grad-3)
       +shadowSmallers()
       
   .menu-item
     padding: $r
     background: srgb(--background-total-theme)
+    color : srgb(--neutral-grad-3)
     border-top : 1px solid srgba(--neutral-grad-1, 0.5)
     line-height: 44px
     margin-top : 0.5 * $r

@@ -6,8 +6,13 @@
         <div class="inputWrapper">
           <input ref="input" :placeholder="placeholder || this.$i18n.t('caption.search')" @keyup="change" @input="change" :value="searchTxt" @focus="focused" @blur="blured" type="text"/>
         </div>
-        <div class="iconWrapper" @click="clickicon">
+
+        <div class="iconWrapper" v-if="!searchTxt">
           <i class="fas fa-search"></i>
+        </div>
+
+        <div class="iconWrapper" v-if="searchTxt" @click="clear">
+          <i class="fas fa-times"></i>
         </div>
 
       </div>

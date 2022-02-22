@@ -2,6 +2,8 @@ import f from './functions'
 import Axios from './axios'
 var { error } = require('./error')
 
+import ChatStorage from "./chatstorage";
+
 var ApiWrapper = function (core) {
 
 	var self = this;
@@ -9,86 +11,161 @@ var ApiWrapper = function (core) {
 
 	var cache = {}
 	var loading = {}
+	var storages = {}
 
 	var apis = {
 		pocketnet : null
 	}
 
+	var ep = function(){
+		return Promise.resolve()
+	}
 
-	var scasheAct = function (ids, key, resultsKey, reload) {
+	var getstorage = function(p){
 
-		var waitLoading = {}
+		if(!storages[p.storage]){
+			return ChatStorage(p.storage, p.version || 1, p.time).then(storage => {
+				storages[p.storage] = storage
+
+				console.log('storage', storage)
+
+				return Promise.resolve(storage)
+			})
+		}
+
+		return Promise.resolve(storages[p.storage])
+	}
+
+	
+	var scasheAct = function (ids, key, resultsKey, reload, storageparameters) {
 
 		if (!_.isArray(ids)) ids = [ids]
 
-		if (!resultsKey) resultsKey = key
+		var waitLoading = {}
 
-		if (!cache[key]) {
+		if(!resultsKey) 
+			resultsKey = key
+
+		if(!cache[key]) {
 			cache[key] = {}
 		}
 
-		if (!loading[key]) {
+		if(!loading[key]) {
 			loading[key] = {}
 		}
 
-		var idtoloadPrev = _.uniq(_.filter(ids, function (id) {
-			return reload || !cache[key][id] || cache[key][id].nocache
-		}))
+		return (storageparameters ? getstorage(storageparameters) : ep()).then(storage => {
 
-		var idtoload = _.filter(idtoloadPrev, function (id) {
-			if (!loading[key][id]) {
-				loading[key][id] = true
-				return true
+			if (storage){
+
+				return Promise.all(_.map(ids, (id) => {
+
+					return storage.get(id).then((stored) => {
+						cache[key][stored[resultsKey]] = stored
+
+						return Promise.resolve()
+					}).catch(e => {
+						return Promise.resolve()
+					})
+
+				}))
+
 			}
 
-			waitLoading[id] = true
+			return Promise.resolve()
+
+			
+		}).then(r => {
+
+			var idtoloadPrev = _.uniq(_.filter(ids, function (id) {
+				return reload || !cache[key][id] || cache[key][id].nocache
+			}))
+	
+			var idtoload = _.filter(idtoloadPrev, function (id) {
+	
+				if(!loading[key][id]) {
+					loading[key][id] = true
+					return true
+				}
+	
+				waitLoading[id] = true
+			})
+	
+			var handleResults = function (result, _ids) {
+
+				return (storageparameters ? getstorage(storageparameters) : ep()).then(storage => {
+					
+					if(storage){
+						return Promise.all(_.map(result, (row) => {
+
+							if(!row[resultsKey]){
+								return Promise.resolve()
+							}
+
+							return storage.set(row[resultsKey], row)
+
+						}))
+					}
+
+					return Promise.resolve()
+					
+				}).then(() => {
+
+					_.each(result, function (row) {
+
+						if (row[resultsKey]) {
+							cache[key][row[resultsKey]] = row
+						}
+	
+					})
+		
+					_.each(_ids, function(id){
+						delete loading[key][id]
+						delete waitLoading[id]
+		
+						if(!cache[key][id])
+							cache[key][id] = 'error'
+					})
+		
+					var nresult = {};
+		
+					return f.pretry(() => {
+		
+						_.each(ids, function (id) {
+		
+							if (cache[key][id]) {
+		
+								if (cache[key][id] != 'error')
+		
+									nresult[id] = (cache[key][id])
+		
+								delete loading[key][id]
+								delete waitLoading[id]
+							}
+		
+						})
+		
+						return _.toArray(waitLoading).length == 0
+		
+					}).then(() => {
+						return Promise.resolve(nresult)
+					})
+
+				})
+	
+				
+	
+			}
+	
+			return Promise.resolve({
+				id: idtoload,
+				handle: handleResults
+			})
 		})
 
 
-		var handleResults = function (result, _ids) {
-
-			_.each(result, function (row) {
-				if (row[resultsKey]) {
-					cache[key][row[resultsKey]] = row
-				}
-			})
-
-			_.each(_ids, function(id){
-				delete loading[key][id]
-				delete waitLoading[id]
-
-				if(!cache[key][id])
-					cache[key][id] = 'error'
-			})
-
-			var nresult = {};
-
-			return f.pretry(() => {
-
-				_.each(ids, function (id) {
-
-					if (cache[key][id]) {
-						if (cache[key][id] != 'error')
-							nresult[id] = (cache[key][id])
-
-						delete loading[key][id]
-						delete waitLoading[id]
-					}
-
-				})
-
-				return _.toArray(waitLoading).length == 0
-
-			}).then(() => {
-				return Promise.resolve(nresult)
-			})
-
-		}
-
-		return {
-			id: idtoload,
-			handle: handleResults
-		}
+		
+		
 	}
 
 	var waitonline = function () {
@@ -101,16 +178,19 @@ var ApiWrapper = function (core) {
 
 	}
 
-	var crequest = function (ids, key, rkey, reload) {
+	var crequest = function (ids, key, rkey, reload, storageparameters) {
 
-		var sh = scasheAct(ids, key, rkey, reload)
+		return scasheAct(ids, key, rkey, reload, storageparameters).then(sh => {
 
-		if (!sh.id.length) {
+			if (!sh.id.length) {
+				return sh.handle([])
+			}
+	
+			return Promise.reject(sh)
 
-			return sh.handle([])
-		}
+		})
 
-		return Promise.reject(sh)
+		
 	}
 
 	var request = function (data, to) {
@@ -160,7 +240,6 @@ var ApiWrapper = function (core) {
 
 	}
 
-
 	self.clearCache = function (key) {
 
 		if (!key) {
@@ -169,7 +248,6 @@ var ApiWrapper = function (core) {
 			delete cache[key]
 		}
 	}
-
 
 	self.pocketnet = {
 
@@ -185,7 +263,6 @@ var ApiWrapper = function (core) {
 			}	
 				
 			if (apis.pocketnet) {
-
 
 				return apis.pocketnet.initIf().then(() => {
 					return apis.pocketnet.wait.ready('use', 3000)
@@ -231,7 +308,15 @@ var ApiWrapper = function (core) {
 
 		userInfo: (addresses, reload) => {
 
-			return crequest(addresses, 'pocketnet_userInfo', 'address', reload).catch(sh => {
+			return crequest(addresses, 'pocketnet_userInfo', 'address', reload, {
+				storage : 'userInfo',
+				time : 60 * 60 * 2 
+			}).catch(sh => {
+
+				if(!sh || !sh.id) {
+					console.error(sh)
+					return Promise.reject(sh)
+				}
 
 				var parameters = [sh.id, '1'];
 
@@ -278,7 +363,6 @@ var ApiWrapper = function (core) {
 
 
 	}
-
 
 	return self;
 }

@@ -122,7 +122,8 @@
         "younotgen" : "Please wait a minute, Your encryption keys are being generated...",
         "messageRead" : "Message read",
         "open" : "Open",
-        "You" : "You"
+        "You" : "You",
+        "chatsearchingempty" : "No chats found for the specified filter"
         
     },
 
