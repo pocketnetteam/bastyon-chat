@@ -1,4 +1,58 @@
 .pocketnet_iframe{
+
+    .pipped{
+        position: fixed;
+        left: 0;
+        right: 0;
+        top : 0;
+        bottom: 0;
+        z-index: 10000;
+        max-height: none!important;
+        max-width: none!important;
+    }
+
+    .video-js{
+        .vjs-volume-horizontal .vjs-volume-level,
+        .vjs-load-progress,
+        .vjs-play-progress{
+            transform-origin : left;
+        }
+
+        #vjs-forward-button, #vjs-rewind-button {
+            visibility: hidden;
+            opacity: 0;
+            transition: all .3s ease-in
+        }
+        .vjs-has-started {
+            #vjs-forward-button, #vjs-rewind-button {
+            visibility: visible;
+            opacity: 1;
+            transition: all .3s ease-in
+            }
+        }
+        .vjs-user-inactive.vjs-playing {
+            .vjs-big-play-button {
+            visibility: hidden !important;
+            opacity: 0;
+            transition: all .3s ease-in
+            }
+            #vjs-forward-button, #vjs-rewind-button {
+            visibility: hidden;
+            opacity: 0;
+            transition: all .3s ease-in
+            }
+        }
+        .vjs-user-active.vjs-playing {
+            .vjs-big-play-button {
+            visibility: visible !important;
+            opacity: 1;
+            transition: all .3s ease-in
+            }
+        }
+    }
+
+   
+    
     #lenta .shares .share .metatable>div.metapanel .metapanelitem{
         display: none;
     }
@@ -318,12 +372,12 @@
         width: 0.5em;
         height: 0.5em;
         border-radius: 50%;
-        background: srgb(--neutral-grad-2);
+        background: rgb(var(--neutral-grad-2));
         margin: 0 0.5 * 0.5em;
     }
     
     .owl-carousel button.owl-dot.active {
-        background: srgb(--color-bg-ac-bright);
+        background: rgb(var(--color-bg-ac-bright));
     }
 
     .owl-carousel .owl-nav{
@@ -338,7 +392,7 @@
         width: 44px;
         height: 44px;
         line-height: 44px;
-        color: srgba(--text-on-bg-ac-color, 0.5);
+        color: rgba(var(--text-on-bg-ac-color), 0.5);
         border-radius: 50%;
         i{
             font-size: 0.7em;
@@ -375,3 +429,7 @@
 
 
 }
+
+
+  
+    

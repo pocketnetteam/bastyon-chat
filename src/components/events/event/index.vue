@@ -408,8 +408,6 @@ export default {
 
     async decrypt() {
 
-        //if(!this.chat.pcrypto) return
-
         if (this.event.event.decrypted){
 
           this.decryptEvent = this.event.event.decrypted
@@ -418,8 +416,14 @@ export default {
         }
 
         try{
-          this.decryptEvent = await this.chat.pcrypto.decryptEvent(this.event.event)
+
+          var de = await this.chat.pcrypto.decryptEvent(this.event.event)
+
+          console.log("ASDASDASD")
+
+          this.decryptEvent = de
           this.event.event.decrypted = this.decryptEvent
+          
         }
         catch(e){
 
@@ -429,8 +433,7 @@ export default {
           
         }
     },
-   
-    
+
     checkReaded: function () {
 
       if (this.event) {

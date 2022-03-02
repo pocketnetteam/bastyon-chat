@@ -27,7 +27,6 @@ var ApiWrapper = function (core) {
 			return ChatStorage(p.storage, p.version || 1, p.time).then(storage => {
 				storages[p.storage] = storage
 
-				console.log('storage', storage)
 
 				return Promise.resolve(storage)
 			})
@@ -59,6 +58,10 @@ var ApiWrapper = function (core) {
 			if (storage){
 
 				return Promise.all(_.map(ids, (id) => {
+
+					if (cache[key][id]){
+						return Promise.resolve()
+					}
 
 					return storage.get(id).then((stored) => {
 						cache[key][stored[resultsKey]] = stored
@@ -310,7 +313,7 @@ var ApiWrapper = function (core) {
 
 			return crequest(addresses, 'pocketnet_userInfo', 'address', reload, {
 				storage : 'userInfo',
-				time : 60 * 60 * 2 
+				time : 60 * 60 * 24 
 			}).catch(sh => {
 
 				if(!sh || !sh.id) {

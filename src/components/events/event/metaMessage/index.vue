@@ -2,11 +2,13 @@
 
   <div ref="metaMsg" class='metaMsg'>
 
-    <div class="pocketnet_iframe" v-show="iframe" ref="iframe">
-    </div>
+    <div class="pocketnet_iframe_wrapper" v-show="iframe">
+      <div class="pocketnet_iframe" ref="iframe">
+      </div>
 
-    <div class="openlink" v-if="iframe && gotopn">
-      <button class="button orange small rounded" @click="openlinkiframe(url)">{{$t('caption.open')}}</button>
+      <div class="openlink" v-if="gotopn">
+        <button class="button orange small rounded" @click="openlinkiframe(url)">{{$t('caption.open')}}</button>
+      </div>
     </div>
 
     <div class="matrixUrl" v-if="matrix">

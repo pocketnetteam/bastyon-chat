@@ -16,6 +16,8 @@ const ChatStorage = function(storageName, version, time) {
 
     var cacheTime = time || SecondsInMonth
 
+    var memorystorage = {}
+
     /**
      * Function generates UNIX timestamp
      * floored to current hour.
@@ -130,6 +132,8 @@ const ChatStorage = function(storageName, version, time) {
 
                     const req = items.delete(itemId);
 
+                    delete memorystorage[itemId]
+
                     req.onsuccess = (data) => {
                         debugLog('PCryptoStorage CLEAR log', data);
                         resolve(true);
@@ -158,6 +162,8 @@ const ChatStorage = function(storageName, version, time) {
                         cachedAt: unixtime,
                     };
 
+                    memorystorage[itemId] = message
+
                     /**
                      * FIXME: It is not the best practice to use
                      *        here put() instead of add(), but it
@@ -184,6 +190,12 @@ const ChatStorage = function(storageName, version, time) {
                 debugLog('PCryptoStorage reading', itemId);
 
                 function executor(resolve, reject) {
+
+                    if (memorystorage[itemId]){
+
+                        return resolve(memorystorage[itemId]);
+                    }
+
                     const transaction = openTransaction('items');
                     const items = transaction.objectStore('items');
 
@@ -203,6 +215,8 @@ const ChatStorage = function(storageName, version, time) {
                             reject('Message property does not exist');
                             return;
                         }
+
+                        memorystorage[itemId] = req.result.message
 
                         resolve(req.result.message);
                     };

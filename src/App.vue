@@ -1,6 +1,6 @@
 <template>
 	<div id="matrix-root" :theme="theme" class="app">
-		<div class="rootcontent" :class="{'bin' : pocketnet, 'fix' : pocketnet, 'bout' : !pocketnet, minimized, active, mobile}">
+		<div class="rootcontent" :class="{pip, 'bin' : pocketnet, 'fix' : pocketnet, 'bout' : !pocketnet, minimized, active, mobile}">
 			<div class="chatwrapper" @click="iteraction">
 				<div>
 					<div class="backface" v-if="closebybg" @click="hide"></div>
@@ -223,7 +223,12 @@ export default {
 
 		fcmtoken : String,
 
-		localization: String
+		localization: String,
+
+		pip : {
+			type : Boolean,
+			default : false
+		}
 
 	},
 	
@@ -418,13 +423,9 @@ export default {
 		}
 	},
 
-	
-
 	beforeCreate() {
 		this.$store.commit('init');
 	},
-
-	
 
 	created() {
 
@@ -439,7 +440,6 @@ export default {
 
 		this.importInitialScripts()
 
-		// Generate the teamroom messages
 		this.generateTeamroomMessages();
 
 		setTimeout(() => {

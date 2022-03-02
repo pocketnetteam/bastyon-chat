@@ -74,7 +74,7 @@
         bottom : 0
         padding-bottom : 0
         margin : 0 auto
-        max-width: 768px
+        max-width: 640px
 
     .headerSpacerWrapper
         position: absolute
@@ -129,7 +129,7 @@
                 height: 100%
                 overflow: visible
                 will-change: transform
-                +transition(0.3s)
+                +transitionopt(0.3s, transform)
 
             .headerSpacer
                 position: absolute
@@ -139,7 +139,6 @@
                 padding: 0
                 overflow-x: hidden
                 will-change: transform
-                +transitionopt(0.3s, transform)
                 overscroll-behavior: contain
 
             &.active
@@ -153,9 +152,7 @@
                     z-index: 130
 
                 .headerSpacerWrapperOvf
-                    right: 0px
                     transform: translate3d(-300px, 4px, 0)
-                    width: 344px
 
                     .headerSpacer
                         border-radius: 8px
@@ -165,7 +162,6 @@
                         border: 1px solid srgba(--neutral-grad-2, 0.2)
                         +shadowSmaller()
                         right : 0
-                        left: 0
                    
 
 .modalcommoncontent

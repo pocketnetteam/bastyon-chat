@@ -134,50 +134,82 @@ export default {
     },
     getEvents: function () {
       var events = this.timeline.getEvents()
-      // if (this.filterType !== 'images') {
-        events = _.filter(events, e => {
 
-          var type = e.event.type;
+      events = _.filter(events, e => {
 
-          if (e.localRedactionEvent() || e.getRedactionEvent()) return
+        var type = e.event.type;
 
-          if (e.event.type === 'm.room.power_levels' && Object.keys(e.event.content.users).length === 1) {
-            return
-          }
-          if (this.chat.currentState.getMembers().length <= 2 && e.event.type === 'm.room.member' && 'm.room.power_levels') {
-            return
-          }
+        if (e.localRedactionEvent() || e.getRedactionEvent()) return
 
-          return !this.eventsTypes || this.eventsTypes[type]
+        if (e.event.type === 'm.room.power_levels' && Object.keys(e.event.content.users).length === 1) {
+          return
+        }
+        if (this.chat.currentState.getMembers().length <= 2 && e.event.type === 'm.room.member' && 'm.room.power_levels') {
+          return
+        }
 
-        })
+        return !this.eventsTypes || this.eventsTypes[type]
 
-        events = events.reverse()
+      })
 
-        this.relations(events)
+      events = events.reverse()
 
-        events = _.sortBy(events, function (e) {
-          return e.replacingEventDate() || e.getDate() || Infinity
-        })
+      this.relations(events)
 
-        events = events.reverse()
+      events = _.sortBy(events, function (e) {
+        return e.replacingEventDate() || e.getDate() || Infinity
+      })
 
-        events = _.uniq(events, e => {
-          return this.core.mtrx.clearEventId(e) || f.makeid()
-        })
+      events = events.reverse()
 
-        events = _.sortBy(events, function (e) {
-          return e.getDate() || Infinity
-        })
+      events = _.uniq(events, e => {
+        return this.core.mtrx.clearEventId(e) || f.makeid()
+      })
+
+      events = _.sortBy(events, function (e) {
+        return e.getDate() || Infinity
+      })
 
 
-        events = events.reverse()
-      // }
+      events = events.reverse()
 
       this.$emit('getEvents', events)
 
       return events
 
+    },
+
+    getEventsAndEncrypt : function(){
+      var events = this.getEvents()
+
+      return Promise.all(_.map(events, (e) => { 
+
+
+        if(!this.chat.pcrypto) return Promise.resolve()
+
+
+        if (e.event.decrypted) return Promise.resolve()
+
+
+        if(f.deep(e, 'event.content.msgtype') != 'm.encrypted') return Promise.resolve()
+
+
+        return this.chat.pcrypto.decryptEvent(e.event).then(d => {
+          e.event.decrypted = d
+
+          return Promise.resolve()
+        }).catch(e => {
+
+          e.event.decrypted = {
+            msgtype : 'm.bad.encrypted'
+          }
+
+          return Promise.resolve()
+        })
+
+      })).then(() => {
+        return Promise.resolve(events)
+      })
     },
 
     relations: function (events) {
@@ -249,10 +281,12 @@ export default {
 
       setTimeout(() => {
 
-        this.timeline.load(/*null, (this.wh() || 600)*/).then(async r => {
+        this.timeline.load(/*null, (this.wh() || 600)*/).then((r) => {
 
-          this.events = this.getEvents()
+          return this.getEventsAndEncrypt()
 
+        }).then((events) => {
+          this.events = events
 
           this.loading = false;
 
@@ -300,18 +334,16 @@ export default {
 
           }).then(r => {
 
-            setTimeout( () => {
+            return this.getEventsAndEncrypt()
 
-              this.events = this.getEvents();
+          }).then(events => {
+            this.events = events;
 
-              this.firstPaginate = false
+            this.firstPaginate = false
 
-              this.readAll();
+            this.readAll();
 
-              this['p_' + direction] = false;
-
-            }, 100)
-
+            this['p_' + direction] = false;
           })
 
         }

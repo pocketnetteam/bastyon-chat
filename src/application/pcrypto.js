@@ -284,11 +284,13 @@ var PcryptoRoom = async function(pcrypto, chat, {ls, lse}){
        
             return ls.get(`${lcachekey + pcrypto.user.userinfo.id}-${k}`).then((keys) => {
 
+
                 const keysPrepared = convert.aeskeys.out(keys);
 
                 return { keys: keysPrepared, k }
 
-            }).catch ( async () => {
+            }).catch ( async (e) => {
+
 
                 const keysPrepared = eaac.aeskeys(time, block);
 
@@ -297,7 +299,7 @@ var PcryptoRoom = async function(pcrypto, chat, {ls, lse}){
                     const itemId = `${lcachekey + pcrypto.user.userinfo.id}-${k}`;
 
                     await ls.set(itemId, convert.aeskeys.inp(keysPrepared)).catch(() => {
-                        console.error('Error writing item on LS.SET');
+           
                     });
 
                 }
@@ -450,8 +452,6 @@ var PcryptoRoom = async function(pcrypto, chat, {ls, lse}){
 
         var error = null
 
-       
-
         if (keys[userid]){
             try{
                 return await decrypt(keys[userid], {encrypted, nonce})
@@ -459,16 +459,14 @@ var PcryptoRoom = async function(pcrypto, chat, {ls, lse}){
             catch(e){
                 error = e
             }
-            
         }
         else{
             error = 'emptykey'
         }
 
-        await ls.clear(`${lcachekey + pcrypto.user.userinfo.id}-${k}`)
-            .catch((err) => {
-                console.error('Error clearing item on LS.CLEAR');
-            });
+        await ls.clear(`${lcachekey + pcrypto.user.userinfo.id}-${k}`).catch((err) => {
+            console.error('Error clearing item on LS.CLEAR');
+        });
 
         throw new Error(error)
 
@@ -494,9 +492,21 @@ var PcryptoRoom = async function(pcrypto, chat, {ls, lse}){
             return event.decrypting
         }
 
-        var dpromise = lse.get(`${ecachekey + pcrypto.user.userinfo.id}-${event.event_id}`).then((stored) => {
+        var k = `${ecachekey + pcrypto.user.userinfo.id}-${event.event_id}`
 
-            return stored
+        var dpromise = lse.get(k).then((stored) => {
+
+            var parsed = null
+
+            try{
+                parsed = JSON.parse(stored)
+            }
+            catch(e){}
+
+
+            if(!parsed) return Promise.reject()
+
+            return Promise.resolve(parsed)
 
         }).catch(async (err) => {
 
@@ -527,14 +537,17 @@ var PcryptoRoom = async function(pcrypto, chat, {ls, lse}){
                 throw new Error('emptyforme');
             }
 
-            return self.decrypt(keyindex, body[bodyindex], time, block);
+            return self.decrypt(keyindex, body[bodyindex], time, block).then(decrypted => {
 
-        }).then(decrypted => {
+                var data = {
+                    body: decrypted,
+                    msgtype: 'm.text'
+                }
+    
+                lse.set(k, JSON.stringify(data))
 
-            return {
-                body: decrypted,
-                msgtype: 'm.text'
-            }
+                return data
+            })
 
         }).finally(() => {
             delete event.decrypting

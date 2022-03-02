@@ -2,7 +2,9 @@
   <div id="contact" :class="{'bin' : pocketnet, 'bout' : !pocketnet, minimized, fix : pocketnet, active, 'isBlocked': blocked}">
 
     <div class="viewWrapper">
-      <userView :userinfo="contact" :blocked="blocked" />
+      <div class="uviewwr">
+        <userView :userinfo="contact" :blocked="blocked" />
+      </div>
     </div>
     <div class="actionsWrapper" v-if="contact.id !== activeuser.id">
       <contactActions :contact="contact" :blocked="blocked" />

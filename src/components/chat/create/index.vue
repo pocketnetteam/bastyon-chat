@@ -3,26 +3,29 @@
 
     <div class="selecttype">
 
-      <div class="types" v-if="!type">
-        <div class="type" @click="e => selecttype(type.id)" v-for="type in types" :key="type.id">
-          <div class="icon"><i :class="type.icon"></i></div><div><span>{{$t('type.' + type.id)}}</span></div></div>
-      </div>
-      <div class="selectedtype" v-if="type">
+      <div class="work">
 
-        <div class="icon" @click="unselecttype">
-          <i class="fas fa-arrow-left"></i>
+        <div class="types" v-if="!type">
+          <div class="type" @click="e => selecttype(type.id)" v-for="type in types" :key="type.id">
+            <div class="icon"><i :class="type.icon"></i></div><div><span>{{$t('type.' + type.id)}}</span></div></div>
         </div>
+        <div class="selectedtype" v-if="type">
 
-        <div class="label">
-          {{$t('typelabel.' + type.id)}}
-        </div>
+          <div class="icon" @click="unselecttype">
+            <i class="fas fa-arrow-left"></i>
+          </div>
 
-        <div class="completewrapper">
-          <button @click="complete()" class="button small rounded" :class="{orange : cancomplete, ghost : !cancomplete}">
-            {{$t('caption.create')}} <i :class="type.icon"></i> <span v-if="selectedLength">{{selectedLength}}</span>
-          </button>
+          <div class="label">
+            {{$t('typelabel.' + type.id)}}
+          </div>
+
+          <div class="completewrapper">
+            <button @click="complete()" class="button small rounded" :class="{orange : cancomplete, ghost : !cancomplete}">
+              {{$t('caption.create')}} <i :class="type.icon"></i> <span v-if="selectedLength">{{selectedLength}}</span>
+            </button>
+          </div>
+          
         </div>
-        
       </div>
 
       <div class="creationbody">

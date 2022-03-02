@@ -200,6 +200,21 @@ button.button
             background : srgb(--neutral-grad-2)
             border-color : srgb(--neutral-grad-2)
 
+.rootcontent.pip *
+    transform : none!important
+
+.rootcontent.pip
+    .js-player
+        
+        .vjs-control-bar
+            display: none!important
+
+        #vjs-rewind-button,
+        #vjs-forward-button,
+        .vjs-big-play-button,
+        .vjs-overlay
+            display: none!important
+
 
 .bout
     .emojipicker
@@ -437,10 +452,10 @@ button.button
     .work
         padding : 0 $r
         margin : 0 auto
-        max-width: 768px
+        max-width: 640px
 
     .pwork
-        max-width: 768px
+        max-width: 640px
         background: transparent
         margin : 0 auto
         padding : 0 8 * $r
