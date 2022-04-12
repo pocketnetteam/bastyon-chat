@@ -25,8 +25,8 @@ var ApiWrapper = function (core) {
 
 		if(!storages[p.storage]){
 			return ChatStorage(p.storage, p.version || 1, p.time).then(storage => {
-				storages[p.storage] = storage
 
+				storages[p.storage] = storage
 
 				return Promise.resolve(storage)
 			})

@@ -1,28 +1,30 @@
 <template>
-
-  <div ref="metaMsg" class='metaMsg'>
-
+  <div ref="metaMsg" class="metaMsg">
     <div class="pocketnet_iframe_wrapper" v-show="iframe">
-      <div class="pocketnet_iframe" ref="iframe">
-      </div>
+      <div class="pocketnet_iframe" ref="iframe"></div>
 
       <div class="openlink" v-if="gotopn">
-        <button class="button orange small rounded" @click="openlinkiframe(url)">{{$t('caption.open')}}</button>
+        <button
+          class="button orange small rounded"
+          @click="openlinkiframe(url)"
+        >
+          {{ $t("caption.open") }}
+        </button>
       </div>
     </div>
 
     <div class="matrixUrl" v-if="matrix">
-      <matrixlink :url="url"/>
+      <matrixlink :url="url" />
     </div>
 
     <div class="customURL" v-if="!iframe && !matrix">
-
       <div class="link">
-        <div @click="openlink(url)"><i class="fas fa-link"></i> <span>{{url}}</span></div>
+        <div @click="openlink(url)">
+          <i class="fas fa-link"></i> <span>{{ url }}</span>
+        </div>
       </div>
 
-      <div class="header" v-if="image || title">  
-
+      <div class="header" v-if="image || title">
         <div v-if="image">
           <bgimage :src="image" />
         </div>
@@ -34,25 +36,24 @@
       </div>
 
       <!--<Player v-if="video" :video="video_url" :autoplay="false" />-->
-
     </div>
-
   </div>
 </template>
 <script>
 //import Player from '@/components/chat/player/Player.vue'
-import Widgets from '@/application/utils/widgets.js'
-import matrixlink from '@/components/events/event/metaMessage/matrixlink.vue'
-import imagesLoaded from 'vue-images-loaded'
+import Widgets from "@/application/utils/widgets.js";
+import matrixlink from "@/components/events/event/metaMessage/matrixlink.vue";
+import imagesLoaded from "vue-images-loaded";
 
+/*import icons from './plyr.svg';*/
 
 export default {
   components: {
-    //Player, 
-    matrixlink
+    //Player,
+    matrixlink,
   },
   directives: {
-    imagesLoaded
+    imagesLoaded,
   },
   props: {
     title: String,
@@ -62,120 +63,123 @@ export default {
     image: String,
     video: String,
     url: String,
-    h: Number, 
+    h: Number,
     w: Number,
     initImageWidth: Number,
     imageFactor: Number,
     clientWidth: Number,
     post: String,
-    type : String,
+    type: String,
   },
 
   data: () => {
     return {
-      link: '',
+      link: "",
       txt: String,
-      gotopn : false
-    }
+      gotopn: false,
+      module: {},
+    };
   },
   computed: {
-    smallsize(){
-      if (this.url){
-        var _u = new URL(this.url)
+    smallsize() {
+      if (this.url) {
+        var _u = new URL(this.url);
 
-        if(_u.pathname && _u.pathname != '/') return false
+        if (_u.pathname && _u.pathname != "/") return false;
 
-        return true
+        return true;
       }
     },
 
-    imageWidth(){
-      return this.clientWidth < 650 ? this.imageFactor * this.initImageWidth : this.initImageWidth;
+    imageWidth() {
+      return this.clientWidth < 650
+        ? this.imageFactor * this.initImageWidth
+        : this.initImageWidth;
     },
 
-    getUrl : function () {
+    getUrl: function () {
+      var domain = window.pocketnetdomain || "pocketnet.app";
 
-        var domain = window.pocketnetdomain || 'pocketnet.app'
-
-        if(this.metaUrl) return new URL(this.metaUrl).hostname === domain
+      if (this.metaUrl) return new URL(this.metaUrl).hostname === domain;
     },
 
-    imageHeight(){
-
+    imageHeight() {
       const ratio = this.w / this.imageWidth;
 
       return this.h / ratio || 300;
     },
 
-    iframe(){
-      if(this.type === 'pocketnet') {
-        return true
+    iframe() {
+      if (this.type === "pocketnet") {
+        return true;
       }
     },
 
-    matrix(){
-      if(this.type === 'matrix') {
-        return true
+    matrix() {
+      if (this.type === "matrix") {
+        return true;
       }
-    }
+    },
   },
 
-  beforeMount() {
-    //if(this.video) this.video_url = this.video
+  beforeMount() {},
+  beforeDestroy() {
+    if (this.module.d) {
+		try{
+			this.module.d.destroy();
+		}
+		catch(e){}
+      
+      delete this.module.d;
+    }
   },
   mounted() {
-    
-    if(this.type === 'pocketnet' && this.$refs.iframe) {
+    if (this.type === "pocketnet" && this.$refs.iframe) {
+      let widget = new Widgets();
 
-      let widget = new Widgets()
-
-      if(this.$refs.iframe)
-
-        this.gotopn = widget.makefromurl(this.$refs.iframe, this.url, (before) => {
-          this.updatedSize(before)
-        }, {
-          theme : this.core.vm.ctheme || this.$store.state.theme
-        })
-
+      if (this.$refs.iframe)
+        this.gotopn = widget.makefromurl(
+          this.$refs.iframe,
+          this.url,
+          (before) => {
+            this.updatedSize(before);
+          },
+          {
+            theme: this.core.vm.ctheme || this.$store.state.theme,
+          },
+          (p, m) => {
+            this.module.d = m;
+          }
+        );
     }
-  
   },
-  
+
   methods: {
-
-    openlink : function(url){
-
-      if(typeof window != 'undefined' && typeof window.cordova != 'undefined' && cordova.InAppBrowser){
-        var ref = cordova.InAppBrowser.open(url, '_system');
-        return false
-			}
-      else{
-        window.open(url, "_blank")
+    openlink: function (url) {
+      if (
+        typeof window != "undefined" &&
+        typeof window.cordova != "undefined" &&
+        cordova.InAppBrowser
+      ) {
+        var ref = cordova.InAppBrowser.open(url, "_system");
+        return false;
+      } else {
+        window.open(url, "_blank");
       }
-
     },
 
-    openlinkiframe : function(url){
+    openlinkiframe: function (url) {
+      if (this.core.backtoapp) {
+        var pu = new URL(url);
 
-      if(this.core.backtoapp) {
-
-        var pu = new URL(url)
-
-        this.core.backtoapp(pu.pathname.replace('/', '') + pu.search)
-      }
-      else
-          window.open(url,"_blank")
+        this.core.backtoapp(pu.pathname.replace("/", "") + pu.search);
+      } else window.open(url, "_blank");
     },
 
-    imagesLoaded : function(){
-      //this.updatedSize()
-    },
-    updatedSize: function(before) {
-        //this.$emit('updatedSize', before)
-    },
+    imagesLoaded: function () {},
+    updatedSize: function (before) {},
   },
-
-}
+};
 </script>
 
 <style lang="less" src="@/components/events/event/metaMessage/exported.less"></style>

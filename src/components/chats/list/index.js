@@ -215,23 +215,8 @@ export default {
 	methods: {
 
 		search(text) {
-
 			this.searchText = text.toLowerCase()
-			
-			/*if(!this.inputText){
-				this.fromSearch = []
-			}
-			else{
-			  this.core.user.searchContacts(this.inputText).then(users => {
-	  
-				this.fromSearch = _.filter(users || [], (u) => {
-				  return u.id != this.core.user.userinfo.id
-				})
-			  }).finally(() => {
-				this.searching = false
-			  });
-			}*/
-		  },
+		},
 
 		invitepnt() {
 			this.core.invitepnt()
@@ -263,8 +248,6 @@ export default {
 			};
 		},
 
-
-
 		itemClick(chat) {
 
 			if (this.hmode) {
@@ -274,12 +257,12 @@ export default {
 				this.$store.commit('setiteraction', true)
 
 
-				if (
+				/*if (
 					!this.share &&
 					this.$store.state.lastroom &&
 					this.$store.state.lastroom.id == chat.roomId) {
 					this.$router.push('chat?id=' + this.$store.state.lastroom.id)
-				}
+				}*/
 			}
 			else {
 

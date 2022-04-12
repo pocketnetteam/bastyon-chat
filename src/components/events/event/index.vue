@@ -419,13 +419,13 @@ export default {
 
           var de = await this.chat.pcrypto.decryptEvent(this.event.event)
 
-          console.log("ASDASDASD")
-
           this.decryptEvent = de
           this.event.event.decrypted = this.decryptEvent
           
         }
         catch(e){
+
+          console.error(e)
 
           this.event.event.decrypted = this.decryptEvent = {
             msgtype : 'm.bad.encrypted'

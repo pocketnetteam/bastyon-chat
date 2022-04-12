@@ -96,7 +96,13 @@ export default {
       return this.core.mtrx.kit.unknowngroupusers(this.chat)
     },
 
-  
+    matrixevent : function(){
+      var e = this.event
+
+      if (e){
+        return e.get()
+      }
+    },
 
     event: function () {
 

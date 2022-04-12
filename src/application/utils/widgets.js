@@ -11,7 +11,7 @@ var PNWIDGETS = function(){
         }
     }
 
-    self.make = function(seed, action, id, p, fast, __el, resized, additional){
+    self.make = function(seed, action, id, p, fast, __el, resized, additional, _clbk){
 
         if(!additional) additional = {}
 
@@ -39,7 +39,7 @@ var PNWIDGETS = function(){
 
             elem.addClass('openapipnet')
 
-            app.platform.papi[action](id, elem, null, embeddingSettigns, additional)
+            app.platform.papi[action](id, elem, _clbk, embeddingSettigns, additional)
 
             if(action == 'transaction') return false
 
@@ -132,7 +132,7 @@ var PNWIDGETS = function(){
 
     }
 
-    self.makefromurl = function(el, url, resized, additional){
+    self.makefromurl = function(el, url, resized, additional, _clbk){
 
 
         var seed = Math.floor(Math.random() * 100000)
@@ -148,7 +148,7 @@ var PNWIDGETS = function(){
 
         ps.additional = _.extend(ps.additional, additional || {})
 
-        return self.make(seed, ps.action, ps.id, ps.p, true, el, resized, ps.additional)
+        return self.make(seed, ps.action, ps.id, ps.p, true, el, resized, ps.additional, _clbk)
 
     }
 

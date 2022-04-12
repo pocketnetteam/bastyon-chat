@@ -67,10 +67,11 @@ export default {
 
       if (this.m_chat._selfMembership === 'invite') {
 
-
         if( f.date.addseconds(moment.utc(this.m_chat.summary.lastModified).toDate(), 86400) > new Date() ) return 1
 
       }
+
+      this.allnotifications
 
       return this.m_chat.getUnreadNotificationCount()
 

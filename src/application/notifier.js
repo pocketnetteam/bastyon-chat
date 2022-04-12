@@ -88,6 +88,24 @@ class Notifier {
 		}
 	}
 
+	decrypt(event, chat) {
+
+		return this.core.mtrx.kit.prepareChat(chat).then(r => {
+
+			
+			if (event.event.decrypted) {
+
+				return Promise.resolve()
+			}
+
+			return chat.pcrypto.decryptEvent(event.event)
+			  
+		}).catch(e => {
+			return Promise.resolve()
+		})
+
+	}
+
 	message(event, user, chat) {
 
 		var state = this.core.vm.$store.state
@@ -108,45 +126,62 @@ class Notifier {
 		if (['m.room.redaction'].indexOf(t) > -1) ctype = 'redaction'
 		if (f.deep(event, 'event.content.msgtype') == 'm.encrypted') ctype = 'encrypted'
 
-		var msg = {
-			title: user.name,
-			event: event,
-			message: event.event.content.type == 'm.encrypted' ? "***" : event.event.content.body, // event.content.body,
-			roomId: event.event.room_id,
-			icon: user.image,
-			chat: chat,
-			ctype: ctype
+		var c = () => {
+			var msg = {
+				title: user.name,
+				event: event,
+				message: event.event.content.type == 'm.encrypted' ? "***" : event.event.content.body, // event.content.body,
+				roomId: event.event.room_id,
+				icon: user.image,
+				chat: chat,
+				ctype: ctype
+			}
+
+			_.each(external, function (e) {
+				e(msg)
+			})
+
+			if (state.currentRoom === event.event.room_id && !this.core.hiddenInParent) {
+				return;
+			}
+
+			this.notifySoundOrAction()
+			this.show(msg, '/chat?id=' + event.event.room_id)
 		}
 
-		_.each(external, function (e) {
-			e(msg)
-		})
-
-		if (state.currentRoom === event.event.room_id && !this.core.hiddenInParent) {
-			return;
+		if (ctype == 'encrypted') {
+			this.decrypt(event, chat).then(c)
+		}
+		else {
+			c()
 		}
 
-		this.notifySoundOrAction()
-		this.show(msg, '/chat?id=' + event.event.room_id)
+
 	}
 
 	event(event, chat) {
 		let pushAction = this.core.mtrx.client.getPushActionsForEvent(event)
 
-		if(!pushAction.notify) return
+
+		if (!pushAction.notify) return
 
 		//let timeFromNow = moment(moment.utc(event.event.origin_server_ts).toDate()).local().fromNow()
 
 		var date = moment(moment.utc(event.event.origin_server_ts).toDate()).local().toDate()
 		var iftime = f.date.addseconds(date, 10) > moment().toDate()
 
-		if(!iftime) return
+
+		if (!iftime) return
+
+
 
 		this.core.mtrx.isReaded(event, true).then(r => {
+
 
 			if (r) return
 
 			if (!this.core.mtrx.me(event.getSender()) && event.getSender() && event.getSender() !== this.core.mtrx.client.credentials.userId) {
+
 
 				this.core.user.usersInfo([f.getmatrixid(event.getSender())]).then(info => {
 

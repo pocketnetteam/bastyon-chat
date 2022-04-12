@@ -123,7 +123,7 @@
             text-align: center
 
 .chatInputWrapper
-    position: absolute
+    position: fixed
     z-index: 3
     bottom: -1px
     background: transparent
@@ -131,6 +131,9 @@
     right: 0
     padding-bottom : 31px
     background: srgb(--background-total-theme)
+    will-change: transform
+    transform: translate3d(0, calc((var(--keyboardheight, 0) - 1px) * -1), 0)
+    +transition(0.3s)
 
     &.bin
         position: absolute

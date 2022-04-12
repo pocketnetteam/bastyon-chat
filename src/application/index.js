@@ -161,15 +161,16 @@ class Core {
                 return Promise.reject('unknown')
             }
 
-            return this.mtrx.init()
-
-        }).then(r => {
-            this.loading = false
-            this.setUnauthorized(null)
-
             return this.pcrypto.prepare()
 
         }).then(r => {
+
+            return this.mtrx.init()
+
+        }).then(r => {
+
+            this.loading = false
+            this.setUnauthorized(null)
 
             this.pcrypto.helpers.checkuser()
 

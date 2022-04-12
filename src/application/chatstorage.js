@@ -66,6 +66,42 @@ const ChatStorage = function(storageName, version, time) {
         };
 
         /**
+         * Function get all items to memory cache
+         */
+         function getall() {
+
+            const transaction = openTransaction('items');
+            const items = transaction.objectStore('items');
+
+            const req = items.getAll();
+
+            return new Promise((resolve, reject) => {
+
+                req.onsuccess = (data) => {
+                    const cursor = data.target.result;
+
+                    if (cursor) {
+                        _.each(cursor, (item) => {
+                            memorystorage[item.id] = item.message
+                        })
+                    }
+
+                    console.log('memorystorage', storageName)
+
+                    resolve()
+                };
+
+                req.onerror = (data) => {
+
+                    debugLog('PCryptoStorage CLEAR OUTDATED error', data);
+
+                    resolve()
+                };
+
+            })
+        }
+
+        /**
          * Function removes items cached
          * in IndexedDB 30 days ago
          */
@@ -77,23 +113,33 @@ const ChatStorage = function(storageName, version, time) {
 
             const req = items.openCursor();
 
-            req.onsuccess = (data) => {
-                const cursor = data.target.result;
+            return new Promise((resolve, reject) => {
 
-                if (cursor) {
-
-                    if (timeFromCurrent >= cursor.value.cachedAt) {
-                        debugLog('PCryptoStorage CLEAR OUTDATED log', data);
-                        cursor.delete();
+                req.onsuccess = (data) => {
+                    const cursor = data.target.result;
+    
+                    if (cursor) {
+    
+                        if (timeFromCurrent >= cursor.value.cachedAt) {
+                            debugLog('PCryptoStorage CLEAR OUTDATED log', data);
+                            cursor.delete();
+                        }
+    
+                        cursor.continue();
                     }
 
-                    cursor.continue();
-                }
-            };
+                    resolve()
+                };
+    
+                req.onerror = (data) => {
+                    debugLog('PCryptoStorage CLEAR OUTDATED error', data);
 
-            req.onerror = (data) => {
-                debugLog('PCryptoStorage CLEAR OUTDATED error', data);
-            };
+                    resolve()
+                };
+
+            })
+
+            
         }
 
         /**
@@ -240,9 +286,12 @@ const ChatStorage = function(storageName, version, time) {
             openRequest.onsuccess = function () {
                 db = openRequest.result;
 
-                clearOldItems();
-
-                resolve(instanceFunctions);
+                clearOldItems().then(r => {
+                    return getall()
+                }).then(r => {
+                    resolve(instanceFunctions);
+                })
+                
             };
         }
 
@@ -267,8 +316,6 @@ const ChatStorage = function(storageName, version, time) {
 
             msgItems.forEach((msgItem) => {
                 const msg = JSON.parse(localStorage[msgItem]);
-
-                console.log(msg);
 
                 if (timeFromCurrent >= msg.cachedAt) {
                     console.log('PCryptoStorage CLEAR OUTDATED log', msg);

@@ -25,7 +25,7 @@
           </div>
 
           <div class="eventsLine maxwidth" v-if="!dummy && ready">
-            <eventsEvent :event="event" :chat="m_chat" :preview="true" v-if="event"/>
+            <eventsEvent :event="matrixevent" :chat="m_chat" :preview="true" v-if="event"/>
           </div>
 
           <div class="eventsLine" v-if="dummy">

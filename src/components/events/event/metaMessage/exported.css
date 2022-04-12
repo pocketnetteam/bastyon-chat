@@ -1,9 +1,9 @@
 .pocketnet_iframe {
+  /*./components/lenta/index.css*/
   /*./components/transactionview/index.css*/
   /*./components/comments/index.css*/
-  /*./components/lenta/index.css*/
-  /*./components/author/index.css*/
   /*./components/channel/index.css*/
+  /*./components/author/index.css*/
   /*./components/post/index.css*/
   /*./css/main.css*/
   /*! HTML5 Boilerplate v5.2.0 | MIT License | https://html5boilerplate.com/ */
@@ -42,6 +42,12 @@
   /* ==========================================================================
      Browser Upgrade Prompt
      ========================================================================== */
+  /*
+  html.testaddress{
+      .vjs-peertube{
+          display : block;
+      }
+  }*/
   /* ==========================================================================
      Author's custom styles
      ========================================================================== */
@@ -135,6 +141,677 @@
    * Copyright 2013-2018 David Deutsch
    * Licensed under: SEE LICENSE IN https://github.com/OwlCarousel2/OwlCarousel2/blob/master/LICENSE
    */
+}
+.pocketnet_iframe #lenta .optimizationTip {
+  height: 150px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0.5em;
+  border-radius: 6px;
+}
+.pocketnet_iframe #lenta .optimizationTip > div {
+  padding: 1em;
+  text-align: center;
+  opacity: 0.8;
+  max-width: 80%;
+  border-radius: 12px;
+  background: rgb(var(--background-secondary-theme));
+  border: 1px solid rgb(var(--neutral-grad-1));
+}
+.pocketnet_iframe #lenta .optimizationTip .icon {
+  opacity: 0.5;
+  margin-top: 0.5em;
+}
+.pocketnet_iframe #lenta.destroying {
+  display: none;
+}
+.pocketnet_iframe #lenta.openapi .loadmore {
+  display: none !important;
+}
+.pocketnet_iframe #lenta.rebuilding {
+  -moz-transition: 0.3s;
+  -o-transition: 0.3s;
+  -webkit-transition: 0.3s;
+  transition: 0.3s;
+  opacity: 0.3;
+}
+.pocketnet_iframe #lenta .work {
+  padding-right: 0;
+}
+.pocketnet_iframe #lenta .mlwr {
+  position: relative;
+}
+.pocketnet_iframe #lenta .loader {
+  background: rgb(var(--background-total-theme));
+  padding: 3em 0;
+  display: none;
+  border-radius: 12px;
+  height: 111px;
+  contain: strict;
+}
+.pocketnet_iframe #lenta.loading .loader {
+  display: block;
+}
+.pocketnet_iframe #lenta.sharesEnded .loader {
+  display: none;
+}
+.pocketnet_iframe #lenta .panel {
+  overflow: hidden;
+}
+.pocketnet_iframe #lenta .video-js .vjs-volume-control {
+  display: none;
+}
+.pocketnet_iframe #lenta .fullScreenVideo .video-js .vjs-volume-control {
+  display: inherit;
+}
+.pocketnet_iframe #lenta .circularprogress {
+  overflow: hidden;
+  height: 0;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+}
+.pocketnet_iframe #lenta .circularprogress .circularprogressWrapper {
+  padding: 1em;
+  text-align: center;
+}
+.pocketnet_iframe #lenta .circularprogress .circularprogressWrapper canvas {
+  margin: 0 auto;
+}
+.pocketnet_iframe #lenta .share .sharecnt .removeDescription {
+  display: none;
+  padding-bottom: 1.5em;
+  color: rgb(var(--neutral-grad-1));
+}
+.pocketnet_iframe #lenta .share .sharecnt.deleted .cntscontent,
+.pocketnet_iframe #lenta .share .sharecnt.deleted .repostWrapper,
+.pocketnet_iframe #lenta .share .sharecnt.deleted .commentsWrapperHb,
+.pocketnet_iframe #lenta .share .sharecnt.deleted .metapanel,
+.pocketnet_iframe #lenta .share .sharecnt.deleted .sys {
+  display: none !important;
+}
+.pocketnet_iframe #lenta .share .sharecnt.deleted .removeDescription {
+  display: block;
+}
+.pocketnet_iframe #lenta .share.fromsub {
+  border: 1px solid #000;
+}
+.pocketnet_iframe #lenta .share {
+  margin-bottom: 0.5em;
+  padding-bottom: 0;
+  border-radius: 12px;
+}
+.pocketnet_iframe #lenta .share .shareSpacer {
+  height: 400px;
+  padding: 0 2em;
+}
+.pocketnet_iframe #lenta .share .images {
+  max-width: 590px;
+}
+.pocketnet_iframe #lenta .share .sharecaption {
+  max-width: 590px;
+}
+.pocketnet_iframe #lenta .share .message {
+  max-width: 590px;
+}
+.pocketnet_iframe #lenta .share .verticalVideo {
+  max-width: 350px;
+}
+.pocketnet_iframe #lenta .share .squareVideo {
+  max-width: 450px;
+}
+.pocketnet_iframe #lenta .share .debuginfo {
+  display: none !important;
+}
+.pocketnet_iframe #lenta .share.fullScreenVideo .squareVideo,
+.pocketnet_iframe #lenta .share.fullScreenVideo .verticalVideo {
+  max-width: none;
+}
+.pocketnet_iframe #lenta .shares {
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+.pocketnet_iframe #lenta .shares .authorgroup {
+  display: flex;
+  flex-direction: column;
+}
+.pocketnet_iframe #lenta .shares .authorgroup.blocking {
+  display: none;
+}
+.pocketnet_iframe #lenta .shares .work {
+  padding-left: 0;
+}
+.pocketnet_iframe #lenta .shares .ss {
+  padding: 1em;
+}
+.pocketnet_iframe #lenta .shares .ss span {
+  font-size: 2em;
+}
+.pocketnet_iframe #lenta .shares .showmorebyauthor {
+  text-align: center;
+  padding: 1em;
+  cursor: pointer;
+  font-size: 0.8em;
+  margin-bottom: 0.6em;
+  border-radius: 12px;
+  font-weight: 700;
+  text-decoration: underline;
+}
+.pocketnet_iframe #lenta .subc {
+  margin-top: 1em;
+}
+.pocketnet_iframe #lenta .subc button {
+  min-width: 220px;
+}
+.pocketnet_iframe #lenta .zero,
+.pocketnet_iframe #lenta .ended {
+  display: none;
+  padding: 4em 0;
+  padding-bottom: 4em;
+  color: rgb(var(--neutral-grad-4));
+  text-align: center;
+  background: rgb(var(--background-total-theme));
+  border-radius: 12px;
+}
+.pocketnet_iframe #lenta .zero .tou,
+.pocketnet_iframe #lenta .ended .tou {
+  padding: 2em 0;
+  color: rgb(var(--color-txt-ac));
+}
+.pocketnet_iframe #lenta .seemore,
+.pocketnet_iframe #lenta .loadprev,
+.pocketnet_iframe #lenta .loadmore {
+  background: rgb(var(--background-total-theme));
+  padding: 1em 0;
+  text-align: center;
+}
+.pocketnet_iframe #lenta .seemore button,
+.pocketnet_iframe #lenta .loadprev button,
+.pocketnet_iframe #lenta .loadmore button {
+  border-radius: 30px;
+  width: 350px;
+  max-width: 90%;
+}
+.pocketnet_iframe #lenta .loadmore {
+  display: none;
+}
+.pocketnet_iframe #lenta .loadprev {
+  display: none;
+  margin-bottom: 0.5em;
+}
+.pocketnet_iframe #lenta.showLoadmore {
+  display: none;
+}
+.pocketnet_iframe #lenta.showprev .loadprev {
+  display: block;
+}
+.pocketnet_iframe #lenta.loading .loadmore {
+  display: none;
+}
+.pocketnet_iframe #lenta.sharesZero .zero {
+  display: block;
+}
+.pocketnet_iframe #lenta.sharesZero .loadmore {
+  display: none;
+}
+.pocketnet_iframe #lenta.sharesZero .loader {
+  display: none;
+}
+.pocketnet_iframe #lenta .networkErrorMessage {
+  border-radius: 12px;
+  background: rgb(var(--background-total-theme));
+  display: none;
+  padding: 3em;
+  text-align: center;
+}
+.pocketnet_iframe #lenta .networkErrorMessage i {
+  font-size: 2em;
+  opacity: 0.5;
+}
+.pocketnet_iframe #lenta.networkError .networkErrorMessage {
+  display: block;
+}
+.pocketnet_iframe #lenta.networkError .loadmore {
+  display: none;
+}
+.pocketnet_iframe #lenta.networkError .loader {
+  display: none !important;
+}
+.pocketnet_iframe #lenta .seemore {
+  display: none;
+}
+.pocketnet_iframe #lenta.sharesEnded .ended {
+  display: block;
+}
+.pocketnet_iframe #lenta.sharesEnded .seemore {
+  display: block;
+}
+.pocketnet_iframe #lenta.sharesEnded .loadmore {
+  display: none;
+}
+.pocketnet_iframe #lenta.mainvideo .zero,
+.pocketnet_iframe #lenta.mainvideo .seemore,
+.pocketnet_iframe #lenta.mainvideo .loadprev,
+.pocketnet_iframe #lenta.mainvideo .loadmore,
+.pocketnet_iframe #lenta.mainvideo .ended {
+  background: transparent;
+}
+.pocketnet_iframe #lenta.mainvideo .loader {
+  background: transparent;
+}
+.pocketnet_iframe #lenta.mainvideo .share {
+  background: transparent;
+  padding: 0;
+  margin-bottom: 0;
+  overflow: hidden;
+  border-radius: 6px;
+}
+.pocketnet_iframe #lenta.mainvideo .share .sharecaption {
+  margin-bottom: 0;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.pocketnet_iframe #lenta.mainvideo .share .tags {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  display: block;
+}
+.pocketnet_iframe #lenta.mainvideo .share .tags .tag {
+  float: none;
+  display: inline;
+  margin-right: 0;
+}
+.pocketnet_iframe #lenta.mainvideo .share.hidden {
+  display: block !important;
+}
+.pocketnet_iframe #lenta.mainvideo .share .sharecaption {
+  white-space: inherit;
+  padding-right: 1em;
+}
+.pocketnet_iframe #lenta.mainvideo .share .sharecaption div {
+  font-size: 1em;
+  font-weight: 500;
+  text-transform: capitalize;
+}
+.pocketnet_iframe #lenta.mainvideo .share .sharecaption span {
+  font-size: 1em;
+}
+.pocketnet_iframe #lenta.mainvideo .share .meta {
+  padding-top: 0.5em;
+  margin-bottom: 0;
+}
+.pocketnet_iframe #lenta.mainvideo .share .commentsWrapperHb {
+  display: none;
+}
+.pocketnet_iframe #lenta.mainvideo .share .hideOnFullVideo {
+  display: none;
+}
+.pocketnet_iframe #lenta.mainvideo .share .videoviews {
+  display: none;
+}
+.pocketnet_iframe #lenta.mainvideo .share .showMore {
+  display: none;
+}
+.pocketnet_iframe #lenta.mainvideo .share .iconWrapper {
+  padding: 0;
+  z-index: 12;
+  width: 32px !important;
+}
+.pocketnet_iframe #lenta.mainvideo .share .iconWrapper .icon {
+  width: auto;
+  height: 32px !important;
+}
+.pocketnet_iframe #lenta.mainvideo .share .iconWrapper .icon .usericon {
+  width: 32px !important;
+  height: 32px !important;
+  line-height: 32px !important;
+  font-size: 1.5em;
+}
+.pocketnet_iframe #lenta.mainvideo .share .forurl {
+  height: 200px;
+  position: relative;
+  max-width: 350px;
+  margin: 0 auto;
+}
+.pocketnet_iframe #lenta.mainvideo .share .forurl.verticalVideo {
+  height: 530px;
+}
+.pocketnet_iframe #lenta.mainvideo .share .url {
+  margin-bottom: 0;
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+.pocketnet_iframe #lenta.mainvideo .share .url .videoWrapper {
+  height: 100%;
+}
+.pocketnet_iframe #lenta.mainvideo .share .url .videoWrapper .js-player {
+  height: 100%;
+}
+.pocketnet_iframe #lenta.mainvideo .share .urlcnt {
+  display: none;
+}
+.pocketnet_iframe #lenta.mainvideo .share .panel {
+  display: none;
+}
+.pocketnet_iframe #lenta.mainvideo .share .tags > div span {
+  opacity: 0.7;
+  text-decoration: none;
+}
+.pocketnet_iframe #lenta.mainvideo .share .shareTable {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+.pocketnet_iframe #lenta.mainvideo .share .shareTable .authorTable {
+  align-items: center;
+  display: flex;
+}
+.pocketnet_iframe #lenta.mainvideo .share .shareTable .authorTable > div.authorCell {
+  padding-left: 0.5em;
+  padding-right: 0;
+}
+.pocketnet_iframe #lenta.mainvideo .share .shareTable .authorTable > div a {
+  font-size: 0.9em;
+}
+.pocketnet_iframe #lenta.mainvideo .share .shareTable .authorTable > div.datetime {
+  padding-left: 0.5em;
+  opacity: 0.5;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.pocketnet_iframe #lenta.mainvideo .share .shareTable .authorTable > div.datetime span {
+  color: rgb(var(--text-color));
+}
+.pocketnet_iframe #lenta.mainvideo .share .shareTable .authorTable > div span {
+  font-size: 0.9em;
+  font-weight: 400;
+}
+.pocketnet_iframe #lenta.mainvideo .share .shareTable .metatable > div.metapanel {
+  width: 40px;
+  color: rgb(var(--text-color));
+}
+.pocketnet_iframe #lenta.mainvideo .share .shareTable .metatable > div.metapanel .metapanelitem {
+  opacity: 1;
+}
+.pocketnet_iframe #lenta.mainvideo .share .cntswrk {
+  margin-left: 0;
+  padding-left: 0;
+  padding-right: 0;
+}
+.pocketnet_iframe #lenta.mainvideo .share .paddingWrapper {
+  margin-left: 32px;
+  padding-left: 0.5em;
+}
+.pocketnet_iframe #lenta.mainvideo .shares .spsp {
+  font-weight: 400;
+}
+.pocketnet_iframe #lenta.mainvideo .shares .authorgroup {
+  float: left;
+  width: 33.3333%;
+}
+.pocketnet_iframe #lenta.mainvideo .shares .authorgroup .share {
+  padding: 15px;
+}
+.pocketnet_iframe #lenta.mainvideo .shares .authorgroup .anothercntswrk {
+  height: 100px;
+  overflow: hidden;
+}
+.pocketnet_iframe #lenta.mainvideo .shares .authorgroup:nth-child(3n+1) {
+  clear: left;
+}
+.pocketnet_iframe #lenta.mainvideo .shares .showmorebyauthor {
+  display: none;
+}
+.pocketnet_iframe #lenta.horizontal {
+  display: flex;
+  flex-grow: 1;
+}
+.pocketnet_iframe #lenta.horizontal .mlwr {
+  display: flex;
+  flex-grow: 1;
+  align-items: center;
+}
+.pocketnet_iframe #lenta.horizontal .mlwr .ended {
+  padding: 0.5em;
+}
+.pocketnet_iframe #lenta.horizontal .share {
+  flex-grow: 1;
+  width: 300px;
+  margin: 0;
+  margin-right: 0.5em;
+  margin-bottom: 0.5em;
+}
+.pocketnet_iframe #lenta.horizontal .share:nth-last-child(1) {
+  margin-right: 0;
+}
+.pocketnet_iframe #lenta.horizontal .shares {
+  display: flex !important;
+  flex-wrap: nowrap;
+  flex-grow: 1;
+  flex-direction: row;
+}
+.pocketnet_iframe #lenta.horizontal .loader,
+.pocketnet_iframe #lenta.horizontal .ended {
+  display: none !important;
+}
+.pocketnet_iframe #lenta.horizontal.mainvideo .share .forurl.verticalVideo {
+  height: 200px;
+}
+.pocketnet_iframe #lenta.horizontal.mainvideo .share .formeta {
+  padding-top: 0;
+}
+.pocketnet_iframe #lenta.horizontal.compact .shareSpacer {
+  height: 180px;
+}
+.pocketnet_iframe #lenta.horizontal.compact .share {
+  width: 230px;
+}
+.pocketnet_iframe #lenta.horizontal.compact .share .tags {
+  display: none;
+}
+.pocketnet_iframe #lenta.horizontal.compact .share .shareTable {
+  position: relative;
+}
+.pocketnet_iframe #lenta.horizontal.compact .share .shareTable .authorTable > div.datetime {
+  display: none;
+}
+.pocketnet_iframe #lenta.horizontal.compact .share .shareTable .authorTable > div.authorCell {
+  display: none;
+}
+.pocketnet_iframe #lenta.horizontal.compact .share .shareTable .metatable > div.metapanel .metapanelitem {
+  display: none;
+}
+.pocketnet_iframe #lenta.horizontal.compact .share .shareTable .anothercntswrk {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 40px;
+  display: flex;
+  flex-wrap: nowrap;
+  overflow: hidden;
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+}
+.pocketnet_iframe #lenta.horizontal.compact .share .shareTable .anothercntswrk .formeta {
+  width: 32px;
+  min-width: 32px;
+}
+.pocketnet_iframe #lenta.horizontal.compact .share .shareTable .anothercntswrk .meta {
+  padding-top: 0.125em;
+  margin-bottom: 0;
+}
+.pocketnet_iframe #lenta.horizontal.compact .share .shareTable .anothercntswrk .authorTable {
+  display: block;
+}
+.pocketnet_iframe #lenta.horizontal.compact .share .shareTable .anothercntswrk .paddingWrapper {
+  margin-left: 0;
+  padding-right: 0;
+  padding-left: 0.25em;
+}
+.pocketnet_iframe #lenta.horizontal.compact .share .shareTable .anothercntswrk .sharecaption {
+  max-height: 36px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  flex-grow: 1;
+  max-width: 200px;
+  padding-top: 0.25em;
+  padding-right: 0.5em;
+  font-size: 0.85em !important;
+}
+.pocketnet_iframe #lenta.horizontal.compact .share .shareTable .anothercntswrk .sharecaption .adr {
+  font-weight: 700;
+}
+.pocketnet_iframe #lenta.horizontal.compact.mainvideo .share .shareTable {
+  height: 180px;
+  padding-top: 0;
+}
+.pocketnet_iframe #lenta.horizontal.compact.mainvideo .share .forurl {
+  height: 140px;
+}
+.pocketnet_iframe #lenta.horizontal.compact.mainvideo .share .forurl.verticalVideo {
+  height: 140px;
+}
+@media only screen and (max-width: 1920px) {
+  .pocketnet_iframe #lenta .share .images {
+    max-width: none;
+  }
+  .pocketnet_iframe #lenta .share .showMore {
+    text-align: center;
+  }
+  .pocketnet_iframe #lenta .openoriginallabel {
+    display: none;
+  }
+}
+@media only screen and (max-width: 1920px) {
+  .pocketnet_iframe #lenta.horizontal.compact.mainvideo .shares .formeta {
+    margin-left: 0.25em;
+  }
+  .pocketnet_iframe #lenta .loadprev.fxdp {
+    position: fixed;
+    left: 0;
+    top: 110px;
+    z-index: 10;
+    right: 0;
+    background: transparent !important;
+    -moz-transition: 0.3s;
+    -o-transition: 0.3s;
+    -webkit-transition: 0.3s;
+    transition: 0.3s;
+    will-change: transform;
+    -webkit-backface-visibility: hidden;
+  }
+  .pocketnet_iframe #lenta .loadprev.fxdp button {
+    width: 260px;
+  }
+  .pocketnet_iframe html.scrollmodedown #lenta .loadprev.fxdp {
+    transform: translateY(-220px);
+  }
+}
+@media only screen and (max-width: 1180px) {
+  .pocketnet_iframe #lenta.mainvideo .shares .authorgroup {
+    width: 50%;
+  }
+}
+@media only screen and (max-width: 1920px) {
+  .pocketnet_iframe #lenta .loader {
+    padding: 1em;
+    text-align: center;
+  }
+  .pocketnet_iframe #lenta .shares {
+    overflow: hidden;
+  }
+  .pocketnet_iframe #lenta .shares .work {
+    padding: 0;
+  }
+  .pocketnet_iframe #lenta .shares .loadmore {
+    padding: 1em 0;
+    padding-bottom: 1em;
+  }
+  .pocketnet_iframe #lenta .shares .loadmore button {
+    width: 100%;
+  }
+  .pocketnet_iframe #lenta .shares .statswrapperExtended {
+    padding: 0.5em;
+  }
+  .pocketnet_iframe #lenta .shares .ss {
+    padding: 1em;
+  }
+  .pocketnet_iframe #lenta .shares .ss span {
+    font-size: 2em;
+  }
+  .pocketnet_iframe #lenta .share .squareVideo,
+  .pocketnet_iframe #lenta .share .verticalVideo {
+    max-width: none;
+  }
+  .pocketnet_iframe #lenta.mainvideo .share .cntswrk {
+    margin-left: 0;
+    padding-left: 0;
+    padding-right: 0;
+  }
+  .pocketnet_iframe #lenta.mainvideo .share .formeta {
+    padding-top: 1em;
+    margin-left: 1em;
+  }
+  .pocketnet_iframe #lenta.mainvideo .shares .authorgroup {
+    width: 50%;
+  }
+  .pocketnet_iframe #lenta.mainvideo .shares .authorgroup {
+    width: 100%;
+    padding: 0;
+    margin-bottom: 1em;
+  }
+  .pocketnet_iframe #lenta.mainvideo .shares .authorgroup .share {
+    padding: 0;
+  }
+  .pocketnet_iframe #lenta.mainvideo .shares .authorgroup .anothercntswrk {
+    max-height: none;
+    height: auto;
+  }
+  .pocketnet_iframe html.tablet #lenta.mainvideo .shares .authorgroup {
+    width: 50%;
+  }
+  .pocketnet_iframe html.tablet #lenta.mainvideo .shares .authorgroup .share {
+    padding: 15px;
+  }
+  .pocketnet_iframe html.tablet #lenta.mainvideo .shares .authorgroup .anothercntswrk {
+    height: 100px;
+    overflow: hidden;
+  }
+  .pocketnet_iframe html.tablet #lenta.mainvideo .share .paddingWrapper {
+    margin-left: 46px;
+  }
+  .pocketnet_iframe .dialog.donation .thwrapper {
+    padding-left: 0;
+    padding-right: 0;
+  }
+  .pocketnet_iframe .dialog.donation .thwrapper .addr {
+    font-size: 0.9em;
+  }
+}
+.pocketnet_iframe html.mobileview #lenta .share .jsPlayerLoading,
+.pocketnet_iframe html.mobileview #lenta .share .video-js {
+  max-height: calc(var(--vh, 1vh) * 80);
+}
+.pocketnet_iframe html.mobileview #lenta .fullScreenVideo .video-js .vjs-volume-control {
+  display: none;
+}
+.pocketnet_iframe html.mobileview.ios #lenta .share .jsPlayerLoading,
+.pocketnet_iframe html.mobileview.ios #lenta .share .video-js {
+  max-height: 80vh;
+}
+.pocketnet_iframe html.mobileview #lenta .fullScreenVideo {
+  will-change: transform;
+  -webkit-backface-visibility: hidden;
+}
+.pocketnet_iframe html.mobileview.fullscreen #lenta .fullScreenVideo #comments {
+  display: none;
 }
 .pocketnet_iframe #transactionview .workd {
   background: rgb(var(--background-secondary-theme));
@@ -261,6 +938,9 @@
 .pocketnet_iframe #comments .usericon .letter {
   font-size: 1.5em;
 }
+.pocketnet_iframe #comments [profile] {
+  cursor: pointer;
+}
 .pocketnet_iframe #comments .repliesloaderWrapper,
 .pocketnet_iframe #comments .loaderWrapper {
   padding: 1.5em;
@@ -273,6 +953,10 @@
   vertical-align: bottom;
   display: inline-block;
   white-space: nowrap;
+}
+.pocketnet_iframe #comments .panel {
+  height: auto;
+  contain: none;
 }
 .pocketnet_iframe #comments .donateEmbWr .donatecntWrapper {
   padding-top: 1em;
@@ -557,18 +1241,32 @@
 .pocketnet_iframe #comments .list .comment.mycomment > div.commentPaddingWrapper > div.commentWrapper > div.commentBody > div.cbodyWrapper .commentpanel .upvoteComment,
 .pocketnet_iframe #comments .list .comment.rated > div.commentPaddingWrapper > div.commentWrapper > div.commentBody > div.cbodyWrapper .commentpanel .upvoteComment {
   cursor: default;
-  color: rgb(var(--neutral-grad-1));
+  color: rgb(var(--neutral-grad-2));
 }
 .pocketnet_iframe #comments .list .comment.mycomment > div.commentPaddingWrapper > div.commentWrapper > div.commentBody > div.cbodyWrapper .commentpanel .upvoteComment.ratedScore,
 .pocketnet_iframe #comments .list .comment.rated > div.commentPaddingWrapper > div.commentWrapper > div.commentBody > div.cbodyWrapper .commentpanel .upvoteComment.ratedScore {
   color: rgb(var(--color-bg-ac-bright));
 }
 .pocketnet_iframe #comments .list .comment.deleted .commentmessage {
-  color: rgb(var(--neutral-grad-1));
+  color: rgb(var(--neutral-grad-2));
 }
 .pocketnet_iframe #comments .list .comment.newcommentsn,
 .pocketnet_iframe #comments .list .comment.newcomments {
   color: rgb(var(--color-txt-ac-1));
+}
+.pocketnet_iframe #comments .list .comment.hiddenComment .commentimages,
+.pocketnet_iframe #comments .list .comment.hiddenComment .commentmessage {
+  display: none;
+}
+.pocketnet_iframe #comments .list .comment.hiddenComment .hiddenCommentLabel {
+  display: block;
+  color: rgb(var(--neutral-grad-2));
+}
+.pocketnet_iframe #comments .list .comment .hiddenCommentLabel .ghost {
+  padding-left: 0;
+}
+.pocketnet_iframe #comments .list .comment .hiddenCommentLabel {
+  display: none;
 }
 .pocketnet_iframe #comments .list .comment.firstcomment {
   display: none;
@@ -623,13 +1321,15 @@
 .pocketnet_iframe #comments .list .comment.temptransaction.commentnotedited .commentpanel .items > div.reply {
   display: none;
 }
-.pocketnet_iframe #comments .list .commentWrapper > div {
-  vertical-align: top;
+.pocketnet_iframe #comments .list .commentWrapper {
+  display: flex;
+  justify-content: space-between;
 }
 .pocketnet_iframe #comments .list .commentWrapper > div.iconWrapper {
   position: relative;
   font-size: 0.8em;
   width: 45px;
+  min-width: 45px;
   padding-top: 1em;
   float: none;
   padding-left: 0;
@@ -667,6 +1367,7 @@
 }
 .pocketnet_iframe #comments .list .commentWrapper > div.commentBody {
   padding-left: 0.5em;
+  flex-grow: 1;
 }
 .pocketnet_iframe #comments .list .commentWrapper > div.commentBody .cbodyWrapper {
   padding-bottom: 1em;
@@ -688,12 +1389,10 @@
   font-size: 0.8em;
 }
 .pocketnet_iframe #comments .list .metatable {
-  height: auto;
+  padding-top: 0.75em;
 }
 .pocketnet_iframe #comments .list .metatable > div {
-  vertical-align: middle;
-  padding: 1em 0;
-  padding-bottom: 0;
+  padding: 0;
 }
 .pocketnet_iframe #comments .list .metatable > div span {
   font-size: 0.9em;
@@ -861,6 +1560,7 @@
 }
 .pocketnet_iframe #comments .commentimages .imagesContainer {
   display: flex;
+  flex-wrap: wrap;
   gap: 0.25em;
 }
 .pocketnet_iframe #comments .commentimages .imagesContainer.one .imagesWrapper {
@@ -1001,16 +1701,22 @@
 .pocketnet_iframe #comments .post .postbody .closeAnswer:hover {
   color: rgba(var(--color-txt-ac));
 }
+.pocketnet_iframe #comments .edit .posttable,
+.pocketnet_iframe #comments .answer .posttable,
+.pocketnet_iframe #comments .post .posttable {
+  display: flex;
+  justify-content: space-between;
+}
 .pocketnet_iframe #comments .edit .posttable > div,
 .pocketnet_iframe #comments .answer .posttable > div,
 .pocketnet_iframe #comments .post .posttable > div {
-  vertical-align: top;
   padding: 1em 0.5em;
 }
 .pocketnet_iframe #comments .edit .posttable > div.iconWrapper,
 .pocketnet_iframe #comments .answer .posttable > div.iconWrapper,
 .pocketnet_iframe #comments .post .posttable > div.iconWrapper {
   width: 45px;
+  min-width: 45px;
   font-size: 0.8em;
   padding-top: 1.15em;
   padding-left: 0;
@@ -1026,6 +1732,8 @@
 .pocketnet_iframe #comments .answer .posttable > div.lcpp,
 .pocketnet_iframe #comments .post .posttable > div.lcpp {
   padding-right: 0;
+  min-width: 0;
+  flex-grow: 1;
 }
 .pocketnet_iframe #comments .edit .posttable > div.reputationFailCell,
 .pocketnet_iframe #comments .answer .posttable > div.reputationFailCell,
@@ -1048,6 +1756,7 @@
 .pocketnet_iframe #comments .answer .posttable > div.postCellWrapper,
 .pocketnet_iframe #comments .post .posttable > div.postCellWrapper {
   width: 38px;
+  min-width: 38px;
 }
 .pocketnet_iframe #comments .edit .posttable > div.closeWrapper .closeEdit,
 .pocketnet_iframe #comments .answer .posttable > div.closeWrapper .closeEdit,
@@ -1176,6 +1885,11 @@
 .pocketnet_iframe #comments .post .postbody.sending .posttable > div.postCellWrapper .postaction .preloaderWrapper {
   display: block;
 }
+.pocketnet_iframe #comments .edit .postbody.hastext .posttable > div.postCellWrapper .postaction .icon,
+.pocketnet_iframe #comments .answer .postbody.hastext .posttable > div.postCellWrapper .postaction .icon,
+.pocketnet_iframe #comments .post .postbody.hastext .posttable > div.postCellWrapper .postaction .icon {
+  color: rgb(var(--color-bg-ac-bright));
+}
 .pocketnet_iframe #comments .edit .emojionearea,
 .pocketnet_iframe #comments .answer .emojionearea,
 .pocketnet_iframe #comments .post .emojionearea,
@@ -1210,6 +1924,7 @@
   top: 7px;
   right: 7px;
   color: rgb(var(--neutral-grad-2));
+  cursor: pointer;
 }
 .pocketnet_iframe #comments .edit .emojionearea-editor,
 .pocketnet_iframe #comments .answer .emojionearea-editor,
@@ -1431,13 +2146,14 @@
   }
   .pocketnet_iframe #comments .list .comment .answer .postbody {
     padding-left: 0.5em;
-    padding-right: 0;
+    padding-right: 0.3em;
   }
   .pocketnet_iframe #comments .list .commentWrapper > div {
     vertical-align: top;
   }
   .pocketnet_iframe #comments .list .commentWrapper > div.iconWrapper {
     width: 36px;
+    min-width: 36px;
     padding-top: 0.5em;
   }
   .pocketnet_iframe #comments .list .commentWrapper > div.iconWrapper .usericon {
@@ -1501,9 +2217,6 @@
   .pocketnet_iframe #comments .list .comment {
     margin-bottom: 0.5em;
   }
-  .pocketnet_iframe #comments .list .metatable > div {
-    padding-top: 0.75em !important;
-  }
   .pocketnet_iframe #comments .list .metatable > div span {
     font-size: 1em;
   }
@@ -1533,7 +2246,7 @@
   .pocketnet_iframe #comments .answer,
   .pocketnet_iframe #comments .post {
     padding-left: 0.5em;
-    padding-right: 0;
+    padding-right: 0.3em;
   }
   .pocketnet_iframe #comments .answer .postbody,
   .pocketnet_iframe #comments .post .postbody {
@@ -1565,11 +2278,6 @@
   .pocketnet_iframe #comments .post .posttable > div.postCellWrapper .postaction .icon {
     text-align: center;
   }
-  .pocketnet_iframe #comments .edit.active .newcommentimages.active,
-  .pocketnet_iframe #comments .answer.active .newcommentimages.active,
-  .pocketnet_iframe #comments .post.active .newcommentimages.active {
-    display: none !important;
-  }
   .pocketnet_iframe #comments .edit.active .postbody .posttable > div.lcpp,
   .pocketnet_iframe #comments .answer.active .postbody .posttable > div.lcpp,
   .pocketnet_iframe #comments .post.active .postbody .posttable > div.lcpp {
@@ -1599,977 +2307,78 @@
     display: none;
   }
 }
-.pocketnet_iframe #lenta.destroying {
-  display: none;
+.pocketnet_iframe #channel .emptychannel {
+  text-align: center;
 }
-.pocketnet_iframe #lenta.openapi .loadmore {
-  display: none !important;
-}
-.pocketnet_iframe #lenta.rebuilding {
-  -moz-transition: 0.3s;
-  -o-transition: 0.3s;
-  -webkit-transition: 0.3s;
-  transition: 0.3s;
-  opacity: 0.3;
-}
-.pocketnet_iframe #lenta .work {
-  padding-right: 0;
-}
-.pocketnet_iframe #lenta .mlwr {
-  position: relative;
-}
-.pocketnet_iframe #lenta .loader {
+.pocketnet_iframe #channel .channel {
   background: rgb(var(--background-total-theme));
-  padding: 3em 0;
-  display: none;
-  border-radius: 12px;
+  padding: 0 0.5em;
 }
-.pocketnet_iframe #lenta.loading .loader {
-  display: block;
+.pocketnet_iframe #channel .channel .userinfo {
+  padding: 0.5em 0;
+  display: flex;
 }
-.pocketnet_iframe #lenta .panel {
-  overflow: hidden;
+.pocketnet_iframe #channel .channel .userinfo .name {
+  font-size: 1.75em;
+  font-weight: 700;
+  padding-bottom: 0.5em;
 }
-.pocketnet_iframe #lenta .adr {
-  max-width: 230px;
+.pocketnet_iframe #channel .channel .userinfo .adr {
+  max-width: 500px;
   overflow: hidden;
   text-overflow: ellipsis;
   vertical-align: bottom;
   display: inline-block;
-  white-space: nowrap;
 }
-.pocketnet_iframe #lenta .authorCell a,
-.pocketnet_iframe #lenta .sbtnxs,
-.pocketnet_iframe #lenta .spsp {
-  display: inline-block;
+.pocketnet_iframe #channel .channel .userinfo .nameinfo {
+  padding-left: 1em;
+  flex-grow: 2;
 }
-.pocketnet_iframe #lenta .circularprogress {
-  overflow: hidden;
-  height: 0;
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 0;
-}
-.pocketnet_iframe #lenta .circularprogress .circularprogressWrapper {
-  padding: 1em;
-  text-align: center;
-}
-.pocketnet_iframe #lenta .circularprogress .circularprogressWrapper canvas {
-  margin: 0 auto;
-}
-.pocketnet_iframe #lenta .share .sharecnt .removeDescription {
-  display: none;
-  padding-bottom: 1.5em;
-  color: rgb(var(--neutral-grad-1));
-}
-.pocketnet_iframe #lenta .share .sharecnt.deleted .cntscontent,
-.pocketnet_iframe #lenta .share .sharecnt.deleted .repostWrapper,
-.pocketnet_iframe #lenta .share .sharecnt.deleted .commentsWrapperHb,
-.pocketnet_iframe #lenta .share .sharecnt.deleted .metapanel,
-.pocketnet_iframe #lenta .share .sharecnt.deleted .sys {
-  display: none !important;
-}
-.pocketnet_iframe #lenta .share .sharecnt.deleted .removeDescription {
-  display: block;
-}
-.pocketnet_iframe #lenta .share {
-  margin-bottom: 0.5em;
-  padding-bottom: 0;
-  border-radius: 12px;
-}
-.pocketnet_iframe #lenta .share .shareSpacer {
-  height: 400px;
-  padding: 0 2em;
-}
-.pocketnet_iframe #lenta .share .images {
-  max-width: 590px;
-}
-.pocketnet_iframe #lenta .share .sharecaption {
-  max-width: 590px;
-}
-.pocketnet_iframe #lenta .share .message {
-  max-width: 590px;
-}
-.pocketnet_iframe #lenta .share .verticalVideo {
-  max-width: 350px;
-}
-.pocketnet_iframe #lenta .share .squareVideo {
-  max-width: 450px;
-}
-.pocketnet_iframe #lenta .share .debuginfo {
-  display: none !important;
-}
-.pocketnet_iframe #lenta .share.fullScreenVideo .squareVideo,
-.pocketnet_iframe #lenta .share.fullScreenVideo .verticalVideo {
-  max-width: none;
-}
-.pocketnet_iframe #lenta .shares {
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-}
-.pocketnet_iframe #lenta .shares .authorgroup {
-  display: flex;
-  flex-direction: column;
-}
-.pocketnet_iframe #lenta .shares .authorgroup.blocking {
-  display: none;
-}
-.pocketnet_iframe #lenta .shares .work {
-  padding-left: 0;
-}
-.pocketnet_iframe #lenta .shares .ss {
-  padding: 1em;
-}
-.pocketnet_iframe #lenta .shares .ss span {
-  font-size: 2em;
-}
-.pocketnet_iframe #lenta .shares .showmorebyauthor {
-  text-align: center;
-  padding: 1em;
-  cursor: pointer;
-  font-size: 0.8em;
-  margin-bottom: 0.6em;
-  border-radius: 12px;
-}
-.pocketnet_iframe #lenta .subc {
-  margin-top: 1em;
-}
-.pocketnet_iframe #lenta .subc button {
-  min-width: 220px;
-}
-.pocketnet_iframe #lenta .zero,
-.pocketnet_iframe #lenta .ended {
-  display: none;
-  padding: 4em 0;
-  padding-bottom: 4em;
-  color: rgb(var(--neutral-grad-4));
-  text-align: center;
-  background: rgb(var(--background-total-theme));
-}
-.pocketnet_iframe #lenta .zero .tou,
-.pocketnet_iframe #lenta .ended .tou {
-  padding: 2em 0;
-  color: rgb(var(--color-txt-ac));
-}
-.pocketnet_iframe #lenta .seemore,
-.pocketnet_iframe #lenta .loadprev,
-.pocketnet_iframe #lenta .loadmore {
-  background: rgb(var(--background-total-theme));
-  padding: 1em 0;
-  text-align: center;
-}
-.pocketnet_iframe #lenta .seemore button,
-.pocketnet_iframe #lenta .loadprev button,
-.pocketnet_iframe #lenta .loadmore button {
-  border-radius: 30px;
-  width: 350px;
-  max-width: 90%;
-}
-.pocketnet_iframe #lenta .loadmore {
-  display: none;
-}
-.pocketnet_iframe #lenta .loadprev {
-  display: none;
-  margin-bottom: 0.5em;
-}
-.pocketnet_iframe #lenta.showLoadmore {
-  display: none;
-}
-.pocketnet_iframe #lenta.showprev .loadprev {
-  display: block;
-}
-.pocketnet_iframe #lenta.loading .loadmore {
-  display: none;
-}
-.pocketnet_iframe #lenta.sharesZero .zero {
-  display: block;
-}
-.pocketnet_iframe #lenta.sharesZero .loadmore {
-  display: none;
-}
-.pocketnet_iframe #lenta .networkErrorMessage {
-  display: none;
-  padding: 3em;
-  text-align: center;
-}
-.pocketnet_iframe #lenta .networkErrorMessage i {
-  font-size: 2em;
-  color: rgba(var(--color-txt-ac), 0.15);
-}
-.pocketnet_iframe #lenta.networkError .networkErrorMessage {
-  display: block;
-}
-.pocketnet_iframe #lenta.networkError .loadmore {
-  display: none;
-}
-.pocketnet_iframe #lenta.networkError .loader {
-  display: none !important;
-}
-.pocketnet_iframe #lenta .seemore {
-  display: none;
-}
-.pocketnet_iframe #lenta.sharesEnded .ended {
-  display: block;
-}
-.pocketnet_iframe #lenta.sharesEnded .seemore {
-  display: block;
-}
-.pocketnet_iframe #lenta.sharesEnded .loadmore {
-  display: none;
-}
-.pocketnet_iframe #lenta.mainvideo .zero,
-.pocketnet_iframe #lenta.mainvideo .seemore,
-.pocketnet_iframe #lenta.mainvideo .loadprev,
-.pocketnet_iframe #lenta.mainvideo .loadmore,
-.pocketnet_iframe #lenta.mainvideo .ended {
-  background: transparent;
-}
-.pocketnet_iframe #lenta.mainvideo .loader {
-  background: transparent;
-}
-.pocketnet_iframe #lenta.mainvideo .share {
-  background: transparent;
-  padding: 0;
-  margin-bottom: 0;
-  overflow: hidden;
-  border-radius: 6px;
-}
-.pocketnet_iframe #lenta.mainvideo .share .sharecaption {
-  margin-bottom: 0;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-}
-.pocketnet_iframe #lenta.mainvideo .share .tags {
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  display: block;
-}
-.pocketnet_iframe #lenta.mainvideo .share .tags .tag {
-  float: none;
-  display: inline;
-  margin-right: 0;
-}
-.pocketnet_iframe #lenta.mainvideo .share.hidden {
-  display: block !important;
-}
-.pocketnet_iframe #lenta.mainvideo .share .sharecaption {
-  white-space: inherit;
-  padding-right: 1em;
-}
-.pocketnet_iframe #lenta.mainvideo .share .sharecaption div {
-  font-size: 1em;
-  font-weight: 500;
-  text-transform: capitalize;
-}
-.pocketnet_iframe #lenta.mainvideo .share .meta {
-  padding-top: 0.5em;
-  margin-bottom: 0;
-}
-.pocketnet_iframe #lenta.mainvideo .share .commentsWrapperHb {
-  display: none;
-}
-.pocketnet_iframe #lenta.mainvideo .share .hideOnFullVideo {
-  display: none;
-}
-.pocketnet_iframe #lenta.mainvideo .share .videoviews {
-  display: none;
-}
-.pocketnet_iframe #lenta.mainvideo .share .showMore {
-  display: none;
-}
-.pocketnet_iframe #lenta.mainvideo .share .iconWrapper {
-  padding: 0;
-  z-index: 12;
-  width: 32px !important;
-}
-.pocketnet_iframe #lenta.mainvideo .share .iconWrapper .icon {
-  width: auto;
-  height: 32px !important;
-}
-.pocketnet_iframe #lenta.mainvideo .share .iconWrapper .icon .usericon {
-  width: 32px !important;
-  height: 32px !important;
-  line-height: 32px !important;
-  font-size: 1.5em;
-}
-.pocketnet_iframe #lenta.mainvideo .share .forurl {
-  height: 200px;
-  position: relative;
-}
-.pocketnet_iframe #lenta.mainvideo .share .forurl.verticalVideo {
-  height: 530px;
-}
-.pocketnet_iframe #lenta.mainvideo .share .url {
-  margin-bottom: 0;
-  height: 100%;
-  width: 100%;
-  position: absolute;
-  left: 0;
-  top: 0;
-}
-.pocketnet_iframe #lenta.mainvideo .share .url .videoWrapper {
-  height: 100%;
-}
-.pocketnet_iframe #lenta.mainvideo .share .url .videoWrapper .js-player {
-  height: 100%;
-}
-.pocketnet_iframe #lenta.mainvideo .share .urlcnt {
-  display: none;
-}
-.pocketnet_iframe #lenta.mainvideo .share .panel {
-  display: none;
-}
-.pocketnet_iframe #lenta.mainvideo .share .tags > div span {
-  opacity: 0.7;
-  text-decoration: none;
-}
-.pocketnet_iframe #lenta.mainvideo .share .shareTable {
-  padding-top: 0;
-  padding-bottom: 0;
-}
-.pocketnet_iframe #lenta.mainvideo .share .shareTable .authorTable {
-  align-items: center;
-  display: flex;
-}
-.pocketnet_iframe #lenta.mainvideo .share .shareTable .authorTable > div.authorCell {
-  padding-left: 0.5em;
-  padding-right: 0;
-}
-.pocketnet_iframe #lenta.mainvideo .share .shareTable .authorTable > div a {
-  font-size: 0.9em;
-}
-.pocketnet_iframe #lenta.mainvideo .share .shareTable .authorTable > div.datetime {
-  padding-left: 0.5em;
-  opacity: 0.5;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-}
-.pocketnet_iframe #lenta.mainvideo .share .shareTable .authorTable > div.datetime span {
-  color: rgb(var(--text-color));
-}
-.pocketnet_iframe #lenta.mainvideo .share .shareTable .authorTable > div span {
-  font-size: 0.9em;
-  font-weight: 400;
-}
-.pocketnet_iframe #lenta.mainvideo .share .shareTable .metatable > div.metapanel {
-  width: 40px;
-  color: rgb(var(--text-color));
-}
-.pocketnet_iframe #lenta.mainvideo .share .shareTable .metatable > div.metapanel .metapanelitem {
-  opacity: 1;
-}
-.pocketnet_iframe #lenta.mainvideo .share .cntswrk {
-  margin-left: 0;
-  padding-left: 0;
-  padding-right: 0;
-}
-.pocketnet_iframe #lenta.mainvideo .share .paddingWrapper {
-  margin-left: 32px;
-  padding-left: 0.5em;
-}
-.pocketnet_iframe #lenta.mainvideo .shares .spsp {
-  font-weight: 400;
-}
-.pocketnet_iframe #lenta.mainvideo .shares .authorgroup {
-  float: left;
-  width: 33.3333%;
-}
-.pocketnet_iframe #lenta.mainvideo .shares .authorgroup .share {
-  padding: 15px;
-}
-.pocketnet_iframe #lenta.mainvideo .shares .authorgroup .anothercntswrk {
-  height: 100px;
-  overflow: hidden;
-}
-.pocketnet_iframe #lenta.mainvideo .shares .authorgroup:nth-child(3n+1) {
-  clear: left;
-}
-.pocketnet_iframe #lenta.mainvideo .shares .showmorebyauthor {
-  display: none;
-}
-.pocketnet_iframe #lenta.horizontal {
-  display: flex;
-  flex-grow: 1;
-}
-.pocketnet_iframe #lenta.horizontal .mlwr {
-  display: flex;
-  flex-grow: 1;
-  align-items: center;
-}
-.pocketnet_iframe #lenta.horizontal .mlwr .ended {
-  padding: 0.5em;
-}
-.pocketnet_iframe #lenta.horizontal .share {
-  flex-grow: 1;
-  width: 300px;
-  margin: 0;
-  margin-right: 0.5em;
-  margin-bottom: 0.5em;
-}
-.pocketnet_iframe #lenta.horizontal .share:nth-last-child(1) {
-  margin-right: 0;
-}
-.pocketnet_iframe #lenta.horizontal .shares {
-  display: flex !important;
-  flex-wrap: nowrap;
-  flex-grow: 1;
-  flex-direction: row;
-}
-.pocketnet_iframe #lenta.horizontal .loader,
-.pocketnet_iframe #lenta.horizontal .ended {
-  display: none !important;
-}
-.pocketnet_iframe #lenta.horizontal.mainvideo .share .forurl.verticalVideo {
-  height: 200px;
-}
-.pocketnet_iframe #lenta.horizontal.mainvideo .share .formeta {
-  padding-top: 0;
-}
-.pocketnet_iframe #lenta.horizontal.compact .shareSpacer {
-  height: 180px;
-}
-.pocketnet_iframe #lenta.horizontal.compact .share {
-  width: 230px;
-}
-.pocketnet_iframe #lenta.horizontal.compact .share .tags {
-  display: none;
-}
-.pocketnet_iframe #lenta.horizontal.compact .share .shareTable {
-  position: relative;
-}
-.pocketnet_iframe #lenta.horizontal.compact .share .shareTable .authorTable > div.datetime {
-  display: none;
-}
-.pocketnet_iframe #lenta.horizontal.compact .share .shareTable .authorTable > div.authorCell {
-  display: none;
-}
-.pocketnet_iframe #lenta.horizontal.compact .share .shareTable .metatable > div.metapanel .metapanelitem {
-  display: none;
-}
-.pocketnet_iframe #lenta.horizontal.compact .share .shareTable .anothercntswrk {
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  height: 40px;
-  display: flex;
-  flex-wrap: nowrap;
-  overflow: hidden;
-  flex-direction: row;
-  align-items: center;
-  width: 100%;
-}
-.pocketnet_iframe #lenta.horizontal.compact .share .shareTable .anothercntswrk .formeta {
-  width: 32px;
-  min-width: 32px;
-}
-.pocketnet_iframe #lenta.horizontal.compact .share .shareTable .anothercntswrk .meta {
-  padding-top: 0.125em;
-  margin-bottom: 0;
-}
-.pocketnet_iframe #lenta.horizontal.compact .share .shareTable .anothercntswrk .authorTable {
-  display: block;
-}
-.pocketnet_iframe #lenta.horizontal.compact .share .shareTable .anothercntswrk .paddingWrapper {
-  margin-left: 0;
-  padding-right: 0;
-  padding-left: 0.25em;
-}
-.pocketnet_iframe #lenta.horizontal.compact .share .shareTable .anothercntswrk .sharecaption {
-  max-height: 36px;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  overflow: hidden;
-  flex-grow: 1;
-  max-width: 200px;
-  padding-top: 0.25em;
-  padding-right: 0.5em;
-  font-size: 0.85em !important;
-}
-.pocketnet_iframe #lenta.horizontal.compact .share .shareTable .anothercntswrk .sharecaption .adr {
-  font-weight: 700;
-}
-.pocketnet_iframe #lenta.horizontal.compact.mainvideo .share .shareTable {
-  height: 180px;
-  padding-top: 0;
-}
-.pocketnet_iframe #lenta.horizontal.compact.mainvideo .share .forurl {
-  height: 140px;
-}
-.pocketnet_iframe #lenta.horizontal.compact.mainvideo .share .forurl.verticalVideo {
-  height: 140px;
-}
-.pocketnet_iframe #lenta .share .sharearticle {
-  opacity: 0;
-  -moz-transition: opacity 0.1s;
-  -o-transition: opacity 0.1s;
-  -webkit-transition: opacity 0.1s;
-  transition: opacity 0.1s;
-}
-.pocketnet_iframe #lenta .share .sharearticle.ready {
-  opacity: 1;
-}
-.pocketnet_iframe #lenta .share .sharearticle .shareTable {
-  padding-top: 0;
-  padding-bottom: 0;
-}
-.pocketnet_iframe #lenta .share .sharearticle .shareBgCaption .author,
-.pocketnet_iframe #lenta .share .sharearticle .articleend .author {
-  margin-top: 1em;
-  margin-bottom: 0.5em;
-}
-.pocketnet_iframe #lenta .share .sharearticle .shareBgCaption .author i,
-.pocketnet_iframe #lenta .share .sharearticle .articleend .author i {
-  display: none;
-}
-.pocketnet_iframe #lenta .share .sharearticle .shareBgCaption .author .notificationturn,
-.pocketnet_iframe #lenta .share .sharearticle .articleend .author .notificationturn {
-  display: none !important;
-}
-.pocketnet_iframe #lenta .share .sharearticle .shareBgCaption .forstars .itemwr,
-.pocketnet_iframe #lenta .share .sharearticle .articleend .forstars .itemwr {
-  display: flex;
-  flex-direction: column-reverse;
-  align-items: center;
-}
-.pocketnet_iframe #lenta .share .sharearticle .shareBgCaption .forstars .itemwr i,
-.pocketnet_iframe #lenta .share .sharearticle .articleend .forstars .itemwr i {
-  text-align: center;
-}
-.pocketnet_iframe #lenta .share .sharearticle .shareBgCaption .forstars .starWrapper,
-.pocketnet_iframe #lenta .share .sharearticle .articleend .forstars .starWrapper {
-  text-align: center;
-}
-.pocketnet_iframe #lenta .share .sharearticle .shareBgCaption .forstars .count span,
-.pocketnet_iframe #lenta .share .sharearticle .articleend .forstars .count span {
-  font-size: 2em;
-}
-.pocketnet_iframe #lenta .share .sharearticle .shareBgCaption .forstars .count span,
-.pocketnet_iframe #lenta .share .sharearticle .articleend .forstars .count span {
-  font-weight: 700;
-  font-family: Nunito Sans;
-}
-.pocketnet_iframe #lenta .share .sharearticle .shareBgCaption .sys,
-.pocketnet_iframe #lenta .share .sharearticle .articleend .sys {
-  text-align: center;
-}
-.pocketnet_iframe #lenta .share .sharearticle .shareBgCaption .buttonOpenWrapper,
-.pocketnet_iframe #lenta .share .sharearticle .articleend .buttonOpenWrapper {
+.pocketnet_iframe #channel .channel .userinfo .openprofilebuttonwrapper {
   padding-bottom: 1em;
+}
+.pocketnet_iframe #channel .channel .userinfo .openprofilebutton {
+  min-width: 200px;
+}
+.pocketnet_iframe #channel .channel .userinfo .additional {
+  margin-top: 0.5em;
   padding-top: 1em;
-}
-.pocketnet_iframe #lenta .share .sharearticle .shareBgCaption .buttonOpenWrapper button,
-.pocketnet_iframe #lenta .share .sharearticle .articleend .buttonOpenWrapper button {
-  width: 130px;
-  border-radius: 2px;
-  background: rgba(var(--color-shadow-base), 0.1);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  border: 1px solid transparent !important;
-}
-.pocketnet_iframe #lenta .share .sharearticle .shareBgCaption .buttonOpenWrapper button:hover,
-.pocketnet_iframe #lenta .share .sharearticle .articleend .buttonOpenWrapper button:hover {
-  background: rgba(var(--color-shadow-base), 0.01);
-}
-.pocketnet_iframe #lenta .share .sharearticle .shareBgCaption .divider,
-.pocketnet_iframe #lenta .share .sharearticle .articleend .divider {
-  margin: 0 auto;
-  margin-bottom: 0.5em;
-  height: 1px;
-  width: 110px;
-  background: rgb(var(--background-total-theme));
-}
-.pocketnet_iframe #lenta .share .sharearticle .shareBgCaption .tags,
-.pocketnet_iframe #lenta .share .sharearticle .articleend .tags {
-  justify-content: center;
-  max-width: none;
-}
-.pocketnet_iframe #lenta .share .sharearticle .shareBgCaption .tags div span,
-.pocketnet_iframe #lenta .share .sharearticle .articleend .tags div span {
-  color: rgb(var(--text-on-bg-ac-color));
-}
-.pocketnet_iframe #lenta .share .sharearticle .shareBgCaption {
-  height: 425px;
-  position: relative;
-}
-.pocketnet_iframe #lenta .share .sharearticle .shareBgCaption .blackmatte {
-  background: #000;
-  background: linear-gradient(0, #000 0, rgba(255, 255, 255, 0) 100%);
-}
-.pocketnet_iframe #lenta .share .sharearticle .shareBgCaption .captioncnt {
   padding-bottom: 1em;
+  border-top: 1px solid rgb(var(--neutral-grad-0));
+}
+.pocketnet_iframe #channel .channel .panel {
+  margin: 0 auto;
+  max-width: 600px;
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
-  z-index: 1;
-  color: rgb(var(--text-on-bg-ac-color));
-  text-align: center;
-  overflow: hidden;
 }
-.pocketnet_iframe #lenta .share .sharearticle .shareBgCaption .captioncnt .sharecaption {
-  font-size: 3em;
-  font-family: Georgia,serif;
-  max-width: 85%;
-  margin: 0 auto;
-  color: rgb(var(--text-on-bg-ac-color));
-  max-height: 150px;
-  overflow-x: hidden;
-  overflow-y: auto;
-  text-overflow: ellipsis;
-  overscroll-behavior: auto;
-}
-.pocketnet_iframe #lenta .share .sharearticle .shareBgCaption .sys span {
-  color: rgb(var(--text-on-bg-shadow-color));
-}
-.pocketnet_iframe #lenta .share .sharearticle .shareBgCaption .icon .usericon {
-  margin: 0 auto;
-  position: relative;
-}
-.pocketnet_iframe #lenta .share .sharearticle .shareBgCaption.showtext .icon {
-  position: absolute;
-  bottom: -22px;
-  left: 0;
-  right: 0;
-}
-.pocketnet_iframe #lenta .share .sharearticle .shareBgCaption .starstoppanel,
-.pocketnet_iframe #lenta .share .sharearticle .shareBgCaption .socialsharewrapper {
-  position: absolute;
-  bottom: 0.75em;
-  right: 1.25em;
-}
-.pocketnet_iframe #lenta .share .sharearticle .shareBgCaption .starstoppanel .iconwrapper,
-.pocketnet_iframe #lenta .share .sharearticle .shareBgCaption .socialsharewrapper .iconwrapper {
-  width: 3.5em;
-  height: 3.5em;
-  line-height: 3.5em;
-  border-radius: 3.5em;
-  color: rgb(var(--text-on-bg-ac-color));
+.pocketnet_iframe #channel .channel .panel .usermenuitem {
+  padding: 0.5em 0;
   cursor: pointer;
-  display: flex;
-  align-items: center;
-  font-family: Nunito Sans;
+  white-space: nowrap;
 }
-.pocketnet_iframe #lenta .share .sharearticle .shareBgCaption .starstoppanel .iconwrapper:hover,
-.pocketnet_iframe #lenta .share .sharearticle .shareBgCaption .socialsharewrapper .iconwrapper:hover {
-  opacity: 0.6;
-}
-.pocketnet_iframe #lenta .share .sharearticle .shareBgCaption .starstoppanel .iconwrapper i,
-.pocketnet_iframe #lenta .share .sharearticle .shareBgCaption .socialsharewrapper .iconwrapper i {
-  width: 30px;
+.pocketnet_iframe #channel .channel .panel > div i {
   text-align: center;
-  font-size: 0.7em;
+  width: 30px;
+  font-size: 0.8em;
 }
-.pocketnet_iframe #lenta .share .sharearticle .shareBgCaption .socialsharewrapper .iconwrapper {
-  justify-content: flex-end;
+.pocketnet_iframe #channel .channel .usericon {
+  width: 40px;
+  height: 40px;
+  line-height: 40px;
+  margin: 0 auto;
 }
-.pocketnet_iframe #lenta .share .sharearticle .shareBgCaption .starstoppanel {
-  bottom: 0.75em;
-  left: 1.5em;
-  right: auto;
-  display: flex;
-}
-.pocketnet_iframe #lenta .share .sharearticle .shareBgCaption .articleCover {
-  border-radius: 12px;
-  overflow: hidden;
-}
-.pocketnet_iframe #lenta .share .sharearticle .shareBgCaption .blackmatte {
-  border-radius: 12px;
-  overflow: hidden;
-}
-.pocketnet_iframe #lenta .share .sharearticle .shareBgCaption .articleCover,
-.pocketnet_iframe #lenta .share .sharearticle .shareBgCaption .captioncnt,
-.pocketnet_iframe #lenta .share .sharearticle .shareBgCaption .blackmatte {
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 0;
-  bottom: 0;
-}
-.pocketnet_iframe #lenta .share .sharearticle .shareBgCaption.smallimage .articleCover {
-  background-color: rgb(var(--color-shadow-base));
-  background-size: 100px auto !important;
-}
-.pocketnet_iframe #lenta .share .sharearticle .shareBgCaption.caption_small .captionmult {
+.pocketnet_iframe #channel .channel .usericon.letter {
   font-size: 1.5em;
 }
-.pocketnet_iframe #lenta .share .sharearticle .shareBgCaption.caption_long .captionmult {
-  font-size: 0.5em;
+.pocketnet_iframe #channel .channel .action {
+  padding: 1em;
+  text-align: center;
 }
-.pocketnet_iframe #lenta .share .sharearticle .shareBgCaption.verticalcover {
-  height: 520px;
-}
-.pocketnet_iframe #lenta .share .sharearticle .shareBgCaption.verticalcover .articleCover {
-  left: 0.5em;
-  top: 0.5em;
-  bottom: 0.5em;
-  right: 56%;
-  border-radius: 2px;
-  overflow: hidden;
-}
-.pocketnet_iframe #lenta .share .sharearticle .shareBgCaption.verticalcover .captioncnt {
-  left: 44%;
-  right: 0.5em;
-  top: 0.5em;
-  bottom: 0.5em;
-}
-.pocketnet_iframe #lenta .share .sharearticle .shareBgCaption.verticalcover .captioncnt .sharecaption {
-  color: rgb(var(--text-color));
-}
-.pocketnet_iframe #lenta .share .sharearticle .shareBgCaption.verticalcover .blackmatte {
-  display: none;
-}
-.pocketnet_iframe #lenta .share .sharearticle .shareBgCaption.verticalcover .icon {
-  position: static;
-}
-.pocketnet_iframe #lenta .share .sharearticle .shareBgCaption.verticalcover .captioncnt {
-  justify-content: center;
-  color: rgb(var(--text-color));
-}
-.pocketnet_iframe #lenta .share .sharearticle .shareBgCaption.verticalcover .divider {
-  background: rgb(var(--text-color));
-}
-.pocketnet_iframe #lenta .share .sharearticle .shareBgCaption.verticalcover .buttonOpenWrapper {
-  margin-bottom: 0.5em;
-}
-.pocketnet_iframe #lenta .share .sharearticle .shareBgCaption.verticalcover .buttonOpenWrapper button {
-  background: rgb(var(--color-shadow-base));
-}
-.pocketnet_iframe #lenta .share .sharearticle .shareBgCaption.verticalcover .buttonOpenWrapper button:hover {
-  background: rgba(var(--color-shadow-base), 0.9);
-}
-.pocketnet_iframe #lenta .share .sharearticle .shareBgCaption.verticalcover .tags div span {
-  color: rgb(var(--text-color));
-}
-.pocketnet_iframe #lenta .share .sharearticle .shareBgCaption.verticalcover .sys span {
-  color: rgb(var(--text-color));
-}
-.pocketnet_iframe #lenta .share .sharearticle .shareBgCaption.verticalcover .starstoppanel .iconwrapper,
-.pocketnet_iframe #lenta .share .sharearticle .shareBgCaption.verticalcover .socialsharewrapper .iconwrapper {
-  color: rgb(var(--text-color));
-}
-.pocketnet_iframe #lenta .share .sharearticle .articlecontent {
-  padding-top: 4em;
-  padding-bottom: 4em;
-}
-.pocketnet_iframe #lenta .share .sharearticle .articlecontent .cntswrk {
-  margin-left: 0;
-  padding-left: 0;
-  padding-right: 0;
-}
-.pocketnet_iframe #lenta .share .sharearticle .articlecontent .articleend {
-  margin-top: 3em;
-}
-.pocketnet_iframe #lenta .share .sharearticle .articlecontent .commentsWrapper {
-  border-radius: 12px;
-}
-.pocketnet_iframe #lenta .share .sharearticle .articlecontent .forcomments {
-  margin-top: 6em;
-}
-.pocketnet_iframe #lenta .share .sharearticle .removeDescription {
-  display: none;
-  padding: 1.5em;
-  color: rgb(var(--neutral-grad-2));
-}
-.pocketnet_iframe #lenta .share .sharearticle.deleted .starstoppanel,
-.pocketnet_iframe #lenta .share .sharearticle.deleted .socialsharewrapper,
-.pocketnet_iframe #lenta .share .sharearticle.deleted .textscnts {
-  display: none !important;
-}
-.pocketnet_iframe #lenta .share .sharearticle.deleted .removeDescription {
-  display: block;
-}
-.pocketnet_iframe #lenta .share .sharearticle.deleted .articleCover {
-  filter: blur(10px);
-}
-@media only screen and (max-width: 1920px) {
-  .pocketnet_iframe #lenta .share .images {
-    max-width: none;
-  }
-  .pocketnet_iframe #lenta .share .sharearticle .shareBgCaption:not(.verticalcover) .captioncnt .sharecaption {
-    font-size: 2em;
-    font-family: Georgia, serif;
-  }
-  .pocketnet_iframe #lenta .share .sharearticle .shareBgCaption:not(.verticalcover) .icon {
-    margin-top: 1em;
-  }
-  .pocketnet_iframe #lenta .share .sharearticle .shareBgCaption.verticalcover {
-    height: 520px;
-    border-bottom: 0;
-  }
-  .pocketnet_iframe #lenta .share .sharearticle .shareBgCaption.verticalcover .articleCover {
-    left: 0;
-    top: 0;
-    bottom: 0;
-    right: 0;
-  }
-  .pocketnet_iframe #lenta .share .sharearticle .shareBgCaption.verticalcover .captioncnt {
-    left: 0;
-    right: 0;
-    top: 0;
-    bottom: 0;
-  }
-  .pocketnet_iframe #lenta .share .sharearticle .shareBgCaption.verticalcover .captioncnt .sharecaption {
-    font-size: 2em;
-    color: rgb(var(--text-on-bg-ac-color));
-  }
-  .pocketnet_iframe #lenta .share .sharearticle .shareBgCaption.verticalcover .blackmatte {
-    display: block;
-  }
-  .pocketnet_iframe #lenta .share .sharearticle .shareBgCaption.verticalcover .icon {
-    margin-top: 1em;
-  }
-  .pocketnet_iframe #lenta .share .sharearticle .shareBgCaption.verticalcover .captioncnt {
-    justify-content: flex-end;
-    color: rgb(var(--text-on-bg-ac-color));
-  }
-  .pocketnet_iframe #lenta .share .sharearticle .shareBgCaption.verticalcover .divider {
-    background: rgb(var(--text-on-bg-ac-color));
-  }
-  .pocketnet_iframe #lenta .share .sharearticle .shareBgCaption.verticalcover .tags div span {
-    color: rgb(var(--text-on-bg-ac-color));
-  }
-  .pocketnet_iframe #lenta .share .sharearticle .shareBgCaption.verticalcover .sys span {
-    color: rgb(var(--text-on-bg-ac-color));
-  }
-  .pocketnet_iframe #lenta .share .sharearticle .shareBgCaption.verticalcover .starstoppanel .iconwrapper,
-  .pocketnet_iframe #lenta .share .sharearticle .shareBgCaption.verticalcover .socialsharewrapper .iconwrapper {
-    color: rgb(var(--text-on-bg-ac-color));
-  }
-  .pocketnet_iframe #lenta .share .sharearticle .articlecontent {
-    padding-left: 0.5em;
-    padding-right: 0.5em;
-  }
-  .pocketnet_iframe #lenta .share .sharearticle .articlecontent .article_quote,
-  .pocketnet_iframe #lenta .share .sharearticle .articlecontent .article_link_custom {
-    width: 96%;
-    max-width: none;
-  }
-  .pocketnet_iframe #lenta .share .sharearticle .articlecontent .article_this_embed {
-    padding: 0;
-    border: 0;
-  }
-  .pocketnet_iframe #lenta .share .showMore {
-    text-align: center;
-  }
-  .pocketnet_iframe #lenta .openoriginallabel {
-    display: none;
-  }
-}
-@media only screen and (max-width: 1920px) {
-  .pocketnet_iframe #lenta.horizontal.compact.mainvideo .shares .formeta {
-    margin-left: 0.25em;
-  }
-  .pocketnet_iframe #lenta .loadprev.fxdp {
-    position: fixed;
-    left: 0;
-    top: 110px;
-    z-index: 10;
-    right: 0;
-    background: transparent !important;
-    -moz-transition: 0.3s;
-    -o-transition: 0.3s;
-    -webkit-transition: 0.3s;
-    transition: 0.3s;
-    will-change: transform;
-    -webkit-backface-visibility: hidden;
-  }
-  .pocketnet_iframe #lenta .loadprev.fxdp button {
-    width: 260px;
-  }
-  .pocketnet_iframe html.scrollmodedown #lenta .loadprev.fxdp {
-    transform: translateY(-220px);
-  }
-}
-@media only screen and (max-width: 1920px) {
-  .pocketnet_iframe #lenta.mainvideo .shares .authorgroup {
-    width: 50%;
-  }
-}
-@media only screen and (max-width: 1920px) {
-  .pocketnet_iframe #lenta .loader {
-    padding: 1em;
-    text-align: center;
-  }
-  .pocketnet_iframe #lenta .shares {
-    overflow: hidden;
-  }
-  .pocketnet_iframe #lenta .shares .work {
-    padding: 0;
-  }
-  .pocketnet_iframe #lenta .shares .loadmore {
-    padding: 1em 0;
-    padding-bottom: 1em;
-  }
-  .pocketnet_iframe #lenta .shares .loadmore button {
-    width: 100%;
-  }
-  .pocketnet_iframe #lenta .shares .statswrapperExtended {
-    padding: 0.5em;
-  }
-  .pocketnet_iframe #lenta .shares .ss {
-    padding: 1em;
-  }
-  .pocketnet_iframe #lenta .shares .ss span {
-    font-size: 2em;
-  }
-  .pocketnet_iframe #lenta .share .squareVideo,
-  .pocketnet_iframe #lenta .share .verticalVideo {
-    max-width: none;
-  }
-  .pocketnet_iframe #lenta.mainvideo .share .cntswrk {
-    margin-left: 0;
-    padding-left: 0;
-    padding-right: 0;
-  }
-  .pocketnet_iframe #lenta.mainvideo .share .formeta {
-    padding-top: 1em;
-    margin-left: 1em;
-  }
-  .pocketnet_iframe #lenta.mainvideo .shares .authorgroup {
-    width: 50%;
-  }
-  .pocketnet_iframe #lenta.mainvideo .shares .authorgroup {
-    width: 100%;
-    padding: 0;
-    margin-bottom: 1em;
-  }
-  .pocketnet_iframe #lenta.mainvideo .shares .authorgroup .share {
-    padding: 0;
-  }
-  .pocketnet_iframe #lenta.mainvideo .shares .authorgroup .anothercntswrk {
-    max-height: none;
-    height: auto;
-  }
-  .pocketnet_iframe html.tablet #lenta.mainvideo .shares .authorgroup {
-    width: 50%;
-  }
-  .pocketnet_iframe html.tablet #lenta.mainvideo .shares .authorgroup .share {
-    padding: 15px;
-  }
-  .pocketnet_iframe html.tablet #lenta.mainvideo .shares .authorgroup .anothercntswrk {
-    height: 100px;
-    overflow: hidden;
-  }
-  .pocketnet_iframe html.tablet #lenta.mainvideo .share .paddingWrapper {
-    margin-left: 46px;
-  }
-  .pocketnet_iframe .dialog.donation .thwrapper {
-    padding-left: 0;
-    padding-right: 0;
-  }
-  .pocketnet_iframe .dialog.donation .thwrapper .addr {
-    font-size: 0.9em;
-  }
-}
-.pocketnet_iframe html.tablet #lenta .fullScreenVideo,
-.pocketnet_iframe html.mobile #lenta .fullScreenVideo {
-  will-change: transform;
-  -webkit-backface-visibility: hidden;
-}
-.pocketnet_iframe html.tablet.fullscreen #lenta .fullScreenVideo #comments,
-.pocketnet_iframe html.mobile.fullscreen #lenta .fullScreenVideo #comments {
-  display: none;
+.pocketnet_iframe .wnd #channel {
+  padding-bottom: 3em;
+  padding-left: 0.5em;
+  padding-right: 0.5em;
 }
 .pocketnet_iframe #author .rightchatspacer {
   height: 100%;
@@ -2852,7 +2661,8 @@
   text-align: center;
   opacity: 0.7;
   cursor: pointer;
-  font-size: 0.9em;
+  font-size: 0.5em;
+  display: none;
 }
 .pocketnet_iframe #author .bgCaption .changeaccount:hover {
   opacity: 1;
@@ -3080,15 +2890,45 @@
 .pocketnet_iframe #author.preshell .bgCaption .cellforimage .usericon {
   background: rgba(var(--background-secondary-theme), 0.3);
 }
+.pocketnet_iframe html.mobileview #author .lentacell {
+  margin-right: 0;
+  margin-left: 0;
+}
+.pocketnet_iframe html.mobileview #author .bgCaption .adr {
+  max-width: none;
+  display: block;
+}
+.pocketnet_iframe html.mobileview #author .bgCaption .middotwrapper {
+  display: none;
+}
+.pocketnet_iframe html.mobileview #author .leftpanelcell {
+  display: none;
+}
+.pocketnet_iframe html.mobileview #author .authorlentawrappermain {
+  position: relative;
+}
+.pocketnet_iframe html.mobileview #author .authorlentawrappermain .authorsearchicon {
+  display: none;
+}
+.pocketnet_iframe html.mobileview #author .authorlentawrappermain .authorsearchwrapper {
+  padding: 0 0.5em;
+}
+.pocketnet_iframe html.mobileview #author .authorlentawrappermain .authorsearchwrapper .search .searchPanel {
+  display: table-cell;
+}
+.pocketnet_iframe html.mobileview #author .authorlentawrappermain .authorsearchwrapper .search .searchPanel .searchPanelWrapper > div[event=clear] {
+  display: block;
+}
+.pocketnet_iframe html.mobileview #author .authorlentawrappermain .authorsearchwrapper .search .searchInput .searchInputIcon .sminput {
+  background: transparent;
+  padding-left: 0.5em;
+}
 @media only screen and (max-width: 1920px) {
   .pocketnet_iframe #author .bgCaption .caption {
     justify-content: center;
   }
   .pocketnet_iframe #author .mobileinfo {
     display: block;
-  }
-  .pocketnet_iframe #author .leftpanelcell {
-    display: none;
   }
   .pocketnet_iframe #author .lentacell {
     margin-right: 44px;
@@ -3113,9 +2953,6 @@
     height: auto;
     padding-bottom: 2em;
     background: #051b48;
-  }
-  .pocketnet_iframe #author .bgCaption .changeaccount {
-    font-size: 0.5em;
   }
   .pocketnet_iframe #author .bgCaption .cwrapper {
     display: block;
@@ -3220,36 +3057,22 @@
     text-align: left !important;
     padding-left: 0.5em;
   }
+  .pocketnet_iframe #author .bgCaption .changeaccount {
+    display: block;
+  }
+  .pocketnet_iframe #author .bgCaption .infoWrapper,
+  .pocketnet_iframe #author .lentacell .cnt {
+    max-width: 640px;
+    margin: 0 auto;
+  }
   .pocketnet_iframe #author .newsharewrapper {
     display: none;
   }
   .pocketnet_iframe html.allcontent #author .bgCaption {
     padding-top: 44px;
   }
-  .pocketnet_iframe #author .lentacell {
-    margin-right: 0;
-  }
   .pocketnet_iframe #author .work.mwork {
     width: 100%;
-  }
-  .pocketnet_iframe #author .authorlentawrappermain {
-    position: relative;
-  }
-  .pocketnet_iframe #author .authorlentawrappermain .authorsearchicon {
-    display: none;
-  }
-  .pocketnet_iframe #author .authorlentawrappermain .authorsearchwrapper {
-    padding: 0 0.5em;
-  }
-  .pocketnet_iframe #author .authorlentawrappermain .authorsearchwrapper .search .searchPanel {
-    display: table-cell;
-  }
-  .pocketnet_iframe #author .authorlentawrappermain .authorsearchwrapper .search .searchPanel .searchPanelWrapper > div[event=clear] {
-    display: block;
-  }
-  .pocketnet_iframe #author .authorlentawrappermain .authorsearchwrapper .search .searchInput .searchInputIcon .sminput {
-    background: transparent;
-    padding-left: 0.5em;
   }
   .pocketnet_iframe #author .lentaWrapper .authorinfo {
     padding: 1em;
@@ -3261,6 +3084,11 @@
   .pocketnet_iframe #author .subscribewrapperphones .subscribebuttons button {
     padding-bottom: 0.5em;
     padding-top: 0.5em;
+  }
+  .pocketnet_iframe #author .bgCaption .caption .subscribe {
+    font-size: 1.4em;
+    border-bottom: 1px solid #ff4800;
+    opacity: 1;
   }
   .pocketnet_iframe #author .bgCaption .cwrapper > div {
     vertical-align: top;
@@ -3302,76 +3130,6 @@
     position: fixed;
   }
 }
-.pocketnet_iframe #channel .emptychannel {
-  padding: 2em;
-  text-align: center;
-  font-size: 0.8em;
-}
-.pocketnet_iframe #channel .channel {
-  background: rgb(var(--background-total-theme));
-  padding: 1em 0;
-}
-.pocketnet_iframe #channel .channel .userinfo {
-  text-align: center;
-  padding: 0.5em 0;
-}
-.pocketnet_iframe #channel .channel .userinfo span {
-  font-size: 2em;
-  font-weight: 200;
-}
-.pocketnet_iframe #channel .channel .userinfo .name {
-  padding: 0.5em 0;
-}
-.pocketnet_iframe #channel .channel .userinfo .adr {
-  max-width: 500px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  vertical-align: bottom;
-  display: inline-block;
-}
-.pocketnet_iframe #channel .channel .panel {
-  margin: 0 auto;
-  max-width: 600px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.pocketnet_iframe #channel .channel .panel .usermenuitem {
-  padding: 0.5em;
-  cursor: pointer;
-  white-space: nowrap;
-}
-.pocketnet_iframe #channel .channel .panel > div span,
-.pocketnet_iframe #channel .channel .panel > div i {
-  font-size: 0.8em;
-}
-.pocketnet_iframe #channel .channel .panel > div i {
-  text-align: center;
-  width: 30px;
-}
-.pocketnet_iframe #channel .channel .usericon {
-  width: 80px;
-  height: 80px;
-  line-height: 80px;
-  margin: 0 auto;
-}
-.pocketnet_iframe #channel .channel .usericon.letter {
-  font-size: 1.5em;
-}
-.pocketnet_iframe #channel .channel .action {
-  padding: 1em;
-  text-align: center;
-}
-@media only screen and (max-width: 1920px) {
-  .pocketnet_iframe #channel .channel .panel {
-    display: block;
-    max-width: 480px;
-    padding-left: 4em;
-  }
-  .pocketnet_iframe #channel .channel .panel > div {
-    margin: 0 auto;
-  }
-}
 .pocketnet_iframe .lentaWrapper > div#post {
   background: transparent;
 }
@@ -3387,14 +3145,12 @@
 .pocketnet_iframe #post .jsPlayerLoading,
 .pocketnet_iframe #post .video-js {
   max-height: 80vh;
+  max-height: calc(var(--vh, 1vh) * 80);
 }
 .pocketnet_iframe #post .videoWrapper {
   max-width: 650px;
   position: relative;
   overflow: hidden;
-}
-.pocketnet_iframe #post .videoWrapper .js-player {
-  border-radius: 0;
 }
 .pocketnet_iframe #post .lockedaccount,
 .pocketnet_iframe #post .empty {
@@ -3445,7 +3201,6 @@
 .pocketnet_iframe #post .postWrapper {
   margin: 0 auto;
   max-width: 930px;
-  background: rgb(var(--background-total-theme));
   opacity: 0;
   -moz-transition: opacity 0.3s;
   -o-transition: opacity 0.3s;
@@ -3454,6 +3209,10 @@
 }
 .pocketnet_iframe #post .postWrapper.active {
   opacity: 1;
+}
+.pocketnet_iframe #post .share {
+  background: rgb(var(--background-total-theme));
+  border-radius: 6px;
 }
 .pocketnet_iframe #post .share .work {
   padding: 0;
@@ -3532,15 +3291,19 @@
 .pocketnet_iframe #post .share .message {
   max-width: 620px;
 }
-.pocketnet_iframe #post.videomainpost {
-  padding-bottom: 2em;
-}
 .pocketnet_iframe #post.videomainpost .hiddenpost {
   background: rgb(var(--background-total-theme));
 }
 .pocketnet_iframe #post.videomainpost .postWrapper {
   background: transparent;
   max-width: none;
+}
+.pocketnet_iframe #post.videomainpost .videoWrapper {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+.pocketnet_iframe #post.videomainpost .videoWrapper .js-player {
+  border-radius: 0;
 }
 .pocketnet_iframe #post.videomainpost .share {
   background: transparent;
@@ -3600,8 +3363,7 @@
   padding-left: 0.5em;
   padding-right: 0;
 }
-.pocketnet_iframe #post.videomainpost .shareTable .authorTable > div.datetime {
-  padding-left: 1em;
+.pocketnet_iframe #post.videomainpost .shareTable .authorTable > div .datetime {
   opacity: 0.5;
 }
 .pocketnet_iframe #post.videomainpost .shareTable .metatable > div.metapanel .metapanelitem {
@@ -3622,6 +3384,7 @@
 .pocketnet_iframe #post.videomainpost .jsPlayerLoading,
 .pocketnet_iframe #post.videomainpost .video-js {
   max-height: 80vh;
+  max-height: calc(var(--vh, 1vh) * 80);
 }
 .pocketnet_iframe #post.videomainpost .forurl .url {
   border-radius: 12px;
@@ -3636,10 +3399,10 @@
 }
 .pocketnet_iframe #post .sharearticle {
   opacity: 0;
-  -moz-transition: opacity 0.1s;
-  -o-transition: opacity 0.1s;
-  -webkit-transition: opacity 0.1s;
-  transition: opacity 0.1s;
+  -moz-transition: opacity 0.3s;
+  -o-transition: opacity 0.3s;
+  -webkit-transition: opacity 0.3s;
+  transition: opacity 0.3s;
 }
 .pocketnet_iframe #post .sharearticle .shareTable {
   padding-top: 0;
@@ -3652,6 +3415,9 @@
 }
 .pocketnet_iframe #post .sharearticle.ready {
   opacity: 1;
+}
+.pocketnet_iframe #post .sharearticle .sharepanel {
+  padding-right: 0.5em;
 }
 .pocketnet_iframe #post .sharearticle .shareBgCaption .author,
 .pocketnet_iframe #post .sharearticle .articleend .author {
@@ -3763,11 +3529,13 @@
   margin: 0 auto;
   position: relative;
 }
-.pocketnet_iframe #post .sharearticle .shareBgCaption.showtext .icon {
+.pocketnet_iframe #post .sharearticle .shareBgCaption.showtext .iconWrapper {
   position: absolute;
+  width: auto;
   bottom: -22px;
   left: 0;
   right: 0;
+  padding-left: 0;
 }
 .pocketnet_iframe #post .sharearticle .shareBgCaption .starstoppanel,
 .pocketnet_iframe #post .sharearticle .shareBgCaption .socialsharewrapper {
@@ -3781,7 +3549,7 @@
   height: 3.5em;
   line-height: 3.5em;
   border-radius: 3.5em;
-  color: rgb(var(--text-on-bg-ac-color));
+  color: rgb(var(--neutral-grad-3));
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -3804,6 +3572,9 @@
   bottom: 0.75em;
   left: 1.5em;
   right: auto;
+  display: flex;
+}
+.pocketnet_iframe #post .sharearticle .shareBgCaption .starstoppanel .panelLeft {
   display: flex;
 }
 .pocketnet_iframe #post .sharearticle .shareBgCaption .articleCover,
@@ -3866,6 +3637,15 @@
 .pocketnet_iframe #post .sharearticle .shareBgCaption.verticalcover .socialsharewrapper .iconwrapper {
   color: rgb(var(--text-color));
 }
+.pocketnet_iframe #post .sharearticle .shareBgCaption.verticalcover.showtext .iconWrapper {
+  position: static;
+  width: auto;
+  padding-left: 0;
+  float: none;
+}
+.pocketnet_iframe #post .sharearticle .shareBgCaption.verticalcover.showtext .toppanel {
+  order: 1;
+}
 .pocketnet_iframe #post .sharearticle .articlecontent {
   padding-top: 4em;
   padding-bottom: 4em;
@@ -3886,6 +3666,10 @@
 }
 .pocketnet_iframe #post .sharearticle .articlecontent .forcomments {
   margin-top: 2em;
+}
+.pocketnet_iframe #post .sharearticle .articlecontent .article {
+  max-width: 640px;
+  margin: 0 auto;
 }
 .pocketnet_iframe #post .sharearticle .removeDescription {
   display: none;
@@ -3908,6 +3692,12 @@
 .pocketnet_iframe #post .sharearticle.deleted .articleCover {
   filter: blur(10px);
 }
+.pocketnet_iframe #post .sharearticle p a {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  max-width: 90%;
+  overflow: hidden;
+}
 .pocketnet_iframe #content > div#post.sharec .postWrapper {
   max-width: none;
 }
@@ -3917,6 +3707,13 @@
   margin: 0 auto;
 }
 .pocketnet_iframe html.mobileview #post .videoWrapper {
+  max-width: none;
+}
+.pocketnet_iframe html.mobileview #post .sharearticle .articlecontent {
+  padding-left: 0.5em;
+  padding-right: 0.5em;
+}
+.pocketnet_iframe html.mobileview .wnd.normalizedmobile.articlewindow .wndinner .wndcontent {
   max-width: none;
 }
 @media only screen and (max-width: 1920px) {
@@ -3939,11 +3736,22 @@
     border-radius: 0;
     overflow: visible;
   }
+  .pocketnet_iframe #post .sharearticle .shareBgCaption.caption_small .captionmult {
+    font-size: 1.1em;
+  }
+  .pocketnet_iframe #post .sharearticle .shareBgCaption.caption_long .captionmult {
+    font-size: 0.8em;
+  }
+  .pocketnet_iframe #post .sharearticle .shareBgCaption .captioncnt .sharecaption {
+    max-height: none;
+  }
   .pocketnet_iframe #post .sharearticle .shareBgCaption:not(.verticalcover) {
     height: auto;
   }
   .pocketnet_iframe #post .sharearticle .shareBgCaption:not(.verticalcover) .captioncnt {
     padding-bottom: 2em;
+    padding-left: 1em;
+    padding-right: 1em;
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
@@ -3965,16 +3773,8 @@
   }
   .pocketnet_iframe #post .sharearticle .shareBgCaption:not(.verticalcover) .captioncnt .sharecaption {
     font-size: 3em;
-    font-family: Georgia, serif;
-  }
-  .pocketnet_iframe #post .sharearticle .shareBgCaption:not(.verticalcover) .icon {
-    position: absolute;
-    bottom: -22px;
-    left: 0;
-    right: 0;
-  }
-  .pocketnet_iframe #post .sharearticle .shareBgCaption:not(.verticalcover) .icon .usericon {
-    margin: 0 auto;
+    padding: 0.5em 0;
+    padding-top: 1em;
   }
   .pocketnet_iframe #post .sharearticle .shareBgCaption:not(.verticalcover) .articleCover {
     height: 300px;
@@ -4001,13 +3801,13 @@
     padding-bottom: 4em;
   }
   .pocketnet_iframe #post .sharearticle .shareBgCaption.verticalcover .captioncnt .sharecaption {
-    font-size: 2em;
+    font-size: 3em;
+    padding: 0.5em 0;
+    padding-top: 1em;
   }
   .pocketnet_iframe #post .sharearticle .shareBgCaption.verticalcover .blackmatte {
     display: block;
-  }
-  .pocketnet_iframe #post .sharearticle .shareBgCaption.verticalcover .icon {
-    position: absolute;
+    backdrop-filter: brightness(85%);
   }
   .pocketnet_iframe #post .sharearticle .shareBgCaption.verticalcover .captioncnt {
     justify-content: flex-end;
@@ -4026,9 +3826,21 @@
   .pocketnet_iframe #post .sharearticle .shareBgCaption.verticalcover .socialsharewrapper .iconwrapper {
     color: rgb(var(--text-on-bg-ac-color));
   }
+  .pocketnet_iframe #post .sharearticle .starstoppanel,
+  .pocketnet_iframe #post .sharearticle .socialsharewrapper {
+    bottom: -0.25em !important;
+  }
+  .pocketnet_iframe #post .sharearticle .starstoppanel .panelLeft,
+  .pocketnet_iframe #post .sharearticle .socialsharewrapper .panelLeft {
+    flex-direction: column;
+  }
   .pocketnet_iframe #post .sharearticle .articlecontent {
     padding-left: 0.5em;
     padding-right: 0.5em;
+  }
+  .pocketnet_iframe #post .sharearticle .articlecontent .article {
+    max-width: 640px;
+    margin: 0 auto;
   }
   .pocketnet_iframe #post .sharearticle .articlecontent .article_quote,
   .pocketnet_iframe #post .sharearticle .articlecontent .article_link_custom {
@@ -4037,14 +3849,12 @@
   }
   .pocketnet_iframe #post .sharearticle .articlecontent .article_this_embed {
     padding: 0;
+    margin-top: 1em;
     border: 0;
   }
 }
 .pocketnet_iframe html.mobileview.fullscreen #post #comments {
   display: none;
-}
-.pocketnet_iframe .wnd.postwindow {
-  z-index: 1005;
 }
 .pocketnet_iframe .wnd.postwindow .wndcontent {
   top: 0;
@@ -4064,15 +3874,10 @@
 .pocketnet_iframe .wnd.postwindow.articlewindow .wndcontent {
   padding: 0;
   border-radius: 0;
+  background: rgb(var(--background-total-theme));
 }
 .pocketnet_iframe .wnd.postwindow.articlewindow #post .postWrapper {
   max-width: none;
-}
-.pocketnet_iframe .wnd.postwindow.articlewindow ._close {
-  backdrop-filter: blur(7px) grayscale(30%);
-  -webkit-backdrop-filter: blur(7px) grayscale(30%);
-  color: rgb(var(--text-on-bg-ac-color));
-  box-shadow: 0 5px 10px -5px rgba(var(--color-shadow-base), 0.4);
 }
 .pocketnet_iframe .wnd.postwindow .widthcontainer {
   width: 80%;
@@ -4093,6 +3898,10 @@
 .pocketnet_iframe html.mobileview .wnd.postwindow .widthcontainer {
   width: 100%;
   max-width: none;
+}
+.pocketnet_iframe html.mobileview .wnd.articlewindow .widthcontainer {
+  width: 96%;
+  max-width: 768px;
 }
 @media only screen and (max-width: 1920px) {
   .pocketnet_iframe #post {
@@ -4124,6 +3933,7 @@
   }
   .pocketnet_iframe #post.videomainpost .formeta {
     margin-left: 0;
+    margin-bottom: 1em;
     padding-left: 0;
   }
   .pocketnet_iframe #post.videomainpost.squareVideo .forurl .videoWrapper,
@@ -4149,9 +3959,6 @@
   .pocketnet_iframe .wnd.postwindow #post .share .commentsWrapper {
     padding-bottom: 5em;
   }
-  .pocketnet_iframe html.mobileview .wnd.postwindow {
-    z-index: 1005;
-  }
   .pocketnet_iframe html.mobileview .wnd.postwindow .widthcontainer {
     width: 100%;
   }
@@ -4168,10 +3975,75 @@
     padding-top: 0;
   }
 }
+.pocketnet_iframe .wnd.postwindow.pipmini .wndcontent {
+  padding-right: 0;
+  overflow-y: hidden;
+}
+.pocketnet_iframe .wnd.postwindow.pipmini #post {
+  padding: 0 !important;
+}
+.pocketnet_iframe .wnd.postwindow.pipmini #post .postWrapper {
+  padding: 0 !important;
+}
+.pocketnet_iframe .wnd.postwindow.pipmini #post .shareTable {
+  padding: 0;
+  border-radius: 6px;
+}
+.pocketnet_iframe .wnd.postwindow.pipmini #post .videoWrapper {
+  border-radius: 6px;
+}
+.pocketnet_iframe .wnd.postwindow.pipmini #post .videoWrapper .video-js {
+  min-height: 150px;
+  max-height: calc(var(--vh, 1vh) * 25);
+}
+.pocketnet_iframe .wnd.postwindow.pipmini #post .videoWrapper .video-js .vjs-control-bar .vjs-mute-control {
+  position: absolute;
+  height: 3em;
+  line-height: 3.5em;
+  font-size: 1em;
+  right: 0.25em;
+  bottom: 0;
+  width: 3em;
+  font-size: 0.9em;
+}
+.pocketnet_iframe .wnd.postwindow.pipmini #post .work {
+  position: static;
+}
+.pocketnet_iframe html.pipmode .wnd.postwindow.pipmini #post .shareTable {
+  padding: 0;
+  border-radius: 0;
+}
+.pocketnet_iframe html.pipmode .wnd.postwindow.pipmini #post .videoWrapper {
+  border-radius: 0;
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  right: 0;
+}
+.pocketnet_iframe html.pipmode .wnd.postwindow.pipmini #post .videoWrapper .js-player {
+  height: 100%;
+}
+.pocketnet_iframe html.pipmode .wnd.postwindow.pipmini #post .videoWrapper .video-js {
+  max-height: none;
+  min-height: 0;
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  right: 0;
+}
+.pocketnet_iframe html.pipmode .wnd.postwindow.pipmini #post .videoWrapper .video-js .vjs-control-bar {
+  padding-left: 0;
+}
 .pocketnet_iframe :root {
   --background-hidden-layer: 255, 255, 255;
   --background-total-theme: 255, 255, 255;
   --background-secondary-theme: 250, 250, 250;
+  --background-secondary-theme-2: 18, 22, 33;
   --background-main: 240, 242, 245;
   --background-main-contrast: 10, 12, 23;
   --color-medium-theme: 199, 200, 217;
@@ -4203,19 +4075,45 @@
   --color-nrml: 0, 0, 0;
   --color-good: 7, 108, 52;
   --color-yellow: 255, 238, 0;
+  --color-h2-aboutcc: 68, 68, 68;
+  --color-h2-works__container: 255, 255, 255;
+  --color-black: 0, 0, 0;
+  --color-cc-videos: 38,38,38;
+  --color-cc-open: 251,240,195;
+  --color-cc-blue: 0, 166, 255;
+  --color-cc-white: 255,255,255;
+  --color-cc-grey: 221,221,221;
+  --color-cc-menu: 0,213,195;
+  --color-cc-dark-blue: 49,60,155;
+  --color-cc-dark: 59,59,59;
+  --color-cc-description: 207,207,207;
+  --color-cc-line: 49,60,155;
+  --color-cc-table: 246, 246, 246;
+  --color-services-item: 5, 5, 5, 0.2;
+  --color-cc-dark-grey: 102,102,102;
+  --color-cc-dark-blue-cc: 22,28,53;
+  --color-cc-dark-blue-ccc: 22,28,53, 0.7;
+  --color-cc-team-container: 204,204,204;
+  --color-cc-bc: 238,238,238;
+  --color-cc-bc-span: 51,51,51;
+  --color-cc-bc-p: 22,28,53;
+  --color-cc-form: 33, 42, 73, 0.6;
+  --color-fb: 10, 35, 71;
+  --color-menu-2: 100, 255, 237;
 }
 .pocketnet_iframe :root[theme='black'] {
   --background-hidden-layer: 10, 12, 23;
   --background-total-theme: 18, 22, 33;
   --background-secondary-theme: 24, 36, 52;
-  --background-main: 14, 28, 43;
+  --background-secondary-theme-2: 24, 36, 52;
+  --background-main: 12, 14, 18;
   --background-main-contrast: 240, 242, 245;
   --color-medium-theme: 99, 100, 117;
-  --neutral-grad-0: 16,16,17;
-  --neutral-grad-1: 34,34,37;
-  --neutral-grad-2: 59,59,71;
-  --neutral-grad-3: 77,78,92;
-  --neutral-grad-4: 85,87,112;
+  --neutral-grad-0: 25,25,29;
+  --neutral-grad-1: 38,38,42;
+  --neutral-grad-2: 78,78,99;
+  --neutral-grad-3: 85,87,112;
+  --neutral-grad-4: 96,103,112;
   --text-color: 178, 171, 172;
   --text-on-main-bg-color: 85,87,112;
   --text-on-bg-ac-color: 255, 255, 255;
@@ -4223,7 +4121,7 @@
   --color-bg-ac: 0, 80, 190;
   --color-bg-ac-1: 0, 142, 191;
   --color-bg-ac-2: 250, 110,132;
-  --color-bg-selection: 179, 212, 252;
+  --color-bg-selection: 7, 36, 170;
   --color-txt-ac: 0, 164, 255;
   --color-txt-ac-1: 0, 142, 191;
   --color-txt-ac-2: 250, 110, 132;
@@ -4235,34 +4133,161 @@
   --color-shadow-var: 18, 18, 26;
   --text-on-bg-shadow-color: 214, 219, 230;
   --color-bad: 244, 26, 77;
-  --color-nrml: 0, 0, 0;
+  --color-nrml: 180, 180, 180;
   --color-good: 7, 108, 52;
   --color-yellow: 255, 238, 0;
+}
+.pocketnet_iframe :root[theme='gray'] {
+  --background-hidden-layer: 12, 12, 12;
+  --background-total-theme: 20, 20, 20;
+  --background-secondary-theme: 36, 36, 36;
+  --background-secondary-theme-2: 36, 36, 36;
+  --background-main: 28, 28, 28;
+  --background-main-contrast: 242, 242, 242;
+  --color-medium-theme: 104, 104, 104;
+  --neutral-grad-0: 37,37,37;
+  --neutral-grad-1: 47,47,47;
+  --neutral-grad-2: 88,88,88;
+  --neutral-grad-3: 95,95,95;
+  --neutral-grad-4: 105,105,105;
+  --text-color: 190, 190, 190;
+  --text-on-main-bg-color: 130,130,130;
+  --text-on-bg-ac-color: 255, 255, 255;
+  --color-bg-ac-bright: 55, 120, 160;
+  --color-bg-ac: 50, 110, 150;
+  --color-bg-ac-1: 0, 142, 191;
+  --color-bg-ac-2: 255, 216, 0;
+  --color-bg-selection: 30, 80, 150;
+  --color-txt-ac: 50, 110, 150;
+  --color-txt-ac-1: 0, 142, 191;
+  --color-txt-ac-2: 255, 216, 0;
+  --color-txt-gray: 110, 110, 110;
+  --color-txt-gray-dark: 120, 120, 120;
+  --color-bg-orange: 255, 72, 0;
+  --text-txt-orange: 255, 72, 0;
+  --color-shadow-base: 22, 22, 22;
+  --color-shadow-var: 25, 25, 25;
+  --text-on-bg-shadow-color: 214, 214, 214;
+  --color-bad: 210, 0, 20;
+  --color-nrml: 180, 180, 0180;
+  --color-good: 0, 140, 40;
+  --color-yellow: 250, 230, 10;
 }
 .pocketnet_iframe .disable-hover,
 .pocketnet_iframe .disable-hover * {
   pointer-events: none !important;
 }
 .pocketnet_iframe .customscroll {
-  overflow-y: overlay!important;
+  overscroll-behavior: contain;
+}
+.pocketnet_iframe .jsPlayerLoading {
+  width: auto;
+  height: auto;
+  background: #000000;
+  position: relative;
+  min-height: 200px;
+  border-radius: 6px;
+}
+.pocketnet_iframe .jsPlayerLoading .preloader5 {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  margin-left: -15px;
+  margin-top: -8px;
+  width: 30px;
+  height: 15px;
+  contain: strict;
+}
+.pocketnet_iframe .jsPlayerLoading .jsPlayerLoadingD {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.pocketnet_iframe .jsPlayerLoading.ytbvimb {
+  padding-bottom: 56.25%;
+}
+.pocketnet_iframe .jsPlayerLoading.ytbvimb .jsPlayerLoading {
+  display: none;
+}
+.pocketnet_iframe .jsPlayerLoading.ytbvimb .playerlabel {
+  position: absolute;
+  left: 0.5em;
+  padding: 0.5em;
+  border-radius: 6px;
+  background: rgba(var(--color-shadow-base), 0.5);
+  bottom: 0.5em;
+}
+.pocketnet_iframe .jsPlayerLoading.ytbvimb.loading .jsPlayerLoading {
+  height: 100%;
+  max-height: none;
+  display: block;
+  background: transparent;
+}
+.pocketnet_iframe .jsPlayerLoading.ytbvimb.loading .jsPlayerLoading .preloader5 {
+  display: block;
+}
+.pocketnet_iframe .jsPlayerLoading.ytbvimb.loading .playerlabel {
+  display: none;
+}
+.pocketnet_iframe .jsPlayerLoading.ytbvimb.loading .initvideoplayer {
+  display: none;
+}
+.pocketnet_iframe .jsPlayerLoading .initvideoplayer {
+  text-align: center;
+  cursor: pointer;
+  width: 100px;
+  height: 100px;
+  line-height: 100px;
+  font-size: 1.5em;
+  margin: 0 auto;
+  text-shadow: 0px 0px 2px rgba(var(--color-shadow-base), 0.714), 0 0 3px rgba(var(--color-shadow-base), 0.519);
+}
+@media only screen and (min-width: 768px) {
+  .pocketnet_iframe .customscroll {
+    overflow-y: overlay;
+    overflow-x: hidden;
+    scrollbar-width: 7px;
+    scrollbar-color: rgba(var(--background-main-contrast), 0.15) rgba(var(--background-main-contrast), 0.05);
+    overscroll-behavior: contain;
+  }
+  .pocketnet_iframe .customscroll::-webkit-scrollbar {
+    width: 7px;
+  }
+  .pocketnet_iframe .customscroll::-webkit-scrollbar-track {
+    background: rgba(var(--background-main-contrast), 0.05);
+  }
+  .pocketnet_iframe .customscroll::-webkit-scrollbar-thumb {
+    background-color: rgba(var(--background-main-contrast), 0.25);
+    border: 0 solid rgba(var(--background-main-contrast), 0.05);
+    background-image: linear-gradient(180deg, rgba(var(--background-main-contrast), 0.25) 0%, rgba(var(--background-hidden-layer), 0) 90%);
+  }
+}
+.pocketnet_iframe .wnd .wndcustomscroll {
+  overflow-y: overlay;
   overflow-x: hidden;
   scrollbar-width: 7px;
   scrollbar-color: rgba(var(--background-main-contrast), 0.15) rgba(var(--background-main-contrast), 0.05);
   overscroll-behavior: contain;
 }
-.pocketnet_iframe .customscroll::-webkit-scrollbar {
+.pocketnet_iframe .wnd .wndcustomscroll::-webkit-scrollbar {
   width: 7px;
 }
-.pocketnet_iframe .customscroll::-webkit-scrollbar-track {
+.pocketnet_iframe .wnd .wndcustomscroll::-webkit-scrollbar-track {
   background: rgba(var(--background-main-contrast), 0.05);
 }
-.pocketnet_iframe .customscroll::-webkit-scrollbar-thumb {
+.pocketnet_iframe .wnd .wndcustomscroll::-webkit-scrollbar-thumb {
   background-color: rgba(var(--background-main-contrast), 0.25);
   border: 0 solid rgba(var(--background-main-contrast), 0.05);
   background-image: linear-gradient(180deg, rgba(var(--background-main-contrast), 0.25) 0%, rgba(var(--background-hidden-layer), 0) 90%);
 }
 .pocketnet_iframe body {
-  overscroll-behavior: contain;
+  overscroll-behavior: none;
+  /* scroll-snap-type: y proximity;*/
 }
 .pocketnet_iframe html {
   font-size: 15px;
@@ -4271,6 +4296,7 @@
   position: relative;
   overflow-x: hidden;
   overflow-y: overlay;
+  overscroll-behavior: none;
   /*&.mobileview{
           scroll-behavior: smooth;
       }*/
@@ -4348,7 +4374,7 @@
   background: rgba(255, 174, 0, 0.07);
 }
 .pocketnet_iframe mark {
-  background: rgba(var(--color-bg-ac-2), 0.9) rgba(255, 110, 132, 0.9);
+  background: rgba(var(--color-bg-ac), 0.9);
   color: rgb(var(--text-on-bg-ac-color));
 }
 .pocketnet_iframe ::-moz-selection {
@@ -4462,6 +4488,7 @@
   color: rgb(var(--text-color));
   padding: 0.2em 0;
 }
+.pocketnet_iframe #topsmallpreloader,
 .pocketnet_iframe #globalpreloader,
 .pocketnet_iframe .updatingFrontend {
   position: fixed;
@@ -4475,10 +4502,17 @@
   -webkit-transition: transform 0.3s;
   transition: transform 0.3s;
 }
+.pocketnet_iframe #topsmallpreloader.show,
 .pocketnet_iframe #globalpreloader.show,
 .pocketnet_iframe .updatingFrontend.show {
   transform: translateY(100%);
 }
+.pocketnet_iframe #topsmallpreloader.show .table .icon i,
+.pocketnet_iframe #globalpreloader.show .table .icon i,
+.pocketnet_iframe .updatingFrontend.show .table .icon i {
+  display: inline-block;
+}
+.pocketnet_iframe #topsmallpreloader .table,
 .pocketnet_iframe #globalpreloader .table,
 .pocketnet_iframe .updatingFrontend .table {
   width: 100%;
@@ -4486,29 +4520,49 @@
   color: rgb(var(--text-on-bg-ac-color));
   text-shadow: 0px 0px 2px rgba(var(--color-shadow-base), 0.714), 0 0 3px rgba(var(--color-shadow-base), 0.519);
 }
+.pocketnet_iframe #topsmallpreloader .table > div,
 .pocketnet_iframe #globalpreloader .table > div,
 .pocketnet_iframe .updatingFrontend .table > div {
   vertical-align: middle;
   text-align: center;
 }
+.pocketnet_iframe #topsmallpreloader .table .text,
 .pocketnet_iframe #globalpreloader .table .text,
 .pocketnet_iframe .updatingFrontend .table .text {
   max-width: 524px;
   margin: 0 auto;
   padding: 1em;
 }
+.pocketnet_iframe #topsmallpreloader .table .text span,
 .pocketnet_iframe #globalpreloader .table .text span,
 .pocketnet_iframe .updatingFrontend .table .text span {
   font-size: 1.5em;
   font-weight: 100;
 }
+.pocketnet_iframe #topsmallpreloader .table .icon,
 .pocketnet_iframe #globalpreloader .table .icon,
 .pocketnet_iframe .updatingFrontend .table .icon {
   padding: 2em;
 }
+.pocketnet_iframe #topsmallpreloader .table .icon i,
 .pocketnet_iframe #globalpreloader .table .icon i,
 .pocketnet_iframe .updatingFrontend .table .icon i {
+  display: none;
   font-size: 1.3em;
+}
+.pocketnet_iframe #topsmallpreloader {
+  top: -65px;
+  bottom: auto;
+  height: 65px;
+}
+.pocketnet_iframe .js-player .video-js {
+  display: none;
+}
+.pocketnet_iframe .js-player .video-js.vjs-thumb {
+  display: block;
+}
+.pocketnet_iframe .js-player.player-ready .video-js {
+  display: block;
 }
 .pocketnet_iframe .unselectable {
   -webkit-touch-callout: none;
@@ -4526,6 +4580,13 @@
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+}
+.pocketnet_iframe .cancopy {
+  -webkit-user-select: text!important;
+  -khtml-user-select: text!important;
+  -moz-user-select: text!important;
+  -ms-user-select: text!important;
+  user-select: text!important;
 }
 .pocketnet_iframe div {
   -webkit-tap-highlight-color: transparent;
@@ -6379,15 +6440,27 @@
   white-space: nowrap;
   background: rgb(var(--background-total-theme));
 }
+.pocketnet_iframe .wnd ._changeplace,
+.pocketnet_iframe .wnd ._expand,
 .pocketnet_iframe .wnd ._close {
   position: absolute;
-  right: 0.75em;
-  top: 0.5em;
   backdrop-filter: blur(2px) grayscale(30%);
   -webkit-backdrop-filter: blur(2px) grayscale(30%);
   cursor: pointer;
   color: rgb(var(--text-on-bg-ac-color));
   z-index: 150;
+}
+.pocketnet_iframe .wnd ._close {
+  top: 0.5em;
+  right: 0.75em;
+}
+.pocketnet_iframe .wnd ._expand {
+  top: 0.5em;
+  left: 0.75em;
+}
+.pocketnet_iframe .wnd ._changeplace {
+  bottom: 0.5em;
+  left: 0.75em;
 }
 .pocketnet_iframe .wnd .wndok,
 .pocketnet_iframe .wnd .wndclose {
@@ -6548,6 +6621,8 @@
 }
 .pocketnet_iframe .wnd.withoutButtons .wndcontent {
   bottom: 0;
+  border-bottom-left-radius: 6px;
+  border-bottom-right-radius: 6px;
 }
 .pocketnet_iframe .wnd.withoutButtons.allscreen .wndcontent {
   bottom: 0;
@@ -6571,6 +6646,78 @@
 }
 .pocketnet_iframe .wnd.article .wndinner > div.buttons {
   display: none;
+}
+.pocketnet_iframe .wnd.pipmini {
+  right: 60px;
+  bottom: 1em;
+  top: auto;
+  left: auto;
+  max-width: 300px;
+  width: 25%;
+  height: auto;
+  z-index: 999;
+}
+.pocketnet_iframe .wnd.pipmini ._changeplace {
+  display: none;
+}
+.pocketnet_iframe .wnd.pipmini:hover ._changeplace,
+.pocketnet_iframe .wnd.pipmini:hover ._expand,
+.pocketnet_iframe .wnd.pipmini:hover ._close {
+  opacity: 1;
+}
+.pocketnet_iframe .wnd.pipmini ._changeplace,
+.pocketnet_iframe .wnd.pipmini ._expand,
+.pocketnet_iframe .wnd.pipmini ._close {
+  background: transparent;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  opacity: 0;
+  -moz-transition: 0.3s;
+  -o-transition: 0.3s;
+  -webkit-transition: 0.3s;
+  transition: 0.3s;
+}
+.pocketnet_iframe .wnd.pipmini ._changeplace {
+  bottom: 0;
+  left: 0;
+}
+.pocketnet_iframe .wnd.pipmini ._expand {
+  top: 0;
+  left: 0;
+}
+.pocketnet_iframe .wnd.pipmini ._close {
+  top: 0;
+  right: 0;
+}
+.pocketnet_iframe .wnd.pipmini .wndback {
+  display: none;
+}
+.pocketnet_iframe .wnd.pipmini .closeline {
+  display: none;
+}
+.pocketnet_iframe .wnd.pipmini .wndinner {
+  position: static;
+}
+.pocketnet_iframe .wnd.pipmini .wndcontent {
+  position: static;
+  padding: 0!important;
+}
+.pocketnet_iframe .wnd.pipmini .wndcontent .widthcontainer {
+  max-width: none!important;
+  width: 100%;
+}
+.pocketnet_iframe .wnd.pipmini .piphidden {
+  display: none!important;
+}
+.pocketnet_iframe .wnd.centercontentWindow .wndinner {
+  display: flex;
+  align-items: center;
+  box-shadow: none;
+}
+.pocketnet_iframe .wnd.centercontentWindow .wndinner .wndcontent {
+  width: 100%;
+  position: static;
+  box-shadow: 0 5px 10px -5px rgba(var(--color-shadow-base), 0.4);
 }
 .pocketnet_iframe .wnd.hiddenState {
   position: fixed;
@@ -6618,6 +6765,16 @@
   bottom: 20px;
   padding: 1em;
   border-radius: 6px;
+  -moz-transition: 0.3s;
+  -o-transition: 0.3s;
+  -webkit-transition: 0.3s;
+  transition: 0.3s;
+}
+.pocketnet_iframe .sitemessage .action {
+  margin-top: 0.5em;
+}
+.pocketnet_iframe .sitemessage.removing {
+  opacity: 0;
 }
 .pocketnet_iframe .bodyshadow {
   position: fixed;
@@ -6813,6 +6970,8 @@
   width: 30px;
 }
 .pocketnet_iframe .preloader5 img {
+  height: 7.5px;
+  contain: strict;
   width: 30px;
   will-change: transform;
 }
@@ -6864,7 +7023,7 @@
   top: 0;
   bottom: 0;
   right: 0;
-  background: rgba(var(--color-shadow-base), 0.7);
+  background: rgba(var(--color-shadow-var), 0.9);
   z-index: 150;
 }
 .pocketnet_iframe .dialog.zindex {
@@ -7235,7 +7394,7 @@
   width: 100%;
 }
 .pocketnet_iframe .menudialog .mobiledialogcontent {
-  max-height: 60vh;
+  max-height: calc(var(--vh, 1vh) * 60);
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
   overscroll-behavior: contain;
@@ -7589,6 +7748,21 @@
 }
 .pocketnet_iframe #application .owl-carousel .owl-nav button.disabled {
   opacity: 0.5;
+}
+.pocketnet_iframe #application .emojionearea .emojionearea-picker {
+  background: rgb(var(--background-total-theme));
+  color: rgb(var(--text-color));
+  box-shadow: 0 5px 7px -5px rgba(var(--color-shadow-base), 0.4);
+}
+.pocketnet_iframe #application .emojionearea .emojionearea-picker .emojionearea-filters {
+  background: rgb(var(--background-main));
+}
+.pocketnet_iframe #application .emojionearea .emojionearea-picker .emojionearea-filters .emojionearea-filter.active {
+  background: rgb(var(--neutral-grad-1));
+}
+.pocketnet_iframe #application .emojionearea .emojionearea-picker .emojionearea-scroll-area .emojionearea-category-title {
+  background: rgb(var(--background-total-theme));
+  color: rgb(var(--text-color));
 }
 .pocketnet_iframe .errorcntplyrex {
   width: 100%;
@@ -7975,7 +8149,6 @@
   overflow-x: scroll;
   scroll-behavior: smooth;
   scrollbar-width: none;
-  scroll-snap-type: y mandatory;
   border-radius: 6px;
 }
 .pocketnet_iframe .horizontalLentaWrapper .showmorebywrapper::-webkit-scrollbar {
@@ -7996,6 +8169,11 @@
 }
 .pocketnet_iframe .horizontalLentaWrapper .showmorebywrapper .showmorebywrapper {
   display: none;
+}
+.pocketnet_iframe .optimizationTip {
+  background: rgb(var(--background-total-theme));
+  background-repeat: repeat-x;
+  background-position: center;
 }
 .pocketnet_iframe .sharepostmenu .menuitem {
   cursor: pointer;
@@ -8048,10 +8226,11 @@
 }
 .pocketnet_iframe html.mobileview .matrixchatwrapper {
   position: fixed;
-  contain: strict style;
-  left: -100%;
+  contain: strict;
+  left: 0;
   top: 0;
-  right: 100%;
+  /*touch-action: none;*/
+  right: 0;
   bottom: 0;
   background: rgb(var(--background-hidden-layer));
   -moz-transition: 0.3s;
@@ -8060,17 +8239,16 @@
   transition: 0.3s;
   z-index: 1004;
   -webkit-overflow-scrolling: touch;
-  transform-origin: 'right center';
-  -webkit-transform: scale(0.9);
-  transform: scale(0.9);
+  transform-origin: left center;
+  -webkit-transform: translateX(-100%);
+  transform: translateX(-100%);
   overflow: hidden;
-  border-radius: 5px;
   backface-visibility: hidden;
   will-change: transform;
 }
 .pocketnet_iframe html.mobileview .matrixchatwrapper.active {
-  -webkit-transform: scale(1) translateX(100%);
-  transform: scale(1) translateX(100%);
+  -webkit-transform: translateX(0);
+  transform: translateX(0);
 }
 .pocketnet_iframe html.mobileview[chatposition='above'] .matrixchatwrapper {
   z-index: 1006;
@@ -8108,7 +8286,7 @@
   display: none;
 }
 .pocketnet_iframe html.mobileview .tooltipMobileDialog .mobiledialogcontent {
-  max-height: 60vh;
+  max-height: calc(var(--vh, 1vh) * 60);
 }
 .pocketnet_iframe html.mobileview .tooltipMobileDialog .secondwrapper {
   vertical-align: bottom;
@@ -8162,6 +8340,55 @@
   touch-action: none;
   -webkit-overflow-scrolling: none;
   overscroll-behavior: none;
+}
+.pocketnet_iframe html.mobileview .wnd.pipmini {
+  right: 1em;
+  top: 50%;
+  bottom: auto;
+  left: auto;
+  transform: translateY(-50%);
+  max-width: 33%;
+  width: 330px;
+}
+.pocketnet_iframe html.mobileview .wnd.pipmini ._changeplace,
+.pocketnet_iframe html.mobileview .wnd.pipmini ._expand,
+.pocketnet_iframe html.mobileview .wnd.pipmini ._close {
+  opacity: 1;
+}
+@media only screen and (max-width: 1920px) {
+  .pocketnet_iframe html.mobileview .wnd.pipmini {
+    transform: none;
+    left: 0.5em;
+    right: 0.5em;
+    width: auto;
+    max-width: none;
+    top: 70px;
+    will-change: transform;
+    -moz-transition: transform 0.3s;
+    -o-transition: transform 0.3s;
+    -webkit-transition: transform 0.3s;
+    transition: transform 0.3s;
+  }
+  .pocketnet_iframe html.mobileview .wnd.pipmini ._changeplace {
+    display: block;
+    -moz-transition: transform 0.3s;
+    -o-transition: transform 0.3s;
+    -webkit-transition: transform 0.3s;
+    transition: transform 0.3s;
+  }
+  .pocketnet_iframe html.mobileview .wnd.pipmini[position='bottom'] {
+    bottom: 100px;
+    top: auto;
+  }
+  .pocketnet_iframe html.mobileview .wnd.pipmini[position='bottom'] ._changeplace {
+    transform: rotate(180deg);
+  }
+  .pocketnet_iframe html.mobileview.scrollmodedown .wnd.pipmini {
+    transform: translateY(-65px);
+  }
+  .pocketnet_iframe html.mobileview.scrollmodedown .wnd.pipmini[position='bottom'] {
+    transform: translateY(90px);
+  }
 }
 .pocketnet_iframe html.mobileview.fullscreen {
   -webkit-touch-callout: none;
@@ -8520,8 +8747,7 @@
 .pocketnet_iframe .fastMessage .commentmessagewrapper .commenttext span,
 .pocketnet_iframe .notification .commentmessagewrapper .commenttext span {
   font-size: 1;
-  color: rgb(var(--neutral-grad-4));
-  font-weight: 400;
+  font-weight: 700;
 }
 .pocketnet_iframe .fastMessage .commentmessagewrapper .commentimages,
 .pocketnet_iframe .notification .commentmessagewrapper .commentimages {
@@ -8790,9 +9016,7 @@
   cursor: pointer;
 }
 .pocketnet_iframe .notification .commentmessagewrapper .commenttext span {
-  font-size: 1.4em;
-  color: rgb(var(--neutral-grad-4));
-  font-weight: 100;
+  font-weight: 700;
 }
 .pocketnet_iframe #hideallnotifications .hidenf {
   position: fixed;
@@ -9076,6 +9300,9 @@
   margin-top: 0.5em;
   margin-bottom: 0.5em;
 }
+.pocketnet_iframe .article_body .article_image {
+  margin-bottom: 0.5em;
+}
 .pocketnet_iframe .article_body .article_image.withBorder {
   border: 1px solid rgba(var(--neutral-grad-1), 0.5);
   padding: 0.5em;
@@ -9092,6 +9319,7 @@
   display: block;
   margin: 0 auto;
   max-width: 400px!important;
+  width: 100%;
 }
 .pocketnet_iframe .article_body .article_image img {
   border-radius: 5px;
@@ -9275,8 +9503,8 @@
   position: fixed;
   top: 0;
   left: 0;
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
   background-color: #011621;
   z-index: 5000;
   display: flex;
@@ -9300,8 +9528,8 @@
   background-color: #0098eb;
 }
 .pocketnet_iframe #splashScreen img {
-  max-height: 6vh;
-  max-width: 100vw;
+  max-height: 50px;
+  max-width: 50px;
 }
 .pocketnet_iframe #splashScreen img.zoom-in {
   -webkit-animation: zoom-in 0.5s ease-out both;
@@ -9318,6 +9546,9 @@
 .pocketnet_iframe #splashScreen img.zoom-out-rotate {
   -webkit-animation: zoom-out-rotate 0.5s ease-in both;
   animation: zoom-out-rotate 0.5s ease-in both;
+}
+.pocketnet_iframe html.mobileview .plyr__volume {
+  max-width: 32px;
 }
 .pocketnet_iframe html.mobileview #panelWrapper {
   position: fixed;
@@ -9383,6 +9614,12 @@
 }
 .pocketnet_iframe html.mobileview #navigation .fakem {
   display: none;
+}
+.pocketnet_iframe html.mobileview.openapipnet .contentWrapper {
+  padding-top: 0;
+}
+.pocketnet_iframe html.openapipnet .contentWrapper {
+  padding-top: 0;
 }
 .pocketnet_iframe html.mobileview #panelWrapper {
   position: fixed;
@@ -9955,22 +10192,27 @@
 .pocketnet_iframe html.mobileview .upbutton .full {
   display: none;
 }
+.pocketnet_iframe html.mobileview .wnd.normalizedmobile {
+  contain: strict;
+}
 .pocketnet_iframe html.mobileview .wnd.normalizedmobile .wndinner {
   width: 100%;
   background: transparent!important;
+  will-change: transform;
 }
 .pocketnet_iframe html.mobileview .wnd.normalizedmobile .wndback {
   backface-visibility: hidden;
-  will-change: transform;
-  backdrop-filter: none!important;
-  -webkit-backdrop-filter: none!important;
-  -moz-transition: 0.3s;
-  -o-transition: 0.3s;
-  -webkit-transition: 0.3s;
-  transition: 0.3s;
+  -moz-transition: 0s;
+  -o-transition: 0s;
+  -webkit-transition: 0s;
+  transition: 0s;
 }
 .pocketnet_iframe html.mobileview .wnd.normalizedmobile .hideButton {
   display: none!important;
+}
+.pocketnet_iframe html.mobileview .wnd.normalizedmobile ._close {
+  backdrop-filter: none!important;
+  opacity: 0;
 }
 .pocketnet_iframe html.mobileview .wnd.normalizedmobile .closeline {
   top: 120px;
@@ -9981,6 +10223,7 @@
   left: 28%;
   opacity: 0;
   position: absolute;
+  display: none;
   -moz-transition: top 0.3s;
   -o-transition: top 0.3s;
   -webkit-transition: top 0.3s;
@@ -9988,7 +10231,7 @@
 }
 .pocketnet_iframe html.mobileview .wnd.normalizedmobile .wndinner {
   max-height: none!important;
-  top: 0%!important;
+  top: auto!important;
   bottom: 0;
   height: auto!important;
   max-width: none!important;
@@ -9996,7 +10239,6 @@
   transform: translateY(100%);
   backface-visibility: hidden;
   will-change: transform;
-  contain: strict;
   -moz-transition: top 0.3s;
   -o-transition: top 0.3s;
   -webkit-transition: top 0.3s;
@@ -10005,19 +10247,31 @@
 .pocketnet_iframe html.mobileview .wnd.normalizedmobile .wndinner .wndheader {
   max-width: 768px;
   margin: 0 auto;
+  position: sticky;
 }
 .pocketnet_iframe html.mobileview .wnd.normalizedmobile .wndinner .wndcontent {
+  position: relative;
   border-bottom-right-radius: 0;
   border-bottom-left-radius: 0;
-  bottom: 0;
   backface-visibility: hidden;
-  padding-bottom: 130px;
   background: rgb(var(--background-total-theme));
   max-width: 768px;
+  max-height: calc(var(--vh, 1vh) * 92);
+  min-height: calc(var(--vh, 1vh) * 30);
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
   margin: 0 auto;
   padding-left: 0;
   padding-right: 0;
-  box-shadow: 0 5px 7px -5px rgba(var(--color-shadow-base), 0.4);
+}
+.pocketnet_iframe html.mobileview .wnd.normalizedmobile .wndinner .wndcontent > div {
+  opacity: 0;
+  -moz-transition: opacity 0.3s;
+  -o-transition: opacity 0.3s;
+  -webkit-transition: opacity 0.3s;
+  transition: opacity 0.3s;
 }
 .pocketnet_iframe html.mobileview .wnd.normalizedmobile .wndinner .wndcontent::-webkit-scrollbar {
   width: 0;
@@ -10027,6 +10281,10 @@
 }
 .pocketnet_iframe html.mobileview .wnd.normalizedmobile .wndinner > div.buttons {
   display: none;
+}
+.pocketnet_iframe html.mobileview .wnd.normalizedmobile .wndinner > div.buttons > div {
+  max-width: 768px;
+  margin: 0 auto;
 }
 .pocketnet_iframe html.mobileview .wnd.normalizedmobile.asette .wndback {
   -moz-transition: 0.2s;
@@ -10047,32 +10305,21 @@
   transition: 0.2s;
 }
 .pocketnet_iframe html.mobileview .wnd.normalizedmobile.sette .wndinner {
-  -webkit-transform: translateY(130px);
-  transform: translateY(130px);
+  -webkit-transform: translate3d(0, 0, 0);
+  transform: translate3d(0, 0, 0);
   -moz-transition: transform 0.3s;
   -o-transition: transform 0.3s;
   -webkit-transition: transform 0.3s;
   transition: transform 0.3s;
 }
-.pocketnet_iframe html.mobileview .wnd.normalizedmobile.sette .windowmainbuttons {
-  -webkit-transform: translateY(-130px);
-  transform: translateY(-130px);
-  -moz-transition: transform 0.3s;
-  -o-transition: transform 0.3s;
-  -webkit-transition: transform 0.3s;
-  transition: transform 0.3s;
-}
+.pocketnet_iframe html.mobileview .wnd.normalizedmobile.sette ._close,
 .pocketnet_iframe html.mobileview .wnd.normalizedmobile.sette .closeline,
 .pocketnet_iframe html.mobileview .wnd.normalizedmobile.sette .wndback {
   opacity: 1;
 }
 .pocketnet_iframe html.mobileview .wnd.normalizedmobile.showbetter.sette .wndinner {
-  -webkit-transform: translateY(45px);
-  transform: translateY(45px);
-}
-.pocketnet_iframe html.mobileview .wnd.normalizedmobile.showbetter.sette .windowmainbuttons {
-  -webkit-transform: translateY(-45px);
-  transform: translateY(-45px);
+  -webkit-transform: translate3d(0, 0, 0);
+  transform: translate3d(0, 0, 0);
 }
 .pocketnet_iframe html.mobileview .wnd.normalizedmobile.showbetter .closeline {
   opacity: 0;
@@ -10080,9 +10327,49 @@
 .pocketnet_iframe html.mobileview .wnd.normalizedmobile.showbetter .roundclosebutton {
   backdrop-filter: none;
 }
-.pocketnet_iframe html.mobileview .wnd.normalizedmobile.noheader .wndinner .wndcontent {
+.pocketnet_iframe html.mobileview .wnd.normalizedmobile.noheader .wndinner {
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
+  overflow: hidden;
+}
+.pocketnet_iframe html.mobileview .wnd.normalizedmobile:only-child .wndback {
+  -moz-transition: 0.2s;
+  -o-transition: 0.2s;
+  -webkit-transition: 0.2s;
+  transition: 0.2s;
+}
+.pocketnet_iframe html.mobileview .wnd.normalizedmobile:only-child.asette .wndback {
+  opacity: 0;
+}
+.pocketnet_iframe html.mobileview .wnd.maxheight .wndinner .wndcontent {
+  height: calc(var(--vh, 1vh) * 92);
+}
+.pocketnet_iframe html.pipmode .pipped {
+  position: fixed!important;
+  left: 0!important;
+  right: 0!important;
+  top: 0!important;
+  bottom: 0!important;
+  width: 100%!important;
+  height: 100%!important;
+  z-index: 10000!important;
+  max-height: none!important;
+  max-width: none!important;
+  transform: none!important;
+}
+.pocketnet_iframe html.pipmode .wnd ._expand,
+.pocketnet_iframe html.pipmode .wnd ._changeplace,
+.pocketnet_iframe html.pipmode .wnd ._close,
+.pocketnet_iframe html.pipmode .wnd .closeline {
+  display: none!important;
+}
+.pocketnet_iframe html.pipmode .wnd .wndinner {
+  -webkit-transform: none!important;
+  transform: none!important;
+}
+.pocketnet_iframe html.pipmode #content,
+.pocketnet_iframe html.pipmode .matrixchatwrapper {
+  display: none;
 }
 .pocketnet_iframe #application .emojionearea,
 .pocketnet_iframe #application .emojionearea.form-control {
@@ -10216,7 +10503,7 @@
 .pocketnet_iframe #application .parameter input {
   width: 100%;
   padding: 0.5em;
-  border-radius: 2px;
+  border-radius: 6px;
 }
 .pocketnet_iframe #application .parameter select.error,
 .pocketnet_iframe #application .parameter textarea.error,
@@ -10239,7 +10526,7 @@
 }
 .pocketnet_iframe #application .parameter .vc_valuecustom .vc_textInput,
 .pocketnet_iframe #application .parameter .vc_valuecustom_multibig .vc_textInput {
-  background: #fff;
+  background: rgb(var(--background-hidden-layer));
 }
 .pocketnet_iframe #application .parameter .vmt_valuesmultitree,
 .pocketnet_iframe #application .parameter .vm_value {
@@ -10560,7 +10847,6 @@
 }
 .pocketnet_iframe .dg-main-content {
   width: 98%;
-  /*width: calc(98% - 30px);*/
   max-width: 400px;
   padding: 15px;
   border-radius: 5px;
@@ -10734,6 +11020,24 @@
 .pocketnet_iframe .share_common .commentsWrapperHb {
   min-height: 1em;
 }
+.pocketnet_iframe .share_common .gotouserprofile {
+  cursor: pointer;
+}
+.pocketnet_iframe .share_common .pkoin {
+  display: flex;
+  align-items: center;
+  background: rgb(var(--color-bg-ac-bright));
+  color: rgb(var(--text-on-bg-ac-color));
+  border-radius: 8px;
+  padding: 4px 8px;
+  cursor: pointer;
+}
+.pocketnet_iframe .share_common .pkoin img {
+  width: 1em;
+}
+.pocketnet_iframe .share_common .pkoin span {
+  margin-left: 0.5em;
+}
 .pocketnet_iframe .share_common .commentsWrapper {
   background: rgb(var(--background-secondary-theme));
   border-bottom-left-radius: 12px;
@@ -10744,6 +11048,15 @@
 }
 .pocketnet_iframe .share_common .work {
   width: 100%;
+}
+.pocketnet_iframe .share_common .sbtnxs,
+.pocketnet_iframe .share_common .adr {
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  vertical-align: middle;
+  display: inline-block;
+  white-space: nowrap;
 }
 .pocketnet_iframe .share_common .statswrapperExtended {
   display: flex;
@@ -10841,7 +11154,7 @@
   font-weight: 700;
 }
 .pocketnet_iframe .share_common .repostShare {
-  border-radius: 6px;
+  border-radius: 12px;
   border: 1px solid rgba(var(--neutral-grad-1), 0.5);
   border-bottom: 1px solid rgba(var(--background-total-theme), 0.75);
   border-right: 1px solid rgba(var(--background-total-theme), 0.75);
@@ -10851,7 +11164,7 @@
   margin-bottom: 0.5em;
 }
 .pocketnet_iframe .share_common .repostShare .share {
-  margin-bottom: 0;
+  margin-bottom: 0!important;
 }
 .pocketnet_iframe .share_common .repostShare .share .videoTips {
   display: none!important;
@@ -10934,6 +11247,9 @@
 .pocketnet_iframe .share_common .subscribeWrapper .unsubscribeevent {
   display: none;
 }
+.pocketnet_iframe .share_common .shareSave {
+  margin-right: auto;
+}
 .pocketnet_iframe .share_common .shareSave i {
   display: none;
 }
@@ -10964,7 +11280,7 @@
   left: 0;
   right: 0;
   top: 0;
-  bottom: 60px;
+  bottom: 70px;
   cursor: pointer;
   background: #000000;
   background: linear-gradient(180deg, rgba(0, 0, 0, 0.95281863) 0%, rgba(0, 0, 0, 0.94721639) 6%, rgba(0, 0, 0, 0.21612395) 76%, rgba(0, 0, 0, 0.09007353) 82%, rgba(0, 0, 0, 0) 100%);
@@ -11147,24 +11463,6 @@
 .pocketnet_iframe .share_common .jsPlayerPreview .statswrapper > div:nth-last-child(1) {
   margin-right: 0;
 }
-.pocketnet_iframe .share_common .jsPlayerLoading {
-  width: auto;
-  height: auto;
-  background: #000000;
-  position: relative;
-}
-.pocketnet_iframe .share_common .jsPlayerLoading .jsPlayerLoadingD {
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-}
-.pocketnet_iframe .share_common .jsPlayerLoading .jsPlayerLoadingD > div {
-  vertical-align: middle;
-  text-align: center;
-}
 .pocketnet_iframe .share_common .authorTable {
   width: auto;
 }
@@ -11318,6 +11616,8 @@
   font-weight: 500;
   overflow: hidden;
   text-overflow: ellipsis;
+  display: inline-block;
+  vertical-align: middle;
 }
 .pocketnet_iframe .share_common .sharecaption a {
   text-decoration: underline;
@@ -11487,6 +11787,12 @@
   font-size: 0.9em;
   color: rgb(var(--neutral-grad-4));
 }
+.pocketnet_iframe .share_common .stars {
+  height: 40px;
+  line-height: 40px;
+  text-align: center;
+  cursor: pointer;
+}
 .pocketnet_iframe .share_common .sharepanel {
   border-radius: 0;
   display: flex;
@@ -11513,12 +11819,6 @@
 .pocketnet_iframe .share_common .sharepanel > div:nth-last-child(1) {
   margin-right: 0;
 }
-.pocketnet_iframe .share_common .sharepanel > div .stars {
-  height: 40px;
-  line-height: 40px;
-  text-align: center;
-  cursor: pointer;
-}
 .pocketnet_iframe .share_common .sharepanel > div .count {
   cursor: pointer;
 }
@@ -11540,21 +11840,6 @@
 }
 .pocketnet_iframe .share_common .sharepanel > div:hover .icon {
   opacity: 0.7;
-}
-.pocketnet_iframe .share_common .sharepanel > div.pkoin {
-  display: flex;
-  align-items: center;
-  background: rgb(var(--color-bg-ac-bright));
-  color: rgb(var(--text-on-bg-ac-color));
-  border-radius: 8px;
-  padding: 4px 8px;
-  cursor: pointer;
-}
-.pocketnet_iframe .share_common .sharepanel > div.pkoin img {
-  width: 1em;
-}
-.pocketnet_iframe .share_common .sharepanel > div.pkoin span {
-  margin-left: 0.5em;
 }
 .pocketnet_iframe .share_common .sharepanel > div.sharesocial .label,
 .pocketnet_iframe .share_common .sharepanel > div.sharesocial .icon {
@@ -11632,38 +11917,9 @@
   padding-top: 0;
   border-radius: 0!important;
   margin-bottom: 0!important;
-  /*#comments{
-              .caption{
-                  padding-left: 2 * @rhythm;
-                  padding-right: 3 * @rhythm;
-              }
-              
-              .commentPaddingWrapper,
-              .post{
-                  padding-left: 2 * @rhythm;
-                  padding-right: 3 * @rhythm;
-              }
-  
-              .commentPaddingWrapper{
-                  padding-right: 4 * @rhythm;
-              }
-  
-              .list .answer .postbody{
-                  padding-left: 2 * @rhythm;
-                  padding-right: 3 * @rhythm;
-              }
-  
-              .answers{
-                  .commentPaddingWrapper{
-                      padding-right: 0;
-                      padding-left: 0;
-                  }
-              }	
-  
-          }*/
 }
 .pocketnet_iframe .share_common.fullScreenVideo .video-js {
-  max-height: 80vh;
+  max-height: calc(var(--vh, 1vh) * 80);
 }
 .pocketnet_iframe .share_common.fullScreenVideo .shareTable {
   padding-top: 0;
@@ -11744,6 +12000,9 @@
 .pocketnet_iframe .share_common.fullScreenVideo .sharecaption span {
   font-size: 0.9em;
 }
+.pocketnet_iframe .share_common.fullScreenVideo .message {
+  padding-left: 1em;
+}
 .pocketnet_iframe .share_common.fullScreenVideo .formeta {
   padding-left: 1em;
 }
@@ -11804,32 +12063,6 @@
 }
 .pocketnet_iframe .share_common.fullScreenVideo .work .videoWrapper {
   max-width: none;
-  /*background: #000;
-              
-                  &.squareVideo,
-                  &.verticalVideo {
-                      background: #000;
-                      position: relative;
-                      overflow: hidden;
-  
-                      .js-player{
-                          margin : 0 auto;
-                          max-width: 450px;
-                          position : static;
-                      }
-  
-  
-                      .video-js{
-                          position : static;
-  
-                      }
-                  }
-  
-                  &.squareVideo{
-                      .js-player{
-                          max-width: 500px;
-                      }
-                  }*/
 }
 .pocketnet_iframe .share_common.fullScreenVideo .work .videoWrapper .videoTips {
   display: none;
@@ -11856,6 +12089,17 @@
 }
 .pocketnet_iframe .share_common .work {
   width: 100%;
+}
+.pocketnet_iframe html.mobileview .share_common .images .imagesContainer.owlcar {
+  max-width: none;
+  contain: strict;
+}
+.pocketnet_iframe html.mobileview .share_common .panel {
+  contain: strict;
+  height: 40px;
+}
+.pocketnet_iframe html.ios .share_common.fullScreenVideo .video-js {
+  max-height: 80vh;
 }
 @media only screen and (max-width: 1920px) {
   .pocketnet_iframe .share_common {
@@ -11900,6 +12144,9 @@
               }
           }*/
   }
+  .pocketnet_iframe .share_common .jsPlayerLoading .preloader5 {
+    display: none;
+  }
   .pocketnet_iframe .share_common .showMore button {
     font-size: 1.2em;
   }
@@ -11933,6 +12180,9 @@
     background: rgb(var(--color-shadow-base));
   }
   .pocketnet_iframe .share_common.fullScreenVideo .sharecaption {
+    padding-left: 0.5em;
+  }
+  .pocketnet_iframe .share_common.fullScreenVideo .message {
     padding-left: 0.5em;
   }
   .pocketnet_iframe .share_common.fullScreenVideo .work .metawrapper {
@@ -12035,7 +12285,7 @@
   }
   .pocketnet_iframe .share_common .jsPlayerLoading {
     width: 100%;
-    height: 300px;
+    /*height: 300px;*/
   }
   .pocketnet_iframe .share_common .meta {
     margin-top: 0;
@@ -12144,6 +12394,324 @@
   }
   .pocketnet_iframe .share_common .exitFull {
     right: 1em;
+  }
+}
+.pocketnet_iframe .common_share_article_wrapper .share .sharearticle {
+  border-radius: 12px;
+  overflow: hidden;
+  opacity: 0;
+  -moz-transition: opacity 0.1s;
+  -o-transition: opacity 0.1s;
+  -webkit-transition: opacity 0.1s;
+  transition: opacity 0.1s;
+}
+.pocketnet_iframe .common_share_article_wrapper .share .sharearticle.ready {
+  opacity: 1;
+}
+.pocketnet_iframe .common_share_article_wrapper .share .sharearticle .shareTable {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+.pocketnet_iframe .common_share_article_wrapper .share .sharearticle .articleclick {
+  cursor: pointer;
+}
+.pocketnet_iframe .common_share_article_wrapper .share .sharearticle .readarticlebutton {
+  text-decoration: underline;
+}
+.pocketnet_iframe .common_share_article_wrapper .share .sharearticle .shareBgCaption .author,
+.pocketnet_iframe .common_share_article_wrapper .share .sharearticle .articleend .author {
+  margin-top: 1em;
+}
+.pocketnet_iframe .common_share_article_wrapper .share .sharearticle .shareBgCaption .author i,
+.pocketnet_iframe .common_share_article_wrapper .share .sharearticle .articleend .author i {
+  display: none;
+}
+.pocketnet_iframe .common_share_article_wrapper .share .sharearticle .shareBgCaption .author .notificationturn,
+.pocketnet_iframe .common_share_article_wrapper .share .sharearticle .articleend .author .notificationturn {
+  display: none!important;
+}
+.pocketnet_iframe .common_share_article_wrapper .share .sharearticle .shareBgCaption .forstars .itemwr,
+.pocketnet_iframe .common_share_article_wrapper .share .sharearticle .articleend .forstars .itemwr {
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: center;
+}
+.pocketnet_iframe .common_share_article_wrapper .share .sharearticle .shareBgCaption .forstars .itemwr i,
+.pocketnet_iframe .common_share_article_wrapper .share .sharearticle .articleend .forstars .itemwr i {
+  text-align: center;
+}
+.pocketnet_iframe .common_share_article_wrapper .share .sharearticle .shareBgCaption .forstars .starWrapper,
+.pocketnet_iframe .common_share_article_wrapper .share .sharearticle .articleend .forstars .starWrapper {
+  text-align: center;
+}
+.pocketnet_iframe .common_share_article_wrapper .share .sharearticle .shareBgCaption .forstars .count span,
+.pocketnet_iframe .common_share_article_wrapper .share .sharearticle .articleend .forstars .count span {
+  font-size: 2em;
+}
+.pocketnet_iframe .common_share_article_wrapper .share .sharearticle .shareBgCaption .forstars .count span,
+.pocketnet_iframe .common_share_article_wrapper .share .sharearticle .articleend .forstars .count span {
+  font-weight: 700;
+  font-family: Nunito Sans;
+}
+.pocketnet_iframe .common_share_article_wrapper .share .sharearticle .shareBgCaption .sys,
+.pocketnet_iframe .common_share_article_wrapper .share .sharearticle .articleend .sys {
+  text-align: center;
+}
+.pocketnet_iframe .common_share_article_wrapper .share .sharearticle .shareBgCaption .buttonOpenWrapper,
+.pocketnet_iframe .common_share_article_wrapper .share .sharearticle .articleend .buttonOpenWrapper {
+  padding-bottom: 1em;
+}
+.pocketnet_iframe .common_share_article_wrapper .share .sharearticle .shareBgCaption .buttonOpenWrapper .showMoreArticle,
+.pocketnet_iframe .common_share_article_wrapper .share .sharearticle .articleend .buttonOpenWrapper .showMoreArticle {
+  color: #00A4FF;
+  cursor: pointer;
+}
+.pocketnet_iframe .common_share_article_wrapper .share .sharearticle .shareBgCaption .buttonOpenWrapper .showMoreArticle:hover,
+.pocketnet_iframe .common_share_article_wrapper .share .sharearticle .articleend .buttonOpenWrapper .showMoreArticle:hover {
+  opacity: 0.6;
+}
+.pocketnet_iframe .common_share_article_wrapper .share .sharearticle .shareBgCaption .divider,
+.pocketnet_iframe .common_share_article_wrapper .share .sharearticle .articleend .divider {
+  margin: 0.5em auto;
+  height: 1px;
+  width: 110px;
+  background: rgb(var(--background-total-theme));
+}
+.pocketnet_iframe .common_share_article_wrapper .share .sharearticle .shareBgCaption .tags,
+.pocketnet_iframe .common_share_article_wrapper .share .sharearticle .articleend .tags {
+  max-width: none;
+}
+.pocketnet_iframe .common_share_article_wrapper .share .sharearticle .shareBgCaption .tags div span,
+.pocketnet_iframe .common_share_article_wrapper .share .sharearticle .articleend .tags div span {
+  color: rgba(var(--text-on-bg-ac-color), 0, 0.7);
+}
+.pocketnet_iframe .common_share_article_wrapper .share .sharearticle .author {
+  white-space: nowrap;
+}
+.pocketnet_iframe .common_share_article_wrapper .share .sharearticle .shareBgCaption {
+  height: 425px;
+  position: relative;
+}
+.pocketnet_iframe .common_share_article_wrapper .share .sharearticle .shareBgCaption .blackmatte {
+  background: linear-gradient(0deg, rgba(var(--background-secondary-theme-2), 0.96) 10%, rgba(255, 255, 255, 0) 75%), linear-gradient(180deg, rgb(var(--background-secondary-theme-2)) 0%, rgba(255, 255, 255, 0) 18%);
+}
+.pocketnet_iframe .common_share_article_wrapper .share .sharearticle .shareBgCaption.withoutcover {
+  height: 340px;
+}
+.pocketnet_iframe .common_share_article_wrapper .share .sharearticle .shareBgCaption.withoutcover .blackmatte {
+  background: rgb(var(--background-secondary-theme-2));
+}
+.pocketnet_iframe .common_share_article_wrapper .share .sharearticle .shareBgCaption .captioncnt {
+  display: flex;
+  flex-direction: column;
+  z-index: 1;
+  color: rgb(var(--text-on-bg-ac-color));
+  overflow: hidden;
+}
+.pocketnet_iframe .common_share_article_wrapper .share .sharearticle .shareBgCaption .captioncnt .toppanel {
+  display: flex;
+  justify-content: space-between;
+}
+.pocketnet_iframe .common_share_article_wrapper .share .sharearticle .shareBgCaption .captioncnt .toppanel .authorWrapper {
+  display: flex;
+}
+.pocketnet_iframe .common_share_article_wrapper .share .sharearticle .shareBgCaption .captioncnt .toppanel .authorWrapper .iconWrapper {
+  margin-top: 6px;
+}
+.pocketnet_iframe .common_share_article_wrapper .share .sharearticle .shareBgCaption .captioncnt .toppanel .authorWrapper .actionsWrapper {
+  margin-left: 12px;
+}
+.pocketnet_iframe .common_share_article_wrapper .share .sharearticle .shareBgCaption .captioncnt .toppanel .authorWrapper .actionsWrapper .sys {
+  text-align: start;
+}
+.pocketnet_iframe .common_share_article_wrapper .share .sharearticle .shareBgCaption .captioncnt .toppanel .socialsharewrapper {
+  padding-right: 1em;
+}
+.pocketnet_iframe .common_share_article_wrapper .share .sharearticle .shareBgCaption .captioncnt .widthcontainer {
+  margin-top: auto;
+  padding: 0 16px;
+}
+.pocketnet_iframe .common_share_article_wrapper .share .sharearticle .shareBgCaption .captioncnt .articleclick {
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  cursor: pointer;
+}
+.pocketnet_iframe .common_share_article_wrapper .share .sharearticle .shareBgCaption .captioncnt .articleclick .captionmult {
+  margin-top: auto;
+}
+.pocketnet_iframe .common_share_article_wrapper .share .sharearticle .shareBgCaption .captioncnt .sharecaption {
+  font-size: 1.5em;
+  font-weight: 700;
+  max-width: 85%;
+  color: rgb(var(--text-on-bg-ac-color));
+  max-height: 220px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  text-overflow: ellipsis;
+  overscroll-behavior: auto;
+  text-shadow: 0px 0px 2px rgba(var(--color-shadow-base), 0.714), 0 0 3px rgba(var(--color-shadow-base), 0.519);
+}
+.pocketnet_iframe .common_share_article_wrapper .share .sharearticle .shareBgCaption .tags {
+  margin-bottom: 0;
+}
+.pocketnet_iframe .common_share_article_wrapper .share .sharearticle .shareBgCaption .tags div span {
+  text-shadow: 0px 0px 2px rgba(var(--color-shadow-base), 0.714), 0 0 3px rgba(var(--color-shadow-base), 0.519);
+}
+.pocketnet_iframe .common_share_article_wrapper .share .sharearticle .shareBgCaption .sys span {
+  color: rgb(var(--text-on-bg-shadow-color));
+  text-shadow: 0px 0px 2px rgba(var(--color-shadow-base), 0.714), 0 0 3px rgba(var(--color-shadow-base), 0.519);
+}
+.pocketnet_iframe .common_share_article_wrapper .share .sharearticle .shareBgCaption .icon .usericon {
+  margin: 0 auto;
+  position: relative;
+}
+.pocketnet_iframe .common_share_article_wrapper .share .sharearticle .shareBgCaption.showtext .icon {
+  position: absolute;
+  bottom: -22px;
+  left: 0;
+  right: 0;
+}
+.pocketnet_iframe .common_share_article_wrapper .share .sharearticle .shareBgCaption .starstoppanel,
+.pocketnet_iframe .common_share_article_wrapper .share .sharearticle .shareBgCaption .socialsharewrapper {
+  bottom: 0.75em;
+  right: 1.25em;
+}
+.pocketnet_iframe .common_share_article_wrapper .share .sharearticle .shareBgCaption .starstoppanel .starstoppanel .iconwrapper,
+.pocketnet_iframe .common_share_article_wrapper .share .sharearticle .shareBgCaption .socialsharewrapper .starstoppanel .iconwrapper,
+.pocketnet_iframe .common_share_article_wrapper .share .sharearticle .shareBgCaption .starstoppanel .socialsharewrapper .iconwrapper,
+.pocketnet_iframe .common_share_article_wrapper .share .sharearticle .shareBgCaption .socialsharewrapper .socialsharewrapper .iconwrapper {
+  color: rgb(var(--text-color));
+}
+.pocketnet_iframe .common_share_article_wrapper .share .sharearticle .shareBgCaption .starstoppanel .iconwrapper,
+.pocketnet_iframe .common_share_article_wrapper .share .sharearticle .shareBgCaption .socialsharewrapper .iconwrapper {
+  width: 3.5em;
+  height: 3.5em;
+  line-height: 3.5em;
+  border-radius: 3.5em;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  font-family: Nunito Sans;
+}
+.pocketnet_iframe .common_share_article_wrapper .share .sharearticle .shareBgCaption .starstoppanel .iconwrapper:hover,
+.pocketnet_iframe .common_share_article_wrapper .share .sharearticle .shareBgCaption .socialsharewrapper .iconwrapper:hover {
+  opacity: 0.6;
+}
+.pocketnet_iframe .common_share_article_wrapper .share .sharearticle .shareBgCaption .starstoppanel .iconwrapper i,
+.pocketnet_iframe .common_share_article_wrapper .share .sharearticle .shareBgCaption .socialsharewrapper .iconwrapper i {
+  width: 30px;
+  text-align: center;
+  font-size: 0.7em;
+}
+.pocketnet_iframe .common_share_article_wrapper .share .sharearticle .shareBgCaption .starstoppanel .sharesocial,
+.pocketnet_iframe .common_share_article_wrapper .share .sharearticle .shareBgCaption .socialsharewrapper .sharesocial {
+  display: none;
+}
+.pocketnet_iframe .common_share_article_wrapper .share .sharearticle .shareBgCaption .socialsharewrapper .iconwrapper {
+  justify-content: flex-end;
+}
+.pocketnet_iframe .common_share_article_wrapper .share .sharearticle .shareBgCaption .starstoppanel {
+  bottom: 0.75em;
+  left: 1.5em;
+  right: auto;
+  display: flex;
+  justify-content: space-between;
+  padding-left: 1em;
+  padding-right: 1.5em;
+  padding-bottom: 0.5em;
+  contain: none;
+  height: auto;
+}
+.pocketnet_iframe .common_share_article_wrapper .share .sharearticle .shareBgCaption .starstoppanel .panelLeft {
+  display: flex;
+  padding-bottom: 0.5em;
+}
+.pocketnet_iframe .common_share_article_wrapper .share .sharearticle .shareBgCaption .starstoppanel .panelRight {
+  display: flex;
+  align-items: center;
+}
+.pocketnet_iframe .common_share_article_wrapper .share .sharearticle .shareBgCaption .starstoppanel .panelRight .panel {
+  contain: none;
+}
+.pocketnet_iframe .common_share_article_wrapper .share .sharearticle .shareBgCaption .articleCover {
+  border-radius: 12px;
+  overflow: hidden;
+  filter: brightness(85%);
+}
+.pocketnet_iframe .common_share_article_wrapper .share .sharearticle .shareBgCaption .blackmatte {
+  border-radius: 12px;
+  overflow: hidden;
+}
+.pocketnet_iframe .common_share_article_wrapper .share .sharearticle .shareBgCaption .articleCover,
+.pocketnet_iframe .common_share_article_wrapper .share .sharearticle .shareBgCaption .captioncnt,
+.pocketnet_iframe .common_share_article_wrapper .share .sharearticle .shareBgCaption .blackmatte {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+}
+.pocketnet_iframe .common_share_article_wrapper .share .sharearticle .shareBgCaption .whitematte {
+  position: absolute;
+  bottom: 30%;
+  top: 20%;
+  left: 0;
+  right: 0;
+  cursor: pointer;
+  z-index: 1;
+}
+.pocketnet_iframe .common_share_article_wrapper .share .sharearticle .shareBgCaption.smallimage .articleCover {
+  background-color: rgb(var(--color-shadow-base));
+  background-size: 100px auto!important;
+}
+.pocketnet_iframe .common_share_article_wrapper .share .sharearticle .shareBgCaption.caption_small .captionmult {
+  font-size: 1.5em;
+}
+.pocketnet_iframe .common_share_article_wrapper .share .sharearticle .shareBgCaption.caption_long .captionmult {
+  font-size: 0.8em;
+}
+.pocketnet_iframe .common_share_article_wrapper .share .sharearticle .articlecontent {
+  padding-top: 4em;
+  padding-bottom: 4em;
+}
+.pocketnet_iframe .common_share_article_wrapper .share .sharearticle .articlecontent .cntswrk {
+  margin-left: 0;
+  padding-left: 0;
+  padding-right: 0;
+}
+.pocketnet_iframe .common_share_article_wrapper .share .sharearticle .articlecontent .articleend {
+  margin-top: 3em;
+}
+.pocketnet_iframe .common_share_article_wrapper .share .sharearticle .articlecontent .commentsWrapper {
+  border-radius: 12px;
+}
+.pocketnet_iframe .common_share_article_wrapper .share .sharearticle .articlecontent .forcomments {
+  margin-top: 6em;
+}
+.pocketnet_iframe .common_share_article_wrapper .share .sharearticle .removeDescription {
+  display: none;
+  padding: 1.5em;
+  color: rgb(var(--neutral-grad-2));
+}
+.pocketnet_iframe .common_share_article_wrapper .share .sharearticle.deleted .starstoppanel,
+.pocketnet_iframe .common_share_article_wrapper .share .sharearticle.deleted .socialsharewrapper,
+.pocketnet_iframe .common_share_article_wrapper .share .sharearticle.deleted .textscnts {
+  display: none!important;
+}
+.pocketnet_iframe .common_share_article_wrapper .share .sharearticle.deleted .removeDescription {
+  display: block;
+}
+.pocketnet_iframe .common_share_article_wrapper .share .sharearticle.deleted .articleCover {
+  filter: blur(2px);
+}
+@media only screen and (max-width: 1920px) {
+  .pocketnet_iframe .common_share_article_wrapper .shares .sharearticle .shareBgCaption {
+    contain: strict;
+  }
+  .pocketnet_iframe .common_share_article_wrapper .shares .sharearticle .shareBgCaption .starstoppanel,
+  .pocketnet_iframe .common_share_article_wrapper .shares .sharearticle .shareBgCaption .captioncnt .toppanel .socialsharewrapper {
+    padding-right: 0.5em;
   }
 }
 @keyframes plyr-progress {

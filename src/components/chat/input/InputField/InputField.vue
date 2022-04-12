@@ -63,7 +63,6 @@ import "emoji-mart-vue-fast/css/emoji-mart.css";
 import f from "@/application/functions";
 import { Picker, EmojiIndex } from 'emoji-mart-vue-fast'
 
-let emojiIndex = new EmojiIndex(data)
 
 import vClickOutside from 'v-click-outside'
 
@@ -106,6 +105,16 @@ export default {
     computed: {
         mobile : function(){
             return !this.$store.state.pocketnet && this.$store.state.mobile
+        },
+
+        emojiIndex : function(){
+
+            if(!window.emojiIndex){
+                window.emojiIndex = new EmojiIndex(data)
+            }
+
+            return window.emojiIndex
+
         }
        
     },
@@ -185,8 +194,6 @@ export default {
         toggle_emoji_picker() {
             this.display_emoji = !this.display_emoji
         },
-        
-       
 
         send_text(event) {
 
@@ -447,7 +454,6 @@ export default {
 
     data() {
         return {
-            emojiIndex: emojiIndex,
             send: false,
             toMatch: [
                 /Android/i,

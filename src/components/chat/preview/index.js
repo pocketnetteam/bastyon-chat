@@ -39,7 +39,6 @@ export default {
           el: '.swiper-pagination',
         }
       },
-     // pUsers: []
     }
 
   },
@@ -52,20 +51,5 @@ export default {
       return this.core.mtrx.chatUsersInfo(this.chat.roomId, 'anotherChatUsers')
     },
 
-    /*roomMembers: function () {
-
-      var self = this
-      var my = f.getmatrixid(this.core.mtrx.client.credentials.userId)
-      var names = _.map(self.chat.members, function (member) {
-        return member.name
-      })
-
-      this.core.user.usersInfo(names).then(r => {
-        this.pUsers = r
-      }).catch(e => {
-        console.log(e, "eeerror name")
-      })
-      return this.chat.members
-    }*/
   }
 }

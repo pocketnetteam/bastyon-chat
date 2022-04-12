@@ -537,6 +537,8 @@ var PcryptoRoom = async function(pcrypto, chat, {ls, lse}){
                 throw new Error('emptyforme');
             }
 
+            console.log('decrypt event')
+
             return self.decrypt(keyindex, body[bodyindex], time, block).then(decrypted => {
 
                 var data = {
@@ -1011,6 +1013,8 @@ var Pcrypto = function(core, p){
     self.prepare = function(){
        
         return Promise.all([ChatStorage('messages', 1), ChatStorage('events', 1)]).then((r) => {
+
+            console.log("PRC", r)
 
             ls = r[0]
             lse = r[1]

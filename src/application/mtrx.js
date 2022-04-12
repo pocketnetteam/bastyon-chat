@@ -415,6 +415,7 @@ class MTRX {
 
 		this.client.on("RoomMember.membership", (event, member) => {
 
+
 			if(!this.chatsready) return
 
 
