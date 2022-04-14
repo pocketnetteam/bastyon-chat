@@ -39,7 +39,6 @@ export default {
 
                 this.last = this.menu
 
-                console.log(item)
 
                 this.menu.handler(item, this.menu.item, {
                     hidePopup : this.hidePopup,

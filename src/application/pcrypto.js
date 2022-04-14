@@ -537,7 +537,6 @@ var PcryptoRoom = async function(pcrypto, chat, {ls, lse}){
                 throw new Error('emptyforme');
             }
 
-            console.log('decrypt event')
 
             return self.decrypt(keyindex, body[bodyindex], time, block).then(decrypted => {
 
@@ -767,7 +766,6 @@ var PcryptoFile = function(){
             var array = new Uint32Array(24);
 
             var token = window.crypto.getRandomValues(array).toString('hex');
-            console.log('token', token)
             resolve(token)
 
             /*ncrypto.randomBytes(24, function(err, buffer) {
@@ -1014,7 +1012,6 @@ var Pcrypto = function(core, p){
        
         return Promise.all([ChatStorage('messages', 1), ChatStorage('events', 1)]).then((r) => {
 
-            console.log("PRC", r)
 
             ls = r[0]
             lse = r[1]

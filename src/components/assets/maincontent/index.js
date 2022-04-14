@@ -60,7 +60,6 @@ export default {
             if (this.$store.state.autohide){
                 this.$store.commit('active', false)
             }
-            // console.log("MEOW")
             this.$store.commit('blockactive', {value : false, item : 'main'})
         },
 
