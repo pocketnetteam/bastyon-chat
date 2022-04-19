@@ -123,7 +123,8 @@
         "messageRead" : "Message read",
         "open" : "Open",
         "You" : "You",
-        "chatsearchingempty" : "No chats found for the specified filter"
+        "chatsearchingempty" : "No chats found for the specified filter",
+        "sendmessage" : "Send message"
         
     },
 

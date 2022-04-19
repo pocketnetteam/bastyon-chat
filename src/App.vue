@@ -432,8 +432,8 @@ export default {
 
 	created() {
 
-    	/*this.pocketnet = false
-		this.mobile = !this.pocketnet*/
+    	this.pocketnet = true
+		this.mobile = !this.pocketnet
 
 		this.$store.commit('setPocketnet', this.pocketnet);
 		this.$store.commit('setMobile', this.mobile);
@@ -739,8 +739,8 @@ if (module.hot) {
 
 </style>
 <style lang="sass" src="./index.sass"></style>
+<style lang="css" src="./fontawesome/css/all.css"></style>
 <style>
-@import 'https://use.fontawesome.com/releases/v5.2.0/css/all.css';
 @import '@/../../public/css/main.css';
 @import '@/../../public/css/normalize.css';
 @import '@/../../public/css/emoji-mart.css';

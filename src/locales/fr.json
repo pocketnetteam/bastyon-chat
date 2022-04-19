@@ -119,7 +119,8 @@
         "contactsempty" : "Vous n'avez pas encore de contacts, vous pouvez utiliser la recherche",
         "usernotgen" : "User did not generate their encryption keys yet. You will be able to chat them when their keys are generated.",
         "younotgen" : "Please wait a minute, Your encryption keys are being generated...",
-        "chatsearchingempty" : "No chats found for the specified filter"
+        "chatsearchingempty" : "No chats found for the specified filter",
+        "sendmessage" : "Send message"
     },
 
     "input" : {

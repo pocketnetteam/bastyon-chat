@@ -8,7 +8,7 @@
 
           <bgimage v-if="props.userinfo.image" :src="props.userinfo.image"/>
 
-          <div v-if="!props.userinfo.image && props.userinfo.name" class="charAvatar">
+          <div v-if="!props.userinfo.image && props.userinfo.name && (props.status != 'blocked' && props.status != 'invite' && props.status != 'ban')" class="charAvatar">
             <span>{{props.userinfo.name.charAt(0)}}</span>
           </div>
 
