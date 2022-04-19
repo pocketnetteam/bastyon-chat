@@ -41,7 +41,8 @@ export default {
         active : state => state.active,
         modalShowed : state => state.modalShowed,
         hiddenInParent : state => state.hiddenInParent,
-        mobile : state => state.mobile
+        mobile : state => state.mobile,
+        unauthorized : state => state.unauthorized
     }),
 
     methods : {

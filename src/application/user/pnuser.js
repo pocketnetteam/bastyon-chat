@@ -216,6 +216,7 @@ class PNUser extends User {
     }
     userInfo(reload){
 
+
         return this.usersInfo(this.credentials.address, false, reload).then(info => {
 
             this.userinfo = info[0]
