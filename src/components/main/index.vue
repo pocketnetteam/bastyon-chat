@@ -1,10 +1,10 @@
 <template>
   <div class='main-wrapper' :class="{minimized, active}">
 
-    <vue-page-transition name="fade-in-right">
+    <vue-page-transition name="fade-in-right" v-if="!mobile">
         <router-view></router-view>
     </vue-page-transition>
-
+    <router-view v-else></router-view>
 
     <FooterChat v-if="showFooter"/>
 

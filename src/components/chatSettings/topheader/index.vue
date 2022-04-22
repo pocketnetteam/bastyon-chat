@@ -8,7 +8,7 @@
       </template>
 
       <template v-slot:info>
-        <span>Settings</span>
+        <span>{{ $t("caption.settings") }}</span>
       </template>
 
       <template v-slot:right>

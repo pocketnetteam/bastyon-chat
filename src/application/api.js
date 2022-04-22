@@ -317,7 +317,6 @@ var ApiWrapper = function (core) {
 			}).catch(sh => {
 
 				if(!sh || !sh.id) {
-					console.error(sh)
 					return Promise.reject(sh)
 				}
 

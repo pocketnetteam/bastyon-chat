@@ -124,7 +124,8 @@
     "messageRead" : "Messaggio letto",
     "open" : "Apri",
     "You" : "Tu",
-    "chatsearchingempty" : "No chats found for the specified filter"
+    "chatsearchingempty" : "No chats found for the specified filter",
+    "sendmessage" : "Send message"
   },
 
   "input" : {

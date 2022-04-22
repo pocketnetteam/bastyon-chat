@@ -1,5 +1,5 @@
 <template>
-  <div id="maincontent" @mouseenter="mouseenter"  @mouseleave="mouseleave" class="fixedOnPageTop" :class="{'bin' : pocketnet, 'bout' : !pocketnet, minimized, fix : pocketnet, active, modalShowed : modalShowed ? true : false, mobile}">
+  <div id="maincontent" @mouseenter="mouseenter"  @mouseleave="mouseleave" class="fixedOnPageTop" :class="{'bin' : pocketnet, 'bout' : !pocketnet, minimized, fix : pocketnet, active, unauthorized, modalShowed : modalShowed ? true : false, mobile}">
 
     <div class="headerSpacerWrapper" >
       <div class="headerSpacerWrapperOvf">

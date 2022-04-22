@@ -19,11 +19,8 @@ class Core {
         if(!p.mtrx) p.mtrx = {}
             p.mtrx.baseUrl = 'https://' + p.domain
 
-        if (p.mtrx.baseUrl == 'https://vamily.ru'){
-
-           /* p.mtrx.baseUrl = 'http://vamily.ru:5009'
-            p.domain = 'vamily.ru:5009'*/
-
+        if (p.mtrx.baseUrl == 'https://test.matrix.pocketnet.app'){
+            
             this.options.burn = {
                 v : 'minutes',
                 w : 120,

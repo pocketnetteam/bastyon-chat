@@ -86,7 +86,6 @@ const ChatStorage = function(storageName, version, time) {
                         })
                     }
 
-                    console.log('memorystorage', storageName)
 
                     resolve()
                 };
@@ -268,7 +267,6 @@ const ChatStorage = function(storageName, version, time) {
                     };
 
                     req.onerror = (data) => {
-                        console.log('PCryptoStorage GET error', data);
                         reject(data.target.error);
                     };
                 }
@@ -318,7 +316,6 @@ const ChatStorage = function(storageName, version, time) {
                 const msg = JSON.parse(localStorage[msgItem]);
 
                 if (timeFromCurrent >= msg.cachedAt) {
-                    console.log('PCryptoStorage CLEAR OUTDATED log', msg);
 
                     delete localStorage[msgItem];
                 }

@@ -229,7 +229,7 @@ class Notifier {
 			position: position,
 			type: 'info',
 			chat: info.chat,
-			duration: 2000
+			duration: 5000
 		})
 	}
 }

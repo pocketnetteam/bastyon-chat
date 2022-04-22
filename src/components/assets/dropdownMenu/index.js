@@ -59,19 +59,16 @@ export default {
         onClickHandler() {
             this.menuIsVisible = !this.menuIsVisible;
 
-            console.log("showPopuphidePopup")
 
         },
         hidePopup() {
             this.menuIsVisible = false;
 
-            console.log("hidePopup")
         },
         showPopup() {
             
             this.menuIsVisible = true;
 
-            console.log("showPopup")
 
         }
     },

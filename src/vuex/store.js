@@ -402,7 +402,6 @@ var store = new Vuex.Store({
 				Vue.set(state.events, k, {timeline})
 			});
 
-			console.log('state.events', state.events)
 		},
 
 		SET_TYPING_TO_STORE(state, data) {

@@ -18,7 +18,8 @@
                     @keyup="keyup"
                     @click="keyup"
                     @paste="paste_image"
-                    placeholder="Send message"                   
+                    :placeholder="$t('caption.sendmessage')"     
+                                  
                 ></textarea>
                 <transition name="fade" mode="out-in" v-if="!mobile">
                     <picker

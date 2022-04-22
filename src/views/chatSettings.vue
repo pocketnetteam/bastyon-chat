@@ -1,5 +1,5 @@
 <template>
-  <div v-if="chat">
+  <div  class="page "  v-if="chat">
     <topheader class="topheader"/>
 
     <maincontent>

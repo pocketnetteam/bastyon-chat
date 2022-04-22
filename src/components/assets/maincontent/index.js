@@ -41,7 +41,8 @@ export default {
         active : state => state.active,
         modalShowed : state => state.modalShowed,
         hiddenInParent : state => state.hiddenInParent,
-        mobile : state => state.mobile
+        mobile : state => state.mobile,
+        unauthorized : state => state.unauthorized
     }),
 
     methods : {
@@ -60,7 +61,6 @@ export default {
             if (this.$store.state.autohide){
                 this.$store.commit('active', false)
             }
-            // console.log("MEOW")
             this.$store.commit('blockactive', {value : false, item : 'main'})
         },
 
