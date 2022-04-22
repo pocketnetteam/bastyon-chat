@@ -13,10 +13,18 @@
     display: flex
 
     .left
-        width: 35px
+        display: flex
+        justify-content: flex-end
+        align-items: center
+        width: 80px
         text-align: center
         .iconbutton
+            display: flex
+            align-items: center
+            justify-content: center
+            height: 35px
             width: 35px
+            -webkit-tap-highlight-color: transparent
 
     .leftdummy
         width: $r
@@ -26,13 +34,14 @@
 
     .center
         max-height: 110px
+        max-width: 100%
         display: flex
         justify-content: center
         align-items: center
         flex-grow: 1
         border: 1px solid transparent
         border-radius: 30px
-        padding-right: $r
+        padding: 0 1em
         background: srgb(--background-secondary-theme)
         
 

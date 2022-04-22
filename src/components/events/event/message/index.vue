@@ -31,7 +31,7 @@
           <userpic :userinfo="userinfo"/>
       </div>
 
-      <div class="fromimagesfiles" v-if="(content.from || imageFrom) && (file || (content.msgtype === 'm.image' && imageUrl))">
+      <div class="fromimagesfiles" v-if="(content.from || imageFrom) && (file || (content.msgtype === 'm.image' && imageUrl) || ( content.msgtype === 'm.audio' && audioUrl))">
           <div class="fromCaption">
             <i class="fas fa-share-alt"></i> <span>{{ $t("caption.messagefrom") }}</span>
           </div>
@@ -59,6 +59,9 @@
         <div class="preloaderImage" :style="imagePaddingStyle(content)" v-else>
           <div class="abswrapper"><linepreloader /></div>
         </div>
+      </div>
+      <div class="messageAudio" v-if="content.msgtype === 'm.audio'">
+        <VoiceMessage v-if="audioUrl" :base64Audio="audioUrl"/>
       </div>
 
       <div class="maxcontent" :class="{'my' : my }" v-if="content.msgtype === 'm.encrypted' && !textWithoutLinks && badenctypted">
@@ -128,7 +131,7 @@
       </div>
       
     </div>
-
+<!--sdfsf-->
     <div class="messagePreview" v-if="preview">
       <listPreview :my="my" :event="origin" :decryptEvent="decryptEvent" :userinfo="userinfo" :chat="chat" :readed="readed" />
     </div>
@@ -139,13 +142,13 @@
         <!--<date v-if="readed.data" :date="readed.data.ts"/>-->
       </div>
     </div>
-
   </div>
 
 </template>
 
 
-<script src="./index.js"></script>
+<script src="./index.js">
+</script>
 <style scoped lang="sass" src="./index.sass"></style>
 
 <!-- THEMES BEGIN -->

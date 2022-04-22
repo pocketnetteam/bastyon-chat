@@ -86,6 +86,7 @@ import userspic from '@/components/assets/userspic/index.vue'
 import bgimage from '@/components/assets/bgimage.vue'
 import logotype from '@/components/assets/logotype/index.vue'
 import dropdownMenu from '@/components/assets/dropdownMenu/index.vue';
+import recordVoice from '@/components/assets/recordVoice/index.vue';
 import backButton from '@/components/assets/backButton/index.vue';
 import topheader from '@/components/assets/topheader/index.vue';
 import maincontent from '@/components/assets/maincontent/index.vue';
@@ -111,6 +112,7 @@ Vue.component('fixedmessageicon', fixedmessageicon)
 Vue.component('bgimage', bgimage)
 Vue.component('logotype', logotype)
 Vue.component('dropdownMenu', dropdownMenu)
+Vue.component('recordVoice', recordVoice)
 Vue.component('backButton', backButton)
 Vue.component('topheader', topheader)
 Vue.component('maincontent', maincontent)
@@ -432,8 +434,8 @@ export default {
 
 	created() {
 
-    	/*this.pocketnet = false
-		this.mobile = !this.pocketnet*/
+    this.pocketnet = false
+		this.mobile = !this.pocketnet
 
 		this.$store.commit('setPocketnet', this.pocketnet);
 		this.$store.commit('setMobile', this.mobile);

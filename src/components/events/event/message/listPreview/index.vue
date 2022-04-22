@@ -44,6 +44,10 @@
       <span v-if="senderName" class="txt sname" >{{ senderName }}&nbsp;</span><span class="txt">{{ $t("caption.sentImage") }}</span>
     </div>
 
+    <div v-if="content.msgtype === 'm.audio'" class="previewMessage">
+      <span v-if="senderName" class="txt sname" >{{ senderName }}&nbsp;</span><span class="txt">{{ $t("caption.sentVoiceMessage") }}</span>
+    </div>
+
 
     <div v-if="(content.msgtype === 'm.text') && !urlpreview" class="previewMessage">
 

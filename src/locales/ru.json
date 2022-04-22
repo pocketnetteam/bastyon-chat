@@ -44,6 +44,7 @@
         "unabletoDecrypt" : "* Невозможно расшифровать",
         "messageDeleted" : "Сообщение удалено",
         "sentImage" : "отправлено изображение",
+        "sentVoiceMessage" : "отправлено голосовое сообщение",
         "invitationToChat" : "Приглашение в чат",
         "invitationToRoom" : "Приглашение в комнату",
         "leftChat" : "покинул чат",

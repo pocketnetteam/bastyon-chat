@@ -14,7 +14,7 @@ export default {
   components: {
     chatName,
     chatTime,
-    chatIcon
+    chatIcon,
   },
 
   data: function () {

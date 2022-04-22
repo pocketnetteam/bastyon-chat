@@ -1,0 +1,49 @@
+.recordProgress {
+  display: flex;
+  height: 20px;
+  justify-content: flex-start;
+  padding: 0 1em;
+  align-items: center;
+  width: 100%;
+  .indicator {
+    margin-right: 1em;
+    min-width: 8px;
+    height: 8px;
+    background: red;
+    border-radius: 50%;
+    &.recording {
+      animation: pulse 1.2s ease infinite;
+    }
+  }
+  .del {
+    cursor: pointer;
+    width: 20px;
+    height: 20px;
+    margin-right: 1em;
+    i {
+      color: red;
+    }
+  }
+  .timer {
+    margin-right: 1em;
+  }
+  .graph {
+    width: calc(100vw - 150px);
+    min-width: 100px;
+    display: flex;
+    justify-content: center;
+  }
+}
+
+
+@keyframes pulse {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.1;
+  }
+  100% {
+    opacity: 1;
+  }
+}

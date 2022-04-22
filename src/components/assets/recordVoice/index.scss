@@ -1,0 +1,28 @@
+.recordButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 35px;
+  height: 35px;
+  line-height: 35px !important;
+  background: transparent;
+  transition: background .3s ;
+  border-radius: 50%;
+  outline: none;
+
+  &.active {
+    background: red;
+    //animation: pulse 1.2s infinite;
+    .icon {
+      color: white;
+      font-size: 14px;
+    }
+  }
+}
+
+@keyframes pulse {
+  50% {
+    height:30px;
+    width: 30px;
+  }
+}

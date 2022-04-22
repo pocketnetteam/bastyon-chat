@@ -80,6 +80,7 @@ export default {
         'm.room.message': true,
         'p.room.encrypt.message': true,
         'm.room.image': true,
+        'm.room.audio': true,
         'm.room.file': true,
         'm.room.member': true,
         'm.fully_read': true

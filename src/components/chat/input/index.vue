@@ -15,8 +15,9 @@
 
 
         <div class="center">
-
+          <record-progress v-if="isRecording || recordViewData.length" :recordTime="recordTime" :isRecording="isRecording" :rmsData="recordViewData" @onClear="clear"/>
           <InputField
+            v-else
             ref="newinput"
 
             @transaction="sendtransaction"
@@ -33,9 +34,8 @@
             :storagekey="'chatinput' + chat.roomId"
             :tipusers="tipusers"
           />
-
           <div class="left" v-if="upload && chat">
-            <div class="iconbutton">
+            <div v-if="!isRecording && !recordViewData.length" class="iconbutton">
               <dropdownMenu
                 ref="dropdownMenu"
                 :menuItems="menuItems"
@@ -87,6 +87,14 @@
 
                 </template>
               </dropdownMenu>
+            </div>
+            <div v-if="isRecording || !recordRmsData.length" class="iconbutton">
+              <recordVoice @onRecordingStart="initRecording" @onRecordingStop="stopRecording" :isRecording="isRecording" @onClear="clear"/>
+            </div>
+            <div v-if="!isRecording && recordViewData.length" class="iconbutton" @click="sendVoiceMessage">
+              <div class="recordButton">
+                <i class="icon fas fa-paper-plane"></i>
+              </div>
             </div>
           </div>
 
