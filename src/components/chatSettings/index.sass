@@ -22,11 +22,12 @@
       color: srgb(--color-txt-ac)
 
 .chatSettingAbout
-  padding: .5em 1em
+  padding: 2 * $r 0
   .chatNameEdit
-    margin-top: 20px
+    margin-top: 2 * $r
+
     input
-      padding: $r 0
+      padding: 2 * $r
       display: block
       width: 100%
       border-bottom: 1px solid srgb(--neutral-grad-1)
@@ -41,4 +42,45 @@
       display: block
       width: 100%
       resize: none
-      padding: $r 0
+      padding: 2 * $r
+
+.chatIconWrapper
+  width : 90%
+  margin : 0 auto
+  padding : $r 0
+  /deep/ .swiperWrapperFlex .imageSwiper
+    width: 100px
+    height: 100px
+    line-height: 100px
+
+  /deep/
+    .swiperWrapperFlex
+      padding-bottom: 2 * $r
+
+    .threeAvatars,
+    .fourAvatars,
+    .twoAvatars
+      width: 50%
+      padding-bottom: 50%
+      +shadowSmaller()
+      background: srgba(--background-total-theme, 0.3)
+
+    .oneuser
+      width: 50%
+      margin: 0 auto
+
+    .bgimage
+      +shadowSmaller()
+
+.minimized:not(.active)
+
+  .chatDescription,
+  .chatNameEdit
+    display: none
+  /deep/
+    .chatIconWrapper
+        width: 52px
+        margin: 0
+        
+
+        

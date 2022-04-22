@@ -2,7 +2,7 @@
   <div class="aboutRoom">
     <div class="roomInfoWrapper noSwipe">
       <div :class="{'chatIconWrapper':'chatIconWrapper'}">
-        <chatIcon :slidesPerView="4" :chat="chat" :m_chat="m_chat" :hideunseen="true"/>
+        <chatIcon :slidesPerView="4" :dontuseslides="minimized && !active" :chat="chat" :m_chat="m_chat" :hideunseen="true"/>
       </div>
 
       <chatName :preview="true" :chat="chat" :m_chat="m_chat"
