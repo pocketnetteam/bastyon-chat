@@ -418,7 +418,6 @@ class MTRX {
 
 			if(!this.chatsready) return
 
-
 			if ((member.membership === "invite" || member.membership === "join") && event.getSender() !== userId) {
 				this.core.notifier.event(event)
 			}
@@ -426,6 +425,7 @@ class MTRX {
 		});
 
 		this.client.on("Room.timeline", (message, member) => {
+
 
 			if(!this.chatsready) return
 
@@ -442,7 +442,7 @@ class MTRX {
 
 				if (message.event.content['m.relates_to'] && message.event.content['m.relates_to']["rel_type"] == 'm.replace') return false
 
-				if (m_chat && this.core.pcrypto.rooms[message.event.room_id]) this.core.notifier.event(message, m_chat)
+				if (m_chat/* && this.core.pcrypto.rooms[message.event.room_id]*/) this.core.notifier.event(message, m_chat)
 
 			}
 
