@@ -5,7 +5,7 @@
         <i :class="isPlaying ? 'fas fa-pause': 'fas fa-play'"></i>
       </button>
       <div class="voiceMessage_graph">
-        <canvas ref="canvas" width="200" height="50" @mousedown="goTo" ></canvas>
+        <canvas ref="canvas" width="160" height="50" @mousedown="goTo" ></canvas>
       </div>
       <div class="voiceMessage_options">
         {{ getDurationString }}
@@ -35,6 +35,13 @@ export default {
   mounted() {
     this.initVoiceMessage()
   },
+  beforeDestroy() {
+    if (this.isPlaying) {
+      this.isPlaying = false
+      this.voiceMessage.audio.pause()
+      clearInterval(this.interval)
+    }
+  },
   computed: {
     getDurationString() {
       if (this.voiceMessage) {
@@ -59,6 +66,15 @@ export default {
       this.voiceMessage.audio.currentTime = e.offsetX / this.$refs.canvas.width * this.voiceMessage.audio.duration;
       this.voiceMessage.currentTime = e.offsetX / this.$refs.canvas.width * this.voiceMessage.duration;
       this.draw()
+      if (!this.isPlaying) {
+        this.isPlaying = true
+        this.voiceMessage.audio.play()
+        this.interval = setInterval( () => {
+          this.setTime()
+          this.draw()
+        }, 20);
+      }
+
     },
     audioToggle() {
       this.isPlaying = !this.isPlaying
@@ -85,14 +101,14 @@ export default {
       const data = this.voiceMessage.signal
       for (let i = 0; i < data.length; i++) {
         let x = Math.floor(i / data.length * canvas.width);
-        let L = data[i] * canvas.height;
-        if (Math.floor(i / 50) === i / 50) { // Число 16 для больших аудиофайлов лучше побольше. Нужно подбирать.
+        let L = Math.abs(data[i] * canvas.height) + 1;
+        if (Math.floor(i / 100) === i / 100) { // Число 16 для больших аудиофайлов лучше побольше. Нужно подбирать.
           if(i / data.length < this.percentPlayed) {
-            ctx.fillStyle = '#5181B8'
+            ctx.fillStyle = '#00a4ff'
           } else {
-            ctx.fillStyle = '#A8C0DB'
+            ctx.fillStyle = '#8bddfb'
           }
-          ctx.fillRect(x, canvas.height / 2 - Math.abs(L) / 2, 1, Math.abs(L));
+          ctx.fillRect(x, canvas.height / 2 - L / 2, 1, L);
         }
       }
     },
@@ -152,6 +168,7 @@ export default {
   -webkit-tap-highlight-color: transparent;
   &_wrapper {
     display: flex;
+    justify-content: flex-end;
     align-items: center;
     overflow: hidden;
     height: 60px;
@@ -168,7 +185,7 @@ export default {
     width: 40px;
     margin-right: 1em;
     border-radius: 50%;
-    background: #5181B8;
+    background: srgb(--color-bg-ac);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -181,12 +198,18 @@ export default {
 
   &_graph {
     position: relative;
+    cursor: pointer;
   }
 
   &_options {
     display: flex;
-    justify-content: flex-end;
-    width: 40px;
+    justify-content: center;
+    line-height: 1em;
+    margin-left: 10px;
+    padding: 2px 10px;
+    min-width: 40px;
+    background: srgb(--neutral-grad-1) ;
+    border-radius: 10px;
   }
 }
 </style>

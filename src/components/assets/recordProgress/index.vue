@@ -5,8 +5,11 @@
       <i class="fas fa-trash"></i>
     </div>
     <div class="timer">{{timer}}</div>
-    <div class="graph">
-      <canvas id="canvas" :width="width" height="60"/>
+    <div class="graph" ref="graph">
+      <canvas ref="canvas" id="canvas" :width="width" height="60"/>
+    </div>
+    <div v-show="isRecording && opacity" class="cancel" ref="cancel">
+      <i></i> <span>Slide left to cancel</span>
     </div>
   </div>
 </template>

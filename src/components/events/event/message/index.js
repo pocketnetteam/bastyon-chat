@@ -135,7 +135,8 @@ export default {
     showmyicon: function () {
       
       return this.showmyicontrue || 
-        this.content.msgtype === 'm.image' || 
+        this.content.msgtype === 'm.image' ||
+        this.content.msgtype === 'm.audio' ||
         this.content.msgtype === 'm.file' || 
         this.urlpreview || (!this.$store.state.active && this.$store.state.minimized)
 

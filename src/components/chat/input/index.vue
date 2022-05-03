@@ -15,7 +15,7 @@
 
 
         <div class="center">
-          <record-progress v-if="isRecording || recordViewData.length" :recordTime="recordTime" :isRecording="isRecording" :rmsData="recordViewData" @onClear="clear"/>
+          <record-progress v-if="isRecording || recordViewData.length" :recordTime="recordTime" :isRecording="isRecording" :rmsData="recordViewData" :opacity="cancelOpacity" @onClear="clear"/>
           <InputField
             v-else
             ref="newinput"
@@ -88,11 +88,17 @@
                 </template>
               </dropdownMenu>
             </div>
-            <div v-if="isRecording || !recordRmsData.length" class="iconbutton">
-              <recordVoice @onRecordingStart="initRecording" @onRecordingStop="stopRecording" :isRecording="isRecording" @onClear="clear"/>
-            </div>
+            <template>
+              <div v-if="(isRecording || !recordRmsData.length) && !microphoneDisabled" class="iconbutton">
+                <recordVoice @onRecordingStart="initRecording" @onRecordingStop="stopRecording" :isRecording="isRecording" @onClear="clear" @canceling="setOpacity"/>
+              </div>
+
+              <div v-if="microphoneDisabled" class="disabled">
+                <i class="icon fas fa-microphone-slash" @click="initRecording"></i>
+              </div>
+            </template>
             <div v-if="!isRecording && recordViewData.length" class="iconbutton" @click="sendVoiceMessage">
-              <div class="recordButton">
+              <div>
                 <i class="icon fas fa-paper-plane"></i>
               </div>
             </div>

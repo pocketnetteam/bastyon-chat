@@ -1,28 +1,78 @@
 .recordButton {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 35px;
-  height: 35px;
-  line-height: 35px !important;
-  background: transparent;
-  transition: background .3s ;
-  border-radius: 50%;
-  outline: none;
-
-  &.active {
-    background: red;
-    //animation: pulse 1.2s infinite;
+  &_wrapper {
+    position: relative;
+  }
+  &_holder {
+    visibility: hidden;
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 16px;
+    width: 16px;
+    background: lightslategrey;
+    border-radius: 50%;
+    bottom: 98px;
+    transition: .1s;
+    right: 9px;
     .icon {
       color: white;
-      font-size: 14px;
+      font-size: 7px;
+    }
+    &.active {
+      visibility: visible;
+    }
+    &.hold {
+      background: lightslategrey;
+      visibility: visible;
+      bottom: 38px;
+      .icon {
+        color: white;
+      }
+    }
+  }
+  &_toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 35px;
+    height: 35px;
+    padding-top: 2px;
+    font-size: 14px;
+    line-height: 35px !important;
+    background: transparent;
+    //transition: background .3s ;
+    //transition: transform .05s;
+    border-radius: 50%;
+    outline: none;
+
+    &.active {
+      background: #00A3F7;
+      animation: pulse 1.2s infinite;
+
+      .icon {
+        color: white;
+        font-size: 16px;
+      }
+
+      &.hold {
+        background: red;
+
+        .icon {
+          font-size: 14px;
+        }
+      }
+    }
+
+    &.outside {
+      background: red;
     }
   }
 }
 
+
 @keyframes pulse {
   50% {
-    height:30px;
-    width: 30px;
+    filter: brightness(80%);
   }
 }

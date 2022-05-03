@@ -45,6 +45,8 @@ export default {
       audioDataArray: null,
       recordTime: 5022,
       interval: null,
+      cancelOpacity: 0,
+      microphoneDisabled: false
     }
 
   },
@@ -72,8 +74,12 @@ export default {
 
 
   computed: {
-    connect: function () {
-      return this.$store.state.contact
+    voiceEnable: function () {
+      this.$
+    },
+
+    connect() {
+      return this.$store.state.voiceMessagesEnabled
     },
     menuItems: function () {
       var menuItems = []
@@ -839,16 +845,19 @@ export default {
         })
           .catch(function (err) {
               console.log('The following getUserMedia error occured: ' + err);
+              this.microphoneDisabled = true
               throw new Error(err)
             }
           );
       } else {
         console.log('getUserMedia not supported on your browser!');
+        this.microphoneDisabled = true
         return false
       }
     },
 
     startRecording() {
+      this.cancelOpacity = 0
       this.recordRmsData = []
       this.recordTime = 0
       this.record = null
@@ -875,8 +884,13 @@ export default {
       //Создаём MediaRecorder
       try {
         this.mediaRecorder = await this.initMediaRecorder()
+        if (this.microphoneDisabled && this.mediaRecorder){
+          this.microphoneDisabled = false
+          return
+        }
         this.isRecording = true
       } catch (e) {
+        this.microphoneDisabled = true
         return this.$dialog.confirm(
           'Access to the microphone is restricted, please check your browser settings.', {
             okText: 'Yes',
@@ -941,20 +955,13 @@ export default {
         id: id,
         base64: base64,
       }
-      this.$emit("sendingData", meta)
 
       this.$f.pretry(() => {
 
         return this.chat
 
       }).then(() => {
-        console.log('core', this.core.mtrx)
         return this.core.mtrx.sendAudio(this.chat, base64, null, meta, {relation: this.relationEvent})
-      }).then(r => {
-        console.log('after send audio', r)
-        this.$emit("sentData", {
-          id: id
-        })
       }).catch(e => {
             this.$emit('sentError', {
               id: id,
@@ -977,6 +984,9 @@ export default {
           resolve(reader.result)
         }
       })
+    },
+    setOpacity(opacity) {
+      this.cancelOpacity = opacity
     }
 
   },

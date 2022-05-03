@@ -112,6 +112,7 @@ Vue.component('fixedmessageicon', fixedmessageicon)
 Vue.component('bgimage', bgimage)
 Vue.component('logotype', logotype)
 Vue.component('dropdownMenu', dropdownMenu)
+Vue.component('recordVoice', recordVoice)
 Vue.component('backButton', backButton)
 Vue.component('topheader', topheader)
 Vue.component('maincontent', maincontent)
@@ -222,6 +223,11 @@ export default {
 			type : String,
 			default : ''
 		},
+
+    voiceMessagesEnabled : {
+      type: String,
+      default: ''
+    },
 
 		ctheme : String,
 
@@ -432,12 +438,12 @@ export default {
 	},
 
 	created() {
-
-    	/*this.pocketnet = false
-		this.mobile = !this.pocketnet*/
+    // this.pocketnet = true
+		// this.mobile = !this.pocketnet
 
 		this.$store.commit('setPocketnet', this.pocketnet);
 		this.$store.commit('setMobile', this.mobile);
+		this.$store.commit('setVoiceMessagesEnabled', this.voiceMessagesEnabled);
 		this.$store.commit('clearall')
 
 		this.$store.commit('ls')
@@ -648,7 +654,7 @@ export default {
 
 		*/
 
-		var domain = f.deep(window, 'window.POCKETNETINSTANCE.options.matrix') || 'vamily.ru'
+		var domain = f.deep(window, 'window.POCKETNETINSTANCE.options.matrix') || 'test.matrix.pocketnet.app'
 
 		core = new Core(this, {
 			domain : domain,

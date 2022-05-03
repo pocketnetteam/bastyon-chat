@@ -1,10 +1,11 @@
 .recordProgress {
   display: flex;
+  position: relative;
   height: 20px;
   justify-content: flex-start;
   padding: 0 1em;
   align-items: center;
-  width: 100%;
+  max-width: 90%;
   .indicator {
     margin-right: 1em;
     min-width: 8px;
@@ -17,11 +18,15 @@
   }
   .del {
     cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     width: 20px;
     height: 20px;
     margin-right: 1em;
     i {
       color: red;
+      font-size: 13px;
     }
   }
   .timer {
@@ -35,6 +40,17 @@
   }
 }
 
+.cancel {
+  position: absolute;
+  left: 80px;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background: white;
+  opacity: 0;
+  display: flex;
+  justify-content: center;
+}
 
 @keyframes pulse {
   0% {

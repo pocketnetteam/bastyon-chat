@@ -43,6 +43,7 @@ var store = new Vuex.Store({
 		signedUpUsers: [],
 		pocketnet: '',
 		mobile: '',
+		voiceMessagesEnabled: '',
 		current_user: {},
 		minimized: true,
 		active: false,
@@ -264,6 +265,10 @@ var store = new Vuex.Store({
 		},
 		setMobile(state, mobile) {
 			state.mobile = mobile;
+		},
+
+		setVoiceMessagesEnabled(state, voiceMessagesEnabled) {
+			state.voiceMessagesEnable = voiceMessagesEnabled;
 		},
 
 		ls(state) {
