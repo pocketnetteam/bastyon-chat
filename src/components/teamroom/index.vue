@@ -2,26 +2,119 @@
   <div id="teamroom" :class="{'bin' : pocketnet, 'bout' : !pocketnet, minimized, fix : pocketnet, active, mobile}">
 
     <div class="teamChatWrapper" @click="click">
-        <div class="iconWrapper">
-            <div class="logo">
-              <img src="https://pocketnet.app/img/logo20.svg"/>
-            </div>
-            <div class="unseen" v-if="teamNotifications > 0"> {{ teamNotifications }} </div>
+      <div class="iconWrapper">
+        <div class="logo">
+          <img src="https://pocketnet.app/img/logo20.svg"/>
         </div>
-        <div class="infoWrapper">
-            <div class="infoName">
-                <span>Bastyon</span>
-            </div>
-            <div class="previewMessage">
+        <div class="unseen" v-if="teamNotifications > 0"> {{ teamNotifications }}</div>
+      </div>
+      <div class="infoWrapper">
+        <div class="infoName">
+          <span>Bastyon</span>
+        </div>
+        <div class="previewMessage">
                 <span v-if="pocketteammessages && pocketteammessages.length > 0">
                   {{ pocketteammessages[pocketteammessages.length - 1].previewText }}
                 </span>
-            </div>
         </div>
+      </div>
     </div>
 
   </div>
 </template>
 
 <script src="./index.js"></script>
-<style scoped lang="sass" src="./index.sass"></style>
+<style scoped lang="sass">
+#teamroom
+
+  &.mobile
+    margin-bottom: 10px
+
+  &:hover
+    cursor: pointer
+
+  .teamChatWrapper
+    padding: .5em .25em
+    display: flex
+    align-items: center
+    +transition(0.3s)
+
+    .iconWrapper
+      width: 44px
+      display: flex
+      align-items: center
+      min-width: 44px
+      height: 44px
+      position: relative
+
+      .logo
+        background-size: cover
+        background-position: center center
+        background-repeat: no-repeat
+        height: 44px
+        width: 44px
+        margin-left: 0px
+        margin-top: 0px
+        position: absolute
+        background: srgb(--text-on-bg-ac-color)
+        border-radius: 50%
+        padding-top: 8px
+        text-align: center
+
+        img
+          width: 28px
+          height: 28px
+          margin: 0 auto
+
+      .unseen
+        background: srgba(--color-bg-ac, 0.9)
+        color: srgb(--text-on-bg-ac-color)
+        position: absolute
+        width: 22px
+        height: 22px
+        right: -10%
+        top: -10%
+        line-height: 22px
+        text-align: center
+        font-weight: 500
+        border-radius: 50%
+        z-index: 2
+        font-size: .6em
+
+    .infoWrapper
+      padding-left: .5em
+
+      > div
+        display: flex
+        align-content: center
+
+      .infoName span
+        font-size: .9em
+        overflow: hidden
+        white-space: nowrap
+        text-overflow: ellipsis
+        font-weight: 700
+        display: inline-block
+        max-width: 190px
+        color: srgb(--text-color)
+
+      .previewMessage
+        display: flex
+        justify-content: flex-start
+        align-items: center
+        width: 100%
+
+        span
+          display: block
+          color: srgb(--color-txt-gray)
+          font-size: .9em
+          text-overflow: ellipsis
+          overflow: hidden
+          white-space: nowrap
+          text-align: left
+          max-width: 210px
+
+  &.minimized:not(.active)
+    .teamChatWrapper
+      padding: .5em 0
+</style>

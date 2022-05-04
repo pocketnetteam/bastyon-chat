@@ -17,32 +17,33 @@
 
 <style scoped lang="sass">
 .chatIcon
-  	width: 100%
-  	position: relative
+  width: 100%
+  position: relative
 
 .unknowngroupusersicon
-	position: absolute
-	left: 0
-	top: 0
-	bottom: 0
-	right: 0
-	font-size: 0.7em
-	display: flex
-	justify-content: center
-	align-items: center
-	color: #fff
-	text-shadow: 0px 0px 2px rgba(0, 11, 58, 0.714), 0 0 3px rgba(0, 8, 43, 0.519)
+  position: absolute
+  left: 0
+  top: 0
+  bottom: 0
+  right: 0
+  font-size: 0.7em
+  display: flex
+  justify-content: center
+  align-items: center
+  color: #fff
+  text-shadow: 0px 0px 2px rgba(0, 11, 58, 0.714), 0 0 3px rgba(0, 8, 43, 0.519)
 
 .unknowngroupusers
-	/deep/
-		.bgimage
-			transform: scale(0.7)
+  /deep/
+  .bgimage
+    transform: scale(0.7)
 </style>
 
 <script>
 import _ from "underscore";
 import f from "@/application/functions";
 import moment from "moment";
+
 export default {
   name: "chatIcon",
   data: function () {
