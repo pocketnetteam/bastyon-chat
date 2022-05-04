@@ -268,7 +268,7 @@ var store = new Vuex.Store({
 		},
 
 		setVoiceMessagesEnabled(state, voiceMessagesEnabled) {
-			state.voiceMessagesEnable = voiceMessagesEnabled;
+			state.voiceMessagesEnabled = voiceMessagesEnabled;
 		},
 
 		ls(state) {

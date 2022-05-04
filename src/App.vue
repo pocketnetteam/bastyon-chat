@@ -225,8 +225,8 @@ export default {
 		},
 
     voiceMessagesEnabled : {
-      type: String,
-      default: ''
+      type: Boolean,
+      default: true
     },
 
 		ctheme : String,
