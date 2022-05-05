@@ -881,7 +881,6 @@ export default {
       }, 20)
     },
     async initRecording() {
-      //Создаём MediaRecorder
       try {
         this.mediaRecorder = await this.initMediaRecorder()
         if (this.microphoneDisabled && this.mediaRecorder){

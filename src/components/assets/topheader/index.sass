@@ -1,122 +1,122 @@
 #topheader
-    background: srgb(--background-total-theme)
-    top : 0
-    left: 0
-    right: 0
-    position: absolute
-    z-index: 4
-    color : srgb(--text-color)
-    border-bottom : 1px solid srgb(--neutral-grad-0)
+  background: srgb(--background-total-theme)
+  top: 0
+  left: 0
+  right: 0
+  position: absolute
+  z-index: 4
+  color: srgb(--text-color)
+  border-bottom: 1px solid srgb(--neutral-grad-0)
 
-    .iconbutton
-        cursor: pointer
+  .iconbutton
+    cursor: pointer
+
+  .headerLine
+    display: flex
+    align-items: center
+    padding: 0
+    height: 64px
+
+    > div
+      text-align: center
+
+    .iconsmall
+      width: 22px
+      min-width: 22px
+
+    .icon
+      color: srgb(--color-txt-ac)
+      width: 44px
+      min-width: 44px
+
+    .rightaddIcons
+      margin-right: 11px
+
+    .leftaddIcon
+      margin-left: 11px
+
+    .infoPart
+      flex-grow: 1
+      padding: 0 2 * $r
+      overflow: hidden
+
+      /deep/ span,
+      span
+        font-size: 0.9em
+        font-weight: 500
+
+  .rightaddIcons,
+  .rightIcons
+    justify-content: space-between
+
+  &.bin
+    position: relative
+
+  &.minimized
+    right: auto
+
+    +transition(0.3s)
 
     .headerLine
-        display: flex
-        align-items: center
+      height: 54px
+
+    &.fix
+      width: 344px
+      position: absolute
+      background: transparent
+      overflow: hidden
+      will-change: transform
+      right: 0
+
+      .headerLine
         padding: 0
-        height: 64px
 
-        >div
-            text-align: center
+      .icon
+        width: 44px
+        height: 44px
+        line-height: 44px
 
-        .iconsmall
-            width : 22px
-            min-width: 22px
 
-        .icon
-            color : srgb(--color-txt-ac)
-            width : 44px
-            min-width: 44px
+        +transitionopt(0.3s, transform)
 
-        .rightaddIcons
-            margin-right: 11px
+        .iconbutton
+          border-radius: 50%
+          background: srgba(--neutral-grad-4, 0.1)
+          color: srgb(--color-txt-ac)
+          cursor: pointer
 
-        .leftaddIcon
-            margin-left: 11px
+          &:hover
+            background: srgba(--neutral-grad-4, 0.05)
 
+        /deep/
+        .iconbutton
+          border-radius: 50%
+          background: srgba(--neutral-grad-4, 0.1)
+          color: srgb(--color-txt-ac)
+          cursor: pointer
+
+          &:hover
+            background: srgba(--neutral-grad-4, 0.05)
+
+
+      .leftIcon,
+      .infoPart
+        display: none
+
+      &.active
+
+        transform: translate3d(-300px, -56px, 0)
+        border-radius: 8px
+        border-bottom-left-radius: 0
+        border-bottom-right-radius: 0
+        background: srgb(--background-total-theme)
+        border: 1px solid srgba(--neutral-grad-4, 0.2)
+        +shadowSmaller()
+
+        .leftIcon,
         .infoPart
-            flex-grow: 1
-            padding : 0 2 * $r
-            overflow: hidden
+          display: block
 
-            /deep/ span,
-            span
-                font-size: 0.9em
-                font-weight: 500
 
-    .rightaddIcons,
-    .rightIcons
-        justify-content: space-between
-
-    &.bin
-        position: relative
-
-    &.minimized
-        right: auto
-        
-        +transition(0.3s)
-
-        .headerLine
-            height: 54px
-
-        &.fix
-            width: 344px
-            position: absolute
-            background: transparent
-            overflow: hidden
-            will-change: transform
-            right: 0
-            
-            .headerLine
-                padding : 0
-
-            .icon
-                width: 44px
-                height: 44px
-                line-height: 44px
-               
-                
-                +transitionopt(0.3s, transform)
-
-                .iconbutton
-                    border-radius: 50%
-                    background: srgba(--neutral-grad-4, 0.1)
-                    color :  srgb(--color-txt-ac)
-                    cursor: pointer
-
-                    &:hover
-                        background: srgba(--neutral-grad-4, 0.05)
-
-                /deep/
-                    .iconbutton
-                        border-radius: 50%
-                        background: srgba(--neutral-grad-4, 0.1)
-                        color : srgb(--color-txt-ac)
-                        cursor: pointer
-
-                        &:hover
-                            background: srgba(--neutral-grad-4, 0.05)
-               
-        
-            .leftIcon,
-            .infoPart
-                display: none
-
-            &.active
-                
-                transform: translate3d(-300px, -56px, 0)
-                border-radius: 8px
-                border-bottom-left-radius: 0
-                border-bottom-right-radius: 0
-                background: srgb(--background-total-theme)
-                border: 1px solid  srgba(--neutral-grad-4, 0.2)
-                +shadowSmaller()
-                
-                .leftIcon,
-                .infoPart
-                    display: block
-
-                
-            &:not(.active)
-                border-bottom : 0!important
+      &:not(.active)
+        border-bottom: 0 !important

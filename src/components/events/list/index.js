@@ -26,8 +26,28 @@ export default {
             menuOpen: false,
             c: 1,
             ls: 0,
+            voiceMessageQueue: []
         }
 
+    },
+    provide() {
+        return {
+            addToQueue: (message, id) => {
+                console.log('added', id)
+                this.voiceMessageQueue = [...this.voiceMessageQueue, {message, id}]
+            },
+            playNext: (id) => {
+                let current = this.sortedVoiceMessageQueue.findIndex(i => {
+                    return i.id === id
+                })
+                let next = current === -1 ? null : this.sortedVoiceMessageQueue[current + 1]
+                console.log('next',next)
+                if (next) {
+                    next.message.audioToggle()
+                }
+            }
+
+        }
     },
 
     watch: {
@@ -37,6 +57,10 @@ export default {
     },
 
     computed: {
+        sortedVoiceMessageQueue () {
+            return this.voiceMessageQueue.sort((a,b) => a.id - b.id)
+        },
+
         ios() {
             return f.isios();
         },

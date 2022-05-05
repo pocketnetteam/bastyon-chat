@@ -23,6 +23,9 @@ export default {
     base64Audio: {
       type: String | null,
       required: true
+    },
+    id: {
+      type: Number
     }
   },
   data() {
@@ -32,6 +35,8 @@ export default {
       interval: null,
     }
   },
+  inject: ['addToQueue', 'playNext'],
+
   mounted() {
     this.initVoiceMessage()
   },
@@ -77,6 +82,9 @@ export default {
 
     },
     audioToggle() {
+      if(!this.voiceMessage.audio.play) {
+        alert('метод недоступен')
+      }
       this.isPlaying = !this.isPlaying
       if (this.isPlaying) {
         this.voiceMessage.audio.play()
@@ -113,8 +121,12 @@ export default {
       }
     },
     async initVoiceMessage() {
-      const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-      const audioNode = new Audio(this.base64Audio)
+      const audioContext = new (window.AudioContext || window.webkitAudioContext)() || null;
+      const audioNode = new Audio(this.base64Audio) || null
+      if (audioNode === null) {
+        alert('ошибка создания контекста')
+        return
+      }
       audioNode.addEventListener('loadedmetadata', () => {
 
         const getDuration = () => {
@@ -131,12 +143,29 @@ export default {
 
 
       })
+      this.addToQueue(this, this.id)
+
+      audioNode.onplay = () => {
+        let currentPlaying = this.$store.state.currentPlayingVoiceMessage
+        if (currentPlaying && currentPlaying.id !== this.id) {
+          currentPlaying.audioToggle()
+        }
+        this.$store.commit('SET_CURRENT_PLAYING_VOICE_MESSAGE', this)
+      }
+      audioNode.onpause = () => {
+        let currentPlaying = this.$store.state.currentPlayingVoiceMessage
+        if (currentPlaying && currentPlaying.id === this.id) {
+          this.$store.commit('SET_CURRENT_PLAYING_VOICE_MESSAGE', null)
+        }
+      }
       audioNode.onended = () => {
+        this.$store.commit('SET_CURRENT_PLAYING_VOICE_MESSAGE', null)
         this.isPlaying = false
         this.voiceMessage.audio.currentTime = 0
         this.voiceMessage.currentTime = 0
         this.draw()
         clearInterval(this.interval)
+        this.playNext(this.id, this.audioToggle)
       }
 
       this.voiceMessage = {

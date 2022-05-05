@@ -44,6 +44,7 @@ var store = new Vuex.Store({
 		pocketnet: '',
 		mobile: '',
 		voiceMessagesEnabled: '',
+		currentPlayingVoiceMessage: null,
 		current_user: {},
 		minimized: true,
 		active: false,
@@ -88,6 +89,9 @@ var store = new Vuex.Store({
 		},
 	},
 	mutations: {
+		SET_CURRENT_PLAYING_VOICE_MESSAGE(state, message) {
+			state.currentPlayingVoiceMessage = message
+		},
 		setUser(state, userData) {
 			state.current_user = userData || {}
 		},
