@@ -354,6 +354,8 @@ class MTRX {
 
 	download(url){
 
+		console.log('url', url)
+
 		// Function to download the file
 		var dlFile = function() {
 			return f.fetchLocal(url).then(response => {
@@ -684,6 +686,19 @@ class MTRX {
 
 	}
 
+	sendFileBase64(chat, base64, meta, p){
+
+		if(!p) p = {}
+
+		var method = 'toFileFetch'
+
+		if(base64.indexOf('data:') > -1) method = 'toFile'
+
+		return f.Base64[method](base64).then(file => {
+			return this.sendFile(chat, file, meta, p)
+		})
+	}
+
 	sendImageBase64(chat, base64, meta, p){
 
 		var method = 'toFileFetch'
@@ -790,7 +805,7 @@ class MTRX {
 						if(!e) resolve()
 
 						else reject('unable')
-					})
+					}, true)
 				})
 			}
 
@@ -868,7 +883,9 @@ class MTRX {
 
 			_.each(share.files, (file) => {
 
-				promises.push(this.sendFile(m_chat, file, {}, {from : share.from}))
+				console.log('file', file)
+
+				promises.push(this.sendFileBase64(m_chat, file, {from : share.from}))
 
 			})
 

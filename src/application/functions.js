@@ -973,12 +973,17 @@ f.readFile = function (file) {
 }
 
 f.fetchLocal = function (url) {
+
+    console.log('fetchLocal', url)
+
     return new Promise(function (resolve, reject) {
         var xhr = new XMLHttpRequest
 
         xhr.onload = function () {
 
             var type = xhr.getResponseHeader('content-type')
+
+            console.log('xhr', xhr)
 
             resolve({
                 data: new Blob([xhr.response], { type: type, name: 'file' })
@@ -987,7 +992,8 @@ f.fetchLocal = function (url) {
             // resolve()
         }
 
-        xhr.onerror = function () {
+        xhr.onerror = function (e) {
+            console.error(e)
             reject(new TypeError('Local request failed'))
         }
 
@@ -999,81 +1005,103 @@ f.fetchLocal = function (url) {
 
 
 
-f.saveFileCordova = function (file, name, clbk) {
+f.saveFileCordova = function(file, name, clbk, todownloads){
 
     var storageLocation = "";
 
     switch (device.platform) {
         case "Android":
-            storageLocation = 'file:///storage/emulated/0/';
+            storageLocation = 'file:///storage/emulated/0/'; //LocalFileSystem.PERSISTENT
             break;
         case "iOS":
             storageLocation = cordova.file.cacheDirectory;
             break;
     }
 
-    var blob = new Blob([file], { type: file.type })
 
-    window.resolveLocalFileSystemURL(storageLocation, function (fileSystem) {
+    var onsuccess = function (fileSystem) {
 
-        fileSystem.getDirectory('Download', {
-            create: true,
-            exclusive: false
-        },
+        fileSystem.getDirectory('Download', { exclusive: false }, function (directory) {
 
-            function (directory) {
+            directory.getFile(name, { create: true, exclusive: false }, function (entry) {
+                // After you save the file, you can access it with this URL
+                var myFileUrl = entry.toURL();
 
-                directory.getFile(name, { create: true, exclusive: false }, function (entry) {
 
-                    var myFileUrl = entry.toURL();
+                entry.createWriter(function (writer) {
 
-                    entry.createWriter(function (writer) {
+                    writer.onwriteend = function (evt) {
+                        //sitemessage("File " + name + " successfully downloaded");
 
-                        writer.onwriteend = function (evt) {
+                        if (window.galleryRefresh){
 
-                            cordova.plugins.fileOpener2.open(
-                                myFileUrl,
-                                file.type,
-                                {
-                                    error: function () { },
-                                    success: function () { }
-                                }
-                            );
+                            window.galleryRefresh.refresh(myFileUrl, function (msg) {
 
-                            /*if (window.galleryRefresh){
-                                window.galleryRefresh.refresh(myFileUrl, function (msg) {}, function (err) {})
-                            }*/
+                            }, function (err) {
 
-                            if (clbk)
-                                clbk(myFileUrl)
 
-                        };
+                            })
 
-                        writer.seek(0);
-                        writer.write(blob);
-                    }, function (error) {
-                        if (clbk) clbk(null, error)
+                        }
 
-                    });
+                        if (clbk)
+                            clbk({
+                                name,
+                                url : myFileUrl
+                            })
+                    };
+
+                    writer.onerror = function (e) {
+
+                        if (clbk)
+                            clbk(null, e)
+
+                    };
+
+                    // Write to the file
+                    writer.seek(0);
+
+                    writer.write(file);
+
                 }, function (error) {
-                    if (clbk) clbk(null, error)
+
+                    /*dialog({
+                        html : "Error: Could not create file writer, " + error.code,
+                        class : "one"
+                    })*/
+
+                    if(clbk) clbk(null, error)
+
                 });
-
             }, function (error) {
-                if (clbk) clbk(null, error)
 
-            })
+                /*dialog({
+                    html : "Error: Could not create file, " + error.code,
+                    class : "one"
+                })*/
 
+                if(clbk) clbk(null, error)
 
+            });
 
-    }, function (evt) {
-
-        dialog({
-            html: "Error: Could not create file, " + evt.target.error.code,
-            class: "one"
         })
+    }
 
-    });
+    var onerror = function (evt) {
+        if(clbk) clbk(null, evt)
+    }
+    
+    if(todownloads){
+        window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fileSystem){
+
+            console.log(fileSystem)
+
+            onsuccess(fileSystem.root)
+        }, onerror)
+    }
+    else{
+        window.resolveLocalFileSystemURL(storageLocation, onsuccess, onerror)
+    }
 
 }
 

@@ -278,6 +278,8 @@ export default {
 						manual: true
 					})
 
+					console.log('_share', _share)
+
 					this.core.mtrx.shareInChat(chat.roomId, _share).then(r => {
 
 						this.$store.commit('icon', {
@@ -288,6 +290,8 @@ export default {
 						this.$router.push(_share.route || 'chat?id=' + chat.roomId)
 
 					}).catch(e => {
+
+						console.error(e)
 
 						this.$store.commit('icon', {
 							icon: 'error',
