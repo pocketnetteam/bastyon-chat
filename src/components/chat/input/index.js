@@ -7,7 +7,8 @@ import {mapState} from "vuex";
 import contacts from '@/components/contacts/list/index.vue'
 import preview from '@/components/contacts/preview/index.vue'
 import recordProgress from '@/components/assets/recordProgress/index.vue';
-import {mediarecorder} from 'caniuse-lite/data/features';
+
+import { MediaRecorder } from 'extendable-media-recorder';
 
 export default {
   name: 'chatInput',
@@ -43,7 +44,7 @@ export default {
       audioContext: null,
       audioAnalyser: null,
       audioDataArray: null,
-      recordTime: 5022,
+      recordTime: 0,
       interval: null,
       cancelOpacity: 0,
       microphoneDisabled: false
@@ -74,12 +75,12 @@ export default {
 
 
   computed: {
-    voiceEnable: function () {
-      this.$
+    voiceEnable() {
+      return this.$store.state.voiceMessagesEnabled
     },
 
-    connect() {
-      return this.$store.state.voiceMessagesEnabled
+    connect: function() {
+      return this.$store.state.contact
     },
     menuItems: function () {
       var menuItems = []
@@ -838,10 +839,13 @@ export default {
     },
 
     async initMediaRecorder() {
+      console.log('init recorder')
       if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
         console.log('getUserMedia supported.');
-        return navigator.mediaDevices.getUserMedia({audio: true}).then(stream => {
-          return new MediaRecorder(stream)
+        return navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
+          let mediaRecorder = new MediaRecorder(stream, { mimeType: 'audio/wav' })
+          mediaRecorder.stream = stream
+          return mediaRecorder
         })
           .catch(function (err) {
               console.log('The following getUserMedia error occured: ' + err);
@@ -855,34 +859,17 @@ export default {
         return false
       }
     },
-
-    startRecording() {
-      this.cancelOpacity = 0
-      this.recordRmsData = []
-      this.recordTime = 0
-      this.record = null
-      this.audioContext = new AudioContext()
-      this.audioAnalyser = this.audioContext.createAnalyser()
-      this.audioDataArray = new Uint8Array(this.audioAnalyser.frequencyBinCount)
-
-      this.mediaRecorder.addEventListener("dataavailable", async (event) => this.createVoiceMessage(event));
-      try {
-        this.mediaRecorder.start()
-      } catch (e) {
-        console.log(e)
-      }
-      let src = this.audioContext.createMediaStreamSource(this.mediaRecorder.stream)
-      src.connect(this.audioAnalyser)
-      this.interval = setInterval(() => {
-        this.dataArray = new Uint8Array(this.audioAnalyser.frequencyBinCount)
-        this.audioAnalyser.getByteFrequencyData(this.dataArray)
-        this.recordRmsData.push(this.generateRms(this.dataArray))
-        this.recordTime = this.recordTime + 20
-      }, 20)
-    },
     async initRecording() {
       try {
-        this.mediaRecorder = await this.initMediaRecorder()
+        if (!this.mediaRecorder) {
+          this.mediaRecorder = await this.initMediaRecorder()
+          this.audioContext = new (window.AudioContext || window.webkitAudioContext)()
+          this.audioAnalyser = this.audioContext.createAnalyser()
+          this.audioDataArray = new Uint8Array(this.audioAnalyser.frequencyBinCount)
+          this.mediaRecorder.ondataavailable = async (event) => this.createVoiceMessage(event)
+          this.src = this.audioContext.createMediaStreamSource(this.mediaRecorder.stream)
+          this.src.connect(this.audioAnalyser)
+        }
         if (this.microphoneDisabled && this.mediaRecorder){
           this.microphoneDisabled = false
           return
@@ -897,6 +884,30 @@ export default {
       }
       this.startRecording()
     },
+
+    startRecording() {
+      try {
+        this.cancelOpacity = 0
+        this.recordRmsData = []
+        this.recordTime = 0
+        this.record = null
+        this.mediaRecorder.stream.getTracks().forEach(function(track) {
+          track.enabled = true
+        });
+        this.mediaRecorder.start()
+        this.interval = setInterval(() => {
+          this.dataArray = new Uint8Array(this.audioAnalyser.frequencyBinCount)
+          this.audioAnalyser.getByteFrequencyData(this.dataArray)
+          this.recordRmsData.push(this.generateRms(this.dataArray))
+          this.recordTime = this.recordTime + 50
+        }, 50)
+      } catch (e) {
+        console.log('startRecord', e)
+      }
+
+    },
+
+
 
 
     async createVoiceMessage(event) {
@@ -929,6 +940,7 @@ export default {
         id,
         isPlaying: false,
       }
+      console.log('message created')
     },
 
     generateRms(frequencies) {
@@ -936,6 +948,10 @@ export default {
     },
 
     stopRecording() {
+    this.mediaRecorder.stream.getTracks().forEach(function(track) {
+        track.enabled = false
+      });
+      console.log('recording stoped')
       this.mediaRecorder.stop()
       this.isRecording = false
       clearInterval(this.interval)
@@ -944,7 +960,6 @@ export default {
     async sendVoiceMessage() {
 
       this.recordRmsData = []
-
       const base64 = await this.convertAudioToBase64(this.record.file)
 
       const id = f.makeid()

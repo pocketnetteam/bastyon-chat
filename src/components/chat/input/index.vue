@@ -15,7 +15,7 @@
 
 
         <div class="center">
-          <record-progress v-if="connect && (isRecording || recordViewData.length)" :recordTime="recordTime" :isRecording="isRecording" :rmsData="recordViewData" :opacity="cancelOpacity" @onClear="clear"/>
+          <record-progress v-if="voiceEnable && (isRecording || recordViewData.length)" :recordTime="recordTime" :isRecording="isRecording" :rmsData="recordViewData" :opacity="cancelOpacity" @onClear="clear"/>
           <InputField
             v-else
             ref="newinput"
@@ -34,7 +34,7 @@
             :storagekey="'chatinput' + chat.roomId"
             :tipusers="tipusers"
           />
-          <div class="left" v-if="upload && chat">
+          <div class="left" :class="{extended: voiceEnable}" v-if="upload && chat">
             <div v-if="!isRecording && !recordViewData.length" class="iconbutton">
               <dropdownMenu
                 ref="dropdownMenu"
@@ -88,7 +88,7 @@
                 </template>
               </dropdownMenu>
             </div>
-            <template v-if="connect">
+            <template v-if="voiceEnable">
               <div v-if="(isRecording || !recordRmsData.length) && !microphoneDisabled" class="iconbutton">
                 <recordVoice @onRecordingStart="initRecording" @onRecordingStop="stopRecording" :isRecording="isRecording" @onClear="clear" @canceling="setOpacity"/>
               </div>

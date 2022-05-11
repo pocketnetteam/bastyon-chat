@@ -33,7 +33,6 @@ export default {
     provide() {
         return {
             addToQueue: (message, id) => {
-                console.log('added', id)
                 this.voiceMessageQueue = [...this.voiceMessageQueue, {message, id}]
             },
             playNext: (id) => {
@@ -41,7 +40,6 @@ export default {
                     return i.id === id
                 })
                 let next = current === -1 ? null : this.sortedVoiceMessageQueue[current + 1]
-                console.log('next',next)
                 if (next) {
                     next.message.audioToggle()
                 }

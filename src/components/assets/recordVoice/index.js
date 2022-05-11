@@ -19,16 +19,19 @@ export default {
   mounted() {
     this.$refs.toggle.addEventListener('touchstart', this.handleTouchStart)
     this.$refs.toggle.addEventListener('touchend', this.handleTouchEnd)
+    this.$refs.toggle.addEventListener('touchcancel', this.handleTouchEnd)
   },
   beforeDestroy() {
     this.$refs.toggle.removeEventListener('touchstart', this.handleTouchStart)
     this.$refs.toggle.removeEventListener('touchend', this.handleTouchEnd)
+    this.$refs.toggle.removeEventListener('touchcancel', this.handleTouchEnd)
     document.removeEventListener('mouseup', this.handleTouchEnd)
     document.removeEventListener('mousemove', this.handleMove)
     document.removeEventListener('touchmove', this.handleMove)
   },
   methods: {
     handleTouchStart(e) {
+      console.log('touch start')
       if (!this.isRecording) {
         this.start = {
           Y: e.changedTouches[0].pageY,
@@ -40,8 +43,7 @@ export default {
       }
     },
     handleTouchEnd(e) {
-      // console.log('end')
-      // e.preventDefault()
+      console.log('touch end')
       if (this.isRecording) {
         this.$emit('onRecordingStop')
         document.removeEventListener('mousemove', this.handleMove)
@@ -72,6 +74,7 @@ export default {
           document.removeEventListener('mousemove', this.handleMove)
           document.removeEventListener('touchmove', this.handleMove)
           this.$refs.toggle.removeEventListener('touchend', this.handleTouchEnd)
+          this.$refs.toggle.removeEventListener('touchcancel', this.handleTouchEnd)
           document.removeEventListener('mouseup', this.handleTouchEnd)
           this.isHold = true
         }
@@ -96,6 +99,7 @@ export default {
 
     record(e) {
       if (this.isRecording) {
+        console.log('stop recording')
         this.$emit('onRecordingStop')
         document.removeEventListener('mousemove', this.handleMove)
         document.removeEventListener('touchmove', this.handleMove)

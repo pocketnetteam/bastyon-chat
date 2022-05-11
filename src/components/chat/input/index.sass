@@ -13,11 +13,12 @@
   display: flex
 
   .left
+    width: 35px
     display: flex
     justify-content: flex-end
     align-items: center
-    width: 80px
     text-align: center
+
 
     .iconbutton
       display: flex
@@ -26,6 +27,10 @@
       height: 35px
       width: 35px
       -webkit-tap-highlight-color: transparent
+
+  .extended
+    width: 70px
+    margin-left: 7px
 
   .leftdummy
     width: $r
@@ -42,7 +47,6 @@
     flex-grow: 1
     border: 1px solid transparent
     border-radius: 30px
-    padding: 0 1em
     background: srgb(--background-secondary-theme)
 
 
@@ -126,5 +130,6 @@
   width: 35px
   height: 35px
   color: srgb(--neutral-grad-3)
+
   i
     padding-top: 1px

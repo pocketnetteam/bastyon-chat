@@ -5,7 +5,7 @@
         <i :class="isPlaying ? 'fas fa-pause': 'fas fa-play'"></i>
       </button>
       <div class="voiceMessage_graph">
-        <canvas ref="canvas" width="160" height="50" @mousedown="goTo" ></canvas>
+        <canvas ref="canvas" width="160" height="50" @mousedown="goTo"></canvas>
       </div>
       <div class="voiceMessage_options">
         {{ getDurationString }}
@@ -71,47 +71,38 @@ export default {
       this.voiceMessage.audio.currentTime = e.offsetX / this.$refs.canvas.width * this.voiceMessage.audio.duration;
       this.voiceMessage.currentTime = e.offsetX / this.$refs.canvas.width * this.voiceMessage.duration;
       this.draw()
-      if (!this.isPlaying) {
-        this.isPlaying = true
-        this.voiceMessage.audio.play()
-        this.interval = setInterval( () => {
-          this.setTime()
-          this.draw()
-        }, 20);
-      }
 
+
+      this.audioToggle()
     },
     audioToggle() {
-      if(!this.voiceMessage.audio.play) {
-        alert('метод недоступен')
-      }
       this.isPlaying = !this.isPlaying
       if (this.isPlaying) {
         this.voiceMessage.audio.play()
-        this.interval = setInterval( () => {
-          this.setTime()
+        this.interval = setInterval(() => {
           this.draw()
+          this.setTime()
         }, 20);
-      } else {
+      }else {
         clearInterval(this.interval)
         this.voiceMessage.audio.pause()
       }
-
     },
     setTime() {
       this.voiceMessage.currentTime = this.voiceMessage.audio.currentTime * 1000
+      console.log(this.voiceMessage.currentTime)
     },
 
     draw() {
       const canvas = this.$refs.canvas
       const ctx = canvas.getContext("2d")
-      ctx.clearRect(0,0, canvas.width, canvas.height)
+      ctx.clearRect(0, 0, canvas.width, canvas.height)
       const data = this.voiceMessage.signal
       for (let i = 0; i < data.length; i++) {
         let x = Math.floor(i / data.length * canvas.width);
         let L = Math.abs(data[i] * canvas.height) + 1;
-        if (Math.floor(i / 100) === i / 100) { // Число 16 для больших аудиофайлов лучше побольше. Нужно подбирать.
-          if(i / data.length < this.percentPlayed) {
+        if (Math.floor(i / 200) === i / 200) { // Число 16 для больших аудиофайлов лучше побольше. Нужно подбирать.
+          if (i / data.length <= this.percentPlayed) {
             ctx.fillStyle = '#00a4ff'
           } else {
             ctx.fillStyle = '#8bddfb'
@@ -121,13 +112,16 @@ export default {
       }
     },
     async initVoiceMessage() {
-      const audioContext = new (window.AudioContext || window.webkitAudioContext)() || null;
-      const audioNode = new Audio(this.base64Audio) || null
-      if (audioNode === null) {
-        alert('ошибка создания контекста')
-        return
+
+      let audioContext
+      let audioNode
+      try {
+        audioContext = new (window.AudioContext || window.webkitAudioContext)() || null;
+        audioNode = new Audio(this.base64Audio) || null
+      } catch (e) {
+        console.log(e)
       }
-      audioNode.addEventListener('loadedmetadata', () => {
+      audioNode.onloadedmetadata = () => {
 
         const getDuration = () => {
           audioNode.currentTime = 0
@@ -142,9 +136,7 @@ export default {
         }
 
 
-      })
-      this.addToQueue(this, this.id)
-
+      }
       audioNode.onplay = () => {
         let currentPlaying = this.$store.state.currentPlayingVoiceMessage
         if (currentPlaying && currentPlaying.id !== this.id) {
@@ -163,10 +155,11 @@ export default {
         this.isPlaying = false
         this.voiceMessage.audio.currentTime = 0
         this.voiceMessage.currentTime = 0
-        this.draw()
         clearInterval(this.interval)
+        this.draw()
         this.playNext(this.id, this.audioToggle)
       }
+      this.addToQueue(this, this.id)
 
       this.voiceMessage = {
         audio: audioNode,
@@ -175,17 +168,21 @@ export default {
       }
 
       const data = f._base64ToArrayBuffer(this.base64Audio.split(',')[1])
-      await audioContext.decodeAudioData(data, (buffer) => {
+      try {
+        await audioContext.decodeAudioData(data, (buffer) => {
 
-        this.voiceMessage = {
-          audio: audioNode,
-          duration: 0,
-          currentTime: 0,
-          signal: buffer.getChannelData(0),
-        }
+          this.voiceMessage = {
+            audio: audioNode,
+            duration: 0,
+            currentTime: 0,
+            signal: buffer.getChannelData(0),
+          }
 
           this.draw()
-      })
+        })
+      } catch (e) {
+        console.log(e)
+      }
 
     }
   }
@@ -195,6 +192,7 @@ export default {
 <style scoped lang="scss">
 .voiceMessage {
   -webkit-tap-highlight-color: transparent;
+
   &_wrapper {
     display: flex;
     justify-content: flex-end;
@@ -237,7 +235,7 @@ export default {
     margin-left: 10px;
     padding: 2px 10px;
     min-width: 40px;
-    background: srgb(--neutral-grad-1) ;
+    background: srgb(--neutral-grad-1);
     border-radius: 10px;
   }
 }
