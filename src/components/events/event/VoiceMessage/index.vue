@@ -72,8 +72,14 @@ export default {
       this.voiceMessage.currentTime = e.offsetX / this.$refs.canvas.width * this.voiceMessage.duration;
       this.draw()
 
-
-      this.audioToggle()
+      if (!this.isPlaying) {
+        this.isPlaying = true
+        this.voiceMessage.audio.play()
+        this.interval = setInterval(() => {
+          this.draw()
+          this.setTime()
+        }, 20);
+      }
     },
     audioToggle() {
       this.isPlaying = !this.isPlaying
@@ -90,7 +96,6 @@ export default {
     },
     setTime() {
       this.voiceMessage.currentTime = this.voiceMessage.audio.currentTime * 1000
-      console.log(this.voiceMessage.currentTime)
     },
 
     draw() {

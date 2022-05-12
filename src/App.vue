@@ -515,9 +515,9 @@ export default {
   },
 
   created() {
-    // this.pocketnet = true
+    // this.pocketnet = false
     // this.mobile = !this.pocketnet
-    console.log('recording-', this.recording)
+
     this.$store.commit('setPocketnet', this.pocketnet);
     this.$store.commit('setMobile', this.mobile);
     this.$store.commit('setVoiceMessagesEnabled', this.recording);
