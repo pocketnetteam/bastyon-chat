@@ -31,7 +31,6 @@ export default {
   },
   methods: {
     handleTouchStart(e) {
-      console.log('touch start')
       if (!this.isRecording) {
         this.start = {
           Y: e.changedTouches[0].pageY,
@@ -43,7 +42,6 @@ export default {
       }
     },
     handleTouchEnd(e) {
-      console.log('touch end')
       if (this.isRecording) {
         this.$emit('onRecordingStop')
         document.removeEventListener('mousemove', this.handleMove)
@@ -99,7 +97,6 @@ export default {
 
     record(e) {
       if (this.isRecording) {
-        console.log('stop recording')
         this.$emit('onRecordingStop')
         document.removeEventListener('mousemove', this.handleMove)
         document.removeEventListener('touchmove', this.handleMove)

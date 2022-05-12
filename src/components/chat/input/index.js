@@ -839,7 +839,6 @@ export default {
     },
 
     async initMediaRecorder() {
-      console.log('init recorder')
       if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
         console.log('getUserMedia supported.');
         return navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
@@ -940,7 +939,6 @@ export default {
         id,
         isPlaying: false,
       }
-      console.log('message created')
     },
 
     generateRms(frequencies) {
@@ -951,7 +949,6 @@ export default {
     this.mediaRecorder.stream.getTracks().forEach(function(track) {
         track.enabled = false
       });
-      console.log('recording stoped')
       this.mediaRecorder.stop()
       this.isRecording = false
       clearInterval(this.interval)
