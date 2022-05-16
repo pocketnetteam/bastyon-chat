@@ -1,112 +1,135 @@
 
 #chatInput
-    padding-bottom : $r 
+  padding-bottom: $r
 
 /deep/ #modal.minimized .modal-wrapper
-    left : 0
+  left: 0
 
 /deep/ .previewWrapper
-    padding-left: $r!important
-    padding-right: $r!important
+  padding-left: $r !important
+  padding-right: $r !important
 
 .inputWrapper
+  display: flex
+
+  .left
+    width: 35px
     display: flex
+    justify-content: flex-end
+    align-items: center
+    text-align: center
 
-    .left
-        width: 35px
-        text-align: center
-        .iconbutton
-            width: 35px
 
-    .leftdummy
-        width: $r
+    .iconbutton
+      display: flex
+      align-items: center
+      justify-content: center
+      height: 35px
+      width: 35px
+      -webkit-tap-highlight-color: transparent
 
-    >div
-        +transition(0.3s)
+  .extended
+    width: 70px
+    margin-left: 7px
 
-    .center
-        max-height: 110px
-        display: flex
-        justify-content: center
-        align-items: center
-        flex-grow: 1
-        border: 1px solid transparent
-        border-radius: 30px
-        padding-right: $r
-        background: srgb(--background-secondary-theme)
-        
+  .leftdummy
+    width: $r
 
-    input
-        border : 1px solid srgb(--neutral-grad-0)
-        background: srgba(--background-main, 0.5)
-        border-radius: 30px
-        width : 100%
-        padding : $r 2 * $r
+  > div
+    +transition(0.3s)
+
+  .center
+    max-height: 110px
+    max-width: 100%
+    display: flex
+    justify-content: center
+    align-items: center
+    flex-grow: 1
+    border: 1px solid transparent
+    border-radius: 30px
+    background: srgb(--background-secondary-theme)
+
+
+  input
+    border: 1px solid srgb(--neutral-grad-0)
+    background: srgba(--background-main, 0.5)
+    border-radius: 30px
+    width: 100%
+    padding: $r 2 * $r
 
 .notready
-    padding : $r 0
-    text-align: center
-    
-.waitjoined
-    padding : $r 0
-    text-align: center
+  padding: $r 0
+  text-align: center
 
-    span
-        font-size: 0.8em
+.waitjoined
+  padding: $r 0
+  text-align: center
+
+  span
+    font-size: 0.8em
+
 .greetings
-    padding : $r 0
-    text-align: center
-    button   
+  padding: $r 0
+  text-align: center
+
+  button
 
 /deep/ .iconWrapper
-    text-align: center
+  text-align: center
 
 .menu-item
-    padding: $r
-    background: srgb(--background-total-theme)
-    line-height: 44px
-    border-radius: 5px
+  padding: $r
+  background: srgb(--background-total-theme)
+  line-height: 44px
+  border-radius: 5px
 
-    display: flex
+  display: flex
 
-    .title
-        flex-grow: 2
-        padding-right: 44px
-        text-align: center
+  .title
+    flex-grow: 2
+    padding-right: 44px
+    text-align: center
 
-    .iconWrapper
-        width: 44px
+  .iconWrapper
+    width: 44px
 
 .tipusers
-    position: absolute
-    max-height: 300px
-    border-radius: $r
-    border: 1px solid srgba(--neutral-grad-0, 0.9)
-    overflow-y: overlay
-    background-color: srgba(--background-total-theme, 0.95)
-    backdrop-filter: blur(4px)
-    -webkit-backdrop-filter: blur(4px)
-    padding: 0.5 * $r 0
-    bottom : 100%
-    margin-bottom: $r
-    left: 0.5 * $r
-    right: 0.5 * $r
+  position: absolute
+  max-height: 300px
+  border-radius: $r
+  border: 1px solid srgba(--neutral-grad-0, 0.9)
+  overflow-y: overlay
+  background-color: srgba(--background-total-theme, 0.95)
+  backdrop-filter: blur(4px)
+  -webkit-backdrop-filter: blur(4px)
+  padding: 0.5 * $r 0
+  bottom: 100%
+  margin-bottom: $r
+  left: 0.5 * $r
+  right: 0.5 * $r
 
-    .previewWrapperExt
-        border-radius: 1.5 * $r
-        margin-left: 0.5 *$r
-        margin-right: 0.5 *$r
-        padding-top : 0.5 *$r
-        padding-bottom : 0.5 *$r
+  .previewWrapperExt
+    border-radius: 1.5 * $r
+    margin-left: 0.5 *$r
+    margin-right: 0.5 *$r
+    padding-top: 0.5 *$r
+    padding-bottom: 0.5 *$r
 
-        /deep/ .previewWrapper
-            padding-left: 0.5 *$r!important
-            padding-right: 0.5 * $r!important
-            
-        &.selected
-            background: srgb(--background-main)
+    /deep/ .previewWrapper
+      padding-left: 0.5 *$r !important
+      padding-right: 0.5 * $r !important
 
-
+    &.selected
+      background: srgb(--background-main)
 
 
-    
+.disabled
+  display: flex
+  justify-content: center
+  align-items: center
+  width: 35px
+  height: 35px
+  color: srgb(--neutral-grad-3)
+
+  i
+    padding-top: 1px

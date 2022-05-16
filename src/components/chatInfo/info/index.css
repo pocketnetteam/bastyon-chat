@@ -3,7 +3,7 @@
  * 10 |   color: $color-text-light
  *    |          ^^^^^^^^^^^^^^^^^
  *    '
- *   index.sass 10:10  root stylesheet */
+ *   index.scss 10:10  root stylesheet */
 
 body::before {
   font-family: "Source Code Pro", "SF Mono", Monaco, Inconsolata, "Fira Mono",

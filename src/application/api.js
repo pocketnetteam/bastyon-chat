@@ -304,8 +304,8 @@ var ApiWrapper = function (core) {
 
 			var parameters = [text, 'users'];
 
-			return self.pocketnet.common({ parameters }, 'search').then(data => {
-				return Promise.resolve(data.users?.data || [])
+			return self.pocketnet.common({ parameters }, 'searchusers').then(data => {
+				return Promise.resolve(data || [])
 			})
 		},
 

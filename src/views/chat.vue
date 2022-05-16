@@ -2,7 +2,7 @@
   <div class="page chat" :class="{mobile}">
 
     <topheader :key="k" class="topheader" v-show="!hideHeader || !ios"
-      :u="u" :chat="chat" @addMember="addMemberModal"
+               :u="u" :chat="chat" @addMember="addMemberModal"
     />
 
     <maincontent>
@@ -15,7 +15,7 @@
               @removeBrokenRoom="creatorLeft"
               @getEvents="eventsRoom"
               @menuIsVisible="menuIsVisibleHandler"
-              />
+        />
 
       </template>
 
@@ -55,6 +55,7 @@
     .headerSpacerWrapper
       bottom: 0
       overflow: visible
+
     .headerSpacerWrapperOvf
       overflow: visible
 </style>
@@ -105,20 +106,20 @@ export default {
     ...mapState({
       pocketnet: state => state.pocketnet,
       minimized: state => state.minimized,
-      mobile : state => state.mobile,
+      mobile: state => state.mobile,
     }),
 
   },
-  
+
   mounted() {
     setTimeout(() => {
 
-      if(!this.leaveIfBroken()){
+      if (!this.leaveIfBroken()) {
 
-        
+
       }
 
-     
+
     }, 2000)
   },
   methods: {
@@ -147,7 +148,7 @@ export default {
       this.hideHeader = isVisible;
     },
 
-    leaveIfBroken(){
+    leaveIfBroken() {
       if (this.brokenRoom) {
 
         this.core.mtrx.client.leave(from.query.id).then(r => {
@@ -162,7 +163,7 @@ export default {
         return true
 
       } else {
-        
+
         return false
 
       }

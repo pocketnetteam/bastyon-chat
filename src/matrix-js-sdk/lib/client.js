@@ -3258,6 +3258,36 @@ MatrixClient.prototype.sendImageMessage = function (roomId, url, info, text, cal
  */
 
 
+MatrixClient.prototype.sendAudioMessage = function (roomId, url, info, text, callback) {
+  console.log('send audio', roomId, url, text, callback)
+  if (utils.isFunction(text)) {
+    callback = text;
+    text = undefined;
+  }
+
+  if (!text) {
+    text = "Audio";
+  }
+
+  const content = {
+    msgtype: "m.audio",
+    url: url,
+    info: info,
+    body: text
+  };
+  return this.sendMessage(roomId, content, callback);
+};
+/**
+ * @param {string} roomId
+ * @param {string} url
+ * @param {Object} info
+ * @param {string} text
+ * @param {module:client.callback} callback Optional.
+ * @return {Promise} Resolves: TODO
+ * @return {module:http-api.MatrixError} Rejects: with an error response.
+ */
+
+
 MatrixClient.prototype.sendStickerMessage = function (roomId, url, info, text, callback) {
   if (utils.isFunction(text)) {
     callback = text;

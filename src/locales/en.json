@@ -44,6 +44,7 @@
         "unabletoDecrypt" : "* Unable to decrypt",
         "messageDeleted" : "Message Deleted",
         "sentImage" : "sent image",
+        "sentVoiceMessage": "sent a voice message",
         "invitationToChat" : "Invitation to chat",
         "invitationToRoom" : "Invitation to room",
         "leftChat" : "left the chat",

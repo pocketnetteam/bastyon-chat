@@ -3,6 +3,15 @@ var prependcssvars = `@import "@/styles/variables/common.sass"; @import "@/style
 
 module.exports = {
 
+
+  devServer: {
+    open: process.platform === 'darwin',
+    host: '0.0.0.0',
+    port: 8080, // CHANGE YOUR PORT HERE!
+    https: true,
+    hotOnly: false,
+  },
+
   publicPath: '/',
   lintOnSave: false,
 
@@ -31,7 +40,6 @@ module.exports = {
         {
           loader: 'babel-loader',
           test: '/\.(js)$/',
-          exclude: /node_modules/
         },
         {
           test: /\.(ts|tsx)?$/,

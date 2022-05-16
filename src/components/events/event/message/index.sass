@@ -143,7 +143,8 @@
       text-shadow: none 
       right: 0
       left : auto
-
+  .messageAudio
+    width: 100%
   .messageImg
     width: 85%
     position: relative
@@ -217,6 +218,7 @@
             display: block
             width: 100%
             height: 100%
+
 
   .filePreview
     width : 90%
@@ -409,6 +411,7 @@
 
   &[my="true"]
     justify-content: flex-end
+    flex-wrap: wrap
 
     .iconWrapper
       margin-left: $r
@@ -462,6 +465,8 @@
       .filePreview,
       .metaMsg,
       .messageImg
+        order: 6
+      .messageAudio
         order: 6
 
   &.not-preview

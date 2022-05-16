@@ -44,6 +44,7 @@
         "unabletoDecrypt" : "* 해독할 수 없음",
         "messageDeleted" : "메시지 삭제됨",
         "sentImage" : "전송된 이미지",
+        "sentVoiceMessage": "음성 메시지를 보냈다",
         "invitationToChat" : "채팅 초대",
         "invitationToRoom" : "Invitation to room",
         "leftChat" : "채팅에서 나감",

@@ -182,7 +182,7 @@ var thm = function(){
 
         var scoped = ' ';
 
-        if(data.indexOf('<style scoped lang="sass" src="./index.sass"></style>') > -1) scoped = ' scoped '
+        if(data.indexOf('<style scoped lang="sass" src="./index.scss"></style>') > -1) scoped = ' scoped '
 
         var themestring = _.reduce(themes, function(s, th){
 
@@ -270,7 +270,7 @@ var thm = function(){
 
     var divideIndexSass = function(file, clbk){
 
-        if(file.indexOf("index.sass") > -1){
+        if(file.indexOf("index.scss") > -1){
 
             fs.readFile(file, {encoding: 'utf-8'}, function(err, data){
                 if (!err){
@@ -330,7 +330,7 @@ var thm = function(){
 
             file : function(file, next){
 
-                if (file.indexOf('index.sass') > -1) {
+                if (file.indexOf('index.scss') > -1) {
                     clearThemeFilesAll(path.dirname(file))
 
                     if(!clear)
