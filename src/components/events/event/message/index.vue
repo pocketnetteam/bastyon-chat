@@ -12,9 +12,9 @@
 
     </div>
 
-    <div v-touch:longtap="dropDownMenuShow" :class="{referenceshowed, showmeta : showmeta, my,'messageRow': 'messageRow', urlpreview : urlpreview, allscreen : urlpreview || content.msgtype === 'm.image'|| file}" :my="my" v-if="!preview && content.msgtype !== 'm.notice'">
+    <div v-touch:longtap="dropDownMenuShow" :class="{referenceshowed, showmeta : showmeta, my,'messageRow': 'messageRow', urlpreview : urlpreview, allscreen : urlpreview || content.msgtype === 'm.image'|| file || content.msgtype === 'm.audio'}" :my="my" v-if="!preview && content.msgtype !== 'm.notice'">
 
-      <div class="timeWrapper" v-if="(urlpreview || imageUrl || content.msgtype === 'm.image') || (showmeta && (my)) || file">
+      <div class="timeWrapper" v-if="(urlpreview || imageUrl || content.msgtype === 'm.image' || content.msgtype === 'm.audio') || (showmeta && (my)) || file">
         
         <i :class="'fas fa-fire burn ' + showburn" v-if="showburn" @click="showwhenburn"></i>
         
@@ -31,7 +31,7 @@
           <userpic :userinfo="userinfo"/>
       </div>
 
-      <div class="fromimagesfiles" v-if="(content.from || imageFrom) && (file || (content.msgtype === 'm.image' && imageUrl))">
+      <div class="fromimagesfiles" v-if="(content.from || imageFrom) && (file || (content.msgtype === 'm.image' && imageUrl) || ( content.msgtype === 'm.audio' && audioUrl))">
           <div class="fromCaption">
             <i class="fas fa-share-alt"></i> <span>{{ $t("caption.messagefrom") }}</span>
           </div>
@@ -59,6 +59,9 @@
         <div class="preloaderImage" :style="imagePaddingStyle(content)" v-else>
           <div class="abswrapper"><linepreloader /></div>
         </div>
+      </div>
+      <div class="messageAudio" v-if="content.msgtype === 'm.audio'">
+        <VoiceMessage v-if="audioUrl" :base64Audio="audioUrl" :id="event._localTimestamp || Date.now()"/>
       </div>
 
       <div class="maxcontent" :class="{'my' : my }" v-if="content.msgtype === 'm.encrypted' && !textWithoutLinks && badenctypted">
@@ -128,7 +131,7 @@
       </div>
       
     </div>
-
+<!--sdfsf-->
     <div class="messagePreview" v-if="preview">
       <listPreview :my="my" :event="origin" :decryptEvent="decryptEvent" :userinfo="userinfo" :chat="chat" :readed="readed" />
     </div>
@@ -139,13 +142,13 @@
         <!--<date v-if="readed.data" :date="readed.data.ts"/>-->
       </div>
     </div>
-
   </div>
 
 </template>
 
 
-<script src="./index.js"></script>
+<script src="./index.js">
+</script>
 <style scoped lang="sass" src="./index.sass"></style>
 
 <!-- THEMES BEGIN -->

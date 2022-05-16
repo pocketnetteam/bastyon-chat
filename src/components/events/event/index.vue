@@ -13,7 +13,7 @@
              :prevevent="prevevent"
              :origin="event"
              :decryptEvent="decryptEvent"
-             :decryptedImage="decryptedImage"
+             :decryptedInfo="decryptedInfo"
              :encryptedData="encryptedData"
 
              :imgEvent="galleryData" 
@@ -113,7 +113,7 @@ export default {
     return {
       readed: null,
       decryptEvent: {},
-      decryptedImage : null,
+      decryptedInfo : null,
       decryptReady: '',
       readyEvent: false,
       downloading : false,
@@ -336,19 +336,15 @@ export default {
       var pr = Promise.resolve()
 
       if(_sharing.download){
-
         pr = this.core.mtrx.getFile(this.chat, this.event).then(r => {
-
           return f.Base64.fromFile(r.file)
 
         }).then(r => {
           _sharing.files = [r]
-
           return Promise.resolve()
         })
 
       }
-
       return pr.then(() => {
         return this.core.share(_sharing)
       })
@@ -390,7 +386,7 @@ export default {
 
       this.core.mtrx.getImage(this.chat, this.event).then(url => {
 
-        this.decryptedImage = url
+        this.decryptedInfo = url
 
       }).catch(e => {
 

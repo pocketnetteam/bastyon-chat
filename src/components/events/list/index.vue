@@ -27,7 +27,6 @@
                 @menuIsVisible="menuIsVisibleHandler"
                 
             />
-
           </div>
       </div>
 

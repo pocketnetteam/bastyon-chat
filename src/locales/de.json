@@ -43,6 +43,7 @@
         "unabletoDecrypt" : "* Kann nicht entschlüsselnt",
         "messageDeleted" : "Nachricht gelöscht",
         "sentImage" : "gesendetes Bild",
+        "sentVoiceMessage" : "eine Sprachnachricht gesendet",
         "invitationToChat" : "Einladung zum Chat",
         "invitationToRoom" : "Invitation to room",
         "leftChat" : "Hat den chat verlasst",

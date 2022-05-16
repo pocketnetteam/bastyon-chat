@@ -10,6 +10,7 @@ import imagesLoaded from 'vue-images-loaded'
 import dummypreviews from "@/components/chats/dummypreviews";
 import moment from "moment";
 import IncomingMessage from "./incomingMessage/incomingMessage.vue"
+import VoiceMessage from '@/components/events/event/VoiceMessage';
 
 export default {
   name: 'eventsMessage',
@@ -33,7 +34,7 @@ export default {
     chat: Object,
     encrypted: false,
     encryptedData: Boolean,
-    decryptedImage: String,
+    decryptedInfo: String,
     error: String,
     withImage: Boolean,
     reference: Object,
@@ -60,7 +61,8 @@ export default {
     listPreview,
     url,
     dummypreviews,
-    IncomingMessage
+    IncomingMessage,
+    VoiceMessage,
   },
   computed: {
     showburn : function(){  
@@ -133,7 +135,8 @@ export default {
     showmyicon: function () {
       
       return this.showmyicontrue || 
-        this.content.msgtype === 'm.image' || 
+        this.content.msgtype === 'm.image' ||
+        this.content.msgtype === 'm.audio' ||
         this.content.msgtype === 'm.file' || 
         this.urlpreview || (!this.$store.state.active && this.$store.state.minimized)
 
@@ -193,11 +196,21 @@ export default {
       if (this.content.msgtype === 'm.image') {
 
         if (this.encryptedData) {
-          return this.decryptedImage
+          return this.decryptedInfo
         } else {
           return this.content && this.content.url;
         }
 
+      }
+    },
+    audioUrl: function () {
+      if (this.content.msgtype === 'm.audio') {
+
+        if (this.encryptedData) {
+          return this.decryptedInfo
+        } else {
+          return this.content && this.content.url;
+        }
       }
     },
 
@@ -361,6 +374,8 @@ export default {
       var trimmed = this.$f.trim(this.body)
       
       if (this.content.msgtype === 'm.image' && this.imageUrl) sharing.images = [this.imageUrl]
+
+      if (this.content.msgtype === 'm.audio' && this.decryptedInfo) sharing.audio = [this.decryptedInfo]
 
       if ((this.content.msgtype === 'm.text' || this.content.msgtype === 'm.encrypted') && trimmed) sharing.messages = [trimmed]
 

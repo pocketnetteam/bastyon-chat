@@ -440,7 +440,6 @@ export default {
         })
       } else {
         this.core.mtrx.client.ban(this.m_chat.roomId, f.getMatrixIdFull(user.userId, this.core.domain), 'admin ban').then(r => {
-          console.log()
         })
       }
 
