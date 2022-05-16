@@ -37,7 +37,7 @@
 
       </modal>
 
-      <div class="expandp" v-if="!rbackexp" @click="setactive" @mousemove="effect">
+      <div class="expandp" v-if="!unauthorized && rbackexp" @click="setactive" @mousemove="effect">
         <div class="etablew">
           <div class="etable table">
             <div><i class="fas fa-expand-arrows-alt"></i></div>

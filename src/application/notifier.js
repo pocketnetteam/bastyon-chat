@@ -110,6 +110,7 @@ class Notifier {
 
 		var state = this.core.vm.$store.state
 
+
 		if (this.showed[event.event.event_id]) return
 
 		this.addshowed(event.event.event_id)
@@ -127,6 +128,8 @@ class Notifier {
 		if (f.deep(event, 'event.content.msgtype') == 'm.encrypted') ctype = 'encrypted'
 
 		var c = () => {
+
+			
 			var msg = {
 				title: user.name,
 				event: event,
@@ -173,10 +176,7 @@ class Notifier {
 
 		if (!iftime) return
 
-
-
 		this.core.mtrx.isReaded(event, true).then(r => {
-
 
 			if (r) return
 
@@ -184,10 +184,10 @@ class Notifier {
 
 
 				this.core.user.usersInfo([f.getmatrixid(event.getSender())]).then(info => {
-
 					if (
 						info && info[0]
 					) {
+
 
 						this.message(event, info[0], chat)
 

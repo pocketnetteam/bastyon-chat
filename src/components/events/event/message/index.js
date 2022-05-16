@@ -241,14 +241,16 @@ export default {
           click: "reply",
           title: this.$i18n.t("button.reply"),
           icon: "fas fa-reply"
-        },
-        {
+        }
+      ]
+
+      if(!this.file){
+        menu.push({
           click: "share",
           title: this.$i18n.t("button.share"),
           icon: "fas fa-share-alt"
-        }
-
-      ]
+        })
+      }
 
 
       if (this.my) {
@@ -370,7 +372,7 @@ export default {
       var sharing = {}
 
       var trimmed = this.$f.trim(this.body)
-
+      
       if (this.content.msgtype === 'm.image' && this.imageUrl) sharing.images = [this.imageUrl]
 
       if (this.content.msgtype === 'm.audio' && this.decryptedInfo) sharing.audio = [this.decryptedInfo]

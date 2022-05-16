@@ -245,7 +245,8 @@ export default {
       })
     },
     mediaTimelineSet: async function () {
-      var filter = new core.mtrx.sdk.Filter(client.getUserId())
+      var filter = new this.core.mtrx.sdk.Filter(client.getUserId())
+
       filter.setDefinition({
         "room": {
           "timeline": {
@@ -256,7 +257,9 @@ export default {
           },
         }
       })
-      filter.filterId = await client.getOrCreateFilter("FILTER_FILES_" + client.credentials.userId, filter);
+
+      filter.filterId = await this.core.mtrx.client.getOrCreateFilter("FILTER_FILES_" + this.core.mtrx.client.credentials.userId, filter);
+      
       return this.chat.getOrCreateFilteredTimelineSet(filter)
     },
     init: async function () {
