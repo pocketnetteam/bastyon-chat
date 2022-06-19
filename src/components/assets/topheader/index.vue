@@ -49,24 +49,11 @@
 
 <!-- THEMES BEGIN -->
 <!-- THEMES END -->
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+<style lang="scss" scoped>
+  @media only screen and (min-width: 768px) {
+    .fixedOnPageTop {
+      width: 40%;
+      max-width: 400px;
+    }
+  }
+</style>

@@ -1,62 +1,65 @@
-import { mapState} from 'vuex'
+import { mapState } from "vuex";
 export default {
-    name: "footerChat",
+  name: "footerChat",
 
   data: function () {
-
     return {
-      loading: false
-    }
-
+      loading: false,
+    };
   },
 
-  created: () => {
-
-  },
+  created: () => {},
 
   watch: {
     //$route: 'getdata'
   },
 
-  
-
   computed: mapState({
-    pocketnet: state => state.pocketnet,
-    minimized: state => state.minimized,
-    active: state => state.active,
-    auth: state => state.auth,
-    notificationCount : state => state.allnotifications,
+    pocketnet: (state) => state.pocketnet,
+    minimized: (state) => state.minimized,
+    active: (state) => state.active,
+    auth: (state) => state.auth,
+    notificationCount: (state) => state.allnotifications,
 
-    current : function(){
-      return this.$route.name
+    current: function () {
+      return this.$route.name;
     },
 
-    activesettings : function(){
-      return this.current == 'settings'
+    query: function () {
+      return this.$route.query;
     },
 
-    activecontacts : function(){
-      return this.current == 'contact' || this.current == 'contacts'
+    activesettings: function () {
+      return this.query.page === "settings";
     },
 
-    activechats : function(){
-      return this.current == 'chat' || this.current == 'chats'
+    activecontacts: function () {
+      return this.query.page == "contacts";
     },
 
-    mobile : function(){
-      return this.$store.state.mobile
-    }
-    
+    activechats: function () {
+      return this.query.page === undefined || this.query.page == "chats";
+    },
+
+    mobile: function () {
+      return this.$store.state.mobile;
+    },
   }),
-  methods : {
-    gotona(r){
-      this.$router.push(r)
-      this.$store.commit('active', true)
-      this.$store.commit('setiteraction', true)
+  methods: {
+    gotona(r) {
+      this.$router.push({
+        path: this.$router.path,
+        query: {
+          ...this.$route.query,
+          page: r,
+        },
+      });
+      this.$store.commit("active", true);
+      this.$store.commit("setiteraction", true);
     },
 
-    movefromchat : function(){
-      if(this.core.backtoapp) this.core.backtoapp()
-    }
-  }
-}
+    movefromchat: function () {
+      if (this.core.backtoapp) this.core.backtoapp();
+    },
+  },
+};
