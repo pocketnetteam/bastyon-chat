@@ -20,6 +20,9 @@
         @close="closeGallery"
       />
     </div>
+    <div v-if="!showPage" class="chat-container-pages-empty">
+      <i class="fas fa-comments"></i>
+    </div>
   </div>
 </template>
 
@@ -38,6 +41,19 @@
       position: relative;
       height: 100%;
       width: calc(100% - 400px);
+      &-empty {
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        justify-content: center;
+        width: calc(100% - 400px);
+        height: 100%;
+        background: rgba(250, 250, 250, 0.9);
+        i {
+          color: rgb(0, 164, 255);
+          transform: scale(2);
+        }
+      }
     }
   }
 }
@@ -55,6 +71,9 @@
         width: 100%;
         z-index: 999;
         background: #fff;
+        &-empty {
+          display: none;
+        }
       }
     }
   }
