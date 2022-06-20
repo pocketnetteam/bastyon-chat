@@ -36,11 +36,27 @@
     width: 400px;
     height: 100%;
     position: relative;
-
+    .menubgwrapper {
+      display: none;
+    }
+    #wai-fixedmessageicon {
+      display: none;
+    }
     &-pages {
       position: relative;
       height: 100%;
       width: calc(100% - 400px);
+      #wai-fixedmessageicon {
+        &.active {
+          .wrapper {
+            position: fixed;
+            right: 0;
+            left: auto;
+            width: calc(100vw - 400px) !important;
+            transform: none;
+          }
+        }
+      }
       &-empty {
         display: flex;
         align-items: center;
@@ -73,6 +89,17 @@
         background: #fff;
         &-empty {
           display: none;
+        }
+        #wai-fixedmessageicon {
+          &.active {
+            .wrapper {
+              position: fixed;
+              right: 0;
+              left: auto;
+              width: 100vw !important;
+              transform: none;
+            }
+          }
         }
       }
     }
