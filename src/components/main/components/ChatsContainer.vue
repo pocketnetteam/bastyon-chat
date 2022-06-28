@@ -36,6 +36,7 @@
     .headerSpacerWrapper
       overflow: visible !important
     .headerSpacerWrapperOvf
+      background: #ffffff
       overflow: visible !important
 
 

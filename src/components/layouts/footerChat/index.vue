@@ -92,6 +92,9 @@
   .footer-chat {
     width: 40%;
     max-width: 400px;
+    &.bout {
+      width: 100%;
+    }
   }
 }
 </style>

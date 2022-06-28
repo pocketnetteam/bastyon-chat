@@ -33,6 +33,7 @@
         :chat="m_chat"
         @editingEvent="editingEvent"
         @replyEvent="replyEvent"
+        @shareEvent="shareEvent"
         @eventImage="(e) => galleryImage(e)"
         @scroll="scroll"
         @menuIsVisible="menuIsVisibleHandler"
