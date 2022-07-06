@@ -134,6 +134,8 @@
     will-change: transform
     transform: translate3d(0, calc((var(--keyboardheight, 0) - 1px) * -1), 0)
     +transition(0.3s)
+    width: calc(100% - 400px);
+    margin: 0 0 0 auto;
 
     &.bin
         position: absolute

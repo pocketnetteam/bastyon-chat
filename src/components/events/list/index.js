@@ -1,128 +1,116 @@
-import {mapState} from 'vuex';
+import { mapState } from "vuex";
 import f from "@/application/functions";
 import * as _ from "underscore";
 
-
 export default {
-    name: 'events',
-    props: {
-
-        timeline: Object,
-        events: Array,
-        chat: Object,
-        loading: Boolean,
-        scrollType: '',
-        error : [Object, Error, String]
-
-
-    },
-    components: {},
-    data: function () {
-
-        return {
-            type: '',
-            tmt: null,
-            lscroll: null,
-            menuOpen: false,
-            c: 1,
-            ls: 0,
-            voiceMessageQueue: []
+  name: "events",
+  props: {
+    timeline: Object,
+    events: Array,
+    chat: Object,
+    loading: Boolean,
+    scrollType: "",
+    error: [Object, Error, String],
+  },
+  components: {},
+  data: function () {
+    return {
+      type: "",
+      tmt: null,
+      lscroll: null,
+      menuOpen: false,
+      c: 1,
+      ls: 0,
+      voiceMessageQueue: [],
+    };
+  },
+  provide() {
+    return {
+      addToQueue: (message, id) => {
+        this.voiceMessageQueue = [...this.voiceMessageQueue, { message, id }];
+      },
+      playNext: (id) => {
+        let current = this.sortedVoiceMessageQueue.findIndex((i) => {
+          return i.id === id;
+        });
+        let next =
+          current === -1 ? null : this.sortedVoiceMessageQueue[current + 1];
+        if (next) {
+          next.message.audioToggle();
         }
+      },
+    };
+  },
 
-    },
-    provide() {
-        return {
-            addToQueue: (message, id) => {
-                this.voiceMessageQueue = [...this.voiceMessageQueue, {message, id}]
-            },
-            playNext: (id) => {
-                let current = this.sortedVoiceMessageQueue.findIndex(i => {
-                    return i.id === id
-                })
-                let next = current === -1 ? null : this.sortedVoiceMessageQueue[current + 1]
-                if (next) {
-                    next.message.audioToggle()
-                }
-            }
+  watch: {
+    events: function () {},
+  },
 
-        }
+  computed: {
+    sortedVoiceMessageQueue() {
+      return this.voiceMessageQueue.sort((a, b) => a.id - b.id);
     },
 
-    watch: {
-        events: function () {
-        },
-        
+    ios() {
+      return f.isios();
     },
 
-    computed: {
-        sortedVoiceMessageQueue () {
-            return this.voiceMessageQueue.sort((a,b) => a.id - b.id)
-        },
+    ...mapState({
+      auth: (state) => state.auth,
+      mobile: (state) => state.mobile,
+      scrollbottomshow: function () {
+        return this.lscroll && this.lscroll.scrollTop > 500;
+      },
+    }),
 
-        ios() {
-            return f.isios();
-        },
+    eventsByPages: function () {
+      var ps = [];
+      var pc = 0;
 
-        ...mapState({
-            auth: state => state.auth,
-            mobile: state => state.mobile,
-            scrollbottomshow: function () {
-                return this.lscroll && this.lscroll.scrollTop > 500
-            }
-        }),
+      _.each(this.events, function (e) {
+        if (!pc) ps.push([]);
 
-        eventsByPages: function () {
-            var ps = [];
-            var pc = 0
+        ps[ps.length - 1].push(e);
 
-            _.each(this.events, function (e) {
-                if (!pc) ps.push([])
+        pc++;
 
-                ps[ps.length - 1].push(e)
+        if (pc > 19) pc = 0;
+      });
 
-                pc++
-
-                if (pc > 19) pc = 0
-            })
-
-
-            return ps
-        },
-
-        stringifyiedError : function(){
-            return f.stringify(this.error)
-        }
-    },
-    destroyed: function () {
-        this.core.menu(null)
-    },
-    mounted: function () {
+      return ps;
     },
 
-    methods: {
+    stringifyiedError: function () {
+      return f.stringify(this.error);
+    },
+  },
+  destroyed: function () {
+    this.core.menu(null);
+  },
+  mounted: function () {},
 
-        showerror : function(){
-           // stringifyiedError
+  methods: {
+    showerror: function () {
+      // stringifyiedError
 
-            return this.$dialog.alert(this.stringifyiedError, {
-                okText: 'Ok',
-                backdropClose: true
-            }).catch(e => {
+      return this.$dialog
+        .alert(this.stringifyiedError, {
+          okText: "Ok",
+          backdropClose: true,
+        })
+        .catch((e) => {});
+    },
 
-            })
-        },
+    dupdated: _.debounce(function () {
+      this.$emit("updated", this.size());
+    }, 75),
 
-        dupdated: _.debounce(function () {
-            this.$emit('updated', this.size())
-        }, 75),
+    dscroll: _.debounce(function () {
+      return this.scroll();
+    }, 35),
 
-        dscroll: _.debounce(function () {
-            return this.scroll()
-        }, 35),
-
-        ddscroll: function (e) {
-
-            /*var _ls = this.$refs['container'].scrollTop 
+    ddscroll: function (e) {
+      /*var _ls = this.$refs['container'].scrollTop 
 
             if (Math.abs(_ls - this.ls) > 500 && this.c * _ls < this.c * this.ls){
             }
@@ -130,101 +118,94 @@ export default {
                 this.ls = _ls
             }*/
 
-            this.dscroll()
-        },
-
-        emounted: function () {
-
-            this.$nextTick(function () {
-                this.scrollCorrection()
-                this.dupdated()
-            })
-
-        },
-        scroll: function () {
-            this.$emit('scroll', this.size())
-        },
-
-        size: function () {
-
-            var s = {
-                scrollHeight: 0,
-                scrollTop: 0,
-                clientHeight: 0
-            }
-
-            if (this.$refs['container']) {
-
-                s.scrollHeight = this.$refs['container'].scrollHeight
-                s.scrollTop = this.c * this.$refs['container'].scrollTop
-                s.clientHeight = this.$refs['container'].clientHeight
-            }
-
-            this.lscroll = s
-
-            return s
-
-        },
-
-        editingEvent: function ({event, text}) {
-            this.$emit('editingEvent', {event, text})
-        },
-
-        replyEvent: function ({event}) {
-            this.$emit('replyEvent', {event})
-        },
-
-        removeEvent: function (event) {
-            this.$emit('removeEvent', event)
-        },
-
-        showPhotoSwipe(index) {
-            this.isOpen = true
-            this.$set(this.options, 'index', index)
-        },
-
-        hidePhotoSwipe() {
-            this.isOpen = false
-        },
-
-        galleryOpen(e) {
-            this.$emit('galleryEventOpen', e)
-        },
-
-        scrolldown() {
-            this.scrollToNew(0)
-        },
-
-        scrollCorrection() {
-            //this.scrollToNew(this.c * this.ls)
-        },
-        scrollToNew(s) {
-            if (this.$refs['container']) {
-
-                this.$refs['container'].scrollTop = this.c * s
-            }
-        },
-
-        menuIsVisibleHandler: function (isVisible) {
-            this.menuOpen = isVisible;
-            this.$emit('menuIsVisible', isVisible);
-        },
-
-        mousewheel: function (e) {
-
-            if(this.scrollType === 'custom'){
-                return
-
-            }else {
-                e.preventDefault();
-                var dy = e.deltaY
-
-                this.$refs['container'].scrollTop += dy > 0 ? -60 : 60
-                return false
-            }
-
-        }
-
+      this.dscroll();
     },
 
-}
+    emounted: function () {
+      this.$nextTick(function () {
+        this.scrollCorrection();
+        this.dupdated();
+      });
+    },
+    scroll: function () {
+      this.$emit("scroll", this.size());
+    },
+
+    size: function () {
+      var s = {
+        scrollHeight: 0,
+        scrollTop: 0,
+        clientHeight: 0,
+      };
+
+      if (this.$refs["container"]) {
+        s.scrollHeight = this.$refs["container"].scrollHeight;
+        s.scrollTop = this.c * this.$refs["container"].scrollTop;
+        s.clientHeight = this.$refs["container"].clientHeight;
+      }
+
+      this.lscroll = s;
+
+      return s;
+    },
+
+    editingEvent: function ({ event, text }) {
+      this.$emit("editingEvent", { event, text });
+    },
+
+    replyEvent: function ({ event }) {
+      this.$emit("replyEvent", { event });
+    },
+
+    shareEvent: function ({ event }) {
+      this.$emit("shareEvent", { event });
+    },
+
+    removeEvent: function (event) {
+      this.$emit("removeEvent", event);
+    },
+
+    showPhotoSwipe(index) {
+      this.isOpen = true;
+      this.$set(this.options, "index", index);
+    },
+
+    hidePhotoSwipe() {
+      this.isOpen = false;
+    },
+
+    galleryOpen(e) {
+      this.$emit("galleryEventOpen", e);
+    },
+
+    scrolldown() {
+      this.scrollToNew(0);
+    },
+
+    scrollCorrection() {
+      //this.scrollToNew(this.c * this.ls)
+    },
+    scrollToNew(s) {
+      if (this.$refs["container"]) {
+        this.$refs["container"].scrollTop = this.c * s;
+      }
+    },
+
+    menuIsVisibleHandler: function (isVisible) {
+      this.menuOpen = isVisible;
+      this.$emit("menuIsVisible", isVisible);
+    },
+
+    mousewheel: function (e) {
+      if (this.scrollType === "custom") {
+        return;
+      } else {
+        e.preventDefault();
+        var dy = e.deltaY;
+
+        this.$refs["container"].scrollTop += -dy;
+        return false;
+      }
+    },
+  },
+};
