@@ -21,7 +21,9 @@ module.exports = {
 	},
 
 	runtimeCompiler: true,
-	
+	"transpileDependencies": [
+		"rxjs-interop"
+	  ],
 	configureWebpack: {
 		resolve: {
 			extensions: [".js", ".ts"],
