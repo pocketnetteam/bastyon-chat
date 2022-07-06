@@ -53,7 +53,6 @@
 <script src="./index.js"></script>
 <style scoped lang="sass" src="./index.sass"></style>
 <style src="../../../../node_modules/vue-simple-accordion/dist/vue-simple-accordion.css"></style>
-<style src="../../../../node_modules/swiper/swiper-bundle.css"></style>
 
 <!-- THEMES BEGIN -->
 <!-- THEMES END -->

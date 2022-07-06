@@ -13,6 +13,7 @@
     "buildpocketnetdev": "npm run build -- --target wc-async --inline-vue --watch --name matrix-element src/App.vue"
   },
   "dependencies": {
+    "@babel/preset-stage-0": "^7.8.3",
     "another-json": "^0.2.0",
     "async-each": "^1.0.3",
     "autosize": "^4.0.4",
@@ -39,7 +40,6 @@
     "moment": "^2.29.1",
     "pbkdf2": "^3.1.2",
     "qs": "^6.10.3",
-    "swiper": "^6.8.4",
     "underscore": "^1.13.2",
     "unhomoglyph": "^1.0.6",
     "v-click-outside": "^3.1.2",
