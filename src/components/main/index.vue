@@ -1,7 +1,6 @@
 <template>
   <div class="main-wrapper" :class="{ minimized, active }">
     <div class="chat-container">
-      {{ query }} query
       <ContactsContainer v-if="page === 'contacts'" />
       <ChatsContainer v-if="page === 'chats'" />
       <SettingsContainer v-if="page === 'settings'" />
@@ -32,6 +31,11 @@
 <style lang="scss">
 .main-wrapper {
   display: flex;
+  &.minimized {
+    .headerSpacerWrapperOvf {
+      background: transparent !important;
+    }
+  }
   .chat-container {
     width: 400px;
     height: 100%;
@@ -46,6 +50,30 @@
       position: relative;
       height: 100%;
       width: calc(100% - 400px);
+      border-left: 1px solid rgb(235, 235, 240);
+      #topheader.minimized.fix {
+        left: -44px !important;
+      }
+      .minimized {
+        .headerSpacerWrapper {
+          left: -44px !important;
+        }
+      }
+      .fixedOnPageTop {
+        width: 100%;
+      }
+      &-empty {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: calc(100% - 400px);
+        background: #f1f1f1;
+        i {
+          transform: scale(2);
+          color: rgb(0, 164, 255);
+        }
+      }
       #wai-fixedmessageicon {
         &.active {
           .wrapper {
@@ -57,19 +85,6 @@
           }
         }
       }
-      &-empty {
-        display: flex;
-        align-items: center;
-        flex-direction: column;
-        justify-content: center;
-        width: calc(100% - 400px);
-        height: 100%;
-        background: rgba(250, 250, 250, 0.9);
-        i {
-          color: rgb(0, 164, 255);
-          transform: scale(2);
-        }
-      }
     }
   }
 }
@@ -78,6 +93,9 @@
     display: block;
     .chat-container {
       width: 100%;
+      .fixedOnPageTop {
+        width: 400px;
+      }
       &-pages {
         position: fixed;
         top: 0;
@@ -87,6 +105,9 @@
         width: 100%;
         z-index: 999;
         background: #fff;
+        .fixedOnPageTop {
+          width: 100%;
+        }
         &-empty {
           display: none;
         }

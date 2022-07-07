@@ -159,9 +159,16 @@
 <!-- THEMES BEGIN -->
 <!-- THEMES END -->
 <style lang="scss">
+.chatInputWrapper .bin {
+  width: 100% !important;
+}
+
 @media only screen and (max-width: 768px) {
   .chatInputWrapper {
     width: 100% !important;
+    .bin {
+      width: 100% !important;
+    }
   }
 }
 </style>
