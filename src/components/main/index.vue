@@ -35,6 +35,21 @@
     .headerSpacerWrapperOvf {
       background: transparent !important;
     }
+    .inputWrapper {
+      width: 334px;
+      margin-left: -340px;
+    }
+    .input_component {
+      width: 300px;
+    }
+    .chat-container {
+      #chatsTopheader {
+        width: 344px;
+      }
+    }
+    .headerSpacer {
+      left: -602px;
+    }
   }
   .chat-container {
     width: 400px;
