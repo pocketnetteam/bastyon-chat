@@ -27,6 +27,9 @@ module.exports = {
 	configureWebpack: {
 		resolve: {
 			extensions: [".js", ".ts"],
+			alias: {
+				"standardized-audio-context": path.resolve('node_modules/standardized-audio-context/build/es5/bundle.js'),
+			}
 		},
 		output: {
 			pathinfo: false,
