@@ -4,8 +4,8 @@ module.exports = {
 	devServer: {
 		open: process.platform === "darwin",
 		host: "0.0.0.0",
-		port: 7001, // CHANGE YOUR PORT HERE!
-		https: false,
+		port: 8080, // CHANGE YOUR PORT HERE!
+		https: true,
 		hotOnly: false,
 	},
 
@@ -22,7 +22,8 @@ module.exports = {
 
 	runtimeCompiler: true,
 	"transpileDependencies": [
-		"rxjs-interop"
+		"rxjs-interop",
+		"standardized-audio-context"
 	],
 	configureWebpack: {
 		resolve: {
@@ -37,7 +38,7 @@ module.exports = {
 				{
 					loader: "babel-loader",
 					test: "/.(js)$/",
-					include: [path.resolve('node_modules/rxjs-interop')]
+					include: [path.resolve('node_modules/rxjs-interop'), path.resolve('node_modules/standardized-audio-context')]
 				},
 				{
 					test: /\.(ts|tsx)?$/,
