@@ -49,7 +49,7 @@ export default {
     resize() {
       let timer = null
 
-      function re() {
+      var re = () => {
         if (!timer) {
           timer = setTimeout(() => {
             timer = null
@@ -59,7 +59,7 @@ export default {
         }
       }
 
-      re.call(this)
+      re()
     },
     draw() {
       const ctx = this.$refs.canvas.getContext(`2d`);
