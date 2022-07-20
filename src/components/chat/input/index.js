@@ -890,9 +890,6 @@ export default {
         this.recordRmsData = []
         this.recordTime = 0
         this.record = null
-        this.mediaRecorder.stream.getTracks().forEach(function(track) {
-          track.enabled = true
-        });
         this.mediaRecorder.start()
         this.interval = setInterval(() => {
           this.dataArray = new Uint8Array(this.audioAnalyser.frequencyBinCount)
@@ -939,6 +936,8 @@ export default {
         id,
         isPlaying: false,
       }
+      this.mediaRecorder.stream.getTracks()[0].stop()
+      this.mediaRecorder = null
     },
 
     generateRms(frequencies) {
@@ -946,12 +945,11 @@ export default {
     },
 
     stopRecording() {
-    this.mediaRecorder.stream.getTracks().forEach(function(track) {
-        track.enabled = false
-      });
-      this.mediaRecorder.stop()
-      this.isRecording = false
       clearInterval(this.interval)
+      this.isRecording = false
+      if(this.mediaRecorder){
+        this.mediaRecorder.stop()
+      }
     },
 
     async sendVoiceMessage() {
