@@ -101,7 +101,7 @@ export default {
       this.$router.push({
         path: 'chat',
         query: {'id': chat.room_id}
-      })
+      }).catch(e => {})
     },
 
     scrolltop : function(){

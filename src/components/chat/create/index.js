@@ -87,7 +87,7 @@ export default {
 
             var tetatetid = this.core.mtrx.kit.tetatetid(u, this.core.user.userinfo)
 
-            this.$router.push('chat?id=' + tetatetid + '&u=' + u.id)
+            this.$router.push('chat?id=' + tetatetid + '&u=' + u.id).catch(e => {})
             
         },
 

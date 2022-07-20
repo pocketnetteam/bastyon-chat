@@ -93,7 +93,7 @@ export default {
 
             if(this.share){
                 if (this.share.route){
-                    this.$router.push(this.share.route)
+                    this.$router.push(this.share.route).catch(e => {})
                 }
             }
 

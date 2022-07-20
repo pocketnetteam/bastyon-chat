@@ -112,7 +112,7 @@ class Core {
         this.removeEvents()
 
         if(!this.vm.$route.name != 'chats')
-            this.vm.$router.push('/chats')
+            this.vm.$router.push('/chats').catch(e => {})
 
         this.user.destroy()
         this.mtrx.destroy()
@@ -300,12 +300,12 @@ class Core {
 
             if (this.store.state.chatsMap[roomid]){
                 /// old chat
-                this.vm.$router.push('/chat?id=' + roomid)
+                this.vm.$router.push('/chat?id=' + roomid).catch(e => {})
             }
             else
             {
                 this.store.commit('JOINROOM', roomid)
-                this.vm.$router.push('/publicPreview?id=' + roomid)
+                this.vm.$router.push('/publicPreview?id=' + roomid).catch(e => {})
             }
 
             return Promise.resolve()
@@ -339,12 +339,12 @@ class Core {
 
             if (this.store.state.chatsMap[roomId]){
                 /// old chat
-                this.vm.$router.push('/chat?id=' + roomId)
+                this.vm.$router.push('/chat?id=' + roomId).catch(e => {})
             }
             else
             {
                 this.store.commit('CONTACT', roomId)
-                this.vm.$router.push('/chat?id=' + roomId + '&u=' + f.hexEncode(address))
+                this.vm.$router.push('/chat?id=' + roomId + '&u=' + f.hexEncode(address)).catch(e => {})
             }
 
             return Promise.resolve()
@@ -360,7 +360,7 @@ class Core {
     share(share){
 		this.store.commit('SHARE', share)
 
-        this.vm.$router.push('/chats')
+        this.vm.$router.push('/chats').catch(e => {})
 
         return Promise.resolve()
 	}
@@ -370,7 +370,7 @@ class Core {
         this.cancelDefaultRoute = true;
 
         this.mtrx.wait().then(() => {
-            this.vm.$router.push('/chat?id=' + roomId);
+            this.vm.$router.push('/chat?id=' + roomId).catch(e => {});
         });
     }
 
@@ -379,7 +379,7 @@ class Core {
         this.cancelDefaultRoute = true;
 
         this.mtrx.wait().then(() => {
-            this.vm.$router.push(route);
+            this.vm.$router.push(route).catch(e => {});
         });
     }
 

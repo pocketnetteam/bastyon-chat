@@ -112,7 +112,7 @@ export default {
     },
 
     navigateToProfile(id) {
-      this.$router.push({path: `/contact?id=${f.getmatrixid(id)}`})
+      this.$router.push({path: `/contact?id=${f.getmatrixid(id)}`}).catch(e => {})
     },
    
     menuItemClickHandler(item, rowObject, utils) {

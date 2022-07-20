@@ -50,7 +50,7 @@ export default {
   }),
   methods : {
     gotona(r){
-      this.$router.push(r)
+      this.$router.push(r).catch(e => {})
       this.$store.commit('active', true)
       this.$store.commit('setiteraction', true)
     },

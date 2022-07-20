@@ -29,7 +29,7 @@ export default {
 
         else
 
-        this.$router.push(this.action);
+        this.$router.push(this.action).catch(e => {});
     }
   }
 }

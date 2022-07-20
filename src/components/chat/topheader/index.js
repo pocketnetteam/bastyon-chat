@@ -212,7 +212,7 @@ export default {
   }),
   methods: {
     navigateToProfile(id) {
-      this.$router.push({path: `/contact?id=${f.getmatrixid(id)}`})
+      this.$router.push({path: `/contact?id=${f.getmatrixid(id)}`}).catch(e => {})
     },
     getuserinfo: function () {
       if (this.u) {
@@ -273,7 +273,7 @@ export default {
 
             this.$store.commit('DELETE_ROOM', this.chat.roomId);
           }).then(r=>{
-            this.$router.push({path: '/chats'})
+            this.$router.push({path: '/chats'}).catch(e => {})
           })
         })
 

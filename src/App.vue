@@ -406,7 +406,7 @@ export default {
           this.$route.name !== 'chatSettings' &&
           core.cancelDefaultRoute !== true) {
 
-          this.$router.push('/chats')
+          this.$router.push('/chats').catch(e => {})
         }
 
       }, 500)
@@ -783,7 +783,7 @@ export default {
           this.$route.name !== 'chatSettings' &&
           core.cancelDefaultRoute !== true) {
 
-          this.$router.push('/chats')
+          this.$router.push('/chats').catch(e => {})
         }
 
       })
