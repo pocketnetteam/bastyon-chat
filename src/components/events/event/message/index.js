@@ -208,6 +208,8 @@ export default {
 
         if (this.encryptedData) {
           return this.decryptedInfo
+        } else if (this.decryptedInfo) {
+          return this.decryptedInfo
         } else {
           return this.content && this.content.url;
         }
