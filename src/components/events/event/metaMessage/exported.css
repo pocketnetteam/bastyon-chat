@@ -11275,6 +11275,27 @@
   border-radius: 10px;
   overflow: hidden;
 }
+.pocketnet_iframe .share_common .peertube-server-hint {
+  z-index: 1;
+  position: absolute;
+  margin: 10px;
+  padding: 5px;
+  border-radius: 4px;
+  font-family: monospace;
+  font-size: 0.7em;
+  background: #000000bb;
+  color: #fff;
+}
+.pocketnet_iframe .share_common .peertube-server-hint i.fa {
+  font-size: 0.8em;
+  margin-top: 1px;
+  margin-right: 5px;
+}
+.pocketnet_iframe .share_common .peertube-server-hint a {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
 .pocketnet_iframe .share_common .videoWrapper .videoTips {
   position: absolute;
   left: 0;
