@@ -95,6 +95,7 @@
         "searchResult" : "Search result",
         "joinedInTheChat" : "joined the chat",
         "invited" : "invited ",
+        "hasInvited" : "has invited ",
         "inTheChat" : " in the chat",
         "banned" : "banned",
         "andRoom" : "and room",
