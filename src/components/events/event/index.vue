@@ -223,7 +223,6 @@ export default {
       handler: function () {
 
         this.decryptEvent = {}
-
         this.checkReaded()
         this.relations()
 
@@ -234,7 +233,6 @@ export default {
             return this.chat.pcrypto
 
           }, 20, 10000).then(() => {
-
             if(this.encryptedData){
               this.decryptImage()
             }
@@ -246,8 +244,6 @@ export default {
           })
 
         }
-
-        
       }
     }
   },

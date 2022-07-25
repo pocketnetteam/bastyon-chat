@@ -964,7 +964,6 @@ export default {
         id: id,
         base64: base64,
       }
-
       this.$f.pretry(() => {
 
         return this.chat

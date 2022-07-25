@@ -38,6 +38,7 @@ export default {
   inject: ['addToQueue', 'playNext'],
 
   mounted() {
+
     this.initVoiceMessage()
   },
   beforeDestroy() {
@@ -116,7 +117,7 @@ export default {
         }
       }
     },
-    async initVoiceMessage() {
+    initVoiceMessage() {
 
       let audioContext
       let audioNode
@@ -171,24 +172,31 @@ export default {
         duration: 0,
         currentTime: 0
       }
+      let data
+      if(!this.base64Audio.split(',')[1]) {
 
-      const data = f._base64ToArrayBuffer(this.base64Audio.split(',')[1])
-      try {
-        await audioContext.decodeAudioData(data, (buffer) => {
+        this.getData().then(u => {
+          data = f._base64ToArrayBuffer(u.split(',')[1])
+          return
+        }).then(()=> {
+          audioContext.decodeAudioData(data).then( async (buffer) => {
+            this.voiceMessage.signal= await buffer.getChannelData(0)
 
-          this.voiceMessage = {
-            audio: audioNode,
-            duration: 0,
-            currentTime: 0,
-            signal: buffer.getChannelData(0),
-          }
-
-          this.draw()
+          }).then(this.draw)
         })
-      } catch (e) {
-        console.log(e)
+        return
       }
+      data = f._base64ToArrayBuffer(this.base64Audio.split(',')[1])
+      audioContext.decodeAudioData(data).then( async (buffer) => {
+        this.voiceMessage.signal= await buffer.getChannelData(0)
 
+      }).then(this.draw)
+
+    },
+    async getData(){
+      return await this.core.mtrx.download(this.base64Audio).then(blob => {
+        return f.Base64.fromFile(blob)
+      }).then(url => url)
     }
   }
 }

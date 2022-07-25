@@ -983,7 +983,7 @@ f.fetchLocal = function (url) {
 
             var type = xhr.getResponseHeader('content-type')
 
-            console.log('xhr', xhr)
+            // console.log('xhr', xhr)
 
             resolve({
                 data: new Blob([xhr.response], { type: type, name: 'file' })
