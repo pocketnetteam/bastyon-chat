@@ -7,6 +7,7 @@
       :unseen="unseen"
       :key="allnotifications"
       :single="singleAvatar"
+      :group-avatar="groupAvatar"
     />
 
     <div class="unknowngroupusersicon" v-if="unknowngroupusers">
@@ -124,13 +125,11 @@ export default {
         "anotherChatUsers"
       );
 
-
       if (this.dontuseslides) {
         u = _.first(u, 4);
       }
 
       return u;
-
     },
 
     status: function () {
@@ -148,6 +147,8 @@ export default {
     unknowngroupusers: function () {
       return this.core.mtrx.kit.unknowngroupusers(this.m_chat);
     },
+
+    groupAvatar: function () {},
   },
 };
 </script>
