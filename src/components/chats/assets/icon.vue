@@ -10,6 +10,10 @@
       :group-avatar="groupAvatar"
     />
 
+    <div class="iconGroup" v-if="isShowGroupIcon">
+      <i class="fas fa-solid fa-users"></i>
+    </div>
+
     <div class="unknowngroupusersicon" v-if="unknowngroupusers">
       <i class="fas fa-question"></i>
     </div>
@@ -38,6 +42,13 @@
   /deep/
   .bgimage
     transform: scale(0.7)
+
+.iconGroup
+  position: absolute
+  left: -5px
+  top: -11px
+  i
+    color: rgb(0,164,255)
 </style>
 
 <script>
@@ -148,7 +159,9 @@ export default {
       return this.core.mtrx.kit.unknowngroupusers(this.m_chat);
     },
 
-    groupAvatar: function () {},
+    isShowGroupIcon() {
+      return this.m_chat.name.slice(0, 1) === "@";
+    },
   },
 };
 </script>
