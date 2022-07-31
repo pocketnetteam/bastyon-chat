@@ -10,6 +10,7 @@
       :unseen="unseen"
       :key="allnotifications"
       :single="singleAvatar"
+      :class="{ opacity: groupAvatar !== '' }"
     />
 
     <div class="unknowngroupusersicon" v-if="unknowngroupusers">
@@ -19,6 +20,8 @@
 </template>
 
 <style scoped lang="sass">
+.opacity
+  opacity: 0
 .chatIcon
   width: 100%
   position: relative
