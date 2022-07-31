@@ -5,6 +5,7 @@ export default {
     pubChat: Object,
     topicTxt: "",
     topic: false,
+    userImagebase64: null,
   }),
   props: {
     chat: Object,
@@ -27,15 +28,12 @@ export default {
         this.core.domain
       }/publicPreview/welcome?connect=${this.chat.roomId.replace("!", "%")}`;
     },
-    userImagebase64() {
-      const avatar =
-        this.m_chat.currentState.getStateEvents("m.room.avatar")[0]?.event
-          .content.avatarUrl;
-      return avatar !== "" ? avatar : null;
-    },
   }),
   mounted() {
-    console.log("this.m_chat", this.m_chat);
+    const avatar =
+      this.m_chat.currentState.getStateEvents("m.room.avatar")[0]?.event.content
+        .avatarUrl;
+    this.userImagebase64 = avatar !== "" ? avatar : null;
     if (this.m_chat.getJoinRule() === "public") {
       this.getPublicRoom();
       this.topic = true;
