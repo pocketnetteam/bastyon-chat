@@ -1,6 +1,6 @@
 <template>
   <div class="chatIcon" :class="{ unknowngroupusers }">
-    <div class="chatGroupIcon">
+    <div v-if="groupAvatar" class="chatGroupIcon">
       <img :src="groupAvatar" alt="" />
     </div>
     <userspic
@@ -10,7 +10,7 @@
       :unseen="unseen"
       :key="allnotifications"
       :single="singleAvatar"
-      :class="{ opacity: groupAvatar !== '' }"
+      :class="{ opacity: groupAvatar }"
     />
 
     <div class="unknowngroupusersicon" v-if="unknowngroupusers">

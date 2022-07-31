@@ -5,7 +5,6 @@ export default {
     pubChat: Object,
     topicTxt: "",
     topic: false,
-    userImagebase64: null,
   }),
   props: {
     chat: Object,
@@ -27,6 +26,12 @@ export default {
       return `https://${
         this.core.domain
       }/publicPreview/welcome?connect=${this.chat.roomId.replace("!", "%")}`;
+    },
+    userImagebase64() {
+      const avatar =
+        this.m_chat.currentState.getStateEvents("m.room.avatar")[0]?.event
+          .content.avatarUrl;
+      return avatar !== "" ? avatar : null;
     },
   }),
   mounted() {
