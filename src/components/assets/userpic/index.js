@@ -1,11 +1,10 @@
-
 export default {
-  name: 'userpic',
+  name: "userpic",
   props: {
     userinfo: {
-      type : Object,
-      default : {}
+      type: Object,
+      default: {},
     },
-    status : ''
-  }
-}
+    status: "",
+  },
+};

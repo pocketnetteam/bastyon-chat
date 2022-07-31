@@ -3,16 +3,17 @@
     <div class="iconGroup" v-if="isShowGroupIcon">
       <i class="fas fa-solid fa-users"></i>
     </div>
-    <span>
+    <div>
       {{ convertedName }}
-    </span>
+    </div>
   </div>
 </template>
 
 <style scoped lang="sass">
 .nameline
-  display: flex
+  display: flex !important
   align-items: center
+  justify-content: center
 .iconGroup
   margin-right: 5px
   i
@@ -81,6 +82,9 @@ export default {
     isShowGroupIcon() {
       return this.m_chat.name.slice(0, 1) === "@";
     },
+  },
+  mounted() {
+    console.log("m.room.guest_access", m.room.guest_access);
   },
 };
 </script>

@@ -1,35 +1,47 @@
 <template>
   <div class="aboutRoom">
     <div class="roomInfoWrapper noSwipe">
-      <div :class="{'chatIconWrapper':'chatIconWrapper'}">
-        <chatIcon :slidesPerView="4" :dontuseslides="minimized && !active" :chat="chat" :m_chat="m_chat" :hideunseen="true"/>
+      <div :class="{ chatIconWrapper: 'chatIconWrapper' }">
+        <chatIcon
+          :slidesPerView="4"
+          :dontuseslides="minimized && !active"
+          :chat="chat"
+          :m_chat="m_chat"
+          :hideunseen="true"
+        />
+        <div class="chatGroupIcon">
+          <img :src="groupAvatar" alt="" />
+        </div>
       </div>
 
-      <chatName :preview="true" :chat="chat" :m_chat="m_chat"
-                class="roomNameLine"/>
+      <chatName
+        :preview="true"
+        :chat="chat"
+        :m_chat="m_chat"
+        class="roomNameLine"
+      />
 
       <div class="roomInfo" v-if="topicTxt">
         <span class="topicTxt">{{ topicTxt }}</span>
       </div>
     </div>
-    
+
     <!--    {{ isRole }}-->
 
     <div class="roomAccordionsList">
-      <div class="accordion"
+      <div
+        class="accordion"
         :key="index"
         v-for="(item, index) in accordionList"
-        :class="{active: isActive === index}">
-
+        :class="{ active: isActive === index }"
+      >
         <div class="aHeader" @click="toggleItem(index)">
           <div class="head">
             <div class="leftBlock">
-
               <i class="fas fa-users" v-if="item.id === 'members'"></i>
               <i class="far fa-image" v-if="item.id === 'media'"></i>
               <i class="fas fa-folder" v-if="item.id === 'files'"></i>
               {{ item.title }}
-
             </div>
             <div class="rightBlock" v-if="item.id === 'members'">
               <div class="membersCount" v-if="membersList">
@@ -39,26 +51,34 @@
           </div>
         </div>
         <div class="body">
-
-          <members v-if="isActive === index && item.id === 'members'" :membersList="membersList"
-                   @admin="makeAdmin"
-                   @kick="kickUser"
-                   @ban="banUser"
+          <members
+            v-if="isActive === index && item.id === 'members'"
+            :membersList="membersList"
+            @admin="makeAdmin"
+            @kick="kickUser"
+            @ban="banUser"
           />
 
-          <images v-if="isActive === index && item.id === 'media'" :chat="m_chat"/>
+          <images
+            v-if="isActive === index && item.id === 'media'"
+            :chat="m_chat"
+          />
 
-          <files :chat="m_chat" v-if="isActive === index && item.id === 'files'" :fileEvents="fileEvents"/>
+          <files
+            :chat="m_chat"
+            v-if="isActive === index && item.id === 'files'"
+            :fileEvents="fileEvents"
+          />
         </div>
       </div>
-      
+
       <div class="publicRoomElements" v-if="public">
         <div class="linkwrapper">
           <div class="linkPlace">
             <i class="fas fa-link" @click="copyShareLink()"></i>
             <span @click="copyShareLink()">{{ shareRoomLink }}</span>
           </div>
-          
+
           <div class="sharelink">
             <button class="button small rounded ghost" @click="sharelink">
               Share <i class="fas fa-share-alt"></i>
@@ -69,8 +89,11 @@
     </div>
 
     <div class="roomActionsList">
-
-      <button class="button small rounded" @click="modalInviteUser" v-if="canInvite">
+      <button
+        class="button small rounded"
+        @click="modalInviteUser"
+        v-if="canInvite"
+      >
         {{ $t("caption.add") }} <i class="fas fa-user-plus"></i>
       </button>
 
@@ -83,23 +106,37 @@
         </span>
       </button>
 
-      <button class="button small  rounded badbutton" @click="forgetRoom()" v-if="!tetatet">
+      <button
+        class="button small rounded badbutton"
+        @click="forgetRoom()"
+        v-if="!tetatet"
+      >
         {{ $t("caption.leave") }} <i class="fas fa-sign-out-alt"></i>
       </button>
 
-      <button class="button small  rounded badbutton" @click="blockUser()" v-if="tetatet && !blockedCheck">
+      <button
+        class="button small rounded badbutton"
+        @click="blockUser()"
+        v-if="tetatet && !blockedCheck"
+      >
         {{ $t("button.block") }} <i class="fas fa-sign-out-alt"></i>
       </button>
 
-      <button class="button small rounded" @click="unblock()" v-if="tetatet && blockedCheck">
+      <button
+        class="button small rounded"
+        @click="unblock()"
+        v-if="tetatet && blockedCheck"
+      >
         {{ $t("button.unblock") }} <i class="fas fa-sign-out-alt"></i>
       </button>
 
-      <button class="button small rounded badbutton" @click="complain()" v-if="curation/* && (blockedCheck || !tetatet)*/">
+      <button
+        class="button small rounded badbutton"
+        @click="complain()"
+        v-if="curation /* && (blockedCheck || !tetatet)*/"
+      >
         {{ $t("button.Complain") }} <i class="fas fa-exclamation-triangle"></i>
       </button>
-      
-
     </div>
 
     <modal @close="closeModal" v-if="inviteUserOpened">
@@ -107,11 +144,10 @@
         <span>{{ $t("caption.inviteUser") }}</span>
       </template>
       <template v-slot:body>
-        <invite :chatRoomId="chat.roomId" @completed="closeContactModal"/>
+        <invite :chatRoomId="chat.roomId" @completed="closeContactModal" />
       </template>
       <template v-slot:footer></template>
     </modal>
-    
   </div>
 </template>
 
@@ -121,20 +157,6 @@
 <!-- THEMES BEGIN -->
 <!-- THEMES END -->
 
-<style src="../../../../node_modules/vue-simple-accordion/dist/vue-simple-accordion.css"></style>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+<style
+  src="../../../../node_modules/vue-simple-accordion/dist/vue-simple-accordion.css"
+></style>

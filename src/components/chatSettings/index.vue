@@ -19,7 +19,12 @@
           :m_chat="m_chat"
           :hideunseen="true"
         />
-        <img v-if="userImagebase64" :src="userImagebase64" alt="" />
+        <img
+          v-if="userImagebase64"
+          :src="userImagebase64"
+          class="userImagebase64"
+          alt=""
+        />
       </div>
       <div class="chatNameEdit">
         <input type="text" v-model="m_chat.name" placeholder="Name" />
@@ -47,6 +52,9 @@
 <style scoped lang="sass" src="./index.sass"></style>
 
 <style lang="scss">
+.chatGroupIcon img {
+  width: 50% !important;
+}
 .chatIconWrapper {
   position: relative;
   img {
@@ -81,5 +89,8 @@
 }
 .chatIconFile {
   display: none;
+}
+.userImagebase64 {
+  z-index: 150;
 }
 </style>

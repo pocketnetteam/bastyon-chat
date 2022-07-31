@@ -1,5 +1,8 @@
 <template>
   <div class="chatIcon" :class="{ unknowngroupusers }">
+    <div class="chatGroupIcon">
+      <img :src="groupAvatar" alt="" />
+    </div>
     <userspic
       :slidesPerView="slidesPerView"
       :users="usersinfo"
@@ -7,7 +10,6 @@
       :unseen="unseen"
       :key="allnotifications"
       :single="singleAvatar"
-      :group-avatar="groupAvatar"
     />
 
     <div class="unknowngroupusersicon" v-if="unknowngroupusers">
@@ -38,6 +40,16 @@
   /deep/
   .bgimage
     transform: scale(0.7)
+
+.chatGroupIcon img
+  width: 100%
+  height: 100%
+  border-radius: 50%
+  object-fit: cover
+  object-position: 50% 50%
+  position: absolute
+  top: 0
+  z-index: 100
 </style>
 
 <script>
@@ -146,6 +158,13 @@ export default {
 
     unknowngroupusers: function () {
       return this.core.mtrx.kit.unknowngroupusers(this.m_chat);
+    },
+
+    groupAvatar: function () {
+      const avatar =
+        this.m_chat.currentState.getStateEvents("m.room.avatar")[0]?.event
+          .content.avatarUrl;
+      return avatar !== "" ? avatar : "";
     },
   },
 };
