@@ -1,11 +1,11 @@
 <template>
-  <div class="input-outter-div" v-bind:class="{ invalid: inputInvalidInner }" >
-    <input 
-      @focus="onFocusHandler" 
-      v-bind:type="inputType" 
+  <div class="input-outter-div" v-bind:class="{ invalid: inputInvalidInner }">
+    <input
+      @focus="onFocusHandler"
+      v-bind:type="inputType"
       v-bind:placeholder="inputPlaceholder"
       v-model="inputValue"
-    >
+    />
   </div>
 </template>
 
@@ -14,24 +14,3 @@
 
 <!-- THEMES BEGIN -->
 <!-- THEMES END -->
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

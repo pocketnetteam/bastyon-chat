@@ -3,7 +3,7 @@
 var _interopRequireWildcard = require("@babel/runtime/helpers/interopRequireWildcard");
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
+  value: true,
 });
 exports.RoomState = RoomState;
 
@@ -78,16 +78,17 @@ const OOB_STATUS_FINISHED = 3;
 
 function RoomState(roomId, oobMemberFlags = undefined) {
   this.roomId = roomId;
-  this.members = {// userId: RoomMember
+  this.members = {
+    // userId: RoomMember
   };
   this.events = new Map(); // Map<eventType, Map<stateKey, MatrixEvent>>
 
   this.paginationToken = null;
-  this._sentinels = {// userId: RoomMember
+  this._sentinels = {
+    // userId: RoomMember
   };
 
   this._updateModifiedTime(); // stores fuzzy matches to a list of userIDs (applies utils.removeHiddenChars to keys)
-
 
   this._displayNameToUserIds = {};
   this._userIdsToDisplayNames = {};
@@ -107,7 +108,7 @@ function RoomState(roomId, oobMemberFlags = undefined) {
 
   if (!oobMemberFlags) {
     oobMemberFlags = {
-      status: OOB_STATUS_NOTSTARTED
+      status: OOB_STATUS_NOTSTARTED,
     };
   }
 
@@ -128,7 +129,7 @@ RoomState.prototype.getJoinedMemberCount = function () {
 
   if (this._joinedMemberCount === null) {
     this._joinedMemberCount = this.getMembers().reduce((count, m) => {
-      return m.membership === 'join' ? count + 1 : count;
+      return m.membership === "join" ? count + 1 : count;
     }, 0);
   }
 
@@ -139,7 +140,6 @@ RoomState.prototype.getJoinedMemberCount = function () {
  * @param {number} count the amount of joined members
  */
 
-
 RoomState.prototype.setJoinedMemberCount = function (count) {
   this._summaryJoinedMemberCount = count;
 };
@@ -148,7 +148,6 @@ RoomState.prototype.setJoinedMemberCount = function (count) {
  * @return {integer} The number of members in this room whose membership is 'invite'
  */
 
-
 RoomState.prototype.getInvitedMemberCount = function () {
   if (this._summaryInvitedMemberCount !== null) {
     return this._summaryInvitedMemberCount;
@@ -156,7 +155,7 @@ RoomState.prototype.getInvitedMemberCount = function () {
 
   if (this._invitedMemberCount === null) {
     this._invitedMemberCount = this.getMembers().reduce((count, m) => {
-      return m.membership === 'invite' ? count + 1 : count;
+      return m.membership === "invite" ? count + 1 : count;
     }, 0);
   }
 
@@ -167,7 +166,6 @@ RoomState.prototype.getInvitedMemberCount = function () {
  * @param {number} count the amount of invited members
  */
 
-
 RoomState.prototype.setInvitedMemberCount = function (count) {
   this._summaryInvitedMemberCount = count;
 };
@@ -175,7 +173,6 @@ RoomState.prototype.setInvitedMemberCount = function (count) {
  * Get all RoomMembers in this room.
  * @return {Array<RoomMember>} A list of RoomMembers.
  */
-
 
 RoomState.prototype.getMembers = function () {
   return utils.values(this.members);
@@ -186,16 +183,16 @@ RoomState.prototype.getMembers = function () {
  * @return {Array<RoomMember>} A list of RoomMembers.
  */
 
-
 RoomState.prototype.getMembersExcept = function (excludedIds) {
-  return utils.values(this.members).filter(m => !excludedIds.includes(m.userId));
+  return utils
+    .values(this.members)
+    .filter((m) => !excludedIds.includes(m.userId));
 };
 /**
  * Get a room member by their user ID.
  * @param {string} userId The room member's user ID.
  * @return {RoomMember} The member or null if they do not exist.
  */
-
 
 RoomState.prototype.getMember = function (userId) {
   return this.members[userId] || null;
@@ -209,7 +206,6 @@ RoomState.prototype.getMember = function (userId) {
  * @param {string} userId The room member's user ID.
  * @return {RoomMember} The member or null if they do not exist.
  */
-
 
 RoomState.prototype.getSentinelMember = function (userId) {
   if (!userId) return null;
@@ -238,7 +234,6 @@ RoomState.prototype.getSentinelMember = function (userId) {
  * <code>undefined</code>, else a single event (or null if no match found).
  */
 
-
 RoomState.prototype.getStateEvents = function (eventType, stateKey) {
   if (!this.events.has(eventType)) {
     // no match
@@ -258,7 +253,6 @@ RoomState.prototype.getStateEvents = function (eventType, stateKey) {
  * @return {RoomState} the copy of the room state
  */
 
-
 RoomState.prototype.clone = function () {
   const copy = new RoomState(this.roomId, this._oobMemberFlags); // Ugly hack: because setStateEvents will mark
   // members as susperseding future out of bound members
@@ -269,7 +263,7 @@ RoomState.prototype.clone = function () {
 
   const status = this._oobMemberFlags.status;
   this._oobMemberFlags.status = OOB_STATUS_NOTSTARTED;
-  Array.from(this.events.values()).forEach(eventsByStateKey => {
+  Array.from(this.events.values()).forEach((eventsByStateKey) => {
     copy.setStateEvents(Array.from(eventsByStateKey.values()));
   }); // Ugly hack: see above
 
@@ -283,10 +277,9 @@ RoomState.prototype.clone = function () {
     copy.setJoinedMemberCount(this.getJoinedMemberCount());
   } // copy out of band flags if needed
 
-
   if (this._oobMemberFlags.status == OOB_STATUS_FINISHED) {
     // copy markOutOfBand flags
-    this.getMembers().forEach(member => {
+    this.getMembers().forEach((member) => {
       if (member.isOutOfBand()) {
         const copyMember = copy.getMember(member.userId);
         copyMember.markOutOfBand();
@@ -304,10 +297,12 @@ RoomState.prototype.clone = function () {
  * @param {MatrixEvent[]} events state events to prepend
  */
 
-
 RoomState.prototype.setUnknownStateEvents = function (events) {
-  const unknownStateEvents = events.filter(event => {
-    return !this.events.has(event.getType()) || !this.events.get(event.getType()).has(event.getStateKey());
+  const unknownStateEvents = events.filter((event) => {
+    return (
+      !this.events.has(event.getType()) ||
+      !this.events.get(event.getType()).has(event.getStateKey())
+    );
   });
   this.setStateEvents(unknownStateEvents);
 };
@@ -322,12 +317,10 @@ RoomState.prototype.setUnknownStateEvents = function (events) {
  * @fires module:client~MatrixClient#event:"RoomState.events"
  */
 
-
 RoomState.prototype.setStateEvents = function (stateEvents) {
   const self = this;
 
   this._updateModifiedTime(); // update the core event dict
-
 
   utils.forEach(stateEvents, function (event) {
     if (event.getRoomId() !== self.roomId) {
@@ -343,7 +336,11 @@ RoomState.prototype.setStateEvents = function (stateEvents) {
     self._setStateEvent(event);
 
     if (event.getType() === "m.room.member") {
-      _updateDisplayNameCache(self, event.getStateKey(), event.getContent().displayname);
+      _updateDisplayNameCache(
+        self,
+        event.getStateKey(),
+        event.getContent().displayname
+      );
 
       _updateThirdPartyTokenCache(self, event);
     }
@@ -368,9 +365,14 @@ RoomState.prototype.setStateEvents = function (stateEvents) {
       // so let's fake one up so that we don't leak user ids
       // into the timeline
 
-      if (event.getContent().membership === "leave" || event.getContent().membership === "ban") {
-        event.getContent().avatar_url = event.getContent().avatar_url || event.getPrevContent().avatar_url;
-        event.getContent().displayname = event.getContent().displayname || event.getPrevContent().displayname;
+      if (
+        event.getContent().membership === "leave" ||
+        event.getContent().membership === "ban"
+      ) {
+        event.getContent().avatar_url =
+          event.getContent().avatar_url || event.getPrevContent().avatar_url;
+        event.getContent().displayname =
+          event.getContent().displayname || event.getPrevContent().displayname;
       }
 
       const member = self._getOrCreateMember(userId, event);
@@ -409,7 +411,6 @@ RoomState.prototype.setStateEvents = function (stateEvents) {
  * @returns {RoomMember} the member, existing or newly created.
  */
 
-
 RoomState.prototype._getOrCreateMember = function (userId, event) {
   let member = this.members[userId];
 
@@ -445,7 +446,6 @@ RoomState.prototype._updateMember = function (member) {
     member.setPowerLevelEvent(pwrLvlEvent);
   } // blow away the sentinel which is now outdated
 
-
   delete this._sentinels[member.userId];
   this.members[member.userId] = member;
   this._joinedMemberCount = null;
@@ -457,7 +457,6 @@ RoomState.prototype._updateMember = function (member) {
  * @return {bool} whether or not the members of this room need to be loaded
  */
 
-
 RoomState.prototype.needsOutOfBandMembers = function () {
   return this._oobMemberFlags.status === OOB_STATUS_NOTSTARTED;
 };
@@ -466,7 +465,6 @@ RoomState.prototype.needsOutOfBandMembers = function () {
  * ensuring it doesn't ask for them to be requested again
  * through needsOutOfBandMembers
  */
-
 
 RoomState.prototype.markOutOfBandMembersStarted = function () {
   if (this._oobMemberFlags.status !== OOB_STATUS_NOTSTARTED) {
@@ -479,7 +477,6 @@ RoomState.prototype.markOutOfBandMembersStarted = function () {
  * Mark this room state as having failed to fetch out-of-band members
  */
 
-
 RoomState.prototype.markOutOfBandMembersFailed = function () {
   if (this._oobMemberFlags.status !== OOB_STATUS_INPROGRESS) {
     return;
@@ -491,10 +488,9 @@ RoomState.prototype.markOutOfBandMembersFailed = function () {
  * Clears the loaded out-of-band members
  */
 
-
 RoomState.prototype.clearOutOfBandMembers = function () {
   let count = 0;
-  Object.keys(this.members).forEach(userId => {
+  Object.keys(this.members).forEach((userId) => {
     const member = this.members[userId];
 
     if (member.isOutOfBand()) {
@@ -512,9 +508,10 @@ RoomState.prototype.clearOutOfBandMembers = function () {
  * @param {MatrixEvent[]} stateEvents array of membership state events
  */
 
-
 RoomState.prototype.setOutOfBandMembers = function (stateEvents) {
-  _logger.logger.log(`LL: RoomState about to set ${stateEvents.length} OOB members ...`);
+  _logger.logger.log(
+    `LL: RoomState about to set ${stateEvents.length} OOB members ...`
+  );
 
   if (this._oobMemberFlags.status !== OOB_STATUS_INPROGRESS) {
     return;
@@ -523,16 +520,15 @@ RoomState.prototype.setOutOfBandMembers = function (stateEvents) {
   _logger.logger.log(`LL: RoomState put in OOB_STATUS_FINISHED state ...`);
 
   this._oobMemberFlags.status = OOB_STATUS_FINISHED;
-  stateEvents.forEach(e => this._setOutOfBandMember(e));
+  stateEvents.forEach((e) => this._setOutOfBandMember(e));
 };
 /**
  * Sets a single out of band member, used by both setOutOfBandMembers and clone
  * @param {MatrixEvent} stateEvent membership state event
  */
 
-
 RoomState.prototype._setOutOfBandMember = function (stateEvent) {
-  if (stateEvent.getType() !== 'm.room.member') {
+  if (stateEvent.getType() !== "m.room.member") {
     return;
   }
 
@@ -564,7 +560,6 @@ RoomState.prototype._setOutOfBandMember = function (stateEvent) {
  * @param {MatrixEvent} event The typing event
  */
 
-
 RoomState.prototype.setTypingEvent = function (event) {
   utils.forEach(utils.values(this.members), function (member) {
     member.setTypingEvent(event);
@@ -577,14 +572,12 @@ RoomState.prototype.setTypingEvent = function (event) {
  * @return {?MatrixEvent} The m.room.member event or null
  */
 
-
 RoomState.prototype.getInviteForThreePidToken = function (token) {
   return this._tokenToInvite[token] || null;
 };
 /**
  * Update the last modified time to the current time.
  */
-
 
 RoomState.prototype._updateModifiedTime = function () {
   this._modified = Date.now();
@@ -595,7 +588,6 @@ RoomState.prototype._updateModifiedTime = function () {
  * @return {number} The timestamp
  */
 
-
 RoomState.prototype.getLastModifiedTime = function () {
   return this._modified;
 };
@@ -604,7 +596,6 @@ RoomState.prototype.getLastModifiedTime = function () {
  * @param {string} displayName The display name to get user IDs from.
  * @return {string[]} An array of user IDs or an empty array.
  */
-
 
 RoomState.prototype.getUserIdsWithDisplayName = function (displayName) {
   return this._displayNameToUserIds[utils.removeHiddenChars(displayName)] || [];
@@ -617,16 +608,15 @@ RoomState.prototype.getUserIdsWithDisplayName = function (displayName) {
  * @return {boolean} true if the given used ID can redact given event
  */
 
-
 RoomState.prototype.maySendRedactionForEvent = function (mxEvent, userId) {
   const member = this.getMember(userId);
-  if (!member || member.membership === 'leave') return false;
+  if (!member || member.membership === "leave") return false;
   if (mxEvent.status || mxEvent.isRedacted()) return false; // The user may have been the sender, but they can't redact their own message
   // if redactions are blocked.
 
   const canRedact = this.maySendEvent("m.room.redaction", userId);
   if (mxEvent.getSender() === userId) return canRedact;
-  return this._hasSufficientPowerLevelFor('redact', member.powerLevel);
+  return this._hasSufficientPowerLevelFor("redact", member.powerLevel);
 };
 /**
  * Returns true if the given power level is sufficient for action
@@ -635,9 +625,11 @@ RoomState.prototype.maySendRedactionForEvent = function (mxEvent, userId) {
  * @return {boolean} true if the given power level is sufficient
  */
 
-
-RoomState.prototype._hasSufficientPowerLevelFor = function (action, powerLevel) {
-  const powerLevelsEvent = this.getStateEvents('m.room.power_levels', '');
+RoomState.prototype._hasSufficientPowerLevelFor = function (
+  action,
+  powerLevel
+) {
+  const powerLevelsEvent = this.getStateEvents("m.room.power_levels", "");
   let powerLevels = {};
 
   if (powerLevelsEvent) {
@@ -659,9 +651,8 @@ RoomState.prototype._hasSufficientPowerLevelFor = function (action, powerLevel) 
  *                   message events into the given room.
  */
 
-
 RoomState.prototype.maySendMessage = function (userId) {
-  return this._maySendEventOfType('m.room.message', userId, false);
+  return this._maySendEventOfType("m.room.message", userId, false);
 };
 /**
  * Returns true if the given user ID has permission to send a normal
@@ -672,7 +663,6 @@ RoomState.prototype.maySendMessage = function (userId) {
  *                        the given type of event into this room,
  *                        according to the room's state.
  */
-
 
 RoomState.prototype.maySendEvent = function (eventType, userId) {
   return this._maySendEventOfType(eventType, userId, false);
@@ -686,7 +676,6 @@ RoomState.prototype.maySendEvent = function (eventType, userId) {
  *                        the given type of state event into this room,
  *                        according to the room's state.
  */
-
 
 RoomState.prototype.mayClientSendStateEvent = function (stateEventType, cli) {
   if (cli.isGuest()) {
@@ -705,7 +694,6 @@ RoomState.prototype.mayClientSendStateEvent = function (stateEventType, cli) {
  *                        according to the room's state.
  */
 
-
 RoomState.prototype.maySendStateEvent = function (stateEventType, userId) {
   return this._maySendEventOfType(stateEventType, userId, true);
 };
@@ -722,9 +710,8 @@ RoomState.prototype.maySendStateEvent = function (stateEventType, userId) {
  *                        according to the room's state.
  */
 
-
 RoomState.prototype._maySendEventOfType = function (eventType, userId, state) {
-  const power_levels_event = this.getStateEvents('m.room.power_levels', '');
+  const power_levels_event = this.getStateEvents("m.room.power_levels", "");
   let power_levels;
   let events_levels = {};
   let state_default = 0;
@@ -771,7 +758,6 @@ RoomState.prototype._maySendEventOfType = function (eventType, userId, state) {
  *                        notification of this type.
  */
 
-
 RoomState.prototype.mayTriggerNotifOfType = function (notifLevelKey, userId) {
   const member = this.getMember(userId);
 
@@ -779,10 +765,15 @@ RoomState.prototype.mayTriggerNotifOfType = function (notifLevelKey, userId) {
     return false;
   }
 
-  const powerLevelsEvent = this.getStateEvents('m.room.power_levels', '');
+  const powerLevelsEvent = this.getStateEvents("m.room.power_levels", "");
   let notifLevel = 50;
 
-  if (powerLevelsEvent && powerLevelsEvent.getContent() && powerLevelsEvent.getContent().notifications && utils.isNumber(powerLevelsEvent.getContent().notifications[notifLevelKey])) {
+  if (
+    powerLevelsEvent &&
+    powerLevelsEvent.getContent() &&
+    powerLevelsEvent.getContent().notifications &&
+    utils.isNumber(powerLevelsEvent.getContent().notifications[notifLevelKey])
+  ) {
     notifLevel = powerLevelsEvent.getContent().notifications[notifLevelKey];
   }
 
@@ -792,7 +783,6 @@ RoomState.prototype.mayTriggerNotifOfType = function (notifLevelKey, userId) {
  * Returns the join rule based on the m.room.join_rule state event, defaulting to `invite`.
  * @returns {string} the join_rule applied to this room
  */
-
 
 RoomState.prototype.getJoinRule = function () {
   const joinRuleEvent = this.getStateEvents(_event.EventType.RoomJoinRules, "");
@@ -805,13 +795,17 @@ function _updateThirdPartyTokenCache(roomState, memberEvent) {
     return;
   }
 
-  const token = (memberEvent.getContent().third_party_invite.signed || {}).token;
+  const token = (memberEvent.getContent().third_party_invite.signed || {})
+    .token;
 
   if (!token) {
     return;
   }
 
-  const threePidInvite = roomState.getStateEvents("m.room.third_party_invite", token);
+  const threePidInvite = roomState.getStateEvents(
+    "m.room.third_party_invite",
+    token
+  );
 
   if (!threePidInvite) {
     return;
@@ -834,13 +828,14 @@ function _updateDisplayNameCache(roomState, userId, displayName) {
 
     if (existingUserIds) {
       // remove this user ID from this array
-      const filteredUserIDs = existingUserIds.filter(id => id !== userId);
+      const filteredUserIDs = existingUserIds.filter((id) => id !== userId);
       roomState._displayNameToUserIds[strippedOldName] = filteredUserIDs;
     }
   }
 
   roomState._userIdsToDisplayNames[userId] = displayName;
-  const strippedDisplayname = displayName && utils.removeHiddenChars(displayName); // an empty stripped displayname (undefined/'') will be set to MXID in room-member.js
+  const strippedDisplayname =
+    displayName && utils.removeHiddenChars(displayName); // an empty stripped displayname (undefined/'') will be set to MXID in room-member.js
 
   if (strippedDisplayname) {
     if (!roomState._displayNameToUserIds[strippedDisplayname]) {
@@ -880,16 +875,16 @@ function _updateDisplayNameCache(roomState, userId, displayName) {
  */
 
 /**
-* Fires whenever a member is added to the members dictionary. The RoomMember
-* will not be fully populated yet (e.g. no membership state) but will already
-* be available in the members dictionary.
-* @event module:client~MatrixClient#"RoomState.newMember"
-* @param {MatrixEvent} event The matrix event which caused this event to fire.
-* @param {RoomState} state The room state whose RoomState.members dictionary
-* was updated with a new entry.
-* @param {RoomMember} member The room member that was added.
-* @example
-* matrixClient.on("RoomState.newMember", function(event, state, member){
-*   // add event listeners on 'member'
-* });
-*/
+ * Fires whenever a member is added to the members dictionary. The RoomMember
+ * will not be fully populated yet (e.g. no membership state) but will already
+ * be available in the members dictionary.
+ * @event module:client~MatrixClient#"RoomState.newMember"
+ * @param {MatrixEvent} event The matrix event which caused this event to fire.
+ * @param {RoomState} state The room state whose RoomState.members dictionary
+ * was updated with a new entry.
+ * @param {RoomMember} member The room member that was added.
+ * @example
+ * matrixClient.on("RoomState.newMember", function(event, state, member){
+ *   // add event listeners on 'member'
+ * });
+ */

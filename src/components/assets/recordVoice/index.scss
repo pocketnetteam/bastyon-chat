@@ -14,7 +14,7 @@
     background: lightslategrey;
     border-radius: 50%;
     bottom: 98px;
-    transition: .1s;
+    transition: 0.1s;
     right: 9px;
 
     .icon {
@@ -54,7 +54,7 @@
     outline: none;
 
     &.active {
-      background: #00A3F7;
+      background: #00a3f7;
       animation: pulse 1.2s infinite;
 
       .icon {
@@ -76,7 +76,6 @@
     }
   }
 }
-
 
 @keyframes pulse {
   50% {

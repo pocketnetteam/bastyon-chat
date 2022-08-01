@@ -1,7 +1,7 @@
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
+  value: true,
 });
 exports.setNow = setNow;
 exports.setTimeout = setTimeout;
@@ -43,7 +43,6 @@ let _count = 0; // the key for our callback with the real global.setTimeout
 let _realCallbackKey; // a sorted list of the callbacks to be run.
 // each is an object with keys [runAt, func, params, key].
 
-
 const _callbackList = []; // var debuglog = logger.log.bind(logger);
 
 const debuglog = function () {};
@@ -56,7 +55,6 @@ const debuglog = function () {};
  *
  * @internal
  */
-
 
 function setNow(f) {
   _now = f || Date.now;
@@ -84,12 +82,20 @@ function setTimeout(func, delayMs) {
   const params = Array.prototype.slice.call(arguments, 2);
   const runAt = _now() + delayMs;
   const key = _count++;
-  debuglog("setTimeout: scheduling cb", key, "at", runAt, "(delay", delayMs, ")");
+  debuglog(
+    "setTimeout: scheduling cb",
+    key,
+    "at",
+    runAt,
+    "(delay",
+    delayMs,
+    ")"
+  );
   const data = {
     runAt: runAt,
     func: func,
     params: params,
-    key: key
+    key: key,
   }; // figure out where it goes in the list
 
   const idx = binarySearch(_callbackList, function (el) {
@@ -108,12 +114,10 @@ function setTimeout(func, delayMs) {
  * @param {Number} key   result from an earlier setTimeout call
  */
 
-
 function clearTimeout(key) {
   if (_callbackList.length === 0) {
     return;
   } // remove the element from the list
-
 
   let i;
 
@@ -127,12 +131,10 @@ function clearTimeout(key) {
     }
   } // iff it was the first one in the list, reschedule our callback.
 
-
   if (i === 0) {
     _scheduleRealCallback();
   }
 } // use the real global.setTimeout to schedule a callback to _runCallbacks.
-
 
 function _scheduleRealCallback() {
   if (_realCallbackKey) {
@@ -176,7 +178,6 @@ function _runCallbacks() {
   // keep the codepaths the same whether or not our functions
   // register their own setTimeouts.
 
-
   _scheduleRealCallback();
 
   for (let i = 0; i < callbacksToRun.length; i++) {
@@ -185,7 +186,10 @@ function _runCallbacks() {
     try {
       cb.func.apply(global, cb.params);
     } catch (e) {
-      _logger.logger.error("Uncaught exception in callback function", e.stack || e);
+      _logger.logger.error(
+        "Uncaught exception in callback function",
+        e.stack || e
+      );
     }
   }
 }
@@ -195,14 +199,13 @@ function _runCallbacks() {
  * greater than zero, or array.length if no such element exists.
  */
 
-
 function binarySearch(array, func) {
   // min is inclusive, max exclusive.
   let min = 0;
   let max = array.length;
 
   while (min < max) {
-    const mid = min + max >> 1;
+    const mid = (min + max) >> 1;
     const res = func(array[mid]);
 
     if (res > 0) {
@@ -213,7 +216,6 @@ function binarySearch(array, func) {
       min = mid + 1;
     }
   } // presumably, min==max now.
-
 
   return min;
 }

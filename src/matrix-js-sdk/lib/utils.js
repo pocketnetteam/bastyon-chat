@@ -3,7 +3,7 @@
 var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
+  value: true,
 });
 exports.encodeParams = encodeParams;
 exports.encodeUri = encodeUri;
@@ -90,14 +90,16 @@ function encodeParams(params) {
  * @return {string} The result of replacing all template variables e.g. '/foo/baz'.
  */
 
-
 function encodeUri(pathTemplate, variables) {
   for (const key in variables) {
     if (!variables.hasOwnProperty(key)) {
       continue;
     }
 
-    pathTemplate = pathTemplate.replace(key, encodeURIComponent(variables[key]));
+    pathTemplate = pathTemplate.replace(
+      key,
+      encodeURIComponent(variables[key])
+    );
   }
 
   return pathTemplate;
@@ -109,7 +111,6 @@ function encodeUri(pathTemplate, variables) {
  * the array with the signature <code>fn(element){...}</code>
  * @return {Array} A new array with the results of the function.
  */
-
 
 function map(array, fn) {
   const results = new Array(array.length);
@@ -129,7 +130,6 @@ function map(array, fn) {
  * @return {Array} A new array with the results of the function.
  */
 
-
 function filter(array, fn) {
   const results = [];
 
@@ -146,7 +146,6 @@ function filter(array, fn) {
  * @param {Object} obj The object to get the keys for.
  * @return {string[]} The keys of the object.
  */
-
 
 function keys(obj) {
   const result = [];
@@ -166,7 +165,6 @@ function keys(obj) {
  * @param {Object} obj The object to get the values for.
  * @return {Array<*>} The values of the object.
  */
-
 
 function values(obj) {
   const result = [];
@@ -188,7 +186,6 @@ function values(obj) {
  * function signature <code>fn(element, index)</code>.
  */
 
-
 function forEach(array, fn) {
   for (let i = 0; i < array.length; i++) {
     fn(array[i], i);
@@ -205,7 +202,6 @@ function forEach(array, fn) {
  * @return {*} The first value in the array which returns <code>true</code> for
  * the given function.
  */
-
 
 function findElement(array, fn, reverse) {
   let i;
@@ -234,7 +230,6 @@ function findElement(array, fn, reverse) {
  * @param {boolean} reverse True to search in reverse order.
  * @return {boolean} True if an element was removed.
  */
-
 
 function removeElement(array, fn, reverse) {
   let i;
@@ -266,7 +261,6 @@ function removeElement(array, fn, reverse) {
  * @return {boolean} True if it is a function.
  */
 
-
 function isFunction(value) {
   return Object.prototype.toString.call(value) === "[object Function]";
 }
@@ -276,9 +270,10 @@ function isFunction(value) {
  * @return {boolean} True if it is an array.
  */
 
-
 function isArray(value) {
-  return Array.isArray ? Array.isArray(value) : Boolean(value && value.constructor === Array);
+  return Array.isArray
+    ? Array.isArray(value)
+    : Boolean(value && value.constructor === Array);
 }
 /**
  * Checks that the given object has the specified keys.
@@ -287,7 +282,6 @@ function isArray(value) {
  * @throws If the object is missing keys.
  */
 // note using 'keys' here would shadow the 'keys' function defined above
-
 
 function checkObjectHasKeys(obj, keys_) {
   for (let i = 0; i < keys_.length; i++) {
@@ -302,7 +296,6 @@ function checkObjectHasKeys(obj, keys_) {
  * @param {string[]} allowedKeys The list of allowed key names.
  * @throws If there are extra keys.
  */
-
 
 function checkObjectHasNoAdditionalKeys(obj, allowedKeys) {
   for (const key in obj) {
@@ -322,7 +315,6 @@ function checkObjectHasNoAdditionalKeys(obj, allowedKeys) {
  * @return {Object} A copy of the object without any references to the original.
  */
 
-
 function deepCopy(obj) {
   return JSON.parse(JSON.stringify(obj));
 }
@@ -334,7 +326,6 @@ function deepCopy(obj) {
  *
  * @return {boolean} true if the two objects are equal
  */
-
 
 function deepCompare(x, y) {
   // Inspired by
@@ -349,32 +340,26 @@ function deepCompare(x, y) {
     return false;
   } // special-case NaN (since NaN !== NaN)
 
-
-  if (typeof x === 'number' && isNaN(x) && isNaN(y)) {
+  if (typeof x === "number" && isNaN(x) && isNaN(y)) {
     return true;
   } // special-case null (since typeof null == 'object', but null.constructor
   // throws)
-
 
   if (x === null || y === null) {
     return x === y;
   } // everything else is either an unequal primitive, or an object
 
-
   if (!(x instanceof Object)) {
     return false;
   } // check they are the same type of object
-
 
   if (x.constructor !== y.constructor || x.prototype !== y.prototype) {
     return false;
   } // special-casing for some special types of object
 
-
   if (x instanceof RegExp || x instanceof Date) {
     return x.toString() === y.toString();
   } // the object algorithm works for Array, but it's sub-optimal.
-
 
   if (x instanceof Array) {
     if (x.length !== y.length) {
@@ -400,7 +385,6 @@ function deepCompare(x, y) {
       }
     } // finally, compare each of x's keys with y
 
-
     for (p in y) {
       // eslint-disable-line guard-for-in
       if (y.hasOwnProperty(p) !== x.hasOwnProperty(p)) {
@@ -413,7 +397,6 @@ function deepCompare(x, y) {
     }
   }
   /* jshint +W089 */
-
 
   return true;
 }
@@ -430,7 +413,6 @@ function deepCompare(x, y) {
  *
  * @return {Object} target
  */
-
 
 function extend(...restParams) {
   const target = restParams[0] || {};
@@ -451,7 +433,6 @@ function extend(...restParams) {
  * Run polyfills to add Array.map and Array.filter if they are missing.
  */
 
-
 function runPolyfills() {
   //                Array.prototype.filter
   // ========================================================
@@ -459,9 +440,11 @@ function runPolyfills() {
   // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/filter
   if (!Array.prototype.filter) {
     // eslint-disable-next-line no-extend-native
-    Array.prototype.filter = function (fun,
-    /*, thisArg*/
-    ...restProps) {
+    Array.prototype.filter = function (
+      fun,
+      /*, thisArg*/
+      ...restProps
+    ) {
       if (this === void 0 || this === null) {
         throw new TypeError();
       }
@@ -469,7 +452,7 @@ function runPolyfills() {
       const t = Object(this);
       const len = t.length >>> 0;
 
-      if (typeof fun !== 'function') {
+      if (typeof fun !== "function") {
         throw new TypeError();
       }
 
@@ -499,7 +482,6 @@ function runPolyfills() {
   // Production steps of ECMA-262, Edition 5, 15.4.4.19
   // Reference: http://es5.github.io/#x15.4.4.19
 
-
   if (!Array.prototype.map) {
     // eslint-disable-next-line no-extend-native
     Array.prototype.map = function (callback, thisArg) {
@@ -507,10 +489,9 @@ function runPolyfills() {
       let k;
 
       if (this === null || this === undefined) {
-        throw new TypeError(' this is null or not defined');
+        throw new TypeError(" this is null or not defined");
       } // 1. Let O be the result of calling ToObject passing the |this|
       //    value as the argument.
-
 
       const O = Object(this); // 2. Let lenValue be the result of calling the Get internal
       //    method of O with the argument "length".
@@ -519,17 +500,15 @@ function runPolyfills() {
       const len = O.length >>> 0; // 4. If IsCallable(callback) is false, throw a TypeError exception.
       // See: http://es5.github.com/#x9.11
 
-      if (typeof callback !== 'function') {
-        throw new TypeError(callback + ' is not a function');
+      if (typeof callback !== "function") {
+        throw new TypeError(callback + " is not a function");
       } // 5. If thisArg was supplied, let T be thisArg; else let T be undefined.
-
 
       if (arguments.length > 1) {
         T = thisArg;
       } // 6. Let A be a new array created as if by the expression new Array(len)
       //    where Array is the standard built-in constructor with that name and
       //    len is the value of len.
-
 
       const A = new Array(len); // 7. Let k be 0
 
@@ -570,10 +549,8 @@ function runPolyfills() {
           A[k] = mappedValue;
         } // d. Increase k by 1.
 
-
         k++;
       } // 9. return A
-
 
       return A;
     };
@@ -584,7 +561,6 @@ function runPolyfills() {
   // Production steps of ECMA-262, Edition 5, 15.4.4.18
   // Reference: http://es5.github.io/#x15.4.4.18
 
-
   if (!Array.prototype.forEach) {
     // eslint-disable-next-line no-extend-native
     Array.prototype.forEach = function (callback, thisArg) {
@@ -592,10 +568,9 @@ function runPolyfills() {
       let k;
 
       if (this === null || this === undefined) {
-        throw new TypeError(' this is null or not defined');
+        throw new TypeError(" this is null or not defined");
       } // 1. Let O be the result of calling ToObject passing the |this| value as the
       // argument.
-
 
       const O = Object(this); // 2. Let lenValue be the result of calling the Get internal method of O with the
       // argument "length".
@@ -605,14 +580,12 @@ function runPolyfills() {
       // See: http://es5.github.com/#x9.11
 
       if (typeof callback !== "function") {
-        throw new TypeError(callback + ' is not a function');
+        throw new TypeError(callback + " is not a function");
       } // 5. If thisArg was supplied, let T be thisArg; else let T be undefined.
-
 
       if (arguments.length > 1) {
         T = thisArg;
       } // 6. Let k be 0
-
 
       k = 0; // 7. Repeat, while k < len
 
@@ -634,10 +607,8 @@ function runPolyfills() {
           callback.call(T, kValue, k, O);
         } // d. Increase k by 1.
 
-
         k++;
       } // 8. return undefined
-
     };
   }
 }
@@ -649,7 +620,6 @@ function runPolyfills() {
  *     prototype.
  * @param {function} superCtor Constructor function to inherit prototype from.
  */
-
 
 function inherits(ctor, superCtor) {
   // Add util.inherits from Node.js
@@ -681,8 +651,8 @@ function inherits(ctor, superCtor) {
       value: ctor,
       enumerable: false,
       writable: true,
-      configurable: true
-    }
+      configurable: true,
+    },
   });
 }
 /**
@@ -695,7 +665,6 @@ function inherits(ctor, superCtor) {
  * @param {any} SuperType The type to act as a super instance
  * @param {any} params Arguments to supply to the super type's constructor
  */
-
 
 function polyfillSuper(thisArg, SuperType, ...params) {
   try {
@@ -713,9 +682,8 @@ function polyfillSuper(thisArg, SuperType, ...params) {
  * @return {boolean} whether or not value is a finite number without type-coercion
  */
 
-
 function isNumber(value) {
-  return typeof value === 'number' && isFinite(value);
+  return typeof value === "number" && isFinite(value);
 }
 /**
  * Removes zero width chars, diacritics and whitespace from the string
@@ -724,10 +692,11 @@ function isNumber(value) {
  * @return {string} a string with the hidden characters removed
  */
 
-
 function removeHiddenChars(str) {
   if (typeof str === "string") {
-    return (0, _unhomoglyph.default)(str.normalize('NFD').replace(removeHiddenCharsRegex, ''));
+    return (0, _unhomoglyph.default)(
+      str.normalize("NFD").replace(removeHiddenCharsRegex, "")
+    );
   }
 
   return "";
@@ -740,29 +709,32 @@ function removeHiddenChars(str) {
 // Zero width no-break space (BOM) U+FEFF
 // eslint-disable-next-line no-misleading-character-class
 
-
-const removeHiddenCharsRegex = /[\u2000-\u200F\u202A-\u202F\u0300-\u036f\uFEFF\s]/g;
+const removeHiddenCharsRegex =
+  /[\u2000-\u200F\u202A-\u202F\u0300-\u036f\uFEFF\s]/g;
 
 function escapeRegExp(string) {
   return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
 
 function globToRegexp(glob, extended) {
-  extended = typeof extended === 'boolean' ? extended : true; // From
+  extended = typeof extended === "boolean" ? extended : true; // From
   // https://github.com/matrix-org/synapse/blob/abbee6b29be80a77e05730707602f3bbfc3f38cb/synapse/push/__init__.py#L132
   // Because micromatch is about 130KB with dependencies,
   // and minimatch is not much better.
 
   let pat = escapeRegExp(glob);
-  pat = pat.replace(/\\\*/g, '.*');
-  pat = pat.replace(/\?/g, '.');
+  pat = pat.replace(/\\\*/g, ".*");
+  pat = pat.replace(/\?/g, ".");
 
   if (extended) {
-    pat = pat.replace(/\\\[(!|)(.*)\\]/g, function (match, p1, p2, offset, string) {
-      const first = p1 && '^' || '';
-      const second = p2.replace(/\\-/, '-');
-      return '[' + first + second + ']';
-    });
+    pat = pat.replace(
+      /\\\[(!|)(.*)\\]/g,
+      function (match, p1, p2, offset, string) {
+        const first = (p1 && "^") || "";
+        const second = p2.replace(/\\-/, "-");
+        return "[" + first + second + "]";
+      }
+    );
   }
 
   return pat;
@@ -776,9 +748,8 @@ function ensureNoTrailingSlash(url) {
   }
 } // Returns a promise which resolves with a given value after the given number of ms
 
-
 function sleep(ms, value) {
-  return new Promise(resolve => {
+  return new Promise((resolve) => {
     setTimeout(resolve, ms, value);
   });
 }
@@ -786,7 +757,6 @@ function sleep(ms, value) {
 function isNullOrUndefined(val) {
   return val === null || val === undefined;
 } // Returns a Deferred
-
 
 function defer() {
   let resolve;
@@ -798,7 +768,7 @@ function defer() {
   return {
     resolve,
     reject,
-    promise
+    promise,
   };
 }
 
@@ -809,15 +779,16 @@ async function promiseMapSeries(promises, fn) {
 }
 
 function promiseTry(fn) {
-  return new Promise(resolve => resolve(fn()));
+  return new Promise((resolve) => resolve(fn()));
 } // Creates and awaits all promises, running no more than `chunkSize` at the same time
-
 
 async function chunkPromises(fns, chunkSize) {
   const results = [];
 
   for (let i = 0; i < fns.length; i += chunkSize) {
-    results.push(...(await Promise.all(fns.slice(i, i + chunkSize).map(fn => fn()))));
+    results.push(
+      ...(await Promise.all(fns.slice(i, i + chunkSize).map((fn) => fn())))
+    );
   }
 
   return results;
@@ -825,7 +796,6 @@ async function chunkPromises(fns, chunkSize) {
 // Matrix SDK without needing to `require("crypto")`, which will fail in
 // browsers.  So `index.ts` will call `setCrypto` to store it, and when we need
 // it, we can call `getCrypto`.
-
 
 let crypto;
 

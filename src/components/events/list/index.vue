@@ -1,51 +1,65 @@
 <template>
-  <div id="events" class="maskedtop" :class="{mobile, ios, menuOpen, imagesList: (this.scrollType === 'custom' ? 'imagesList' : '')}">
-    <div class="eventsflex" @mousewheel="mousewheel" ref="container" @scroll="dscroll" :class="{mobile, ios, menuOpen}">
+  <div
+    id="events"
+    class="maskedtop"
+    :class="{
+      mobile,
+      ios,
+      menuOpen,
+      imagesList: this.scrollType === 'custom' ? 'imagesList' : '',
+    }"
+  >
+    <div
+      class="eventsflex"
+      @mousewheel="mousewheel"
+      ref="container"
+      @scroll="dscroll"
+      :class="{ mobile, ios, menuOpen }"
+    >
       <div class="ewr">
-
-          <div class="errorWrapper" v-if="stringifyiedError" >
-            <div class="error"><div>{{ $t("sendingerror") }}</div><div class="btnwrp"><button @click="showerror" class="button small">{{ $t("details") }}</button></div></div>
+        <div class="errorWrapper" v-if="stringifyiedError">
+          <div class="error">
+            <div>{{ $t("sendingerror") }}</div>
+            <div class="btnwrp">
+              <button @click="showerror" class="button small">
+                {{ $t("details") }}
+              </button>
+            </div>
           </div>
-            
-          <div class="eventWrapper"
-              v-for="(event, i) in events"
-              :key="event.event.event_id"
-          >
+        </div>
 
-            <eventsEvent
-                :event="event"
-                :prevevent="events[i+1]"
-                :galleryData="events"
-                :chat="chat"
-                :timeline="timeline"
-                :last="i == 0"
-                @openImageEvent="e => galleryOpen(e)"
-                @removeEvent="e => removeEvent(event)"
-                @editing="text => editingEvent({event, text})"
-                @reply="e => replyEvent({event})"
-                @mounted="emounted"
-                @menuIsVisible="menuIsVisibleHandler"
-                
-            />
-          </div>
+        <div
+          class="eventWrapper"
+          v-for="(event, i) in events"
+          :key="event.event.event_id"
+        >
+          <eventsEvent
+            :event="event"
+            :prevevent="events[i + 1]"
+            :galleryData="events"
+            :chat="chat"
+            :timeline="timeline"
+            :last="i == 0"
+            @openImageEvent="(e) => galleryOpen(e)"
+            @removeEvent="(e) => removeEvent(event)"
+            @editing="(text) => editingEvent({ event, text })"
+            @reply="(e) => replyEvent({ event })"
+            @mounted="emounted"
+            @menuIsVisible="menuIsVisibleHandler"
+          />
+        </div>
       </div>
 
       <div class="preloadingWrapper" v-if="loading">
         <linepreloader />
       </div>
-
-      
-
     </div>
 
     <transition name="fade">
-      <div class="scrollbottom" v-show="scrollbottomshow" @click="scrolldown"> 
+      <div class="scrollbottom" v-show="scrollbottomshow" @click="scrolldown">
         <i class="fas fa-chevron-down"></i>
       </div>
     </transition>
-
- 
-
   </div>
 </template>
 
@@ -54,24 +68,3 @@
 
 <!-- THEMES BEGIN -->
 <!-- THEMES END -->
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

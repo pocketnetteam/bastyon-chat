@@ -3,11 +3,13 @@
 var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
+  value: true,
 });
 exports.Relations = void 0;
 
-var _defineProperty2 = _interopRequireDefault(require("@babel/runtime/helpers/defineProperty"));
+var _defineProperty2 = _interopRequireDefault(
+  require("@babel/runtime/helpers/defineProperty")
+);
 
 var _events = require("events");
 
@@ -63,28 +65,34 @@ class Relations extends _events.EventEmitter {
         return;
       } // Event was cancelled, remove from the collection
 
-
       event.removeListener("Event.status", this._onEventStatus);
 
       this._removeEvent(event);
     });
-    (0, _defineProperty2.default)(this, "_onBeforeRedaction", redactedEvent => {
-      if (!this._relations.has(redactedEvent)) {
-        return;
+    (0, _defineProperty2.default)(
+      this,
+      "_onBeforeRedaction",
+      (redactedEvent) => {
+        if (!this._relations.has(redactedEvent)) {
+          return;
+        }
+
+        this._relations.delete(redactedEvent);
+
+        if (this.relationType === "m.annotation") {
+          // Remove the redacted annotation from aggregation by key
+          this._removeAnnotationFromAggregation(redactedEvent);
+        } else if (this.relationType === "m.replace" && this._targetEvent) {
+          this._targetEvent.makeReplaced(this.getLastReplacement());
+        }
+
+        redactedEvent.removeListener(
+          "Event.beforeRedaction",
+          this._onBeforeRedaction
+        );
+        this.emit("Relations.redaction", redactedEvent);
       }
-
-      this._relations.delete(redactedEvent);
-
-      if (this.relationType === "m.annotation") {
-        // Remove the redacted annotation from aggregation by key
-        this._removeAnnotationFromAggregation(redactedEvent);
-      } else if (this.relationType === "m.replace" && this._targetEvent) {
-        this._targetEvent.makeReplaced(this.getLastReplacement());
-      }
-
-      redactedEvent.removeListener("Event.beforeRedaction", this._onBeforeRedaction);
-      this.emit("Relations.redaction", redactedEvent);
-    });
+    );
     this.relationType = relationType;
     this.eventType = eventType;
     this._relations = new Set();
@@ -99,7 +107,6 @@ class Relations extends _events.EventEmitter {
    * @param {MatrixEvent} event
    * The new relation event to be added.
    */
-
 
   addEvent(event) {
     if (this._relations.has(event)) {
@@ -124,7 +131,6 @@ class Relations extends _events.EventEmitter {
     } // If the event is in the process of being sent, listen for cancellation
     // so we can remove the event from the collection.
 
-
     if (event.isSending()) {
       event.on("Event.status", this._onEventStatus);
     }
@@ -146,7 +152,6 @@ class Relations extends _events.EventEmitter {
    * @param {MatrixEvent} event
    * The relation event to remove.
    */
-
 
   _removeEvent(event) {
     if (!this._relations.has(event)) {
@@ -187,7 +192,6 @@ class Relations extends _events.EventEmitter {
    * @param {EventStatus} status The new status
    */
 
-
   /**
    * Get all relation events in this collection.
    *
@@ -203,9 +207,7 @@ class Relations extends _events.EventEmitter {
   }
 
   _addAnnotationToAggregation(event) {
-    const {
-      key
-    } = event.getRelation();
+    const { key } = event.getRelation();
 
     if (!key) {
       return;
@@ -218,7 +220,6 @@ class Relations extends _events.EventEmitter {
 
       this._sortedAnnotationsByKey.push([key, eventsForKey]);
     } // Add the new event to the set for this key
-
 
     eventsForKey.add(event); // Re-sort the [key, events] pairs in descending order of event count
 
@@ -235,14 +236,11 @@ class Relations extends _events.EventEmitter {
       eventsFromSender = this._annotationsBySender[sender] = new Set();
     } // Add the new event to the set for this sender
 
-
     eventsFromSender.add(event);
   }
 
   _removeAnnotationFromAggregation(event) {
-    const {
-      key
-    } = event.getRelation();
+    const { key } = event.getRelation();
 
     if (!key) {
       return;
@@ -279,7 +277,6 @@ class Relations extends _events.EventEmitter {
    * The original relation event that is about to be redacted.
    */
 
-
   /**
    * Get all events in this collection grouped by key and sorted by descending
    * event count in each group.
@@ -308,7 +305,6 @@ class Relations extends _events.EventEmitter {
    * events for that sender as a value.
    */
 
-
   getAnnotationsBySender() {
     if (this.relationType !== "m.annotation") {
       // Other relation types are not grouped currently.
@@ -326,7 +322,6 @@ class Relations extends _events.EventEmitter {
    * @return {MatrixEvent?}
    */
 
-
   getLastReplacement() {
     if (this.relationType !== "m.replace") {
       // Aggregating on last only makes sense for this relation type
@@ -341,8 +336,8 @@ class Relations extends _events.EventEmitter {
     } // the all-knowning server tells us that the event at some point had
     // this timestamp for its replacement, so any following replacement should definitely not be less
 
-
-    const replaceRelation = this._targetEvent.getServerAggregatedRelation("m.replace");
+    const replaceRelation =
+      this._targetEvent.getServerAggregatedRelation("m.replace");
 
     const minTs = replaceRelation && replaceRelation.origin_server_ts;
     return this.getRelations().reduce((last, event) => {
@@ -365,7 +360,6 @@ class Relations extends _events.EventEmitter {
    * @param {MatrixEvent} targetEvent the event the relations are related to.
    */
 
-
   setTargetEvent(event) {
     if (this._targetEvent) {
       return;
@@ -382,7 +376,6 @@ class Relations extends _events.EventEmitter {
       }
     }
   }
-
 }
 
 exports.Relations = Relations;

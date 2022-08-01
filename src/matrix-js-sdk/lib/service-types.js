@@ -1,7 +1,7 @@
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
+  value: true,
 });
 exports.SERVICE_TYPES = void 0;
 
@@ -21,9 +21,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 const SERVICE_TYPES = Object.freeze({
-  IS: 'SERVICE_TYPE_IS',
+  IS: "SERVICE_TYPE_IS",
   // An Identity Service
-  IM: 'SERVICE_TYPE_IM' // An Integration Manager
-
+  IM: "SERVICE_TYPE_IM", // An Integration Manager
 });
 exports.SERVICE_TYPES = SERVICE_TYPES;

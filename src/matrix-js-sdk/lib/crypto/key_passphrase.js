@@ -1,7 +1,7 @@
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
+  value: true,
 });
 exports.keyFromAuthData = keyFromAuthData;
 exports.keyFromPassphrase = keyFromPassphrase;
@@ -34,10 +34,18 @@ async function keyFromAuthData(authData, password) {
   }
 
   if (!authData.private_key_salt || !authData.private_key_iterations) {
-    throw new Error("Salt and/or iterations not found: " + "this backup cannot be restored with a passphrase");
+    throw new Error(
+      "Salt and/or iterations not found: " +
+        "this backup cannot be restored with a passphrase"
+    );
   }
 
-  return await deriveKey(password, authData.private_key_salt, authData.private_key_iterations, authData.private_key_bits || DEFAULT_BITSIZE);
+  return await deriveKey(
+    password,
+    authData.private_key_salt,
+    authData.private_key_iterations,
+    authData.private_key_bits || DEFAULT_BITSIZE
+  );
 }
 
 async function keyFromPassphrase(password) {
@@ -46,15 +54,25 @@ async function keyFromPassphrase(password) {
   }
 
   const salt = (0, _randomstring.randomString)(32);
-  const key = await deriveKey(password, salt, DEFAULT_ITERATIONS, DEFAULT_BITSIZE);
+  const key = await deriveKey(
+    password,
+    salt,
+    DEFAULT_ITERATIONS,
+    DEFAULT_BITSIZE
+  );
   return {
     key,
     salt,
-    iterations: DEFAULT_ITERATIONS
+    iterations: DEFAULT_ITERATIONS,
   };
 }
 
-async function deriveKey(password, salt, iterations, numBits = DEFAULT_BITSIZE) {
+async function deriveKey(
+  password,
+  salt,
+  iterations,
+  numBits = DEFAULT_BITSIZE
+) {
   const subtleCrypto = global.crypto.subtle;
   const TextEncoder = global.TextEncoder;
 
@@ -63,14 +81,24 @@ async function deriveKey(password, salt, iterations, numBits = DEFAULT_BITSIZE) 
     throw new Error("Password-based backup is not avaiable on this platform");
   }
 
-  const key = await subtleCrypto.importKey('raw', new TextEncoder().encode(password), {
-    name: 'PBKDF2'
-  }, false, ['deriveBits']);
-  const keybits = await subtleCrypto.deriveBits({
-    name: 'PBKDF2',
-    salt: new TextEncoder().encode(salt),
-    iterations: iterations,
-    hash: 'SHA-512'
-  }, key, numBits);
+  const key = await subtleCrypto.importKey(
+    "raw",
+    new TextEncoder().encode(password),
+    {
+      name: "PBKDF2",
+    },
+    false,
+    ["deriveBits"]
+  );
+  const keybits = await subtleCrypto.deriveBits(
+    {
+      name: "PBKDF2",
+      salt: new TextEncoder().encode(salt),
+      iterations: iterations,
+      hash: "SHA-512",
+    },
+    key,
+    numBits
+  );
   return new Uint8Array(keybits);
 }

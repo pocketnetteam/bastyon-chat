@@ -5,7 +5,7 @@ var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefau
 var _interopRequireWildcard = require("@babel/runtime/helpers/interopRequireWildcard");
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
+  value: true,
 });
 var _exportNames = {};
 exports.default = void 0;
@@ -20,7 +20,7 @@ Object.keys(matrixcs).forEach(function (key) {
     enumerable: true,
     get: function () {
       return matrixcs[key];
-    }
+    },
   });
 });
 
@@ -48,11 +48,11 @@ utils.runPolyfills();
 
 try {
   // eslint-disable-next-line @typescript-eslint/no-var-requires
-  const crypto = require('crypto');
+  const crypto = require("crypto");
 
   utils.setCrypto(crypto);
 } catch (err) {
-  console.log('nodejs was compiled without crypto support');
+  console.log("nodejs was compiled without crypto support");
 }
 
 var _default = matrixcs;

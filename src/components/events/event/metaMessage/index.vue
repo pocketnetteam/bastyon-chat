@@ -125,11 +125,10 @@ export default {
   beforeMount() {},
   beforeDestroy() {
     if (this.module.d) {
-		try{
-			this.module.d.destroy();
-		}
-		catch(e){}
-      
+      try {
+        this.module.d.destroy();
+      } catch (e) {}
+
       delete this.module.d;
     }
   },
@@ -182,8 +181,14 @@ export default {
 };
 </script>
 
-<style lang="less" src="@/components/events/event/metaMessage/exported.less"></style>
-<style lang="less" src="@/components/events/event/metaMessage/exported2.less"></style>
+<style
+  lang="less"
+  src="@/components/events/event/metaMessage/exported.less"
+></style>
+<style
+  lang="less"
+  src="@/components/events/event/metaMessage/exported2.less"
+></style>
 <style src="@/styles/peerTube.css"></style>
 
 <style scoped lang="sass" src="./index.sass"></style>

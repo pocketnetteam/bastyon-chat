@@ -13,7 +13,10 @@ export declare function encodeParams(params: Record<string, string>): string;
  * variables with. E.g. { "$bar": "baz" }.
  * @return {string} The result of replacing all template variables e.g. '/foo/baz'.
  */
-export declare function encodeUri(pathTemplate: string, variables: Record<string, string>): string;
+export declare function encodeUri(
+  pathTemplate: string,
+  variables: Record<string, string>
+): string;
 /**
  * Applies a map function to the given array.
  * @param {Array} array The array to apply the function to.
@@ -30,7 +33,10 @@ export declare function map<T, S>(array: T[], fn: (t: T) => S): S[];
  * looks like <code>fn(element, index, array){...}</code>.
  * @return {Array} A new array with the results of the function.
  */
-export declare function filter<T>(array: T[], fn: (t: T, i?: number, a?: T[]) => boolean): T[];
+export declare function filter<T>(
+  array: T[],
+  fn: (t: T, i?: number, a?: T[]) => boolean
+): T[];
 /**
  * Get the keys for an object. Same as <code>Object.keys()</code>.
  * @param {Object} obj The object to get the keys for.
@@ -49,7 +55,10 @@ export declare function values<T>(obj: Record<string, T>): T[];
  * @param {Function} fn The function to invoke for each element. Has the
  * function signature <code>fn(element, index)</code>.
  */
-export declare function forEach<T>(array: T[], fn: (t: T, i: number) => void): void;
+export declare function forEach<T>(
+  array: T[],
+  fn: (t: T, i: number) => void
+): void;
 /**
  * The findElement() method returns a value in the array, if an element in the array
  * satisfies (returns true) the provided testing function. Otherwise undefined
@@ -61,7 +70,11 @@ export declare function forEach<T>(array: T[], fn: (t: T, i: number) => void): v
  * @return {*} The first value in the array which returns <code>true</code> for
  * the given function.
  */
-export declare function findElement<T>(array: T[], fn: (t: T, i?: number, a?: T[]) => boolean, reverse?: boolean): T;
+export declare function findElement<T>(
+  array: T[],
+  fn: (t: T, i?: number, a?: T[]) => boolean,
+  reverse?: boolean
+): T;
 /**
  * The removeElement() method removes the first element in the array that
  * satisfies (returns true) the provided testing function.
@@ -72,7 +85,11 @@ export declare function findElement<T>(array: T[], fn: (t: T, i?: number, a?: T[
  * @param {boolean} reverse True to search in reverse order.
  * @return {boolean} True if an element was removed.
  */
-export declare function removeElement<T>(array: T[], fn: (t: T, i?: number, a?: T[]) => boolean, reverse?: boolean): any;
+export declare function removeElement<T>(
+  array: T[],
+  fn: (t: T, i?: number, a?: T[]) => boolean,
+  reverse?: boolean
+): any;
 /**
  * Checks if the given thing is a function.
  * @param {*} value The thing to check.
@@ -98,7 +115,10 @@ export declare function checkObjectHasKeys(obj: object, keys_: string[]): void;
  * @param {string[]} allowedKeys The list of allowed key names.
  * @throws If there are extra keys.
  */
-export declare function checkObjectHasNoAdditionalKeys(obj: object, allowedKeys: string[]): void;
+export declare function checkObjectHasNoAdditionalKeys(
+  obj: object,
+  allowedKeys: string[]
+): void;
 /**
  * Deep copy the given object. The object MUST NOT have circular references and
  * MUST NOT have functions.
@@ -152,7 +172,11 @@ export declare function inherits(ctor: Function, superCtor: Function): void;
  * @param {any} SuperType The type to act as a super instance
  * @param {any} params Arguments to supply to the super type's constructor
  */
-export declare function polyfillSuper(thisArg: any, SuperType: any, ...params: any[]): void;
+export declare function polyfillSuper(
+  thisArg: any,
+  SuperType: any,
+  ...params: any[]
+): void;
 /**
  * Returns whether the given value is a finite number without type-coercion
  *
@@ -173,12 +197,18 @@ export declare function ensureNoTrailingSlash(url: string): string;
 export declare function sleep<T>(ms: number, value: T): Promise<T>;
 export declare function isNullOrUndefined(val: any): boolean;
 export declare function defer(): {
-    resolve: any;
-    reject: any;
-    promise: Promise<unknown>;
+  resolve: any;
+  reject: any;
+  promise: Promise<unknown>;
 };
-export declare function promiseMapSeries<T>(promises: Promise<T>[], fn: (t: T) => void): Promise<void>;
+export declare function promiseMapSeries<T>(
+  promises: Promise<T>[],
+  fn: (t: T) => void
+): Promise<void>;
 export declare function promiseTry<T>(fn: () => T): Promise<T>;
-export declare function chunkPromises<T>(fns: (() => Promise<T>)[], chunkSize: number): Promise<T[]>;
+export declare function chunkPromises<T>(
+  fns: (() => Promise<T>)[],
+  chunkSize: number
+): Promise<T[]>;
 export declare function setCrypto(c: Object): void;
 export declare function getCrypto(): Object;

@@ -3,7 +3,7 @@
 var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
+  value: true,
 });
 exports.logger = void 0;
 
@@ -49,11 +49,14 @@ _loglevel.default.methodFactory = function (methodName, logLevel, loggerName) {
     }
     /* eslint-enable @babel/no-invalid-this */
 
-
-    const supportedByConsole = methodName === "error" || methodName === "warn" || methodName === "trace" || methodName === "info";
+    const supportedByConsole =
+      methodName === "error" ||
+      methodName === "warn" ||
+      methodName === "trace" ||
+      methodName === "info";
     /* eslint-disable no-console */
 
-    return
+    return;
 
     if (supportedByConsole) {
       return console[methodName](...args);
@@ -61,14 +64,12 @@ _loglevel.default.methodFactory = function (methodName, logLevel, loggerName) {
       return console.log(...args);
     }
     /* eslint-enable no-console */
-
   };
 };
 /**
  * Drop-in replacement for <code>console</code> using {@link https://www.npmjs.com/package/loglevel|loglevel}.
  * Can be tailored down to specific use cases if needed.
  */
-
 
 const logger = _loglevel.default.getLogger(DEFAULT_NAMESPACE);
 
@@ -85,7 +86,9 @@ function extendLogger(logger) {
 extendLogger(logger);
 
 function getPrefixedLogger(prefix) {
-  const prefixLogger = _loglevel.default.getLogger(`${DEFAULT_NAMESPACE}-${prefix}`);
+  const prefixLogger = _loglevel.default.getLogger(
+    `${DEFAULT_NAMESPACE}-${prefix}`
+  );
 
   if (prefixLogger.prefix !== prefix) {
     // Only do this setup work the first time through, as loggers are saved by name.

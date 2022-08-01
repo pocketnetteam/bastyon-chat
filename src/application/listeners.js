@@ -1,118 +1,102 @@
-import f from './functions'
+import f from "./functions";
 
 var FocusListener = function (platform) {
+  var self = this;
+  var inited = false;
+  var unfocustime = null;
 
-    var self = this;
-    var inited = false;
-    var unfocustime = null;
+  self.focus = true;
+  self.clbks = {
+    resume: {},
+    pause: {},
+  };
+
+  window.focus();
+
+  var resume = function (e, resume) {
+    var focustime = platform.currentTime();
+    var time = focustime - (unfocustime || focustime);
 
     self.focus = true;
-    self.clbks = {
-        resume : {},
-        pause : {}
-    }
 
-    window.focus();
-
-    var resume = function (e, resume) {
-
-        var focustime = platform.currentTime()
-        var time = focustime - (unfocustime || focustime)
-
-        self.focus = true;
-
-        /*if (time > 120 && (window.cordova)) {
+    /*if (time > 120 && (window.cordova)) {
            
         }*/
 
-        _.each(self.clbks.resume, function(c){
-            c(time)
-        })
-        
+    _.each(self.clbks.resume, function (c) {
+      c(time);
+    });
 
-        if (self.titleManager) {
-            self.titleManager.clear();
-        }
+    if (self.titleManager) {
+      self.titleManager.clear();
+    }
+  };
 
+  var pause = function () {
+    self.focus = false;
+
+    unfocustime = platform.currentTime();
+
+    _.each(self.clbks.pause, function (c) {
+      c();
+    });
+  };
+
+  self.init = function () {
+    inited = true;
+
+    if (window.cordova) {
+      document.addEventListener("pause", pause, false);
+      document.addEventListener("resume", resume, false);
+
+      return;
     }
 
-    var pause = function () {
+    window.addEventListener("blur", pause);
+    window.addEventListener("focus", resume);
+  };
 
-        self.focus = false;
+  self.destroy = function () {
+    self.clbk = {
+      resume: {},
+      pause: {},
+    };
 
-        unfocustime = platform.currentTime()
+    if (!inited) return;
 
-        _.each(self.clbks.pause, function(c){
-            c()
-        })
+    if (window.cordova) {
+      document.removeEventListener("pause", pause, false);
+      document.removeEventListener("resume", resume, false);
+
+      return;
     }
 
-   
+    window.removeEventListener("blur", pause);
+    window.removeEventListener("focus", resume);
 
-    self.init = function () {
+    inited = false;
+  };
 
-        inited = true;
-
-        if (window.cordova) {
-
-            document.addEventListener("pause", pause, false);
-            document.addEventListener("resume", resume, false);
-
-            return
-        }
-
-        window.addEventListener('blur', pause);
-        window.addEventListener('focus', resume);
-
-
-    }
-
-    self.destroy = function () {
-
-        self.clbk = {
-            resume : {},
-            pause : {}
-        }
-
-        if (!inited) return
-
-        if (window.cordova) {
-
-            document.removeEventListener("pause", pause, false);
-            document.removeEventListener("resume", resume, false);
-
-            return
-        }
-
-        window.removeEventListener('blur', pause);
-        window.removeEventListener('focus', resume);
-
-        inited = false;
-
-    }
-
-    return self;
-}
+  return self;
+};
 
 var OnlineListener = function (platform) {
+  var self = this;
+  var interval = null;
+  var offlinetime = null;
 
-    var self = this;
-    var interval = null;
-    var offlinetime = null;
+  self.online = f.deep(window, "navigator.onLine");
+  self.clbks = {
+    online: {},
+    offline: {},
+  };
 
-    self.online = f.deep(window, 'navigator.onLine');
-    self.clbks = {
-        online : {},
-        offline : {}
-    }
+  if (!self.online) {
+    offlinetime = platform.currentTime();
+  }
 
-    if(!self.online){
-        offlinetime = platform.currentTime()
-    }
-
-    self.init = function () {
-
-        /*interval = f.retry(function () {
+  self.init = function () {
+    /*interval = f.retry(function () {
 
             var online = f.deep(window, 'navigator.onLine');
 
@@ -148,29 +132,25 @@ var OnlineListener = function (platform) {
             self.init();
 
         }, 50)*/
+  };
 
+  self.destroy = function () {
+    if (interval) {
+      clearInterval(interval);
+
+      interval = null;
     }
-    
-    self.destroy = function(){
-        if (interval){
 
-            clearInterval(interval)
-            
-            interval = null
-        }
+    self.clbks = {
+      online: {},
+      offline: {},
+    };
+  };
 
-        self.clbks = {
-            online : {},
-            offline : {}
-        }
-    }
-        
-
-    return self
-}
-
+  return self;
+};
 
 export default {
-    focus : FocusListener,
-    online : OnlineListener
-}
+  focus: FocusListener,
+  online: OnlineListener,
+};

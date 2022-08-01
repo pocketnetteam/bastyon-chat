@@ -1,9 +1,13 @@
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
+  value: true,
 });
-exports.RoomType = exports.RoomCreateTypeField = exports.MsgType = exports.EventType = void 0;
+exports.RoomType =
+  exports.RoomCreateTypeField =
+  exports.MsgType =
+  exports.EventType =
+    void 0;
 
 /*
 Copyright 2020 The Matrix.org Foundation C.I.C.

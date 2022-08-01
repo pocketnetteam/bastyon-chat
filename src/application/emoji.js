@@ -1,9 +1,5 @@
-
-
-$(document).ready(function() {
-
-
-    $("#chat-input").emojioneArea({
-        pickerPosition: "bottom",
-    });
+$(document).ready(function () {
+  $("#chat-input").emojioneArea({
+    pickerPosition: "bottom",
+  });
 });

@@ -3,7 +3,7 @@
 var _interopRequireWildcard = require("@babel/runtime/helpers/interopRequireWildcard");
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
+  value: true,
 });
 exports.Group = Group;
 
@@ -73,7 +73,6 @@ Group.prototype.setMyMembership = function (membership) {
  * so set this before setting myMembership.
  * @param {Object} inviter Infomation about who invited us to the room
  */
-
 
 Group.prototype.setInviter = function (inviter) {
   this.inviter = inviter;

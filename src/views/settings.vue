@@ -1,15 +1,12 @@
 <template>
-  <div class="page settings">   
-    <topheader
-      class="topheader"
-    />
+  <div class="page settings">
+    <topheader class="topheader" />
 
     <maincontent>
       <template v-slot:content>
-        <settings/>
+        <settings />
       </template>
     </maincontent>
-    
   </div>
 </template>
 
@@ -19,35 +16,27 @@
 .topheader
   top: 0
   z-index: 999
-
 </style>
 
 <script>
-
-import settings from '@/components/settings/index.vue'
-import topheader from '@/components/settings/topheader/index.vue'
-import { mapState } from 'vuex';
+import settings from "@/components/settings/index.vue";
+import topheader from "@/components/settings/topheader/index.vue";
+import { mapState } from "vuex";
 
 export default {
-  name: 'pagesettings',
+  name: "pagesettings",
   components: {
-
     settings,
-    topheader
-
+    topheader,
   },
 
   computed: mapState({
-    pocketnet: state => state.pocketnet,
-    minimized: state => state.minimized,
+    pocketnet: (state) => state.pocketnet,
+    minimized: (state) => state.minimized,
   }),
 
-  methods : {
-   
-  },
+  methods: {},
 
-  mounted() {
-    
-  }
-}
+  mounted() {},
+};
 </script>

@@ -1,404 +1,337 @@
-var parser = require('gitignore-parser'),
-    fs = require('fs');
+var parser = require("gitignore-parser"),
+  fs = require("fs");
 
-var _ = require('underscore');
-var path = require('path');
+var _ = require("underscore");
+var path = require("path");
 
 var clear = true;
 
-var thm = function(){
+var thm = function () {
+  var self = this;
+  var themes = ["white", "black", "classic"];
+  var removetheme = { classic: true };
+  var ignore = parser.compile(fs.readFileSync(".gitignore", "utf8"));
+  var added = {};
+  const THEMESBEGIN = "<!-- THEMES BEGIN -->";
+  const THEMESEND = "<!-- THEMES END -->";
 
-    var self = this
-    var themes = ['white', 'black', 'classic']
-    var removetheme = {classic : true}
-    var ignore = parser.compile(fs.readFileSync('.gitignore', 'utf8'));
-    var added = {}
-    const THEMESBEGIN = '<!-- THEMES BEGIN -->'
-    const THEMESEND = '<!-- THEMES END -->'
+  var hash = function (str) {
+    return str.replace(/[^a-zA-Z0-9:]+/g, "");
+  };
 
-    var hash = function(str){
-        return str.replace(/[^a-zA-Z0-9:]+/g, '')
-    }
+  var walk = function (dir, actions, done) {
+    if (!actions) actions = {};
 
-   
-    var walk = function(dir, actions, done) {
+    fs.readdir(dir, function (err, list) {
+      list = list.filter(ignore.accepts);
 
-        if(!actions) actions = {}
+      if (err) return done(err);
 
-        fs.readdir(dir, function(err, list) {
+      var i = 0;
 
-            list = list.filter(ignore.accepts);
+      (function next() {
+        var file = list[i++];
 
-            if (err) return done(err);
+        if (!file) return done(null);
 
-            var i = 0;
+        file = path.resolve(dir, file);
 
-            (function next() {
+        fs.stat(file, function (err, stat) {
+          if (stat && stat.isDirectory()) {
+            if (actions.directory) actions.directory(file);
 
-                var file = list[i++];
-
-                if (!file) 
-                    return done(null);
-
-                    file = path.resolve(dir, file);
-
-                    fs.stat(file, function(err, stat) {
-
-                        if (stat && stat.isDirectory()) {
-
-                            if (actions.directory)
-                                actions.directory(file)
-
-                            walk(file, actions, function(err, res) {
-
-                                next();
-
-                            });
-
-                        } else {
-
-                            if (actions.file)
-                                actions.file(file, next)
-
-                        }
-                    });
-
-                })();
-
+            walk(file, actions, function (err, res) {
+              next();
             });
-    };
+          } else {
+            if (actions.file) actions.file(file, next);
+          }
+        });
+      })();
+    });
+  };
 
-    var createThemeData = function(filedata, theme){
-        var nd = filedata.replace(/\$color-/g, '$' + theme + '-' + 'color-');
-            nd = nd.replace(/theme_template/g, 'theme_' + theme);
-            
-            nd = nd.replace(/\n/g, '\n\t');
-            nd = '@at-root #matrix-root[theme="'+theme+'"] \n\t' + nd
+  var createThemeData = function (filedata, theme) {
+    var nd = filedata.replace(/\$color-/g, "$" + theme + "-" + "color-");
+    nd = nd.replace(/theme_template/g, "theme_" + theme);
 
-        return nd
+    nd = nd.replace(/\n/g, "\n\t");
+    nd = '@at-root #matrix-root[theme="' + theme + '"] \n\t' + nd;
+
+    return nd;
+  };
+
+  var clearThemeFilesAll = function (dirname) {
+    if (clearThemeFiles(dirname)) clearThemeFiles(themesPath(dirname));
+
+    if (fs.existsSync(themesPath(dirname))) {
+      try {
+        fs.rmdirSync(themesPath(dirname));
+      } catch (e) {}
+    }
+  };
+
+  var clearThemeFiles = function (dirname) {
+    if (!fs.existsSync(dirname)) return;
+
+    var filenameth = path.join(dirname, "theme_template.sass");
+
+    if (fs.existsSync(filenameth)) {
+      fs.unlinkSync(filenameth);
     }
 
-    var clearThemeFilesAll = function(dirname){
-        if (clearThemeFiles(dirname))
-            clearThemeFiles(themesPath(dirname))
+    var filenameth2 = path.join(dirname, "theme_template_notrewrite.sass");
 
-        if (fs.existsSync(themesPath(dirname))){
-            try{
-                fs.rmdirSync(themesPath(dirname));
-            }catch(e){
+    if (!fs.existsSync(filenameth2)) {
+      _.each(themes, function (theme) {
+        var filename = path.join(dirname, "theme_" + theme + ".sass");
 
-            }
-            
+        if (fs.existsSync(filename)) {
+          fs.unlinkSync(filename);
         }
-    }   
+      });
 
-    var clearThemeFiles = function(dirname){
-
-        if(!fs.existsSync(dirname)) return
-
-        var filenameth = path.join(dirname, 'theme_template.sass');
-
-        if (fs.existsSync(filenameth)) {
-            fs.unlinkSync(filenameth);
-        }
-
-        var filenameth2 = path.join(dirname, 'theme_template_notrewrite.sass');
-
-        if (!fs.existsSync(filenameth2)) {
-
-            _.each(themes, function(theme){
-                var filename = path.join(dirname, 'theme_' + theme + '.sass');
-
-                if (fs.existsSync(filename)) {
-                    fs.unlinkSync(filename);
-                }
-
-            })
-
-            return true
-
-        }
-
-        return false
-
-        
+      return true;
     }
 
-    var createThemeFiles = function(file){
-        fs.readFile(file, {encoding: 'utf-8'}, function(err, data){
-            if (!err){
+    return false;
+  };
 
-                createThemesFolder(path.dirname(file))
+  var createThemeFiles = function (file) {
+    fs.readFile(file, { encoding: "utf-8" }, function (err, data) {
+      if (!err) {
+        createThemesFolder(path.dirname(file));
 
-                _.each(themes, function(theme){
+        _.each(themes, function (theme) {
+          if (removetheme[theme]) return;
 
-                    if(removetheme[theme]) return
+          var themedata = createThemeData(data, theme);
 
-                    var themedata = createThemeData(data, theme)
+          var dirname = path.dirname(file);
 
-                    var dirname = path.dirname(file)
+          var filename = path.join(
+            themesPath(dirname),
+            "theme_" + theme + ".sass"
+          );
 
-                    var filename = path.join(themesPath(dirname), 'theme_' + theme + '.sass');
+          console.log("filename", filename);
 
-                    console.log('filename', filename)
+          var options = {};
 
-                    var options = {}
+          if (file.indexOf("notrewrite") > -1) {
+            options.flag = "wx";
+          } else {
+            options.flag = "w";
+          }
 
-                    if(file.indexOf('notrewrite') > -1){
-                        options.flag = 'wx'
-                    }
-                    else{
-                        options.flag = 'w'
-                    }
-
-                    fs.writeFile(filename, themedata, options, function(err) {
-
-                        /*if(err) {
+          fs.writeFile(filename, themedata, options, function (err) {
+            /*if(err) {
                             return console.log(err);
                         }*/
-                        
-                    }); 
-                })
-
-            }else{
-                console.log(err);
-            }
+          });
         });
-    }
+      } else {
+        console.log(err);
+      }
+    });
+  };
 
-    var clearThemeUsage = function(data, file){
+  var clearThemeUsage = function (data, file) {
+    var ndata = data.replace(
+      new RegExp(THEMESBEGIN + "[^~]*?" + THEMESEND),
+      THEMESBEGIN + "\n" + THEMESEND
+    );
 
+    return ndata;
+  };
 
-        var ndata = data.replace(
-            new RegExp(THEMESBEGIN + '[^~]*?' + THEMESEND), 
-            THEMESBEGIN + '\n' + THEMESEND
-        )
+  var changeThemeUsage = function (data, file) {
+    var scoped = " ";
 
-        return ndata
-        
-    }
+    if (
+      data.indexOf('<style scoped lang="sass" src="./index.scss"></style>') > -1
+    )
+      scoped = " scoped ";
 
-    var changeThemeUsage = function(data, file){
+    var themestring = _.reduce(
+      themes,
+      function (s, th) {
+        if (removetheme[th]) return s;
 
-        var scoped = ' ';
+        return (
+          s +
+          "<style" +
+          scoped +
+          'lang="sass" src="./themes/theme_' +
+          th +
+          '.sass"></style>\n'
+        );
+      },
+      ""
+    );
 
-        if(data.indexOf('<style scoped lang="sass" src="./index.scss"></style>') > -1) scoped = ' scoped '
+    var ndata = data.replace(
+      new RegExp(THEMESBEGIN + "[^~]*" + THEMESEND),
+      THEMESBEGIN + "\n" + themestring + THEMESEND
+    );
 
-        var themestring = _.reduce(themes, function(s, th){
+    return ndata;
+  };
 
-            if(removetheme[th]) return s
+  var clearThemeUsageFile = function (file, clbk) {
+    fs.readFile(file, { encoding: "utf-8" }, function (err, data) {
+      if (!err) {
+        if (data.indexOf(THEMESBEGIN) == -1) return;
 
-            return s + '<style'+scoped+'lang="sass" src="./themes/theme_'+th+'.sass"></style>\n'
-        }, '')
+        var ndata = clearThemeUsage(data, file);
 
-        var ndata = data.replace(
-            new RegExp(THEMESBEGIN + '[^~]*' + THEMESEND), 
-            THEMESBEGIN + '\n' + themestring + THEMESEND
-        )
-
-        return ndata
-        
-    }
-
-    var clearThemeUsageFile = function(file, clbk){
-        fs.readFile(file, {encoding: 'utf-8'}, function(err, data){
-            if (!err){
-
-                if(data.indexOf(THEMESBEGIN) == -1) return
-
-                var ndata = clearThemeUsage(data, file)
-
-                fs.writeFile(file, ndata, function(err) {
-
-                    if(clbk) clbk()
-                    
-                }); 
-
-            }else{
-                console.log(err);
-
-                if(clbk) clbk()
-            }
+        fs.writeFile(file, ndata, function (err) {
+          if (clbk) clbk();
         });
+      } else {
+        console.log(err);
+
+        if (clbk) clbk();
+      }
+    });
+  };
+
+  var changeThemeUsageFile = function (file) {
+    var dirname = path.dirname(file);
+
+    if (added[dirname]) {
+      fs.readFile(file, { encoding: "utf-8" }, function (err, data) {
+        if (!err) {
+          if (data.indexOf(THEMESBEGIN) == -1) return;
+
+          var ndata = changeThemeUsage(data, file);
+
+          fs.writeFile(file, ndata, function (err) {});
+        } else {
+          console.log(err);
+        }
+      });
     }
+  };
 
-    var changeThemeUsageFile = function(file){
+  var themesPath = function (dirname) {
+    return path.join(dirname, "themes");
+  };
 
-        var dirname = path.dirname(file)
+  var createThemesFolder = function (dirname) {
+    var f = themesPath(dirname);
 
-        if(added[dirname]){
-            fs.readFile(file, {encoding: 'utf-8'}, function(err, data){
-                if (!err){
-    
-                    if(data.indexOf(THEMESBEGIN) == -1) return
-    
-                    var ndata = changeThemeUsage(data, file)
-    
-                    fs.writeFile(file, ndata, function(err) {
-    
-    
-                        
-                    }); 
-    
-                }else{
-                    console.log(err);
-                }
+    if (!fs.existsSync(f)) {
+      try {
+        fs.mkdirSync(f);
+      } catch (e) {
+        console.log(e);
+      }
+    }
+  };
+
+  var divideIndexSass = function (file, clbk) {
+    if (file.indexOf("index.scss") > -1) {
+      fs.readFile(file, { encoding: "utf-8" }, function (err, data) {
+        if (!err) {
+          var strings = data.split("\n");
+
+          var indexStrings = _.filter(strings, function (s) {
+            if (s) return true;
+          });
+
+          var colorStrings = _.filter(strings, function (s) {
+            if (
+              s.indexOf("color") > -1 ||
+              s.indexOf("@media") > -1 ||
+              s.indexOf("animation") > -1 ||
+              s.indexOf("background") > -1 ||
+              s.indexOf(":") == -1 ||
+              hash(s).indexOf(":") == 0 ||
+              s.indexOf("transparent") > -1 ||
+              (s.indexOf("border") > -1 && s.indexOf("border-radius") == -1)
+            )
+              return true;
+          });
+
+          console.log("colorStrings.length", colorStrings.length);
+
+          if (colorStrings.length && indexStrings.length) {
+            var dirname = path.dirname(file);
+
+            added[dirname] = true;
+
+            var filename = path.join(dirname, "theme_template.sass");
+
+            fs.writeFile(filename, colorStrings.join("\n"), function (err) {
+              if (clbk) clbk();
             });
+          } else {
+            if (clbk) clbk();
+          }
+        } else {
+          console.log(err);
         }
-
-        
+      });
+    } else {
     }
+  };
 
-    var themesPath = function(dirname){
-        return path.join(dirname, 'themes');
-    }
-   
-    var createThemesFolder = function(dirname){
+  self.run = function () {
+    walk(
+      process.env.INIT_CWD,
+      {
+        file: function (file, next) {
+          if (file.indexOf("index.scss") > -1) {
+            clearThemeFilesAll(path.dirname(file));
 
-        var f = themesPath(dirname);
-
-        if(!fs.existsSync(f)){
-            try{
-                fs.mkdirSync(f);
+            if (!clear) divideIndexSass(file, next);
+            else {
+              if (next) next();
             }
-            catch(e){
-                console.log(e)
-            }
-            
-        }
-    }
+          } else {
+            if (next) next();
+          }
+        },
 
-    var divideIndexSass = function(file, clbk){
-
-        if(file.indexOf("index.scss") > -1){
-
-            fs.readFile(file, {encoding: 'utf-8'}, function(err, data){
-                if (!err){
-    
-                    var strings = data.split("\n")
-    
-                    var indexStrings = _.filter(strings, function(s){
-                        if(s) return true
-                    })
-    
-                    var colorStrings = _.filter(strings, function(s){
-                        if( s.indexOf('color') > -1 || s.indexOf('@media') > -1 || s.indexOf('animation') > -1 || s.indexOf('background') > -1 ||
-                        (
-                            s.indexOf(":") == -1 || hash(s).indexOf(":") == 0 || s.indexOf('transparent') > -1 || (s.indexOf('border') > -1 && s.indexOf('border-radius') == -1)
-                        )) return true
-                    })
-
-                    console.log('colorStrings.length', colorStrings.length)
-
-                    if (colorStrings.length && indexStrings.length){
-
-                        var dirname = path.dirname(file)
-
-                        added[dirname] = true
-
-                        var filename = path.join(dirname, 'theme_template.sass');
-
-                        fs.writeFile(filename, colorStrings.join("\n"), function(err) {
-
-                            if(clbk) clbk()
-        
-                        }); 
-                    }
-                    else{
-                        if(clbk) clbk()
-                    }
-    
-                   
-    
-                }else{
-                    console.log(err);
-                }
-            });
-
-        }
-
-        else{
-
-        }       
-
-        
-    }
-
-    self.run = function(){
-
-        walk(process.env.INIT_CWD, {
-
-            file : function(file, next){
-
-                if (file.indexOf('index.scss') > -1) {
-                    clearThemeFilesAll(path.dirname(file))
-
-                    if(!clear)
-                        divideIndexSass(file, next)
-                    else{
-                        if(next) next()
-                    }
+        directory: function (directory) {},
+      },
+      function (err, results) {
+        walk(
+          process.env.INIT_CWD,
+          {
+            file: function (file, next) {
+              if (file.indexOf("themes.js") > -1) {
+              } else {
+                if (file.indexOf("theme_template") > -1) {
+                  createThemeFiles(file);
                 }
 
-                else{
-                    if(next) next()
+                if (file.indexOf("index.vue" > -1)) {
+                  clearThemeUsageFile(file, function () {
+                    if (!clear) changeThemeUsageFile(file);
+                  });
                 }
+              }
 
+              if (next) next();
             },
 
-            directory : function(directory){
-            
-            }
+            directory: function (directory) {},
+          },
+          function (err, results) {
+            if (err) throw err;
 
-        }, function(err, results) {
+            console.log("END");
+          }
+        );
+      }
+    );
+  };
 
-            walk(process.env.INIT_CWD, {
+  return self;
+};
 
-                file : function(file, next){
-    
-                    if (file.indexOf('themes.js') > -1){
-                    }
+var t = new thm();
 
-                    else{
-                        if (file.indexOf('theme_template') > -1){
-                            
-                            createThemeFiles(file)
-                            
-                        }
-        
-                        if (file.indexOf('index.vue' > -1)){
-                            clearThemeUsageFile(file, function(){
-
-                                if(!clear)
-                                    changeThemeUsageFile(file)
-                            })
-                            
-                        }
-                    }
-
-                    if(next) next()
-    
-                },
-    
-                directory : function(directory){
-                
-                }
-    
-            }, function(err, results) {
-                if (err) throw err;
-    
-                console.log("END")
-            });
-
-        });
-
-       
-    }
-
-    return self
-}
-
-
-var t = new thm()
-
-t.run()
+t.run();

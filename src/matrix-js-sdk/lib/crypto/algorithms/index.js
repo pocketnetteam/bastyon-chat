@@ -1,7 +1,7 @@
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
+  value: true,
 });
 
 require("./olm");
@@ -17,6 +17,6 @@ Object.keys(_base).forEach(function (key) {
     enumerable: true,
     get: function () {
       return _base[key];
-    }
+    },
   });
 });

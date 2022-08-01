@@ -1,7 +1,7 @@
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
+  value: true,
 });
 exports.exists = exists;
 
@@ -58,6 +58,6 @@ function exists(indexedDB, dbName) {
       resolve(exists);
     };
 
-    req.onerror = ev => reject(ev.target.error);
+    req.onerror = (ev) => reject(ev.target.error);
   });
 }

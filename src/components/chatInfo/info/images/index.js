@@ -1,70 +1,57 @@
 import _ from "underscore";
 import f from "@/application/functions";
-import imageEvents from "@/components/chat/list/index.vue"
+import imageEvents from "@/components/chat/list/index.vue";
 export default {
   data: function () {
     return {
       events: [],
       empty: false,
-    }
+    };
   },
   components: {
-    imageEvents
+    imageEvents,
   },
   props: {
     images: Array,
-    chat : Object
+    chat: Object,
   },
 
-  computed: {
+  computed: {},
 
-  },
-
-  mounted : function(){
-    this.core.mtrx.kit.prepareChat(this.chat).then(r => {
+  mounted: function () {
+    this.core.mtrx.kit.prepareChat(this.chat).then((r) => {
       _.each(this.imageEvents, (e) => {
-
-        if(this.encrypted(e)){
-          this.core.mtrx.getImage(this.chat, e).catch(e => {
-            console.error(e)
-          })
+        if (this.encrypted(e)) {
+          this.core.mtrx.getImage(this.chat, e).catch((e) => {
+            console.error(e);
+          });
         }
-  
-      })
-    })
-
-
-    
+      });
+    });
   },
 
   methods: {
     galleryImage(e) {
-
-      this.core.store.dispatch('SHOW_GALLERY_FROMEVENTS', {
+      this.core.store.dispatch("SHOW_GALLERY_FROMEVENTS", {
         events: this.events,
-        event: e
-      })
-
+        event: e,
+      });
     },
-    eventsList(events){
-      if(events.length === 0){
-        this.empty = true
+    eventsList(events) {
+      if (events.length === 0) {
+        this.empty = true;
       }
-      this.events = events
-
+      this.events = events;
     },
     showPhotoSwipe(event) {
-
-      this.core.store.dispatch('SHOW_GALLERY_FROMEVENTS', {
-        events : this.imageEvents, 
-        event
-      })
-
+      this.core.store.dispatch("SHOW_GALLERY_FROMEVENTS", {
+        events: this.imageEvents,
+        event,
+      });
     },
 
-    encrypted : function(event){
-      return f.deep(event, 'event.content.info.secrets') ? true : false
-    }
-   
-  }
-}
+    encrypted: function (event) {
+      return f.deep(event, "event.content.info.secrets") ? true : false;
+    },
+  },
+};

@@ -1,7 +1,7 @@
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
+  value: true,
 });
 exports.RemoteIndexedDBStoreBackend = RemoteIndexedDBStoreBackend;
 
@@ -46,7 +46,8 @@ function RemoteIndexedDBStoreBackend(workerScript, dbName, workerApi) {
   this._worker = null;
   this._nextSeq = 0; // The currently in-flight requests to the actual backend
 
-  this._inFlight = {// seq: promise,
+  this._inFlight = {
+    // seq: promise,
   }; // Once we start connecting, we keep the promise and re-use it
   // if we try to connect again
 
@@ -60,7 +61,7 @@ RemoteIndexedDBStoreBackend.prototype = {
    * @return {Promise} Resolves if successfully connected.
    */
   connect: function () {
-    return this._ensureStarted().then(() => this._doCmd('connect'));
+    return this._ensureStarted().then(() => this._doCmd("connect"));
   },
 
   /**
@@ -69,12 +70,12 @@ RemoteIndexedDBStoreBackend.prototype = {
    * @return {Promise} Resolved when the database is cleared.
    */
   clearDatabase: function () {
-    return this._ensureStarted().then(() => this._doCmd('clearDatabase'));
+    return this._ensureStarted().then(() => this._doCmd("clearDatabase"));
   },
 
   /** @return {Promise<bool>} whether or not the database was newly created in this session. */
   isNewlyCreated: function () {
-    return this._doCmd('isNewlyCreated');
+    return this._doCmd("isNewlyCreated");
   },
 
   /**
@@ -83,16 +84,16 @@ RemoteIndexedDBStoreBackend.prototype = {
    * is no saved sync data.
    */
   getSavedSync: function () {
-    return this._doCmd('getSavedSync');
+    return this._doCmd("getSavedSync");
   },
   getNextBatchToken: function () {
-    return this._doCmd('getNextBatchToken');
+    return this._doCmd("getNextBatchToken");
   },
   setSyncData: function (syncData) {
-    return this._doCmd('setSyncData', [syncData]);
+    return this._doCmd("setSyncData", [syncData]);
   },
   syncToDatabase: function (users) {
-    return this._doCmd('syncToDatabase', [users]);
+    return this._doCmd("syncToDatabase", [users]);
   },
 
   /**
@@ -103,7 +104,7 @@ RemoteIndexedDBStoreBackend.prototype = {
    * @returns {null} in case the members for this room haven't been stored yet
    */
   getOutOfBandMembers: function (roomId) {
-    return this._doCmd('getOutOfBandMembers', [roomId]);
+    return this._doCmd("getOutOfBandMembers", [roomId]);
   },
 
   /**
@@ -115,16 +116,16 @@ RemoteIndexedDBStoreBackend.prototype = {
    * @returns {Promise} when all members have been stored
    */
   setOutOfBandMembers: function (roomId, membershipEvents) {
-    return this._doCmd('setOutOfBandMembers', [roomId, membershipEvents]);
+    return this._doCmd("setOutOfBandMembers", [roomId, membershipEvents]);
   },
   clearOutOfBandMembers: function (roomId) {
-    return this._doCmd('clearOutOfBandMembers', [roomId]);
+    return this._doCmd("clearOutOfBandMembers", [roomId]);
   },
   getClientOptions: function () {
-    return this._doCmd('getClientOptions');
+    return this._doCmd("getClientOptions");
   },
   storeClientOptions: function (options) {
-    return this._doCmd('storeClientOptions', [options]);
+    return this._doCmd("storeClientOptions", [options]);
   },
 
   /**
@@ -132,16 +133,18 @@ RemoteIndexedDBStoreBackend.prototype = {
    * @return {Promise<Object[]>} A list of presence events in their raw form.
    */
   getUserPresenceEvents: function () {
-    return this._doCmd('getUserPresenceEvents');
+    return this._doCmd("getUserPresenceEvents");
   },
   _ensureStarted: function () {
     if (this._startPromise === null) {
       this._worker = new this._workerApi(this._workerScript);
       this._worker.onmessage = this._onWorkerMessage.bind(this); // tell the worker the db name.
 
-      this._startPromise = this._doCmd('_setupWorker', [this._dbName]).then(() => {
-        _logger.logger.log("IndexedDB worker is ready");
-      });
+      this._startPromise = this._doCmd("_setupWorker", [this._dbName]).then(
+        () => {
+          _logger.logger.log("IndexedDB worker is ready");
+        }
+      );
     }
 
     return this._startPromise;
@@ -157,7 +160,7 @@ RemoteIndexedDBStoreBackend.prototype = {
       this._worker.postMessage({
         command: cmd,
         seq: seq,
-        args: args
+        args: args,
       });
 
       return def.promise;
@@ -166,7 +169,7 @@ RemoteIndexedDBStoreBackend.prototype = {
   _onWorkerMessage: function (ev) {
     const msg = ev.data;
 
-    if (msg.command == 'cmd_success' || msg.command == 'cmd_fail') {
+    if (msg.command == "cmd_success" || msg.command == "cmd_fail") {
       if (msg.seq === undefined) {
         _logger.logger.error("Got reply from worker with no seq");
 
@@ -183,7 +186,7 @@ RemoteIndexedDBStoreBackend.prototype = {
 
       delete this._inFlight[msg.seq];
 
-      if (msg.command == 'cmd_success') {
+      if (msg.command == "cmd_success") {
         def.resolve(msg.result);
       } else {
         const error = new Error(msg.error.message);
@@ -193,5 +196,5 @@ RemoteIndexedDBStoreBackend.prototype = {
     } else {
       _logger.logger.warn("Unrecognised message from worker: " + msg);
     }
-  }
+  },
 };

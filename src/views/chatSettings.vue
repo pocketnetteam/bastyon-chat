@@ -1,6 +1,6 @@
 <template>
-  <div  class="page "  v-if="chat">
-    <topheader class="topheader"/>
+  <div class="page" v-if="chat">
+    <topheader class="topheader" />
 
     <maincontent>
       <template v-slot:content>
@@ -11,24 +11,22 @@
 </template>
 <script>
 import topheader from "@/components/chatSettings/topheader/index.vue";
-import settings from "@/components/chatSettings/index.vue"
+import settings from "@/components/chatSettings/index.vue";
 
 export default {
-  name: 'chatSettings',
-  data: function (){
-    return {
-    }
+  name: "chatSettings",
+  data: function () {
+    return {};
   },
   components: {
     topheader,
-    settings
+    settings,
   },
   computed: {
     chat() {
-      return this.$store.state.chatsMap[this.$route.query.id.replace('%', '!')]
+      return this.$store.state.chatsMap[this.$route.query.id.replace("%", "!")];
     },
   },
-  methods: {
-  }
-}
+  methods: {},
+};
 </script>

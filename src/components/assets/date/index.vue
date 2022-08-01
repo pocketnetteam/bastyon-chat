@@ -1,5 +1,5 @@
 <template>
-  <span id="wai-date">{{label}}</span>
+  <span id="wai-date">{{ label }}</span>
 </template>
 
 <script src="./index.js"></script>
@@ -7,24 +7,3 @@
 
 <!-- THEMES BEGIN -->
 <!-- THEMES END -->
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

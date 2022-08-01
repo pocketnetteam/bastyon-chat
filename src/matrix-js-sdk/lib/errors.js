@@ -1,7 +1,7 @@
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
+  value: true,
 });
 exports.InvalidStoreError = InvalidStoreError;
 exports.InvalidCryptoStoreError = InvalidCryptoStoreError;
@@ -10,7 +10,9 @@ exports.KeySignatureUploadError = void 0;
 // can't just do InvalidStoreError extends Error
 // because of http://babeljs.io/docs/usage/caveats/#classes
 function InvalidStoreError(reason, value) {
-  const message = `Store is invalid because ${reason}, ` + `please stop the client, delete all data and start the client again`;
+  const message =
+    `Store is invalid because ${reason}, ` +
+    `please stop the client, delete all data and start the client again`;
   const instance = Reflect.construct(Error, [message]);
   Reflect.setPrototypeOf(instance, Reflect.getPrototypeOf(this));
   instance.reason = reason;
@@ -24,17 +26,19 @@ InvalidStoreError.prototype = Object.create(Error.prototype, {
     value: Error,
     enumerable: false,
     writable: true,
-    configurable: true
-  }
+    configurable: true,
+  },
 });
 Reflect.setPrototypeOf(InvalidStoreError, Error);
 
 function InvalidCryptoStoreError(reason) {
-  const message = `Crypto store is invalid because ${reason}, ` + `please stop the client, delete all data and start the client again`;
+  const message =
+    `Crypto store is invalid because ${reason}, ` +
+    `please stop the client, delete all data and start the client again`;
   const instance = Reflect.construct(Error, [message]);
   Reflect.setPrototypeOf(instance, Reflect.getPrototypeOf(this));
   instance.reason = reason;
-  instance.name = 'InvalidCryptoStoreError';
+  instance.name = "InvalidCryptoStoreError";
   return instance;
 }
 
@@ -44,8 +48,8 @@ InvalidCryptoStoreError.prototype = Object.create(Error.prototype, {
     value: Error,
     enumerable: false,
     writable: true,
-    configurable: true
-  }
+    configurable: true,
+  },
 });
 Reflect.setPrototypeOf(InvalidCryptoStoreError, Error);
 
@@ -54,7 +58,6 @@ class KeySignatureUploadError extends Error {
     super(message);
     this.value = value;
   }
-
 }
 
 exports.KeySignatureUploadError = KeySignatureUploadError;

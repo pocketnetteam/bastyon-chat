@@ -1,25 +1,27 @@
 <template>
-  <div id="wai-fixedmessageicon" :class="{'bin' : pocketnet, 'bout' : !pocketnet, minimized, fix : pocketnet, active}">
-
+  <div
+    id="wai-fixedmessageicon"
+    :class="{
+      bin: pocketnet,
+      bout: !pocketnet,
+      minimized,
+      fix: pocketnet,
+      active,
+    }"
+  >
     <div class="wrapper">
-
       <div class="table">
-
         <div class="cell">
-
           <div class="iconWrapper" v-if="icon">
             <sweetalert :icon="icon" />
           </div>
 
           <div class="message" v-if="message">
-            <div>{{message}}</div>
+            <div>{{ message }}</div>
           </div>
-          
         </div>
       </div>
-
     </div>
-  
   </div>
 </template>
 
@@ -28,38 +30,3 @@
 
 <!-- THEMES BEGIN -->
 <!-- THEMES END -->
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

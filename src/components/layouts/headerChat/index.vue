@@ -1,5 +1,5 @@
 <template>
-  <div class='topheader'>
+  <div class="topheader">
     <!--<div
         v-if="!isCoreRoute"
         class="header__back"
@@ -7,9 +7,7 @@
       <i class="fas fa-arrow-circle-left icon"></i>
     </div>-->
 
-
-    <div v-if="!isCoreRoute"
-        class="header__user-info">
+    <div v-if="!isCoreRoute" class="header__user-info">
       <span>{{ currentUserChat }}</span>
     </div>
     <div class="right-side"></div>
@@ -17,5 +15,3 @@
 </template>
 <script src="./index.js"></script>
 <style scoped lang="sass" src="./index.sass"></style>
-
-

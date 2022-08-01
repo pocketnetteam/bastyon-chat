@@ -1,14 +1,12 @@
 <template>
   <div id="contactView">
-  
-    <div class="imageWrapper">  
-      <userpic :userinfo="contact"/>
+    <div class="imageWrapper">
+      <userpic :userinfo="contact" />
     </div>
 
     <div class="nameWrapper">
-      <span>{{contact.name}}</span>
+      <span>{{ contact.name }}</span>
     </div>
-  
   </div>
 </template>
 

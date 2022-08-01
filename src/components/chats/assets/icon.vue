@@ -124,13 +124,11 @@ export default {
         "anotherChatUsers"
       );
 
-
       if (this.dontuseslides) {
         u = _.first(u, 4);
       }
 
       return u;
-
     },
 
     status: function () {

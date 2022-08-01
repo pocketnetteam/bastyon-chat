@@ -5,7 +5,7 @@ var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefau
 var _interopRequireWildcard = require("@babel/runtime/helpers/interopRequireWildcard");
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
+  value: true,
 });
 var _exportNames = {};
 exports.default = void 0;
@@ -20,7 +20,7 @@ Object.keys(matrixcs).forEach(function (key) {
     enumerable: true,
     get: function () {
       return matrixcs[key];
-    }
+    },
   });
 });
 
@@ -61,14 +61,12 @@ try {
   indexedDB = global.indexedDB;
 } catch (e) {} // if our browser (appears to) support indexeddb, use an indexeddb crypto store.
 
-
 if (indexedDB) {
   matrixcs.setCryptoStoreFactory(function () {
     return new matrixcs.IndexedDBCryptoStore(indexedDB, "matrix-js-sdk:crypto");
   });
 } // We export 3 things to make browserify happy as well as downstream projects.
 // It's awkward, but required.
-
 
 var _default = matrixcs; // keep export for browserify package deps
 

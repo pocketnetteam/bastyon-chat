@@ -1,7 +1,7 @@
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
+  value: true,
 });
 exports.StubStore = StubStore;
 
@@ -278,5 +278,5 @@ StubStore.prototype = {
   },
   storeClientOptions: function () {
     return Promise.resolve();
-  }
+  },
 };

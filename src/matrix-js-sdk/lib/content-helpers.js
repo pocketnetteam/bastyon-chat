@@ -1,7 +1,7 @@
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
+  value: true,
 });
 exports.makeHtmlMessage = makeHtmlMessage;
 exports.makeHtmlNotice = makeHtmlNotice;
@@ -40,7 +40,7 @@ function makeHtmlMessage(body, htmlBody) {
     msgtype: "m.text",
     format: "org.matrix.custom.html",
     body: body,
-    formatted_body: htmlBody
+    formatted_body: htmlBody,
   };
 }
 /**
@@ -50,13 +50,12 @@ function makeHtmlMessage(body, htmlBody) {
  * @returns {{msgtype: string, format: string, body: string, formatted_body: string}}
  */
 
-
 function makeHtmlNotice(body, htmlBody) {
   return {
     msgtype: "m.notice",
     format: "org.matrix.custom.html",
     body: body,
-    formatted_body: htmlBody
+    formatted_body: htmlBody,
   };
 }
 /**
@@ -66,13 +65,12 @@ function makeHtmlNotice(body, htmlBody) {
  * @returns {{msgtype: string, format: string, body: string, formatted_body: string}}
  */
 
-
 function makeHtmlEmote(body, htmlBody) {
   return {
     msgtype: "m.emote",
     format: "org.matrix.custom.html",
     body: body,
-    formatted_body: htmlBody
+    formatted_body: htmlBody,
   };
 }
 /**
@@ -81,11 +79,10 @@ function makeHtmlEmote(body, htmlBody) {
  * @returns {{msgtype: string, body: string}}
  */
 
-
 function makeTextMessage(body) {
   return {
     msgtype: "m.text",
-    body: body
+    body: body,
   };
 }
 /**
@@ -94,11 +91,10 @@ function makeTextMessage(body) {
  * @returns {{msgtype: string, body: string}}
  */
 
-
 function makeNotice(body) {
   return {
     msgtype: "m.notice",
-    body: body
+    body: body,
   };
 }
 /**
@@ -107,10 +103,9 @@ function makeNotice(body) {
  * @returns {{msgtype: string, body: string}}
  */
 
-
 function makeEmoteMessage(body) {
   return {
     msgtype: "m.emote",
-    body: body
+    body: body,
   };
 }

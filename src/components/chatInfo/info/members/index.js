@@ -1,12 +1,11 @@
-import f from '@/application/functions.js'
-import chatIcon from "@/components/chats/assets/icon.vue"
+import f from "@/application/functions.js";
+import chatIcon from "@/components/chats/assets/icon.vue";
 export default {
   components: {
-    chatIcon
+    chatIcon,
   },
   data: function () {
     return {
-
       moderItems: [
         {
           click: "adminBan",
@@ -14,21 +13,20 @@ export default {
           icon: "fas fa-ban",
 
           upload: {
-            multiple: true
+            multiple: true,
           },
         },
         {
           click: "adminKick",
           title: this.$i18n.t("caption.kick"),
-          icon: "fas fa-user-times"
-        }
+          icon: "fas fa-user-times",
+        },
       ],
       menuItems: [
         {
           click: "adminMakeModer",
           title: this.$i18n.t("caption.makeModerator"),
           icon: "fas fa-user-shield",
-
         },
 
         {
@@ -37,127 +35,138 @@ export default {
           icon: "fas fa-ban",
 
           upload: {
-            multiple: true
+            multiple: true,
           },
         },
         {
           click: "adminKick",
           title: this.$i18n.t("caption.kick"),
-          icon: "fas fa-user-times"
-        }
+          icon: "fas fa-user-times",
+        },
       ],
-    }
+    };
   },
   props: {
-    membersList: Array
+    membersList: Array,
   },
   computed: {
-    meid : function(){
-      return this.core.user.userinfo.id
+    meid: function () {
+      return this.core.user.userinfo.id;
     },
-    me : function(){
-      return _.find(this.membersList, (m) =>{
-        return m.userId == this.core.user.userinfo.id
-      }) || {}
-    }
-
+    me: function () {
+      return (
+        _.find(this.membersList, (m) => {
+          return m.userId == this.core.user.userinfo.id;
+        }) || {}
+      );
+    },
   },
   methods: {
-    userinfo : function(user){
-      return f.deep(this, 'core.store.state.users.' + user.userId) || {}
+    userinfo: function (user) {
+      return f.deep(this, "core.store.state.users." + user.userId) || {};
     },
-    role : function(user){ 
-      var r = 'member'
+    role: function (user) {
+      var r = "member";
 
-      if(user.powerLevel >= 50) r = 'moderator'
-      if(user.powerLevel >= 100) r = 'admin'
+      if (user.powerLevel >= 50) r = "moderator";
+      if (user.powerLevel >= 100) r = "admin";
 
-      return r
+      return r;
     },
-    menu : function(user){
-
+    menu: function (user) {
       var items = {
-        setAdmin : {
+        setAdmin: {
           click: "setAdmin",
           title: this.$i18n.t("caption.makeModerator"),
           icon: "fas fa-user-shield",
         },
-        kick : {
+        kick: {
           click: "kick",
           title: this.$i18n.t("caption.kick"),
-          icon: "fas fa-user-times"
+          icon: "fas fa-user-times",
         },
-        ban : {
+        ban: {
           click: "ban",
           title: this.$i18n.t("caption.ban"),
-          icon: "fas fa-user-times"
-        }
+          icon: "fas fa-user-times",
+        },
+      };
+      var menu = [];
+      if (user.membership === "ban") {
+        items.ban.title = this.$i18n.t("caption.removeBan");
       }
-      var menu = []
-      if(user.membership === 'ban'){
-        items.ban.title = this.$i18n.t("caption.removeBan")
-      }
-      if(user.powerLevel === 0 && this.me.powerLevel >= 50 && this.core.user.userinfo.id !== user.id){
-        menu = [items.ban]
+      if (
+        user.powerLevel === 0 &&
+        this.me.powerLevel >= 50 &&
+        this.core.user.userinfo.id !== user.id
+      ) {
+        menu = [items.ban];
       }
 
-      if(user.powerLevel === 0 &&  this.me.powerLevel === 100 && this.core.user.userinfo.id !== user.id) {
-        menu = [items.setAdmin, items.ban]
+      if (
+        user.powerLevel === 0 &&
+        this.me.powerLevel === 100 &&
+        this.core.user.userinfo.id !== user.id
+      ) {
+        menu = [items.setAdmin, items.ban];
       }
-      if(user.powerLevel === 50 && this.core.user.userinfo.id !== user.id && this.me.powerLevel === 100) {
-        items.setAdmin.title = this.$i18n.t("caption.cancelModeration")
-        menu = [ items.setAdmin,  items.ban]
+      if (
+        user.powerLevel === 50 &&
+        this.core.user.userinfo.id !== user.id &&
+        this.me.powerLevel === 100
+      ) {
+        items.setAdmin.title = this.$i18n.t("caption.cancelModeration");
+        menu = [items.setAdmin, items.ban];
       }
-      return menu
+      return menu;
     },
 
     navigateToProfile(id) {
-      this.$router.push({path: `/contact?id=${f.getmatrixid(id)}`})
+      this.$router.push({ path: `/contact?id=${f.getmatrixid(id)}` });
     },
-   
-    menuItemClickHandler(item, rowObject, utils) {
 
-      if(!this[item.click]) {
-        return Promise.resolve()
+    menuItemClickHandler(item, rowObject, utils) {
+      if (!this[item.click]) {
+        return Promise.resolve();
       }
 
-      this['menu' + item.click](rowObject).then(r => {
-        utils.hidePopup()
-      }).catch(e => {
-        utils.showPopup()
-      })
-      return this[item.click](rowObject.user)
+      this["menu" + item.click](rowObject)
+        .then((r) => {
+          utils.hidePopup();
+        })
+        .catch((e) => {
+          utils.showPopup();
+        });
+      return this[item.click](rowObject.user);
+    },
+    menusetAdmin(rowObject) {
+      this.$emit("admin", rowObject.user);
+      return Promise.resolve();
+    },
+    menukick(rowObject) {
+      console.log("menukick");
+      this.$emit("kick", rowObject.user);
+      return Promise.resolve();
+    },
+    menuban(rowObject) {
+      this.$emit("ban", rowObject.user);
+      return Promise.resolve();
+    },
+    setAdmin: function (user) {
+      this.$emit("setAdmin", user.id);
 
-    },
-    menusetAdmin(rowObject){
-      this.$emit('admin', rowObject.user)
-      return Promise.resolve()
-    },
-    menukick(rowObject){
-      console.log("menukick")
-      this.$emit('kick', rowObject.user)
-      return Promise.resolve()
-    },
-    menuban(rowObject){
-      this.$emit('ban', rowObject.user)
-      return Promise.resolve()
-    },
-    setAdmin : function(user){
-      this.$emit('setAdmin', user.id)
-
-      return Promise.resolve()
-    },
-
-    ban : function(user){
-      this.$emit('adminKick', user.id)
-      
-      return Promise.resolve()
+      return Promise.resolve();
     },
 
-    kick : function(user){
-      this.$emit('adminKick', user.id)
-      return Promise.resolve()
-    }
+    ban: function (user) {
+      this.$emit("adminKick", user.id);
 
-  }
-}
+      return Promise.resolve();
+    },
+
+    kick: function (user) {
+      this.$emit("adminKick", user.id);
+      return Promise.resolve();
+    },
+  },
+};

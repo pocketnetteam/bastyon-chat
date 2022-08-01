@@ -5,7 +5,7 @@ var _interopRequireWildcard = require("@babel/runtime/helpers/interopRequireWild
 var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
+  value: true,
 });
 exports.InteractiveAuth = InteractiveAuth;
 
@@ -126,7 +126,8 @@ function InteractiveAuth(opts) {
   this._inputs = opts.inputs || {};
   this._requestEmailTokenCallback = opts.requestEmailToken;
   if (opts.sessionId) this._data.session = opts.sessionId;
-  this._clientSecret = opts.clientSecret || this._matrixClient.generateClientSecret();
+  this._clientSecret =
+    opts.clientSecret || this._matrixClient.generateClientSecret();
   this._emailSid = opts.emailSid;
   if (this._emailSid === undefined) this._emailSid = null;
   this._requestingEmailToken = false;
@@ -160,7 +161,7 @@ InteractiveAuth.prototype = {
 
         if (this._data.session) {
           auth = {
-            session: this._data.session
+            session: this._data.session,
           };
         }
 
@@ -193,11 +194,13 @@ InteractiveAuth.prototype = {
       if (this._emailSid) {
         const creds = {
           sid: this._emailSid,
-          client_secret: this._clientSecret
+          client_secret: this._clientSecret,
         };
 
         if (await this._matrixClient.doesServerRequireIdServerParam()) {
-          const idServerParsedUrl = _url.default.parse(this._matrixClient.getIdentityServerUrl());
+          const idServerParsedUrl = _url.default.parse(
+            this._matrixClient.getIdentityServerUrl()
+          );
 
           creds.id_server = idServerParsedUrl.host;
         }
@@ -208,7 +211,7 @@ InteractiveAuth.prototype = {
           // See https://github.com/matrix-org/synapse/issues/5665
           // See https://github.com/matrix-org/matrix-doc/issues/2220
           threepid_creds: creds,
-          threepidCreds: creds
+          threepidCreds: creds,
         };
       }
     }
@@ -280,19 +283,17 @@ InteractiveAuth.prototype = {
     // (but discard any expections as we only care when its done,
     // not whether it worked or not)
 
-
     while (this._submitPromise) {
       try {
         await this._submitPromise;
       } catch (e) {}
     } // use the sessionid from the last request, if one is present.
 
-
     let auth;
 
     if (this._data.session) {
       auth = {
-        session: this._data.session
+        session: this._data.session,
       };
       utils.extend(auth, authData);
     } else {
@@ -367,14 +368,16 @@ InteractiveAuth.prototype = {
           // We ignore all failures here (even non-UI auth related ones)
           // since we don't want to suddenly fail if the internet connection
           // had a blip whilst we were polling
-          _logger.logger.log("Background poll request failed doing UI auth: ignoring", error);
+          _logger.logger.log(
+            "Background poll request failed doing UI auth: ignoring",
+            error
+          );
         }
       } // if the error didn't come with flows, completed flows or session ID,
       // copy over the ones we have. Synapse sometimes sends responses without
       // any UI auth data (eg. when polling for email validation, if the email
       // has not yet been validated). This appears to be a Synapse bug, which
       // we workaround here.
-
 
       if (!error.data.flows && !error.data.completed && !error.data.session) {
         error.data.flows = this._data.flows;
@@ -393,7 +396,11 @@ InteractiveAuth.prototype = {
         this._rejectFunc = null;
       }
 
-      if (!this._emailSid && !this._requestingEmailToken && this._chosenFlow.stages.includes('m.login.email.identity')) {
+      if (
+        !this._emailSid &&
+        !this._requestingEmailToken &&
+        this._chosenFlow.stages.includes("m.login.email.identity")
+      ) {
         // If we've picked a flow with email auth, we send the email
         // now because we want the request to fail as soon as possible
         // if the email address is not valid (ie. already taken or not
@@ -401,8 +408,12 @@ InteractiveAuth.prototype = {
         this._requestingEmailToken = true;
 
         try {
-          const requestTokenResult = await this._requestEmailTokenCallback(this._inputs.emailAddress, this._clientSecret, 1, // TODO: Multiple send attempts?
-          this._data.session);
+          const requestTokenResult = await this._requestEmailTokenCallback(
+            this._inputs.emailAddress,
+            this._clientSecret,
+            1, // TODO: Multiple send attempts?
+            this._data.session
+          );
           this._emailSid = requestTokenResult.sid; // NB. promise is not resolved here - at some point, doRequest
           // will be called again and if the user has jumped through all
           // the hoops correctly, auth will be complete and the request
@@ -442,17 +453,17 @@ InteractiveAuth.prototype = {
 
     this._currentStage = nextStage;
 
-    if (nextStage === 'm.login.dummy') {
+    if (nextStage === "m.login.dummy") {
       this.submitAuthDict({
-        type: 'm.login.dummy'
+        type: "m.login.dummy",
       });
       return;
     }
 
-    if (this._data && this._data.errcode || this._data.error) {
+    if ((this._data && this._data.errcode) || this._data.error) {
       this._stateUpdatedCallback(nextStage, {
         errcode: this._data.errcode || "",
-        error: this._data.error || ""
+        error: this._data.error || "",
       });
 
       return;
@@ -506,8 +517,10 @@ InteractiveAuth.prototype = {
   _chooseFlow: function () {
     const flows = this._data.flows || []; // we've been given an email or we've already done an email part
 
-    const haveEmail = Boolean(this._inputs.emailAddress) || Boolean(this._emailSid);
-    const haveMsisdn = Boolean(this._inputs.phoneCountry) && Boolean(this._inputs.phoneNumber);
+    const haveEmail =
+      Boolean(this._inputs.emailAddress) || Boolean(this._emailSid);
+    const haveMsisdn =
+      Boolean(this._inputs.phoneCountry) && Boolean(this._inputs.phoneNumber);
 
     for (const flow of flows) {
       let flowHasEmail = false;
@@ -527,9 +540,8 @@ InteractiveAuth.prototype = {
     } // Throw an error with a fairly generic description, but with more
     // information such that the app can give a better one if so desired.
 
-
     const err = new Error("No appropriate authentication flow found");
-    err.name = 'NoAuthFlowFoundError';
+    err.name = "NoAuthFlowFoundError";
     err.required_stages = [];
     if (haveEmail) err.required_stages.push(EMAIL_STAGE_TYPE);
     if (haveMsisdn) err.required_stages.push(MSISDN_STAGE_TYPE);
@@ -554,5 +566,5 @@ InteractiveAuth.prototype = {
         return stageType;
       }
     }
-  }
+  },
 };

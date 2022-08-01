@@ -1,7 +1,7 @@
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
+  value: true,
 });
 exports.LocalStorageCryptoStore = void 0;
 
@@ -41,7 +41,8 @@ const KEY_CROSS_SIGNING_KEYS = E2E_PREFIX + "cross_signing_keys";
 const KEY_NOTIFIED_ERROR_DEVICES = E2E_PREFIX + "notified_error_devices";
 const KEY_DEVICE_DATA = E2E_PREFIX + "device_data";
 const KEY_INBOUND_SESSION_PREFIX = E2E_PREFIX + "inboundgroupsessions/";
-const KEY_INBOUND_SESSION_WITHHELD_PREFIX = E2E_PREFIX + "inboundgroupsessions.withheld/";
+const KEY_INBOUND_SESSION_WITHHELD_PREFIX =
+  E2E_PREFIX + "inboundgroupsessions.withheld/";
 const KEY_ROOMS_PREFIX = E2E_PREFIX + "rooms/";
 const KEY_SESSIONS_NEEDING_BACKUP = E2E_PREFIX + "sessionsneedingbackup";
 
@@ -68,7 +69,6 @@ function keyEndToEndRoomsPrefix(roomId) {
  * @implements {module:crypto/store/base~CryptoStore}
  */
 
-
 class LocalStorageCryptoStore extends _memoryCryptoStore.MemoryCryptoStore {
   constructor(webStore) {
     super();
@@ -87,12 +87,11 @@ class LocalStorageCryptoStore extends _memoryCryptoStore.MemoryCryptoStore {
     return false;
   } // Olm Sessions
 
-
   countEndToEndSessions(txn, func) {
     let count = 0;
 
     for (let i = 0; i < this.store.length; ++i) {
-      if (this.store.key(i).startsWith(keyEndToEndSessions(''))) ++count;
+      if (this.store.key(i).startsWith(keyEndToEndSessions(""))) ++count;
     }
 
     func(count);
@@ -103,9 +102,9 @@ class LocalStorageCryptoStore extends _memoryCryptoStore.MemoryCryptoStore {
     const fixedSessions = {}; // fix up any old sessions to be objects rather than just the base64 pickle
 
     for (const [sid, val] of Object.entries(sessions || {})) {
-      if (typeof val === 'string') {
+      if (typeof val === "string") {
         fixedSessions[sid] = {
-          session: val
+          session: val,
         };
       } else {
         fixedSessions[sid] = val;
@@ -127,10 +126,12 @@ class LocalStorageCryptoStore extends _memoryCryptoStore.MemoryCryptoStore {
 
   getAllEndToEndSessions(txn, func) {
     for (let i = 0; i < this.store.length; ++i) {
-      if (this.store.key(i).startsWith(keyEndToEndSessions(''))) {
-        const deviceKey = this.store.key(i).split('/')[1];
+      if (this.store.key(i).startsWith(keyEndToEndSessions(""))) {
+        const deviceKey = this.store.key(i).split("/")[1];
 
-        for (const sess of Object.values(this._getEndToEndSessions(deviceKey))) {
+        for (const sess of Object.values(
+          this._getEndToEndSessions(deviceKey)
+        )) {
           func(sess);
         }
       }
@@ -149,7 +150,7 @@ class LocalStorageCryptoStore extends _memoryCryptoStore.MemoryCryptoStore {
     problems.push({
       type,
       fixed,
-      time: Date.now()
+      time: Date.now(),
     });
     problems.sort((a, b) => {
       return a.time - b.time;
@@ -170,7 +171,7 @@ class LocalStorageCryptoStore extends _memoryCryptoStore.MemoryCryptoStore {
     for (const problem of problems) {
       if (problem.time > timestamp) {
         return Object.assign({}, problem, {
-          fixed: lastProblem.fixed
+          fixed: lastProblem.fixed,
         });
       }
     }
@@ -183,14 +184,12 @@ class LocalStorageCryptoStore extends _memoryCryptoStore.MemoryCryptoStore {
   }
 
   async filterOutNotifiedErrorDevices(devices) {
-    const notifiedErrorDevices = getJsonItem(this.store, KEY_NOTIFIED_ERROR_DEVICES) || {};
+    const notifiedErrorDevices =
+      getJsonItem(this.store, KEY_NOTIFIED_ERROR_DEVICES) || {};
     const ret = [];
 
     for (const device of devices) {
-      const {
-        userId,
-        deviceInfo
-      } = device;
+      const { userId, deviceInfo } = device;
 
       if (userId in notifiedErrorDevices) {
         if (!(deviceInfo.deviceId in notifiedErrorDevices[userId])) {
@@ -200,7 +199,7 @@ class LocalStorageCryptoStore extends _memoryCryptoStore.MemoryCryptoStore {
       } else {
         ret.push(device);
         notifiedErrorDevices[userId] = {
-          [deviceInfo.deviceId]: true
+          [deviceInfo.deviceId]: true,
         };
       }
     }
@@ -209,9 +208,17 @@ class LocalStorageCryptoStore extends _memoryCryptoStore.MemoryCryptoStore {
     return ret;
   } // Inbound Group Sessions
 
-
   getEndToEndInboundGroupSession(senderCurve25519Key, sessionId, txn, func) {
-    func(getJsonItem(this.store, keyEndToEndInboundGroupSession(senderCurve25519Key, sessionId)), getJsonItem(this.store, keyEndToEndInboundGroupSessionWithheld(senderCurve25519Key, sessionId)));
+    func(
+      getJsonItem(
+        this.store,
+        keyEndToEndInboundGroupSession(senderCurve25519Key, sessionId)
+      ),
+      getJsonItem(
+        this.store,
+        keyEndToEndInboundGroupSessionWithheld(senderCurve25519Key, sessionId)
+      )
+    );
   }
 
   getAllEndToEndInboundGroupSessions(txn, func) {
@@ -226,7 +233,7 @@ class LocalStorageCryptoStore extends _memoryCryptoStore.MemoryCryptoStore {
         func({
           senderKey: key.substr(KEY_INBOUND_SESSION_PREFIX.length, 43),
           sessionId: key.substr(KEY_INBOUND_SESSION_PREFIX.length + 44),
-          sessionData: getJsonItem(this.store, key)
+          sessionData: getJsonItem(this.store, key),
         });
       }
     }
@@ -234,20 +241,51 @@ class LocalStorageCryptoStore extends _memoryCryptoStore.MemoryCryptoStore {
     func(null);
   }
 
-  addEndToEndInboundGroupSession(senderCurve25519Key, sessionId, sessionData, txn) {
-    const existing = getJsonItem(this.store, keyEndToEndInboundGroupSession(senderCurve25519Key, sessionId));
+  addEndToEndInboundGroupSession(
+    senderCurve25519Key,
+    sessionId,
+    sessionData,
+    txn
+  ) {
+    const existing = getJsonItem(
+      this.store,
+      keyEndToEndInboundGroupSession(senderCurve25519Key, sessionId)
+    );
 
     if (!existing) {
-      this.storeEndToEndInboundGroupSession(senderCurve25519Key, sessionId, sessionData, txn);
+      this.storeEndToEndInboundGroupSession(
+        senderCurve25519Key,
+        sessionId,
+        sessionData,
+        txn
+      );
     }
   }
 
-  storeEndToEndInboundGroupSession(senderCurve25519Key, sessionId, sessionData, txn) {
-    setJsonItem(this.store, keyEndToEndInboundGroupSession(senderCurve25519Key, sessionId), sessionData);
+  storeEndToEndInboundGroupSession(
+    senderCurve25519Key,
+    sessionId,
+    sessionData,
+    txn
+  ) {
+    setJsonItem(
+      this.store,
+      keyEndToEndInboundGroupSession(senderCurve25519Key, sessionId),
+      sessionData
+    );
   }
 
-  storeEndToEndInboundGroupSessionWithheld(senderCurve25519Key, sessionId, sessionData, txn) {
-    setJsonItem(this.store, keyEndToEndInboundGroupSessionWithheld(senderCurve25519Key, sessionId), sessionData);
+  storeEndToEndInboundGroupSessionWithheld(
+    senderCurve25519Key,
+    sessionId,
+    sessionData,
+    txn
+  ) {
+    setJsonItem(
+      this.store,
+      keyEndToEndInboundGroupSessionWithheld(senderCurve25519Key, sessionId),
+      sessionData
+    );
   }
 
   getEndToEndDeviceData(txn, func) {
@@ -264,7 +302,7 @@ class LocalStorageCryptoStore extends _memoryCryptoStore.MemoryCryptoStore {
 
   getEndToEndRooms(txn, func) {
     const result = {};
-    const prefix = keyEndToEndRoomsPrefix('');
+    const prefix = keyEndToEndRoomsPrefix("");
 
     for (let i = 0; i < this.store.length; ++i) {
       const key = this.store.key(i);
@@ -279,21 +317,29 @@ class LocalStorageCryptoStore extends _memoryCryptoStore.MemoryCryptoStore {
   }
 
   getSessionsNeedingBackup(limit) {
-    const sessionsNeedingBackup = getJsonItem(this.store, KEY_SESSIONS_NEEDING_BACKUP) || {};
+    const sessionsNeedingBackup =
+      getJsonItem(this.store, KEY_SESSIONS_NEEDING_BACKUP) || {};
     const sessions = [];
 
     for (const session in sessionsNeedingBackup) {
-      if (Object.prototype.hasOwnProperty.call(sessionsNeedingBackup, session)) {
+      if (
+        Object.prototype.hasOwnProperty.call(sessionsNeedingBackup, session)
+      ) {
         // see getAllEndToEndInboundGroupSessions for the magic number explanations
         const senderKey = session.substr(0, 43);
         const sessionId = session.substr(44);
-        this.getEndToEndInboundGroupSession(senderKey, sessionId, null, sessionData => {
-          sessions.push({
-            senderKey: senderKey,
-            sessionId: sessionId,
-            sessionData: sessionData
-          });
-        });
+        this.getEndToEndInboundGroupSession(
+          senderKey,
+          sessionId,
+          null,
+          (sessionData) => {
+            sessions.push({
+              senderKey: senderKey,
+              sessionId: sessionId,
+              sessionData: sessionData,
+            });
+          }
+        );
 
         if (limit && session.length >= limit) {
           break;
@@ -305,15 +351,17 @@ class LocalStorageCryptoStore extends _memoryCryptoStore.MemoryCryptoStore {
   }
 
   countSessionsNeedingBackup() {
-    const sessionsNeedingBackup = getJsonItem(this.store, KEY_SESSIONS_NEEDING_BACKUP) || {};
+    const sessionsNeedingBackup =
+      getJsonItem(this.store, KEY_SESSIONS_NEEDING_BACKUP) || {};
     return Promise.resolve(Object.keys(sessionsNeedingBackup).length);
   }
 
   unmarkSessionsNeedingBackup(sessions) {
-    const sessionsNeedingBackup = getJsonItem(this.store, KEY_SESSIONS_NEEDING_BACKUP) || {};
+    const sessionsNeedingBackup =
+      getJsonItem(this.store, KEY_SESSIONS_NEEDING_BACKUP) || {};
 
     for (const session of sessions) {
-      delete sessionsNeedingBackup[session.senderKey + '/' + session.sessionId];
+      delete sessionsNeedingBackup[session.senderKey + "/" + session.sessionId];
     }
 
     setJsonItem(this.store, KEY_SESSIONS_NEEDING_BACKUP, sessionsNeedingBackup);
@@ -321,10 +369,11 @@ class LocalStorageCryptoStore extends _memoryCryptoStore.MemoryCryptoStore {
   }
 
   markSessionsNeedingBackup(sessions) {
-    const sessionsNeedingBackup = getJsonItem(this.store, KEY_SESSIONS_NEEDING_BACKUP) || {};
+    const sessionsNeedingBackup =
+      getJsonItem(this.store, KEY_SESSIONS_NEEDING_BACKUP) || {};
 
     for (const session of sessions) {
-      sessionsNeedingBackup[session.senderKey + '/' + session.sessionId] = true;
+      sessionsNeedingBackup[session.senderKey + "/" + session.sessionId] = true;
     }
 
     setJsonItem(this.store, KEY_SESSIONS_NEEDING_BACKUP, sessionsNeedingBackup);
@@ -336,12 +385,10 @@ class LocalStorageCryptoStore extends _memoryCryptoStore.MemoryCryptoStore {
    * @returns {Promise} Promise which resolves when the store has been cleared.
    */
 
-
   deleteAllData() {
     this.store.removeItem(KEY_END_TO_END_ACCOUNT);
     return Promise.resolve();
   } // Olm account
-
 
   getAccount(txn, func) {
     const account = getJsonItem(this.store, KEY_END_TO_END_ACCOUNT);
@@ -373,7 +420,6 @@ class LocalStorageCryptoStore extends _memoryCryptoStore.MemoryCryptoStore {
   doTxn(mode, stores, func) {
     return Promise.resolve(func(null));
   }
-
 }
 
 exports.LocalStorageCryptoStore = LocalStorageCryptoStore;

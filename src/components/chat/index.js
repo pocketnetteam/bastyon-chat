@@ -1,29 +1,28 @@
-import {mapState} from 'vuex';
+import { mapState } from "vuex";
 
-import list from '@/components/chat/list/index.vue'
-import join from '@/components/chat/join/index.vue'
-import attachement from '@/components/chat/attachement/index.vue'
-import _ from 'underscore'
+import list from "@/components/chat/list/index.vue";
+import join from "@/components/chat/join/index.vue";
+import attachement from "@/components/chat/attachement/index.vue";
+import _ from "underscore";
 import f from "@/application/functions";
-import userRoomStatus from "@/components/chat/userRoomStatus/index.vue"
+import userRoomStatus from "@/components/chat/userRoomStatus/index.vue";
 
 export default {
-  name: 'chat',
+  name: "chat",
   props: {
     chat: Object,
-    u: String
+    u: String,
   },
 
   components: {
     list,
-    chatInput : () => import('@/components/chat/input/index.vue'),
+    chatInput: () => import("@/components/chat/input/index.vue"),
     join,
     attachement,
-    userRoomStatus
+    userRoomStatus,
   },
 
   data: function () {
-
     return {
       roomUserBanned: false,
       roomUserKicked: false,
@@ -35,162 +34,140 @@ export default {
       usersinfo: [],
       chatEvents: {},
       relationEvent: null,
-      key: '',
+      key: "",
       sendingDataStore: {},
       esize: {},
       fsize: {},
       cantchat: false,
       cantchatexc: false,
-      error : null
-    }
-
+      error: null,
+    };
   },
 
-  created() {
-
-  },
+  created() {},
 
   mounted() {
-
-    this.getuserinfo()
-    this.$store.commit('active', true)
-    this.$store.commit('blockactive', {value: true, item: 'chat'})
-
+    this.getuserinfo();
+    this.$store.commit("active", true);
+    this.$store.commit("blockactive", { value: true, item: "chat" });
   },
 
   destroyed() {
-    this.$store.commit('blockactive', {value: false, item: 'chat'})
-    this.$store.commit('SET_CURRENT_ROOM', false)
+    this.$store.commit("blockactive", { value: false, item: "chat" });
+    this.$store.commit("SET_CURRENT_ROOM", false);
 
-    this.clearintrv()
+    this.clearintrv();
   },
 
   watch: {
-
     needcreatekey: function () {
       if (this.needcreatekey) {
-
         if (!this.intrv) {
           this.intrv = setInterval(() => {
-            this.refreshkeys(true)
-          }, 20000)
+            this.refreshkeys(true);
+          }, 20000);
         }
-
-
       } else {
-        this.clearintrv()
+        this.clearintrv();
       }
     },
 
     chatusers: function () {
-
-
       if (this.m_chat && this.m_chat.pcrypto) {
-        this.m_chat.pcrypto.userschanded().then(r => {
-          this.checkcrypto()
-        })
-
+        this.m_chat.pcrypto.userschanded().then((r) => {
+          this.checkcrypto();
+        });
       }
-
     },
     m_chat: {
       immediate: true,
       handler: function () {
-
-        
         if (this.m_chat && !_.isEmpty(this.m_chat)) {
+          this.core.mtrx.kit
+            .allchatmembers([this.m_chat], false, true)
+            .then((r) => {
+              return this.core.mtrx.kit.prepareChat(this.m_chat);
+            })
+            .then((r) => {
+              this.ready = true;
 
-
-          this.core.mtrx.kit.allchatmembers([this.m_chat], false, true).then(r => {
-            return this.core.mtrx.kit.prepareChat(this.m_chat)
-          }).then(r => {
-            
-            this.ready = true
-
-            this.checkcrypto()
-
-          })
-
+              this.checkcrypto();
+            });
         }
-
-      }
+      },
     },
     chat: {
       immediate: true,
       handler: function () {
-
-        this.ready = false
-        this.encrypted = false
-        this.$store.commit('setmodal', null)
+        this.ready = false;
+        this.encrypted = false;
+        this.$store.commit("setmodal", null);
         if (this.chat) {
-          this.$store.commit('SET_CURRENT_ROOM', this.chat.roomId)
-          this.$store.commit('SET_LAST_ROOM', this.chat.roomId);
-        } else
-          this.$store.commit('SET_CURRENT_ROOM', false)
-      }
-
+          this.$store.commit("SET_CURRENT_ROOM", this.chat.roomId);
+          this.$store.commit("SET_LAST_ROOM", this.chat.roomId);
+        } else this.$store.commit("SET_CURRENT_ROOM", false);
+      },
     },
   },
   computed: mapState({
-
-    pocketnet: state => state.pocketnet,
-    minimized: state => state.minimized,
-    active: state => state.active,
-    auth: state => state.auth,
+    pocketnet: (state) => state.pocketnet,
+    minimized: (state) => state.minimized,
+    active: (state) => state.active,
+    auth: (state) => state.auth,
     m_chat: function () {
-
       if (this.chat && this.chat.roomId) {
-
-        let pushRules = this.core.mtrx.client._pushProcessor.getPushRuleById(this.chat.roomId)
+        let pushRules = this.core.mtrx.client._pushProcessor.getPushRuleById(
+          this.chat.roomId
+        );
         if (pushRules !== null) {
-          this.roomMuted = true
+          this.roomMuted = true;
         }
 
-        var m_chat = this.core.mtrx.client.getRoom(this.chat.roomId)
+        var m_chat = this.core.mtrx.client.getRoom(this.chat.roomId);
 
-        return m_chat || {}
+        return m_chat || {};
       }
-
     },
 
     keyproblem: function () {
       if (this.core.user.userinfo.keys.length < 12) {
-        return 'younotgen'
-      } else return 'usernotgen'
+        return "younotgen";
+      } else return "usernotgen";
     },
 
     needcreatekey: function () {
-      return this.keyproblem == 'younotgen' && this.cantchat && !this.cantchatexc
+      return (
+        this.keyproblem == "younotgen" && this.cantchat && !this.cantchatexc
+      );
     },
 
     membership: function () {
-
       if (this.m_chat) {
         if (this.m_chat.timeline.length > 0) {
-          var id = this.core.mtrx.client.credentials.userId
-          var lastEvent = this.m_chat.timeline[this.m_chat.timeline.length - 1]
-          if (lastEvent.event.state_key === id && lastEvent.event.content.reason === 'admin ban') {
-            this.roomUserBanned = true
+          var id = this.core.mtrx.client.credentials.userId;
+          var lastEvent = this.m_chat.timeline[this.m_chat.timeline.length - 1];
+          if (
+            lastEvent.event.state_key === id &&
+            lastEvent.event.content.reason === "admin ban"
+          ) {
+            this.roomUserBanned = true;
           }
         }
 
-
-        return this.m_chat.getMyMembership()
+        return this.m_chat.getMyMembership();
       }
-
     },
 
     blockedUser: function () {
-
       if (this.u) {
-        return this.core.mtrx.blockeduser(this.u[0])
+        return this.core.mtrx.blockeduser(this.u[0]);
       }
 
       if (this.chat) {
-        var users = this.core.mtrx.anotherChatUsers(this.chat.roomId)
+        var users = this.core.mtrx.anotherChatUsers(this.chat.roomId);
 
         if (users.length == 1) {
-          return this.core.mtrx.blockeduser(users[0].userId)
+          return this.core.mtrx.blockeduser(users[0].userId);
         }
       }
 
@@ -204,242 +181,224 @@ export default {
        }*/
     },
     openInviteModal: function () {
-      return this.openInviteModal
+      return this.openInviteModal;
     },
 
     attachements: function () {
-      return _.toArray(this.sendingDataStore)
+      return _.toArray(this.sendingDataStore);
     },
 
     chatusers: function () {
       if (this.m_chat)
-        return this.core.store.state.chatusers[this.m_chat.roomId]
-    }
-
+        return this.core.store.state.chatusers[this.m_chat.roomId];
+    },
   }),
   methods: {
-
     clearintrv: function () {
       if (this.intrv) {
-        clearInterval(this.intrv)
-        this.intrv = null
+        clearInterval(this.intrv);
+        this.intrv = null;
       }
     },
 
     checkcrypto: function () {
-      this.encrypted = this.m_chat.pcrypto.canBeEncrypt()
-      this.cantchat = this.m_chat.pcrypto.cantchat()
+      this.encrypted = this.m_chat.pcrypto.canBeEncrypt();
+      this.cantchat = this.m_chat.pcrypto.cantchat();
     },
 
     force: function () {
-      this.key = f.makeid()
+      this.key = f.makeid();
     },
 
     clearRelationEvent: function () {
-
-      if (this.relationEvent && this.relationEvent.type == 'm.replace' && this.$refs['chatInput']) {
-        this.$refs['chatInput'].setText('')
+      if (
+        this.relationEvent &&
+        this.relationEvent.type == "m.replace" &&
+        this.$refs["chatInput"]
+      ) {
+        this.$refs["chatInput"].setText("");
       }
 
-      this.relationEvent = null
+      this.relationEvent = null;
     },
 
     newchat: function (chat) {
-      this.$emit("newchat", chat)
+      this.$emit("newchat", chat);
 
-
-      this.m_chat.pcrypto.userschanded()
+      this.m_chat.pcrypto.userschanded();
     },
 
     getuserinfo: function () {
       if (this.u) {
-        this.core.user.usersInfo(this.u).then(info => {
-          this.usersinfo = info
-        })
+        this.core.user.usersInfo(this.u).then((info) => {
+          this.usersinfo = info;
+        });
       }
     },
 
     cantchatcrypto: function () {
-      this.cantchat = true
+      this.cantchat = true;
     },
 
     proceedwithoutkeys: function () {
-      this.cantchatexc = true
+      this.cantchatexc = true;
     },
 
     refreshkeys: function () {
-
-      this.core.user.userInfo(true).then(r => {
-
-
+      this.core.user.userInfo(true).then((r) => {
         if (this.u) {
-          this.core.user.usersInfo(this.u, false, true).then(info => {
+          this.core.user.usersInfo(this.u, false, true).then((info) => {
+            var _info = info[0];
 
-            var _info = info[0]
-
-            if (_info && _info.keys && _info.keys.length >= 12 && this.core.user.userinfo.keys.length >= 12) {
-              this.cantchat = false
+            if (
+              _info &&
+              _info.keys &&
+              _info.keys.length >= 12 &&
+              this.core.user.userinfo.keys.length >= 12
+            ) {
+              this.cantchat = false;
             }
 
-            this.usersinfo = info
+            this.usersinfo = info;
 
             //this.m_chat.pcrypto.userschanded()
-          })
-
+          });
         } else {
-          this.core.store.dispatch('RELOAD_CHAT_USERS', [this.m_chat]).then(r => {
-            /*this.m_chat.pcrypto.userschanded()
+          this.core.store
+            .dispatch("RELOAD_CHAT_USERS", [this.m_chat])
+            .then((r) => {
+              /*this.m_chat.pcrypto.userschanded()
     
             this.checkcrypto()*/
-          })
+            });
         }
-
-
-      })
-
-
+      });
     },
 
     closing: function (e) {
-      this.PNmetaPreview = e
+      this.PNmetaPreview = e;
     },
 
     usersinfoNames: function () {
       return _.map(this.usersinfo, function (u) {
-        return u.name
-      }).join(', ')
+        return u.name;
+      }).join(", ");
     },
 
-    replyEvent: function ({event}) {
-
+    replyEvent: function ({ event }) {
       this.relationEvent = {
-        type: 'm.reference',
+        type: "m.reference",
         event: event,
-        action: this.$i18n.t("caption.replyOnMessage")
+        action: this.$i18n.t("caption.replyOnMessage"),
+      };
+      if (this.$refs["chatInput"]) {
+        this.$refs["chatInput"].focus();
       }
-      if (this.$refs['chatInput']) {
-        this.$refs['chatInput'].focus()
-      }
-
     },
 
-    editingEvent: function ({event, text}) {
-
+    editingEvent: function ({ event, text }) {
       this.relationEvent = {
-        type: 'm.replace',
+        type: "m.replace",
         event: event,
-        action: this.$i18n.t("caption.editMessage")
-      }
+        action: this.$i18n.t("caption.editMessage"),
+      };
 
-      if (this.$refs['chatInput']) {
-        this.$refs['chatInput'].setText(text)
+      if (this.$refs["chatInput"]) {
+        this.$refs["chatInput"].setText(text);
       }
-
     },
 
     focused: function () {
-      this.fsize = _.clone(this.esize)
+      this.fsize = _.clone(this.esize);
     },
 
     scroll(size) {
-      this.esize = size
+      this.esize = size;
 
-      var ns = this.esize.scrollTop || 0
-      var fs = this.fsize.scrollTop || 0
+      var ns = this.esize.scrollTop || 0;
+      var fs = this.fsize.scrollTop || 0;
 
       if (ns - 450 > fs) {
-        this.$refs['chatInput'].blurifempty()
+        this.$refs["chatInput"].blurifempty();
       }
-
     },
 
     events(data) {
-      this.$emit('getEvents', data)
-      this.chatEvents = data
+      this.$emit("getEvents", data);
+      this.chatEvents = data;
     },
 
     galleryImage(e) {
-
-      this.core.store.dispatch('SHOW_GALLERY_FROMEVENTS', {
+      this.core.store.dispatch("SHOW_GALLERY_FROMEVENTS", {
         events: this.chatEvents,
-        event: e
-      })
-
+        event: e,
+      });
     },
 
     sending: function () {
+      this.$emit("sending");
 
-      this.$emit('sending')
+      this.$refs["list"].scrollToNew(0);
 
-      this.$refs['list'].scrollToNew(0)
-
-      ///$(this.$el).find('.eventsflex').scrollTop(0) ??? 
+      ///$(this.$el).find('.eventsflex').scrollTop(0) ???
     },
 
     sent: function () {
-
-      if (this.relationEvent && this.relationEvent.type == 'm.reference') {
-        this.relationEvent = null
+      if (this.relationEvent && this.relationEvent.type == "m.reference") {
+        this.relationEvent = null;
       }
 
-      this.$emit('sent')
+      this.$emit("sent");
 
-      this.error = null
+      this.error = null;
     },
 
     sendingData: function (meta) {
-
       this.$set(this.sendingDataStore, meta.id, meta);
     },
 
     sentData: function (meta) {
-      this.clearMeta(meta)
+      this.clearMeta(meta);
 
-      this.error = null
+      this.error = null;
     },
 
     sentError: function (meta) {
-
       if (meta && meta.id) {
         this.clearMeta(meta);
       }
 
       if (meta && meta.error) {
-        this.error = meta.error
+        this.error = meta.error;
       }
-      
     },
 
-    sentMessageError : function(e){
-
-      this.error = e.error
-      this.core.logerror('sentMessageError', f.stringify(this.error))
-
+    sentMessageError: function (e) {
+      this.error = e.error;
+      this.core.logerror("sentMessageError", f.stringify(this.error));
     },
 
     abortSending: function (id) {
-      var meta = this.sendingDataStore[id]
+      var meta = this.sendingDataStore[id];
 
-      if (meta.abort) meta.abort()
+      if (meta.abort) meta.abort();
 
-      meta.aborted = true
+      meta.aborted = true;
 
       ///
 
-      this.clearMeta(meta)
-
+      this.clearMeta(meta);
     },
     brokenInvitedRoom(val) {
-      this.$emit('removeBrokenRoom', val)
+      this.$emit("removeBrokenRoom", val);
     },
 
     clearMeta: function (meta) {
       this.$delete(this.sendingDataStore, meta.id);
     },
 
-    menuIsVisibleHandler: function(isVisible) {
-      this.$emit('menuIsVisible', isVisible);
-    }
-
-  }
-}
+    menuIsVisibleHandler: function (isVisible) {
+      this.$emit("menuIsVisible", isVisible);
+    },
+  },
+};

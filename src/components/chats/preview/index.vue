@@ -1,40 +1,39 @@
 <template>
-  <div class="chatsPreview" :class="{minimized, active}">
+  <div class="chatsPreview" :class="{ minimized, active }">
     <div class="work">
       <div class="previewWrapper">
         <div class="iconWrapper">
-          <chatIcon :m_chat="m_chat" v-if="!dummy" :chat="chat" :key="key"/>
+          <chatIcon :m_chat="m_chat" v-if="!dummy" :chat="chat" :key="key" />
           <div v-else class="dummyicon loadinggradient"></div>
         </div>
 
         <div class="infoWrapper">
-
           <div class="summaryLine" v-if="!dummy && ready">
             <div class="caption flexBlock">
-
-              <chatName :preview="true" :chat="chat" :m_chat="m_chat"/>
+              <chatName :preview="true" :chat="chat" :m_chat="m_chat" />
               <div class="roomMuted" v-if="roomMuted">
                 <i class="fas fa-bell-slash"></i>
               </div>
             </div>
 
             <div class="time">
-              <chatTime :chat="chat" :m_chat="m_chat"/>
+              <chatTime :chat="chat" :m_chat="m_chat" />
             </div>
-
           </div>
 
           <div class="eventsLine maxwidth" v-if="!dummy && ready">
-            <eventsEvent :event="matrixevent" :chat="m_chat" :preview="true" v-if="event"/>
+            <eventsEvent
+              :event="matrixevent"
+              :chat="m_chat"
+              :preview="true"
+              v-if="event"
+            />
           </div>
 
           <div class="eventsLine" v-if="dummy">
-            <div class="dummyline loadinggradient">
-            </div>
+            <div class="dummyline loadinggradient"></div>
           </div>
-
         </div>
-
       </div>
     </div>
   </div>
@@ -171,30 +170,7 @@
       font-weight: 500
       display: inline-block
       max-width: 190px
-
-
 </style>
 
 <!-- THEMES BEGIN -->
 <!-- THEMES END -->
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

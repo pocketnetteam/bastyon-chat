@@ -1,7 +1,7 @@
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
+  value: true,
 });
 exports.Filter = Filter;
 
@@ -56,7 +56,6 @@ function setProp(obj, keyNesting, val) {
  * @prop {?string} filterId The filter ID
  */
 
-
 function Filter(userId, filterId) {
   this.userId = userId;
   this.filterId = filterId;
@@ -64,7 +63,7 @@ function Filter(userId, filterId) {
 }
 
 Filter.LAZY_LOADING_MESSAGES_FILTER = {
-  lazy_load_members: true
+  lazy_load_members: true,
 };
 /**
  * Get the ID of this filter on your homeserver (if known)
@@ -79,7 +78,6 @@ Filter.prototype.getFilterId = function () {
  * @return {Object} The filter definition
  */
 
-
 Filter.prototype.getDefinition = function () {
   return this.definition;
 };
@@ -87,7 +85,6 @@ Filter.prototype.getDefinition = function () {
  * Set the JSON body of the filter
  * @param {Object} definition The filter definition
  */
-
 
 Filter.prototype.setDefinition = function (definition) {
   this.definition = definition; // This is all ported from synapse's FilterCollection()
@@ -139,7 +136,9 @@ Filter.prototype.setDefinition = function (definition) {
   }
 
   this._room_filter = new _filterComponent.FilterComponent(room_filter_fields);
-  this._room_timeline_filter = new _filterComponent.FilterComponent(room_filter_json ? room_filter_json.timeline || {} : {}); // don't bother porting this from synapse yet:
+  this._room_timeline_filter = new _filterComponent.FilterComponent(
+    room_filter_json ? room_filter_json.timeline || {} : {}
+  ); // don't bother porting this from synapse yet:
   // this._room_state_filter =
   //     new FilterComponent(room_filter_json.state || {});
   // this._room_ephemeral_filter =
@@ -156,7 +155,6 @@ Filter.prototype.setDefinition = function (definition) {
  * @return {FilterComponent} room timeline filter component
  */
 
-
 Filter.prototype.getRoomTimelineFilterComponent = function () {
   return this._room_timeline_filter;
 };
@@ -167,7 +165,6 @@ Filter.prototype.getRoomTimelineFilterComponent = function () {
  * @return {MatrixEvent[]} the list of events which match the filter
  */
 
-
 Filter.prototype.filterRoomTimeline = function (events) {
   return this._room_timeline_filter.filter(this._room_filter.filter(events));
 };
@@ -175,7 +172,6 @@ Filter.prototype.filterRoomTimeline = function (events) {
  * Set the max number of events to return for each room's timeline.
  * @param {Number} limit The max number of events to return for each room.
  */
-
 
 Filter.prototype.setTimelineLimit = function (limit) {
   setProp(this.definition, "room.timeline.limit", limit);
@@ -190,7 +186,6 @@ Filter.prototype.setLazyLoadMembers = function (enabled) {
  * in responses.
  */
 
-
 Filter.prototype.setIncludeLeaveRooms = function (includeLeave) {
   setProp(this.definition, "room.include_leave", includeLeave);
 };
@@ -202,7 +197,6 @@ Filter.prototype.setIncludeLeaveRooms = function (includeLeave) {
  * @param {Object} jsonObj
  * @return {Filter}
  */
-
 
 Filter.fromJson = function (userId, filterId, jsonObj) {
   const filter = new Filter(userId, filterId);

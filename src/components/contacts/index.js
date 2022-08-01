@@ -1,145 +1,135 @@
-import {mapState} from 'vuex';
-import list from '@/components/contacts/list/index.vue'
+import { mapState } from "vuex";
+import list from "@/components/contacts/list/index.vue";
 import _ from "underscore";
-import preview from '@/components/contacts/preview/index.vue'
-import contact from '@/components/contact/index.vue'
-
+import preview from "@/components/contacts/preview/index.vue";
+import contact from "@/components/contact/index.vue";
 
 export default {
-  name: 'contacts',
+  name: "contacts",
   props: {
-
     mode: {
       type: String,
       default: function () {
-        return ''
-      }
+        return "";
+      },
     },
 
     chatRoomId: String, //
-
   },
 
   components: {
     list,
     contact,
-    preview
+    preview,
   },
 
   data: function () {
-
     return {
       loading: false,
-      searching : false,
+      searching: false,
       fromSearch: [],
-      inputText: '',
+      inputText: "",
       groupContacts: [],
-      groupName: '',
+      groupName: "",
       contact: {},
-      selected : {},
-    }
-
+      selected: {},
+    };
   },
 
-  mounted: function() {
-    if(this.mode && this.mode != 'page'){
+  mounted: function () {
+    if (this.mode && this.mode != "page") {
       //$(this.$el).find('input').focus()
     }
   },
 
-  created: function() {
-    
-  },
-  watch: {
-  },
+  created: function () {},
+  watch: {},
   computed: mapState({
-    auth: state => state.auth,
-    window : function(){
-      return window
+    auth: (state) => state.auth,
+    window: function () {
+      return window;
     },
- 
-    users : function(){
+
+    users: function () {
       var c = {
-        contacts : [],
-        search : []
-      }
+        contacts: [],
+        search: [],
+      };
 
       c.contacts = _.filter(this.contactsMap, (contact) => {
-        if(!this.inputText || contact.name.toLowerCase().match(this.inputText.toLowerCase())) return true
-      })
+        if (
+          !this.inputText ||
+          contact.name.toLowerCase().match(this.inputText.toLowerCase())
+        )
+          return true;
+      });
 
       c.search = _.filter(this.fromSearch, (contact, index) => {
         return !this.contactsMap[contact.id];
-      })
+      });
 
-      return c
+      return c;
     },
 
     ...mapState([
-      'contactsMap',
-      'pocketnet',
-      'minimized',
-      'active',
-      'unauthorized'
+      "contactsMap",
+      "pocketnet",
+      "minimized",
+      "active",
+      "unauthorized",
     ]),
 
-    usersinfo : function(){
-      return this.$store.state.users
+    usersinfo: function () {
+      return this.$store.state.users;
     },
 
     u: function () {
-      return this.$route.query.u
+      return this.$route.query.u;
     },
 
-    selectedlength : function(){
-      return _.toArray(this.selected).length
+    selectedlength: function () {
+      return _.toArray(this.selected).length;
     },
 
     contactsListFiltered() {
-      var arr = []
-      var contacts = this.contactsMap
-      var text = this.inputText
+      var arr = [];
+      var contacts = this.contactsMap;
+      var text = this.inputText;
       _.mapObject(contacts, function (key, value) {
-        key.selected = false
-        arr.push(key)
-      })
+        key.selected = false;
+        arr.push(key);
+      });
       return arr.filter(function (contact) {
-        return contact.name.match(text)
-      })
-
+        return contact.name.match(text);
+      });
     },
 
     gName: function () {
-      var name = this.groupName
-      return name.replace(/ /g, '_')
+      var name = this.groupName;
+      return name.replace(/ /g, "_");
     },
   }),
   methods: {
-    select : function(u){
-      this.$emit('select', u)
+    select: function (u) {
+      this.$emit("select", u);
     },
 
-    toggleUser : function(id){
+    toggleUser: function (id) {
+      if (!this.selected[id]) {
+        if (this.selectedlength >= 11) {
+          this.$store.commit("icon", {
+            icon: "warning",
+            message:
+              "At the moment, you can add no more than 12 users to the chat",
+          });
 
-      if(!this.selected[id]){
-        
-        if(this.selectedlength >= 11){
-
-          this.$store.commit('icon', {
-            icon : 'warning',
-            message : "At the moment, you can add no more than 12 users to the chat"
-          })
-
-          return
+          return;
         }
 
-        this.$set(this.selected, id, id)
-      }
-        
-      else
-        this.$delete(this.selected, id)
+        this.$set(this.selected, id, id);
+      } else this.$delete(this.selected, id);
 
-      this.$emit('selectedUsers', this.selected)
+      this.$emit("selectedUsers", this.selected);
     },
 
     /*chat: function () {
@@ -149,42 +139,41 @@ export default {
     },*/
 
     search(text) {
-      this.inputText = text
-      this.searching = true
+      this.inputText = text;
+      this.searching = true;
 
-      if(!this.inputText){
-          this.fromSearch = []
-      }
-      else{
-        this.core.user.searchContacts(this.inputText).then(users => {
-
-          this.fromSearch = _.filter(users || [], (u) => {
-            return u.id != this.core.user.userinfo.id
+      if (!this.inputText) {
+        this.fromSearch = [];
+      } else {
+        this.core.user
+          .searchContacts(this.inputText)
+          .then((users) => {
+            this.fromSearch = _.filter(users || [], (u) => {
+              return u.id != this.core.user.userinfo.id;
+            });
           })
-        }).finally(() => {
-          this.searching = false
-        });
+          .finally(() => {
+            this.searching = false;
+          });
       }
     },
 
-    invitepnt(){
-      this.core.invitepnt()
+    invitepnt() {
+      this.core.invitepnt();
     },
 
     inviteUserAction(users) {
-      var client = this.core.mtrx.client
-      var roomID = this.chatRoomId
-      var self = this
+      var client = this.core.mtrx.client;
+      var roomID = this.chatRoomId;
+      var self = this;
 
       _.each(users, (id) => {
-        var matrixID = '@' + `${id}` + ':' + self.core.domain
+        var matrixID = "@" + `${id}` + ":" + self.core.domain;
 
-        client.invite(roomID, matrixID).then(r => {
-        })
-      })
+        client.invite(roomID, matrixID).then((r) => {});
+      });
 
-      this.$emit('closeModal', false)
-    }
-
+      this.$emit("closeModal", false);
+    },
   },
-}
+};

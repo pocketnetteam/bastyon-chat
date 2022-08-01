@@ -1,106 +1,100 @@
 <template>
-  <div class="chatpublicroom" >
-    
+  <div class="chatpublicroom">
     <div v-if="ready">
-
-        <div class="publicPreviewContent" v-if="room.length > 0">
-            <div class="name">
-            <span>{{ room[0].name }}</span>
-            </div>
-            <div class="topic" v-if="room[0].topic">
-            <span>{{ room[0].topic.replace(/_/g, ' ') }}</span>
-            </div>
-            <div class="membersCount">
-            <i class="fas fa-users"></i>
-            <span><b>{{ room[0].num_joined_members }}</b> Users in room</span> 
-            </div>
-            <div class="actions">
-            <button class="button small rounded" @click="joinRoom()">{{ $t("button.join") }} </button>
-            </div>
+      <div class="publicPreviewContent" v-if="room.length > 0">
+        <div class="name">
+          <span>{{ room[0].name }}</span>
         </div>
-
-        <div class="empty" v-else>
-            <div class="caption">
-            <span>Room not found</span>
-            </div>
+        <div class="topic" v-if="room[0].topic">
+          <span>{{ room[0].topic.replace(/_/g, " ") }}</span>
         </div>
+        <div class="membersCount">
+          <i class="fas fa-users"></i>
+          <span
+            ><b>{{ room[0].num_joined_members }}</b> Users in room</span
+          >
+        </div>
+        <div class="actions">
+          <button class="button small rounded" @click="joinRoom()">
+            {{ $t("button.join") }}
+          </button>
+        </div>
+      </div>
+
+      <div class="empty" v-else>
+        <div class="caption">
+          <span>Room not found</span>
+        </div>
+      </div>
     </div>
 
     <div v-else>
-        <div class="empty">
-            <linepreloader />
-        </div>
+      <div class="empty">
+        <linepreloader />
+      </div>
     </div>
-</div>
+  </div>
 </template>
 
 <style scoped lang="sass">
-  .empty
-    padding : 4 * $r
-    text-align: center
+.empty
+  padding : 4 * $r
+  text-align: center
 
-    span
-      font-size: 0.9em
+  span
+    font-size: 0.9em
 </style>
 
 <script>
-
-import {mapState} from 'vuex';
-import topheader from '@/components/assets/topheader/index.vue';
+import { mapState } from "vuex";
+import topheader from "@/components/assets/topheader/index.vue";
 
 export default {
-  name: 'chatpublicroom',
+  name: "chatpublicroom",
   props: {
-    id : String
+    id: String,
   },
   data: function () {
     return {
       ready: false,
-      room: {}
-    }
+      room: {},
+    };
   },
   components: {
     topheader,
   },
   computed: mapState({
-
-    active: state => state.active,
-    pocketnet: state => state.pocketnet,
-    minimized: state => state.minimized,
-    pocketteammessages: state => state.pocketteammessages,
+    active: (state) => state.active,
+    pocketnet: (state) => state.pocketnet,
+    minimized: (state) => state.minimized,
+    pocketteammessages: (state) => state.pocketteammessages,
   }),
   methods: {
-
-    joinRoom(){
-      this.core.mtrx.client.joinRoom(this.room[0].room_id).then(r=>{
-        this.$router.push('/chat?id=' + this.room[0].room_id)
-      })
-    }
-
+    joinRoom() {
+      this.core.mtrx.client.joinRoom(this.room[0].room_id).then((r) => {
+        this.$router.push("/chat?id=" + this.room[0].room_id);
+      });
+    },
   },
 
   mounted() {
-
-
     //////////////// get public room by id
 
-    this.core.mtrx.wait().then(r => {
+    this.core.mtrx.wait().then((r) => {
+      this.core.mtrx.client.publicRooms().then((r) => {
+        this.ready = true;
 
-      this.core.mtrx.client.publicRooms().then(r => {
-        this.ready = true
-
-        if(this.id[0] === '!'){
-          return this.room = r['chunk'].filter(i => i.room_id === this.id)
-        }else {
-          return this.room = r['chunk'].filter(i => i.name === this.id.replace(/_/g, ' ', ))
-
+        if (this.id[0] === "!") {
+          return (this.room = r["chunk"].filter((i) => i.room_id === this.id));
+        } else {
+          return (this.room = r["chunk"].filter(
+            (i) => i.name === this.id.replace(/_/g, " ")
+          ));
         }
-      })
-
-    })
-  }
-
-}
+      });
+    });
+  },
+};
 </script>
 <style lang="sass" scoped>
 .empty
@@ -151,5 +145,4 @@ export default {
         justify-content: center
         align-items: center
         margin: 50px auto
-
 </style>

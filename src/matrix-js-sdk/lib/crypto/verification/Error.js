@@ -1,12 +1,20 @@
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
+  value: true,
 });
 exports.newVerificationError = newVerificationError;
 exports.errorFactory = errorFactory;
 exports.errorFromEvent = errorFromEvent;
-exports.newInvalidMessageError = exports.newUserMismatchError = exports.newKeyMismatchError = exports.newUnexpectedMessageError = exports.newUnknownMethodError = exports.newUnknownTransactionError = exports.newTimeoutError = exports.newUserCancelledError = void 0;
+exports.newInvalidMessageError =
+  exports.newUserMismatchError =
+  exports.newKeyMismatchError =
+  exports.newUnexpectedMessageError =
+  exports.newUnknownMethodError =
+  exports.newUnknownTransactionError =
+  exports.newTimeoutError =
+  exports.newUserCancelledError =
+    void 0;
 
 var _event = require("../../models/event");
 
@@ -32,13 +40,17 @@ limitations under the License.
  * @module crypto/verification/Error
  */
 function newVerificationError(code, reason, extradata) {
-  const content = Object.assign({}, {
-    code,
-    reason
-  }, extradata);
+  const content = Object.assign(
+    {},
+    {
+      code,
+      reason,
+    },
+    extradata
+  );
   return new _event.MatrixEvent({
     type: "m.key.verification.cancel",
-    content
+    content,
   });
 }
 
@@ -50,7 +62,6 @@ function errorFactory(code, reason) {
 /**
  * The verification was cancelled by the user.
  */
-
 
 const newUserCancelledError = errorFactory("m.user", "Cancelled by user");
 /**
@@ -64,19 +75,28 @@ const newTimeoutError = errorFactory("m.timeout", "Timed out");
  */
 
 exports.newTimeoutError = newTimeoutError;
-const newUnknownTransactionError = errorFactory("m.unknown_transaction", "Unknown transaction");
+const newUnknownTransactionError = errorFactory(
+  "m.unknown_transaction",
+  "Unknown transaction"
+);
 /**
  * An unknown method was selected.
  */
 
 exports.newUnknownTransactionError = newUnknownTransactionError;
-const newUnknownMethodError = errorFactory("m.unknown_method", "Unknown method");
+const newUnknownMethodError = errorFactory(
+  "m.unknown_method",
+  "Unknown method"
+);
 /**
  * An unexpected message was sent.
  */
 
 exports.newUnknownMethodError = newUnknownMethodError;
-const newUnexpectedMessageError = errorFactory("m.unexpected_message", "Unexpected message");
+const newUnexpectedMessageError = errorFactory(
+  "m.unexpected_message",
+  "Unexpected message"
+);
 /**
  * The key does not match.
  */
@@ -94,25 +114,25 @@ const newUserMismatchError = errorFactory("m.user_error", "User mismatch");
  */
 
 exports.newUserMismatchError = newUserMismatchError;
-const newInvalidMessageError = errorFactory("m.invalid_message", "Invalid message");
+const newInvalidMessageError = errorFactory(
+  "m.invalid_message",
+  "Invalid message"
+);
 exports.newInvalidMessageError = newInvalidMessageError;
 
 function errorFromEvent(event) {
   const content = event.getContent();
 
   if (content) {
-    const {
-      code,
-      reason
-    } = content;
+    const { code, reason } = content;
     return {
       code,
-      reason
+      reason,
     };
   } else {
     return {
       code: "Unknown error",
-      reason: "m.unknown"
+      reason: "m.unknown",
     };
   }
 }

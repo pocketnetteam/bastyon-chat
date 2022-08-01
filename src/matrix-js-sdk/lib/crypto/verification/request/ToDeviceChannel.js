@@ -1,7 +1,7 @@
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
+  value: true,
 });
 exports.ToDeviceRequests = exports.ToDeviceChannel = void 0;
 
@@ -49,7 +49,7 @@ class ToDeviceChannel {
   isToDevices(devices) {
     if (devices.length === this._devices.length) {
       for (const device of devices) {
-        const d = this._devices.find(d => d.deviceId === device.deviceId);
+        const d = this._devices.find((d) => d.deviceId === device.deviceId);
 
         if (!d) {
           return false;
@@ -75,7 +75,6 @@ class ToDeviceChannel {
    * @returns {string} the transaction id
    */
 
-
   static getTransactionId(event) {
     const content = event.getContent();
     return content && content.transaction_id;
@@ -86,9 +85,11 @@ class ToDeviceChannel {
    * @returns {bool} boolean flag
    */
 
-
   static canCreateRequest(type) {
-    return type === _VerificationRequest.REQUEST_TYPE || type === _VerificationRequest.START_TYPE;
+    return (
+      type === _VerificationRequest.REQUEST_TYPE ||
+      type === _VerificationRequest.START_TYPE
+    );
   }
   /**
    * Checks whether this event is a well-formed key verification event.
@@ -100,10 +101,11 @@ class ToDeviceChannel {
    * @returns {bool} whether the event is valid and should be passed to handleEvent
    */
 
-
   static validateEvent(event, client) {
     if (event.isCancelled()) {
-      _logger.logger.warn("Ignoring flagged verification request from " + event.getSender());
+      _logger.logger.warn(
+        "Ignoring flagged verification request from " + event.getSender()
+      );
 
       return false;
     }
@@ -117,7 +119,9 @@ class ToDeviceChannel {
     }
 
     if (!content.transaction_id) {
-      _logger.logger.warn("ToDeviceChannel.validateEvent: invalid: no transaction_id");
+      _logger.logger.warn(
+        "ToDeviceChannel.validateEvent: invalid: no transaction_id"
+      );
 
       return false;
     }
@@ -126,27 +130,37 @@ class ToDeviceChannel {
 
     if (type === _VerificationRequest.REQUEST_TYPE) {
       if (!Number.isFinite(content.timestamp)) {
-        _logger.logger.warn("ToDeviceChannel.validateEvent: invalid: no timestamp");
+        _logger.logger.warn(
+          "ToDeviceChannel.validateEvent: invalid: no timestamp"
+        );
 
         return false;
       }
 
-      if (event.getSender() === client.getUserId() && content.from_device == client.getDeviceId()) {
+      if (
+        event.getSender() === client.getUserId() &&
+        content.from_device == client.getDeviceId()
+      ) {
         // ignore requests from ourselves, because it doesn't make sense for a
         // device to verify itself
-        _logger.logger.warn("ToDeviceChannel.validateEvent: invalid: from own device");
+        _logger.logger.warn(
+          "ToDeviceChannel.validateEvent: invalid: from own device"
+        );
 
         return false;
       }
     }
 
-    return _VerificationRequest.VerificationRequest.validateEvent(type, event, client);
+    return _VerificationRequest.VerificationRequest.validateEvent(
+      type,
+      event,
+      client
+    );
   }
   /**
    * @param {MatrixEvent} event the event to get the timestamp of
    * @return {number} the timestamp when the event was sent
    */
-
 
   getTimestamp(event) {
     const content = event.getContent();
@@ -160,12 +174,15 @@ class ToDeviceChannel {
    * @returns {Promise} a promise that resolves when any requests as an anwser to the passed-in event are sent.
    */
 
-
   async handleEvent(event, request, isLiveEvent) {
     const type = event.getType();
     const content = event.getContent();
 
-    if (type === _VerificationRequest.REQUEST_TYPE || type === _VerificationRequest.READY_TYPE || type === _VerificationRequest.START_TYPE) {
+    if (
+      type === _VerificationRequest.REQUEST_TYPE ||
+      type === _VerificationRequest.READY_TYPE ||
+      type === _VerificationRequest.START_TYPE
+    ) {
       if (!this.transactionId) {
         this.transactionId = content.transaction_id;
       }
@@ -176,30 +193,53 @@ class ToDeviceChannel {
         this._deviceId = deviceId;
       } // if no device id or different from addopted one, cancel with sender
 
-
       if (!this._deviceId || this._deviceId !== deviceId) {
         // also check that message came from the device we sent the request to earlier on
         // and do send a cancel message to that device
         // (but don't cancel the request for the device we should be talking to)
-        const cancelContent = this.completeContent((0, _Error.errorFromEvent)((0, _Error.newUnexpectedMessageError)()));
-        return this._sendToDevices(_VerificationRequest.CANCEL_TYPE, cancelContent, [deviceId]);
+        const cancelContent = this.completeContent(
+          (0, _Error.errorFromEvent)((0, _Error.newUnexpectedMessageError)())
+        );
+        return this._sendToDevices(
+          _VerificationRequest.CANCEL_TYPE,
+          cancelContent,
+          [deviceId]
+        );
       }
     }
 
-    const wasStarted = request.phase === _VerificationRequest.PHASE_STARTED || request.phase === _VerificationRequest.PHASE_READY;
-    await request.handleEvent(event.getType(), event, isLiveEvent, false, false);
-    const isStarted = request.phase === _VerificationRequest.PHASE_STARTED || request.phase === _VerificationRequest.PHASE_READY;
-    const isAcceptingEvent = type === _VerificationRequest.START_TYPE || type === _VerificationRequest.READY_TYPE; // the request has picked a ready or start event, tell the other devices about it
+    const wasStarted =
+      request.phase === _VerificationRequest.PHASE_STARTED ||
+      request.phase === _VerificationRequest.PHASE_READY;
+    await request.handleEvent(
+      event.getType(),
+      event,
+      isLiveEvent,
+      false,
+      false
+    );
+    const isStarted =
+      request.phase === _VerificationRequest.PHASE_STARTED ||
+      request.phase === _VerificationRequest.PHASE_READY;
+    const isAcceptingEvent =
+      type === _VerificationRequest.START_TYPE ||
+      type === _VerificationRequest.READY_TYPE; // the request has picked a ready or start event, tell the other devices about it
 
     if (isAcceptingEvent && !wasStarted && isStarted && this._deviceId) {
-      const nonChosenDevices = this._devices.filter(d => d !== this._deviceId && d !== this._client.getDeviceId());
+      const nonChosenDevices = this._devices.filter(
+        (d) => d !== this._deviceId && d !== this._client.getDeviceId()
+      );
 
       if (nonChosenDevices.length) {
         const message = this.completeContent({
           code: "m.accepted",
-          reason: "Verification request accepted by another device"
+          reason: "Verification request accepted by another device",
         });
-        await this._sendToDevices(_VerificationRequest.CANCEL_TYPE, message, nonChosenDevices);
+        await this._sendToDevices(
+          _VerificationRequest.CANCEL_TYPE,
+          message,
+          nonChosenDevices
+        );
       }
     }
   }
@@ -208,7 +248,6 @@ class ToDeviceChannel {
    * @param {MatrixEvent} event the received event
    * @returns {Object} the content object
    */
-
 
   completedContentFromEvent(event) {
     return event.getContent();
@@ -223,7 +262,6 @@ class ToDeviceChannel {
    * @returns {object} the complete content, as it will be sent.
    */
 
-
   completeContent(type, content) {
     // make a copy
     content = Object.assign({}, content);
@@ -232,7 +270,11 @@ class ToDeviceChannel {
       content.transaction_id = this.transactionId;
     }
 
-    if (type === _VerificationRequest.REQUEST_TYPE || type === _VerificationRequest.READY_TYPE || type === _VerificationRequest.START_TYPE) {
+    if (
+      type === _VerificationRequest.REQUEST_TYPE ||
+      type === _VerificationRequest.READY_TYPE ||
+      type === _VerificationRequest.START_TYPE
+    ) {
       content.from_device = this._client.getDeviceId();
     }
 
@@ -249,10 +291,13 @@ class ToDeviceChannel {
    * @returns {Promise} the promise of the request
    */
 
-
   send(type, uncompletedContent = {}) {
     // create transaction id when sending request
-    if ((type === _VerificationRequest.REQUEST_TYPE || type === _VerificationRequest.START_TYPE) && !this.transactionId) {
+    if (
+      (type === _VerificationRequest.REQUEST_TYPE ||
+        type === _VerificationRequest.START_TYPE) &&
+      !this.transactionId
+    ) {
       this.transactionId = ToDeviceChannel.makeTransactionId();
     }
 
@@ -266,7 +311,6 @@ class ToDeviceChannel {
    * @returns {Promise} the promise of the request
    */
 
-
   async sendCompleted(type, content) {
     let result;
 
@@ -277,19 +321,21 @@ class ToDeviceChannel {
     } // the VerificationRequest state machine requires remote echos of the event
     // the client sends itself, so we fake this for to_device messages
 
-
     const remoteEchoEvent = new _event.MatrixEvent({
       sender: this._client.getUserId(),
       content,
-      type
+      type,
     });
-    await this._request.handleEvent(type, remoteEchoEvent,
-    /*isLiveEvent=*/
-    true,
-    /*isRemoteEcho=*/
-    true,
-    /*isSentByUs=*/
-    true);
+    await this._request.handleEvent(
+      type,
+      remoteEchoEvent,
+      /*isLiveEvent=*/
+      true,
+      /*isRemoteEcho=*/
+      true,
+      /*isSentByUs=*/
+      true
+    );
     return result;
   }
 
@@ -302,7 +348,7 @@ class ToDeviceChannel {
       }
 
       return this._client.sendToDevice(type, {
-        [this.userId]: msgMap
+        [this.userId]: msgMap,
       });
     } else {
       return Promise.resolve();
@@ -313,11 +359,9 @@ class ToDeviceChannel {
    * @returns {string} the transaction id
    */
 
-
   static makeTransactionId() {
     return (0, _randomstring.randomString)(32);
   }
-
 }
 
 exports.ToDeviceChannel = ToDeviceChannel;
@@ -328,11 +372,17 @@ class ToDeviceRequests {
   }
 
   getRequest(event) {
-    return this.getRequestBySenderAndTxnId(event.getSender(), ToDeviceChannel.getTransactionId(event));
+    return this.getRequestBySenderAndTxnId(
+      event.getSender(),
+      ToDeviceChannel.getTransactionId(event)
+    );
   }
 
   getRequestByChannel(channel) {
-    return this.getRequestBySenderAndTxnId(channel.userId, channel.transactionId);
+    return this.getRequestBySenderAndTxnId(
+      channel.userId,
+      channel.transactionId
+    );
   }
 
   getRequestBySenderAndTxnId(sender, txnId) {
@@ -344,11 +394,19 @@ class ToDeviceRequests {
   }
 
   setRequest(event, request) {
-    this.setRequestBySenderAndTxnId(event.getSender(), ToDeviceChannel.getTransactionId(event), request);
+    this.setRequestBySenderAndTxnId(
+      event.getSender(),
+      ToDeviceChannel.getTransactionId(event),
+      request
+    );
   }
 
   setRequestByChannel(channel, request) {
-    this.setRequestBySenderAndTxnId(channel.userId, channel.transactionId, request);
+    this.setRequestBySenderAndTxnId(
+      channel.userId,
+      channel.transactionId,
+      request
+    );
   }
 
   setRequestBySenderAndTxnId(sender, txnId, request) {
@@ -393,12 +451,11 @@ class ToDeviceRequests {
     const requestsByTxnId = this._requestsByUserId.get(userId);
 
     if (requestsByTxnId) {
-      return Array.from(requestsByTxnId.values()).filter(r => r.pending);
+      return Array.from(requestsByTxnId.values()).filter((r) => r.pending);
     }
 
     return [];
   }
-
 }
 
 exports.ToDeviceRequests = ToDeviceRequests;

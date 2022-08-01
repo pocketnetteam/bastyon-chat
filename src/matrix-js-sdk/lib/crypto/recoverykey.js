@@ -3,7 +3,7 @@
 var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
+  value: true,
 });
 exports.encodeRecoveryKey = encodeRecoveryKey;
 exports.decodeRecoveryKey = decodeRecoveryKey;
@@ -27,7 +27,7 @@ limitations under the License.
 */
 // picked arbitrarily but to try & avoid clashing with any bitcoin ones
 // (which are also base58 encoded, but bitcoin's involve a lot more hashing)
-const OLM_RECOVERY_KEY_PREFIX = [0x8B, 0x01];
+const OLM_RECOVERY_KEY_PREFIX = [0x8b, 0x01];
 
 function encodeRecoveryKey(key) {
   const buf = new Buffer(OLM_RECOVERY_KEY_PREFIX.length + key.length + 1);
@@ -47,7 +47,7 @@ function encodeRecoveryKey(key) {
 }
 
 function decodeRecoveryKey(recoverykey) {
-  const result = _bs.default.decode(recoverykey.replace(/ /g, ''));
+  const result = _bs.default.decode(recoverykey.replace(/ /g, ""));
 
   let parity = 0;
 
@@ -65,9 +65,17 @@ function decodeRecoveryKey(recoverykey) {
     }
   }
 
-  if (result.length !== OLM_RECOVERY_KEY_PREFIX.length + global.Olm.PRIVATE_KEY_LENGTH + 1) {
+  if (
+    result.length !==
+    OLM_RECOVERY_KEY_PREFIX.length + global.Olm.PRIVATE_KEY_LENGTH + 1
+  ) {
     throw new Error("Incorrect length");
   }
 
-  return Uint8Array.from(result.slice(OLM_RECOVERY_KEY_PREFIX.length, OLM_RECOVERY_KEY_PREFIX.length + global.Olm.PRIVATE_KEY_LENGTH));
+  return Uint8Array.from(
+    result.slice(
+      OLM_RECOVERY_KEY_PREFIX.length,
+      OLM_RECOVERY_KEY_PREFIX.length + global.Olm.PRIVATE_KEY_LENGTH
+    )
+  );
 }

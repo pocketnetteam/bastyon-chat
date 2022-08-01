@@ -3,11 +3,13 @@
 var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
+  value: true,
 });
 exports.DehydrationManager = exports.DEHYDRATION_ALGORITHM = void 0;
 
-var _defineProperty2 = _interopRequireDefault(require("@babel/runtime/helpers/defineProperty"));
+var _defineProperty2 = _interopRequireDefault(
+  require("@babel/runtime/helpers/defineProperty")
+);
 
 var _olmlib = require("./olmlib");
 
@@ -50,31 +52,44 @@ class DehydrationManager {
   }
 
   async getDehydrationKeyFromCache() {
-    return await this.crypto._cryptoStore.doTxn('readonly', [_indexeddbCryptoStore.IndexedDBCryptoStore.STORE_ACCOUNT], txn => {
-      this.crypto._cryptoStore.getSecretStorePrivateKey(txn, async result => {
-        if (result) {
-          const {
-            key,
-            keyInfo,
-            deviceDisplayName,
-            time
-          } = result;
-          const pickleKey = Buffer.from(this.crypto._olmDevice._pickleKey);
-          const decrypted = await (0, _aes.decryptAES)(key, pickleKey, DEHYDRATION_ALGORITHM);
-          this.key = (0, _olmlib.decodeBase64)(decrypted);
-          this.keyInfo = keyInfo;
-          this.deviceDisplayName = deviceDisplayName;
-          const now = Date.now();
-          const delay = Math.max(1, time + oneweek - now);
-          this.timeoutId = global.setTimeout(this.dehydrateDevice.bind(this), delay);
-        }
-      }, "dehydration");
-    });
+    return await this.crypto._cryptoStore.doTxn(
+      "readonly",
+      [_indexeddbCryptoStore.IndexedDBCryptoStore.STORE_ACCOUNT],
+      (txn) => {
+        this.crypto._cryptoStore.getSecretStorePrivateKey(
+          txn,
+          async (result) => {
+            if (result) {
+              const { key, keyInfo, deviceDisplayName, time } = result;
+              const pickleKey = Buffer.from(this.crypto._olmDevice._pickleKey);
+              const decrypted = await (0, _aes.decryptAES)(
+                key,
+                pickleKey,
+                DEHYDRATION_ALGORITHM
+              );
+              this.key = (0, _olmlib.decodeBase64)(decrypted);
+              this.keyInfo = keyInfo;
+              this.deviceDisplayName = deviceDisplayName;
+              const now = Date.now();
+              const delay = Math.max(1, time + oneweek - now);
+              this.timeoutId = global.setTimeout(
+                this.dehydrateDevice.bind(this),
+                delay
+              );
+            }
+          },
+          "dehydration"
+        );
+      }
+    );
   }
   /** set the key, and queue periodic dehydration to the server in the background */
 
-
-  async setKeyAndQueueDehydration(key, keyInfo = {}, deviceDisplayName = undefined) {
+  async setKeyAndQueueDehydration(
+    key,
+    keyInfo = {},
+    deviceDisplayName = undefined
+  ) {
     const matches = await this.setKey(key, keyInfo, deviceDisplayName);
 
     if (!matches) {
@@ -91,10 +106,17 @@ class DehydrationManager {
         this.timeoutId = undefined;
       } // clear storage
 
-
-      await this.crypto._cryptoStore.doTxn('readwrite', [_indexeddbCryptoStore.IndexedDBCryptoStore.STORE_ACCOUNT], txn => {
-        this.crypto._cryptoStore.storeSecretStorePrivateKey(txn, "dehydration", null);
-      });
+      await this.crypto._cryptoStore.doTxn(
+        "readwrite",
+        [_indexeddbCryptoStore.IndexedDBCryptoStore.STORE_ACCOUNT],
+        (txn) => {
+          this.crypto._cryptoStore.storeSecretStorePrivateKey(
+            txn,
+            "dehydration",
+            null
+          );
+        }
+      );
       this.key = undefined;
       this.keyInfo = undefined;
       return;
@@ -102,7 +124,6 @@ class DehydrationManager {
     // dehydrate a new device.  If it's the same, we can keep the same
     // device.  (Assume that keyInfo and deviceDisplayName will be the
     // same if the key is the same.)
-
 
     let matches = this.key && key.length == this.key.length;
 
@@ -122,10 +143,11 @@ class DehydrationManager {
   }
   /** returns the device id of the newly created dehydrated device */
 
-
   async dehydrateDevice() {
     if (this.inProgress) {
-      _logger.logger.log("Dehydration already in progress -- not starting new dehydration");
+      _logger.logger.log(
+        "Dehydration already in progress -- not starting new dehydration"
+      );
 
       return;
     }
@@ -140,20 +162,31 @@ class DehydrationManager {
     try {
       const pickleKey = Buffer.from(this.crypto._olmDevice._pickleKey); // update the crypto store with the timestamp
 
-      const key = await (0, _aes.encryptAES)((0, _olmlib.encodeBase64)(this.key), pickleKey, DEHYDRATION_ALGORITHM);
-      await this.crypto._cryptoStore.doTxn('readwrite', [_indexeddbCryptoStore.IndexedDBCryptoStore.STORE_ACCOUNT], txn => {
-        this.crypto._cryptoStore.storeSecretStorePrivateKey(txn, "dehydration", {
-          keyInfo: this.keyInfo,
-          key,
-          deviceDisplayName: this.deviceDisplayName,
-          time: Date.now()
-        });
-      });
+      const key = await (0, _aes.encryptAES)(
+        (0, _olmlib.encodeBase64)(this.key),
+        pickleKey,
+        DEHYDRATION_ALGORITHM
+      );
+      await this.crypto._cryptoStore.doTxn(
+        "readwrite",
+        [_indexeddbCryptoStore.IndexedDBCryptoStore.STORE_ACCOUNT],
+        (txn) => {
+          this.crypto._cryptoStore.storeSecretStorePrivateKey(
+            txn,
+            "dehydration",
+            {
+              keyInfo: this.keyInfo,
+              key,
+              deviceDisplayName: this.deviceDisplayName,
+              time: Date.now(),
+            }
+          );
+        }
+      );
 
       _logger.logger.log("Attempting to dehydrate device");
 
       _logger.logger.log("Creating account"); // create the account and all the necessary keys
-
 
       const account = new global.Olm.Account();
       account.create();
@@ -169,7 +202,7 @@ class DehydrationManager {
       const pickledAccount = account.pickle(new Uint8Array(this.key));
       const deviceData = {
         algorithm: DEHYDRATION_ALGORITHM,
-        account: pickledAccount
+        account: pickledAccount,
       };
 
       if (this.keyInfo.passphrase) {
@@ -178,12 +211,19 @@ class DehydrationManager {
 
       _logger.logger.log("Uploading account to server");
 
-      const dehydrateResult = await this.crypto._baseApis._http.authedRequest(undefined, "PUT", "/dehydrated_device", undefined, {
-        device_data: deviceData,
-        initial_device_display_name: this.deviceDisplayName
-      }, {
-        prefix: "/_matrix/client/unstable/org.matrix.msc2697.v2"
-      }); // send the keys to the server
+      const dehydrateResult = await this.crypto._baseApis._http.authedRequest(
+        undefined,
+        "PUT",
+        "/dehydrated_device",
+        undefined,
+        {
+          device_data: deviceData,
+          initial_device_display_name: this.deviceDisplayName,
+        },
+        {
+          prefix: "/_matrix/client/unstable/org.matrix.msc2697.v2",
+        }
+      ); // send the keys to the server
 
       const deviceId = dehydrateResult.device_id;
 
@@ -195,18 +235,23 @@ class DehydrationManager {
         user_id: this.crypto._userId,
         keys: {
           [`ed25519:${deviceId}`]: e2eKeys.ed25519,
-          [`curve25519:${deviceId}`]: e2eKeys.curve25519
-        }
+          [`curve25519:${deviceId}`]: e2eKeys.curve25519,
+        },
       };
-      const deviceSignature = account.sign(_anotherJson.default.stringify(deviceKeys));
+      const deviceSignature = account.sign(
+        _anotherJson.default.stringify(deviceKeys)
+      );
       deviceKeys.signatures = {
         [this.crypto._userId]: {
-          [`ed25519:${deviceId}`]: deviceSignature
-        }
+          [`ed25519:${deviceId}`]: deviceSignature,
+        },
       };
 
       if (this.crypto._crossSigningInfo.getId("self_signing")) {
-        await this.crypto._crossSigningInfo.signObject(deviceKeys, "self_signing");
+        await this.crypto._crossSigningInfo.signObject(
+          deviceKeys,
+          "self_signing"
+        );
       }
 
       _logger.logger.log("Preparing one-time keys");
@@ -215,13 +260,13 @@ class DehydrationManager {
 
       for (const [keyId, key] of Object.entries(otks.curve25519)) {
         const k = {
-          key
+          key,
         };
         const signature = account.sign(_anotherJson.default.stringify(k));
         k.signatures = {
           [this.crypto._userId]: {
-            [`ed25519:${deviceId}`]: signature
-          }
+            [`ed25519:${deviceId}`]: signature,
+          },
         };
         oneTimeKeys[`signed_curve25519:${keyId}`] = k;
       }
@@ -233,29 +278,37 @@ class DehydrationManager {
       for (const [keyId, key] of Object.entries(fallbacks.curve25519)) {
         const k = {
           key,
-          fallback: true
+          fallback: true,
         };
         const signature = account.sign(_anotherJson.default.stringify(k));
         k.signatures = {
           [this.crypto._userId]: {
-            [`ed25519:${deviceId}`]: signature
-          }
+            [`ed25519:${deviceId}`]: signature,
+          },
         };
         fallbackKeys[`signed_curve25519:${keyId}`] = k;
       }
 
       _logger.logger.log("Uploading keys to server");
 
-      await this.crypto._baseApis._http.authedRequest(undefined, "POST", "/keys/upload/" + encodeURI(deviceId), undefined, {
-        "device_keys": deviceKeys,
-        "one_time_keys": oneTimeKeys,
-        "org.matrix.msc2732.fallback_keys": fallbackKeys
-      });
+      await this.crypto._baseApis._http.authedRequest(
+        undefined,
+        "POST",
+        "/keys/upload/" + encodeURI(deviceId),
+        undefined,
+        {
+          device_keys: deviceKeys,
+          one_time_keys: oneTimeKeys,
+          "org.matrix.msc2732.fallback_keys": fallbackKeys,
+        }
+      );
 
       _logger.logger.log("Done dehydrating"); // dehydrate again in a week
 
-
-      this.timeoutId = global.setTimeout(this.dehydrateDevice.bind(this), oneweek);
+      this.timeoutId = global.setTimeout(
+        this.dehydrateDevice.bind(this),
+        oneweek
+      );
       return deviceId;
     } finally {
       this.inProgress = false;
@@ -268,7 +321,6 @@ class DehydrationManager {
       this.timeoutId = undefined;
     }
   }
-
 }
 
 exports.DehydrationManager = DehydrationManager;

@@ -3,7 +3,7 @@
 var _interopRequireWildcard = require("@babel/runtime/helpers/interopRequireWildcard");
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
+  value: true,
 });
 exports.MatrixEvent = exports.EventStatus = void 0;
 
@@ -59,7 +59,7 @@ const EventStatus = {
   SENT: "sent",
 
   /** The event was cancelled before it was successfully sent. */
-  CANCELLED: "cancelled"
+  CANCELLED: "cancelled",
 };
 exports.EventStatus = EventStatus;
 const interns = {};
@@ -95,7 +95,6 @@ function intern(str) {
  * Default: true. <strong>This property is experimental and may change.</strong>
  */
 
-
 const MatrixEvent = function (event) {
   // intern the values of matrix events to force share strings and reduce the
   // amount of needless string duplication. This can save moderate amounts of
@@ -103,26 +102,32 @@ const MatrixEvent = function (event) {
   // 'membership' at the event level (rather than the content level) is a legacy
   // field that Element never otherwise looks at, but it will still take up a lot
   // of space if we don't intern it.
-  ["state_key", "type", "sender", "room_id", "membership"].forEach(prop => {
+  ["state_key", "type", "sender", "room_id", "membership"].forEach((prop) => {
     if (!event[prop]) {
       return;
     }
 
     event[prop] = intern(event[prop]);
   });
-  ["membership", "avatar_url", "displayname"].forEach(prop => {
+  ["membership", "avatar_url", "displayname"].forEach((prop) => {
     if (!event.content || !event.content[prop]) {
       return;
     }
 
     event.content[prop] = intern(event.content[prop]);
   });
-  ["rel_type"].forEach(prop => {
-    if (!event.content || !event.content["m.relates_to"] || !event.content["m.relates_to"][prop]) {
+  ["rel_type"].forEach((prop) => {
+    if (
+      !event.content ||
+      !event.content["m.relates_to"] ||
+      !event.content["m.relates_to"][prop]
+    ) {
       return;
     }
 
-    event.content["m.relates_to"][prop] = intern(event.content["m.relates_to"][prop]);
+    event.content["m.relates_to"][prop] = intern(
+      event.content["m.relates_to"][prop]
+    );
   });
   this.event = event || {};
   this.sender = null;
@@ -249,7 +254,9 @@ utils.extend(MatrixEvent.prototype, {
    * @return {Date} The event date, e.g. <code>new Date(1433502692297)</code>
    */
   getDate: function () {
-    return this.event.origin_server_ts ? new Date(this.event.origin_server_ts) : null;
+    return this.event.origin_server_ts
+      ? new Date(this.event.origin_server_ts)
+      : null;
   },
 
   /**
@@ -372,11 +379,16 @@ utils.extend(MatrixEvent.prototype, {
    *   sender if this event.
    *   See {@link module:models/event.MatrixEvent#getClaimedEd25519Key}
    */
-  makeEncrypted: function (crypto_type, crypto_content, senderCurve25519Key, claimedEd25519Key) {
+  makeEncrypted: function (
+    crypto_type,
+    crypto_content,
+    senderCurve25519Key,
+    claimedEd25519Key
+  ) {
     // keep the plain-text data for 'view source'
     this._clearEvent = {
       type: this.event.type,
-      content: this.event.content
+      content: this.event.content,
     };
     this.event.type = crypto_type;
     this.event.content = crypto_content;
@@ -402,7 +414,11 @@ utils.extend(MatrixEvent.prototype, {
    *     couldn't decrypt.
    */
   isDecryptionFailure: function () {
-    return this._clearEvent && this._clearEvent.content && this._clearEvent.content.msgtype === "m.bad.encrypted";
+    return (
+      this._clearEvent &&
+      this._clearEvent.content &&
+      this._clearEvent.content.msgtype === "m.bad.encrypted"
+    );
   },
 
   /**
@@ -424,9 +440,15 @@ utils.extend(MatrixEvent.prototype, {
       throw new Error("Attempt to decrypt event which isn't encrypted");
     }
 
-    if (this._clearEvent && this._clearEvent.content && this._clearEvent.content.msgtype !== "m.bad.encrypted") {
+    if (
+      this._clearEvent &&
+      this._clearEvent.content &&
+      this._clearEvent.content.msgtype !== "m.bad.encrypted"
+    ) {
       // we may want to just ignore this? let's start with rejecting it.
-      throw new Error("Attempt to decrypt event which has already been decrypted");
+      throw new Error(
+        "Attempt to decrypt event which has already been decrypted"
+      );
     } // if we already have a decryption attempt in progress, then it may
     // fail because it was using outdated info. We now have reason to
     // succeed where it failed before, but we don't want to have multiple
@@ -434,9 +456,10 @@ utils.extend(MatrixEvent.prototype, {
     // new info.
     //
 
-
     if (this._decryptionPromise) {
-      _logger.logger.log(`Event ${this.getId()} already being decrypted; queueing a retry`);
+      _logger.logger.log(
+        `Event ${this.getId()} already being decrypted; queueing a retry`
+      );
 
       this._retryDecryption = true;
       return this._decryptionPromise;
@@ -456,12 +479,16 @@ utils.extend(MatrixEvent.prototype, {
    */
   cancelAndResendKeyRequest: function (crypto, userId) {
     const wireContent = this.getWireContent();
-    return crypto.requestRoomKey({
-      algorithm: wireContent.algorithm,
-      room_id: this.getRoomId(),
-      session_id: wireContent.session_id,
-      sender_key: wireContent.sender_key
-    }, this.getKeyRequestRecipients(userId), true);
+    return crypto.requestRoomKey(
+      {
+        algorithm: wireContent.algorithm,
+        room_id: this.getRoomId(),
+        session_id: wireContent.session_id,
+        sender_key: wireContent.sender_key,
+      },
+      this.getKeyRequestRecipients(userId),
+      true
+    );
   },
 
   /**
@@ -475,16 +502,18 @@ utils.extend(MatrixEvent.prototype, {
     // send the request to all of our own devices, and the
     // original sending device if it wasn't us.
     const wireContent = this.getWireContent();
-    const recipients = [{
-      userId,
-      deviceId: '*'
-    }];
+    const recipients = [
+      {
+        userId,
+        deviceId: "*",
+      },
+    ];
     const sender = this.getSender();
 
     if (sender !== userId) {
       recipients.push({
         userId: sender,
-        deviceId: wireContent.device_id
+        deviceId: wireContent.device_id,
       });
     }
 
@@ -509,16 +538,21 @@ utils.extend(MatrixEvent.prototype, {
           res = await crypto.decryptEvent(this);
 
           if (isRetry) {
-            _logger.logger.info(`Decrypted event on retry (id=${this.getId()})`);
+            _logger.logger.info(
+              `Decrypted event on retry (id=${this.getId()})`
+            );
           }
         }
       } catch (e) {
         if (e.name !== "DecryptionError") {
           // not a decryption error: log the whole exception as an error
           // (and don't bother with a retry)
-          const re = isRetry ? 're' : '';
+          const re = isRetry ? "re" : "";
 
-          _logger.logger.error(`Error ${re}decrypting event ` + `(id=${this.getId()}): ${e.stack || e}`);
+          _logger.logger.error(
+            `Error ${re}decrypting event ` +
+              `(id=${this.getId()}): ${e.stack || e}`
+          );
 
           this._decryptionPromise = null;
           this._retryDecryption = false;
@@ -542,14 +576,18 @@ utils.extend(MatrixEvent.prototype, {
 
         if (this._retryDecryption) {
           // decryption error, but we have a retry queued.
-          _logger.logger.log(`Got error decrypting event (id=${this.getId()}: ` + `${e}), but retrying`);
+          _logger.logger.log(
+            `Got error decrypting event (id=${this.getId()}: ` +
+              `${e}), but retrying`
+          );
 
           continue;
         } // decryption error, no retries queued. Warn about the error and
         // set it to m.bad.encrypted.
 
-
-        _logger.logger.warn(`Error decrypting event (id=${this.getId()}): ${e.detailedString}`);
+        _logger.logger.warn(
+          `Error decrypting event (id=${this.getId()}): ${e.detailedString}`
+        );
 
         res = this._badEncryptedMessage(e.message);
       } // at this point, we've either successfully decrypted the event, or have given up
@@ -563,7 +601,6 @@ utils.extend(MatrixEvent.prototype, {
       // see also notes on _retryDecryption above.
       //
 
-
       this._decryptionPromise = null;
       this._retryDecryption = false;
 
@@ -573,7 +610,6 @@ utils.extend(MatrixEvent.prototype, {
       // highlighting when the user's name is mentioned rely on this happening. We also want
       // to set the push actions before emitting so that any notification listeners don't
       // pick up the wrong contents.
-
 
       this.setPushActions(null);
       this.emit("Event.decrypted", this, err);
@@ -586,9 +622,9 @@ utils.extend(MatrixEvent.prototype, {
         type: "m.room.message",
         content: {
           msgtype: "m.bad.encrypted",
-          body: "** Unable to decrypt: " + reason + " **"
-        }
-      }
+          body: "** Unable to decrypt: " + reason + " **",
+        },
+      },
     };
   },
 
@@ -608,7 +644,8 @@ utils.extend(MatrixEvent.prototype, {
     this._clearEvent = decryptionResult.clearEvent;
     this._senderCurve25519Key = decryptionResult.senderCurve25519Key || null;
     this._claimedEd25519Key = decryptionResult.claimedEd25519Key || null;
-    this._forwardingCurve25519KeyChain = decryptionResult.forwardingCurve25519KeyChain || [];
+    this._forwardingCurve25519KeyChain =
+      decryptionResult.forwardingCurve25519KeyChain || [];
     this._untrusted = decryptionResult.untrusted || false;
   },
 
@@ -657,7 +694,7 @@ utils.extend(MatrixEvent.prototype, {
    */
   getKeysClaimed: function () {
     return {
-      ed25519: this._claimedEd25519Key
+      ed25519: this._claimedEd25519Key,
     };
   },
 
@@ -865,7 +902,6 @@ utils.extend(MatrixEvent.prototype, {
       this.event.unsigned.redacted_because = oldUnsigned.redacted_because;
     } // successfully sent.
 
-
     this.setStatus(null);
 
     if (this.getId() !== oldId) {
@@ -912,7 +948,12 @@ utils.extend(MatrixEvent.prototype, {
     // encrypted rooms, so we have to check `getWireContent` for this.
     const content = this.getWireContent();
     const relation = content && content["m.relates_to"];
-    return relation && relation.rel_type && relation.event_id && (relType && relation.rel_type === relType || !relType);
+    return (
+      relation &&
+      relation.rel_type &&
+      relation.event_id &&
+      ((relType && relation.rel_type === relType) || !relType)
+    );
   },
 
   /**
@@ -1105,7 +1146,7 @@ utils.extend(MatrixEvent.prototype, {
       event_id: this.getId(),
       origin_server_ts: this.getTs(),
       unsigned: this.getUnsigned(),
-      room_id: this.getRoomId()
+      room_id: this.getRoomId(),
     }; // if this is a redaction then attach the redacts key
 
     if (this.isRedaction()) {
@@ -1118,7 +1159,7 @@ utils.extend(MatrixEvent.prototype, {
 
     return {
       decrypted: event,
-      encrypted: this.event
+      encrypted: this.event,
     };
   },
 
@@ -1132,8 +1173,7 @@ utils.extend(MatrixEvent.prototype, {
 
   getTxnId() {
     return this._txnId;
-  }
-
+  },
 });
 /* _REDACT_KEEP_KEY_MAP gives the keys we keep when an event is redacted
  *
@@ -1145,35 +1185,45 @@ utils.extend(MatrixEvent.prototype, {
  *  - We keep user_id for backwards-compat with v1
  */
 
-const _REDACT_KEEP_KEY_MAP = ['event_id', 'type', 'room_id', 'user_id', 'sender', 'state_key', 'prev_state', 'content', 'unsigned', 'origin_server_ts'].reduce(function (ret, val) {
+const _REDACT_KEEP_KEY_MAP = [
+  "event_id",
+  "type",
+  "room_id",
+  "user_id",
+  "sender",
+  "state_key",
+  "prev_state",
+  "content",
+  "unsigned",
+  "origin_server_ts",
+].reduce(function (ret, val) {
   ret[val] = 1;
   return ret;
 }, {}); // a map from event type to the .content keys we keep when an event is redacted
 
-
 const _REDACT_KEEP_CONTENT_MAP = {
-  'm.room.member': {
-    'membership': 1
+  "m.room.member": {
+    membership: 1,
   },
-  'm.room.create': {
-    'creator': 1
+  "m.room.create": {
+    creator: 1,
   },
-  'm.room.join_rules': {
-    'join_rule': 1
+  "m.room.join_rules": {
+    join_rule: 1,
   },
-  'm.room.power_levels': {
-    'ban': 1,
-    'events': 1,
-    'events_default': 1,
-    'kick': 1,
-    'redact': 1,
-    'state_default': 1,
-    'users': 1,
-    'users_default': 1
+  "m.room.power_levels": {
+    ban: 1,
+    events: 1,
+    events_default: 1,
+    kick: 1,
+    redact: 1,
+    state_default: 1,
+    users: 1,
+    users_default: 1,
   },
-  'm.room.aliases': {
-    'aliases': 1
-  }
+  "m.room.aliases": {
+    aliases: 1,
+  },
 };
 /**
  * Fires when an event is decrypted
