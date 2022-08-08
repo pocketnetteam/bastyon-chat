@@ -25,11 +25,6 @@ const router = new Router({
             component: () => import ('@/views/chats')
         },
         {
-            path: '/chat',
-            name: 'chat',
-            component: () => import ('@/views/chat')
-        },
-        {
             path: '/publicPreview',
             name: 'publicPreview',
             component: () => import ('@/views/publicPreview')

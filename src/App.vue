@@ -783,7 +783,7 @@ export default {
           this.$route.name !== 'chatSettings' &&
           core.cancelDefaultRoute !== true) {
 
-          this.$router.push('/chats')
+          // this.$router.push('/chats')
         }
 
       })
@@ -835,3 +835,13 @@ if (module.hot) {
 <!-- THEMES BEGIN -->
 <!-- THEMES END -->
 
+<style lang="scss">
+.main-wrapper.minimized {
+  .chat-container-pages-empty {
+    display: none !important;
+  }
+  .headerSpacerWrapperOvf {
+    background: transparent !important;
+  }
+}
+</style>

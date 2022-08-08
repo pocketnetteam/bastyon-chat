@@ -46,7 +46,7 @@ var store = new Vuex.Store({
 		voiceMessagesEnabled: '',
 		currentPlayingVoiceMessage: null,
 		current_user: {},
-		minimized: true,
+		minimized: false,
 		active: false,
 		activeBlock: {},
 		globalpreloader: false,
@@ -137,7 +137,7 @@ var store = new Vuex.Store({
 				state.iteraction = false;
 				state.minimized = false;
 				return
-			} else state.minimized = true
+			} else state.minimized = false
 
 			if (activetimeout) {
 				clearTimeout(activetimeout)

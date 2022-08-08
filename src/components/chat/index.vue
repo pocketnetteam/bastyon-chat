@@ -28,6 +28,7 @@
       :key="key" :chat="m_chat"
        @editingEvent="editingEvent"
        @replyEvent="replyEvent"
+       @shareEvent="shareEvent"
        @eventImage="e => galleryImage(e)"
        @scroll="scroll"
        @menuIsVisible="menuIsVisibleHandler"
@@ -136,6 +137,20 @@
 
 <!-- THEMES BEGIN -->
 <!-- THEMES END -->
+<style lang="scss">
+.chatInputWrapper .bin {
+  width: 100% !important;
+}
+
+@media only screen and (max-width: 768px) {
+  .chatInputWrapper {
+    width: 100% !important;
+    .bin {
+      width: 100% !important;
+    }
+  }
+}
+</style>
 
 
 

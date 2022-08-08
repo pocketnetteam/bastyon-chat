@@ -12,6 +12,7 @@
           @removeEvent="removeEvent"
           @editingEvent="editingEvent"
           @replyEvent="replyEvent"
+          @shareEvent="shareEvent"
           @galleryEventOpen="e => imageGallery(e)"
           @menuIsVisible="menuIsVisibleHandler"
 

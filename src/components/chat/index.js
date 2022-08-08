@@ -323,6 +323,17 @@ export default {
 
     },
 
+    shareEvent: function ({ event }) {
+      this.relationEvent = {
+        type: "m.reference",
+        event: event,
+        action: this.$i18n.t("caption.shareMessage"),
+      };
+      if (this.$refs["chatInput"]) {
+        this.$refs["chatInput"].focus()
+      }
+    },
+
     editingEvent: function ({event, text}) {
 
       this.relationEvent = {

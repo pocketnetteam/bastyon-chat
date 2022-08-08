@@ -287,7 +287,13 @@ export default {
 							message: "",
 						})
 
-						this.$router.push(_share.route || 'chat?id=' + chat.roomId)
+						this.$router.push({
+							path: 'chat',
+							query: {
+								...this.$route.query,
+								id: chat.roomId,
+							},
+						})
 
 					}).catch(e => {
 
@@ -299,7 +305,13 @@ export default {
 						})
 
 						if (_share.route) {
-							this.$router.push(_share.route)
+							this.$router.push({
+								path: 'chat',
+								query: {
+									...this.$route.query,
+									id: chat.roomId,
+								},
+							})
 						}
 
 					})

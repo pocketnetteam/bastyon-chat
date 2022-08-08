@@ -22,7 +22,7 @@
 
       
       <template v-slot:rightadd >
-        <router-link to="settings" v-if="!share && pocketnet">
+        <router-link @click="gotona('settings')" v-if="!share && pocketnet">
           <div class="iconbuttonsmall">
             <i class="fas fa-cog"></i>
           </div>

@@ -60,7 +60,13 @@ export default {
         this.select(contact)
       }
       else{
-        this.$router.push({path: `/contact?id=${id}`})
+        this.$router.push({
+          path: '/contact',
+          query: {
+            ...this.$route.query,
+            id: id,
+          },
+        })
       }
     },
 

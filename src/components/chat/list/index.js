@@ -124,6 +124,9 @@ export default {
     replyEvent: function ({event}) {
       this.$emit('replyEvent', {event})
     },
+    shareEvent: function ({ event }) {
+      this.$emit('shareEvent', { event })
+    },
 
     removeEvent: function (event) {
       this.chat.getLiveTimeline().removeEvent(event.event.event_id)

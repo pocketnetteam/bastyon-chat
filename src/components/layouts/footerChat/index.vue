@@ -9,7 +9,7 @@
       <div class="menuItems">
 
 
-          <div class="menuItem bottom-nav__icon"  :class="{active : activecontacts}" @click="gotona('/contacts')">
+          <div class="menuItem bottom-nav__icon"  :class="{active : activecontacts}" @click="gotona('contacts')">
             <div class="icon">
               <i class="fas fa-user-friends"></i>
             </div>
@@ -18,7 +18,7 @@
             </div>
           </div>
 
-          <div class="menuItem bottom-nav__icon" :class="{active : activechats}" @click="gotona('/chats')">
+          <div class="menuItem bottom-nav__icon" :class="{active : activechats}" @click="gotona('chats')">
             <div class="icon">
               <i class="fas fa-comments"></i>
             </div>
@@ -30,7 +30,7 @@
             </div>
           </div>
 
-          <div class="menuItem bottom-nav__icon" v-if="!pocketnet"  :class="{active : activesettings}" @click="gotona('/settings')">
+          <div class="menuItem bottom-nav__icon" v-if="!pocketnet"  :class="{active : activesettings}" @click="gotona('settings')">
             <div class="icon">
               <i class="fas fa-cog"></i>
             </div>
@@ -72,3 +72,15 @@
 
 <!-- THEMES BEGIN -->
 <!-- THEMES END -->
+
+<style lang="scss" scoped>
+@media only screen and (min-width: 768px) {
+  .footer-chat {
+    width: 40%;
+    max-width: 400px;
+    &.bout {
+      width: 100%;
+    }
+  }
+}
+</style>

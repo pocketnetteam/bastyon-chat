@@ -113,6 +113,7 @@
         "unauthorized" : "Unauthorized",
         "search" : "Search",
         "replyOnMessage" : "Reply on Message",
+        "shareMessage": "Share Message",
         "editMessage" : "Edit Message",
         "inviteFriend" : "Invite friends",
         "emptyContactList" : "Contacts list is empty",

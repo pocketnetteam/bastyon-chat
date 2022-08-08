@@ -174,6 +174,10 @@ export default {
             this.$emit('replyEvent', {event})
         },
 
+        shareEvent: function ({ event }) {
+            this.$emit('shareEvent', { event })
+        },
+
         removeEvent: function (event) {
             this.$emit('removeEvent', event)
         },
@@ -219,7 +223,7 @@ export default {
                 e.preventDefault();
                 var dy = e.deltaY
 
-                this.$refs['container'].scrollTop += dy > 0 ? -60 : 60
+                this.$refs['container'].scrollTop += -dy
                 return false
             }
 

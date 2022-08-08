@@ -21,6 +21,7 @@
                 :last="i == 0"
                 @openImageEvent="e => galleryOpen(e)"
                 @removeEvent="e => removeEvent(event)"
+                @share="e => shareEvent({ event })"
                 @editing="text => editingEvent({event, text})"
                 @reply="e => replyEvent({event})"
                 @mounted="emounted"

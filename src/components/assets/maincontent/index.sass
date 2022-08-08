@@ -74,7 +74,7 @@
         bottom : 0
         padding-bottom : 0
         margin : 0 auto
-        max-width: 640px
+        max-width: 100%
 
     .headerSpacerWrapper
         position: absolute
@@ -84,6 +84,8 @@
         bottom : 90px
         overflow-y: auto
         overflow-x: hidden
+        width: 100%
+        max-width: 100%
         
 
     .headerSpacerWrapperOvf
@@ -95,6 +97,7 @@
         overflow-y: scroll
         overflow-x: hidden
         overscroll-behavior : contain
+        background: #ffffff
         
 
     &.minimized
@@ -117,7 +120,7 @@
                 .headerSpacerWrapperOvf
                     -webkit-mask-image: linear-gradient(to top, transparent 3%, black 10%)
                     mask-image: linear-gradient(to top, transparent 3%, black 10%)
-
+                    background: #ffffff
                 /deep/
                     .maskedtop
                         -webkit-mask-image: linear-gradient(to bottom, transparent 3%, black 10%)
@@ -130,7 +133,7 @@
                 overflow: visible
                 will-change: transform
                 +transitionopt(0.3s, transform)
-
+                background: #ffffff
             .headerSpacer
                 position: absolute
                 height: 100%
@@ -153,7 +156,7 @@
 
                 .headerSpacerWrapperOvf
                     transform: translate3d(-300px, 4px, 0)
-
+                    background: #ffffff
                     .headerSpacer
                         border-radius: 8px
                         border-top-left-radius: 0

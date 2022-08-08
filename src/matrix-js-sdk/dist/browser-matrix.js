@@ -53592,21 +53592,21 @@ const DEFAULT_NAMESPACE = "matrix";
 loglevel_1.default.methodFactory = function (methodName, logLevel, loggerName) {
     return function (...args) {
         /* eslint-disable @babel/no-invalid-this */
-        if (this.prefix) {
-            args.unshift(this.prefix);
-        }
+        // if (this.prefix) {
+        //     args.unshift(this.prefix);
+        // }
         /* eslint-enable @babel/no-invalid-this */
-        const supportedByConsole = methodName === "error" ||
-            methodName === "warn" ||
-            methodName === "trace" ||
-            methodName === "info";
+        // const supportedByConsole = methodName === "error" ||
+        //     methodName === "warn" ||
+        //     methodName === "trace" ||
+        //     methodName === "info";
         /* eslint-disable no-console */
-        if (supportedByConsole) {
-            return console[methodName](...args);
-        }
-        else {
-            return console.log(...args);
-        }
+        // if (supportedByConsole) {
+        //     return console[methodName](...args);
+        // }
+        // else {
+        //     return console.log(...args);
+        // }
         /* eslint-enable no-console */
     };
 };

@@ -113,6 +113,7 @@
         "unauthorized" : "Неавторизован",
         "search" : "Поиск",
         "replyOnMessage" : "Ответить на сообщение",
+        "shareMessage": "Переотправить сообщение",
         "editMessage" : "Редактировать сообщение",
         "inviteFriend" : "Пригласить друзей",
         "emptyContactList" : "Ваша книга контактов пуста",

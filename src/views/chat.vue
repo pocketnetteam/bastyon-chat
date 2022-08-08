@@ -58,6 +58,7 @@
 
     .headerSpacerWrapperOvf
       overflow: visible
+      background: #ffffff
 </style>
 
 <script>
