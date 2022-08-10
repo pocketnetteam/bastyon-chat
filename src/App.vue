@@ -515,8 +515,9 @@ export default {
   },
 
   created() {
-    // this.pocketnet = false
-    // this.mobile = !this.pocketnet
+    this.pocketnet = false
+    this.mobile = !this.pocketnet
+    this.recording = true
 
     this.$store.commit('setPocketnet', this.pocketnet);
     this.$store.commit('setMobile', this.mobile);

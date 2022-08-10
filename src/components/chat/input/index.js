@@ -978,8 +978,11 @@ export default {
               id: id,
               error: e
             })
-            return Promise.resolve()
-          })
+
+            return setTimeout(() => {
+              this.core.mtrx.sendAudio(this.chat, base64, null, meta, {relation: this.relationEvent})
+            }, 1000)
+        })
 
 
     },
