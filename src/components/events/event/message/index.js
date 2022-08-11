@@ -312,6 +312,11 @@ export default {
 
   },
 
+  mounted() {
+    console.log('this.origin._localTimestamp', this.origin._localTimestamp)
+
+  },
+
 
   methods: {
     gotoreference: function () {

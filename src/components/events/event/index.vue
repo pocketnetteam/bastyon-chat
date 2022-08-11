@@ -203,6 +203,8 @@ export default {
 
   mounted: function () {
     this.$emit('mounted')
+
+    console.log('this.chat', this.chat)
   },
   
   watch : {
