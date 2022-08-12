@@ -979,9 +979,11 @@ export default {
               error: e
             })
 
-            return setTimeout(() => {
+            const timeoutId = setTimeout(() => {
               this.core.mtrx.sendAudio(this.chat, base64, null, meta, {relation: this.relationEvent})
             }, 1000)
+
+            return Promise.resolve(timeoutId)
         })
 
 
