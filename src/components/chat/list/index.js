@@ -450,16 +450,19 @@ export default {
             i--
           }
 
+          if(e){
+            this.core.mtrx.client.setRoomReadMarkers(
+              this.chat.currentState.roomId,
+              e.eventId,
+              e, {
+                hidden : !this.settings_read ? true : false
+              }).then(r => {
+  
+              return r
+            })
+          }
 
-          this.core.mtrx.client.setRoomReadMarkers(
-            this.chat.currentState.roomId,
-            e.eventId,
-            e, {
-              hidden : !this.settings_read ? true : false
-            }).then(r => {
-
-            return r
-          })
+          
 
         }, 1000)
 

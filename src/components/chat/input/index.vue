@@ -20,11 +20,11 @@
             v-else
             ref="newinput"
 
-            @transaction="sendtransaction"
             @chatMessage="sendinput"
-            @setMetaUrl="emitUrl"
             @emptyInput="emitInputData"
             @FilledInput="HideUploadPic"
+
+
             @base64="pasteImage"
             @focused="focused"
             @tipsearchrequest="tipBySearch"
@@ -88,15 +88,19 @@
                 </template>
               </dropdownMenu>
             </div>
+
             <template v-if="voiceEnable">
-              <div v-if="(isRecording || !recordRmsData.length) && !microphoneDisabled" class="iconbutton">
-                <recordVoice @onRecordingStart="initRecording" @onRecordingStop="stopRecording" :isRecording="isRecording" @onClear="clear" @canceling="setOpacity"/>
+              
+              <div v-show="(isRecording || !recordRmsData.length) && !microphoneDisabled" class="iconbutton">
+                <recordVoice @onRecordingStart="initRecording" @onRecordingStop="stopRecording" :prepareRecording="prepareRecording ? true : false" :isRecording="isRecording" @onClear="clear" @canceling="setOpacity"/>
               </div>
 
               <div v-if="microphoneDisabled" class="disabled">
                 <i class="icon fas fa-microphone-slash" @click="initRecording"></i>
               </div>
             </template>
+
+
             <div v-if="!isRecording && recordViewData.length" class="iconbutton" @click="sendVoiceMessage">
               <div>
                 <i class="icon fas fa-paper-plane"></i>

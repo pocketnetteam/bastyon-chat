@@ -161,6 +161,9 @@ class MTRX {
   }
 
   createMtrxClient(opts) {
+
+    console.log('opts', opts)
+
     var client = sdk.createClient(opts);
 
     client.getProfileInfo = function () {

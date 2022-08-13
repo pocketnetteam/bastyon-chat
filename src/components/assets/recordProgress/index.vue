@@ -1,9 +1,14 @@
 <template>
   <div class="recordProgress">
-    <div v-if="isRecording" class="indicator" :class="{'recording': isRecording}"></div>
+    <div class="indicatorWrapper" v-if="isRecording">
+      <div class="indicator" :class="{'recording': isRecording}"></div>
+    </div>
+    
+
     <div v-else class="del" @click="clear">
       <i class="fas fa-trash"></i>
     </div>
+
     <div class="timer">{{timer}}</div>
     <div class="graph" ref="graph">
       <canvas ref="canvas" id="canvas" :width="width" height="60"/>

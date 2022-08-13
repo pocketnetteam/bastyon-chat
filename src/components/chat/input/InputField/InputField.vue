@@ -2,26 +2,26 @@
   <div class="input_component">
     <div class="input-wrapper">
       <div class="textarea">
-                <textarea
-                  id="textInput"
-                  :value="text"
-                  ref="textarea"
-                  class="chat-input"
-                  type="text"
-                  row="1"
-                  spellcheck="true"
-                  autocorrect="on"
-                  @focus="focused"
-                  @blur="blured"
-                  @keydown="keydown"
-                  @input="textchange"
-                  @keyup="keyup"
-                  @click="keyup"
-                  @paste="paste_image"
-                  :placeholder="$t('caption.sendmessage')"
+        <textarea
+          id="textInput"
+          :value="text"
+          ref="textarea"
+          class="chat-input"
+          type="text"
+          row="1"
+          spellcheck="true"
+          autocorrect="on"
+          @focus="focused"
+          @blur="blured"
+          @keydown="keydown"
+          @input="textchange"
+          @keyup="keyup"
+          @click="keyup"
+          @paste="paste_image"
+          :placeholder="$t('caption.sendmessage')"
 
-                ></textarea>
-        <transition name="fade" mode="out-in" v-if="!mobile">
+        ></textarea>
+        <transition name="fade" mode="out-in" >
           <picker
             :data="emojiIndex"
             v-show="display_emoji"
@@ -38,7 +38,7 @@
       </div>
     </div>
 
-    <div class="iconbutton emojipicker" @click="toggle_emoji_picker()" v-if="!mobile">
+    <div class="iconbutton emojipicker" @click="toggle_emoji_picker()" >
       <div class="leftdummy">
         <div class="idummy">
           <i v-if="display_emoji" class="fas fa-times"></i>
@@ -101,6 +101,31 @@ export default {
         this.textarea_resize()
       }
     },
+  },
+
+  data() {
+    return {
+      send: false,
+     
+      ready: false,
+      text: '',
+      exclude: ['flags'],
+      display_emoji: false,
+      content_height: 26,
+      pasted_data: [],
+      block: false,
+
+      upload: {
+        multiple: true,
+        extensions: ['image/jpg', 'image/jpeg', 'image/png'],
+        images: {
+          resize: {
+            type: 'fit'
+          }
+        }
+      },
+      hidden_previews: null
+    }
   },
 
   computed: {
@@ -176,6 +201,8 @@ export default {
 
     textarea_resize() {
 
+      console.log('this.text', this.text)
+
       if (!this.text) {
         this.textarea_resize_reset()
       } else {
@@ -188,7 +215,7 @@ export default {
     },
 
     textarea_resize_reset() {
-      this.$refs.textarea.style.height = '26px'
+      this.$refs.textarea.style.height = this.content_height + 'px'
     },
     toggle_emoji_picker() {
       this.display_emoji = !this.display_emoji
@@ -200,7 +227,6 @@ export default {
 
         this.display_emoji = false
         this.$emit('chatMessage', this.text)
-
         this.$emit('emptyInput')
         this.send = false
         this.text = ''
@@ -442,41 +468,7 @@ export default {
     tipusers: Array
   },
 
-  data() {
-    return {
-      send: false,
-      toMatch: [
-        /Android/i,
-        /webOS/i,
-        /iPhone/i,
-        /iPad/i,
-        /iPod/i,
-        /BlackBerry/i,
-        /Windows Phone/i
-      ],
-      isPhone: true,
-      heightUp: 40,
-      areaValue: '',
-      ready: false,
-      text: '',
-      exclude: ['flags'],
-      display_emoji: false,
-      content_height: 26,
-      pasted_data: [],
-      block: false,
-
-      upload: {
-        multiple: true,
-        extensions: ['image/jpg', 'image/jpeg', 'image/png'],
-        images: {
-          resize: {
-            type: 'fit'
-          }
-        }
-      },
-      hidden_previews: null
-    }
-  },
+  
 
   creared() {
 
@@ -488,9 +480,6 @@ export default {
       this.focus()
     }
 
-    this.isPhone = this.toMatch.some(toMatchItem => {
-      return navigator.userAgent.match(toMatchItem);
-    })
 
     this.$refs.textarea.style.height = '26px'
 

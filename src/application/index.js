@@ -63,6 +63,8 @@ class Core {
         this.external = {}
         this.hiddenInParent = false
 
+        this.customRecorderConnected = false
+
         this.pcrypto.init(this.user)
 
     }
@@ -476,6 +478,52 @@ class Core {
             
     }
 
+    async connectCustomRecorder() {
+
+        console.log('connectCustomRecorder')
+
+        if (this.customRecorderConnected) return
+            this.customRecorderConnected = true
+
+        var {register} = require('extendable-media-recorder')
+        var {connect} = require('extendable-media-recorder-wav-encoder')
+  
+        await register(await connect());
+
+        
+    }
+
+    initMediaRecorder() {
+
+        /*return new Promise((resolve, reject) => {
+            setTimeout(() => {
+                reject()
+            }, 300)
+        })*/
+
+        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+
+            return this.connectCustomRecorder().then(() => {
+
+                return navigator.mediaDevices.getUserMedia({ audio: true })
+
+            }).then(stream => {
+
+                var {MediaRecorder} = require('extendable-media-recorder')
+
+                let mediaRecorder = new MediaRecorder(stream, { mimeType: 'audio/wav' })
+                mediaRecorder.stream = stream
+
+                return mediaRecorder
+                
+            }).catch(function (err) {
+                return Promise.reject(err)
+            });
+
+        } else {
+            return Promise.reject()
+        }
+    }
 }
 
 export default Core

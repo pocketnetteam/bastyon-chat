@@ -160,7 +160,7 @@ import userspic from '@/components/assets/userspic/index.vue'
 import bgimage from '@/components/assets/bgimage.vue'
 import logotype from '@/components/assets/logotype/index.vue'
 import dropdownMenu from '@/components/assets/dropdownMenu/index.vue';
-import recordVoice from '@/components/assets/recordVoice/index.vue';
+
 import backButton from '@/components/assets/backButton/index.vue';
 import topheader from '@/components/assets/topheader/index.vue';
 import maincontent from '@/components/assets/maincontent/index.vue';
@@ -170,9 +170,7 @@ import linepreloader from '@/components/assets/linepreloader/index.vue';
 import {PhotoSwipe, PhotoSwipeGallery} from "@/editedplugins/v-photoswipe/src/index.js";
 
 import chats from '@/views/chats.vue'
-import func from 'vue-editor-bridge'
-import {register} from 'extendable-media-recorder';
-import {connect} from 'extendable-media-recorder-wav-encoder';
+
 ////////
 
 
@@ -188,7 +186,6 @@ Vue.component('fixedmessageicon', fixedmessageicon)
 Vue.component('bgimage', bgimage)
 Vue.component('logotype', logotype)
 Vue.component('dropdownMenu', dropdownMenu)
-Vue.component('recordVoice', recordVoice)
 Vue.component('backButton', backButton)
 Vue.component('topheader', topheader)
 Vue.component('maincontent', maincontent)
@@ -389,9 +386,7 @@ export default {
   },
 
   methods: {
-    async connectCustomRecorder() {
-      await register(await connect());
-    },
+    
     hide: function () {
 
       this.$store.commit('minimize', true);
@@ -515,8 +510,9 @@ export default {
   },
 
   created() {
-    // this.pocketnet = false
-    // this.mobile = !this.pocketnet
+    this.pocketnet = false
+    this.mobile = !this.pocketnet
+    this.recording = true
 
     this.$store.commit('setPocketnet', this.pocketnet);
     this.$store.commit('setMobile', this.mobile);
@@ -533,7 +529,8 @@ export default {
         this.setPusher(this.fcmtoken);
     }, 5000);
 
-    this.connectCustomRecorder();
+    
+    
     var testUsers = {
       matrixMan: {
         address: f.hexEncode('PToMRMsMVh9dj4Cpa7yu1pB5iq65g4jrVC'),
@@ -773,6 +770,7 @@ export default {
     core.initWithUser(user).then(r => {
 
       return core.mtrx.wait().then(() => {
+        
 
         core.user.getContacts()
 
@@ -785,6 +783,8 @@ export default {
 
           this.$router.push('/chats').catch(e => {})
         }
+
+        //this.connectCustomRecorder();
 
       })
 

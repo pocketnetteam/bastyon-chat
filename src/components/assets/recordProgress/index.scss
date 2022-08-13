@@ -6,17 +6,29 @@
   padding: 0 1em;
   align-items: center;
   max-width: 90%;
-  .indicator {
+
+  .indicatorWrapper{
+    min-width: 20px;
+    width: 20px;
     margin-right: 1em;
-    min-width: 8px;
-    height: 8px;
-    background: red;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .indicator {
+    
+    height: 6px;
+    width: 6px;
+    background: #ff033e;
     border-radius: 50%;
     &.recording {
       animation: pulse 1.2s ease infinite;
     }
   }
+
   .del {
+    min-width: 20px;
     cursor: pointer;
     display: flex;
     justify-content: center;

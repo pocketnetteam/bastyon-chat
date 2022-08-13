@@ -1,4 +1,4 @@
-import {canvas} from 'caniuse-lite/data/features';
+//import {canvas} from 'caniuse-lite/data/features';
 
 export default {
   name: "recordProgress",
