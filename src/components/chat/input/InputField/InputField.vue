@@ -21,7 +21,7 @@
           :placeholder="$t('caption.sendmessage')"
 
         ></textarea>
-        <transition name="fade" mode="out-in" >
+        <transition name="fade" mode="out-in" v-if="!mobile" >
           <picker
             :data="emojiIndex"
             v-show="display_emoji"
@@ -38,7 +38,7 @@
       </div>
     </div>
 
-    <div class="iconbutton emojipicker" @click="toggle_emoji_picker()" >
+    <div class="iconbutton emojipicker" @click="toggle_emoji_picker()" v-if="!mobile">
       <div class="leftdummy">
         <div class="idummy">
           <i v-if="display_emoji" class="fas fa-times"></i>
