@@ -1,4 +1,5 @@
 .recordButton {
+  
   &_wrapper {
     position: relative;
   }
@@ -37,7 +38,7 @@
     }
   }
 
-  &_toggle {
+  &_main {
     padding-top: 1px;
     touch-action: none;
     display: flex;
@@ -45,35 +46,28 @@
     justify-content: center;
     width: 35px;
     height: 35px;
-    font-size: 16px;
     line-height: 35px !important;
     background: transparent;
-    //transition: background .3s ;
-    //transition: transform .05s;
     border-radius: 50%;
     outline: none;
 
     &.active {
-      background: #00A3F7;
+      background: srgb(--color-bg-ac);
       animation: pulse 1.2s infinite;
-
       .icon {
-        color: white;
-        font-size: 16px;
-      }
-
-      &.hold {
-        background: red;
-
-        .icon {
-          font-size: 14px;
-        }
+        color : srgb(--text-on-bg-shadow-color);
       }
     }
 
     &.outside {
-      background: red;
+      background: srgb(--color-bad);
     }
+  }
+
+  &_stop{
+    background: srgb(--color-bad);
+    color : srgb(--text-on-bg-shadow-color);
+    font-size: 0.7em;
   }
 }
 

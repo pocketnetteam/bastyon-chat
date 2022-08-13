@@ -3,9 +3,15 @@
     <div ref="holder" class="recordButton_holder" :class="{hold: isHold}">
       <i class="icon fas" :class="isHold ? 'fa-lock': 'fa-lock-open'"></i>
     </div>
-    <div ref="toggle" class="recordButton_toggle" :class="{active: isRecording, hold: isHold }" @mousedown="record">
-      <i class="icon fas" :class="isHold ? 'fa-stop': 'fa-microphone'"></i>
+
+    <div ref="toggle" class="recordButton_micro recordButton_main" v-if="!isHold" :class="{active: isRecording}" @mousedown="mousedown" @mouseup="mouseup" @touchstart="handleTouchStart" @touchend="handleTouchEnd" @touchcancel="handleTouchEnd">
+      <i class="icon fas fa-microphone"></i>
     </div>
+
+    <div ref="stop" class="recordButton_stop recordButton_main" v-if="isHold" @click="recordEnd">
+      <i class="icon fas fa-stop"></i>
+    </div>
+
   </div>
 </template>
 

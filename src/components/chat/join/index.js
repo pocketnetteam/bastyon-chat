@@ -64,7 +64,7 @@ export default {
       this.$store.commit('SET_CHAT_TO_FORCE', this.m_chat.roomId)
 
       this.core.mtrx.client.joinRoom(this.m_chat.roomId).then(() => {
-        this.$store.commit('SET_CHAT_TO_STORE', this.m_chat.summary)
+        //this.$store.commit('SET_CHAT_TO_STORE', this.m_chat.summary)
         this.$emit('joined')
 
       }).catch(function (error) {

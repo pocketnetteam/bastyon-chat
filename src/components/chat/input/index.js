@@ -873,60 +873,40 @@ export default {
 
 			}).catch(err => {
 
-				this.microphoneDisabled = true
+				if(err == 'permissions'){
+					this.microphoneDisabled = true
 
-				if(window.cordova){
-					console.error('cordova')
+					if(window.cordova){
+						console.error('cordova')
+					}
+					else{	
+						this.$dialog.confirm(
+							this.$i18n.t('micaccessbrowser'), {
+							okText: this.$i18n.t("button.ok"),
+						})
+					}
 				}
-				else{	
+
+				else{
+
 					this.$dialog.confirm(
-						'Access to the microphone is restricted, please check your browser settings.', {
-						okText: 'Yes',
+						this.$i18n.t('micaccesscommonproblem'), {
+						okText: this.$i18n.t("button.ok"),
 					})
+
+					console.error(err)
 				}
 
 			}).finally(() => {
 				this.prepareRecording = null
 			})
 
-			/*try {
-
-
-
-				if (!this.isRecording) return
-
-				if (!this.mediaRecorder) {
-					this.mediaRecorder = await this.initMediaRecorder()
-
-					console.log('this.mediaRecorder', this.mediaRecorder)
-
-					if (this.isRecording) {
-						
-					}
-					else {
-
-						this.mediaRecorder = null
-						return
-					}
-
-				}
-				if (this.microphoneDisabled && this.mediaRecorder) {
-					this.microphoneDisabled = false
-					this.isRecording = false
-					return
-				}
-
-				
-
-			} catch (e) {
-				this.microphoneDisabled = true
-				this.isRecording = false
-				
-			}*/
 
 		},
 
 		startRecording() {
+
+			this.$store.commit('SET_VOICERECORDING', true)
 
 			this.isRecording = true
 			this.cancelOpacity = 0
@@ -946,7 +926,7 @@ export default {
 
 
 		checkaudioForSend : function(audio, sendnow){
-			if (audio.duration < 0.5) {
+			if (audio.duration < 1) {
 				this.clear()
 			}
 			else{
@@ -995,11 +975,7 @@ export default {
 				isPlaying: false,
 			}
 
-			this.mediaRecorder.stream.getTracks().forEach((track) => {
-				track.stop();
-			});
-
-			this.mediaRecorder = null
+			
 		},
 
 		generateRms(frequencies) {
@@ -1009,6 +985,8 @@ export default {
 		stopRecording({ cancel, sendnow }) {
 
 			console.log('stop', cancel, sendnow)
+
+			this.$store.commit('SET_VOICERECORDING', false)
 
 			if (this.prepareRecording){
 
@@ -1029,12 +1007,19 @@ export default {
 
 				if (cancel) {
 					this.mediaRecorder.ondataavailable = () => { }
+					
 				}
 				else{
 					this.mediaRecorder.ondataavailable = (event) => this.createVoiceMessage(event, sendnow)
 				}
 
 				this.mediaRecorder.stop()
+
+				this.mediaRecorder.stream.getTracks().forEach((track) => {
+					track.stop();
+				});
+	
+				this.mediaRecorder = null
 			}
 
 		},

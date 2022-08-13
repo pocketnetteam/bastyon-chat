@@ -1,7 +1,7 @@
 <template>
   <div id="matrix-root" :theme="theme" class="app">
     <div class="rootcontent"
-         :class="{pip, 'bin' : pocketnet, 'fix' : pocketnet, 'bout' : !pocketnet, minimized, active, mobile}">
+         :class="{pip, 'bin' : pocketnet, 'fix' : pocketnet, 'bout' : !pocketnet, minimized, active, mobile, unselect}">
       <div class="chatwrapper" @click="iteraction">
         <div>
           <div class="backface" v-if="closebybg" @click="hide"></div>
@@ -383,6 +383,10 @@ export default {
       return !this.$store.state.pinchat
     },
 
+    unselect:function(){
+      return this.$store.state.voicerecording
+    }
+
   },
 
   methods: {
@@ -510,7 +514,7 @@ export default {
   },
 
   created() {
-    this.pocketnet = false
+    this.pocketnet = true
     this.mobile = !this.pocketnet
     this.recording = true
 
@@ -694,7 +698,7 @@ export default {
       privateKey: this.privatekey
     }
 
-    var username = 'nevermore'
+    var username = 'morph'
 
     var user = (this.address && this.privatekey) ? actualUser : testUsers[`${username}`];
 

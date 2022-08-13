@@ -7,6 +7,7 @@ import ApiWrapper from "./api.js";
 import Pcrypto from "./pcrypto.js";
 import listeners from './listeners'
 import f from './functions'
+import Media from './media'
 
 class Core {
     constructor(vm, p){
@@ -66,6 +67,8 @@ class Core {
         this.customRecorderConnected = false
 
         this.pcrypto.init(this.user)
+
+        this.media = new Media()
 
     }
 
@@ -505,7 +508,9 @@ class Core {
 
             return this.connectCustomRecorder().then(() => {
 
-                return navigator.mediaDevices.getUserMedia({ audio: true })
+                return this.media.get({ audio: true })
+
+                //return navigator.mediaDevices.getUserMedia({ audio: true })
 
             }).then(stream => {
 

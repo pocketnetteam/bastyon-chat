@@ -25,14 +25,14 @@ export default {
 		})
 	},
 	mounted() {
-		this.$refs.toggle.addEventListener('touchstart', this.handleTouchStart)
+		/*this.$refs.toggle.addEventListener('touchstart', this.handleTouchStart)
 		this.$refs.toggle.addEventListener('touchend', this.handleTouchEnd)
-		this.$refs.toggle.addEventListener('touchcancel', this.handleTouchEnd)
+		this.$refs.toggle.addEventListener('touchcancel', this.handleTouchEnd)*/
 	},
 	beforeDestroy() {
-		this.$refs.toggle.removeEventListener('touchstart', this.handleTouchStart)
+		/*this.$refs.toggle.removeEventListener('touchstart', this.handleTouchStart)
 		this.$refs.toggle.removeEventListener('touchend', this.handleTouchEnd)
-		this.$refs.toggle.removeEventListener('touchcancel', this.handleTouchEnd)
+		this.$refs.toggle.removeEventListener('touchcancel', this.handleTouchEnd)*/
 
 		document.removeEventListener('mousemove', this.handleMove)
 		document.removeEventListener('touchmove', this.handleMove)
@@ -43,6 +43,14 @@ export default {
 	},
 	methods: {
 
+		mouseup : function(e){
+			console.log("E", e)
+			this.handleTouchEnd(e)
+		},
+
+		mousedown : function(e){
+			this.handleTouchStart(e)
+		},
 		
 		handleTouchStart(e) {
 
@@ -57,8 +65,8 @@ export default {
 			}
 
 			this.start = {
-				Y: e.changedTouches[0].pageY,
-				X: e.changedTouches[0].pageX
+				Y: e.changedTouches ? e.changedTouches[0].pageY : e.pageY,
+				X: e.changedTouches ? e.changedTouches[0].pageX : e.pageX
 			}
 
 			document.addEventListener('mousemove', this.handleMove)
@@ -66,6 +74,19 @@ export default {
 
 		},
 		handleTouchEnd(e) {
+
+			/*let deltaY = this.start.Y - e.pageY
+			let deltaX = this.start.X - e.pageX
+
+			if (e?.changedTouches?.length) {
+				deltaY = this.start.Y - e.changedTouches[0].pageY
+				deltaX = this.start.X - e.changedTouches[0].pageX
+			}
+
+			if (deltaY > 15 || deltaX > 15) {
+				this.$refs.toggle.style.transform = `translate(0,0)`
+				return
+			}*/
 
 			if(this.isHold) return
 
@@ -98,11 +119,11 @@ export default {
 
 			if (deltaY > 5 && this.direction === 'Y') {
 
-				this.$refs.toggle.classList.add('outside')
+				
 				this.$refs.holder.classList.add('active')
 				this.$refs.toggle.style.transform = `translate(0,-${deltaY}px)`
 
-				if (deltaY > 80) {
+				if (deltaY > 70) {
 					this.$refs.toggle.style.transform = `translate(0,0)`
 
 					document.removeEventListener('mousemove', this.handleMove)
@@ -115,8 +136,9 @@ export default {
 
 			} else if (deltaX > 5 && this.direction === 'X') {
 				this.$refs.toggle.style.transform = `translate(-${deltaX}px, 0)`
-				this.$emit('canceling', (deltaX - 5) / 180)
-				if (deltaX > 180) {
+				this.$refs.toggle.classList.add('outside')
+				this.$emit('canceling', (deltaX - 5) / 130)
+				if (deltaX > 130) {
 					this.$refs.toggle.style.transform = `translate(0,0)`
 					document.removeEventListener('mousemove', this.handleMove)
 					document.removeEventListener('touchmove', this.handleMove)
@@ -132,13 +154,14 @@ export default {
 			}
 		},
 
-		record(e) {
+		recordEnd(e) {
 
-			if (this.isRecording) {
+			if (this.isRecording && this.isHold) {
+				
 
 				this.$emit('onRecordingStop', {})
-				document.removeEventListener('mousemove', this.handleMove)
-				document.removeEventListener('touchmove', this.handleMove)
+				//document.removeEventListener('mousemove', this.handleMove)
+				//document.removeEventListener('touchmove', this.handleMove)
 
 				this.isHold = false
 
@@ -146,19 +169,21 @@ export default {
 
 			}
 
-			if (!this.mobile){
-				this.$emit('onRecordingStart')
-				this.start = {
+			//if (!this.mobile){
+				//this.$emit('onRecordingStart')
+				/*this.start = {
 					Y: e.pageY,
 					X: e.pageX
-				}
+				}*/
 				//document.addEventListener('mouseup', this.handleTouchEnd)
-				document.addEventListener('mousemove', this.handleMove)
-				document.addEventListener('touchmove', this.handleMove)
-			}
+				//document.addEventListener('mousemove', this.handleMove)
+				//document.addEventListener('touchmove', this.handleMove)
+			//}
 
 			
 
 		},
+
+		
 	}
 }

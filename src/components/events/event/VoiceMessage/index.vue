@@ -1,14 +1,14 @@
 <template>
-  <div class="voiceMessage">
+  <div class="voiceMessage" :class="{playing:isPlaying}">
     <div class="voiceMessage_wrapper">
       <button class="voiceMessage_toggle" @click="audioToggle">
         <i :class="isPlaying ? 'fas fa-pause': 'fas fa-play'"></i>
       </button>
       <div class="voiceMessage_graph">
-        <canvas ref="canvas" width="160" height="50" @mousedown="goTo"></canvas>
+        <canvas ref="canvas" width="100" height="50" @mousedown="goTo"></canvas>
       </div>
       <div class="voiceMessage_options">
-        {{ getDurationString }}
+        <span>{{ getDurationString }}</span>
       </div>
     </div>
   </div>
@@ -197,34 +197,34 @@ export default {
 <style scoped lang="scss">
 .voiceMessage {
   -webkit-tap-highlight-color: transparent;
+  display: flex;
 
   &_wrapper {
     display: flex;
     justify-content: flex-end;
     align-items: center;
     overflow: hidden;
-    height: 60px;
     min-width: 10em;
-    padding: 0 1em;
-    border-radius: 1em;
-    border-bottom-left-radius: 1em;
-    border-top-right-radius: 0;
+    padding: 0 0.5em;
+    padding-right: 1em;
+    border-radius: 2em;
+    background: srgb(--background-secondary-theme);
   }
 
   &_toggle {
     cursor: pointer;
-    height: 40px;
-    width: 40px;
-    margin-right: 1em;
+    height: 33px;
+    width: 33px;
+    margin-right: 0.5em;
     border-radius: 50%;
-    background: srgb(--color-bg-ac);
+    background: srgb(--neutral-grad-1);
     display: flex;
     align-items: center;
     justify-content: center;
-    color: white;
+    color: srgb(--color-bg-ac);
 
     i {
-      font-size: 15px;
+      font-size: 0.5em;
     }
   }
 
@@ -236,12 +236,25 @@ export default {
   &_options {
     display: flex;
     justify-content: center;
-    line-height: 1em;
     margin-left: 10px;
     padding: 2px 10px;
     min-width: 40px;
     background: srgb(--neutral-grad-1);
     border-radius: 10px;
+
+    span{
+      font-size: 0.8em;
+      color : srgb(--neutral-grad-3);
+    }
+  }
+
+  &.playing{
+    .voiceMessage_options {
+      span{
+        font-size: 0.8em;
+        color : srgb(--color-bg-ac-bright);
+      }
+    }
   }
 }
 </style>

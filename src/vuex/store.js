@@ -72,7 +72,7 @@ var store = new Vuex.Store({
 		pinchat: false,
 		lastroom: null,
 		dontreadreceipts: false,
-
+		voicerecording : false,
 		deletedrooms: {}
 		//share : {url : 'https://yandex.ru/'} //null
 	},
@@ -129,6 +129,7 @@ var store = new Vuex.Store({
 			state.pinchat = false
 			state.dontreadreceipts = false
 			state.lastroom = null
+			state.voicerecording = false
 
 			// state.share = null
 
@@ -576,6 +577,10 @@ var store = new Vuex.Store({
 		SET_MENU(state, v) {
 			state.menu = v
 
+		},
+
+		SET_VOICERECORDING(state, v){
+			state.voicerecording = v
 		}
 
 	},
