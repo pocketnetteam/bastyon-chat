@@ -8,7 +8,8 @@
         <canvas ref="canvas" width="100" height="50" @mousedown="goTo"></canvas>
       </div>
       <div class="voiceMessage_options">
-        <span>{{ getDurationString }}</span>
+        <span v-if="!error">{{ getDurationString }}</span>
+        <i v-if="error" class="fas fa-exclamation-circle"></i>
       </div>
     </div>
   </div>
@@ -33,6 +34,13 @@ export default {
       voiceMessage: null,
       isPlaying: false,
       interval: null,
+
+      audio : null,
+      duration : null,
+      currentTime : null,
+      signal : null,
+
+      error : null
     }
   },
   inject: ['addToQueue', 'playNext'],
@@ -43,42 +51,49 @@ export default {
   beforeDestroy() {
     if (this.isPlaying) {
       this.isPlaying = false
-      this.voiceMessage.audio.pause()
+      this.audio.pause()
       clearInterval(this.interval)
     }
   },
   computed: {
     getDurationString() {
-      if (this.voiceMessage) {
+
+      if (this.duration) {
+
         let sec, min
-        if (this.voiceMessage.currentTime) {
-          sec = Math.floor(this.voiceMessage.currentTime / 1000)
-          min = Math.floor(this.voiceMessage.currentTime / 60000)
+        
+        if (this.currentTime) {
+          sec = Math.floor(this.currentTime / 1000)
+          min = Math.floor(this.currentTime / 60000)
           return `${min}:${sec < 10 ? '0' + sec : sec}`
         }
-        sec = Math.floor(this.voiceMessage.duration / 1000)
-        min = Math.floor(this.voiceMessage.duration / 60000)
+
+        sec = Math.floor(this.duration / 1000)
+        min = Math.floor(this.duration / 60000)
+
         return `${min}:${sec < 10 ? '0' + sec : sec}`
+
       }
+
       return '0:00'
     },
     percentPlayed() {
-      return this.voiceMessage.currentTime / this.voiceMessage.duration
+      return this.currentTime / this.duration
     }
   },
   methods: {
     goTo(e) {
 
-      var dr = e.offsetX / this.$refs.canvas.width * this.voiceMessage.audio.duration;
-      this.voiceMessage.audio.currentTime = dr
+      var dr = e.offsetX / this.$refs.canvas.width * this.duration;
       
-      this.$set(this.voiceMessage, 'currentTime', dr)
-
+      this.audio.currentTime = dr
+      this.currentTime = dr
+      
       this.draw()
 
       if (!this.isPlaying) {
         this.isPlaying = true
-        this.voiceMessage.audio.play()
+        this.audio.play()
         this.interval = setInterval(() => {
           this.draw()
           this.setTime()
@@ -87,26 +102,33 @@ export default {
     },
     audioToggle() {
       this.isPlaying = !this.isPlaying
+
       if (this.isPlaying) {
-        this.voiceMessage.audio.play()
+        this.audio.play()
         this.interval = setInterval(() => {
           this.draw()
           this.setTime()
         }, 20);
+
       }else {
+
         clearInterval(this.interval)
-        this.voiceMessage.audio.pause()
+        this.audio.pause()
+
       }
     },
     setTime() {
-      this.$set(this.voiceMessage, 'currentTime', this.voiceMessage.audio.currentTime * 1000)
+      this.currentTime = this.audio.currentTime * 1000
     },
 
     draw() {
+
+
       const canvas = this.$refs.canvas
       const ctx = canvas.getContext("2d")
       ctx.clearRect(0, 0, canvas.width, canvas.height)
-      const data = this.voiceMessage.signal
+      const data = this.signal
+
       for (let i = 0; i < data.length; i++) {
         let x = Math.floor(i / data.length * canvas.width);
         let L = Math.abs(data[i] * canvas.height) + 1;
@@ -119,6 +141,8 @@ export default {
           ctx.fillRect(x, canvas.height / 2 - L / 2, 1, L);
         }
       }
+
+
     },
     async initVoiceMessage() {
 
@@ -134,19 +158,28 @@ export default {
 
 
         const getDuration = () => {
+
           audioNode.currentTime = 0
-          this.$set(this.voiceMessage, 'duration', audioNode.duration * 1000)
+
+          this.currentTime = 0
+          this.duration = audioNode.duration * 1000
+
           audioNode.removeEventListener('timeupdate', getDuration)
         }
+
         if (audioNode.duration === Infinity) {
+
           audioNode.addEventListener('timeupdate', getDuration)
           audioNode.currentTime = 1e101
+
+          this.currentTime = 1e101
         } else {
-          this.$set(this.voiceMessage, 'duration', audioNode.duration * 1000)
+          this.duration = audioNode.duration * 1000
         }
 
 
       }
+      
       audioNode.onplay = () => {
         let currentPlaying = this.$store.state.currentPlayingVoiceMessage
         if (currentPlaying && currentPlaying.id !== this.id) {
@@ -154,40 +187,48 @@ export default {
         }
         this.$store.commit('SET_CURRENT_PLAYING_VOICE_MESSAGE', this)
       }
+
       audioNode.onpause = () => {
         let currentPlaying = this.$store.state.currentPlayingVoiceMessage
         if (currentPlaying && currentPlaying.id === this.id) {
           this.$store.commit('SET_CURRENT_PLAYING_VOICE_MESSAGE', null)
         }
       }
+
       audioNode.onended = () => {
         this.$store.commit('SET_CURRENT_PLAYING_VOICE_MESSAGE', null)
         this.isPlaying = false
-        this.voiceMessage.audio.currentTime = 0
+        this.audio.currentTime = 0
+        this.currentTime = 0
 
-        this.$set(this.voiceMessage, 'currentTime', 0)
         clearInterval(this.interval)
+
         this.draw()
         this.playNext(this.id, this.audioToggle)
+
       }
+
+      audioNode.onerror = (E) => {
+        this.error = E
+
+        clearInterval(this.interval)
+        if(this.isPlaying)
+          this.playNext(this.id, this.audioToggle)
+      }
+
+
       this.addToQueue(this, this.id)
 
-      this.voiceMessage = {
-        audio: audioNode,
-        duration: 0,
-        currentTime: 0
-      }
+      this.audio = audioNode
+      this.duration = 0
+      this.currentTime = 0
+
 
       const data = f._base64ToArrayBuffer(this.base64Audio.split(',')[1])
       try {
         await audioContext.decodeAudioData(data, (buffer) => {
 
-          this.voiceMessage = {
-            audio: audioNode,
-            duration: 0,
-            currentTime: 0,
-            signal: buffer.getChannelData(0),
-          }
+          this.signal = buffer.getChannelData(0)
 
           this.draw()
         })
@@ -261,6 +302,12 @@ export default {
         color : srgb(--color-bg-ac-bright);
       }
     }
+  }
+
+  .fa-exclamation-circle{
+    font-size: 0.7em;
+    color : srgb(--color-bad);
+    padding : 0.5em;
   }
 }
 </style>

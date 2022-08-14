@@ -8,16 +8,23 @@ import Pcrypto from "./pcrypto.js";
 import listeners from './listeners'
 import f from './functions'
 import Media from './media'
-
 /*
-var {register, MediaRecorder} = require('extendable-media-recorder')
+import pcm from '@/application/utils/pcm.js'
+let Mp3 = require('js-mp3');
+*/
+/*
+var {register} = require('extendable-media-recorder')
 var {connect} = require('extendable-media-recorder-wav-encoder')*/
+
 
 import AudioRecorder from 'audio-recorder-polyfill'
 import mpegEncoder from 'audio-recorder-polyfill/mpeg-encoder'
 
 AudioRecorder.encoder = mpegEncoder
 AudioRecorder.prototype.mimeType = 'audio/mpeg'
+
+
+
 
 class Core {
     constructor(vm, p){
@@ -490,6 +497,16 @@ class Core {
             
     }
 
+    async convertAudioToBase64(blob) {
+        const reader = new FileReader()
+        reader.readAsDataURL(blob)
+        return new Promise(resolve => {
+            reader.onloadend = () => {
+                resolve(reader.result)
+            }
+        })
+    }
+
     async connectCustomRecorder() {
 
         if (this.customRecorderConnected) return
@@ -498,6 +515,19 @@ class Core {
         await register(await connect());
         
     }
+
+    /*mp3ToWav(base64Audio){
+
+        var mp3ArrayBuffer = f._base64ToArrayBuffer(base64Audio.split(',')[1])
+
+        var decoder = Mp3.newDecoder(mp3ArrayBuffer);
+        var pcmArrayBuffer = decoder.decode();
+
+        var dataURI = new pcm({channels: 1, rate: 8000, depth: 8}).toWav(pcmArrayBuffer).encode();
+
+        return dataURI
+
+    }*/
 
     initMediaRecorder() {
 
@@ -517,10 +547,12 @@ class Core {
 
             /*})*/.then(stream => {
 
-                //var {MediaRecorder} = require('extendable-media-recorder')
+                /*var {MediaRecorder} = require('extendable-media-recorder')
+
+                let mediaRecorder = new MediaRecorder(stream, { audioBitsPerSecond : 64000, mimeType : f.isios() ? 'audio/wav' : 'audio/webm' })
+                mediaRecorder.stream = stream*/
 
                 let mediaRecorder = new AudioRecorder(stream, { audioBitsPerSecond : 64000 })
-                //mediaRecorder.stream = stream
                
                 return mediaRecorder
                 

@@ -938,10 +938,23 @@ export default {
 
 		async createVoiceMessage(event, sendnow) {
 
-			const audioUrl = URL.createObjectURL(event.data);
+			console.log('event.data', event)
+
+			//var u = await this.core.convertAudioToBase64(event.data)
+
+			const audioUrl = URL.createObjectURL(event.data)
+
+			//const audioUrl = this.core.mp3ToWav(u);
+
 			const audio = new Audio(audioUrl);
 			const track = this.audioContext.createMediaElementSource(audio)
 			const id = f.makeid()
+
+			console.log('audio', audio)
+
+			//var u = await this.core.convertAudioToBase64(event.data)
+
+			//console.log("UUU", u)
 
 			audio.addEventListener('loadedmetadata', () => {
 
@@ -1029,7 +1042,7 @@ export default {
 		async sendVoiceMessage() {
 
 			this.recordRmsData = []
-			const base64 = await this.convertAudioToBase64(this.record.file)
+			const base64 = await this.core.convertAudioToBase64(this.record.file)
 
 			const id = f.makeid()
 
@@ -1038,6 +1051,8 @@ export default {
 				id: id,
 				base64: base64,
 			}
+
+			console.log("base64", base64)
 
 			this.$f.pretry(() => {
 
@@ -1061,7 +1076,7 @@ export default {
 			this.recordRmsData = []
 		},
 
-		async convertAudioToBase64(blob) {
+		/*async convertAudioToBase64(blob) {
 			const reader = new FileReader()
 			reader.readAsDataURL(blob)
 			return new Promise(resolve => {
@@ -1069,7 +1084,7 @@ export default {
 					resolve(reader.result)
 				}
 			})
-		},
+		},*/
 
 		setOpacity(opacity) {
 			this.cancelOpacity = opacity
