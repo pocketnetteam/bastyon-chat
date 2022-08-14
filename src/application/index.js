@@ -506,18 +506,22 @@ class Core {
 
         if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
 
-            return this.connectCustomRecorder().then(() => {
+            //return this.connectCustomRecorder().then(() => {
 
                 return this.media.get({ audio: true })
 
                 //return navigator.mediaDevices.getUserMedia({ audio: true })
 
-            }).then(stream => {
+            .then(stream => {
 
-                var {MediaRecorder} = require('extendable-media-recorder')
+                console.log('stream', stream)
 
-                let mediaRecorder = new MediaRecorder(stream, { mimeType: 'audio/wav' })
-                mediaRecorder.stream = stream
+                //var {MediaRecorder} = require('extendable-media-recorder')
+
+                let mediaRecorder = new MediaRecorder(stream, { audioBitsPerSecond : 64000, mimeType: 'audio/webm;codecs=opus' })
+                //mediaRecorder.stream = stream
+
+                console.log('mediaRecorder', mediaRecorder)
 
                 return mediaRecorder
                 

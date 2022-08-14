@@ -704,7 +704,9 @@ class MTRX {
 
     if (base64.indexOf('data:') > -1) method = 'toFile'
 
+    console.log("???")
     return f.Base64[method](base64).then(file => {
+      console.log("!#@#")
       return this.sendAudio(chat, base64, file, meta, p)
     })
   }
@@ -751,9 +753,15 @@ class MTRX {
   }
 
   sendAudio(chat, base64, file, meta, {relation, from} = {}) {
+
+
     if (!file) return this.sendAudioBase64(chat, base64, meta)
+
+    
     let info = {}
+
     info.from = from
+
     return new Promise(resolve => {
       if (chat.pcrypto.canBeEncrypt()) {
         return chat.pcrypto.encryptFile(file).then(r => {
@@ -761,15 +769,20 @@ class MTRX {
           return resolve(r.file)
         })
       }
+
+       resolve(file) 
+
     }).then(file => {
+      console.log('this.core.mtrx.uploadContent', meta)
+
       let promise = this.core.mtrx.uploadContent(file)
+
       if (promise.abort) meta.abort = promise.abort
 
       return promise
     }).then((audio) => {
       if (meta.aborted)
         return Promise.reject('aborted')
-      console.log('info', info)
       return this.client.sendAudioMessage(chat.roomId, audio, info, 'Audio')
     })
 
@@ -835,6 +848,60 @@ class MTRX {
 
   }
 
+  async getAudioUnencrypt(chat, event){
+
+    if(event.event.content.audioData){
+      return Promise.resolve(event.event.content.audioData)
+    }
+
+    this.download(event.event.content.url).then(r => {
+
+      console.log("DOWNLOADED", r)
+      return f.Base64.fromFile(r)
+    }).then(url => {
+
+
+      console.log("URL", url)
+      event.event.content.audioData = url
+
+      return Promise.resolve(event.event.content.audioData)
+    })
+
+  }
+
+  async getAudio(chat, event) {
+
+    if (event.event.decryptedAudio) {
+      return Promise.resolve(event.event.decryptedAudio)
+    }
+
+    try {
+
+      var decryptKey = await chat.pcrypto.decryptKey(event.event)
+
+      event.event.decryptKey = decryptKey
+
+      return this.download(event.event.content.url).then(blob => {
+
+        return chat.pcrypto.decryptFile(blob, decryptKey)
+
+      }).then(r => {
+        return f.Base64.fromFile(r)
+      }).then(url => {
+
+          event.event.decryptedAudio = url
+
+          return Promise.resolve(event.event.decryptedAudio)
+
+      }).catch(e => {
+        return Promise.reject(e)
+      })
+
+    } catch (e) {
+      return Promise.reject(e)
+    }
+  }
+
   async getImage(chat, event) {
 
     if (event.event.decryptedImage) {
@@ -855,15 +922,8 @@ class MTRX {
         return f.Base64.fromFile(r)
       }).then(url => {
 
-        if (event.event.content.msgtype === "m.image") {
-          event.event.decryptedImage = url.replace('data:file;', 'data:image/jpeg;')
-          return Promise.resolve(event.event.decryptedImage)
-        }
-
-        if (event.event.content.msgtype === "m.audio") {
-          event.event.decryptedAudio = url
-          return Promise.resolve(event.event.decryptedAudio)
-        }
+        event.event.decryptedImage = url.replace('data:file;', 'data:image/jpeg;')
+        return Promise.resolve(event.event.decryptedImage)
 
 
       }).catch(e => {
@@ -872,10 +932,6 @@ class MTRX {
 
     } catch (e) {
       return Promise.reject(e)
-
-      this.event.event.decryptKey = this.decryptKey = {
-        msgtype: 'm.bad.encrypted'
-      }
 
     }
   }

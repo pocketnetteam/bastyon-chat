@@ -148,9 +148,8 @@ var Media = function () {
 
             return callperm(ios ? permissions.ios.audio : permissions.audio, mediasettings.audio).then(() => {
                 return callperm(ios ? permissions.ios.video : permissions.video, mediasettings.video)
-            }).then(() => {
-                return callperm(permissions.recognition, mediasettings.recognition)
             }).catch(e => {
+                console.error("E", e)
                 return Promise.reject(e)
             })
 
@@ -164,19 +163,20 @@ var Media = function () {
 
         return new Promise((resolve, reject)=> {
 
-            initPermissions(mediasettings).then(() => {
+            console.log('mediasettings', mediasettings)
 
-                navigator.getUserMedia = (
-                    navigator.getUserMedia ||
-                    navigator.webkitGetUserMedia ||
-                    navigator.mozGetUserMedia ||
-                    navigator.msGetUserMedia
-                );
+            initPermissions(mediasettings).then(() => {
 
                 if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
                     navigator.mediaDevices.getUserMedia(mediasettings).then(resolve).catch(reject);
                 } else {
-                    navigator.getUserMedia(mediasettings, resolve, reject);
+                    (
+                        navigator.getUserMedia ||
+                        navigator.webkitGetUserMedia ||
+                        navigator.mozGetUserMedia ||
+                        navigator.msGetUserMedia
+                    )
+                    (mediasettings, resolve, reject);
                 }
 
             }).catch(reject)

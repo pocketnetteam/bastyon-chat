@@ -172,6 +172,8 @@ export default {
         currentTime: 0
       }
 
+      console.log('this.base64Audio', this.base64Audio)
+
       const data = f._base64ToArrayBuffer(this.base64Audio.split(',')[1])
       try {
         await audioContext.decodeAudioData(data, (buffer) => {

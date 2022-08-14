@@ -44,12 +44,13 @@ export default {
 	methods: {
 
 		mouseup : function(e){
-			console.log("E", e)
-			this.handleTouchEnd(e)
+			if(!this.mobile)
+				this.handleTouchEnd(e)
 		},
 
 		mousedown : function(e){
-			this.handleTouchStart(e)
+			if(!this.mobile)
+				this.handleTouchStart(e)
 		},
 		
 		handleTouchStart(e) {

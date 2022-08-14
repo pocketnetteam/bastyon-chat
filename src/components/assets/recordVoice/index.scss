@@ -50,12 +50,26 @@
     background: transparent;
     border-radius: 50%;
     outline: none;
+    position: relative;
 
     &.active {
       background: srgb(--color-bg-ac);
       animation: pulse 1.2s infinite;
+      
       .icon {
         color : srgb(--text-on-bg-shadow-color);
+      }
+
+      &:before{
+        position: absolute;
+        left: -20px;
+        bottom : -20px;
+        right: -20px;
+        top: -20px;
+        content: "";
+        border-radius: 50%;
+        border : 25px solid srgba(--color-bg-ac, 0.5);
+        animation: pulse 1.2s infinite;
       }
     }
 

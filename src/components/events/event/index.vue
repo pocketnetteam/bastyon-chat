@@ -227,6 +227,8 @@ export default {
         this.checkReaded()
         this.relations()
 
+        console.log('this.encryptedData', this.encryptedData, this.event)
+
         if(this.encryptedData || this.subtype == 'm.encrypted'){
 
           f.pretry(() => {
@@ -235,8 +237,12 @@ export default {
 
           }, 20, 10000).then(() => {
 
-            if(this.encryptedData){
+            if(this.encryptedData && this.subtype == 'm.image'){
               this.decryptImage()
+            }
+
+            if(this.encryptedData && this.subtype == 'm.audio'){
+              this.decryptAudio()
             }
 
             if(this.subtype == 'm.encrypted'){
@@ -245,6 +251,12 @@ export default {
 
           })
 
+        }
+
+        else{
+          if(this.subtype == 'm.audio'){
+            this.getAudioUnencrypt()
+          }
         }
 
         
@@ -380,9 +392,33 @@ export default {
       }) 
     },
 
-    async decryptImage(){
+    getAudioUnencrypt(){
+      this.core.mtrx.getAudioUnencrypt(this.chat, this.event).then(url => {
 
-      //if(!this.chat.pcrypto) return
+        this.$set(this.event.event.content, 'audioData', url)
+        //this.event.event.content.audioData
+
+        //this.$refs.cmessage.update
+        //console.log("AUDIO", url)
+      })
+    },
+
+    async decryptAudio(){
+
+      this.core.mtrx.getAudio(this.chat, this.event).then(url => {
+
+        this.decryptedInfo = url
+
+      }).catch(e => {
+
+        this.event.event.decryptKey = this.decryptKey = {
+          msgtype : 'm.bad.encrypted'
+        }
+      })
+      
+    },
+
+    async decryptImage(){
 
       this.core.mtrx.getImage(this.chat, this.event).then(url => {
 

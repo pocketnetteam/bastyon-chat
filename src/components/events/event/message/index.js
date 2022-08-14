@@ -91,6 +91,7 @@ export default {
               ( (this.content.msgtype === 'm.text' || this.content.msgtype === 'm.encrypted') && this.textWithoutLinks) ||
               (this.file) || (this.error) || 
               (this.content.msgtype === 'm.image' && this.imageUrl) ||
+              (this.content.msgtype === 'm.audio' && this.audioUrl)
               (this.urlpreview) || 
               (this.preview)
 
@@ -198,18 +199,25 @@ export default {
         if (this.encryptedData) {
           return this.decryptedInfo
         } else {
+
+          
+
           return this.content && this.content.url;
         }
 
       }
     },
+
     audioUrl: function () {
       if (this.content.msgtype === 'm.audio') {
 
         if (this.encryptedData) {
           return this.decryptedInfo
         } else {
-          return this.content && this.content.url;
+          console.log('this.content.audioData', this.content.audioData)
+          return this.content && this.content.audioData;
+
+          //// todo
         }
       }
     },

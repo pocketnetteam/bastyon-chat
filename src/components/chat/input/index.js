@@ -847,6 +847,8 @@ export default {
 
 			this.prepareRecording = cancelable(this.core.initMediaRecorder().then((recorder) => {
 
+				console.log('recorder', recorder)
+
 				if (this.prepareRecording){
 					return Promise.resolve(recorder)
 				}
@@ -872,6 +874,8 @@ export default {
 				this.startRecording()
 
 			}).catch(err => {
+
+				console.error(err)
 
 				if(err == 'permissions'){
 					this.microphoneDisabled = true
@@ -1042,6 +1046,7 @@ export default {
 				return this.chat
 
 			}).then(() => {
+				console.log('sendAudio', base64)
 				return this.core.mtrx.sendAudio(this.chat, base64, null, meta, { relation: this.relationEvent })
 			}).catch(e => {
 				this.$emit('sentError', {

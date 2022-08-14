@@ -1,5 +1,5 @@
 <template>
-  <div id="chatInput">
+  <div id="chatInput" class="noswipepnt">
     <div class="work" v-if="ready">
 
       <div class="inputWrapper" v-if="chat">
