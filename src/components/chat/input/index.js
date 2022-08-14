@@ -961,6 +961,7 @@ export default {
 					this.checkaudioForSend(audio, sendnow)
 				}
 
+
 				if (audio.duration === Infinity) {
 					audio.currentTime = 1e101
 					audio.addEventListener('timeupdate', getDuration)
@@ -970,6 +971,7 @@ export default {
 				}
 
 			})
+			
 
 			this.record = {
 				audio,
@@ -988,7 +990,6 @@ export default {
 
 		stopRecording({ cancel, sendnow }) {
 
-			console.log('stop', cancel, sendnow)
 
 			this.$store.commit('SET_VOICERECORDING', false)
 
@@ -1010,11 +1011,13 @@ export default {
 			if (this.mediaRecorder) {
 
 				if (cancel) {
-					this.mediaRecorder.ondataavailable = () => { }
+					//this.mediaRecorder.ondataavailable = () => { }
 					
 				}
 				else{
-					this.mediaRecorder.ondataavailable = (event) => this.createVoiceMessage(event, sendnow)
+					this.mediaRecorder.addEventListener('dataavailable', (event) => {
+						this.createVoiceMessage(event, sendnow)
+					})//ondataavailable = (event) => this.createVoiceMessage(event, sendnow)
 				}
 
 				this.mediaRecorder.stop()

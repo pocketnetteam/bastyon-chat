@@ -1975,6 +1975,11 @@
   "resolved" "https://registry.npmjs.org/atob/-/atob-2.1.2.tgz"
   "version" "2.1.2"
 
+"audio-recorder-polyfill@^0.4.1":
+  "integrity" "sha512-SS4qVOzuVwlS/tjQdd0uR+9cCKBTkx4jsAdjM+rMNqoTEWf6bMnBSTfv+FO4Zn9ngxviJOxhkgRWWXsAMqM96Q=="
+  "resolved" "https://registry.npmjs.org/audio-recorder-polyfill/-/audio-recorder-polyfill-0.4.1.tgz"
+  "version" "0.4.1"
+
 "automation-events@^4.0.16":
   "integrity" "sha512-8mIkcXzjyisUaw2O9HC80wOHscEPPD/ROrh/rEKN2B3VJzt3YJH5w0LcpUHyzprqV24HR0eTCelSKoei1FGg1A=="
   "resolved" "https://registry.npmjs.org/automation-events/-/automation-events-4.0.16.tgz"

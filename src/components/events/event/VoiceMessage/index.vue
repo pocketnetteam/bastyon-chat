@@ -68,8 +68,12 @@ export default {
   },
   methods: {
     goTo(e) {
-      this.voiceMessage.audio.currentTime = e.offsetX / this.$refs.canvas.width * this.voiceMessage.audio.duration;
-      this.voiceMessage.currentTime = e.offsetX / this.$refs.canvas.width * this.voiceMessage.duration;
+
+      var dr = e.offsetX / this.$refs.canvas.width * this.voiceMessage.audio.duration;
+      this.voiceMessage.audio.currentTime = dr
+      
+      this.$set(this.voiceMessage, 'currentTime', dr)
+
       this.draw()
 
       if (!this.isPlaying) {
@@ -95,7 +99,7 @@ export default {
       }
     },
     setTime() {
-      this.voiceMessage.currentTime = this.voiceMessage.audio.currentTime * 1000
+      this.$set(this.voiceMessage, 'currentTime', this.voiceMessage.audio.currentTime * 1000)
     },
 
     draw() {
@@ -128,16 +132,18 @@ export default {
       }
       audioNode.onloadedmetadata = () => {
 
+
         const getDuration = () => {
           audioNode.currentTime = 0
-          this.voiceMessage.duration = audioNode.duration * 1000
+          this.$set(this.voiceMessage, 'duration', audioNode.duration * 1000)
           audioNode.removeEventListener('timeupdate', getDuration)
         }
         if (audioNode.duration === Infinity) {
           audioNode.addEventListener('timeupdate', getDuration)
           audioNode.currentTime = 1e101
         } else {
-          this.voiceMessage.duration = audioNode.duration * 1000
+          console.log('audioNode.duration * 1000', audioNode.duration * 1000)
+          this.$set(this.voiceMessage, 'duration', audioNode.duration * 1000)
         }
 
 
@@ -159,7 +165,8 @@ export default {
         this.$store.commit('SET_CURRENT_PLAYING_VOICE_MESSAGE', null)
         this.isPlaying = false
         this.voiceMessage.audio.currentTime = 0
-        this.voiceMessage.currentTime = 0
+
+        this.$set(this.voiceMessage, 'currentTime', 0)
         clearInterval(this.interval)
         this.draw()
         this.playNext(this.id, this.audioToggle)
@@ -171,8 +178,6 @@ export default {
         duration: 0,
         currentTime: 0
       }
-
-      console.log('this.base64Audio', this.base64Audio)
 
       const data = f._base64ToArrayBuffer(this.base64Audio.split(',')[1])
       try {
@@ -188,7 +193,7 @@ export default {
           this.draw()
         })
       } catch (e) {
-        console.log(e)
+        console.error(e)
       }
 
     }

@@ -856,12 +856,9 @@ class MTRX {
 
     this.download(event.event.content.url).then(r => {
 
-      console.log("DOWNLOADED", r)
       return f.Base64.fromFile(r)
     }).then(url => {
 
-
-      console.log("URL", url)
       event.event.content.audioData = url
 
       return Promise.resolve(event.event.content.audioData)

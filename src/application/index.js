@@ -9,6 +9,15 @@ import listeners from './listeners'
 import f from './functions'
 import Media from './media'
 
+var {register, MediaRecorder} = require('extendable-media-recorder')
+var {connect} = require('extendable-media-recorder-wav-encoder')
+
+import AudioRecorder from 'audio-recorder-polyfill'
+import mpegEncoder from 'audio-recorder-polyfill/mpeg-encoder'
+
+AudioRecorder.encoder = mpegEncoder
+AudioRecorder.prototype.mimeType = 'audio/mpeg'
+
 class Core {
     constructor(vm, p){
         if(!p) p = {}
@@ -483,16 +492,10 @@ class Core {
 
     async connectCustomRecorder() {
 
-        console.log('connectCustomRecorder')
-
         if (this.customRecorderConnected) return
             this.customRecorderConnected = true
-
-        var {register} = require('extendable-media-recorder')
-        var {connect} = require('extendable-media-recorder-wav-encoder')
   
         await register(await connect());
-
         
     }
 
@@ -506,20 +509,20 @@ class Core {
 
         if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
 
-            //return this.connectCustomRecorder().then(() => {
+            return this.connectCustomRecorder().then(() => {
 
                 return this.media.get({ audio: true })
 
                 //return navigator.mediaDevices.getUserMedia({ audio: true })
 
-            .then(stream => {
+            }).then(stream => {
 
                 console.log('stream', stream)
 
                 //var {MediaRecorder} = require('extendable-media-recorder')
 
-                let mediaRecorder = new MediaRecorder(stream, { audioBitsPerSecond : 64000, mimeType: 'audio/webm;codecs=opus' })
-                //mediaRecorder.stream = stream
+                let mediaRecorder = new AudioRecorder(stream, { audioBitsPerSecond : 64000 })
+                mediaRecorder.stream = stream
 
                 console.log('mediaRecorder', mediaRecorder)
 
