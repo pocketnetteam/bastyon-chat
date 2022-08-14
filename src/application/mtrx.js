@@ -591,7 +591,6 @@ class MTRX {
   }
 
   sendtext(chat, text, {relation, from}) {
-
     return this.textEvent(chat, text).then(r => {
 
       if (relation) {
@@ -728,7 +727,6 @@ class MTRX {
         })
 
       }
-
       return Promise.resolve(file)
 
 
@@ -749,8 +747,10 @@ class MTRX {
 
   sendAudio(chat, base64, file, meta, {relation, from} = {}) {
     if (!file) return this.sendAudioBase64(chat, base64, meta)
+
     let info = {}
     info.from = from
+
     return new Promise(resolve => {
       if (chat.pcrypto.canBeEncrypt()) {
         return chat.pcrypto.encryptFile(file).then(r => {
@@ -758,6 +758,7 @@ class MTRX {
           return resolve(r.file)
         })
       }
+      return resolve(file)
     }).then(file => {
       let promise = this.core.mtrx.uploadContent(file)
       if (promise.abort) meta.abort = promise.abort
@@ -767,6 +768,7 @@ class MTRX {
       if (meta.aborted)
         return Promise.reject('aborted')
       console.log('info', info)
+      debugger
       return this.client.sendAudioMessage(chat.roomId, audio, info, 'Audio')
     })
 
