@@ -880,7 +880,7 @@ class MTRX {
         return f.Base64.fromFile(r)
       }).then(url => {
 
-          event.event.decryptedAudio = url
+          event.event.decryptedAudio =  url.replace('data:file;', 'data:audio/mpeg;')
 
           return Promise.resolve(event.event.decryptedAudio)
 
