@@ -9,8 +9,9 @@ import listeners from './listeners'
 import f from './functions'
 import Media from './media'
 
+/*
 var {register, MediaRecorder} = require('extendable-media-recorder')
-var {connect} = require('extendable-media-recorder-wav-encoder')
+var {connect} = require('extendable-media-recorder-wav-encoder')*/
 
 import AudioRecorder from 'audio-recorder-polyfill'
 import mpegEncoder from 'audio-recorder-polyfill/mpeg-encoder'
@@ -108,7 +109,6 @@ class Core {
 
     logerror = function(type, data){
 
-        console.log("type", type, data)
 
         if (window.POCKETNETINSTANCE){
 
@@ -509,23 +509,19 @@ class Core {
 
         if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
 
-            return this.connectCustomRecorder().then(() => {
+            //return this.connectCustomRecorder().then(() => {
 
                 return this.media.get({ audio: true })
 
                 //return navigator.mediaDevices.getUserMedia({ audio: true })
 
-            }).then(stream => {
-
-                console.log('stream', stream)
+            /*})*/.then(stream => {
 
                 //var {MediaRecorder} = require('extendable-media-recorder')
 
                 let mediaRecorder = new AudioRecorder(stream, { audioBitsPerSecond : 64000 })
-                mediaRecorder.stream = stream
-
-                console.log('mediaRecorder', mediaRecorder)
-
+                //mediaRecorder.stream = stream
+               
                 return mediaRecorder
                 
             }).catch(function (err) {

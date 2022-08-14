@@ -163,7 +163,6 @@ var Media = function () {
 
         return new Promise((resolve, reject)=> {
 
-            console.log('mediasettings', mediasettings)
 
             initPermissions(mediasettings).then(() => {
 

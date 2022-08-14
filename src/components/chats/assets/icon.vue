@@ -87,8 +87,6 @@ export default {
 
       var u = this.core.mtrx.anotherChatUsers(this.chat.roomId);
 
-      console.log("this.dontuseslides", this.dontuseslides);
-
       if (this.dontuseslides) {
         u = _.first(u, 4);
       }

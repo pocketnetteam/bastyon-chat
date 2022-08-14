@@ -39,7 +39,6 @@ export default {
     minimized: state => state.minimized,
     active: state => state.active,
     tetatet : function(){
-      console.log('this.core.mtrx.kit.tetatetchat(this.m_chat)', this.core.mtrx.kit.tetatetchat(this.m_chat))
       return this.core.mtrx.kit.tetatetchat(this.m_chat)
     },
 
@@ -68,9 +67,6 @@ export default {
         this.$emit('joined')
 
       }).catch(function (error) {
-
-        console.log(error, "error")
-        console.log(error['M_UNKNOWN'], "error")
 
         self.brokenRoom(true)
         return self.creatorLeft = true
@@ -113,7 +109,6 @@ export default {
 
     },
     brokenRoom(){
-      console.log("need to left user")
       this.$emit('creatorLeft', true)
     }
   },

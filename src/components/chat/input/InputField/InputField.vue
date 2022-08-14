@@ -201,8 +201,6 @@ export default {
 
     textarea_resize() {
 
-      console.log('this.text', this.text)
-
       if (!this.text) {
         this.textarea_resize_reset()
       } else {

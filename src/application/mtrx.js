@@ -162,7 +162,6 @@ class MTRX {
 
   createMtrxClient(opts) {
 
-    console.log('opts', opts)
 
     var client = sdk.createClient(opts);
 
@@ -704,9 +703,7 @@ class MTRX {
 
     if (base64.indexOf('data:') > -1) method = 'toFile'
 
-    console.log("???")
     return f.Base64[method](base64).then(file => {
-      console.log("!#@#")
       return this.sendAudio(chat, base64, file, meta, p)
     })
   }
@@ -742,14 +739,11 @@ class MTRX {
       if (promise.abort) meta.abort = promise.abort
 
       return promise
-    })
+    }).then((image) => {
+      if (meta.aborted) return Promise.reject('aborted')
 
-      .then((image) => {
-        if (meta.aborted)
-          return Promise.reject('aborted')
-        console.log(info)
-        return this.client.sendImageMessage(chat.roomId, image, info, 'Image')
-      })
+      return this.client.sendImageMessage(chat.roomId, image, info, 'Image')
+    })
   }
 
   sendAudio(chat, base64, file, meta, {relation, from} = {}) {

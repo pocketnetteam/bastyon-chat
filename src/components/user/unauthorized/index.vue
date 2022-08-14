@@ -213,8 +213,6 @@ export default {
             if(!auto)
                 this.loading = true
 
-            console.log("refresh")
-
             this.core.initWithUser().then(r => {
 
                 setTimeout(() => {

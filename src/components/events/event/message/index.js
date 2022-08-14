@@ -152,7 +152,6 @@ export default {
 
     replacedmintionsbody:function(){
       return this.body.replace(/@\w{68}:(\w{1,50})/g, function(str, l){
-        console.log("L", l)
         return '@' + l
       })
 

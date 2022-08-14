@@ -55,7 +55,6 @@ export default {
 		
 		handleTouchStart(e) {
 
-			console.log('start', this.isRecording)
 
 			if(!this.isRecording) {
 				this.$emit('onRecordingStart')

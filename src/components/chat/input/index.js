@@ -847,13 +847,10 @@ export default {
 
 			this.prepareRecording = cancelable(this.core.initMediaRecorder().then((recorder) => {
 
-				console.log('recorder', recorder)
-
 				if (this.prepareRecording){
 					return Promise.resolve(recorder)
 				}
 				else{
-					console.log("CLOSE TRACKS")
 					recorder.stream.getTracks().forEach((track) => {
 						track.stop();
 					});
@@ -940,8 +937,6 @@ export default {
 
 
 		async createVoiceMessage(event, sendnow) {
-
-			console.log("AS", sendnow)
 
 			const audioUrl = URL.createObjectURL(event.data);
 			const audio = new Audio(audioUrl);
@@ -1049,7 +1044,6 @@ export default {
 				return this.chat
 
 			}).then(() => {
-				console.log('sendAudio', base64)
 				return this.core.mtrx.sendAudio(this.chat, base64, null, meta, { relation: this.relationEvent })
 			}).catch(e => {
 				this.$emit('sentError', {

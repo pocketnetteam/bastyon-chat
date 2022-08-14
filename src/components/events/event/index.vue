@@ -227,8 +227,6 @@ export default {
         this.checkReaded()
         this.relations()
 
-        console.log('this.encryptedData', this.encryptedData, this.event)
-
         if(this.encryptedData || this.subtype == 'm.encrypted'){
 
           f.pretry(() => {

@@ -142,7 +142,6 @@ export default {
           audioNode.addEventListener('timeupdate', getDuration)
           audioNode.currentTime = 1e101
         } else {
-          console.log('audioNode.duration * 1000', audioNode.duration * 1000)
           this.$set(this.voiceMessage, 'duration', audioNode.duration * 1000)
         }
 

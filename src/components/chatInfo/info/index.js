@@ -192,11 +192,7 @@ export default {
 
       var users = this.core.mtrx.anotherChatUsers(this.chat.roomId)
 
-      console.log('users', users)
-
       if (users.length == 1) {
-
-
         return this.core.mtrx.blockeduser(users[0].userId)
       }
 
