@@ -59,8 +59,7 @@ export default {
       this.interval = null
     }
       
-    if(this.audioContext)
-      this.audioContext.close()
+    if(this.audioContext) this.audioContext.close()
 
   },
   watch : {
@@ -156,6 +155,8 @@ export default {
 
     play(){
 
+      if(!this.audiobuffer) return
+
       if(this.error){
 
         this.playNext(this.id)
@@ -250,10 +251,6 @@ export default {
 
       let audioNode = null
 
-      const buf = this.audioContext.createBuffer(2, this.audioContext.sampleRate * 3, this.audioContext.sampleRate);
-
-      
-
       audioNode = this.audioContext.createBufferSource();
       audioNode.buffer = this.audiobuffer
       audioNode.connect(this.audioContext.destination);
@@ -293,8 +290,6 @@ export default {
     },
 
     async initVoiceMessage() {
-
-      
       
       try {
         this.audioContext = new (window.AudioContext || window.webkitAudioContext)() || null;
@@ -302,6 +297,8 @@ export default {
         this.error = e
         console.log(e)
       }
+
+      if(this.error) return
 
       this.addToQueue(this, this.id)
       
@@ -312,6 +309,8 @@ export default {
       
       try {
         await this.audioContext.decodeAudioData(this.localBuffer, (buffer) => {
+
+          console.log("HAS BUFFER", buffer)
 
           this.audiobuffer = buffer
 
@@ -339,6 +338,7 @@ export default {
   contain: strict;
   width: 230px;
   height: 100%;
+  justify-content: flex-end;
 
   &_wrapper {
     display: flex;

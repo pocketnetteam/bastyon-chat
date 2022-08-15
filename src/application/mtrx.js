@@ -223,7 +223,7 @@ class MTRX {
     localStorage.accessToken = userData.access_token
     var store = new sdk.IndexedDBStore({
       indexedDB: window.indexedDB,
-      dbName: 'matrix-js-sdk:' + this.credentials.username
+      dbName: 'matrix-js-sdk:v2:' + this.credentials.username
     })
     await store.startup()
 
@@ -845,18 +845,24 @@ class MTRX {
   async getAudioUnencrypt(chat, event){
 
     if(event.event.content.audioData){
+      console.log('event.event.content.audioData', event.event.content.audioData)
       return Promise.resolve(event.event.content.audioData)
     }
 
-    this.download(event.event.content.url).then(r => {
+    return this.download(event.event.content.url).then(r => {
 
+      console.log("DOWNLOADED???", r)
 
       return f.readFile(r)
     }).then(arraybuffer => {
 
+      console.log("READ FILE", arraybuffer)
+
+      console.log('event', event)
+
       event.event.content.audioData = arraybuffer
 
-      return Promise.resolve(event.event.content.audioData)
+      return Promise.resolve(arraybuffer)
     })
 
   }

@@ -31,6 +31,8 @@
              :showmyicontrue="showmyicontrue"
              :fromreference="fromreference"
 
+             :audioBuffer="audioBuffer"
+
              ref="cmessage"
 
              @remove="removeEvent"
@@ -122,6 +124,7 @@ export default {
       removed : false,
       downloaded : false,
       readedInterval : null,
+      audioBuffer : null
     }
   },
 
@@ -391,10 +394,17 @@ export default {
     },
 
     getAudioUnencrypt(){
+      console.log("getAudioUnencrypt123")
       this.core.mtrx.getAudioUnencrypt(this.chat, this.event).then(url => {
 
-        this.$set(this.event.event.content, 'audioData', url)
+        console.log("getAudioUnencrypt???", url)
+
+        this.audioBuffer = url
+
+        //this.$set(this.event.event.content, 'audioData', url)
        
+      }).catch(e => {
+        console.error(e)
       })
     },
 

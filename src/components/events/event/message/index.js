@@ -40,7 +40,8 @@ export default {
     reference: Object,
     last : Boolean,
     showmyicontrue : false,
-    fromreference : Boolean
+    fromreference : Boolean,
+    audioBuffer : null
   },
   directives: {
     imagesLoaded
@@ -210,13 +211,11 @@ export default {
     audioUrl: function () {
       if (this.content.msgtype === 'm.audio') {
 
-        if (this.encryptedData) {
-          return this.decryptedInfo
-        } else {
-          return this.content && this.content.audioData;
+        if(this.encryptedData && this.decryptedInfo) return this.decryptedInfo
 
-          //// todo
-        }
+        return this.audioBuffer
+
+        //return this.content && this.content.audioData
       }
     },
 

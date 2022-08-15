@@ -40,10 +40,11 @@ export default {
 			record: null,
 			recordRmsData: [],
 			isRecording: false,
+
 			mediaRecorder: null,
 			audioContext: null,
 			audioAnalyser: null,
-			audioDataArray: null,
+
 			recordTime: 0,
 			interval: null,
 			cancelOpacity: 0,
@@ -864,10 +865,7 @@ export default {
 				this.microphoneDisabled = false
 				this.audioContext = new (window.AudioContext || window.webkitAudioContext)()
 				this.audioAnalyser = this.audioContext.createAnalyser()
-				this.audioDataArray = new Uint8Array(this.audioAnalyser.frequencyBinCount)
-				
-				this.src = this.audioContext.createMediaStreamSource(this.mediaRecorder.stream)
-				this.src.connect(this.audioAnalyser)
+				this.audioContext.createMediaStreamSource(this.mediaRecorder.stream).connect(this.audioAnalyser)
 				this.startRecording()
 
 			}).catch(err => {
@@ -921,10 +919,11 @@ export default {
 
 
 			this.interval = setInterval(() => {
-				this.dataArray = new Uint8Array(this.audioAnalyser.frequencyBinCount)
-				this.audioAnalyser.getByteFrequencyData(this.dataArray)
+				var dataArray = new Uint8Array(this.audioAnalyser.frequencyBinCount)
 
-				rmsdata.push(this.generateRms(this.dataArray))
+				this.audioAnalyser.getByteFrequencyData(dataArray)
+
+				rmsdata.push(this.generateRms(dataArray))
 
 				if(rmsdata.length > 50) rmsdata = _.last(rmsdata, 50)
 
@@ -940,8 +939,13 @@ export default {
 		},
 
 
-		checkaudioForSend : function(audio, sendnow){
-			if (audio.duration < 1) {
+		checkaudioForSend : function(sendnow){
+
+			if(!this.record){
+				return
+			}
+
+			if (this.record.duration < 1) {
 				this.clear()
 			}
 			else{
@@ -950,57 +954,31 @@ export default {
 		},
 
 
-		async createVoiceMessage(event, sendnow) {
+		createVoiceMessage(event, sendnow) {
 
-			//var u = await this.core.convertAudioToBase64(event.data)
-
-			const audioUrl = URL.createObjectURL(event.data)
-
-			//const audioUrl = this.core.mp3ToWav(u);
-
-			const audio = new Audio(audioUrl);
-			const track = this.audioContext.createMediaElementSource(audio)
-			const id = f.makeid()
-
-			console.log('audio', audio)
-
-			//var u = await this.core.convertAudioToBase64(event.data)
-
-			//console.log("UUU", u)
-
-			audio.addEventListener('loadedmetadata', () => {
-
-				const getDuration = () => {
-
-					audio.removeEventListener('timeupdate', getDuration)
-					audio.currentTime = 0
-
-					if (this.record)
-						this.record.duration = audio.duration.toPrecision(4)
-
-					this.checkaudioForSend(audio, sendnow)
-				}
-
-
-				if (audio.duration === Infinity) {
-					audio.currentTime = 1e101
-					audio.addEventListener('timeupdate', getDuration)
-				}
-				else{
-					this.checkaudioForSend(audio, sendnow)
-				}
-
-			})
-			
+			console.log('event', event)
 
 			this.record = {
-				audio,
 				file: event.data,
-				track,
-				id,
-				isPlaying: false,
+				id : f.makeid()
 			}
 
+			f.readFile(event.data).then(arraybuffer => {
+
+				this.audioContext.decodeAudioData(arraybuffer, (buffer) => {
+
+					this.record.duration = buffer.duration
+
+					this.checkaudioForSend(sendnow)
+
+					
+
+				}).catch(e => {
+					console.error('e', e)
+				})
+
+				
+			})
 			
 		},
 
@@ -1064,12 +1042,10 @@ export default {
 				base64: base64,
 			}
 
-			console.log("base64", base64)
+			this.clear()
 
 			this.$f.pretry(() => {
-
 				return this.chat
-
 			}).then(() => {
 				return this.core.mtrx.sendAudio(this.chat, base64, null, meta, { relation: this.relationEvent })
 			}).catch(e => {
@@ -1086,6 +1062,9 @@ export default {
 		clear() {
 			this.record = null
 			this.recordRmsData = []
+			this.audioContext.close()
+			this.audioAnalyser = null
+			this.audioContext = null
 		},
 
 		/*async convertAudioToBase64(blob) {
