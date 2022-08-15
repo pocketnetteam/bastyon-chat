@@ -478,6 +478,7 @@ export default {
     },
 
     format_date(value) {
+      console.log(value)
       if (value) {
         if ((moment().diff(value, 'days')) === 0) {
           return new Date(value).toLocaleTimeString([], {hour: '2-digit', minute: "2-digit", hour12: false})

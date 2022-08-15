@@ -54,7 +54,7 @@ export default {
 
   computed: {
     sortedVoiceMessageQueue() {
-      return this.voiceMessageQueue.sort((a, b) => a.id - b.id);
+      return _.sortBy(this.voiceMessageQueue, (a) => {return a.id})
     },
 
     ios() {

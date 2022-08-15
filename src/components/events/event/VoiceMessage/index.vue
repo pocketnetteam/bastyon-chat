@@ -197,6 +197,10 @@ export default {
 
         if(this.duration - t / 1000 < time) time = this.duration
 
+        if(this.currentTime > this.duration){
+          this.pause()
+        }
+
         this.draw()
         this.setTime(time)
 
@@ -206,8 +210,6 @@ export default {
 
 
     draw() {
-
-      console.log("RDA")
 
       const canvas = this.$refs.canvas
 
@@ -242,10 +244,7 @@ export default {
 
       }
 
-      console.log("R", r)
     },
-
-   
 
     initAudioNode(){
 
@@ -256,9 +255,12 @@ export default {
       audioNode.connect(this.audioContext.destination);
       //audioNode.noteOn(this.currentTime);
 
-      console.log('this.audioContext', this.audioContext, audioNode)
+
+      console.log('audioNode', audioNode)
+
 
       audioNode.onended = () => {
+
 
         this.audio = null
 
@@ -270,6 +272,8 @@ export default {
         else{
           
         }
+
+        if(this.duration - 100 < this.currentTime) this.setTime(0)
 
         this.pause()
         
@@ -306,6 +310,8 @@ export default {
       this.setTime(0)
 
       //const data = f._base64ToArrayBuffer(this.base64Audio.split(',')[1])
+
+      console.log('this.audioContext', this.audioContext)
       
       try {
         await this.audioContext.decodeAudioData(this.localBuffer, (buffer) => {

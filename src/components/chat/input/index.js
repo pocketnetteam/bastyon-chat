@@ -75,6 +75,10 @@ export default {
 		}
 	},
 
+	beforeDestroy(){
+		if (this.audioContext)
+			this.audioContext.close()
+	},
 
 	computed: {
 		voiceEnable() {
@@ -861,11 +865,18 @@ export default {
 
 			this.prepareRecording.then((recorder) => {
 
+				console.log("recorder", recorder)
+
 				this.mediaRecorder = recorder
 				this.microphoneDisabled = false
 				this.audioContext = new (window.AudioContext || window.webkitAudioContext)()
 				this.audioAnalyser = this.audioContext.createAnalyser()
-				this.audioContext.createMediaStreamSource(this.mediaRecorder.stream).connect(this.audioAnalyser)
+
+				//var audioDataArray = new Uint8Array(this.audioAnalyser.frequencyBinCount)
+				
+				var src = this.audioContext.createMediaStreamSource(this.mediaRecorder.stream)
+					src.connect(this.audioAnalyser)
+
 				this.startRecording()
 
 			}).catch(err => {
@@ -971,8 +982,6 @@ export default {
 
 					this.checkaudioForSend(sendnow)
 
-					
-
 				}).catch(e => {
 					console.error('e', e)
 				})
@@ -1062,9 +1071,6 @@ export default {
 		clear() {
 			this.record = null
 			this.recordRmsData = []
-			this.audioContext.close()
-			this.audioAnalyser = null
-			this.audioContext = null
 		},
 
 		/*async convertAudioToBase64(blob) {
