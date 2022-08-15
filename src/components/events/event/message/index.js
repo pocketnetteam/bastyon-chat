@@ -34,7 +34,7 @@ export default {
     chat: Object,
     encrypted: false,
     encryptedData: Boolean,
-    decryptedInfo: String,
+    decryptedInfo: null,
     error: String,
     withImage: Boolean,
     reference: Object,
@@ -213,7 +213,6 @@ export default {
         if (this.encryptedData) {
           return this.decryptedInfo
         } else {
-          console.log('this.content.audioData', this.content.audioData)
           return this.content && this.content.audioData;
 
           //// todo
@@ -384,7 +383,7 @@ export default {
       
       if (this.content.msgtype === 'm.image' && this.imageUrl) sharing.images = [this.imageUrl]
 
-      if (this.content.msgtype === 'm.audio' && this.decryptedInfo) sharing.audio = [this.decryptedInfo]
+      if (this.content.msgtype === 'm.audio' && this.audioUrl) sharing.audio = [this.audioUrl]
 
       if ((this.content.msgtype === 'm.text' || this.content.msgtype === 'm.encrypted') && trimmed) sharing.messages = [trimmed]
 

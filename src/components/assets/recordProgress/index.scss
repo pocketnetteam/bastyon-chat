@@ -1,11 +1,11 @@
 .recordProgress {
   display: flex;
-  position: relative;
   height: 20px;
   justify-content: flex-start;
   padding: 0 1em;
   align-items: center;
   max-width: 80%;
+  flex-grow: 2;
 
   .indicatorWrapper{
     min-width: 20px;
@@ -45,24 +45,33 @@
     margin-right: 1em;
   }
   .graph {
-    width: calc(100vw - 100px);
-    min-width: 100px;
+    margin : 0 auto;
+    width: 100px;
     display: flex;
     justify-content: center;
-    flex-grow: 2;
+    overflow: hidden;
+    border-radius: 15px;
+      
   }
 }
 
 .cancel {
   position: absolute;
-  left: 80px;
+  left: 0;
   right: 0;
   top: 0;
   bottom: 0;
-  background: white;
+  background: srgb(--background-secondary-theme);
   opacity: 0;
   display: flex;
   justify-content: center;
+  text-align: center;
+  align-items: center;
+
+  span{
+    white-space: nowrap;
+    font-size: 0.9em;
+  }
 }
 
 @keyframes pulse {

@@ -394,10 +394,7 @@ export default {
       this.core.mtrx.getAudioUnencrypt(this.chat, this.event).then(url => {
 
         this.$set(this.event.event.content, 'audioData', url)
-        //this.event.event.content.audioData
-
-        //this.$refs.cmessage.update
-        //console.log("AUDIO", url)
+       
       })
     },
 

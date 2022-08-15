@@ -34,6 +34,7 @@
     "howler": "^2.2.3",
     "ion-sound": "^3.0.7",
     "jquery": "^3.5.1",
+    "lamejs": "^1.2.1",
     "linkifyjs": "^3.0.5",
     "miscreant": "^0.3.2",
     "moment": "^2.29.1",

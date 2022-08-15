@@ -15,7 +15,7 @@
 
 
         <div class="center">
-          <record-progress v-if="voiceEnable && (isRecording || recordViewData.length)" :recordTime="recordTime" :isRecording="isRecording" :rmsData="recordViewData" :opacity="cancelOpacity" @onClear="clear"/>
+          <record-progress v-if="voiceEnable && (isRecording || recordRmsData.length)" :recordTime="recordTime" :isRecording="isRecording" :rmsData="recordRmsData" :opacity="cancelOpacity" @onClear="clear"/>
           <InputField
             v-else
             ref="newinput"
@@ -35,7 +35,7 @@
             :tipusers="tipusers"
           />
           <div class="left" :class="{extended: voiceEnable}" v-if="upload && chat">
-            <div v-if="!isRecording && !recordViewData.length" class="iconbutton">
+            <div v-if="!isRecording && !recordRmsData.length" class="iconbutton">
               <dropdownMenu
                 ref="dropdownMenu"
                 :menuItems="menuItems"
@@ -101,7 +101,7 @@
             </template>
 
 
-            <div v-if="!isRecording && recordViewData.length" class="iconbutton" @click="sendVoiceMessage">
+            <div v-if="!isRecording && recordRmsData.length" class="iconbutton" @click="sendVoiceMessage">
               <div>
                 <i class="icon fas fa-paper-plane"></i>
               </div>

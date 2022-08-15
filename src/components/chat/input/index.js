@@ -228,7 +228,7 @@ export default {
 			return null
 		},
 
-		recordViewData() {
+		/*recordViewData() {
 			if (this.recordRmsData.length) {
 				let length = this.recordRmsData.length
 				let step = this.recordRmsData.length / 100
@@ -242,7 +242,7 @@ export default {
 				}
 			}
 			return this.recordRmsData
-		}
+		}*/
 	},
 
 	created() {
@@ -916,11 +916,25 @@ export default {
 			this.record = null
 			this.mediaRecorder.start()
 
+			var sec = 0
+			var rmsdata = []
+
+
 			this.interval = setInterval(() => {
 				this.dataArray = new Uint8Array(this.audioAnalyser.frequencyBinCount)
 				this.audioAnalyser.getByteFrequencyData(this.dataArray)
-				this.recordRmsData.push(this.generateRms(this.dataArray))
-				this.recordTime = this.recordTime + 50
+
+				rmsdata.push(this.generateRms(this.dataArray))
+
+				if(rmsdata.length > 50) rmsdata = _.last(rmsdata, 50)
+
+				sec = sec + 50
+
+				this.recordRmsData = _.clone(rmsdata)
+ 
+				if(sec % 1000 === 0) this.recordTime = sec
+
+				
 			}, 50)
 
 		},
@@ -937,8 +951,6 @@ export default {
 
 
 		async createVoiceMessage(event, sendnow) {
-
-			console.log('event.data', event)
 
 			//var u = await this.core.convertAudioToBase64(event.data)
 

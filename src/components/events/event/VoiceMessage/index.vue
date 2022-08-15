@@ -21,7 +21,7 @@ import f from '@/application/functions'
 export default {
   name: "VoiceMessage",
   props: {
-    base64Audio: {
+    audioBuffer: {
       type: String | null,
       required: true
     },
@@ -34,12 +34,12 @@ export default {
       voiceMessage: null,
       isPlaying: false,
       interval: null,
-
+      audioContext : null,
       audio : null,
       duration : null,
       currentTime : null,
       signal : null,
-
+      audiobuffer : null,
       error : null
     }
   },
@@ -49,10 +49,33 @@ export default {
     this.initVoiceMessage()
   },
   beforeDestroy() {
+
     if (this.isPlaying) {
-      this.isPlaying = false
-      this.audio.pause()
+      this.pause()
+    }
+
+    if(this.interval){
       clearInterval(this.interval)
+      this.interval = null
+    }
+      
+    if(this.audioContext)
+      this.audioContext.close()
+
+  },
+  watch : {
+    isPlaying : function(v){
+      if(!this.isPlaying){
+        
+
+        
+        
+      }
+      else{
+
+        
+
+      }
     }
   },
   computed: {
@@ -63,13 +86,13 @@ export default {
         let sec, min
         
         if (this.currentTime) {
-          sec = Math.floor(this.currentTime / 1000)
-          min = Math.floor(this.currentTime / 60000)
+          sec = Math.floor(this.currentTime)
+          min = Math.floor(this.currentTime / 60)
           return `${min}:${sec < 10 ? '0' + sec : sec}`
         }
 
-        sec = Math.floor(this.duration / 1000)
-        min = Math.floor(this.duration / 60000)
+        sec = Math.floor(this.duration)
+        min = Math.floor(this.duration / 60)
 
         return `${min}:${sec < 10 ? '0' + sec : sec}`
 
@@ -79,6 +102,10 @@ export default {
     },
     percentPlayed() {
       return this.currentTime / this.duration
+    },
+
+    localBuffer(){
+      return f.copyArrayBuffer(this.audioBuffer)
     }
   },
   methods: {
@@ -86,153 +113,217 @@ export default {
 
       var dr = e.offsetX / this.$refs.canvas.width * this.duration;
       
-      this.audio.currentTime = dr
-      this.currentTime = dr
-      
-      this.draw()
+      this.setTime(dr)
 
-      if (!this.isPlaying) {
-        this.isPlaying = true
-        this.audio.play()
-        this.interval = setInterval(() => {
-          this.draw()
-          this.setTime()
-        }, 20);
+      if(!this.isPlaying) { 
+        this.play()
       }
     },
     audioToggle() {
-      this.isPlaying = !this.isPlaying
-
-      if (this.isPlaying) {
-        this.audio.play()
-        this.interval = setInterval(() => {
-          this.draw()
-          this.setTime()
-        }, 20);
-
-      }else {
-
-        clearInterval(this.interval)
-        this.audio.pause()
-
+      if(this.isPlaying){
+        this.pause()
+      }
+      else{
+        this.play()
       }
     },
-    setTime() {
-      this.currentTime = this.audio.currentTime * 1000
+
+    pause(){
+
+       console.log("PAUSE")
+      
+      if(this.audio) {
+        this.audio.stop()
+        this.audio.disconnect()
+      }
+
+      
+      this.isPlaying = false
+
+      this.draw()
+
+      let currentPlaying = this.$store.state.currentPlayingVoiceMessage
+        
+      if (currentPlaying && currentPlaying.id == this.id) {
+        this.$store.commit('SET_CURRENT_PLAYING_VOICE_MESSAGE', null)
+      }
+
+      if(this.interval){
+        clearInterval(this.interval)
+        this.interval = null
+      }
     },
+
+    play(){
+
+      if(this.error){
+
+        this.playNext(this.id)
+        
+        return
+      }
+
+      console.log("PLAY")
+
+      this.isPlaying = true
+
+      this.audio = this.initAudioNode()
+
+      if(this.currentTime >= this.duration){
+        this.setTime(0)
+      }
+      
+
+      this.audio.start(0, this.currentTime)
+
+      let currentPlaying = this.$store.state.currentPlayingVoiceMessage
+        
+      if (currentPlaying && currentPlaying.id !== this.id) {
+          currentPlaying.pause()
+      }
+      
+      this.$store.commit('SET_CURRENT_PLAYING_VOICE_MESSAGE', this)
+
+      if(this.interval){
+        clearInterval(this.interval)
+      }
+
+      var t = 20
+
+      this.interval = setInterval(() => {
+
+        var time = this.currentTime + t / 1000
+
+        if(this.duration - t / 1000 < time) time = this.duration
+
+        this.draw()
+        this.setTime(time)
+
+      }, t);
+
+    },
+
 
     draw() {
 
+      console.log("RDA")
 
       const canvas = this.$refs.canvas
-      const ctx = canvas.getContext("2d")
-      ctx.clearRect(0, 0, canvas.width, canvas.height)
+
+      if(!this.signal) return
+      if(!canvas) return
+
       const data = this.signal
 
-      for (let i = 0; i < data.length; i++) {
-        let x = Math.floor(i / data.length * canvas.width);
-        let L = Math.abs(data[i] * canvas.height) + 1;
-        if (Math.floor(i / 200) === i / 200) { // Число 16 для больших аудиофайлов лучше побольше. Нужно подбирать.
-          if (i / data.length <= this.percentPlayed) {
-            ctx.fillStyle = '#00a4ff'
-          } else {
-            ctx.fillStyle = '#8bddfb'
-          }
-          ctx.fillRect(x, canvas.height / 2 - L / 2, 1, L);
-        }
-      }
-
-
-    },
-    async initVoiceMessage() {
-
-      let audioContext
-      let audioNode
-      try {
-        audioContext = new (window.AudioContext || window.webkitAudioContext)() || null;
-        audioNode = new Audio(this.base64Audio) || null
-      } catch (e) {
-        console.log(e)
-      }
-      audioNode.onloadedmetadata = () => {
-
-
-        const getDuration = () => {
-
-          audioNode.currentTime = 0
-
-          this.currentTime = 0
-          this.duration = audioNode.duration * 1000
-
-          audioNode.removeEventListener('timeupdate', getDuration)
-        }
-
-        if (audioNode.duration === Infinity) {
-
-          audioNode.addEventListener('timeupdate', getDuration)
-          audioNode.currentTime = 1e101
-
-          this.currentTime = 1e101
-        } else {
-          this.duration = audioNode.duration * 1000
-        }
-
-
-      }
+      var w = canvas.width
+      var h = canvas.height
+      var l = data.length
       
-      audioNode.onplay = () => {
-        let currentPlaying = this.$store.state.currentPlayingVoiceMessage
-        if (currentPlaying && currentPlaying.id !== this.id) {
-          currentPlaying.audioToggle()
+      const ctx = canvas.getContext("2d")
+      ctx.clearRect(0, 0, w, h)
+      
+      var r = 0
+      var c = Math.floor (l / 20)
+
+      for (let i = 0; i < l; i = i + c) {
+        let x = Math.floor(i / l * w);
+        let L = Math.abs(data[i] * h) + 1;
+
+        
+        if (i / l <= this.percentPlayed) {
+          ctx.fillStyle = '#00a4ff'
+        } else {
+          ctx.fillStyle = '#8bddfb'
         }
-        this.$store.commit('SET_CURRENT_PLAYING_VOICE_MESSAGE', this)
+
+        ctx.fillRect(x, h / 2 - L / 2, 2, L);
+        r++
+
       }
 
-      audioNode.onpause = () => {
-        let currentPlaying = this.$store.state.currentPlayingVoiceMessage
-        if (currentPlaying && currentPlaying.id === this.id) {
-          this.$store.commit('SET_CURRENT_PLAYING_VOICE_MESSAGE', null)
-        }
-      }
+      console.log("R", r)
+    },
+
+   
+
+    initAudioNode(){
+
+      let audioNode = null
+
+      const buf = this.audioContext.createBuffer(2, this.audioContext.sampleRate * 3, this.audioContext.sampleRate);
+
+      
+
+      audioNode = this.audioContext.createBufferSource();
+      audioNode.buffer = this.audiobuffer
+      audioNode.connect(this.audioContext.destination);
+      //audioNode.noteOn(this.currentTime);
+
+      console.log('this.audioContext', this.audioContext, audioNode)
 
       audioNode.onended = () => {
-        this.$store.commit('SET_CURRENT_PLAYING_VOICE_MESSAGE', null)
-        this.isPlaying = false
-        this.audio.currentTime = 0
-        this.currentTime = 0
 
-        clearInterval(this.interval)
+        this.audio = null
 
-        this.draw()
-        this.playNext(this.id, this.audioToggle)
+        if(this.isPlaying){
+          setTimeout(() => {
+            this.playNext(this.id)
+          }, 10)
+        }
+        else{
+          
+        }
+
+        this.pause()
+        
+        console.log("onended")
+        
+        //
+        //
+        //
 
       }
 
-      audioNode.onerror = (E) => {
-        this.error = E
+      return audioNode
+    
+    },
 
-        clearInterval(this.interval)
-        if(this.isPlaying)
-          this.playNext(this.id, this.audioToggle)
+    setTime(time = 0){
+      this.currentTime = time
+    },
+
+    async initVoiceMessage() {
+
+      
+      
+      try {
+        this.audioContext = new (window.AudioContext || window.webkitAudioContext)() || null;
+      } catch (e) {
+        this.error = e
+        console.log(e)
       }
-
 
       this.addToQueue(this, this.id)
-
-      this.audio = audioNode
+      
       this.duration = 0
-      this.currentTime = 0
+      this.setTime(0)
 
-
-      const data = f._base64ToArrayBuffer(this.base64Audio.split(',')[1])
+      //const data = f._base64ToArrayBuffer(this.base64Audio.split(',')[1])
+      
       try {
-        await audioContext.decodeAudioData(data, (buffer) => {
+        await this.audioContext.decodeAudioData(this.localBuffer, (buffer) => {
+
+          this.audiobuffer = buffer
+
+          this.duration = buffer.duration
+          this.setTime(0)
 
           this.signal = buffer.getChannelData(0)
 
           this.draw()
         })
       } catch (e) {
+        this.error = e
         console.error(e)
       }
 
@@ -245,6 +336,9 @@ export default {
 .voiceMessage {
   -webkit-tap-highlight-color: transparent;
   display: flex;
+  contain: strict;
+  width: 230px;
+  height: 100%;
 
   &_wrapper {
     display: flex;

@@ -954,6 +954,12 @@ var Base64 = {
 
 }
 
+f.copyArrayBuffer = function(src){
+    var dst = new ArrayBuffer(src.byteLength);
+    new Uint8Array(dst).set(new Uint8Array(src));
+    return dst;
+}
+
 f.readFile = function (file) {
 
     let reader = new FileReader();

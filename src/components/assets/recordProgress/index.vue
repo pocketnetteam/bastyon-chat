@@ -11,11 +11,13 @@
 
     <div class="timer">{{timer}}</div>
     <div class="graph" ref="graph">
-      <canvas ref="canvas" id="canvas" :width="width" height="60"/>
+      <canvas ref="canvas" id="canvas" :width="width" height="20"/>
     </div>
+
     <div v-show="isRecording && opacity" class="cancel" ref="cancel">
-      <i></i> <span>Slide left to cancel</span>
+      <span>Slide left to cancel</span>
     </div>
+
   </div>
 </template>
 

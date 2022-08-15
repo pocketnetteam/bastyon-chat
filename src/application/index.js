@@ -552,7 +552,7 @@ class Core {
                 let mediaRecorder = new MediaRecorder(stream, { audioBitsPerSecond : 64000, mimeType : f.isios() ? 'audio/wav' : 'audio/webm' })
                 mediaRecorder.stream = stream*/
 
-                let mediaRecorder = new AudioRecorder(stream, { audioBitsPerSecond : 64000 })
+                let mediaRecorder = new AudioRecorder(stream, { audioBitsPerSecond : 32000 })
                
                 return mediaRecorder
                 

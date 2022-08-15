@@ -850,10 +850,11 @@ class MTRX {
 
     this.download(event.event.content.url).then(r => {
 
-      return f.Base64.fromFile(r)
-    }).then(url => {
 
-      event.event.content.audioData = url
+      return f.readFile(r)
+    }).then(arraybuffer => {
+
+      event.event.content.audioData = arraybuffer
 
       return Promise.resolve(event.event.content.audioData)
     })
@@ -877,10 +878,21 @@ class MTRX {
         return chat.pcrypto.decryptFile(blob, decryptKey)
 
       }).then(r => {
-        return f.Base64.fromFile(r)
-      }).then(url => {
 
-          event.event.decryptedAudio =  url.replace('data:file;', 'data:audio/mpeg;')
+        console.log("AUDIO FILE", r)
+
+
+        return f.readFile(r)
+      }).then(arraybuffer => {
+
+        event.event.decryptedAudio = arraybuffer
+
+        return Promise.resolve(event.event.decryptedAudio)
+
+        console.log('url', url)
+        return
+
+          //event.event.decryptedAudio =  url.replace('data:file;', 'data:audio/mpeg;')
 
           return Promise.resolve(event.event.decryptedAudio)
 
@@ -967,7 +979,12 @@ class MTRX {
 
       })
 
-      _.each(share.audio, (base64) => {
+      _.each(share.audio, (arraybuffer) => {
+
+        var base64 = 'data:audio/mpeg;base64,' + f._arrayBufferToBase64(arraybuffer)
+
+        console.log('base64', base64)
+
         promises.push(this.sendAudioBase64(m_chat, base64,{}, {from: share.from}))
 
       })
