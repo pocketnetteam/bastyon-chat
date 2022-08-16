@@ -258,6 +258,7 @@ export default {
             if(this.encryptedData && this.subtype == 'm.audio'){
               this.decryptAudio()
             }
+            
 
             if(this.subtype == 'm.encrypted'){
               this.decrypt()
