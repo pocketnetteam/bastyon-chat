@@ -129,8 +129,6 @@ export default {
 
     pause(){
 
-       console.log("PAUSE")
-      
       if(this.audio) {
         this.audio.stop()
         this.audio.disconnect()
@@ -163,8 +161,6 @@ export default {
         
         return
       }
-
-      console.log("PLAY")
 
       this.isPlaying = true
 
@@ -256,9 +252,6 @@ export default {
       //audioNode.noteOn(this.currentTime);
 
 
-      console.log('audioNode', audioNode)
-
-
       audioNode.onended = () => {
 
 
@@ -277,12 +270,6 @@ export default {
 
         this.pause()
         
-        console.log("onended")
-        
-        //
-        //
-        //
-
       }
 
       return audioNode
@@ -311,12 +298,8 @@ export default {
 
       //const data = f._base64ToArrayBuffer(this.base64Audio.split(',')[1])
 
-      console.log('this.audioContext', this.audioContext)
-      
       try {
         await this.audioContext.decodeAudioData(this.localBuffer, (buffer) => {
-
-          console.log("HAS BUFFER", buffer)
 
           this.audiobuffer = buffer
 

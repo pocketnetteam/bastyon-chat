@@ -7,42 +7,44 @@
             :preview="preview || false"
             v-if="type === 'member' && !preview"/>
 
-    <message @openGalleryImg="openImage" :chat="chat"
+    <message 
+    
+      @openGalleryImg="openImage" 
+      
+      :chat="chat"
+      :event="event"
+      :prevevent="prevevent"
+      :origin="event"
+      :decryptEvent="decryptEvent"
+      :decryptedInfo="decryptedInfo"
+      :encryptedData="encryptedData"
 
-             :event="event"
-             :prevevent="prevevent"
-             :origin="event"
-             :decryptEvent="decryptEvent"
-             :decryptedInfo="decryptedInfo"
-             :encryptedData="encryptedData"
+      :imgEvent="galleryData" 
+      :userinfo="userinfo"
+      :readed="readed"
+      :preview="preview || false"
+      :withImage="withImage || false"
+      :clientWidth="clientWidth"
+      :encrypted="encrypted"
+      :subtype="subtype"
+      :error="error"
+      :reference="reference"
+      :downloaded="downloaded"
+      :last="last"
+      :showmyicontrue="showmyicontrue"
+      :fromreference="fromreference"
 
-             :imgEvent="galleryData" 
-             :userinfo="userinfo"
-             :readed="readed"
-             :preview="preview || false"
-             :withImage="withImage || false"
-             :clientWidth="clientWidth"
-             :encrypted="encrypted"
-             :subtype="subtype"
-             :error="error"
-             :reference="reference"
-             :downloaded="downloaded"
-             :last="last"
-             :showmyicontrue="showmyicontrue"
-             :fromreference="fromreference"
+      :audioBuffer="audioBuffer"
 
-             :audioBuffer="audioBuffer"
-
-             ref="cmessage"
-
-             @remove="removeEvent"
-             @download="downloadFile"
-             @decryptagain="decryptAgain"
-             @editing="editing"
-             @reply="reply"
-             @share="share"
-             @menuIsVisible="menuIsVisibleHandler"
-             v-if="type === 'message' || preview" />
+      @readyToRender="setReadyToRender"
+      @remove="removeEvent"
+      @download="downloadFile"
+      @decryptagain="decryptAgain"
+      @editing="editing"
+      @reply="reply"
+      @share="share"
+      @menuIsVisible="menuIsVisibleHandler"
+      v-if="type === 'message' || preview" />
 
     <common :event="event"
             :userinfo="userinfo"
@@ -124,7 +126,9 @@ export default {
       removed : false,
       downloaded : false,
       readedInterval : null,
-      audioBuffer : null
+      audioBuffer : null,
+
+      readyToRender : false
     }
   },
 
@@ -147,11 +151,20 @@ export default {
   },
 
   computed: {
-    readyToRender : function(){
-      if(this.$refs["cmessage"]) return this.$refs["cmessage"].readyToRender
+    /*readyToRender : function(){
+      console.log(this.$refs["cmessage"])
+      if(this.$refs["cmessage"]) {
+
+        console.log('this.$refs["cmessage"].readyToRender', this.$refs["cmessage"].readyToRender)
+
+        if(this.$refs["cmessage"].readyToRender){
+          return true
+        }
+
+      }
 
       return true
-    },
+    },*/
     type: function () {
 
       var t = f.deep(this, 'event.event.type')
@@ -266,6 +279,13 @@ export default {
   },
 
   methods: {
+
+    setReadyToRender(){
+      setTimeout(() => {
+        this.readyToRender = true
+      }, 20)
+      
+    },
     manageReadedInterval(){
 
       if(this.preview || !this.my) return
@@ -394,10 +414,7 @@ export default {
     },
 
     getAudioUnencrypt(){
-      console.log("getAudioUnencrypt123")
       this.core.mtrx.getAudioUnencrypt(this.chat, this.event).then(url => {
-
-        console.log("getAudioUnencrypt???", url)
 
         this.audioBuffer = url
 

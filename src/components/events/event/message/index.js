@@ -65,6 +65,14 @@ export default {
     IncomingMessage,
     VoiceMessage,
   },
+  watch : {
+    readyToRender : {
+      immediate : true,
+      handler : function(){
+        if(this.readyToRender) this.$emit('readyToRender')
+      }
+    }
+  },
   computed: {
     showburn : function(){  
 
@@ -88,15 +96,18 @@ export default {
 
     readyToRender : function(){
 
-      var r = ( this.content.msgtype === 'm.encrypted' && !this.textWithoutLinks && this.badenctypted ) || 
-              ( (this.content.msgtype === 'm.text' || this.content.msgtype === 'm.encrypted') && this.textWithoutLinks) ||
-              (this.file) || (this.error) || 
-              (this.content.msgtype === 'm.image' && this.imageUrl) ||
-              (this.content.msgtype === 'm.audio' && this.audioUrl)
-              (this.urlpreview) || 
-              (this.preview)
+      console.log('readyToRender')
 
-              return r 
+      var r = ( this.content.msgtype === 'm.encrypted' && !this.textWithoutLinks && this.badenctypted ) || 
+
+        ((this.content.msgtype === 'm.text' || this.content.msgtype === 'm.encrypted') && this.textWithoutLinks) ||
+        (this.file) || (this.error) || 
+        (this.content.msgtype === 'm.image' && this.imageUrl) ||
+        (this.content.msgtype === 'm.audio' && this.audioUrl) ||
+        (this.urlpreview) || 
+        (this.preview)
+
+      return r 
 
     },
     my: function () {

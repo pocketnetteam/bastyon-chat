@@ -357,6 +357,25 @@ class MTRX {
     })
   }
 
+  storeFileLocal(url, file){
+
+    return file.arrayBuffer().then((arrayBuffer) => {
+        const blob = new Blob([new Uint8Array(arrayBuffer)], {type: file.type });
+
+        if (window.POCKETNETINSTANCE && window.POCKETNETINSTANCE.storage && window.cordova){
+          return window.POCKETNETINSTANCE.storage.saveFile(url, blob);
+        }
+          
+        else{
+          if(this.db){
+            return this.db.set(url, blob)
+          }
+        }
+        
+    });
+    
+    
+  }
 
   download(url) {
 
@@ -585,9 +604,19 @@ class MTRX {
     }
   }
 
-  uploadContent(file) {
+  uploadContent(file, save) {
     return this.client.uploadContent(file).then(src => {
       return Promise.resolve(this.core.mtrx.client.mxcUrlToHttp(src))
+    }).then(url => {
+
+        if(save){
+          console.log('url, file', url, file)
+          return this.storeFileLocal(url, file).then(() => {
+            return Promise.resolve(url)
+          }).catch(e => {})
+        }
+
+        return Promise.resolve()
     })
   }
 
@@ -773,7 +802,7 @@ class MTRX {
 
 
     }).then(file => {
-      var promise = this.core.mtrx.uploadContent(file)
+      var promise = this.core.mtrx.uploadContent(file, true)
       if (promise.abort) meta.abort = promise.abort
 
       return promise
@@ -805,16 +834,18 @@ class MTRX {
        resolve(file) 
 
     }).then(file => {
-      console.log('this.core.mtrx.uploadContent', meta)
 
-      let promise = this.core.mtrx.uploadContent(file)
+      let promise = this.core.mtrx.uploadContent(file, true)
 
       if (promise.abort) meta.abort = promise.abort
 
       return promise
     }).then((audio) => {
-      if (meta.aborted)
-        return Promise.reject('aborted')
+
+      console.log('audio', audio)
+
+      if (meta.aborted) return Promise.reject('aborted')
+
       return this.client.sendAudioMessage(chat.roomId, audio, info, 'Audio')
     })
 
