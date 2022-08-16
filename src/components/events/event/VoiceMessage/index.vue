@@ -185,7 +185,7 @@ export default {
         clearInterval(this.interval)
       }
 
-      var t = 20
+      var t = 50
 
       this.interval = setInterval(() => {
 
@@ -217,6 +217,7 @@ export default {
       var w = canvas.width
       var h = canvas.height
       var l = data.length
+      var perc = this.percentPlayed
       
       const ctx = canvas.getContext("2d")
       ctx.clearRect(0, 0, w, h)
@@ -229,7 +230,7 @@ export default {
         let L = Math.abs(data[i] * h) + 1;
 
         
-        if (i / l <= this.percentPlayed) {
+        if (i / l <= perc) {
           ctx.fillStyle = '#00a4ff'
         } else {
           ctx.fillStyle = '#8bddfb'
