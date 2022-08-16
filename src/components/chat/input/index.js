@@ -49,7 +49,9 @@ export default {
 			interval: null,
 			cancelOpacity: 0,
 			microphoneDisabled: false,
-			prepareRecording : false
+			prepareRecording : false,
+
+			cancelledCordovaMediaRecorder : false
 		}
 
 	},
@@ -844,9 +846,135 @@ export default {
 			this.$refs.dropdownMenu.hidePopup();
 		},
 
-		
+		catchPermissonsError(err){
+			if(err == 'permissions'){
+				this.microphoneDisabled = true
 
-		async initRecording() {
+				if(window.cordova){
+					console.error('cordova')
+				}
+				else{	
+					this.$dialog.confirm(
+						this.$i18n.t('micaccessbrowser'), {
+						okText: this.$i18n.t("button.ok"),
+					})
+				}
+			}
+
+			else{
+
+				this.$dialog.confirm(
+					this.$i18n.t('micaccesscommonproblem'), {
+					okText: this.$i18n.t("button.ok"),
+				})
+
+				console.error(err)
+			}
+		},
+
+		initRecordingCordova(){
+			if(this.prepareRecording || this.isRecording) return
+
+			this.prepareRecording = cancelable(this.core.media.permissions({ audio: true }))
+
+			this.prepareRecording.then(() => {
+
+				this.microphoneDisabled = false
+
+				var path = 'cdvfile://localhost/temporary/recording.mp3'
+
+				var sec = 0
+
+				this.audioContext = this.core.getAudioContext()
+
+				this.cordovaMediaRecorder = new Media(path, () => {
+
+					this.recordTime = 0
+
+					if (this.cancelledCordovaMediaRecorder){
+
+						this.cancelledCordovaMediaRecorder = false
+						return 
+					}
+
+					f.fetchLocal(path).then(r => {
+
+						console.log("R", r)
+
+						/*var e = {
+							data : r.data
+						}*/
+
+						this.createVoiceMessage(r, true)
+
+					})
+
+				}, () => {
+
+					this.isRecording = false
+
+				});
+
+				this.recordRmsData = []
+				var rmsdata = []
+
+				let currentPlaying = this.$store.state.currentPlayingVoiceMessage
+        
+				if (currentPlaying) {
+					currentPlaying.pause()
+				}
+
+				this.$store.commit('SET_VOICERECORDING', true)
+
+				this.interval = setInterval( () => {
+					// get media amplitude
+					this.cordovaMediaRecorder.getCurrentAmplitude(
+						// success callback
+						(amp) => {
+
+							rmsdata.push(amp * 1000)
+
+							if(rmsdata.length > 50) rmsdata = _.last(rmsdata, 50)
+
+							this.recordRmsData = _.clone(rmsdata)
+
+							console.log(rmsdata)
+							
+						},
+						function (e) {
+							console.log("E", e)
+						}
+					);
+
+					sec = sec + 50
+
+					if(sec % 1000 === 0) this.recordTime = sec
+
+				}, 50);
+
+				this.isRecording = true
+
+				
+
+				this.cordovaMediaRecorder.startRecord();
+					
+
+			
+			}).catch(err => {
+
+				this.catchPermissonsError(err)
+
+			}).finally(() => {
+				this.prepareRecording = null
+			})
+
+		},
+
+		initRecording() {
+
+			if(window.cordova){
+				return this.initRecordingCordova()
+			}
 
 			if(this.prepareRecording || this.isRecording) return
 
@@ -869,7 +997,7 @@ export default {
 
 				this.mediaRecorder = recorder
 				this.microphoneDisabled = false
-				this.audioContext = new (window.AudioContext || window.webkitAudioContext)()
+				this.audioContext = this.core.getAudioContext()
 				this.audioAnalyser = this.audioContext.createAnalyser()
 
 				//var audioDataArray = new Uint8Array(this.audioAnalyser.frequencyBinCount)
@@ -881,31 +1009,7 @@ export default {
 
 			}).catch(err => {
 
-				console.error(err)
-
-				if(err == 'permissions'){
-					this.microphoneDisabled = true
-
-					if(window.cordova){
-						console.error('cordova')
-					}
-					else{	
-						this.$dialog.confirm(
-							this.$i18n.t('micaccessbrowser'), {
-							okText: this.$i18n.t("button.ok"),
-						})
-					}
-				}
-
-				else{
-
-					this.$dialog.confirm(
-						this.$i18n.t('micaccesscommonproblem'), {
-						okText: this.$i18n.t("button.ok"),
-					})
-
-					console.error(err)
-				}
+				this.catchPermissonsError(err)
 
 			}).finally(() => {
 				this.prepareRecording = null
@@ -915,6 +1019,12 @@ export default {
 		},
 
 		startRecording() {
+
+			let currentPlaying = this.$store.state.currentPlayingVoiceMessage
+        
+			if (currentPlaying) {
+				currentPlaying.pause()
+			}
 
 			this.$store.commit('SET_VOICERECORDING', true)
 
@@ -934,6 +1044,7 @@ export default {
 
 				this.audioAnalyser.getByteFrequencyData(dataArray)
 
+
 				rmsdata.push(this.generateRms(dataArray))
 
 				if(rmsdata.length > 50) rmsdata = _.last(rmsdata, 50)
@@ -941,6 +1052,8 @@ export default {
 				sec = sec + 50
 
 				this.recordRmsData = _.clone(rmsdata)
+
+				
  
 				if(sec % 1000 === 0) this.recordTime = sec
 
@@ -1015,6 +1128,7 @@ export default {
 				this.interval = null
 			}
 
+
 			if (this.mediaRecorder) {
 
 				if (cancel) {
@@ -1034,6 +1148,22 @@ export default {
 				});
 	
 				this.mediaRecorder = null
+			}
+
+
+			if (this.cordovaMediaRecorder){
+
+				if(cancel){
+					this.cancelledCordovaMediaRecorder = true
+				}
+				else{
+					this.cancelledCordovaMediaRecorder = false
+				}
+
+				
+				this.cordovaMediaRecorder.stopRecord()
+				//this.cordovaMediaRecorder.release()
+				this.cordovaMediaRecorder = null
 			}
 
 		},

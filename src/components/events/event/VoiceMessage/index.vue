@@ -59,7 +59,7 @@ export default {
       this.interval = null
     }
       
-    if(this.audioContext) this.audioContext.close()
+    //if(this.audioContext) this.audioContext.close()
 
   },
   watch : {
@@ -296,7 +296,7 @@ export default {
     async initVoiceMessage() {
       
       try {
-        this.audioContext = new (window.AudioContext || window.webkitAudioContext)() || null;
+        this.audioContext = this.core.getAudioContext() //new (window.AudioContext || window.webkitAudioContext)() || null;
       } catch (e) {
         this.error = e
         console.log(e)

@@ -8,7 +8,7 @@ import FingerprintJS from '@fingerprintjs/fingerprintjs';
 var _ = require('underscore');
 import qs from 'qs';
 import fileSaver from 'file-saver';
-
+import ChatStorage from "./chatstorage";
 
 var axios = require('axios');
 
@@ -29,6 +29,7 @@ class MTRX {
     this.version = 4
     this.dversion = '2'
     this.backup = {}
+    this.db = null
 
     this.customrequest = true
 
@@ -360,11 +361,18 @@ class MTRX {
   download(url) {
 
     // Function to download the file
-    var dlFile = function () {
+    var dlFile =  () => {
       return f.fetchLocal(url).then(response => {
         // Update the storage before returning
-        if (window.POCKETNETINSTANCE && window.POCKETNETINSTANCE.storage)
+        if (window.POCKETNETINSTANCE && window.POCKETNETINSTANCE.storage && window.cordova){
           window.POCKETNETINSTANCE.storage.saveFile(url, response.data);
+        }
+          
+        else{
+          if(this.db){
+            this.db.set(url, response.data)
+          }
+        }
 
         return Promise.resolve(response.data);
       })
@@ -380,8 +388,25 @@ class MTRX {
         // Nothing in storage, download file
         return dlFile();
       });
-    } else
+    } else {
+
+      if(this.db){
+
+        return this.db.get(url).then((file) => {
+
+          return Promise.resolve(file);
+
+        }).catch(() => {
+          return dlFile();
+        })
+        
+      }
+
       return dlFile();
+
+    }
+    
+      
   }
 
   customRoomType(roomId) {
@@ -483,8 +508,21 @@ class MTRX {
 
   }
 
+  initdb(){
+    return ChatStorage('files', 1).then((db) => {
+      this.db = db
+      return Promise.resolve()
+    }).catch(() => {
+      return Promise.resolve()
+    })
+  }
+
   init() {
-    return this.createClient().then(r => {
+    return this.createClient().then(() => {
+
+      return this.initdb()
+    
+    }).then(() => {
 
       this.initEvents()
 
@@ -849,7 +887,7 @@ class MTRX {
       return Promise.resolve(event.event.content.audioData)
     }
 
-    return this.download(event.event.content.url).then(r => {
+    return this.download(event.event.content.url, true).then(r => {
 
       console.log("DOWNLOADED???", r)
 
@@ -879,14 +917,11 @@ class MTRX {
 
       event.event.decryptKey = decryptKey
 
-      return this.download(event.event.content.url).then(blob => {
+      return this.download(event.event.content.url, true).then(blob => {
 
         return chat.pcrypto.decryptFile(blob, decryptKey)
 
       }).then(r => {
-
-        console.log("AUDIO FILE", r)
-
 
         return f.readFile(r)
       }).then(arraybuffer => {
@@ -894,13 +929,6 @@ class MTRX {
         event.event.decryptedAudio = arraybuffer
 
         return Promise.resolve(event.event.decryptedAudio)
-
-        console.log('url', url)
-        return
-
-          //event.event.decryptedAudio =  url.replace('data:file;', 'data:audio/mpeg;')
-
-          return Promise.resolve(event.event.decryptedAudio)
 
       }).catch(e => {
         return Promise.reject(e)
@@ -923,7 +951,7 @@ class MTRX {
 
       event.event.decryptKey = decryptKey
 
-      return this.download(event.event.content.url).then(blob => {
+      return this.download(event.event.content.url, true).then(blob => {
 
         return chat.pcrypto.decryptFile(blob, decryptKey)
 

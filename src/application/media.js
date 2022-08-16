@@ -190,6 +190,8 @@ var Media = function () {
 
     }
 
+    self.permissions = initPermissions
+
 }
 
 

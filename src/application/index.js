@@ -86,6 +86,7 @@ class Core {
         this.pcrypto.init(this.user)
 
         this.media = new Media()
+        this.audioContext = null
 
     }
 
@@ -531,26 +532,10 @@ class Core {
 
     initMediaRecorder() {
 
-        /*return new Promise((resolve, reject) => {
-            setTimeout(() => {
-                reject()
-            }, 300)
-        })*/
-
         if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
 
-            //return this.connectCustomRecorder().then(() => {
 
-                return this.media.get({ audio: true })
-
-                //return navigator.mediaDevices.getUserMedia({ audio: true })
-
-            /*})*/.then(stream => {
-
-                /*var {MediaRecorder} = require('extendable-media-recorder')
-
-                let mediaRecorder = new MediaRecorder(stream, { audioBitsPerSecond : 64000, mimeType : f.isios() ? 'audio/wav' : 'audio/webm' })
-                mediaRecorder.stream = stream*/
+            return this.media.get({ audio: true }).then(stream => {
 
                 let mediaRecorder = new AudioRecorder(stream, { audioBitsPerSecond : 32000 })
                
@@ -563,6 +548,14 @@ class Core {
         } else {
             return Promise.reject()
         }
+    }
+
+    getAudioContext(){
+        if(this.audioContext) return this.audioContext
+
+        this.audioContext = new (window.AudioContext || window.webkitAudioContext)() || null;
+
+        return this.audioContext
     }
 }
 
