@@ -1,7 +1,7 @@
 <template>
   <div class="voiceMessage" :class="{playing:isPlaying}">
     <div class="voiceMessage_wrapper">
-      <button class="voiceMessage_toggle" @click="audioToggle">
+      <button class="voiceMessage_toggle" @touchend="audioToggle" @click="audioToggleClick">
         <i :class="isPlaying ? 'fas fa-pause': 'fas fa-play'"></i>
       </button>
       <div class="voiceMessage_graph">
@@ -17,6 +17,7 @@
 
 <script>
 import f from '@/application/functions'
+import { mapState } from 'vuex';
 
 export default {
   name: "VoiceMessage",
@@ -40,7 +41,7 @@ export default {
       currentTime : null,
       signal : null,
       audiobuffer : null,
-      error : null
+      error : null,
     }
   },
   inject: ['addToQueue', 'playNext'],
@@ -78,6 +79,11 @@ export default {
     }
   },
   computed: {
+
+		...mapState({
+			mobile: state => state.mobile,
+		}),
+
     getDurationString() {
 
       if (this.duration) {
@@ -112,11 +118,27 @@ export default {
 
       var dr = e.offsetX / this.$refs.canvas.width * this.duration;
       
-      this.setTime(dr)
+      
 
       if(!this.isPlaying) { 
+        this.setTime(dr)
         this.play()
       }
+      else{
+        this.pause()
+        
+        setTimeout(() => {
+          this.setTime(dr)
+          this.play()
+        }, 20)
+        
+      }
+
+    },
+    audioToggleClick(){
+      if(this.mobile) return 
+
+      this.audioToggle()
     },
     audioToggle() {
       if(this.isPlaying){
@@ -255,7 +277,6 @@ export default {
 
       audioNode.onended = () => {
 
-
         this.audio = null
 
         if(this.isPlaying){
@@ -328,7 +349,7 @@ export default {
   contain: strict;
   width: 230px;
   height: 100%;
-  justify-content: flex-end;
+  
 
   &_wrapper {
     display: flex;

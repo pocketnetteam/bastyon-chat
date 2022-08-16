@@ -151,6 +151,8 @@
     margin-left: $r
     height: 50px
 
+
+
   .messageImg
     width: 85%
     position: relative
@@ -449,6 +451,12 @@
       border-radius: 2 * $r
       border-bottom-left-radius: 2 * $r
       border-top-right-radius: 0
+
+    .messageAudio
+      margin-left: 0
+      /deep/
+        .voiceMessage
+          justify-content: flex-end
       
   &.urlpreview
     background: srgb(--background-total-theme)

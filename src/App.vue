@@ -514,7 +514,7 @@ export default {
   },
 
   created() {
-    /*this.pocketnet = false
+    /*this.pocketnet = true
     this.mobile = !this.pocketnet
     this.recording = true*/
 
@@ -698,7 +698,7 @@ export default {
       privateKey: this.privatekey
     }
 
-    var username = 'morph'
+    var username = 'alchemist'
 
     var user = (this.address && this.privatekey) ? actualUser : testUsers[`${username}`];
 

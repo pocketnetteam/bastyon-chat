@@ -551,7 +551,8 @@ class Core {
     }
 
     getAudioContext(){
-        if(this.audioContext) return this.audioContext
+
+        if(this.audioContext && this.audioContext.state == "running") return this.audioContext
 
         this.audioContext = new (window.AudioContext || window.webkitAudioContext)() || null;
 
