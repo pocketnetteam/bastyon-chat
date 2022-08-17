@@ -1,10 +1,8 @@
-import {mapState} from 'vuex';
 import actions from "@/components/events/event/actions/index.vue";
 import filePreview from "@/components/events/previews/filePreview/index.vue";
 import fileMessage from "@/components/events/event/fileMessage/index.vue";
 import listPreview from "@/components/events/event/message/listPreview/index.vue";
 import f from '@/application/functions'
-import VuePictureSwipe from 'vue-picture-swipe';
 import url from '@/components/events/event/url/index.vue'
 import imagesLoaded from 'vue-images-loaded'
 import dummypreviews from "@/components/chats/dummypreviews";
@@ -58,7 +56,6 @@ export default {
     actions,
     filePreview,
     fileMessage,
-    VuePictureSwipe,
     listPreview,
     url,
     dummypreviews,

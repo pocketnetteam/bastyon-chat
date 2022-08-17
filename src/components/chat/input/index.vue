@@ -91,13 +91,13 @@
 
             <template v-if="voiceEnable">
               
-              <div v-show="(isRecording || !recordRmsData.length) && !microphoneDisabled" class="iconbutton">
-                <recordVoice @onRecordingStart="initRecording" @onRecordingStop="stopRecording" :prepareRecording="prepareRecording ? true : false" :isRecording="isRecording" @onClear="clear" @canceling="setOpacity"/>
+              <div v-show="(isRecording || !recordRmsData.length) " class="iconbutton">
+                <recordVoice @onRecordingStart="initRecording" @onRecordingStop="stopRecording" :prepareRecording="prepareRecording ? true : false" :isRecording="isRecording" :disabled="microphoneDisabled" @onClear="clear" @canceling="setOpacity"/>
               </div>
 
-              <div v-if="microphoneDisabled" class="disabled">
+              <!--<div v-if="microphoneDisabled" class="disabled">
                 <i class="icon fas fa-microphone-slash" @click="initRecording"></i>
-              </div>
+              </div>-->
             </template>
 
 

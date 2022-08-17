@@ -847,11 +847,15 @@ export default {
 		},
 
 		catchPermissonsError(err){
-			if(err == 'permissions'){
+
+			if(err == 'permissions' || (err.toString && err.toString().indexOf('Permission') > -1)){
 				this.microphoneDisabled = true
 
 				if(window.cordova){
-					console.error('cordova')
+					this.$dialog.confirm(
+						this.$i18n.t('micaccesscordova'), {
+						okText: this.$i18n.t("button.ok"),
+					})
 				}
 				else{	
 					this.$dialog.confirm(
@@ -875,7 +879,19 @@ export default {
 		initRecordingCordova(){
 			if(this.prepareRecording || this.isRecording) return
 
-			this.prepareRecording = cancelable(this.core.media.permissions({ audio: true }))
+			this.prepareRecording = cancelable(this.core.media.permissions({ audio: true }).then(() => {
+				this.microphoneDisabled = false
+
+				return Promise.resolve()
+			}).catch(err => {
+
+				console.error(err)
+
+				this.catchPermissonsError(err)
+
+				return Promise.reject(err)
+
+			}))
 
 			this.prepareRecording.then(() => {
 
@@ -924,7 +940,6 @@ export default {
 					currentPlaying.pause()
 				}
 
-				this.$store.commit('SET_VOICERECORDING', true)
 
 				this.interval = setInterval( () => {
 					// get media amplitude
@@ -960,11 +975,7 @@ export default {
 					
 
 			
-			}).catch(err => {
-
-				this.catchPermissonsError(err)
-
-			}).finally(() => {
+			}).catch(() => {}).finally(() => {
 				this.prepareRecording = null
 			})
 
@@ -980,6 +991,8 @@ export default {
 
 			this.prepareRecording = cancelable(this.core.initMediaRecorder().then((recorder) => {
 
+				this.microphoneDisabled = false
+
 				if (this.prepareRecording){
 					return Promise.resolve(recorder)
 				}
@@ -989,14 +1002,21 @@ export default {
 					});
 				}
 
+			}).catch(err => {
+
+				this.catchPermissonsError(err)
+				return Promise.reject(err)
+
 			}))
+
+			console.log('preparing has')
 
 			this.prepareRecording.then((recorder) => {
 
 				console.log("recorder", recorder)
 
 				this.mediaRecorder = recorder
-				this.microphoneDisabled = false
+				
 				this.audioContext = this.core.getAudioContext()
 				this.audioAnalyser = this.audioContext.createAnalyser()
 
@@ -1007,11 +1027,7 @@ export default {
 
 				this.startRecording()
 
-			}).catch(err => {
-
-				this.catchPermissonsError(err)
-
-			}).finally(() => {
+			}).catch(() => {}).finally(() => {
 				this.prepareRecording = null
 			})
 
@@ -1096,7 +1112,7 @@ export default {
 					this.checkaudioForSend(sendnow)
 
 				}).catch(e => {
-					console.error('e', e)
+					//console.error('e', e)
 				})
 
 				
@@ -1109,6 +1125,8 @@ export default {
 		},
 
 		stopRecording({ cancel, sendnow }) {
+
+			console.log("stopRecording", cancel)
 
 
 			this.$store.commit('SET_VOICERECORDING', false)

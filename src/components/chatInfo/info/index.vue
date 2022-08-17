@@ -121,7 +121,6 @@
 <!-- THEMES BEGIN -->
 <!-- THEMES END -->
 
-<style src="../../../../node_modules/vue-simple-accordion/dist/vue-simple-accordion.css"></style>
 
 
 

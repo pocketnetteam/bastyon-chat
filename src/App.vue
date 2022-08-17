@@ -514,7 +514,7 @@ export default {
   },
 
   created() {
-    /*this.pocketnet = true
+    /*this.pocketnet = false
     this.mobile = !this.pocketnet
     this.recording = true*/
 
@@ -833,7 +833,6 @@ if (module.hot) {
 @import '@/../../public/css/normalize.css';
 @import '@/../../public/css/emoji-mart.css';
 </style>
-<style src="../node_modules/vue-simple-accordion/dist/vue-simple-accordion.css"></style>
 
 <!-- THEMES BEGIN -->
 <!-- THEMES END -->

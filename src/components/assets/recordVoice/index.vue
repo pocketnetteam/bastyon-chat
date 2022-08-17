@@ -1,10 +1,10 @@
 <template>
-  <div class="recordButton_wrapper" :class="{disabled: disabled}">
+  <div class="recordButton_wrapper">
     <div ref="holder" class="recordButton_holder" :class="{hold: isHold}">
       <i class="icon fas" :class="isHold ? 'fa-lock': 'fa-lock-open'"></i>
     </div>
 
-    <div ref="toggle" class="recordButton_micro recordButton_main" v-if="!isHold" :class="{active: isRecording}" @mousedown="mousedown" @mouseup="mouseup" @touchstart="handleTouchStart" @touchend="handleTouchEnd" @touchcancel="handleTouchEnd">
+    <div ref="toggle" class="recordButton_micro recordButton_main" v-if="!isHold" :class="{active: isRecording, disabled: disabled}" @mousedown="mousedown" @mouseup="mouseup" @touchstart="handleTouchStart" @touchend="handleTouchEnd" @touchcancel="handleTouchEnd">
       <i class="icon fas fa-microphone"></i>
     </div>
 

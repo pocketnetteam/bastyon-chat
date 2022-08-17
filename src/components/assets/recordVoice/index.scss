@@ -73,6 +73,12 @@
       }
     }
 
+    &.disabled{
+      .icon {
+        color : srgb(--neutral-grad-2);
+      }
+    }
+
     &.outside {
       background: srgb(--color-bad);
     }

@@ -52,29 +52,34 @@ var Media = function () {
 
                 if (permissions){
 
-                    permissions.hasPermission(permissions.RECORD_AUDIO, (status) => {
+                    var request = function(){
+                        permissions.requestPermission(permissions.RECORD_AUDIO, (status) => {
+
+                            if (status.hasPermission) {
+                                resolve()
+                            }
+                            else{
+                                reject('permissions')
+                            }
+
+                        }, (err) => {
+
+                            reject('permissions')
+
+                        });
+                    }
+
+                    permissions.checkPermission(permissions.RECORD_AUDIO, (status) => {
 
 
                         if (status.hasPermission) {
-
                             resolve()
-
                         }
                         else {
-                            permissions.requestPermission(permissions.RECORD_AUDIO, () => {
-
-                                resolve()
-
-                            }, () => {
-
-
-                                reject('permissions')
-
-                            });
-
+                            request()
                         }
 
-                    });
+                    }, () => {request()});
 
                 }
                 else{

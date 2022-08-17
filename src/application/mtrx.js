@@ -610,7 +610,6 @@ class MTRX {
     }).then(url => {
 
         if(save){
-          console.log('url, file', url, file)
           return this.storeFileLocal(url, file).then(() => {
             return Promise.resolve(url)
           }).catch(e => {})
@@ -842,8 +841,6 @@ class MTRX {
       return promise
     }).then((audio) => {
 
-      console.log('audio', audio)
-
       if (meta.aborted) return Promise.reject('aborted')
 
       return this.client.sendAudioMessage(chat.roomId, audio, info, 'Audio')
@@ -914,20 +911,13 @@ class MTRX {
   async getAudioUnencrypt(chat, event){
 
     if(event.event.content.audioData){
-      console.log('event.event.content.audioData', event.event.content.audioData)
       return Promise.resolve(event.event.content.audioData)
     }
 
     return this.download(event.event.content.url, true).then(r => {
 
-      console.log("DOWNLOADED???", r)
-
       return f.readFile(r)
     }).then(arraybuffer => {
-
-      console.log("READ FILE", arraybuffer)
-
-      console.log('event', event)
 
       event.event.content.audioData = arraybuffer
 
@@ -1047,8 +1037,6 @@ class MTRX {
       _.each(share.audio, (arraybuffer) => {
 
         var base64 = 'data:audio/mpeg;base64,' + f._arrayBufferToBase64(arraybuffer)
-
-        console.log('base64', base64)
 
         promises.push(this.sendAudioBase64(m_chat, base64,{}, {from: share.from}))
 

@@ -10,7 +10,7 @@ export default {
 		prepareRecording: {
 			type: Boolean
 		},
-		disabled: {},
+		disabled: Boolean,
 	},
 	data() {
 		return {
@@ -50,7 +50,7 @@ export default {
 		
 		handleTouchStart(e) {
 
-
+			console.log('handleTouchStart')
 			if(!this.isRecording) {
 				this.$emit('onRecordingStart')
 			}
@@ -64,14 +64,16 @@ export default {
 				X: e.changedTouches ? e.changedTouches[0].pageX : e.pageX
 			}
 
-			document.addEventListener('mousemove', this.handleMove)
-			document.addEventListener('touchmove', this.handleMove)
+			if(!this.mobile)
+				document.addEventListener('mousemove', this.handleMove)
+			else
+				document.addEventListener('touchmove', this.handleMove)
 
 		},
 		handleTouchEnd(e) {
+			console.log('handleTouchEnd')
 
-
-			if(this.isHold) return
+			if (this.isHold) return
 
 			if (this.isRecording || this.prepareRecording) {
 				this.$emit('onRecordingStop', {
@@ -85,6 +87,8 @@ export default {
 		},
 
 		handleMove(e) {
+
+			if(!this.isRecording) return
 
 			let deltaY = this.start.Y - e.pageY
 			let deltaX = this.start.X - e.pageX

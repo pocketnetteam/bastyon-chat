@@ -552,7 +552,17 @@ class Core {
 
     getAudioContext(){
 
-        if(this.audioContext && this.audioContext.state == "running") return this.audioContext
+        if(this.audioContext && this.audioContext.state != 'closed') {
+
+
+            if(this.audioContext.state === "suspended") this.audioContext.resume()
+
+
+
+            return this.audioContext
+        }
+        else{
+        }
 
         this.audioContext = new (window.AudioContext || window.webkitAudioContext)() || null;
 

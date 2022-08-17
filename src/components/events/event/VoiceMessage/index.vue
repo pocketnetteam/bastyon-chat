@@ -177,12 +177,15 @@ export default {
 
       if(!this.audiobuffer) return
 
+      
       if(this.error){
 
         this.playNext(this.id)
         
         return
       }
+
+      this.audioContext = this.core.getAudioContext()
 
       this.isPlaying = true
 
@@ -192,8 +195,13 @@ export default {
         this.setTime(0)
       }
       
-
-      this.audio.start(0, this.currentTime)
+      if (this.audio.start) {
+        this.audio.start(0, this.currentTime);
+      } else if (this.audio.play) {
+        this.audio.play(0, this.currentTime);
+      } else if (this.audio.noteOn) {
+        this.audio.noteOn(0, this.currentTime);
+      }
 
       let currentPlaying = this.$store.state.currentPlayingVoiceMessage
         
@@ -272,8 +280,6 @@ export default {
       audioNode = this.audioContext.createBufferSource();
       audioNode.buffer = this.audiobuffer
       audioNode.connect(this.audioContext.destination);
-      //audioNode.noteOn(this.currentTime);
-
 
       audioNode.onended = () => {
 
@@ -282,7 +288,7 @@ export default {
         if(this.isPlaying){
           setTimeout(() => {
             this.playNext(this.id)
-          }, 10)
+          }, 300)
         }
         else{
           

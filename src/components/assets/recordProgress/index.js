@@ -1,7 +1,3 @@
-//import {canvas} from 'caniuse-lite/data/features';
-
-import { _ } from "core-js"
-
 export default {
   name: "recordProgress",
   props: {
