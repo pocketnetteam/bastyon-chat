@@ -863,17 +863,25 @@ export default {
 						okText: this.$i18n.t("button.ok"),
 					})
 				}
+
+				return
 			}
 
-			else{
-
+			if((err.toString && err.toString().indexOf('device not found') > -1)){
 				this.$dialog.confirm(
-					this.$i18n.t('micaccesscommonproblem'), {
+					this.$i18n.t('micdevicenotfound'), {
 					okText: this.$i18n.t("button.ok"),
 				})
-
-				console.error(err)
+				return
 			}
+
+
+			this.$dialog.confirm(
+				this.$i18n.t('micaccesscommonproblem'), {
+				okText: this.$i18n.t("button.ok"),
+			})
+
+			console.error(err)
 		},
 
 		initRecordingCordova(){

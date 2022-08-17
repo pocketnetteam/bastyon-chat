@@ -64,6 +64,8 @@ var Media = function () {
 
                         }, (err) => {
 
+                            console.error(err)
+
                             reject('permissions')
 
                         });
@@ -79,7 +81,12 @@ var Media = function () {
                             request()
                         }
 
-                    }, () => {request()});
+                    }, (err) => {
+
+                        console.error(err)
+
+                        request()
+                    });
 
                 }
                 else{

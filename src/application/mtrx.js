@@ -612,7 +612,9 @@ class MTRX {
         if(save){
           return this.storeFileLocal(url, file).then(() => {
             return Promise.resolve(url)
-          }).catch(e => {})
+          }).catch(e => {
+            return Promise.resolve(url)
+          })
         }
 
         return Promise.resolve()

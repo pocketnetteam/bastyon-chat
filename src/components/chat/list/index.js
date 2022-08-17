@@ -241,7 +241,9 @@ export default {
 
         if(!pr) return Promise.resolve()
 
-        return pr
+        return pr.catch(e => {
+          return Promise.resolve()
+        })
 
 
         /*return this.chat.pcrypto.decryptEvent(e.event).then(d => {
