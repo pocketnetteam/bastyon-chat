@@ -433,7 +433,6 @@ export default {
     },
 
     checkReaded: function () {
-
       if (this.event) {
 
         this.core.mtrx.isReaded(this.event).then(readed => {

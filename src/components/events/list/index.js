@@ -44,8 +44,10 @@ export default {
 
   watch: {
     events: function () {},
+    notificationCount: function () {
+      this.scrollToReadMessages();      
+    }
   },
-
   computed: {
     sortedVoiceMessageQueue() {
       return this.voiceMessageQueue.sort((a, b) => a.id - b.id);
@@ -61,6 +63,7 @@ export default {
       scrollbottomshow: function () {
         return this.lscroll && this.lscroll.scrollTop > 500;
       },
+      notificationCount : state => state.allnotifications
     }),
 
     eventsByPages: function () {
@@ -87,9 +90,16 @@ export default {
   destroyed: function () {
     this.core.menu(null);
   },
-  mounted: function () {},
+  mounted: function () {
+    this.scrollToReadMessages();
+  },
 
   methods: {
+    scrollToReadMessages: function () {
+      if(this.notificationCount > 0) {
+        document.getElementById("eventWrapper_" + this.notificationCount).scrollIntoView();
+      }
+    },
     showerror: function () {
       // stringifyiedError
 
@@ -196,7 +206,6 @@ export default {
       if (this.scrollType === "custom") {
         return;
       } else {
-        console.log("e.deltaY", e.deltaY, "mousewheel function work");
         e.preventDefault();
         this.$refs["container"].scrollTop += -e.deltaY;
         return false;

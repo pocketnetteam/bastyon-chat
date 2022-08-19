@@ -2,12 +2,12 @@
   <div id="events" class="maskedtop" :class="{mobile, ios, menuOpen, imagesList: (this.scrollType === 'custom' ? 'imagesList' : '')}">
     <div class="eventsflex" @mousewheel="mousewheel" ref="container" @scroll="dscroll" :class="{mobile, ios, menuOpen}">
       <div class="ewr">
-
           <div class="errorWrapper" v-if="stringifyiedError" >
             <div class="error"><div>{{ $t("sendingerror") }}</div><div class="btnwrp"><button @click="showerror" class="button small">{{ $t("details") }}</button></div></div>
           </div>
             
           <div class="eventWrapper"
+              :id="'eventWrapper_' + (i + 1)"
               v-for="(event, i) in events"
               :key="event.event.event_id"
           >
