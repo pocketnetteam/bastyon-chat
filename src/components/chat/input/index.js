@@ -1077,10 +1077,10 @@ export default {
 
 				this.recordRmsData = _.clone(rmsdata)
 
-				
- 
-				if(sec % 1000 === 0) this.recordTime = sec
-
+				if(sec % 1000 === 0) {
+					console.log("SEC")
+					this.recordTime = sec
+				}
 				
 			}, 50)
 
@@ -1092,6 +1092,8 @@ export default {
 			if(!this.record){
 				return
 			}
+
+			console.log('this.record.duration', this.record.duration)
 
 			if (this.record.duration < 1) {
 				this.clear()
@@ -1113,17 +1115,18 @@ export default {
 
 			f.readFile(event.data).then(arraybuffer => {
 
-				this.audioContext.decodeAudioData(arraybuffer, (buffer) => {
+				return this.audioContext.decodeAudioData(arraybuffer, (buffer) => {
 
 					this.record.duration = buffer.duration
 
 					this.checkaudioForSend(sendnow)
 
-				}).catch(e => {
-					//console.error('e', e)
 				})
-
 				
+			}).catch(e => {
+				console.error('e', e)
+				this.clear()
+				//
 			})
 			
 		},

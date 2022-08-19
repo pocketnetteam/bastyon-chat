@@ -62,13 +62,13 @@
 
       &:before{
         position: absolute;
-        left: -20px;
-        bottom : -20px;
-        right: -20px;
-        top: -20px;
+        left: -30px;
+        bottom : -30px;
+        right: -30px;
+        top: -30px;
         content: "";
         border-radius: 50%;
-        border : 25px solid srgba(--color-bg-ac, 0.5);
+        border : 35px solid srgba(--color-bg-ac, 0.5);
         animation: pulse 1.2s infinite;
       }
     }
@@ -93,7 +93,13 @@
 
 
 @keyframes pulse {
+  0% {
+    opacity: 1;
+  }
   50% {
-    filter: brightness(80%);
+    opacity: 0.8;
+  }
+  100% {
+    opacity: 1;
   }
 }

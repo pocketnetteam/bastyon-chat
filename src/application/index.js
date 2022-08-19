@@ -508,14 +508,14 @@ class Core {
         })
     }
 
-    async connectCustomRecorder() {
+    /*async connectCustomRecorder() {
 
         if (this.customRecorderConnected) return
             this.customRecorderConnected = true
   
         await register(await connect());
         
-    }
+    }*/
 
     /*mp3ToWav(base64Audio){
 

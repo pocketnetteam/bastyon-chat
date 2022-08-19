@@ -50,7 +50,7 @@ export default {
 		
 		handleTouchStart(e) {
 
-			console.log('handleTouchStart')
+
 			if(!this.isRecording) {
 				this.$emit('onRecordingStart')
 			}
@@ -71,7 +71,7 @@ export default {
 
 		},
 		handleTouchEnd(e) {
-			console.log('handleTouchEnd')
+
 
 			if (this.isHold) return
 
@@ -84,6 +84,14 @@ export default {
 			document.removeEventListener('mousemove', this.handleMove)
 			document.removeEventListener('touchmove', this.handleMove)
 
+			this.clearStyle()
+
+		},
+
+		clearStyle(){
+			this.$refs.toggle.style.transform = `translate(0,0)`
+			this.$refs.toggle.classList.remove('outside')
+			this.$refs.holder.classList.remove('active')
 		},
 
 		handleMove(e) {
@@ -143,13 +151,13 @@ export default {
 
 			}
 			else {
-				this.$refs.toggle.style.transform = `translate(0,0)`
-				this.$refs.toggle.classList.remove('outside')
-				this.$refs.holder.classList.remove('active')
+				this.clearStyle()
 			}
 		},
 
 		recordEnd(e) {
+
+			this.clearStyle()
 
 			if (this.isRecording && this.isHold) {
 

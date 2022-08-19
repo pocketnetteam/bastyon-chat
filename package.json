@@ -49,6 +49,7 @@
     "vue-images-loaded": "^1.1.2",
     "vue-js-toggle-button": "^1.3.3",
     "vue-observe-visibility": "^0.4.6",
+    "vue-picture-swipe": "^2.0.2",
     "vue-router": "^3.5.3",
     "vue-spinner": "^1.0.4",
     "vue-sweetalert-icons": "^4.3.0",
@@ -57,7 +58,6 @@
     "vue-textarea-autosize": "^1.1.1",
     "vue-virtual-scroller": "^1.0.10",
     "vue2-touch-events": "^3.2.2",
-    "vue-picture-swipe": "^2.0.2",
     "vuejs-dialog": "^1.4.2",
     "vuex": "^3.1.2"
   },

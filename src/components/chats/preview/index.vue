@@ -3,7 +3,7 @@
     <div class="work">
       <div class="previewWrapper">
         <div class="iconWrapper">
-          <chatIcon :m_chat="m_chat" v-if="!dummy" :chat="chat" :key="key"/>
+          <chatIcon :m_chat="m_chat" v-if="!dummy" :chat="chat" :key="key" :dontuseslides="true"/>
           <div v-else class="dummyicon loadinggradient"></div>
         </div>
 
