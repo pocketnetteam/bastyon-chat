@@ -22,6 +22,7 @@ export default {
       c: 1,
       ls: 0,
       voiceMessageQueue: [],
+      countshow: 0
     };
   },
   provide() {
@@ -44,9 +45,6 @@ export default {
 
   watch: {
     events: function () {},
-    notificationCount: function () {
-      this.scrollToReadMessages();      
-    }
   },
   computed: {
     sortedVoiceMessageQueue() {
@@ -90,14 +88,17 @@ export default {
   destroyed: function () {
     this.core.menu(null);
   },
-  mounted: function () {
-    this.scrollToReadMessages();
+  updated: function() {
+    if(this.countshow === 0) {
+      this.scrollToReadMessages();
+    }
+    this.countshow = 1;
   },
-
   methods: {
     scrollToReadMessages: function () {
       if(this.notificationCount > 0) {
-        document.getElementById("eventWrapper_" + this.notificationCount).scrollIntoView();
+        const elem = "eventWrapper_" + (this.notificationCount + 1);
+        document.getElementById(elem).scrollIntoView()
       }
     },
     showerror: function () {

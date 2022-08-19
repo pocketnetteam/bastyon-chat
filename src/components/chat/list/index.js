@@ -45,7 +45,7 @@ export default {
     this.init()
 
     if (this.chat) {
-      this.readAll()
+      // this.readAll()
     }
 
   },
@@ -55,13 +55,13 @@ export default {
 
     active : function(){
 
-      if(this.minimized && !this.active){
-        this.scrollToNew(0)
-      }
+      // if(this.minimized && !this.active){
+      //   this.scrollToNew(0)
+      // }
 
-      if(this.minimized && this.active){
-        this.readAll();
-      }
+      // if(this.minimized && this.active){
+      //   this.readAll();
+      // }
 
     }
   },
@@ -345,7 +345,7 @@ export default {
 
             this.firstPaginate = false
 
-            this.readAll();
+            // this.readAll();
 
             this['p_' + direction] = false;
           })
