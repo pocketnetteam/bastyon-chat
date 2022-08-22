@@ -43,7 +43,7 @@
 //import Player from '@/components/chat/player/Player.vue'
 import Widgets from "@/application/utils/widgets.js";
 import matrixlink from "@/components/events/event/metaMessage/matrixlink.vue";
-import imagesLoaded from "vue-images-loaded";
+//import imagesLoaded from "vue-images-loaded";
 
 /*import icons from './plyr.svg';*/
 
@@ -53,7 +53,7 @@ export default {
     matrixlink,
   },
   directives: {
-    imagesLoaded,
+    //imagesLoaded,
   },
   props: {
     title: String,
@@ -176,7 +176,7 @@ export default {
       } else window.open(url, "_blank");
     },
 
-    imagesLoaded: function () {},
+    //imagesLoaded: function () {},
     updatedSize: function (before) {},
   },
 };
