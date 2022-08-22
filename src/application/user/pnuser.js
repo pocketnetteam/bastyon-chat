@@ -1,6 +1,5 @@
 import User from "./user.js";
 /*require("@/application/vendors/btc.js")*/
-var _ = require('underscore');
 import f from "../functions.js";
 
 class PNUser extends User {

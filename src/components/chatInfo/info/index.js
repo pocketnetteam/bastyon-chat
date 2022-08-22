@@ -1,5 +1,4 @@
 import topheader from '@/components/chat/topheader'
-import _ from "underscore";
 import f from "@/application/functions";
 
 import contacts from '@/components/contacts/index.vue'

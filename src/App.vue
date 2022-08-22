@@ -105,7 +105,6 @@ import store from "@/vuex/store"
 import router from "@/router/router"
 import modal from '@/components/assets/modal/index.vue'
 import pmenu from '@/components/assets/pmenu/index.vue'
-import _ from 'underscore';
 
 import VuePageTransition from '@/editedplugins/vue-page-transition/src/index.js'
 import TextareaAutosize from 'vue-textarea-autosize'
@@ -146,10 +145,8 @@ import Core from '@/application/index.js'
 ////////
 
 Vue.config.productionTip = false
-Vue.prototype._ = _
 Vue.prototype.$f = f
 
-if (!window._) window._ = _
 
 import VueVirtualScroller from 'vue-virtual-scroller'
 import preloader from '@/components/assets/preloader/index.vue'
@@ -514,9 +511,9 @@ export default {
   },
 
   created() {
-    this.pocketnet = false
+    /*this.pocketnet = false
     this.mobile = !this.pocketnet
-    this.recording = true
+    this.recording = true*/
 
     this.$store.commit('setPocketnet', this.pocketnet);
     this.$store.commit('setMobile', this.mobile);

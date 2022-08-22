@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import f from '@/application/functions.js'
-import _ from 'underscore'
 
 
 Vue.use(Vuex);

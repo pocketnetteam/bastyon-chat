@@ -1,6 +1,3 @@
-import moment from "moment";
-
-var _ = require('underscore');
 //require('ion-sound')
 import f from "./functions";
 const { Howl, Howler } = require('howler');

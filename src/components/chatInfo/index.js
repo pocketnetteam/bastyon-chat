@@ -1,6 +1,5 @@
 import {mapState} from 'vuex';
 import info from "@/components/chatInfo/info/index.vue"
-import _ from 'underscore'
 
 export default {
   name: 'chatInfo',

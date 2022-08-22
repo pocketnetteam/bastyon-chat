@@ -1,7 +1,6 @@
 import f from "@/application/functions";
 import InputField from './InputField/InputField.vue'
 import recordVoice from '@/components/assets/recordVoice/index.vue';
-import _ from "underscore";
 import { mapState } from "vuex";
 
 import contacts from '@/components/contacts/list/index.vue'

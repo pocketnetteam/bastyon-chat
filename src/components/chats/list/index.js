@@ -3,8 +3,6 @@ import dummypreviews from '@/components/chats/dummypreviews/index.vue'
 import preview from '@/components/chats/preview/index.vue'
 import teamroom from '@/components/teamroom/index.vue'
 import f from "@/application/functions";
-import moment from "moment";
-import _ from "underscore";
 
 export default {
 	name: "list",

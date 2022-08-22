@@ -1,6 +1,5 @@
 import {mapState} from 'vuex';
 import list from '@/components/contacts/list/index.vue'
-import _ from "underscore";
 import preview from '@/components/contacts/preview/index.vue'
 import contact from '@/components/contact/index.vue'
 

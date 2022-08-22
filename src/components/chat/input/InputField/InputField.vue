@@ -59,10 +59,13 @@
 
 <script>
 import Images from '@/application/utils/images.js'
-import data from "emoji-mart-vue-fast/data/all.json";
+
 import "emoji-mart-vue-fast/css/emoji-mart.css";
 import f from "@/application/functions";
 import {Picker, EmojiIndex} from 'emoji-mart-vue-fast'
+
+
+
 
 
 import vClickOutside from 'v-click-outside'
@@ -136,7 +139,10 @@ export default {
     emojiIndex: function () {
 
       if (!window.emojiIndex) {
-        window.emojiIndex = new EmojiIndex(data)
+
+        var emojidata = require("emoji-mart-vue-fast/data/all.json")
+
+        window.emojiIndex = new EmojiIndex(emojidata)
       }
 
       return window.emojiIndex

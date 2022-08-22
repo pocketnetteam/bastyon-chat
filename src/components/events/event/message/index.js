@@ -6,7 +6,6 @@ import f from '@/application/functions'
 import url from '@/components/events/event/url/index.vue'
 import imagesLoaded from 'vue-images-loaded'
 import dummypreviews from "@/components/chats/dummypreviews";
-import moment from "moment";
 import IncomingMessage from "./incomingMessage/incomingMessage.vue"
 import VoiceMessage from '@/components/events/event/VoiceMessage';
 

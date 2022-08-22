@@ -40,7 +40,7 @@ var _contentRepo = require("./content-repo");
 
 var ContentHelpers = _interopRequireWildcard(require("./content-helpers"));
 
-var olmlib = _interopRequireWildcard(require("./crypto/olmlib"));
+//var olmlib = _interopRequireWildcard(require("./crypto/olmlib"));
 
 var _ReEmitter = require("./ReEmitter");
 
@@ -48,11 +48,11 @@ var _RoomList = require("./crypto/RoomList");
 
 var _logger = require("./logger");
 
-var _crypto = require("./crypto");
+//var _crypto = require("./crypto");
 
-var _recoverykey = require("./crypto/recoverykey");
+//var _recoverykey = require("./crypto/recoverykey");
 
-var _key_passphrase = require("./crypto/key_passphrase");
+//var _key_passphrase = require("./crypto/key_passphrase");
 
 var _randomstring = require("./randomstring");
 
@@ -88,7 +88,7 @@ limitations under the License.
  * @module client
  */
 const SCROLLBACK_DELAY_MS = 3000;
-const CRYPTO_ENABLED = (0, _crypto.isCryptoAvailable)();
+const CRYPTO_ENABLED = false //(0, _crypto.isCryptoAvailable)();
 exports.CRYPTO_ENABLED = CRYPTO_ENABLED;
 const CAPABILITIES_CACHE_MS = 21600000; // 6 hours - an arbitrary value
 

@@ -7,7 +7,6 @@ import {Swiper, SwiperSlide} from 'vue-awesome-swiper'
 //
 import {Carousel, Slide} from 'vue-carousel';
 import f from '@/application/functions.js'
-import _ from "underscore";
 //
 
 export default {

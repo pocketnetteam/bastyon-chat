@@ -1,6 +1,5 @@
 import {mapState} from 'vuex';
 import f from "@/application/functions";
-import _ from 'underscore'
 
 export default {
   name: 'eventsMember',
