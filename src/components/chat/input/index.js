@@ -7,6 +7,7 @@ import contacts from '@/components/contacts/list/index.vue'
 import preview from '@/components/contacts/preview/index.vue'
 import recordProgress from '@/components/assets/recordProgress/index.vue';
 
+import upload from '@/components/assets/upload/index.vue';
 
 import { cancelable } from 'cancelable-promise';
 export default {
@@ -17,7 +18,7 @@ export default {
 		relationEvent: Object
 	},
 
-	components: { InputField, contacts, preview, recordProgress, recordVoice },
+	components: { InputField, contacts, preview, recordProgress, recordVoice, upload },
 
 	data: function () {
 
@@ -233,22 +234,6 @@ export default {
 
 			return null
 		},
-
-		/*recordViewData() {
-			if (this.recordRmsData.length) {
-				let length = this.recordRmsData.length
-				let step = this.recordRmsData.length / 100
-
-				if (length > 100) {
-					let result = []
-					for (let i = 0; i < 100; i++) {
-						result.push(this.recordRmsData[Math.round(i * step)])
-					}
-					return result
-				}
-			}
-			return this.recordRmsData
-		}*/
 	},
 
 	created() {
@@ -580,7 +565,7 @@ export default {
 							return Promise.resolve()
 						}).catch(e => {
 
-
+							console.error(e)
 							return Promise.reject(e)
 						})
 

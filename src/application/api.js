@@ -300,6 +300,49 @@ var ApiWrapper = function (core) {
 			return self.pocketnet.common({ parameters }, 'getuserstate')
 		},
 
+		userStateMe: (address) => {
+
+			var cacheresult = f.deep(window, 'POCKETNETINSTANCE.platform.sdk.ustate.storage.' + address)
+
+			if(cacheresult){
+				return Promise.resolve(cacheresult)
+			}
+
+			return self.pocketnet.userState(address)
+		},
+
+		userInfoCached: (addresses, reload) => {
+
+			var rescached = []
+
+			if(!reload){
+
+				rescached = _.filter(_.map(addresses, (address) => {
+					return  f.deep(window, 'POCKETNETINSTANCE.platform.sdk.userscl.storage.' + address) || null
+				}), (u) => {return u})
+
+				addresses = _.filter(addresses, (a) => {
+					return !_.find(rescached, (r) => {
+						return r.address == a
+					})
+				})
+			}
+
+			return self.pocketnet.userInfo(addresses, reload).then(rs => {
+
+				
+				rs = _.toArray(rs)
+
+				_.each(rescached, (c) => {
+					rs.push(c)
+				})
+
+
+				return Promise.resolve(rs)
+			})
+
+		},
+
 		search: (text) => {
 
 			var parameters = [text, 'users'];
@@ -310,6 +353,10 @@ var ApiWrapper = function (core) {
 		},
 
 		userInfo: (addresses, reload) => {
+
+			if(!addresses.length){
+				return Promise.resolve([])
+			}
 
 			return crequest(addresses, 'pocketnet_userInfo', 'address', reload, {
 				storage : 'userInfo',

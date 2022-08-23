@@ -172,7 +172,7 @@ class Core {
 
         return this.user.checkCredentials().then(state => {
 
-            return this.user.userInfo(true)
+            return this.user.userInfo()
 
         }).then(r => {
 

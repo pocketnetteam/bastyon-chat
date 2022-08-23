@@ -21,7 +21,7 @@
           :placeholder="$t('caption.sendmessage')"
 
         ></textarea>
-        <transition name="fade" mode="out-in" v-if="!mobile" >
+        <transition name="fade" mode="out-in" v-if="!mobile && emojiIndex" >
           <picker
             :data="emojiIndex"
             v-show="display_emoji"
@@ -59,14 +59,9 @@
 
 <script>
 import Images from '@/application/utils/images.js'
-
 import "emoji-mart-vue-fast/css/emoji-mart.css";
 import f from "@/application/functions";
 import {Picker, EmojiIndex} from 'emoji-mart-vue-fast'
-
-
-
-
 
 import vClickOutside from 'v-click-outside'
 
@@ -127,7 +122,8 @@ export default {
           }
         }
       },
-      hidden_previews: null
+      hidden_previews: null,
+      emojiIndex : null
     }
   },
 
@@ -136,22 +132,33 @@ export default {
       return !this.$store.state.pocketnet && this.$store.state.mobile
     },
 
-    emojiIndex: function () {
+    /*emojiIndex: function () {
 
-      if (!window.emojiIndex) {
-
-        var emojidata = require("emoji-mart-vue-fast/data/all.json")
-
-        window.emojiIndex = new EmojiIndex(emojidata)
-      }
+     
 
       return window.emojiIndex
 
-    }
+    }*/
 
   },
 
   methods: {
+
+    prepareemoji : function(){
+
+      if (!this.mobile) {
+        if(window.emojiIndex) this.emojiIndex = window.emojiIndex
+
+        else{
+
+          import("emoji-mart-vue-fast/data/all.json").then(emojidata => {
+            window.emojiIndex = new EmojiIndex(emojidata)
+            this.emojiIndex = window.emojiIndex
+          })
+          
+        }
+      }
+    },
 
     setText: function (text) {
       this.text = text
@@ -483,6 +490,8 @@ export default {
     if (!this.mobile) {
       this.focus()
     }
+
+    this.prepareemoji()
 
 
     this.$refs.textarea.style.height = '26px'

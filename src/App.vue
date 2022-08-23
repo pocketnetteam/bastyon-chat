@@ -162,9 +162,8 @@ import backButton from '@/components/assets/backButton/index.vue';
 import topheader from '@/components/assets/topheader/index.vue';
 import maincontent from '@/components/assets/maincontent/index.vue';
 import search from '@/components/assets/search/index.vue';
-import upload from '@/components/assets/upload/index.vue';
+
 import linepreloader from '@/components/assets/linepreloader/index.vue';
-import {PhotoSwipe, PhotoSwipeGallery} from "@/editedplugins/v-photoswipe/src/index.js";
 
 import chats from '@/views/chats.vue'
 
@@ -173,8 +172,7 @@ import chats from '@/views/chats.vue'
 
 Vue.component('pmenu', pmenu)
 Vue.component('modal', modal)
-Vue.component('v-photoswipe', PhotoSwipe)
-Vue.component('v-photoswipe-gallery', PhotoSwipeGallery)
+
 Vue.component('preloader', preloader)
 Vue.component('date', date)
 Vue.component('userpic', userpic)
@@ -187,7 +185,6 @@ Vue.component('backButton', backButton)
 Vue.component('topheader', topheader)
 Vue.component('maincontent', maincontent)
 Vue.component('search', search)
-Vue.component('upload', upload)
 Vue.component('linepreloader', linepreloader)
 
 

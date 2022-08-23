@@ -62,7 +62,7 @@ var _user = require("./models/user");
 
 var _autodiscovery = require("./autodiscovery");
 
-var _dehydration = require("./crypto/dehydration");
+//var _dehydration = require("./crypto/dehydration");
 
 /*
 Copyright 2015, 2016 OpenMarket Ltd
@@ -402,7 +402,7 @@ function MatrixClient(opts) {
   // we still want to know which rooms are encrypted even if crypto is disabled:
   // we don't want to start sending unencrypted events to them.
 
-  this._roomList = new _RoomList.RoomList(this._cryptoStore); // The pushprocessor caches useful things, so keep one and re-use it
+  //this._roomList = new _RoomList.RoomList(this._cryptoStore); // The pushprocessor caches useful things, so keep one and re-use it
 
   this._pushProcessor = new _pushprocessor.PushProcessor(this); // Promise to a response of the server's /versions response
   // TODO: This should expire: https://github.com/matrix-org/matrix-js-sdk/issues/1020
@@ -1723,7 +1723,8 @@ MatrixClient.prototype.isRoomEncrypted = function (roomId) {
   // previously encrypted.
 
 
-  return this._roomList.isRoomEncrypted(roomId);
+  return false
+  // this._roomList.isRoomEncrypted(roomId);
 };
 /**
  * Forces the current outbound group session to be discarded such

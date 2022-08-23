@@ -166,7 +166,7 @@ class PNUser extends User {
 
         
 
-        return this.core.api.pocketnet.userState(decodedAddress).then(r => {
+        return this.core.api.pocketnet.userStateMe(decodedAddress).then(r => {
 
             //return Promise.reject('unknown')
 
@@ -215,7 +215,6 @@ class PNUser extends User {
     }
     userInfo(reload){
 
-
         return this.usersInfo(this.credentials.address, false, reload).then(info => {
 
             this.userinfo = info[0]
@@ -234,9 +233,9 @@ class PNUser extends User {
                 return f.hexDecode(a)
             })
 
-        return this.core.api.pocketnet.userInfo(addresses, reload).then(infos => {
+        return this.core.api.pocketnet.userInfoCached(addresses, reload).then(infos => {
 
-            // console.log("infos", infos)
+            console.log('infos', infos)
 
             infos = _.map(infos, (info) => {
 
