@@ -9,7 +9,9 @@ export default {
   props: {
     chat: Object,
     filterType: String,
-    error : [Object, Error, String]
+    error : [Object, Error, String],
+    selectedMessages: [],
+    isRemoveSelectedMessages: false,
   },
 
   components: {
@@ -504,6 +506,14 @@ export default {
 
     menuIsVisibleHandler: function (isVisible) {
       this.$emit('menuIsVisible', isVisible);
-    }
+    },
+
+    shareManyMessages: function (isShare) {
+      this.$emit('shareManyMessages', isShare);
+    },
+
+    messagesIsDeleted: function (state) {
+      this.$emit('messagesIsDeleted', state);
+    },
   },
 }

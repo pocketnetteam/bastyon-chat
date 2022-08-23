@@ -259,8 +259,14 @@ export default {
       return roomName.replace('_', ' ')
     },
 
+    groupAvatar: function () {
+      return this.m_chat.currentState.getStateEvents('m.room.avatar')[0].event
+        .content.avatarUrl;
+    },
   },
   mounted() {
+    const smthconstfortexst = this.events;
+    console.log('m.image', 'from info', smthconstfortexst);
     // this.changeName()
     this.eventsList()
     if(this.m_chat.getJoinRule() === 'public'){

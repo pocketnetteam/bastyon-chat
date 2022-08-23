@@ -106,7 +106,7 @@
         "sent" : "a envoyé",
         "PKOINto" : " PKOIN à ",
         "response" : "Réponse",
-        "messagefrom" : "Transférer message",
+        "messagefrom": "Transférer message de",
         "edited" : "Edité",
         "settings" : "Paramètres",
         "unauthorized" : "Non autorisé",
@@ -152,6 +152,7 @@
         "takePhotoOrVideo" : "Envoyer image",
         "sendCoins": "Envoyer PKOIN",
         "edit" : "Editer",
+        "select": "Sélectionner",
         "block" : "Bloquer",
         "unblock" : "Débloquer",
         "blockUser" : "Bloquer utilisateur"

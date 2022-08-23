@@ -23,10 +23,14 @@
         </span>
       </div>
 
-      <div class="actionsWrapper" v-if="content.msgtype !== 'm.file'" @click="setmenu">
-        <i class="fas fa-ellipsis-h"></i>
+      <div class="actionsWrapper" v-if="content.msgtype !== 'm.file'">
+        <div v-if="multiSelect" class="multiSelect" @click="eventMessage(selectedMessage)">
+          <i v-if="selectedMessage" class="far fa-check-circle"></i>
+          <i v-else class="far fa-circle"></i>
+        </div>
+        <i v-else @click="setmenu" class="fas fa-ellipsis-h"></i>
       </div>
-    
+
       <div class="iconWrapper" v-if="!my || showmyicon" @click="core.mtrx.opencontact(userinfo)">
           <userpic :userinfo="userinfo"/>
       </div>
@@ -104,10 +108,11 @@
 
           <div class="from" v-if="content.from">
             <div class="fromCaption">
-              <i class="fas fa-share-alt"></i> <span>{{ $t("caption.messagefrom") }}</span>
+              <i class="fas fa-share-alt"></i>
+              <span>{{ $t("caption.messagefrom") }} {{ this.userinfo.name }}</span>
             </div>
           </div>
-          
+
         </div>
         
       </div>
@@ -153,3 +158,30 @@
 
 <!-- THEMES BEGIN -->
 <!-- THEMES END -->
+
+<style lang="scss">
+.actionsWrapper {
+  opacity: 1;
+  i.fa-check-circle {
+    color: #00a3f7;
+    opacity: 1 !important;
+  }
+  .multiSelect {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    left: 0;
+
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    &:hover {
+      i {
+        opacity: 1;
+      }
+    }
+  }
+}
+</style>

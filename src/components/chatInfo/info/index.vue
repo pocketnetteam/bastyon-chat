@@ -3,6 +3,9 @@
     <div class="roomInfoWrapper noSwipe">
       <div :class="{'chatIconWrapper':'chatIconWrapper'}">
         <chatIcon :slidesPerView="4" :dontuseslides="minimized && !active" :chat="chat" :m_chat="m_chat" :hideunseen="true"/>
+        <div class="chatGroupIcon">
+          <img :src="groupAvatar" alt="" />
+        </div>
       </div>
 
       <chatName :preview="true" :chat="chat" :m_chat="m_chat"
@@ -122,6 +125,7 @@
 <!-- THEMES END -->
 
 <style src="../../../../node_modules/vue-simple-accordion/dist/vue-simple-accordion.css"></style>
+<style src="../../../../node_modules/swiper/swiper-bundle.css"></style>
 
 
 

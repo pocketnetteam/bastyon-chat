@@ -41,7 +41,13 @@ export default {
       fsize: {},
       cantchat: false,
       cantchatexc: false,
-      error : null
+      error : null,
+
+      showInput: true,
+      showShareMessages: false,
+
+      selectedMessages: [],
+      isRemoveSelectedMessages: false,
     }
 
   },
@@ -130,6 +136,51 @@ export default {
       }
 
     },
+
+    shareManyMessages: function (isShare) {
+      this.showInput = !isShare;
+      this.showShareMessages = isShare;
+    },
+
+    shareDataMessages: function () {
+      let allMessages = [];
+
+      for (let i = 0; i < this.selectedMessages.length; i++) {
+        if (this.selectedMessages[i].messages) {
+          allMessages.push(this.selectedMessages[i].messages[0]);
+        }
+      }
+
+      var pr = Promise.resolve();
+      var _sharing = this.selectedMessages[0];
+      _sharing.messages = allMessages;
+      if (_sharing.download) {
+        pr = this.core.mtrx
+          .getFile(this.chat, this.event)
+          .then((r) => {
+            f.Base64.fromFile(r.file);
+          })
+          .then((r) => {
+            _sharing.files = [r];
+            Promise.resolve();
+          });
+      }
+      pr.then(() => {
+        this.core.share(_sharing);
+      });
+    },
+
+    removeDataMessages: function () {
+      this.isRemoveSelectedMessages = true;
+    },
+
+    messagesIsDeleted: function (state) {
+      this.showShareMessages = false;
+      this.showInput = true;
+      if (state) {
+        this.selectedMessages = [];
+      }
+    },
   },
   computed: mapState({
 
@@ -214,8 +265,11 @@ export default {
     chatusers: function () {
       if (this.m_chat)
         return this.core.store.state.chatusers[this.m_chat.roomId]
-    }
+    },
 
+    localisationTitles: function () {
+      return this.$i18n.t('button');
+    },
   }),
   methods: {
 

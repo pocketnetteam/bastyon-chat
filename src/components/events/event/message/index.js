@@ -40,7 +40,16 @@ export default {
     reference: Object,
     last : Boolean,
     showmyicontrue : false,
-    fromreference : Boolean
+    fromreference : Boolean,
+    multiSelect: {
+      default: false,
+      type: Boolean,
+    },
+    selectedMessages: {
+      default: [],
+      type: Array,
+    },
+    isRemoveSelectedMessages: false,
   },
   directives: {
     imagesLoaded
@@ -241,7 +250,12 @@ export default {
           click: "reply",
           title: this.$i18n.t("button.reply"),
           icon: "fas fa-reply"
-        }
+        },
+        {
+          click: "showMultiSelect",
+          title: this.$i18n.t("button.select"),
+          icon: "fas fa-check-circle",
+        },
       ]
 
       if(!this.file){
@@ -308,10 +322,42 @@ export default {
       if (
         this.origin.event.content['m.relates_to'] &&
         this.origin.event.content['m.relates_to']['rel_type'] == 'm.replace') return true
-    }
+    },
 
+    selectedMessage: function () {
+      const elem = this.selectedMessages.filter(
+        (item) => item.message_id === this.origin.event.event_id
+      );
+      return elem[0]?.message_id === this.origin.event.event_id ? true : false;
+    },
   },
 
+  watch: {
+    isRemoveSelectedMessages: {
+      immediate: true,
+      handler: function () {
+        if (this.isRemoveSelectedMessages) {
+          for (let i = 0; i < this.selectedMessages.length; i++) {
+            if (
+              this.selectedMessages[i].message_id === this.origin.event.event_id
+            ) {
+              this.$emit('remove');
+
+              return this.core.mtrx.client.redactEvent(
+                this.chat.roomId,
+                this.origin.event.event_id,
+                null,
+                {
+                  reason: 'messagedeleting',
+                }
+              );
+            }
+          }
+          this.$emit('messagesIsDeleted', true);
+        }
+      },
+    },
+  },
 
   methods: {
     gotoreference: function () {
@@ -397,6 +443,12 @@ export default {
       this.$emit('editing', this.body)
 
       return Promise.resolve()
+    },
+
+    menushowMultiSelect: function () {
+      console.log('emit work from menushowMultiSelect');
+      this.$emit('showMultiSelect');
+      this.selectMessage();
     },
 
     menureply: function () {
@@ -519,7 +571,48 @@ export default {
 
     showreference : function(){
       this.referenceshowed = !this.referenceshowed
-    }
+    },
 
+    selectMessage: function () {
+      var sharing = {};
+
+      var trimmed = this.$f.trim(this.body);
+
+      if (this.content.msgtype === 'm.image' && this.imageUrl)
+        sharing.images = [this.imageUrl];
+
+      if (this.content.msgtype === 'm.audio' && this.decryptedInfo)
+        sharing.audio = [this.decryptedInfo];
+
+      if (
+        (this.content.msgtype === 'm.text' ||
+          this.content.msgtype === 'm.encrypted') &&
+        trimmed
+      )
+        sharing.messages = [trimmed];
+
+      //if(this.urlpreview) sharing.urls = [urlpreview]
+
+      if (this.file) {
+        sharing.download = true;
+      }
+
+      //sharing.route = 'chat?id=' + this.chat.roomId
+      sharing.from = this.userinfo.id;
+      this.$emit('selectMessage', {
+        message_id: this.origin.event.event_id,
+        ...sharing,
+      });
+    },
+    removeMessage: function () {
+      console.log('salkdjlkasjd remove message');
+      this.$emit('removeMessage', {
+        message_id: this.origin.event.event_id,
+      });
+    },
+
+    eventMessage: function (state) {
+      state ? this.removeMessage() : this.selectMessage()
+    }
   }
 }

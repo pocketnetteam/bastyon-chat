@@ -115,7 +115,7 @@
         "emptyContactList" : "Список контактов пуст",
         "joinApp" : "Pocketnet beitreten",
         "hasInvitedToJoin" : "hat Sie eingeladen, Pocketnet beizutreten",
-        "messagefrom" : "Forwarded message",
+        "messagefrom": "Forwarded message from",
         "usernotgen" : "User did not generate their encryption keys yet. You will be able to chat them when their keys are generated.",
         "younotgen" : "Please wait a minute, Your encryption keys are being generated...",
         "chatsearchingempty" : "No chats found for the specified filter",
@@ -149,6 +149,7 @@
         "takePhotoOrVideo" : "Foto machen",
         "sendCoins": "Münzen senden",
         "edit" : "Bearbeiten",
+        "select": "Auswählen",
         "block" : "Sperren",
         "unblock" : "Entsperren",
         "blockUser" : "Benutzer sperren"

@@ -106,7 +106,7 @@
         "sent" : "已发送",
         "PKOINto" : " PKOIN to ",
         "response" : "回应",
-        "messagefrom" : "转发的信息",
+        "messagefrom": "轉發的消息來自",
         "edited" : "已编辑",
         "settings" : "设置",
         "unauthorized" : "未经授权",
@@ -149,6 +149,7 @@
         "takePhotoOrVideo" : "发送图像",
         "sendCoins": "发送硬币",
         "edit" : "编辑",
+        "select": "選擇",
         "block" : "阻止",
         "unblock" : "解除封锁",
         "blockUser" : "阻止用户"

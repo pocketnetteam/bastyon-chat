@@ -2746,6 +2746,32 @@ MatrixClient.prototype.setRoomName = function (roomId, name, callback) {
  */
 
 
+MatrixClient.prototype.setRoomAvatarUrl = function (roomId, url, callback) {
+  console.log(
+    "MatrixClient.prototype.setRoomAvatarUrl",
+    "roomId",
+    roomId,
+    "url",
+    url
+  );
+  return this.sendStateEvent(
+    roomId,
+    "m.room.avatar",
+    {
+      avatarUrl: url,
+    },
+    undefined,
+    callback
+  );
+};
+/**
+ * @param {string} roomId
+ * @param {string} topic
+ * @param {module:client.callback} callback Optional.
+ * @return {Promise} Resolves: TODO
+ * @return {module:http-api.MatrixError} Rejects: with an error response.
+ */
+
 MatrixClient.prototype.setRoomTopic = function (roomId, topic, callback) {
   return this.sendStateEvent(roomId, "m.room.topic", {
     topic: topic

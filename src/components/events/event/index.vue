@@ -30,6 +30,8 @@
              :last="last"
              :showmyicontrue="showmyicontrue"
              :fromreference="fromreference"
+             :multiSelect="multiSelect"
+             :selectedMessages="selectedMessages"
 
              ref="cmessage"
 
@@ -39,8 +41,14 @@
              @editing="editing"
              @reply="reply"
              @share="share"
+             @showMultiSelect="$emit('showMultiSelect')"
+             @selectMessage="selectMessage"
+             @removeMessage="removeMessage"
              @menuIsVisible="menuIsVisibleHandler"
-             v-if="type === 'message' || preview" />
+             @shareManyMessages="shareManyMessages"
+             v-if="type === 'message' || preview"
+             :isRemoveSelectedMessages="isRemoveSelectedMessages"
+             @messagesIsDeleted="messagesIsDeleted"/>
 
     <common :event="event"
             :userinfo="userinfo"
@@ -140,7 +148,17 @@ export default {
     galleryData: {},
     goToGallery: Function,
     clientWidth: Number,
-    fromreference : Boolean
+    fromreference : Boolean,
+
+    multiSelect: {
+      default: false,
+      type: Boolean,
+    },
+    selectedMessages: {
+      default: [],
+      type: Array,
+    },
+    isRemoveSelectedMessages: false,
   },
 
   computed: {
@@ -452,7 +470,23 @@ export default {
 
     menuIsVisibleHandler: function(isVisible) {
       this.$emit('menuIsVisible', isVisible);
-    }
+    },
+
+    selectMessage: function (message) {
+      this.$emit('selectMessage', message);
+    },
+
+    removeMessage: function (message) {
+      this.$emit('removeMessage', message);
+    },
+
+    shareManyMessages: function (isShare) {
+      this.$emit('shareManyMessages', isShare);
+    },
+
+    messagesIsDeleted: function (state) {
+      this.$emit('messagesIsDeleted', state);
+    },
   }
 }
 </script>

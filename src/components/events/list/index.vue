@@ -19,13 +19,20 @@
                 :chat="chat"
                 :timeline="timeline"
                 :last="i == 0"
+                :multiSelect="multiSelect"
+                :selectedMessages="selectedMessages"
+                @showMultiSelect="showMultiSelect"
+                @selectMessage="selectMessage"
+                @removeMessage="removeMessage"
                 @openImageEvent="e => galleryOpen(e)"
                 @removeEvent="e => removeEvent(event)"
                 @editing="text => editingEvent({event, text})"
                 @reply="e => replyEvent({event})"
                 @mounted="emounted"
                 @menuIsVisible="menuIsVisibleHandler"
-                
+                :isRemoveSelectedMessages="isRemoveSelectedMessages"
+                @messagesIsDeleted="messagesIsDeleted"
+
             />
           </div>
       </div>

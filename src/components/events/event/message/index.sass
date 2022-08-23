@@ -260,16 +260,18 @@
     cursor: pointer
     text-align: right
     margin-left: auto
-    
+    display: flex
+    align-items: center
     i
-      font-size: 0.7em
       opacity: 0.3
+      transition: .4s
+    i.fa-ellipsis-h
+      font-size: 0.7em
+    i:hover
+      opacity: 1
+      transition: .4s
 
-    &:hover
-      i
-        opacity: 1
 
-  
   .statusWrapper
     order: 5
     padding: $r $r / 2

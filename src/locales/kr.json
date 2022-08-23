@@ -106,7 +106,7 @@
         "sent" : "보낸",
         "PKOINto" : " PKOIN to ",
         "response" : "응답",
-        "messagefrom" : "전달된 메시지",
+        "messagefrom": "에서 전달된 메시지",
         "edited" : "편집됨",
         "settings" : "설정",
         "unauthorized" : "무단",
@@ -150,6 +150,7 @@
         "takePhotoOrVideo" : "이미지 보내기",
         "sendCoins": "코인 보내기",
         "edit" : "편집",
+        "select": "고르다",
         "block" : "차단",
         "unblock" : "차단 해제",
         "blockUser" : "사용자 차단"
