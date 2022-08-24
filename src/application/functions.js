@@ -954,6 +954,12 @@ var Base64 = {
 
 }
 
+f.copyArrayBuffer = function(src){
+    var dst = new ArrayBuffer(src.byteLength);
+    new Uint8Array(dst).set(new Uint8Array(src));
+    return dst;
+}
+
 f.readFile = function (file) {
 
     let reader = new FileReader();
@@ -974,7 +980,6 @@ f.readFile = function (file) {
 
 f.fetchLocal = function (url) {
 
-    console.log('fetchLocal', url)
 
     return new Promise(function (resolve, reject) {
         var xhr = new XMLHttpRequest
@@ -983,7 +988,6 @@ f.fetchLocal = function (url) {
 
             var type = xhr.getResponseHeader('content-type')
 
-            console.log('xhr', xhr)
 
             resolve({
                 data: new Blob([xhr.response], { type: type, name: 'file' })
@@ -1094,7 +1098,6 @@ f.saveFileCordova = function(file, name, clbk, todownloads){
     if(todownloads){
         window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fileSystem){
 
-            console.log(fileSystem)
 
             onsuccess(fileSystem.root)
         }, onerror)

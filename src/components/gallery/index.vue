@@ -50,8 +50,6 @@ export default {
 
     init() {
 
-      console.log('this.index', this.index)
-
       this.isOpen = true
       this.$set(this.options, 'index', this.index)
     },

@@ -18,6 +18,7 @@ const ChatStorage = function(storageName, version, time) {
 
     var memorystorage = {}
 
+    
     /**
      * Function generates UNIX timestamp
      * floored to current hour.
