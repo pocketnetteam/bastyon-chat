@@ -1,6 +1,5 @@
 
 var createHash = null
-var linkify = null
 
 var f = {}
 
@@ -601,11 +600,11 @@ var knsite = function (url) {
 
 var getUrl = function (data) {
 
-    if(!linkify){
+    /*if(!linkify){
         linkify = require('linkifyjs');
         linkify.registerCustomProtocol('pocketnet')
         linkify.registerCustomProtocol('bastyon')
-    }
+    }*/
 
     var links = linkify.find(data)
 

@@ -40,7 +40,7 @@ var _contentRepo = require("./content-repo");
 
 var ContentHelpers = _interopRequireWildcard(require("./content-helpers"));
 
-var olmlib = _interopRequireWildcard(require("./crypto/olmlib"));
+//var olmlib = _interopRequireWildcard(require("./crypto/olmlib"));
 
 var _ReEmitter = require("./ReEmitter");
 
@@ -48,11 +48,11 @@ var _RoomList = require("./crypto/RoomList");
 
 var _logger = require("./logger");
 
-var _crypto = require("./crypto");
+//var _crypto = require("./crypto");
 
-var _recoverykey = require("./crypto/recoverykey");
+//var _recoverykey = require("./crypto/recoverykey");
 
-var _key_passphrase = require("./crypto/key_passphrase");
+//var _key_passphrase = require("./crypto/key_passphrase");
 
 var _randomstring = require("./randomstring");
 
@@ -62,7 +62,7 @@ var _user = require("./models/user");
 
 var _autodiscovery = require("./autodiscovery");
 
-var _dehydration = require("./crypto/dehydration");
+//var _dehydration = require("./crypto/dehydration");
 
 /*
 Copyright 2015, 2016 OpenMarket Ltd
@@ -88,7 +88,7 @@ limitations under the License.
  * @module client
  */
 const SCROLLBACK_DELAY_MS = 3000;
-const CRYPTO_ENABLED = (0, _crypto.isCryptoAvailable)();
+const CRYPTO_ENABLED = false //(0, _crypto.isCryptoAvailable)();
 exports.CRYPTO_ENABLED = CRYPTO_ENABLED;
 const CAPABILITIES_CACHE_MS = 21600000; // 6 hours - an arbitrary value
 
@@ -402,7 +402,7 @@ function MatrixClient(opts) {
   // we still want to know which rooms are encrypted even if crypto is disabled:
   // we don't want to start sending unencrypted events to them.
 
-  this._roomList = new _RoomList.RoomList(this._cryptoStore); // The pushprocessor caches useful things, so keep one and re-use it
+  //this._roomList = new _RoomList.RoomList(this._cryptoStore); // The pushprocessor caches useful things, so keep one and re-use it
 
   this._pushProcessor = new _pushprocessor.PushProcessor(this); // Promise to a response of the server's /versions response
   // TODO: This should expire: https://github.com/matrix-org/matrix-js-sdk/issues/1020
@@ -1723,7 +1723,8 @@ MatrixClient.prototype.isRoomEncrypted = function (roomId) {
   // previously encrypted.
 
 
-  return this._roomList.isRoomEncrypted(roomId);
+  return false
+  // this._roomList.isRoomEncrypted(roomId);
 };
 /**
  * Forces the current outbound group session to be discarded such
@@ -3259,7 +3260,6 @@ MatrixClient.prototype.sendImageMessage = function (roomId, url, info, text, cal
 
 
 MatrixClient.prototype.sendAudioMessage = function (roomId, url, info, text, callback) {
-  console.log('send audio', roomId, url, text, callback)
   if (utils.isFunction(text)) {
     callback = text;
     text = undefined;

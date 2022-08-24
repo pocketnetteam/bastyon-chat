@@ -1,5 +1,7 @@
 var EXIF = require('exif-js');
+
 import f from '@/application/functions'
+
 var Images = function(){
     var self = this;
 

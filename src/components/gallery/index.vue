@@ -5,10 +5,25 @@
 </template>
 <script>
 
+
+//import {PhotoSwipe, PhotoSwipeGallery} from "@/editedplugins/v-photoswipe/src/index.js";
+
+
 export default {
   props: {
     images : Array,
     index : Number
+  },
+
+  components : {
+    //vPhotoswipe : PhotoSwipe,
+
+    vPhotoswipe : () => {
+      return import ("@/editedplugins/v-photoswipe/src/index.js").then(p => {
+        return p.PhotoSwipe
+      }) 
+    }
+    
   },
 
   data: () => {

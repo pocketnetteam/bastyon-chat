@@ -242,7 +242,6 @@ export default {
 
             return Promise.resolve(data)
           }).catch(e => {
-            console.log("E", e)
             return Promise.reject(e)
           })
 

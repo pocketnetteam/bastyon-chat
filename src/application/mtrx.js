@@ -5,7 +5,6 @@ import f from "./functions";
 import images from "./utils/images";
 import FingerprintJS from '@fingerprintjs/fingerprintjs';
 
-var _ = require('underscore');
 import qs from 'qs';
 import fileSaver from 'file-saver';
 import ChatStorage from "./chatstorage";
@@ -163,7 +162,6 @@ class MTRX {
 
   createMtrxClient(opts) {
 
-
     var client = sdk.createClient(opts);
 
     client.getProfileInfo = function () {
@@ -193,8 +191,6 @@ class MTRX {
 
     var client = this.createMtrxClient(opts);
 
-
-    //console.log("this.user.signature('matrix')", this.core.user.signature('matrix'))
 
     try {
       var userData = await client.login('m.login.password', {
@@ -246,11 +242,11 @@ class MTRX {
     window.client = userClient
     window.core = this.core
 
-
     await userClient.startClient({
       pollTimeout: 60000,
       resolveInvitesToProfiles: true
     });
+
 
     this.access = userClientData
 

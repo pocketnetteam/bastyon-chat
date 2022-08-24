@@ -152,10 +152,8 @@ export default {
 
   computed: {
     /*readyToRender : function(){
-      console.log(this.$refs["cmessage"])
       if(this.$refs["cmessage"]) {
 
-        console.log('this.$refs["cmessage"].readyToRender', this.$refs["cmessage"].readyToRender)
 
         if(this.$refs["cmessage"].readyToRender){
           return true

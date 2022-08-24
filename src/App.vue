@@ -105,7 +105,6 @@ import store from "@/vuex/store"
 import router from "@/router/router"
 import modal from '@/components/assets/modal/index.vue'
 import pmenu from '@/components/assets/pmenu/index.vue'
-import _ from 'underscore';
 
 import VuePageTransition from '@/editedplugins/vue-page-transition/src/index.js'
 import TextareaAutosize from 'vue-textarea-autosize'
@@ -146,10 +145,8 @@ import Core from '@/application/index.js'
 ////////
 
 Vue.config.productionTip = false
-Vue.prototype._ = _
 Vue.prototype.$f = f
 
-if (!window._) window._ = _
 
 import VueVirtualScroller from 'vue-virtual-scroller'
 import preloader from '@/components/assets/preloader/index.vue'
@@ -165,9 +162,8 @@ import backButton from '@/components/assets/backButton/index.vue';
 import topheader from '@/components/assets/topheader/index.vue';
 import maincontent from '@/components/assets/maincontent/index.vue';
 import search from '@/components/assets/search/index.vue';
-import upload from '@/components/assets/upload/index.vue';
+
 import linepreloader from '@/components/assets/linepreloader/index.vue';
-import {PhotoSwipe, PhotoSwipeGallery} from "@/editedplugins/v-photoswipe/src/index.js";
 
 import chats from '@/views/chats.vue'
 
@@ -176,8 +172,7 @@ import chats from '@/views/chats.vue'
 
 Vue.component('pmenu', pmenu)
 Vue.component('modal', modal)
-Vue.component('v-photoswipe', PhotoSwipe)
-Vue.component('v-photoswipe-gallery', PhotoSwipeGallery)
+
 Vue.component('preloader', preloader)
 Vue.component('date', date)
 Vue.component('userpic', userpic)
@@ -190,7 +185,6 @@ Vue.component('backButton', backButton)
 Vue.component('topheader', topheader)
 Vue.component('maincontent', maincontent)
 Vue.component('search', search)
-Vue.component('upload', upload)
 Vue.component('linepreloader', linepreloader)
 
 
@@ -333,6 +327,15 @@ export default {
         // Update the teamroom messages
         this.generateTeamroomMessages();
       }
+    },
+
+    mobile : function(){
+      this.$store.commit('setMobile', this.mobile);
+      this.$store.commit('minimize')
+    },
+    pocketnet : function(){
+      this.$store.commit('setPocketnet', this.pocketnet);
+      this.$store.commit('minimize')
     }
 
   },
@@ -727,8 +730,6 @@ export default {
 
     var sarr = ['vamily.ru', 'pnt.com','bst.app', 'sd.ci']
 
-    console.log(f.getservers(sarr, 3, 'PR7srzZt4EfcNb3s27grgmiG8aB9vYNV82'))
-    console.log(f.getservers(sarr, 3, 'PP582V47P8vCvXjdV3inwYNgxScZCuTWsq'))
 
     */
 

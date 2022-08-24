@@ -1,5 +1,4 @@
 import topheader from '@/components/chat/topheader'
-import _ from "underscore";
 import f from "@/application/functions";
 
 import contacts from '@/components/contacts/index.vue'
@@ -239,8 +238,6 @@ export default {
 
     membersList: function () {
 
-      console.log(this.core.mtrx.chatUsers(this.chat.roomId))
-
       return this.core.mtrx.chatUsers(this.chat.roomId).filter(user => user.membership !== 'leave')
 
     },
@@ -441,7 +438,6 @@ export default {
 
     },
     kickUser(user) {
-      console.log("TEST", f.getMatrixIdFull(user.userId, this.core.domain))
       this.core.mtrx.client.kick(this.m_chat.roomId, f.getMatrixIdFull(user.userId, this.core.domain), 'admin kicked').then(this.$nextTick(function () {
       }))
     },

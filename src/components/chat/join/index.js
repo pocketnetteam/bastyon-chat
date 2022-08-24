@@ -1,7 +1,5 @@
 import {mapState} from 'vuex';
 import chatPreview from '@/components/chat/preview/index.vue'
-import _ from 'underscore'
-import f from "@/application/functions";
 
 export default {
   name: 'chatJoin',

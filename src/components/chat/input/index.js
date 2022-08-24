@@ -1,13 +1,13 @@
 import f from "@/application/functions";
 import InputField from './InputField/InputField.vue'
 import recordVoice from '@/components/assets/recordVoice/index.vue';
-import _ from "underscore";
 import { mapState } from "vuex";
 
 import contacts from '@/components/contacts/list/index.vue'
 import preview from '@/components/contacts/preview/index.vue'
 import recordProgress from '@/components/assets/recordProgress/index.vue';
 
+import upload from '@/components/assets/upload/index.vue';
 
 import { cancelable } from 'cancelable-promise';
 export default {
@@ -18,7 +18,7 @@ export default {
 		relationEvent: Object
 	},
 
-	components: { InputField, contacts, preview, recordProgress, recordVoice },
+	components: { InputField, contacts, preview, recordProgress, recordVoice, upload },
 
 	data: function () {
 
@@ -234,22 +234,6 @@ export default {
 
 			return null
 		},
-
-		/*recordViewData() {
-			if (this.recordRmsData.length) {
-				let length = this.recordRmsData.length
-				let step = this.recordRmsData.length / 100
-
-				if (length > 100) {
-					let result = []
-					for (let i = 0; i < 100; i++) {
-						result.push(this.recordRmsData[Math.round(i * step)])
-					}
-					return result
-				}
-			}
-			return this.recordRmsData
-		}*/
 	},
 
 	created() {
@@ -581,7 +565,7 @@ export default {
 							return Promise.resolve()
 						}).catch(e => {
 
-
+							console.error(e)
 							return Promise.reject(e)
 						})
 
@@ -923,8 +907,6 @@ export default {
 
 					f.fetchLocal(path).then(r => {
 
-						console.log("R", r)
-
 						/*var e = {
 							data : r.data
 						}*/
@@ -961,7 +943,6 @@ export default {
 
 							this.recordRmsData = _.clone(rmsdata)
 
-							console.log(rmsdata)
 							
 						},
 						function (e) {
@@ -1017,11 +998,9 @@ export default {
 
 			}))
 
-			console.log('preparing has')
 
 			this.prepareRecording.then((recorder) => {
 
-				console.log("recorder", recorder)
 
 				this.mediaRecorder = recorder
 				
@@ -1078,7 +1057,6 @@ export default {
 				this.recordRmsData = _.clone(rmsdata)
 
 				if(sec % 1000 === 0) {
-					console.log("SEC")
 					this.recordTime = sec
 				}
 				
@@ -1093,7 +1071,6 @@ export default {
 				return
 			}
 
-			console.log('this.record.duration', this.record.duration)
 
 			if (this.record.duration < 1) {
 				this.clear()
@@ -1106,7 +1083,6 @@ export default {
 
 		createVoiceMessage(event, sendnow) {
 
-			console.log('event', event)
 
 			this.record = {
 				file: event.data,
@@ -1136,9 +1112,6 @@ export default {
 		},
 
 		stopRecording({ cancel, sendnow }) {
-
-			console.log("stopRecording", cancel)
-
 
 			this.$store.commit('SET_VOICERECORDING', false)
 

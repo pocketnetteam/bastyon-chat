@@ -40,9 +40,7 @@
 </style>
 
 <script>
-import _ from "underscore";
 import f from "@/application/functions";
-import moment from "moment";
 
 export default {
   name: "chatIcon",

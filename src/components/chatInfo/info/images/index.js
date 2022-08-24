@@ -1,4 +1,3 @@
-import _ from "underscore";
 import f from "@/application/functions";
 import imageEvents from "@/components/chat/list/index.vue"
 export default {
