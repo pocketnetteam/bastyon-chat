@@ -7,6 +7,24 @@ import ApiWrapper from "./api.js";
 import Pcrypto from "./pcrypto.js";
 import listeners from './listeners'
 import f from './functions'
+import Media from './media'
+/*
+import pcm from '@/application/utils/pcm.js'
+let Mp3 = require('js-mp3');
+*/
+/*
+var {register} = require('extendable-media-recorder')
+var {connect} = require('extendable-media-recorder-wav-encoder')*/
+
+
+import AudioRecorder from 'audio-recorder-polyfill'
+import mpegEncoder from 'audio-recorder-polyfill/mpeg-encoder'
+
+AudioRecorder.encoder = mpegEncoder
+AudioRecorder.prototype.mimeType = 'audio/mpeg'
+
+
+
 
 class Core {
     constructor(vm, p){
@@ -63,7 +81,12 @@ class Core {
         this.external = {}
         this.hiddenInParent = false
 
+        this.customRecorderConnected = false
+
         this.pcrypto.init(this.user)
+
+        this.media = new Media()
+        this.audioContext = null
 
     }
 
@@ -94,7 +117,6 @@ class Core {
 
     logerror = function(type, data){
 
-        console.log("type", type, data)
 
         if (window.POCKETNETINSTANCE){
 
@@ -150,7 +172,7 @@ class Core {
 
         return this.user.checkCredentials().then(state => {
 
-            return this.user.userInfo(true)
+            return this.user.userInfo()
 
         }).then(r => {
 
@@ -476,6 +498,76 @@ class Core {
             
     }
 
+    async convertAudioToBase64(blob) {
+        const reader = new FileReader()
+        reader.readAsDataURL(blob)
+        return new Promise(resolve => {
+            reader.onloadend = () => {
+                resolve(reader.result)
+            }
+        })
+    }
+
+    /*async connectCustomRecorder() {
+
+        if (this.customRecorderConnected) return
+            this.customRecorderConnected = true
+  
+        await register(await connect());
+        
+    }*/
+
+    /*mp3ToWav(base64Audio){
+
+        var mp3ArrayBuffer = f._base64ToArrayBuffer(base64Audio.split(',')[1])
+
+        var decoder = Mp3.newDecoder(mp3ArrayBuffer);
+        var pcmArrayBuffer = decoder.decode();
+
+        var dataURI = new pcm({channels: 1, rate: 8000, depth: 8}).toWav(pcmArrayBuffer).encode();
+
+        return dataURI
+
+    }*/
+
+    initMediaRecorder() {
+
+        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+
+
+            return this.media.get({ audio: true }).then(stream => {
+
+                let mediaRecorder = new AudioRecorder(stream, { audioBitsPerSecond : 32000 })
+               
+                return mediaRecorder
+                
+            }).catch(function (err) {
+                return Promise.reject(err)
+            });
+
+        } else {
+            return Promise.reject()
+        }
+    }
+
+    getAudioContext(){
+
+        if(this.audioContext && this.audioContext.state != 'closed') {
+
+
+            if(this.audioContext.state === "suspended") this.audioContext.resume()
+
+
+
+            return this.audioContext
+        }
+        else{
+        }
+
+        this.audioContext = new (window.AudioContext || window.webkitAudioContext)() || null;
+
+        return this.audioContext
+    }
 }
 
 export default Core

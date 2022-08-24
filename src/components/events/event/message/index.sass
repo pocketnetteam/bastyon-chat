@@ -70,6 +70,9 @@
   padding-left: $r / 2
   min-height: 34px
 
+  &.aligncenter
+    align-items: center
+
   &.my
     padding-left : 0
     padding-right: $r / 2
@@ -143,8 +146,13 @@
       text-shadow: none 
       right: 0
       left : auto
+
   .messageAudio
-    width: 100%
+    margin-left: $r
+    height: 50px
+
+
+
   .messageImg
     width: 85%
     position: relative
@@ -427,6 +435,8 @@
       padding-left : 1.5 * $r
       padding-right : 0.5 *$r
       order: -4
+
+      
     .statusWrapper
       order: -3
 
@@ -441,6 +451,12 @@
       border-radius: 2 * $r
       border-bottom-left-radius: 2 * $r
       border-top-right-radius: 0
+
+    .messageAudio
+      margin-left: 0
+      /deep/
+        .voiceMessage
+          justify-content: flex-end
       
   &.urlpreview
     background: srgb(--background-total-theme)
@@ -466,8 +482,7 @@
       .metaMsg,
       .messageImg
         order: 6
-      .messageAudio
-        order: 6
+      
 
   &.not-preview
     align-items: center

@@ -40,9 +40,7 @@
 </style>
 
 <script>
-import _ from "underscore";
 import f from "@/application/functions";
-import moment from "moment";
 
 export default {
   name: "chatIcon",
@@ -86,8 +84,6 @@ export default {
       if (!this.chat) return [];
 
       var u = this.core.mtrx.anotherChatUsers(this.chat.roomId);
-
-      console.log("this.dontuseslides", this.dontuseslides);
 
       if (this.dontuseslides) {
         u = _.first(u, 4);

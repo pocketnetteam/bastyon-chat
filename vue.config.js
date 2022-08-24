@@ -25,6 +25,14 @@ module.exports = {
 		"rxjs-interop",
 		"standardized-audio-context"
 	],
+
+	pluginOptions: {
+		webpackBundleAnalyzer: {
+			openAnalyzer: false,
+			analyzerMode: "disabled"
+		},
+	},
+
 	configureWebpack: {
 		resolve: {
 			extensions: [".js", ".ts"],
@@ -35,6 +43,9 @@ module.exports = {
 		output: {
 			pathinfo: false,
 		},
+
+		
+		
 
 		module: {
 			rules: [

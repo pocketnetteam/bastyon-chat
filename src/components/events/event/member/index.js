@@ -1,6 +1,5 @@
 import {mapState} from 'vuex';
 import f from "@/application/functions";
-import _ from 'underscore'
 
 export default {
   name: 'eventsMember',
@@ -73,7 +72,6 @@ export default {
 
       }
       if(this.event.event.type === 'm.room.topic'){
-        console.log(this.event, "topic")
       }
 
       // }

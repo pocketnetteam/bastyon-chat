@@ -12,9 +12,9 @@
 
     </div>
 
-    <div v-touch:longtap="dropDownMenuShow" :class="{referenceshowed, showmeta : showmeta, my,'messageRow': 'messageRow', urlpreview : urlpreview, allscreen : urlpreview || content.msgtype === 'm.image'|| file || content.msgtype === 'm.audio'}" :my="my" v-if="!preview && content.msgtype !== 'm.notice'">
+    <div v-touch:longtap="dropDownMenuShow" :class="{referenceshowed, showmeta : showmeta, my,'messageRow': 'messageRow', urlpreview : urlpreview, allscreen : urlpreview || content.msgtype === 'm.image'|| file, aligncenter : content.msgtype === 'm.audio'}" :my="my" v-if="!preview && content.msgtype !== 'm.notice'">
 
-      <div class="timeWrapper" v-if="(urlpreview || imageUrl || content.msgtype === 'm.image' || content.msgtype === 'm.audio') || (showmeta && (my)) || file">
+      <div class="timeWrapper" v-if="(urlpreview || imageUrl || content.msgtype === 'm.image') || (showmeta && (my)) || file">
         
         <i :class="'fas fa-fire burn ' + showburn" v-if="showburn" @click="showwhenburn"></i>
         
@@ -61,7 +61,7 @@
         </div>
       </div>
       <div class="messageAudio" v-if="content.msgtype === 'm.audio'">
-        <VoiceMessage v-if="audioUrl" :base64Audio="audioUrl" :id="event._localTimestamp || Date.now()"/>
+        <VoiceMessage v-if="audioUrl" :audioBuffer="audioUrl" :id="event._localTimestamp || Date.now()"/>
       </div>
 
       <div class="maxcontent" :class="{'my' : my }" v-if="content.msgtype === 'm.encrypted' && !textWithoutLinks && badenctypted">
