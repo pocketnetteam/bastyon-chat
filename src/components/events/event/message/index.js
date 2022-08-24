@@ -92,8 +92,6 @@ export default {
 
     readyToRender : function(){
 
-      console.log('readyToRender')
-
       var r = ( this.content.msgtype === 'm.encrypted' && !this.textWithoutLinks && this.badenctypted ) || 
 
         ((this.content.msgtype === 'm.text' || this.content.msgtype === 'm.encrypted') && this.textWithoutLinks) ||

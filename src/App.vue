@@ -327,6 +327,15 @@ export default {
         // Update the teamroom messages
         this.generateTeamroomMessages();
       }
+    },
+
+    mobile : function(){
+      this.$store.commit('setMobile', this.mobile);
+      this.$store.commit('minimize')
+    },
+    pocketnet : function(){
+      this.$store.commit('setPocketnet', this.pocketnet);
+      this.$store.commit('minimize')
     }
 
   },
@@ -721,8 +730,6 @@ export default {
 
     var sarr = ['vamily.ru', 'pnt.com','bst.app', 'sd.ci']
 
-    console.log(f.getservers(sarr, 3, 'PR7srzZt4EfcNb3s27grgmiG8aB9vYNV82'))
-    console.log(f.getservers(sarr, 3, 'PP582V47P8vCvXjdV3inwYNgxScZCuTWsq'))
 
     */
 

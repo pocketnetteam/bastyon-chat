@@ -3260,7 +3260,6 @@ MatrixClient.prototype.sendImageMessage = function (roomId, url, info, text, cal
 
 
 MatrixClient.prototype.sendAudioMessage = function (roomId, url, info, text, callback) {
-  console.log('send audio', roomId, url, text, callback)
   if (utils.isFunction(text)) {
     callback = text;
     text = undefined;

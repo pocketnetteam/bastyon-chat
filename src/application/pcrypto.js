@@ -768,7 +768,6 @@ var PcryptoFile = function(){
             /*ncrypto.randomBytes(24, function(err, buffer) {
                 var token = buffer.toString('hex');
 
-                console.log('token', token)
 
                 resolve(token)
             });*/

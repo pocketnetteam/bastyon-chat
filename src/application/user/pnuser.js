@@ -132,6 +132,10 @@ class PNUser extends User {
 
     }
 
+    generateprivate(){
+        
+    }
+
     checkCredentials (){
 
         if(!this.credentials){
@@ -234,8 +238,6 @@ class PNUser extends User {
             })
 
         return this.core.api.pocketnet.userInfoCached(addresses, reload).then(infos => {
-
-            console.log('infos', infos)
 
             infos = _.map(infos, (info) => {
 

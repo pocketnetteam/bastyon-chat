@@ -72,7 +72,6 @@ export default {
 
       }
       if(this.event.event.type === 'm.room.topic'){
-        console.log(this.event, "topic")
       }
 
       // }

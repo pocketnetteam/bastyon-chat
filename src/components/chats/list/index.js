@@ -276,7 +276,6 @@ export default {
 						manual: true
 					})
 
-					console.log('_share', _share)
 
 					this.core.mtrx.shareInChat(chat.roomId, _share).then(r => {
 

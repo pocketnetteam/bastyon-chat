@@ -907,8 +907,6 @@ export default {
 
 					f.fetchLocal(path).then(r => {
 
-						console.log("R", r)
-
 						/*var e = {
 							data : r.data
 						}*/
@@ -945,7 +943,6 @@ export default {
 
 							this.recordRmsData = _.clone(rmsdata)
 
-							console.log(rmsdata)
 							
 						},
 						function (e) {
@@ -1001,11 +998,9 @@ export default {
 
 			}))
 
-			console.log('preparing has')
 
 			this.prepareRecording.then((recorder) => {
 
-				console.log("recorder", recorder)
 
 				this.mediaRecorder = recorder
 				
@@ -1062,7 +1057,6 @@ export default {
 				this.recordRmsData = _.clone(rmsdata)
 
 				if(sec % 1000 === 0) {
-					console.log("SEC")
 					this.recordTime = sec
 				}
 				
@@ -1077,7 +1071,6 @@ export default {
 				return
 			}
 
-			console.log('this.record.duration', this.record.duration)
 
 			if (this.record.duration < 1) {
 				this.clear()
@@ -1090,7 +1083,6 @@ export default {
 
 		createVoiceMessage(event, sendnow) {
 
-			console.log('event', event)
 
 			this.record = {
 				file: event.data,
@@ -1120,9 +1112,6 @@ export default {
 		},
 
 		stopRecording({ cancel, sendnow }) {
-
-			console.log("stopRecording", cancel)
-
 
 			this.$store.commit('SET_VOICERECORDING', false)
 
