@@ -227,7 +227,6 @@ export default {
       ) {
         this.selectedMessages.push(message);
       }
-      this.$emit("shareManyMessages", true);
     },
     removeMessage(message) {
       const index = this.selectedMessages.findIndex(
@@ -236,28 +235,6 @@ export default {
       if (index !== -1) {
         this.selectedMessages.splice(index, 1);
       }
-      if (this.selectedMessages.length === 0) {
-        this.multiSelect = false;
-        this.$emit("shareManyMessages", false);
-      }
-    },
-    shareManyMessages(_sharing) {
-      var pr = Promise.resolve();
-
-      if (_sharing.download) {
-        pr = this.core.mtrx
-          .getFile(this.chat, this.event)
-          .then((r) => {
-            return f.Base64.fromFile(r.file);
-          })
-          .then((r) => {
-            _sharing.files = [r];
-            return Promise.resolve();
-          });
-      }
-      return pr.then(() => {
-        return this.core.share(_sharing);
-      });
     },
 
     messagesIsDeleted(state) {

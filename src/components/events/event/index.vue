@@ -45,7 +45,6 @@
              @selectMessage="selectMessage"
              @removeMessage="removeMessage"
              @menuIsVisible="menuIsVisibleHandler"
-             @shareManyMessages="shareManyMessages"
              v-if="type === 'message' || preview"
              :isRemoveSelectedMessages="isRemoveSelectedMessages"
              @messagesIsDeleted="messagesIsDeleted"/>

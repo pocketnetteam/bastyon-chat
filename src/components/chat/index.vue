@@ -33,7 +33,6 @@
        @menuIsVisible="menuIsVisibleHandler"
        v-if="m_chat && membership === 'join' && ready"
        @getEvents="events"
-       @shareManyMessages="shareManyMessages"
        :selectedMessages="selectedMessages"
        :isRemoveSelectedMessages="isRemoveSelectedMessages"
        @messagesIsDeleted="messagesIsDeleted"
@@ -101,11 +100,10 @@
             :chat="m_chat"
             :usersinfo="usersinfo"
             :relationEvent="relationEvent"
-            v-if="!blockedUser && showInput"
+            v-if="!blockedUser && !selectedMessages.length"
             ref="chatInput"
         />
-
-        <div v-if="showShareMessages" class="center shareEventsWrapper">
+        <div v-if="!!selectedMessages.length" class="center shareEventsWrapper">
           <div @click="removeDataMessages()">
             <i class="far fa-trash-alt"></i>{{ localisationTitles.delete }}
           </div>

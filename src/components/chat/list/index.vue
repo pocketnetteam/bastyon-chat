@@ -23,7 +23,6 @@
           :loading="lloading"
           v-if="timeline"
           :scrollType="scrollType"
-          @shareManyMessages="shareManyMessages"
           :selectedMessages="selectedMessages"
           :isRemoveSelectedMessages="isRemoveSelectedMessages"
           @messagesIsDeleted="messagesIsDeleted"

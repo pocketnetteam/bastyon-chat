@@ -508,10 +508,6 @@ export default {
       this.$emit('menuIsVisible', isVisible);
     },
 
-    shareManyMessages: function (isShare) {
-      this.$emit('shareManyMessages', isShare);
-    },
-
     messagesIsDeleted: function (state) {
       this.$emit('messagesIsDeleted', state);
     },

@@ -73,6 +73,32 @@ export default {
     IncomingMessage,
     VoiceMessage,
   },
+  watch: {
+    isRemoveSelectedMessages: {
+      immediate: true,
+      handler: function () {
+        if (this.isRemoveSelectedMessages) {
+          for (let i = 0; i < this.selectedMessages.length; i++) {
+            if (
+              this.selectedMessages[i].message_id === this.origin.event.event_id
+            ) {
+              this.$emit('remove');
+
+              return this.core.mtrx.client.redactEvent(
+                this.chat.roomId,
+                this.origin.event.event_id,
+                null,
+                {
+                  reason: 'messagedeleting',
+                }
+              );
+            }
+          }
+          this.$emit('messagesIsDeleted', true);
+        }
+      },
+    },
+  },
   computed: {
     showburn : function(){  
 
@@ -332,31 +358,11 @@ export default {
     },
   },
 
-  watch: {
-    isRemoveSelectedMessages: {
-      immediate: true,
-      handler: function () {
-        if (this.isRemoveSelectedMessages) {
-          for (let i = 0; i < this.selectedMessages.length; i++) {
-            if (
-              this.selectedMessages[i].message_id === this.origin.event.event_id
-            ) {
-              this.$emit('remove');
+  
 
-              return this.core.mtrx.client.redactEvent(
-                this.chat.roomId,
-                this.origin.event.event_id,
-                null,
-                {
-                  reason: 'messagedeleting',
-                }
-              );
-            }
-          }
-          this.$emit('messagesIsDeleted', true);
-        }
-      },
-    },
+  mounted() {
+
+    console.log('this.origin.event.event_id', this.origin.event.event_id)
   },
 
   methods: {

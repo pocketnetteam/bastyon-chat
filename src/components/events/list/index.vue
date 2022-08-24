@@ -32,7 +32,6 @@
                 @menuIsVisible="menuIsVisibleHandler"
                 :isRemoveSelectedMessages="isRemoveSelectedMessages"
                 @messagesIsDeleted="messagesIsDeleted"
-
             />
           </div>
       </div>

@@ -136,51 +136,6 @@ export default {
       }
 
     },
-
-    shareManyMessages: function (isShare) {
-      this.showInput = !isShare;
-      this.showShareMessages = isShare;
-    },
-
-    shareDataMessages: function () {
-      let allMessages = [];
-
-      for (let i = 0; i < this.selectedMessages.length; i++) {
-        if (this.selectedMessages[i].messages) {
-          allMessages.push(this.selectedMessages[i].messages[0]);
-        }
-      }
-
-      var pr = Promise.resolve();
-      var _sharing = this.selectedMessages[0];
-      _sharing.messages = allMessages;
-      if (_sharing.download) {
-        pr = this.core.mtrx
-          .getFile(this.chat, this.event)
-          .then((r) => {
-            f.Base64.fromFile(r.file);
-          })
-          .then((r) => {
-            _sharing.files = [r];
-            Promise.resolve();
-          });
-      }
-      pr.then(() => {
-        this.core.share(_sharing);
-      });
-    },
-
-    removeDataMessages: function () {
-      this.isRemoveSelectedMessages = true;
-    },
-
-    messagesIsDeleted: function (state) {
-      this.showShareMessages = false;
-      this.showInput = true;
-      if (state) {
-        this.selectedMessages = [];
-      }
-    },
   },
   computed: mapState({
 
@@ -493,7 +448,46 @@ export default {
 
     menuIsVisibleHandler: function(isVisible) {
       this.$emit('menuIsVisible', isVisible);
-    }
+    },
+
+    shareDataMessages: function () {
+      let allMessages = [];
+
+      for (let i = 0; i < this.selectedMessages.length; i++) {
+        if (this.selectedMessages[i].messages) {
+          allMessages.push(this.selectedMessages[i].messages[0]);
+        }
+      }
+
+      var pr = Promise.resolve();
+      var _sharing = this.selectedMessages[0];
+      _sharing.messages = allMessages;
+      if (_sharing.download) {
+        pr = this.core.mtrx
+          .getFile(this.chat, this.event)
+          .then((r) => {
+            f.Base64.fromFile(r.file);
+          })
+          .then((r) => {
+            _sharing.files = [r];
+            Promise.resolve();
+          });
+      }
+      pr.then(() => {
+        this.core.share(_sharing);
+      });
+    },
+
+    removeDataMessages: function () {
+      this.isRemoveSelectedMessages = true;
+    },
+
+    messagesIsDeleted: function (state) {
+      this.isRemoveSelectedMessages = false;
+      if (state) {
+        this.selectedMessages = [];
+      }
+    },
 
   }
 }
