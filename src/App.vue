@@ -787,6 +787,7 @@ export default {
             this.$route.name !== 'chatInfo' &&
             this.$route.name !== 'publicPreview' &&
             this.$route.name !== 'chatSettings' &&
+            this.$route.name !== 'contact' &&
             core.cancelDefaultRoute !== true) {
 
             this.$router.push('/chats').catch(e => {})
