@@ -151,10 +151,11 @@ export default {
 
         else{
 
-          import("emoji-mart-vue-fast/data/all.json").then(emojidata => {
-            window.emojiIndex = new EmojiIndex(emojidata)
+          var emojidata = require("emoji-mart-vue-fast/data/all.json")
+          window.emojiIndex = new EmojiIndex(emojidata)
             this.emojiIndex = window.emojiIndex
-          })
+          
+          
           
         }
       }
