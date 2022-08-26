@@ -400,6 +400,8 @@ export default {
 
       setTimeout(() => {
 
+        
+
         if (this.$route.name !== 'chats' &&
           /*this.$route.name !== 'chat' &&*/
           this.$route.name !== 'contact' &&
@@ -776,18 +778,22 @@ export default {
 
       return core.mtrx.wait().then(() => {
         
-
         core.user.getContacts()
 
-        if (this.$route.name !== 'chats' &&
-          /*this.$route.name !== 'chat' &&*/
-          this.$route.name !== 'chatInfo' &&
-          this.$route.name !== 'publicPreview' &&
-          this.$route.name !== 'chatSettings' &&
-          core.cancelDefaultRoute !== true) {
 
-          this.$router.push('/chats').catch(e => {})
-        }
+        setTimeout(() => {
+          if (this.$route.name !== 'chats' &&
+            /*this.$route.name !== 'chat' &&*/
+            this.$route.name !== 'chatInfo' &&
+            this.$route.name !== 'publicPreview' &&
+            this.$route.name !== 'chatSettings' &&
+            core.cancelDefaultRoute !== true) {
+
+            this.$router.push('/chats').catch(e => {})
+          }
+        }, 100)
+
+        
 
         //this.connectCustomRecorder();
 

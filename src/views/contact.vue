@@ -4,7 +4,9 @@
     <topheader 
       v-if="user" 
       :contact="user"
-    />
+    >
+    
+    </topheader>
 
     <maincontent>
       <template v-slot:content>

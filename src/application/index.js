@@ -357,16 +357,24 @@ class Core {
 
             var roomId = this.mtrx.kit.tetatetid(info[0], this.user.userinfo)
 
+
             if(!roomId) return Promise.reject(e)
 
             if (this.store.state.chatsMap[roomId]){
                 /// old chat
-                this.vm.$router.push('/chat?id=' + roomId).catch(e => {})
+
+                this.gotoRoute('/chat?id=' + roomId)
+                /*this.vm.$router.push('/chat?id=' + roomId).catch(e => {
+                    console.error('e', e)
+                })*/
             }
             else
             {
-                this.store.commit('CONTACT', roomId)
-                this.vm.$router.push('/chat?id=' + roomId + '&u=' + f.hexEncode(address)).catch(e => {})
+
+                this.gotoRoute('/contact?id=' + f.hexEncode(address))
+                //this.store.commit('CONTACT', roomId)
+                //this.gotoRoute('/chat?id=' + roomId + '&u=' + f.hexEncode(address))
+
             }
 
             return Promise.resolve()
