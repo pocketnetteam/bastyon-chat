@@ -18,7 +18,7 @@
           @editingEvent="editingEvent"
           @replyEvent="replyEvent"
           @shareEvent="shareEvent"
-          @galleryEventOpen="(e) => imageGallery(e)"
+          @galleryEventOpen="e => imageGallery(e)"
           @menuIsVisible="menuIsVisibleHandler"
           ref="eventslist"
           :error="error"

@@ -44,16 +44,18 @@ export default {
     },
 
     navigateToProfile(id, contact) {
-      if (this.mode == "Select") {
-        this.select(contact);
-      } else {
+
+      if(this.mode == "Select"){
+        this.select(contact)
+      }
+      else{
         this.$router.push({
-          path: `/contact`,
+          path: '/contact',
           query: {
             ...this.$route.query,
             id: id,
           },
-        });
+        })
       }
     },
 

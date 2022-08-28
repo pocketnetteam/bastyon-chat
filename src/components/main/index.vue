@@ -1,5 +1,6 @@
 <template>
-  <div class="main-wrapper" :class="{ minimized, active }">
+  <div class='main-wrapper' :class="{minimized, active}">
+
     <div class="chat-container">
       <ContactsContainer v-if="page === 'contacts'" />
       <ChatsContainer v-if="page === 'chats'" />
@@ -8,16 +9,13 @@
     </div>
     <div v-if="showPage" class="chat-container-pages">
       <vue-page-transition name="fade-in-right" v-if="!mobile">
-        <router-view></router-view>
+          <router-view></router-view>
       </vue-page-transition>
       <router-view v-else></router-view>
 
-      <gallery
-        v-if="gallery"
-        :images="gallery.images"
-        :index="gallery.index"
-        @close="closeGallery"
-      />
+      <gallery v-if="gallery" :images="gallery.images" :index="gallery.index" @close="closeGallery"/>
+
+
     </div>
     <div v-if="!showPage" class="chat-container-pages-empty">
       <i class="fas fa-comments"></i>

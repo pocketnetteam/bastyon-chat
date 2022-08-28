@@ -106,7 +106,20 @@ export default {
           ...this.$route.query,
           page: r,
         },
-      });
+
+        newchat : function(){
+            this.$emit('newchat')
+        },
+
+        gotona(r) {
+            this.$router.push({
+                path: this.$router.path,
+                query: {
+                    ...this.$route.query,
+                    page: r,
+                },
+            })
+        },
     },
   },
 };

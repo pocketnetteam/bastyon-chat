@@ -344,7 +344,8 @@ export default {
       }
 
       return pr.then(() => {
-        this.$emit("share");
+        this.$emit('share')
+      })
 
         return this.core.share(_sharing);
       });

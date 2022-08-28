@@ -28,7 +28,8 @@
         <span v-if="share">{{ $t("caption.shareWith") }}</span>
       </template>
 
-      <template v-slot:rightadd>
+      
+      <template v-slot:rightadd >
         <router-link @click="gotona('settings')" v-if="!share && pocketnet">
           <div class="iconbuttonsmall">
             <i class="fas fa-cog"></i>

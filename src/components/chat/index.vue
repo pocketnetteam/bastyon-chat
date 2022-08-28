@@ -54,7 +54,28 @@
         <span>{{ $t("caption.startChatWith") }} {{ usersinfoNames() }}</span>
       </div>
 
-      <div
+    <list 
+    
+      ref="list"
+      :error="error"
+      :key="key" :chat="m_chat"
+       @editingEvent="editingEvent"
+       @replyEvent="replyEvent"
+       @shareEvent="shareEvent"
+       @eventImage="e => galleryImage(e)"
+       @scroll="scroll"
+       @menuIsVisible="menuIsVisibleHandler"
+      v-if="m_chat && membership === 'join' && ready" @getEvents="events"/>
+
+    <div v-if="m_chat && membership === 'invite'" class="joinwrapper">
+      <join :m_chat="m_chat" :chat="chat" :usersinfo="usersinfo" @creatorLeft="brokenInvitedRoom"/>
+    </div>
+
+    <div class="chatEmpty" v-if="!m_chat && usersinfo && usersinfo.length">
+      <span>{{ $t("caption.startChatWith") }} {{ usersinfoNames() }}</span>
+    </div>
+
+    <div
         v-if="!m_chat || membership === 'join'"
         class="chatInputWrapper fixedOnPageBottom"
         :class="{ bin: pocketnet, bout: !pocketnet }"
