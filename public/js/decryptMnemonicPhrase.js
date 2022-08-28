@@ -9,14 +9,22 @@ let addressUser = null;
 
 function decryptMnemonic() {
     const mnemonicPhrase = testMnemonicPhrase;
-    
+
     decryption(mnemonicPhrase, hexEncode('fakefingerprint'), {}, function(mnemonicPhrase){
-        !window.bitcoin.bip39.validateMnemonic(mnemonicPhrase) 
+        (!window.bitcoin.bip39.validateMnemonic(mnemonicPhrase) 
             ? setKeysPairFromPrivate(mnemonicPhrase, function(){}) 
-            : setKeys(mnemonicPhrase, function(){})        
-    })		
-    return          
+            : setKeys(mnemonicPhrase, function(){}))
+    })	   
 };
+
+function getDecryptedMnemonic() {
+    return {
+        privateKey: privateKey, 
+        publicKey: publicKey, 
+        addressUser: addressUser
+    } 	 
+}
+
 decryptMnemonic();
 
 function decryption(str, key, p, clbk) {
@@ -28,15 +36,11 @@ function decryption(str, key, p, clbk) {
     const encryptedBytes = new Uint8Array(window.aesjs.utils[p.charsetDec].toBytes(str));
 
     keyForAes(key, function (akey) {
-
         if(!window.crypto.subtle){
             if (clbk)
                 clbk('')
-
             return
         }
-
-
         window.crypto.subtle.decrypt(
             {
             name: "AES-CBC",
@@ -52,7 +56,6 @@ function decryption(str, key, p, clbk) {
                 if (clbk)
                     clbk(_decrypted)
             })
-
             .catch(function (err) {
 
                 console.error(err)
@@ -60,9 +63,7 @@ function decryption(str, key, p, clbk) {
                 if (clbk)
                     clbk('')
             });
-
     })
-
 };
 function keyForAes(key, clbk) {
     var _clbk = function (key) {
@@ -145,30 +146,24 @@ function setKeysPairFromPrivate(_private, clbk){
             clbk(false)
     }
 }
-function setKeys(mnemonic, clbk){
+function setKeys(mnemonic, clbk) {
     var keyPair =  keysFromMnemo(mnemonic)      
     setKeysPair(keyPair, clbk)    
 }
-function setKeysPair(keyPair, clbk){
-
+function setKeysPair(keyPair, clbk) {
     privateKey = keyPair.privateKey
-    publicKey = keyPair.publicKey
-  
-    var address = sdk.address.pnet(publicKey)
+    publicKey = keyPair.publicKey  
+    addressUser = sdk.address.pnet(publicKey).address
 
-    addressUser = address.address
-    console.log('privateKey', privateKey)
-    console.log('publicKey', publicKey)
-    console.log('addressUser', addressUser)
     if (clbk)
-        clbk() 
+        clbk()  
 }
-function keysFromMnemo(mnemonic){
+function keysFromMnemo(mnemonic) {
     if(!mnemonic) mnemonic = ''
     var seed = window.bitcoin.bip39.mnemonicToSeedSync(mnemonic.toLowerCase())
     return keysFromSeed(seed)
 }
-function keysFromSeed(seed){
+function keysFromSeed(seed) {
     var d = window.bitcoin.bip32.fromSeed(seed).derivePath(self.sdk.address.path(0)).toWIF()         
     var keyPair = window.bitcoin.ECPair.fromWIF(d)	    
     return keyPair
