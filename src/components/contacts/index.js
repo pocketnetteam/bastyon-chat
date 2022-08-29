@@ -98,7 +98,7 @@ export default {
       var arr = []
       var contacts = this.contactsMap
       var text = this.inputText
-      _.mapObject(contacts, function (key, value) {
+      _.each(contacts, function (key, value) {
         key.selected = false
         arr.push(key)
       })

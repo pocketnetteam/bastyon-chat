@@ -5,6 +5,7 @@
             :userinfo="userinfo"
             :readed="readed"
             :preview="preview || false"
+            @readyToRender="setReadyToRender"
             v-if="type === 'member' && !preview"/>
 
     <message 
