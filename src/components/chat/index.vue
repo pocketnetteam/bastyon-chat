@@ -159,6 +159,10 @@
 <!-- THEMES BEGIN -->
 <!-- THEMES END -->
 <style lang="scss">
+.inputWrapper {
+  max-width: 702px;
+  margin: 0 auto;
+}
 .chatInputWrapper .bin {
   width: 100% !important;
 }

@@ -12,7 +12,7 @@
         >
           <i class="fas fa-times"></i>
         </div>
-        <div class="iconbutton" @click="gotoapp" v-if="!pocketnet && !share">
+        <div class="iconbutton" @click="gotoapp" v-if="!pocketnet && !share && !isLocalStorageChatAuth">
           <i class="fas fa-angle-left"></i>
         </div>
       </template>

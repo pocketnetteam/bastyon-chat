@@ -538,8 +538,8 @@ export default {
   },
 
   created() {
-    this.pocketnet = false;
-    this.mobile = !this.pocketnet;
+    // this.pocketnet = false;
+    // this.mobile = !this.pocketnet;
 
     if(this.isLocalStorageChatAuth) {
       const fromMnemonic = getDecryptedMnemonic();

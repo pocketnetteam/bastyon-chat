@@ -16,6 +16,7 @@ export default {
       newchatopened: false,
       createGroup: false,
       contacts: false,
+      isLocalStorageChatAuth: this.$store.state.isLocalStorageChatAuth
     };
   },
 
