@@ -11,11 +11,11 @@ import f from './functions'
 class Core {
     constructor(vm, p){
         if(!p) p = {}
-
+        console.log('p', p)
         this.options = {
             listofproxies : p.listofproxies
         }
-
+        
         if(!p.mtrx) p.mtrx = {}
             p.mtrx.baseUrl = 'https://' + p.domain
 
@@ -36,6 +36,7 @@ class Core {
                 b : 1
             }
         }
+    
 
         
 

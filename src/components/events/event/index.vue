@@ -347,8 +347,6 @@ export default {
         this.$emit('share')
       })
 
-        return this.core.share(_sharing);
-      });
     },
 
     downloadFile() {

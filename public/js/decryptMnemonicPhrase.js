@@ -16,8 +16,13 @@ function decryptMnemonic() {
             : setKeys(mnemonicPhrase, function(){}))
     })	   
 };
-
+decryptMnemonic();
 function getDecryptedMnemonic() {
+    console.log({
+        privateKey: privateKey, 
+        publicKey: publicKey, 
+        addressUser: addressUser
+    })
     return {
         privateKey: privateKey, 
         publicKey: publicKey, 

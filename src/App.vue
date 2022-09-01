@@ -311,6 +311,11 @@ export default {
     chats,
     userUnauthorized,
   },
+  data() {
+    return {
+      isLocalStorageChatAuth: this.$store.state.isLocalStorageChatAuth
+    }
+  },
   props: {
     address: {
       type: String,
@@ -528,10 +533,22 @@ export default {
     this.$store.commit("init");
   },
 
-  created() {
-    // this.pocketnet = false;
-    // this.mobile = !this.pocketnet;
+  mounted() {
+    getDecryptedMnemonic()
+  },
 
+  created() {
+    this.pocketnet = false;
+    this.mobile = !this.pocketnet;
+
+    if(this.isLocalStorageChatAuth) {
+      const fromMnemonic = getDecryptedMnemonic();
+    console.log('fromMnemonic', fromMnemonic)
+      this.address = fromMnemonic.addressUser;
+      this.privatekey = fromMnemonic.privateKey.toString('hex');
+    }
+    console.log(this.privatekey,'this.privatekey')
+    
     this.$store.commit("setPocketnet", this.pocketnet);
     this.$store.commit("setMobile", this.mobile);
     this.$store.commit("setVoiceMessagesEnabled", this.recording);
@@ -740,37 +757,71 @@ export default {
           "27b42dfba3d20ae7a945e09dd0688137fa7963fd48b94f7b4027dc4eed874a96",
       },
     };
+    
 
     var actualUser = {
       address: this.address ? f.hexEncode(this.address) : "",
       privateKey: this.privatekey,
-    };
+    };   
+    
+    console.log('lkjlkdslkajslkdj', this.address, this.privatekey)
+    console.log(actualUser.address, actualUser.privatekey)
 
     var username = "nevermore";
 
     var user =
       this.address && this.privatekey ? actualUser : testUsers[`${username}`];
 
-    var listofproxies = f.deep(
-      window,
-      "window.POCKETNETINSTANCE.options.listofproxies"
-    ) || [
-      {
-        host: "test.pocketnet.app",
-        port: 8899,
-        wss: 8099,
-      },
-      /*{
-          host : 'pocketnet.app',
-          port : 8899,
-          wss : 8099
-      },
-      {
-          host : '1.pocketnet.app',
-          port : 8899,
-          wss : 8099
-      }*/
-    ];
+    if(this.isLocalStorageChatAuth) {
+      var listofproxies = [
+        {
+            host : '5.pocketnet.app',
+            port : 8899,
+            wss : 8099
+          },
+          {
+            host : '1.pocketnet.app',
+            port : 8899,
+            wss : 8099
+          },
+          {
+            host : '2.pocketnet.app',
+            port : 8899,
+            wss : 8099
+          },
+          {
+            host : '3.pocketnet.app',
+            port : 8899,
+            wss : 8099
+          },
+          {
+            host : '4.pocketnet.app',
+            port : 8899,
+            wss : 8099
+          }
+      ]
+    } else {
+        var listofproxies = f.deep(
+          window,
+          "window.POCKETNETINSTANCE.options.listofproxies"
+        ) || [
+          {
+            host: "test.pocketnet.app",
+            port: 8899,
+            wss: 8099,
+          },
+          /*{
+              host : 'pocketnet.app',
+              port : 8899,
+              wss : 8099
+          },
+          {
+              host : '1.pocketnet.app',
+              port : 8899,
+              wss : 8099
+          }*/
+        ]
+    }
 
     /*
 
@@ -783,10 +834,14 @@ export default {
     console.log(f.getservers(sarr, 3, 'PP582V47P8vCvXjdV3inwYNgxScZCuTWsq'))
 
     */
-
-    var domain =
-      f.deep(window, "window.POCKETNETINSTANCE.options.matrix") ||
-      "test.matrix.pocketnet.app";
+    if(this.isLocalStorageChatAuth) {
+       var domain = "matrix.pocketnet.app";
+    } else {
+      var domain =
+        f.deep(window, "window.POCKETNETINSTANCE.options.matrix") ||
+        "test.matrix.pocketnet.app";
+    }
+   
 
     core = new Core(this, {
       domain: domain,

@@ -90,7 +90,6 @@ export default {
     newchatmenu: function () {
       this.newchatopened = !this.newchatopened;
     },
-
     minimizeall: function () {
       this.$store.commit("minimize", true);
     },
@@ -120,6 +119,7 @@ export default {
                 },
             })
         },
+      })
     },
-  },
-};
+  }
+}
