@@ -18,7 +18,6 @@ export default {
       tmt: null,
       lscroll: null,
       menuOpen: false,
-      c: 1,
       ls: 0,
       voiceMessageQueue: [],
     };
@@ -54,6 +53,12 @@ export default {
   computed: {
     sortedVoiceMessageQueue() {
       return _.sortBy(this.voiceMessageQueue, (a) => {return a.id})
+    },
+
+    c : function(){
+      if(this.scrollType === "custom") return 1
+
+      return -1
     },
 
     ios() {
@@ -133,6 +138,7 @@ export default {
       });
     },
     scroll: function () {
+      console.log('this.size()', this.size())
       this.$emit("scroll", this.size());
     },
 
@@ -198,6 +204,7 @@ export default {
     },
 
     mousewheel: function (e) {
+      return
       if (this.scrollType === "custom") {
         return;
       } else {

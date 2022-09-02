@@ -60,7 +60,7 @@
 
 .eventsflex
   display: flex
-  flex-flow: column
+  flex-flow: column-reverse
   overflow-y: overlay
   overflow-x: hidden
   max-width: 640px
@@ -73,7 +73,7 @@
   scroll-behavior: auto
   continue: fragments
   justify-content: flex-start
-  transform: scaleY(-1)
+  /*transform: scaleY(-1)*/
   contain: strict
 
   &.freeze
@@ -83,9 +83,9 @@
   .eventspage
     width : 100%
     display: flex
-    flex-flow: column
+    flex-flow: column-reverse
     flex-wrap: nowrap
-    justify-content: flex-start
+    justify-content: flex-end
 
   .errorWrapper
     padding : $r
@@ -102,7 +102,7 @@
   .errorWrapper,
   .eventWrapper
     width: 100%
-    transform: scaleY(-1)
+    /*transform: scaleY(-1)*/
 
   &.mobile
     scroll-behavior: smooth
