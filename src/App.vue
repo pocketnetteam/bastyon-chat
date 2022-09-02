@@ -519,7 +519,7 @@ export default {
   },
 
   created() {
-    /*this.pocketnet = false
+    /*this.pocketnet = true
     this.mobile = !this.pocketnet
     this.recording = true*/
 

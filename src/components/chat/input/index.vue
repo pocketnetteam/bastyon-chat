@@ -15,7 +15,7 @@
 
 
         <div class="center">
-          <record-progress v-if="voiceEnable && (isRecording)" :recordTime="recordTime" :isRecording="isRecording" :rmsData="recordRmsData" :opacity="cancelOpacity" @onClear="clear"/>
+          <record-progress v-if="voiceEnable && (isRecording || record)" :recordTime="recordTime" :isRecording="isRecording" :rmsData="recordRmsData" :opacity="cancelOpacity" @onClear="clear"/>
           <InputField
             v-else
             ref="newinput"
@@ -35,7 +35,7 @@
             :tipusers="tipusers"
           />
           <div class="left" :class="{extended: voiceEnable}" v-if="upload && chat">
-            <div v-if="!isRecording" class="iconbutton">
+            <div v-if="!isRecording && !record" class="iconbutton">
               <dropdownMenu
                 ref="dropdownMenu"
                 :menuItems="menuItems"

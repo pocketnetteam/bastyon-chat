@@ -89,9 +89,15 @@ export default {
 		},
 
 		clearStyle(){
-			this.$refs.toggle.style.transform = `translate(0,0)`
-			this.$refs.toggle.classList.remove('outside')
-			this.$refs.holder.classList.remove('active')
+
+			if (this.$refs.toggle){
+				this.$refs.toggle.style.transform = `translate(0,0)`
+				this.$refs.toggle.classList.remove('outside')
+			}
+
+			if (this.$refs.holder){
+				this.$refs.holder.classList.remove('active')
+			}
 		},
 
 		handleMove(e) {

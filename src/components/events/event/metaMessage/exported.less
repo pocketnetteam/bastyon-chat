@@ -4191,6 +4191,43 @@
   .horizontalLentaWrapper .showmorebywrapper .showmorebywrapper {
     display: none;
   }
+  .carousel {
+    width: 100%;
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: scroll;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+    scroll-snap-type: x mandatory;
+    align-items: center;
+    position: relative;
+  }
+  .carousel::-webkit-scrollbar {
+    display: none!important;
+  }
+  .carousel .carousel_item {
+    width: 100%;
+    min-width: 100%;
+    scroll-snap-align: center;
+  }
+  .carousel_markers {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 1.5em;
+  }
+  .carousel_markers > div {
+    padding: 0.25em;
+  }
+  .carousel_markers > div > div {
+    width: 8px;
+    height: 8px;
+    border-radius: 10px;
+    background: rgb(var(--neutral-grad-2));
+  }
+  .carousel_markers > div.active > div {
+    background: rgb(var(--color-bg-ac));
+  }
   .optimizationTip {
     background: rgb(var(--background-total-theme));
     background-repeat: repeat-x;
@@ -7701,6 +7738,12 @@
   }
   .share_common .images .imagesContainer.owlcar .imagesWrapper .image {
     background-size: contain!important;
+  }
+  .share_common .images .imagesContainer.carousel {
+    max-width: 400px;
+  }
+  .share_common .images .carousel_markers {
+    max-width: 400px;
   }
   .share_common .images .videoOpen {
     position: relative;
