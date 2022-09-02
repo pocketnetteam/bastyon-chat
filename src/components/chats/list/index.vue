@@ -9,7 +9,7 @@
         <search @search="search" :minimize="minimized"/>
       </div>
 
-      <!--<teamroom v-if="!searchText && this.chats.length <= 2 && chatsready == true" @click="openTeamRoom"></teamroom>-->
+      <teamroom v-if="!searchText && this.chats.length <= 2 && chatsready == true" @click="openTeamRoom"></teamroom>
 
       <div class="listChatLoading" v-if="chatsready !== true">
         <dummypreviews/>
