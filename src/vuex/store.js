@@ -72,7 +72,7 @@ var store = new Vuex.Store({
 		dontreadreceipts: false,
 
 		deletedrooms: {},
-    	isLocalStorageChatAuth: true
+    	isLocalStorageChatAuth: false
 		//share : {url : 'https://yandex.ru/'} //null
 	},
 	getters: {

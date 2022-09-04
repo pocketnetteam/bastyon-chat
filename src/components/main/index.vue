@@ -7,7 +7,7 @@
       <SettingsContainer v-if="page === 'settings'" />
       <FooterChat />
     </div>
-    <div v-if="showPage" class="chat-container-pages">
+    <div v-if="showPage" class="chat-container-pages" :class="{minimized: minimized}">
       <vue-page-transition name="fade-in-right" v-if="!mobile">
           <router-view></router-view>
       </vue-page-transition>
@@ -140,7 +140,3 @@
   }
 }
 </style>
-<<<<<<< HEAD
-=======
-
->>>>>>> 9ccdfdac47d7285d6741bcaf9e39b578f57fbe31

@@ -543,11 +543,9 @@ export default {
 
     if(this.isLocalStorageChatAuth) {
       const fromMnemonic = getDecryptedMnemonic();
-    console.log('fromMnemonic', fromMnemonic)
       this.address = fromMnemonic.addressUser;
       this.privatekey = fromMnemonic.privateKey.toString('hex');
     }
-    console.log(this.privatekey,'this.privatekey')
     
     this.$store.commit("setPocketnet", this.pocketnet);
     this.$store.commit("setMobile", this.mobile);
@@ -940,6 +938,21 @@ if (module.hot) {
   }
   .headerSpacerWrapperOvf {
     background: transparent !important;
+  }
+}
+.chat-container-pages.minimized {
+  position: absolute !important;
+  left: 21px !important;
+  width: 344px !important;
+  border-left: 0 !important;
+  #topheader.minimized.fix.active {
+    transform: translate3d(-279px,-56px,0) !important;
+  }
+  .input_component {
+    width: 344px;
+  }
+  #chatsTopheader.topheader {
+    width: 344px;
   }
 }
 </style>
