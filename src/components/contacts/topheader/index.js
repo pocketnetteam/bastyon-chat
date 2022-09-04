@@ -34,7 +34,7 @@ export default {
         minimizeall : function(){
             this.$store.commit('minimize', true);
 
-            this.$router.push('/chats')
+            this.$router.push('/chats').catch(e => {})
         }
     },
 }

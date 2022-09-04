@@ -73,7 +73,7 @@ export default {
 
     joinRoom(){
       this.core.mtrx.client.joinRoom(this.room[0].room_id).then(r=>{
-        this.$router.push('/chat?id=' + this.room[0].room_id)
+        this.$router.push('/chat?id=' + this.room[0].room_id).catch(e => {})
       })
     }
 

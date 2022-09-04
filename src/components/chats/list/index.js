@@ -315,7 +315,7 @@ export default {
 					})
 
 				} else {
-					this.$router.push('chat?id=' + chat.roomId)
+					this.$router.push('chat?id=' + chat.roomId).catch(e => {})
 				}
 
 			}
@@ -341,7 +341,7 @@ export default {
 
 				}, 500);
 
-				this.$router.push('/teamroom');
+				this.$router.push('/teamroom').catch(e => {});
 			}
 
 
@@ -370,7 +370,7 @@ export default {
 							return r
 						}).then(r => {
 							this.$store.commit('DELETE_ROOM', room);
-							this.$router.push({ path: '/chats' })
+							this.$router.push({ path: '/chats' }).catch(e => {})
 						})
 					})
 

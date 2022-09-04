@@ -401,7 +401,7 @@ export default {
 
               this.$store.commit('DELETE_ROOM', this.chat.roomId);
 
-              this.$router.push({path: '/chats'})
+              this.$router.push({path: '/chats'}).catch(e => {})
               
             })
           })

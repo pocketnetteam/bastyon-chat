@@ -204,7 +204,7 @@ class Notifier {
 		if (typeof click != 'function') {
 			var route = click
 			click = () => {
-				this.core.vm.$router.push(route)
+				this.core.vm.$router.push(route).catch(e => {})
 
 				if (this.core.apptochat) this.core.apptochat()
 			}
