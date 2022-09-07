@@ -86,7 +86,7 @@ export default {
 		]),
 
 		showchatslist : function(){
-			return !this.hideOptimization || this.wasunhidden
+			return !this.hideOptimization// || this.wasunhidden
 		},
 
 		rooms: function () {

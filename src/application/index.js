@@ -92,7 +92,7 @@ class Core {
 
     hideOptimization = function(v){
 
-        this.hideOptimization = v
+        //this.hideOptimization = v
         this.store.commit('hideOptimization', v)
 
     }
@@ -102,8 +102,8 @@ class Core {
         this.store.commit('hiddenInParent', v)
 
 
-        if(!v)
-            this.store.commit('wasunhidden', true)
+        /*if(!v)
+            this.store.commit('wasunhidden', true)*/
     }
 
     canback = function(){
@@ -358,7 +358,7 @@ class Core {
             var roomId = this.mtrx.kit.tetatetid(info[0], this.user.userinfo)
 
 
-            if(!roomId) return Promise.reject(e)
+            if(!roomId) return Promise.reject('roomId')
 
             if (this.store.state.chatsMap[roomId]){
                 /// old chat
