@@ -513,10 +513,18 @@ var store = new Vuex.Store({
 
 			state.gallery = v || null
 
-			var fullscreenmode = f.deep(window, 'window.POCKETNETINSTANCE.mobile.fullscreenmode')
+			var fu = null
 
-			if (fullscreenmode) {
-				fullscreenmode(v)
+			if(v){
+				fu = f.deep(window, 'window.POCKETNETINSTANCE.mobile.statusbar.gallerybackground')
+			}
+			else{
+				fu = f.deep(window, 'window.POCKETNETINSTANCE.mobile.statusbar.background')
+
+			}
+
+			if (fu) {
+				fu()
 			}
 
 		},

@@ -222,6 +222,7 @@ class PNUser extends User {
         return this.usersInfo(this.credentials.address, false, reload).then(info => {
 
             this.userinfo = info[0]
+            //this.userinfo.deleted = true
 
             return Promise.resolve(info[0])
 

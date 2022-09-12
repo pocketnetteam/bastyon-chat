@@ -180,6 +180,10 @@ class Core {
                 return Promise.reject('unknown')
             }
 
+            if(r.deleted){
+                return Promise.reject('deleted')
+            }
+
             return this.pcrypto.prepare()
 
         }).then(r => {
@@ -200,10 +204,12 @@ class Core {
 
         }).catch(e => {
 
+            console.log("E", e)
+
             
             this.loading = false
 
-            if(e == 'unauthorized' || e == 'unknown'){
+            if(e == 'unauthorized' || e == 'unknown' || e == 'deleted'){
                 this.setUnauthorized(e)
             }
 
