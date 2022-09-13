@@ -47,79 +47,64 @@ export default {
 
   methods: {
     changeCloseByBg: function () {
-      this.$store.commit("closebybg", !this.closebybg);
+      this.$store.commit('closebybg', !this.closebybg)
     },
     gotoapp: function () {
-      if (this.core.backtoapp) this.core.backtoapp();
+      if (this.core.backtoapp)
+        this.core.backtoapp()
     },
     cordovashare: function () {
-      console.log(this.share);
 
-      var share = this.share;
+      var share = this.share
 
       var options = {
         //subject : "Message"
-      };
-
-      if (share.messages) options.message = share.messages.join(". ");
-
-      if (share.images || share.files) {
-        options.files = [].concat(share.images, share.files);
-
-        options.files = _.filter(options.files, function (f) {
-          return f;
-        });
       }
 
-      console.log("options", options);
+      if (share.messages) options.message = share.messages.join('. ')
+
+      if (share.images || share.files) {
+        options.files = [].concat(share.images, share.files)
+
+        options.files = _.filter(options.files, function (f) { return f })
+      }
 
       if (window.plugins && window.plugins.socialsharing) {
         window.plugins.socialsharing.shareWithOptions(options);
       }
 
-      this.cancelShare();
+      this.cancelShare()
     },
     cancelShare: function () {
+
       if (this.share) {
         if (this.share.route) {
-          this.$router.push(this.share.route);
+          this.$router.push(this.share.route).catch(e => { })
         }
       }
 
-      this.$store.commit("SHARE", null);
+      this.$store.commit('SHARE', null)
     },
     newchatmenu: function () {
-      this.newchatopened = !this.newchatopened;
+      this.newchatopened = !this.newchatopened
     },
+
+
     minimizeall: function () {
-      this.$store.commit("minimize", true);
+      this.$store.commit('minimize', true);
     },
 
     newchat: function () {
-      this.$emit("newchat");
+      this.$emit('newchat')
     },
 
     gotona(r) {
       this.$router.push({
-        path: this.$router.path,
-        query: {
-          ...this.$route.query,
-          page: r,
-        },
-
-        newchat : function(){
-            this.$emit('newchat')
-        },
-
-        gotona(r) {
-            this.$router.push({
-                path: this.$router.path,
-                query: {
-                    ...this.$route.query,
-                    page: r,
-                },
-            })
-        },
+          path: this.$router.path,
+          query: {
+              ...this.$route.query,
+              page: r,
+          },
       })
     },
   }

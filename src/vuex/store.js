@@ -1,7 +1,8 @@
-import Vue from "vue";
-import Vuex from "vuex";
-import f from "@/application/functions.js";
-import _ from "underscore";
+
+import Vue from 'vue'
+import Vuex from 'vuex'
+import f from '@/application/functions.js'
+
 
 Vue.use(Vuex);
 
@@ -70,9 +71,9 @@ var store = new Vuex.Store({
 		pinchat: false,
 		lastroom: null,
 		dontreadreceipts: false,
-
-		deletedrooms: {},
-    	isLocalStorageChatAuth: false
+    	isLocalStorageChatAuth: false,
+		voicerecording : false,
+		deletedrooms: {}
 		//share : {url : 'https://yandex.ru/'} //null
 	},
 	getters: {
@@ -128,6 +129,7 @@ var store = new Vuex.Store({
 			state.pinchat = false
 			state.dontreadreceipts = false
 			state.lastroom = null
+			state.voicerecording = false
 
 			// state.share = null
 
@@ -512,10 +514,18 @@ var store = new Vuex.Store({
 
 			state.gallery = v || null
 
-			var fullscreenmode = f.deep(window, 'window.POCKETNETINSTANCE.mobile.fullscreenmode')
+			var fu = null
 
-			if (fullscreenmode) {
-				fullscreenmode(v)
+			if(v){
+				fu = f.deep(window, 'window.POCKETNETINSTANCE.mobile.statusbar.gallerybackground')
+			}
+			else{
+				fu = f.deep(window, 'window.POCKETNETINSTANCE.mobile.statusbar.background')
+
+			}
+
+			if (fu) {
+				fu()
 			}
 
 		},
@@ -575,6 +585,10 @@ var store = new Vuex.Store({
 		SET_MENU(state, v) {
 			state.menu = v
 
+		},
+
+		SET_VOICERECORDING(state, v){
+			state.voicerecording = v
 		}
 
 	},

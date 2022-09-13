@@ -1,23 +1,17 @@
 <template>
-  <div
-    class="event"
-    :class="{ readyToRender, my }"
-    ref="msgElement"
-    v-if="
-      !event.localRedactionEvent() && !event.getRedactionEvent() && !removed
-    "
-  >
-    <member
-      :chat="chat"
-      :event="event"
-      :userinfo="userinfo"
-      :readed="readed"
-      :preview="preview || false"
-      v-if="type === 'member' && !preview"
-    />
+  <div class="event" :class="{readyToRender, my}" ref="msgElement" v-if="!event.localRedactionEvent() && !event.getRedactionEvent() && !removed">
+  
+    <member :chat="chat" :event="event"
+            :userinfo="userinfo"
+            :readed="readed"
+            :preview="preview || false"
+            @readyToRender="setReadyToRender"
+            v-if="type === 'member' && !preview"/>
 
-    <message
-      @openGalleryImg="openImage"
+    <message 
+    
+      @openGalleryImg="openImage" 
+      
       :chat="chat"
       :event="event"
       :prevevent="prevevent"
@@ -25,7 +19,8 @@
       :decryptEvent="decryptEvent"
       :decryptedInfo="decryptedInfo"
       :encryptedData="encryptedData"
-      :imgEvent="galleryData"
+
+      :imgEvent="galleryData" 
       :userinfo="userinfo"
       :readed="readed"
       :preview="preview || false"
@@ -39,404 +34,516 @@
       :last="last"
       :showmyicontrue="showmyicontrue"
       :fromreference="fromreference"
-      ref="cmessage"
+
+      :multiSelect="multiSelect"
+      :selectedMessages="selectedMessages"
+      :audioBuffer="audioBuffer"
+      @readyToRender="setReadyToRender"
       @remove="removeEvent"
       @download="downloadFile"
       @decryptagain="decryptAgain"
+      @showMultiSelect="$emit('showMultiSelect')"
+      @selectMessage="selectMessage"
+      @removeMessage="removeMessage"
+      :isRemoveSelectedMessages="isRemoveSelectedMessages"
+      @messagesIsDeleted="messagesIsDeleted"
       @editing="editing"
       @reply="reply"
       @share="share"
       @menuIsVisible="menuIsVisibleHandler"
-      v-if="type === 'message' || preview"
-    />
+      v-if="type === 'message' || preview" />
 
-    <common
-      :event="event"
-      :userinfo="userinfo"
-      :readed="readed"
-      :preview="preview || false"
-      v-if="type === 'common'"
-    />
+    <common :event="event"
+            :userinfo="userinfo"
+            :readed="readed"
+            :preview="preview || false"
+            v-if="type === 'common'"/>
 
     <div class="loading" v-if="downloading">
       <linepreloader />
     </div>
+
   </div>
 
   <div v-else class="deletedMessage">
     <i class="fas fa-eraser"></i> {{ $t("caption.messageDeleted") }}
   </div>
+
 </template>
 
 <style scoped lang="sass">
-.deletedMessage
-  font-size: 0.8em
-  text-align: center
-  opacity: 0.6
-
-.event
-  opacity: 0
-  +transition(0.3s)
-
-  &.readyToRender
-    opacity: 1
-
-  .loading
-    position: relative
-    left : 0
-    top : 0
-    padding : $r
-    width : 100%
-    height : 100%
-    text-align: center
-
   .deletedMessage
-    position: relative
-    left : 0
-    top : 0
-    padding : $r
+    font-size: 0.8em
+    text-align: center
+    opacity: 0.6
+
+  .event
+    opacity: 0
+    +transition(0.3s)
+
+    &.readyToRender
+      opacity: 1
+
+    .loading
+      position: relative
+      left : 0
+      top : 0
+      padding : $r
+      width : 100%
+      height : 100%
+      text-align: center
+
+    .deletedMessage
+      position: relative
+      left : 0
+      top : 0
+      padding : $r
+
+
 </style>
 
 <script>
 import dummypreviews from "@/components/chats/dummypreviews";
-import common from "@/components/events/event/common/index.vue";
-import member from "@/components/events/event/member/index.vue";
-import message from "@/components/events/event/message/index.vue";
+import common from '@/components/events/event/common/index.vue'
+import member from '@/components/events/event/member/index.vue'
+import message from '@/components/events/event/message/index.vue'
 
-import f from "@/application/functions";
+import f from '@/application/functions'
 
 export default {
-  name: "eventsEvent",
+  name: 'eventsEvent',
 
   components: {
     common,
     member,
-    message,
-    dummypreviews,
+    message ,
+    dummypreviews
   },
 
   data: function () {
     return {
       readed: null,
       decryptEvent: {},
-      decryptedInfo: null,
-      decryptReady: "",
+      decryptedInfo : null,
+      decryptReady: '',
       readyEvent: false,
-      downloading: false,
-      error: null,
-      reference: null,
-      removed: false,
-      downloaded: false,
-      readedInterval: null,
-    };
+      downloading : false,
+      error : null,
+      reference : null,
+      removed : false,
+      downloaded : false,
+      readedInterval : null,
+      audioBuffer : null,
+
+      readyToRender : false
+    }
   },
+
 
   props: {
     event: Object,
-    prevevent: Object,
+    prevevent : Object,
     preview: Boolean,
-    withImage: Boolean,
-    timeline: Object,
-    last: Boolean,
+    withImage : Boolean,
+    timeline : Object,
+    last : Boolean,
     chat: Object,
     showmyicontrue: Boolean,
-
+   
     metaUrl: String,
     galleryData: {},
     goToGallery: Function,
     clientWidth: Number,
-    fromreference: Boolean,
+    fromreference : Boolean,
+
+    multiSelect: {
+      default: false,
+      type: Boolean,
+    },
+    selectedMessages: {
+      type : Array,
+      default : () => {return []}
+    },
+    isRemoveSelectedMessages: false,
   },
 
   computed: {
-    readyToRender: function () {
-      if (this.$refs["cmessage"]) return this.$refs["cmessage"].readyToRender;
+    /*readyToRender : function(){
+      if(this.$refs["cmessage"]) {
 
-      return true;
-    },
-    type: function () {
-      var t = f.deep(this, "event.event.type");
 
-      if (["m.room.member"].indexOf(t) > -1) return "member";
-      if (["m.room.message"].indexOf(t) > -1) return "message";
-      if (["m.room.name"].indexOf(t) > -1) return "member";
-      if (["m.room.power_levels"].indexOf(t) > -1) return "member";
-      if (["m.room.redaction"].indexOf(t) > -1) return "message";
-      if (["m.room.topic"].indexOf(t) > -1) {
-        return "member";
+        if(this.$refs["cmessage"].readyToRender){
+          return true
+        }
+
       }
 
-      return "";
+      return true
+    },*/
+    type: function () {
+
+      var t = f.deep(this, 'event.event.type')
+
+      if (['m.room.member'].indexOf(t) > -1) return 'member'
+      if (['m.room.message'].indexOf(t) > -1) return 'message'
+      if (['m.room.name'].indexOf(t) > -1) return 'member'
+      if (['m.room.power_levels'].indexOf(t) > -1)return 'member'
+      if (['m.room.redaction'].indexOf(t) > -1) return 'message'
+      if (['m.room.topic'].indexOf(t) > -1) {
+        return 'member'
+      }
+
+      return ''
+
     },
 
-    subtype: function () {
-      return f.deep(this, "event.event.content.msgtype");
+    subtype : function(){
+      return f.deep(this, 'event.event.content.msgtype')
     },
 
-    encryptedData: function () {
-      return f.deep(this, "event.event.content.info.secrets") ||
-        f.deep(this, "event.event.content.pbody.secrets")
-        ? true
-        : false;
+    encryptedData : function(){
+      return f.deep(this, 'event.event.content.info.secrets') || f.deep(this, 'event.event.content.pbody.secrets') ? true : false
     },
 
     userinfo: function () {
-      return (
-        this.$f.deep(
-          this,
-          "$store.state.users." + this.$f.getmatrixid(this.event.getSender())
-        ) || {}
-      );
+
+      return this.$f.deep(this, '$store.state.users.' + this.$f.getmatrixid(this.event.getSender())) || {}
     },
 
     encrypted: function () {
       if (this.chat && this.chat.roomId) {
-        return this.core.mtrx.client.isRoomEncrypted(this.chat.roomId);
+        return this.core.mtrx.client.isRoomEncrypted(this.chat.roomId)
       }
 
-      return false;
+      return false
     },
 
     my: function () {
-      return this.userinfo.id === this.core.user.userinfo?.id;
+      return this.userinfo.id === this.core.user.userinfo?.id
     },
-  },
 
-  beforeDestroy: function () {
-    if (this.readedInterval) {
-      clearInterval(this.readedInterval);
-      this.readedInterval = null;
+  },
+  
+  beforeDestroy : function(){
+    
+    if(this.readedInterval){
+      clearInterval(this.readedInterval)
+      this.readedInterval = null
     }
   },
 
   mounted: function () {
-    this.$emit("mounted");
+    this.$emit('mounted')
+
+    console.log('this.chat', this.chat)
   },
-
-  watch: {
-    readed: {
+  
+  watch : {
+    readed : {
       immediate: true,
       handler: function () {
-        this.manageReadedInterval();
-      },
+        this.manageReadedInterval()
+      }
     },
-
-    last: {
+    
+    last : {
       handler: function () {
-        this.manageReadedInterval();
-      },
+        this.manageReadedInterval()
+      }
     },
-    event: {
+    event : {
       immediate: true,
       handler: function () {
-        this.decryptEvent = {};
 
-        this.checkReaded();
-        this.relations();
+        this.decryptEvent = {}
 
-        if (this.encryptedData || this.subtype == "m.encrypted") {
-          f.pretry(
-            () => {
-              return this.chat.pcrypto;
-            },
-            20,
-            10000
-          ).then(() => {
-            if (this.encryptedData) {
-              this.decryptImage();
+        this.checkReaded()
+        this.relations()
+
+        if(this.encryptedData || this.subtype == 'm.encrypted'){
+
+          f.pretry(() => {
+
+            return this.chat.pcrypto
+
+          }, 20, 10000).then(() => {
+
+            if(this.encryptedData && this.subtype == 'm.image'){
+              this.decryptImage()
             }
 
-            if (this.subtype == "m.encrypted") {
-              this.decrypt();
+            if(this.encryptedData && this.subtype == 'm.audio'){
+              this.decryptAudio()
             }
-          });
+            
+
+            if(this.subtype == 'm.encrypted'){
+              this.decrypt()
+            }
+
+          })
+
         }
-      },
-    },
+
+        else{
+          if(this.subtype == 'm.audio'){
+            this.getAudioUnencrypt()
+          }
+        }
+
+        
+      }
+    }
   },
 
   methods: {
-    manageReadedInterval() {
-      if (this.preview || !this.my) return;
 
-      if (this.last || this.readed) {
-        if (!this.readedInterval) {
-          this.readedInterval = setInterval(() => {
-            this.checkReaded();
-          }, 500);
+    setReadyToRender(){
+      setTimeout(() => {
+        this.readyToRender = true
+      }, 20)
+      
+    },
+    manageReadedInterval(){
+
+      if(this.preview || !this.my) return
+
+      if(this.last || this.readed){
+
+        if(!this.readedInterval){
+          
+          this.readedInterval = setInterval(()=>{
+            this.checkReaded()
+          }, 500)
         }
-      } else {
-        if (this.readedInterval) {
-          clearInterval(this.readedInterval);
-          this.readedInterval = null;
+
+      }
+      else{
+
+        if(this.readedInterval){
+          clearInterval(this.readedInterval)
+          this.readedInterval = null
         }
+        
       }
     },
-    relations() {
-      if (this.timeline) {
-        var ts = this.timeline._timelineSet;
-        var e = this.event;
+    relations(){
+      if(this.timeline){
 
-        if (
-          !this.reference &&
-          e.event.content["m.relates_to"] &&
-          e.event.content["m.relates_to"] &&
-          e.event.content["m.relates_to"]["rel_type"] == "m.reference"
-        ) {
-          var id = e.event.content["m.relates_to"]["event_id"];
+        var ts = this.timeline._timelineSet
+        var e = this.event
 
-          if (id) {
-            this.core.mtrx.client.getEventTimeline(ts, id).then((r) => {
-              var ev = _.find(r.getEvents(), (e) => {
-                if (e.getId() == id) {
-                  return true;
-                }
-              });
+        if(!this.reference && e.event.content['m.relates_to'] && e.event.content['m.relates_to'] && e.event.content['m.relates_to']['rel_type'] == "m.reference"){
 
-              if (ev) {
-                this.reference = e.event.content.reference = ev;
+            var id = e.event.content['m.relates_to']['event_id'] 
+    
+            if (id){
 
-                var rt = ts.getRelationsForEvent(
-                  this.core.mtrx.clearEventId(ev),
-                  "m.replace",
-                  "m.room.message"
-                );
+              this.core.mtrx.client.getEventTimeline(ts, id).then(r => {
 
-                if (rt) {
-                  var last = rt.getLastReplacement();
-
-                  if (last) {
-                    ev.event.content.body = last.event.content.body;
-                    ev.event.content.edited = last.event.event_id;
+                var ev = _.find(r.getEvents(), (e) => {
+                  if(e.getId() == id){
+                    return true
                   }
+                })
+
+                if(ev){
+                  this.reference = e.event.content.reference = ev
+
+                  var rt = ts.getRelationsForEvent(this.core.mtrx.clearEventId(ev), 'm.replace', 'm.room.message')
+
+                  if (rt){
+
+                    var last = rt.getLastReplacement()
+
+                    if (last){
+                      ev.event.content.body = last.event.content.body
+                      ev.event.content.edited = last.event.event_id
+                    }
+
+                  }
+                  
                 }
-              }
-            });
+                  
+              })
+
+            }
           }
-        }
+
+     
       }
     },
-
-    editing(text) {
-      this.$emit("editing", text);
+    
+    editing(text){
+      this.$emit('editing', text)
     },
 
-    reply() {
-      this.$emit("reply");
+    reply(){
+      this.$emit('reply')
     },
-    // share(){
-    //   this.$emit('share')
-    // },
 
-    share(_sharing) {
-      var pr = Promise.resolve();
+    share(_sharing){
 
-      if (_sharing.download) {
-        pr = this.core.mtrx
-          .getFile(this.chat, this.event)
-          .then((r) => {
-            return f.Base64.fromFile(r.file);
-          })
-          .then((r) => {
-            _sharing.files = [r];
-            return Promise.resolve();
-          });
+      var pr = Promise.resolve()
+
+      if(_sharing.download){
+        pr = this.core.mtrx.getFile(this.chat, this.event).then(r => {
+          return f.Base64.fromFile(r.file)
+
+        }).then(r => {
+          _sharing.files = [r]
+          return Promise.resolve()
+        })
+
       }
-
       return pr.then(() => {
-        this.$emit('share')
+        return this.core.share(_sharing)
       })
 
     },
 
-    downloadFile() {
-      this.downloading = true;
+    downloadFile(){
 
-      this.core.mtrx
-        .downloadFile(this.chat, this.event)
-        .catch((e) => {
-          this.error = e.toString();
+      this.downloading = true
+      
+      this.core.mtrx.downloadFile(this.chat, this.event).catch(e => {
+        this.error = e.toString()
 
-          return Promise.resolve(e);
+        return Promise.resolve(e)
+      }).then(r => {
+
+        this.downloading = false
+        this.downloaded = true
+
+        this.$store.commit('icon', {
+          icon : 'success',
+          message : "Downloaded"
         })
-        .then((r) => {
-          this.downloading = false;
-          this.downloaded = true;
 
-          this.$store.commit("icon", {
-            icon: "success",
-            message: "Downloaded",
-          });
+      }).catch(e => {
+
+        this.$store.commit('icon', {
+          icon : 'error',
+          message : "Downloading Failed"
         })
-        .catch((e) => {
-          this.$store.commit("icon", {
-            icon: "error",
-            message: "Downloading Failed",
-          });
-        });
+
+
+      }) 
     },
 
-    async decryptImage() {
-      //if(!this.chat.pcrypto) return
+    getAudioUnencrypt(){
+      this.core.mtrx.getAudioUnencrypt(this.chat, this.event).then(url => {
 
-      this.core.mtrx
-        .getImage(this.chat, this.event)
-        .then((url) => {
-          this.decryptedInfo = url;
-        })
-        .catch((e) => {
-          this.event.event.decryptKey = this.decryptKey = {
-            msgtype: "m.bad.encrypted",
-          };
-        });
+        this.audioBuffer = url
+
+        //this.$set(this.event.event.content, 'audioData', url)
+       
+      }).catch(e => {
+        console.error(e)
+      })
+    },
+
+    async decryptAudio(){
+
+      this.core.mtrx.getAudio(this.chat, this.event).then(url => {
+
+        this.decryptedInfo = url
+
+      }).catch(e => {
+
+        this.event.event.decryptKey = this.decryptKey = {
+          msgtype : 'm.bad.encrypted'
+        }
+      })
+      
+    },
+
+    async decryptImage(){
+
+      this.core.mtrx.getImage(this.chat, this.event).then(url => {
+
+        this.decryptedInfo = url
+
+      }).catch(e => {
+
+        this.event.event.decryptKey = this.decryptKey = {
+          msgtype : 'm.bad.encrypted'
+        }
+      })
+      
     },
 
     async decryptAgain() {
-      this.event.event.decrypted = null;
-      return this.decrypt();
+      this.event.event.decrypted = null
+      return this.decrypt()
     },
 
     async decrypt() {
-      if (this.event.event.decrypted) {
-        this.decryptEvent = this.event.event.decrypted;
 
-        return Promise.resolve();
-      }
+        if (this.event.event.decrypted){
 
-      try {
-        var de = await this.chat.pcrypto.decryptEvent(this.event.event);
+          this.decryptEvent = this.event.event.decrypted
 
-        this.decryptEvent = de;
-        this.event.event.decrypted = this.decryptEvent;
-      } catch (e) {
-        console.error(e);
+          return Promise.resolve()
+        }
 
-        this.event.event.decrypted = this.decryptEvent = {
-          msgtype: "m.bad.encrypted",
-        };
-      }
+        try{
+
+          var de = await this.chat.pcrypto.decryptEvent(this.event.event)
+
+          this.decryptEvent = de
+          this.event.event.decrypted = this.decryptEvent
+          
+        }
+        catch(e){
+
+          console.error(e)
+
+          this.event.event.decrypted = this.decryptEvent = {
+            msgtype : 'm.bad.encrypted'
+          }
+          
+        }
     },
 
     checkReaded: function () {
       if (this.event) {
-        this.core.mtrx.isReaded(this.event).then((readed) => {
-          this.readed = readed || null;
-        });
+
+        this.core.mtrx.isReaded(this.event).then(readed => {
+          this.readed = readed || null
+        })
       }
+
     },
     openImage: function () {
-      this.$emit("openImageEvent", this.event);
+      this.$emit('openImageEvent', this.event)
     },
 
     removeEvent: function (event) {
-      this.$emit("removeEvent", event);
+      this.$emit('removeEvent', event)
 
-      this.removed = true;
+      this.removed = true
     },
 
-    menuIsVisibleHandler: function (isVisible) {
-      this.$emit("menuIsVisible", isVisible);
+    menuIsVisibleHandler: function(isVisible) {
+      this.$emit('menuIsVisible', isVisible);
     },
-  },
-};
+
+    selectMessage: function (message) {
+      this.$emit('selectMessage', message);
+    },
+
+    removeMessage: function (message) {
+      this.$emit('removeMessage', message);
+    },
+
+    shareManyMessages: function (isShare) {
+      this.$emit('shareManyMessages', isShare);
+    },
+
+    messagesIsDeleted: function (state) {
+      this.$emit('messagesIsDeleted', state);
+    },
+  }
+}
 </script>

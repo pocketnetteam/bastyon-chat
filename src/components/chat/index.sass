@@ -1,9 +1,9 @@
 .attachements
     position: absolute
-    left : 0
-    top : 0
-    right : 0
-    padding : $r $r
+    left: 0
+    top: 0
+    right: 0
+    padding: $r $r
     overflow-x: scroll
 
     .attachementsWrapper
@@ -14,24 +14,24 @@
         flex-direction: row
 
         /deep/ #chatAttachement
-            margin-right: $r
-            min-width: 120px
+        margin-right: $r
+        min-width: 120px
 
 .cantchatmessage
-    padding : 4 * $r
+    padding: 4 * $r
 
     .proceed
-        padding-top : 2 * $r
+        padding-top: 2 * $r
 
         button
             padding-left: 0
 
     .refresh
-        padding-top : 4 * $r
+        padding-top: 4 * $r
 
     .msg
         font-size: 0.8em
-    
+
 .encryptedInfo
     position: relative
     z-index: 9999
@@ -40,7 +40,7 @@
     align-items: center
     flex-direction: column
     #slide
-        padding : 0 $r
+        padding: 0 $r
         position: absolute
         left: -180px
         top: 0px
@@ -55,7 +55,7 @@
 
     @-webkit-keyframes slide
         100%
-            left: 0px
+        left: 0px
     @keyframes slide
         100%
             left: 0px
@@ -73,7 +73,7 @@
         flex-direction: column
         align-items: center
         justify-content: center
-        padding : $r / 2 $r / 2
+        padding: $r / 2 $r / 2
         text-align: center
         span
             color: srgb(--color-good)
@@ -94,20 +94,19 @@
     width: 100%
 
     .relationEventWrapper
-        padding-bottom : 2 * $r
+        padding-bottom: 2 * $r
     .relationEventCaption
-        padding : 2 * $r 0
+        padding: 2 * $r 0
         padding-bottom: $r
         span
             font-size: 0.8em
             font-weight: 700
-            color : srgb(--color-txt-ac)
+            color: srgb(--color-txt-ac)
 
-       
     .relationEventPreview
         flex-grow: 1
-        padding : 0 2 * $r
-        padding-top : 0
+        padding: 0 2 * $r
+        padding-top: 0
 
     /deep/
         .previewMessage
@@ -118,7 +117,7 @@
         min-width: 66px
         .item
             width: 100%
-            padding : $r 0
+            padding: $r 0
             cursor: pointer
             text-align: center
 
@@ -129,7 +128,7 @@
     background: transparent
     left: 0
     right: 0
-    padding-bottom : 31px
+    padding-bottom: 31px
     background: srgb(--background-total-theme)
     will-change: transform
     transform: translate3d(0, calc((var(--keyboardheight, 0) - 1px) * -1), 0)
@@ -139,11 +138,10 @@
 
     &.bin
         position: absolute
-        left : 1px
+        left: 1px
         right: 1px
-        bottom : 0
+        bottom: 0
         border-radius: 5px
-
 
 #chat
     &.minimized
@@ -154,18 +152,17 @@
         &:not(.active)
             /deep/
 
-                .statusWrapper
-                    width: 33px
-                    i
-                        color : srgb(--color-txt-ac)
+            .statusWrapper
+                width: 33px
+                i
+                    color: srgb(--color-txt-ac)
 
                     span
                         display: none
-                
+
                 .messageRow
                     padding: 0!important
                     background: transparent!important
-           
 
                 .event
                     padding-bottom: $r
@@ -180,7 +177,7 @@
                     justify-content: flex-start
                     .iconWrapper
                         margin-left: 0 * $r!important
-                        order : -1
+                        order: -1
                         align-self: flex-end
 
                 /*.event.my,*/
@@ -199,14 +196,13 @@
             .chatInputWrapper
                 opacity: 1
 
-
 .encrypted
     position: absolute
-    left : 0
-    top : 0
+    left: 0
+    top: 0
     z-index: 2
-    color : srgb(--color-good)
-    padding : $r / 2 $r
+    color: srgb(--color-good)
+    padding: $r / 2 $r
 
     i
         font-size: 0.8em
@@ -216,14 +212,14 @@
     left: 5px
     top: 20px
     z-index: 2
-    color : srgb(--neutral-grad-3)
+    color: srgb(--neutral-grad-3)
     i
         font-size: 0.8em
 
 .chatEmpty
-    padding : 8 * $r
+    padding: 8 * $r
     text-align: center
-    color : srgb(--neutral-grad-3)
+    color: srgb(--neutral-grad-3)
 
     span
         font-size: 0.8em
@@ -231,11 +227,49 @@
 .preview-wrapper
     max-height: 350px
     overflow-y: auto
-    border : 1px solid srgb(srgb(--neutral-grad-2))
+    border: 1px solid srgb(srgb(--neutral-grad-2))
     border-radius: 10px
-    margin : 0 auto
+    margin: 0 auto
     width: 98%
 
     &::-webkit-scrollbar
         width: 0!important
 
+.shareEventsWrapper
+    .cnt
+
+        background: srgb(--background-secondary-theme)
+        border-radius: 30px
+        padding: 0.5em 1em
+        max-width: 622px
+        width: 100%
+        margin: 0 auto
+        display: flex
+        align-items: center
+        justify-content: space-between
+        font-size: 0.9em
+
+        
+
+        i
+            margin-right: 10px
+            &.fa-trash-alt
+                color: rgb(244, 26, 77)
+
+            &.fa-share-alt
+                color: #00a3f7
+
+        div
+            transition: 0.3s
+            opacity: 0.6
+            cursor: pointer
+            margin-left: 2 * $r
+            display: flex
+            align-items: center
+            &:hover
+                transition: 0.3s
+                opacity: 1
+
+            &.cancel
+                margin-right: auto
+                margin-left: 0

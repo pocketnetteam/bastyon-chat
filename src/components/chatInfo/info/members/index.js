@@ -134,7 +134,6 @@ export default {
       return Promise.resolve()
     },
     menukick(rowObject){
-      console.log("menukick")
       this.$emit('kick', rowObject.user)
       return Promise.resolve()
     },

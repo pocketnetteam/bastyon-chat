@@ -10,8 +10,10 @@
         minimized,
         active,
         mobile,
+        unselect
       }"
     >
+
       <div class="chatwrapper" @click="iteraction">
         <div>
           <div class="backface" v-if="closebybg" @click="hide"></div>
@@ -132,13 +134,12 @@
 </template>
 
 <script>
-import MainWrapper from "./components/main/index.vue";
-import userUnauthorized from "./components/user/unauthorized/index.vue";
-import store from "@/vuex/store";
-import router from "@/router/router";
-import modal from "@/components/assets/modal/index.vue";
-import pmenu from "@/components/assets/pmenu/index.vue";
-import _ from "underscore";
+import MainWrapper from './components/main/index.vue'
+import userUnauthorized from './components/user/unauthorized/index.vue'
+import store from "@/vuex/store"
+import router from "@/router/router"
+import modal from '@/components/assets/modal/index.vue'
+import pmenu from '@/components/assets/pmenu/index.vue'
 
 import VuePageTransition from "@/editedplugins/vue-page-transition/src/index.js";
 import TextareaAutosize from "vue-textarea-autosize";
@@ -177,61 +178,53 @@ import Core from "@/application/index.js";
 
 ////////
 
-Vue.config.productionTip = false;
-Vue.prototype._ = _;
-Vue.prototype.$f = f;
+Vue.config.productionTip = false
+Vue.prototype.$f = f
 
-if (!window._) window._ = _;
 
-import VueVirtualScroller from "vue-virtual-scroller";
-import preloader from "@/components/assets/preloader/index.vue";
-import fixedmessageicon from "@/components/assets/fixedmessageicon/index.vue";
-import date from "@/components/assets/date/index.vue";
-import userpic from "@/components/assets/userpic/index.vue";
-import userspic from "@/components/assets/userspic/index.vue";
-import bgimage from "@/components/assets/bgimage.vue";
-import logotype from "@/components/assets/logotype/index.vue";
-import dropdownMenu from "@/components/assets/dropdownMenu/index.vue";
-import recordVoice from "@/components/assets/recordVoice/index.vue";
-import backButton from "@/components/assets/backButton/index.vue";
-import topheader from "@/components/assets/topheader/index.vue";
-import maincontent from "@/components/assets/maincontent/index.vue";
-import search from "@/components/assets/search/index.vue";
-import upload from "@/components/assets/upload/index.vue";
-import linepreloader from "@/components/assets/linepreloader/index.vue";
-import {
-  PhotoSwipe,
-  PhotoSwipeGallery,
-} from "@/editedplugins/v-photoswipe/src/index.js";
+import VueVirtualScroller from 'vue-virtual-scroller'
+import preloader from '@/components/assets/preloader/index.vue'
+import fixedmessageicon from '@/components/assets/fixedmessageicon/index.vue'
+import date from '@/components/assets/date/index.vue'
+import userpic from '@/components/assets/userpic/index.vue'
+import userspic from '@/components/assets/userspic/index.vue'
+import bgimage from '@/components/assets/bgimage.vue'
+import logotype from '@/components/assets/logotype/index.vue'
+import dropdownMenu from '@/components/assets/dropdownMenu/index.vue';
 
-import chats from "@/views/chats.vue";
-import func from "vue-editor-bridge";
-import { register } from "extendable-media-recorder";
-import { connect } from "extendable-media-recorder-wav-encoder";
+import backButton from '@/components/assets/backButton/index.vue';
+import topheader from '@/components/assets/topheader/index.vue';
+import maincontent from '@/components/assets/maincontent/index.vue';
+import search from '@/components/assets/search/index.vue';
+
+import linepreloader from '@/components/assets/linepreloader/index.vue';
+
+import chats from '@/views/chats.vue'
+
 ////////
 
-Vue.component("pmenu", pmenu);
-Vue.component("modal", modal);
-Vue.component("v-photoswipe", PhotoSwipe);
-Vue.component("v-photoswipe-gallery", PhotoSwipeGallery);
-Vue.component("preloader", preloader);
-Vue.component("date", date);
-Vue.component("userpic", userpic);
-Vue.component("userspic", userspic);
-Vue.component("fixedmessageicon", fixedmessageicon);
-Vue.component("bgimage", bgimage);
-Vue.component("logotype", logotype);
-Vue.component("dropdownMenu", dropdownMenu);
-Vue.component("recordVoice", recordVoice);
-Vue.component("backButton", backButton);
-Vue.component("topheader", topheader);
-Vue.component("maincontent", maincontent);
-Vue.component("search", search);
-Vue.component("upload", upload);
-Vue.component("linepreloader", linepreloader);
 
-Vue.use(VueVirtualScroller);
-Vue.directive("click-outside", {
+Vue.component('pmenu', pmenu)
+Vue.component('modal', modal)
+
+Vue.component('preloader', preloader)
+Vue.component('date', date)
+Vue.component('userpic', userpic)
+Vue.component('userspic', userspic)
+Vue.component('fixedmessageicon', fixedmessageicon)
+Vue.component('bgimage', bgimage)
+Vue.component('logotype', logotype)
+Vue.component('dropdownMenu', dropdownMenu)
+Vue.component('backButton', backButton)
+Vue.component('topheader', topheader)
+Vue.component('maincontent', maincontent)
+Vue.component('search', search)
+Vue.component('linepreloader', linepreloader)
+
+
+Vue.use(VueVirtualScroller)
+Vue.directive('click-outside', {
+
   bind: function (el, binding, vnode) {
     el.clickOutsideEvent = function (event) {
       if (!(el == event.target || el.contains(event.target))) {
@@ -369,8 +362,19 @@ export default {
 
         // Update the teamroom messages
         this.generateTeamroomMessages();
-      },
+
+      }
     },
+
+    mobile : function(){
+      this.$store.commit('setMobile', this.mobile);
+      this.$store.commit('minimize')
+    },
+    pocketnet : function(){
+      this.$store.commit('setPocketnet', this.pocketnet);
+      this.$store.commit('minimize')
+    }
+
   },
 
   computed: {
@@ -413,18 +417,25 @@ export default {
     closebybg: function () {
       return !this.$store.state.pinchat;
     },
+
+
+    unselect:function(){
+      return this.$store.state.voicerecording
+    }
+
   },
 
   methods: {
-    async connectCustomRecorder() {
-      await register(await connect());
-    },
+    
     hide: function () {
       this.$store.commit("minimize", true);
 
       setTimeout(() => {
-        if (
-          this.$route.name !== "chats" &&
+
+
+        
+
+        if (this.$route.name !== 'chats' &&
           /*this.$route.name !== 'chat' &&*/
           this.$route.name !== "contact" &&
           this.$route.name !== "chatInfo" &&
@@ -538,8 +549,10 @@ export default {
   },
 
   created() {
-    // this.pocketnet = false;
-    // this.mobile = !this.pocketnet;
+
+    /*this.pocketnet = false
+    this.mobile = !this.pocketnet
+    this.recording = true*/
 
     if(this.isLocalStorageChatAuth) {
       const fromMnemonic = getDecryptedMnemonic();
@@ -561,7 +574,8 @@ export default {
       if (this.fcmtoken && window.cordova) this.setPusher(this.fcmtoken);
     }, 5000);
 
-    this.connectCustomRecorder();
+    
+    
     var testUsers = {
       matrixMan: {
         address: f.hexEncode("PToMRMsMVh9dj4Cpa7yu1pB5iq65g4jrVC"),
@@ -828,8 +842,6 @@ export default {
 
     var sarr = ['vamily.ru', 'pnt.com','bst.app', 'sd.ci']
 
-    console.log(f.getservers(sarr, 3, 'PR7srzZt4EfcNb3s27grgmiG8aB9vYNV82'))
-    console.log(f.getservers(sarr, 3, 'PP582V47P8vCvXjdV3inwYNgxScZCuTWsq'))
 
     */
     if(this.isLocalStorageChatAuth) {
@@ -875,22 +887,30 @@ export default {
           message : "Downloaded"
         })*/
 
-    core
-      .initWithUser(user)
-      .then((r) => {
-        return core.mtrx.wait().then(() => {
-          core.user.getContacts();
 
-          if (
-            this.$route.name !== "chats" &&
+    core.initWithUser(user).then(r => {
+
+      return core.mtrx.wait().then(() => {
+        
+        core.user.getContacts()
+
+
+        setTimeout(() => {
+          if (this.$route.name !== 'chats' &&
             /*this.$route.name !== 'chat' &&*/
-            this.$route.name !== "chatInfo" &&
-            this.$route.name !== "publicPreview" &&
-            this.$route.name !== "chatSettings" &&
-            core.cancelDefaultRoute !== true
-          ) {
-            // this.$router.push('/chats')
+            this.$route.name !== 'chatInfo' &&
+            this.$route.name !== 'publicPreview' &&
+            this.$route.name !== 'chatSettings' &&
+            this.$route.name !== 'contact' &&
+            core.cancelDefaultRoute !== true) {
+
+            this.$router.push('/chats').catch(e => {})
           }
+        }, 100)
+
+      
+
+          
         });
       })
       .catch((g) => {});
@@ -926,7 +946,6 @@ if (module.hot) {
 @import "@/../../public/css/normalize.css";
 @import "@/../../public/css/emoji-mart.css";
 </style>
-<style src="../node_modules/vue-simple-accordion/dist/vue-simple-accordion.css"></style>
 
 <!-- THEMES BEGIN -->
 <!-- THEMES END -->

@@ -1,10 +1,8 @@
-import Vue from "vue";
-import Router from "vue-router";
+import Vue from 'vue'
+import Router from 'vue-router'
 
 Vue.use(Router);
 
-import contact from "@/views/contact";
-import pageinvite from "@/views/invite";
 
 const router = new Router({
     routes: [
@@ -17,17 +15,17 @@ const router = new Router({
         {
             path: '/contact',
             name: 'contact',
-            component: contact
-        },
-        {
-            path: "/chat",
-            name: "chat",
-            component: () => import("@/views/chat"),
+            component: () => import ('@/views/contact') 
         },
         {
             path: '/chats',
             name: 'chats',
             component: () => import ('@/views/chats')
+        },
+        {
+            path: '/chat',
+            name: 'chat',
+            component: () => import ('@/views/chat')
         },
         {
             path: '/publicPreview',
@@ -55,14 +53,18 @@ const router = new Router({
             component: () => import ('@/views/settings')
         },
 
-    {
-      path: "/invite",
-      name: "invite",
-      component: pageinvite,
-    },
-  ],
+        {
+            path: '/invite',
+            name: 'invite',
+            component: () => import ('@/views/invite')
+        },
 
-  mode: document.getElementById("automomous") ? "history" : "abstract",
-});
+      
+    ],
+    
+    mode: document.getElementById('automomous') ? 'history' : 'abstract',
+  
+})
 
-export default router;
+
+export default router

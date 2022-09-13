@@ -226,16 +226,11 @@ export default {
     },
     handleImages: function (data) {
 
-
-        console.log('this.images', this.images, data)
-
       return images.autorotation(data.file, data.base64).then(base64 => {
         data.base64 = base64
 
         return Promise.resolve(data)
       }).then(data => {
-
-        console.log("HANDLEIMAGES")
 
         if (this.images.resize) {
 
@@ -247,7 +242,6 @@ export default {
 
             return Promise.resolve(data)
           }).catch(e => {
-            console.log("E", e)
             return Promise.reject(e)
           })
 
