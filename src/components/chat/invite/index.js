@@ -90,8 +90,6 @@ export default {
 
               var matrixID = '@' + `${id}` + ':' + this.core.domain
 
-              console.log('matrixID', matrixID)
-      
               return this.core.mtrx.client.invite(roomID, matrixID)
 
             })).then(r => {

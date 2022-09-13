@@ -1,13 +1,34 @@
 <template>
 
-  <span class="nameline">
-    {{ convertedName }}
-  </span>
+  <div class="nameline">
+    <div class="iconGroup" v-if="isShowGroupIcon">
+      <i class="fas fa-user-friends"></i>
+    </div>
+    <div>
+      {{ convertedName }}
+    </div>
+  </div>
 
 </template>
 
 <style scoped lang="sass">
+.nameline
+  display: flex
+  align-items: flex-end
+  justify-content: center
 
+.iconGroup
+  font-size: 0.4em
+  width: 16px
+  text-align: center
+  height: 16px
+  line-height: 16px
+  border-radius: 8px
+  background: srgb(--neutral-grad-2)
+  margin-right: $r
+  margin-block: 0.5 * $r
+  i
+    color: srgb(--neutral-grad-1)
 </style>
 
 <script>
@@ -67,7 +88,12 @@ export default {
       return names.join(', ')
     },
 
+    isShowGroupIcon() {
+      return this.m_chat.name.slice(0, 1) === '@';
+    },
   },
- 
+
+  mounted: function () {
+  },
 }
 </script>

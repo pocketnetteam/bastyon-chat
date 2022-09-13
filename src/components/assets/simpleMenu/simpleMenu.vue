@@ -28,7 +28,6 @@ export default {
     },
     computed: {
         filteredItems: function() {
-            console.log('this.items', this.items)
             return this.items.filter(item => !item.hidden);
         }
     },

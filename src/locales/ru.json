@@ -18,7 +18,8 @@
         "cantJoion" : "Вы не можете присоединиться к чату с",
         "chatInviteDecline" : "Вы можете присоединиться к чату или отклонить приглашение",
         "creatorLeft" : "Так как создатель чата покинул его",
-        "encrypted" : "Зашифрованно",
+
+        "encrypted" : "Зашифровано ",
         "noImages" : "В чате пока нет изображений",
         "noFiles" : "В чате пока нет файлов",
         "inviteUser" : "Пригласить пользователя",
@@ -95,6 +96,7 @@
         "searchResult" : "Результат поиска",
         "joinedInTheChat" : "вошел в чат",
         "invited" : "приглашен ",
+        "hasInvited" : "приглашен ",
         "inTheChat" : " в чат",
         "banned" : "забанен",
         "andRoom" : "и комната",
@@ -118,7 +120,7 @@
         "emptyContactList" : "Ваша книга контактов пуста",
         "joinApp" : "Присоединяйтесь ко мне в защищенном чате.",
         "hasInvitedToJoin" : "Это зашифрованный чат, который не привязывается к номеру телефона.",
-        "messagefrom" : "Пересланное сообщение",
+        "messagefrom": "Пересланное сообщение от",
         "usernotgen" : "User did not generate their encryption keys yet. You will be able to chat them when their keys are generated.",
         "younotgen" : "Please wait a minute, Your encryption keys are being generated...",
         "messageRead" : "Сообщение прочитано",
@@ -155,6 +157,7 @@
         "takePhotoOrVideo" : "Отправить фотографию",
         "sendCoins": "Отправить коины",
         "edit" : "Редактировать",
+        "select": "Выбрать",
         "block" : "Заблокировать",
         "unblock" : "Разблокировать",
         "blockUser" : "Заблокировать пользователя",
@@ -198,5 +201,9 @@
     "unchecked" : "Нет",
     "settings_read" : "Отправлять отчёты о прочтении",
     "messagewasburn" : "Данное сообщение осталось только лишь в памяти вашего устройства",
-    "messagewillburn" : "Сообщение скоро будет удалено"
+    "messagewillburn" : "Сообщение скоро будет удалено",
+    "micaccessbrowser" : "Доступ к микрофону запрещен настройками браузера, пожалуйста проверьте настройки.",
+    "micaccesscommonproblem" : "Извините, по какой-то причине запись голосовых сообщений невозможна на устройстве.",
+    "micaccesscordova" : "Доступ к микрофону запрещен настройками устройства, пожалуйста разрешите доступ к микрофону в настройках устройства.",
+    "micdevicenotfound" : "Устройство для записи звука не найдено"
 }

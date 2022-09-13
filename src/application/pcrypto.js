@@ -1,4 +1,3 @@
-var _ = require('underscore');
 import f from "@/application/functions";
 import ChatStorage from "./chatstorage";
 
@@ -202,7 +201,6 @@ var PcryptoRoom = async function(pcrypto, chat, {ls, lse}){
             }
         })
 
-        //console.log("history", history)
 
     }
 
@@ -669,7 +667,6 @@ var PcryptoRoom = async function(pcrypto, chat, {ls, lse}){
             body : {}
         }
 
-        //console.log(users, encryptedEvent, text)
 
         for(var i = 0; i < users.length ; i++){
             var user = users[i]
@@ -771,7 +768,6 @@ var PcryptoFile = function(){
             /*ncrypto.randomBytes(24, function(err, buffer) {
                 var token = buffer.toString('hex');
 
-                console.log('token', token)
 
                 resolve(token)
             });*/
@@ -900,10 +896,16 @@ var PcryptoFile = function(){
 
 var Pcrypto = function(core, p){
 
-    const EC = require('elliptic').ec
-    const secp256k1 = new EC('secp256k1')
+    //const EC = require('elliptic').ec
 
-    secp256k1CurveN = secp256k1.curve.n
+    secp256k1CurveN = new BN('fffffffffffffffffffffffffffffffebaaedce6af48a03bbfd25e8cd0364141', 16);
+
+
+    ///// 
+
+
+    //console.log('secp256k1CurveN', secp256k1CurveN, secp256k1CurveN.toJSON())
+    //console.log('bbn', bbn, bbn.toJSON())
 
     var self = this
     var ls, lse

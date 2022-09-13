@@ -12,9 +12,9 @@
 
     </div>
 
-    <div v-touch:longtap="dropDownMenuShow" :class="{referenceshowed, showmeta : showmeta, my,'messageRow': 'messageRow', urlpreview : urlpreview, allscreen : urlpreview || content.msgtype === 'm.image'|| file || content.msgtype === 'm.audio'}" :my="my" v-if="!preview && content.msgtype !== 'm.notice'">
+    <div v-touch:touchhold="dropDownMenuShow" :class="{referenceshowed, showmeta : showmeta, my,'messageRow': 'messageRow', urlpreview : urlpreview, allscreen : urlpreview || content.msgtype === 'm.image'|| file, aligncenter : content.msgtype === 'm.audio'}" :my="my" v-if="!preview && content.msgtype !== 'm.notice'">
 
-      <div class="timeWrapper" v-if="(urlpreview || imageUrl || content.msgtype === 'm.image' || content.msgtype === 'm.audio') || (showmeta && (my)) || file">
+      <div class="timeWrapper" v-if="(urlpreview || imageUrl || content.msgtype === 'm.image') || (showmeta && (my)) || file">
         
         <i :class="'fas fa-fire burn ' + showburn" v-if="showburn" @click="showwhenburn"></i>
         
@@ -23,10 +23,16 @@
         </span>
       </div>
 
-      <div class="actionsWrapper" v-if="content.msgtype !== 'm.file'" @click="setmenu">
-        <i class="fas fa-ellipsis-h"></i>
+      <div class="actionsWrapper" v-if="content.msgtype !== 'm.file'">
+        <div v-if="multiSelect" class="multiSelect" @click="eventMessage(selectedMessage)">
+          <i v-if="selectedMessage" class="far fa-check-circle"></i>
+          <i v-else class="far fa-circle"></i>
+        </div>
+        <div class="mnwrapper" v-else>
+          <i @click="setmenu" class="fas fa-ellipsis-h"></i>
+        </div>
       </div>
-    
+
       <div class="iconWrapper" v-if="!my || showmyicon" @click="core.mtrx.opencontact(userinfo)">
           <userpic :userinfo="userinfo"/>
       </div>
@@ -61,7 +67,7 @@
         </div>
       </div>
       <div class="messageAudio" v-if="content.msgtype === 'm.audio'">
-        <VoiceMessage v-if="audioUrl" :base64Audio="audioUrl" :id="event._localTimestamp || Date.now()"/>
+        <VoiceMessage v-if="audioUrl" :audioBuffer="audioUrl" :id="event._localTimestamp || Date.now()"/>
       </div>
 
       <div class="maxcontent" :class="{'my' : my }" v-if="content.msgtype === 'm.encrypted' && !textWithoutLinks && badenctypted">
@@ -104,10 +110,11 @@
 
           <div class="from" v-if="content.from">
             <div class="fromCaption">
-              <i class="fas fa-share-alt"></i> <span>{{ $t("caption.messagefrom") }}</span>
+              <i class="fas fa-share-alt"></i>
+              <span>{{ $t("caption.messagefrom") }} {{ this.userinfo.name }}</span>
             </div>
           </div>
-          
+
         </div>
         
       </div>

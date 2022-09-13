@@ -19,6 +19,12 @@
 
 <style scoped lang="sass">
 
+/deep/
+  .infoWrapper
+    display: flex
+    align-items: center
+    .eventsLine
+      width: 100%
 
 </style>
 

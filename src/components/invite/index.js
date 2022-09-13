@@ -1,5 +1,4 @@
 import {mapState} from 'vuex';
-import _ from "underscore";
 import listPhoneContacts from '@/components/invite/listPhoneContacts/index.vue'
 import f from '@/application/functions.js'
 import listeners from '@/application/listeners'

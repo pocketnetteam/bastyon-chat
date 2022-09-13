@@ -1,6 +1,5 @@
 import { mapState } from "vuex";
 import f from "@/application/functions";
-import * as _ from "underscore";
 
 export default {
   name: "events",
@@ -11,6 +10,8 @@ export default {
     loading: Boolean,
     scrollType: "",
     error: [Object, Error, String],
+    selectedMessages: [],
+    isRemoveSelectedMessages: false,
   },
   components: {},
   data: function () {
@@ -23,12 +24,18 @@ export default {
       ls: 0,
       voiceMessageQueue: [],
       countshow: 0
+      multiSelect: false,
     };
   },
   provide() {
     return {
       addToQueue: (message, id) => {
-        this.voiceMessageQueue = [...this.voiceMessageQueue, { message, id }];
+        var f = _.find(this.voiceMessageQueue, (v) => {
+          return v.id == id
+        })
+
+        if(!f)
+          this.voiceMessageQueue = [...this.voiceMessageQueue, { message, id }];
       },
       playNext: (id) => {
         let current = this.sortedVoiceMessageQueue.findIndex((i) => {
@@ -37,7 +44,8 @@ export default {
         let next =
           current === -1 ? null : this.sortedVoiceMessageQueue[current + 1];
         if (next) {
-          next.message.audioToggle();
+          next.message.setTime(0)
+          next.message.play();
         }
       },
     };
@@ -45,10 +53,19 @@ export default {
 
   watch: {
     events: function () {},
+
+    selectedMessages: {
+      immediate: true,
+      handler: function () {
+        if (this.selectedMessages.length === 0) {
+          this.multiSelect = false;
+        }
+      },
+    },
   },
   computed: {
     sortedVoiceMessageQueue() {
-      return this.voiceMessageQueue.sort((a, b) => a.id - b.id);
+      return _.sortBy(this.voiceMessageQueue, (a) => {return a.id})
     },
 
     ios() {
@@ -211,6 +228,31 @@ export default {
         this.$refs["container"].scrollTop += -e.deltaY;
         return false;
       }
+    },
+    showMultiSelect() {
+      this.multiSelect = true;
+    },
+    selectMessage(message) {
+      console.log("this emit from liust");
+      if (
+        this.selectedMessages.filter(
+          (item) => item.message_id === message.message_id
+        ).length === 0
+      ) {
+        this.selectedMessages.push(message);
+      }
+    },
+    removeMessage(message) {
+      const index = this.selectedMessages.findIndex(
+        (item) => item.message_id === message.message_id
+      );
+      if (index !== -1) {
+        this.selectedMessages.splice(index, 1);
+      }
+    },
+
+    messagesIsDeleted(state) {
+      this.$emit("messagesIsDeleted", state);
     },
   },
 };

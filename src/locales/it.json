@@ -95,6 +95,7 @@
     "searchResult" : "Risultato della ricerca",
     "joinedInTheChat" : "si è unito alla chat",
     "invited" : "invitato ",
+    "hasInvited" : "invitato ",
     "inTheChat" : " nella chat",
     "banned" : "bannato",
     "andRoom" : "e stanza",
@@ -107,7 +108,7 @@
     "sent" : "inviato",
     "PKOINto" : " PKOIN a ",
     "response" : "Risposta",
-    "messagefrom" : "Messaggio inoltrato",
+    "messagefrom": "Messaggio inoltrato da",
     "edited" : "Modificato",
     "settings" : "Impostazioni",
     "unauthorized" : "Non autorizzato",
@@ -156,6 +157,7 @@
     "takePhotoOrVideo" : "Invia immagine",
     "sendCoins": "Invia PKOIN",
     "edit" : "Modifica",
+    "select": "Selezionare",
     "block" : "Blocca",
     "unblock" : "Sblocca",
     "blockUser" : "Blocca utente",
@@ -200,5 +202,9 @@
   "unchecked" : "No",
   "settings_read" : "Send read receipts",
   "messagewasburn" : "This message remains only in the memory of your device",
-  "messagewillburn" : "The message will be deleted soon"
+  "messagewillburn" : "The message will be deleted soon",
+  "micaccessbrowser" : "Access to the microphone is restricted, please check your browser settings.",
+  "micaccesscommonproblem" : "Sorry, for some reason it is not possible to record voice messages on the device",
+  "micaccesscordova" : "Access to the microphone is restricted, please check your device settings.",
+  "micdevicenotfound" : "Audio recording device not found"
 }
