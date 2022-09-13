@@ -355,7 +355,7 @@ export default {
       var ns = this.esize.scrollTop || 0
       var fs = this.fsize.scrollTop || 0
 
-      if (ns - 450 > fs) {
+      if (ns - 450 > fs && this.$refs['chatInput']) {
         this.$refs['chatInput'].blurifempty()
       }
 
@@ -479,6 +479,11 @@ export default {
 
     removeDataMessages: function () {
       this.isRemoveSelectedMessages = true;
+    },
+
+    cancelDataMessages : function(){
+      console.log('this.selectedMessages', this.selectedMessages)
+      this.selectedMessages = [];
     },
 
     messagesIsDeleted: function (state) {

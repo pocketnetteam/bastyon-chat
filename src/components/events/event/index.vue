@@ -161,8 +161,8 @@ export default {
       type: Boolean,
     },
     selectedMessages: {
-      default: [],
-      type: Array,
+      type : Array,
+      default : () => {return []}
     },
     isRemoveSelectedMessages: false,
   },

@@ -12,7 +12,7 @@
 
     </div>
 
-    <div v-touch:longtap="dropDownMenuShow" :class="{referenceshowed, showmeta : showmeta, my,'messageRow': 'messageRow', urlpreview : urlpreview, allscreen : urlpreview || content.msgtype === 'm.image'|| file, aligncenter : content.msgtype === 'm.audio'}" :my="my" v-if="!preview && content.msgtype !== 'm.notice'">
+    <div v-touch:touchhold="dropDownMenuShow" :class="{referenceshowed, showmeta : showmeta, my,'messageRow': 'messageRow', urlpreview : urlpreview, allscreen : urlpreview || content.msgtype === 'm.image'|| file, aligncenter : content.msgtype === 'm.audio'}" :my="my" v-if="!preview && content.msgtype !== 'm.notice'">
 
       <div class="timeWrapper" v-if="(urlpreview || imageUrl || content.msgtype === 'm.image') || (showmeta && (my)) || file">
         
@@ -28,7 +28,9 @@
           <i v-if="selectedMessage" class="far fa-check-circle"></i>
           <i v-else class="far fa-circle"></i>
         </div>
-        <i v-else @click="setmenu" class="fas fa-ellipsis-h"></i>
+        <div class="mnwrapper" v-else>
+          <i @click="setmenu" class="fas fa-ellipsis-h"></i>
+        </div>
       </div>
 
       <div class="iconWrapper" v-if="!my || showmyicon" @click="core.mtrx.opencontact(userinfo)">
@@ -158,30 +160,3 @@
 
 <!-- THEMES BEGIN -->
 <!-- THEMES END -->
-
-<style lang="scss">
-.actionsWrapper {
-  opacity: 1;
-  i.fa-check-circle {
-    color: #00a3f7;
-    opacity: 1 !important;
-  }
-  .multiSelect {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    left: 0;
-
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    &:hover {
-      i {
-        opacity: 1;
-      }
-    }
-  }
-}
-</style>

@@ -2,7 +2,7 @@
 
   <div class="nameline">
     <div class="iconGroup" v-if="isShowGroupIcon">
-      <i class="fas fa-solid fa-users"></i>
+      <i class="fas fa-user-friends"></i>
     </div>
     <div>
       {{ convertedName }}
@@ -13,13 +13,22 @@
 
 <style scoped lang="sass">
 .nameline
-  display: flex !important
-  align-items: center
+  display: flex
+  align-items: flex-end
   justify-content: center
+
 .iconGroup
-  margin-right: 5px
+  font-size: 0.4em
+  width: 16px
+  text-align: center
+  height: 16px
+  line-height: 16px
+  border-radius: 8px
+  background: srgb(--neutral-grad-2)
+  margin-right: $r
+  margin-block: 0.5 * $r
   i
-    color: rgb(0,164,255)
+    color: srgb(--neutral-grad-1)
 </style>
 
 <script>
@@ -85,7 +94,6 @@ export default {
   },
 
   mounted: function () {
-    console.log('m.room.guest_access', m.room.guest_access);
   },
 }
 </script>

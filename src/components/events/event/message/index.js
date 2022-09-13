@@ -467,6 +467,8 @@ export default {
       console.log('emit work from menushowMultiSelect');
       this.$emit('showMultiSelect');
       this.selectMessage();
+
+      return Promise.resolve()
     },
 
     menureply: function () {

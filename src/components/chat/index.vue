@@ -103,12 +103,20 @@
             v-if="!blockedUser && !selectedMessages.length"
             ref="chatInput"
         />
+
         <div v-if="!!selectedMessages.length" class="center shareEventsWrapper">
-          <div @click="removeDataMessages()">
-            <i class="far fa-trash-alt"></i>{{ localisationTitles.delete }}
-          </div>
-          <div @click="shareDataMessages()">
-            <i class="fas fa-share-alt"></i> {{ localisationTitles.share }}
+          <div class="work">
+            <div class="cnt">
+              <div @click="cancelDataMessages()" class="cancel">
+                <i class="fas fa-times"></i><span>{{ $t('cancel') }}</span>
+              </div>
+              <div @click="removeDataMessages()">
+                <i class="far fa-trash-alt"></i><span>{{ localisationTitles.delete }}</span>
+              </div>
+              <div @click="shareDataMessages()">
+                <i class="fas fa-share-alt"></i><span>{{ localisationTitles.share }}</span>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -151,37 +159,7 @@
 <!-- THEMES END -->
 
 <style lang="scss">
-.shareEventsWrapper {
-  background: rgb(250, 250, 250);
-  border-radius: 30px;
-  padding: 0.5em 1em;
-  max-width: 622px;
-  width: 100%;
-  margin: 0 auto;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  font-size: 0.9em;
 
-  i {
-    margin-right: 10px;
-    &.fa-trash-alt {
-      color: rgb(244, 26, 77);
-    }
-    &.fa-share-alt {
-      color: #00a3f7;
-    }
-  }
-  div {
-    transition: 0.3s;
-    opacity: 0.6;
-    cursor: pointer;
-    &:hover {
-      transition: 0.3s;
-      opacity: 1;
-    }
-  }
-}
 </style>
 
 

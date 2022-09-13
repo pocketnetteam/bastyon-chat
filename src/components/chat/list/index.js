@@ -10,7 +10,10 @@ export default {
     chat: Object,
     filterType: String,
     error : [Object, Error, String],
-    selectedMessages: [],
+    selectedMessages: {
+      type : Array,
+      default : () => {return []}
+    },
     isRemoveSelectedMessages: false,
   },
 
