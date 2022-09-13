@@ -42,7 +42,7 @@ export default {
             return invitedName = key.name
           }
         })
-        return this.$i18n.t("caption.invited") + `${invitedName}` + this.$i18n.t("caption.inTheChat")
+        return this.$i18n.t("caption.hasInvited") + `${invitedName}` + this.$i18n.t("caption.inTheChat")
       }
 
       if (membership === 'ban') {
