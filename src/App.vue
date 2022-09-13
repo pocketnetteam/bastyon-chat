@@ -550,9 +550,9 @@ export default {
 
   created() {
 
-    /*this.pocketnet = false
+    this.pocketnet = false
     this.mobile = !this.pocketnet
-    this.recording = true*/
+    this.recording = true
 
     if(this.isLocalStorageChatAuth) {
       const fromMnemonic = getDecryptedMnemonic();

@@ -23,7 +23,7 @@ export default {
       c: 1,
       ls: 0,
       voiceMessageQueue: [],
-      countshow: 0
+      countshow: 0,
       multiSelect: false,
     };
   },
