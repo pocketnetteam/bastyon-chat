@@ -23,7 +23,7 @@ export default {
       c: 1,
       ls: 0,
       voiceMessageQueue: [],
-
+      countshow: 0
       multiSelect: false,
     };
   },
@@ -63,7 +63,6 @@ export default {
       },
     },
   },
-
   computed: {
     sortedVoiceMessageQueue() {
       return _.sortBy(this.voiceMessageQueue, (a) => {return a.id})
@@ -79,6 +78,7 @@ export default {
       scrollbottomshow: function () {
         return this.lscroll && this.lscroll.scrollTop > 500;
       },
+      notificationCount : state => state.allnotifications
     }),
 
     eventsByPages: function () {
@@ -105,9 +105,19 @@ export default {
   destroyed: function () {
     this.core.menu(null);
   },
-  mounted: function () {},
-
+  updated: function() {
+    if(this.countshow === 0) {
+      this.scrollToReadMessages();
+    }
+    this.countshow = 1;
+  },
   methods: {
+    scrollToReadMessages: function () {
+      if(this.notificationCount > 0) {
+        const elem = "eventWrapper_" + (this.notificationCount + 1);
+        document.getElementById(elem).scrollIntoView()
+      }
+    },
     showerror: function () {
       // stringifyiedError
 

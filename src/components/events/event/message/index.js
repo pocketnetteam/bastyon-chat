@@ -368,11 +368,8 @@ export default {
     },
   },
 
-  
-
   mounted() {
 
-    console.log('this.origin.event.event_id', this.origin.event.event_id)
   },
 
   methods: {
