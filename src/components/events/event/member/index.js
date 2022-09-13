@@ -1,6 +1,5 @@
 import {mapState} from 'vuex';
 import f from "@/application/functions";
-import _ from 'underscore'
 
 export default {
   name: 'eventsMember',
@@ -21,6 +20,10 @@ export default {
 
   },
 
+  mounted : function(){
+    this.$emit('readyToRender')
+  },
+
   computed: mapState({
     auth: state => state.auth,
     keyword: function () {
@@ -34,7 +37,7 @@ export default {
       if (membership === 'join') return this.$i18n.t("caption.joinedInTheChat")
 
       if (membership === 'invite') {
-        _.mapObject(pStateUsers, (key, value) => {
+        _.find(pStateUsers, (key, value) => {
           if (key.id === invitedUserID) {
             return invitedName = key.name
           }
@@ -43,7 +46,7 @@ export default {
       }
 
       if (membership === 'ban') {
-        _.mapObject(pStateUsers, (key, value) => {
+        _.find(pStateUsers, (key, value) => {
           if (key.id === invitedUserID) {
             return invitedName = key.name
           }
@@ -73,7 +76,6 @@ export default {
 
       }
       if(this.event.event.type === 'm.room.topic'){
-        console.log(this.event, "topic")
       }
 
       // }

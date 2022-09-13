@@ -202,6 +202,11 @@
     "unchecked" : "No",
     "settings_read" : "Send read receipts",
     "messagewasburn" : "This message remains only in the memory of your device",
-    "messagewillburn" : "The message will be deleted soon"
+    "messagewillburn" : "The message will be deleted soon",
+
+    "micaccessbrowser" : "Access to the microphone is restricted, please check your browser settings.",
+    "micaccesscommonproblem" : "Sorry, for some reason it is not possible to record voice messages on the device",
+    "micaccesscordova" : "Access to the microphone is restricted, please check your device settings.",
+    "micdevicenotfound" : "Audio recording device not found"
 
 }

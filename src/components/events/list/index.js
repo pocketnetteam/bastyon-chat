@@ -1,6 +1,5 @@
 import { mapState } from "vuex";
 import f from "@/application/functions";
-import * as _ from "underscore";
 
 export default {
   name: "events",
@@ -31,7 +30,12 @@ export default {
   provide() {
     return {
       addToQueue: (message, id) => {
-        this.voiceMessageQueue = [...this.voiceMessageQueue, { message, id }];
+        var f = _.find(this.voiceMessageQueue, (v) => {
+          return v.id == id
+        })
+
+        if(!f)
+          this.voiceMessageQueue = [...this.voiceMessageQueue, { message, id }];
       },
       playNext: (id) => {
         let current = this.sortedVoiceMessageQueue.findIndex((i) => {
@@ -40,7 +44,8 @@ export default {
         let next =
           current === -1 ? null : this.sortedVoiceMessageQueue[current + 1];
         if (next) {
-          next.message.audioToggle();
+          next.message.setTime(0)
+          next.message.play();
         }
       },
     };
@@ -61,7 +66,7 @@ export default {
 
   computed: {
     sortedVoiceMessageQueue() {
-      return this.voiceMessageQueue.sort((a, b) => a.id - b.id);
+      return _.sortBy(this.voiceMessageQueue, (a) => {return a.id})
     },
 
     ios() {
@@ -209,7 +214,6 @@ export default {
       if (this.scrollType === "custom") {
         return;
       } else {
-        console.log("e.deltaY", e.deltaY, "mousewheel function work");
         e.preventDefault();
         this.$refs["container"].scrollTop += -e.deltaY;
         return false;

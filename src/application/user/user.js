@@ -1,4 +1,3 @@
-var _ = require('underscore');
 import f from "../functions.js";
 class User {
     constructor(core, p){

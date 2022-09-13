@@ -1,14 +1,11 @@
-import {mapState} from 'vuex';
 import actions from "@/components/events/event/actions/index.vue";
 import filePreview from "@/components/events/previews/filePreview/index.vue";
 import fileMessage from "@/components/events/event/fileMessage/index.vue";
 import listPreview from "@/components/events/event/message/listPreview/index.vue";
 import f from '@/application/functions'
-import VuePictureSwipe from 'vue-picture-swipe';
 import url from '@/components/events/event/url/index.vue'
 import imagesLoaded from 'vue-images-loaded'
 import dummypreviews from "@/components/chats/dummypreviews";
-import moment from "moment";
 import IncomingMessage from "./incomingMessage/incomingMessage.vue"
 import VoiceMessage from '@/components/events/event/VoiceMessage';
 
@@ -34,7 +31,7 @@ export default {
     chat: Object,
     encrypted: false,
     encryptedData: Boolean,
-    decryptedInfo: String,
+    decryptedInfo: null,
     error: String,
     withImage: Boolean,
     reference: Object,
@@ -50,6 +47,7 @@ export default {
       type: Array,
     },
     isRemoveSelectedMessages: false,
+    audioBuffer : null
   },
   directives: {
     imagesLoaded
@@ -66,14 +64,13 @@ export default {
     actions,
     filePreview,
     fileMessage,
-    VuePictureSwipe,
     listPreview,
     url,
     dummypreviews,
     IncomingMessage,
     VoiceMessage,
   },
-  watch: {
+  watch : {
     isRemoveSelectedMessages: {
       immediate: true,
       handler: function () {
@@ -98,6 +95,12 @@ export default {
         }
       },
     },
+    readyToRender : {
+      immediate : true,
+      handler : function(){
+        if(this.readyToRender) this.$emit('readyToRender')
+      }
+    }
   },
   computed: {
     showburn : function(){  
@@ -123,13 +126,17 @@ export default {
     readyToRender : function(){
 
       var r = ( this.content.msgtype === 'm.encrypted' && !this.textWithoutLinks && this.badenctypted ) || 
-              ( (this.content.msgtype === 'm.text' || this.content.msgtype === 'm.encrypted') && this.textWithoutLinks) ||
-              (this.file) || (this.error) || 
-              (this.content.msgtype === 'm.image' && this.imageUrl) ||
-              (this.urlpreview) || 
-              (this.preview)
 
-              return r 
+        (this.content.membership) ||
+
+        ((this.content.msgtype === 'm.text' || this.content.msgtype === 'm.encrypted') && this.textWithoutLinks) ||
+        (this.file) || (this.error) || 
+        (this.content.msgtype === 'm.image' && this.imageUrl) ||
+        (this.content.msgtype === 'm.audio' && this.audioUrl) ||
+        (this.urlpreview) || 
+        (this.preview)
+
+      return r 
 
     },
     my: function () {
@@ -171,7 +178,7 @@ export default {
       
       return this.showmyicontrue || 
         this.content.msgtype === 'm.image' ||
-        this.content.msgtype === 'm.audio' ||
+        /*this.content.msgtype === 'm.audio' ||*/
         this.content.msgtype === 'm.file' || 
         this.urlpreview || (!this.$store.state.active && this.$store.state.minimized)
 
@@ -186,7 +193,6 @@ export default {
 
     replacedmintionsbody:function(){
       return this.body.replace(/@\w{68}:(\w{1,50})/g, function(str, l){
-        console.log("L", l)
         return '@' + l
       })
 
@@ -233,19 +239,23 @@ export default {
         if (this.encryptedData) {
           return this.decryptedInfo
         } else {
+
+          
+
           return this.content && this.content.url;
         }
 
       }
     },
+
     audioUrl: function () {
       if (this.content.msgtype === 'm.audio') {
 
-        if (this.encryptedData) {
-          return this.decryptedInfo
-        } else {
-          return this.content && this.content.url;
-        }
+        if(this.encryptedData && this.decryptedInfo) return this.decryptedInfo
+
+        return this.audioBuffer
+
+        //return this.content && this.content.audioData
       }
     },
 
@@ -405,6 +415,8 @@ export default {
 
     dropDownMenuShow: function () {
 
+      if(this.urlpreview) return
+
       setTimeout(() => {
         this.setmenu()
       }, 200)
@@ -427,7 +439,7 @@ export default {
       
       if (this.content.msgtype === 'm.image' && this.imageUrl) sharing.images = [this.imageUrl]
 
-      if (this.content.msgtype === 'm.audio' && this.decryptedInfo) sharing.audio = [this.decryptedInfo]
+      if (this.content.msgtype === 'm.audio' && this.audioUrl) sharing.audio = [this.audioUrl]
 
       if ((this.content.msgtype === 'm.text' || this.content.msgtype === 'm.encrypted') && trimmed) sharing.messages = [trimmed]
 

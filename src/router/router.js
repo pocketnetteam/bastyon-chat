@@ -3,8 +3,6 @@ import Router from 'vue-router'
 
 Vue.use(Router);
 
-import contact from '@/views/contact'
-import pageinvite from '@/views/invite'
 
 const router = new Router({
     routes: [
@@ -17,7 +15,7 @@ const router = new Router({
         {
             path: '/contact',
             name: 'contact',
-            component: contact
+            component: () => import ('@/views/contact') 
         },
         {
             path: '/chats',
@@ -58,7 +56,7 @@ const router = new Router({
         {
             path: '/invite',
             name: 'invite',
-            component: pageinvite
+            component: () => import ('@/views/invite')
         },
 
       

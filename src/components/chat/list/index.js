@@ -194,10 +194,61 @@ export default {
         if (e.event.decrypted) return Promise.resolve()
 
 
-        if(f.deep(e, 'event.content.msgtype') != 'm.encrypted') return Promise.resolve()
+        var pr = null
+        var subtype = f.deep(e, 'event.content.msgtype')
 
 
-        return this.chat.pcrypto.decryptEvent(e.event).then(d => {
+
+        //if(f.deep(e, 'event.content.msgtype') != 'm.encrypted') return Promise.resolve()
+
+        var einfo = f.deep(e, 'event.content.info.secrets') || f.deep(e, 'event.content.pbody.secrets')
+
+        if(einfo) {
+          if(subtype == 'm.image'){
+            
+          }
+
+          if(subtype == 'm.audio'){
+            pr = this.core.mtrx.getAudio(this.chat, e).catch(error => {
+
+              console.error(error)
+
+              e.event.decrypted = {
+                msgtype : 'm.bad.encrypted'
+              }
+
+            })
+          }
+
+          if(subtype == 'm.encrypted'){
+            pr = this.chat.pcrypto.decryptEvent(e.event).then(d => {
+              e.event.decrypted = d
+    
+              return Promise.resolve()
+            }).catch(e => {
+    
+              e.event.decrypted = {
+                msgtype : 'm.bad.encrypted'
+              }
+    
+              return Promise.resolve()
+            })
+          }
+        }
+        else{
+          if(subtype == 'm.audio'){
+            pr = this.core.mtrx.getAudioUnencrypt(this.chat, e)
+          }
+        }
+
+        if(!pr) return Promise.resolve()
+
+        return pr.catch(e => {
+          return Promise.resolve()
+        })
+
+
+        /*return this.chat.pcrypto.decryptEvent(e.event).then(d => {
           e.event.decrypted = d
 
           return Promise.resolve()
@@ -208,7 +259,7 @@ export default {
           }
 
           return Promise.resolve()
-        })
+        })*/
 
       })).then(() => {
         return Promise.resolve(events)
@@ -452,16 +503,19 @@ export default {
             i--
           }
 
+          if(e){
+            this.core.mtrx.client.setRoomReadMarkers(
+              this.chat.currentState.roomId,
+              e.eventId,
+              e, {
+                hidden : !this.settings_read ? true : false
+              }).then(r => {
+  
+              return r
+            })
+          }
 
-          this.core.mtrx.client.setRoomReadMarkers(
-            this.chat.currentState.roomId,
-            e.eventId,
-            e, {
-              hidden : !this.settings_read ? true : false
-            }).then(r => {
-
-            return r
-          })
+          
 
         }, 1000)
 

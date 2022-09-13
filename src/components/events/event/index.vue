@@ -5,49 +5,53 @@
             :userinfo="userinfo"
             :readed="readed"
             :preview="preview || false"
+            @readyToRender="setReadyToRender"
             v-if="type === 'member' && !preview"/>
 
-    <message @openGalleryImg="openImage" :chat="chat"
+    <message 
+    
+      @openGalleryImg="openImage" 
+      
+      :chat="chat"
+      :event="event"
+      :prevevent="prevevent"
+      :origin="event"
+      :decryptEvent="decryptEvent"
+      :decryptedInfo="decryptedInfo"
+      :encryptedData="encryptedData"
 
-             :event="event"
-             :prevevent="prevevent"
-             :origin="event"
-             :decryptEvent="decryptEvent"
-             :decryptedInfo="decryptedInfo"
-             :encryptedData="encryptedData"
+      :imgEvent="galleryData" 
+      :userinfo="userinfo"
+      :readed="readed"
+      :preview="preview || false"
+      :withImage="withImage || false"
+      :clientWidth="clientWidth"
+      :encrypted="encrypted"
+      :subtype="subtype"
+      :error="error"
+      :reference="reference"
+      :downloaded="downloaded"
+      :last="last"
+      :showmyicontrue="showmyicontrue"
+      :fromreference="fromreference"
 
-             :imgEvent="galleryData" 
-             :userinfo="userinfo"
-             :readed="readed"
-             :preview="preview || false"
-             :withImage="withImage || false"
-             :clientWidth="clientWidth"
-             :encrypted="encrypted"
-             :subtype="subtype"
-             :error="error"
-             :reference="reference"
-             :downloaded="downloaded"
-             :last="last"
-             :showmyicontrue="showmyicontrue"
-             :fromreference="fromreference"
-             :multiSelect="multiSelect"
-             :selectedMessages="selectedMessages"
-
-             ref="cmessage"
-
-             @remove="removeEvent"
-             @download="downloadFile"
-             @decryptagain="decryptAgain"
-             @editing="editing"
-             @reply="reply"
-             @share="share"
-             @showMultiSelect="$emit('showMultiSelect')"
-             @selectMessage="selectMessage"
-             @removeMessage="removeMessage"
-             @menuIsVisible="menuIsVisibleHandler"
-             v-if="type === 'message' || preview"
-             :isRemoveSelectedMessages="isRemoveSelectedMessages"
-             @messagesIsDeleted="messagesIsDeleted"/>
+      :multiSelect="multiSelect"
+      :selectedMessages="selectedMessages"
+      :audioBuffer="audioBuffer"
+      @readyToRender="setReadyToRender"
+      @remove="removeEvent"
+      @download="downloadFile"
+      @decryptagain="decryptAgain"
+      @showMultiSelect="$emit('showMultiSelect')"
+      @selectMessage="selectMessage"
+      @removeMessage="removeMessage"
+      :isRemoveSelectedMessages="isRemoveSelectedMessages"
+      @messagesIsDeleted="messagesIsDeleted"
+      @editing="editing"
+      @reply="reply"
+      @share="share"
+      @menuIsVisible="menuIsVisibleHandler"
+      v-if="type === 'message' || preview" />
 
     <common :event="event"
             :userinfo="userinfo"
@@ -129,6 +133,9 @@ export default {
       removed : false,
       downloaded : false,
       readedInterval : null,
+      audioBuffer : null,
+
+      readyToRender : false
     }
   },
 
@@ -161,11 +168,18 @@ export default {
   },
 
   computed: {
-    readyToRender : function(){
-      if(this.$refs["cmessage"]) return this.$refs["cmessage"].readyToRender
+    /*readyToRender : function(){
+      if(this.$refs["cmessage"]) {
+
+
+        if(this.$refs["cmessage"].readyToRender){
+          return true
+        }
+
+      }
 
       return true
-    },
+    },*/
     type: function () {
 
       var t = f.deep(this, 'event.event.type')
@@ -252,9 +266,14 @@ export default {
 
           }, 20, 10000).then(() => {
 
-            if(this.encryptedData){
+            if(this.encryptedData && this.subtype == 'm.image'){
               this.decryptImage()
             }
+
+            if(this.encryptedData && this.subtype == 'm.audio'){
+              this.decryptAudio()
+            }
+            
 
             if(this.subtype == 'm.encrypted'){
               this.decrypt()
@@ -264,12 +283,25 @@ export default {
 
         }
 
+        else{
+          if(this.subtype == 'm.audio'){
+            this.getAudioUnencrypt()
+          }
+        }
+
         
       }
     }
   },
 
   methods: {
+
+    setReadyToRender(){
+      setTimeout(() => {
+        this.readyToRender = true
+      }, 20)
+      
+    },
     manageReadedInterval(){
 
       if(this.preview || !this.my) return
@@ -397,9 +429,34 @@ export default {
       }) 
     },
 
-    async decryptImage(){
+    getAudioUnencrypt(){
+      this.core.mtrx.getAudioUnencrypt(this.chat, this.event).then(url => {
 
-      //if(!this.chat.pcrypto) return
+        this.audioBuffer = url
+
+        //this.$set(this.event.event.content, 'audioData', url)
+       
+      }).catch(e => {
+        console.error(e)
+      })
+    },
+
+    async decryptAudio(){
+
+      this.core.mtrx.getAudio(this.chat, this.event).then(url => {
+
+        this.decryptedInfo = url
+
+      }).catch(e => {
+
+        this.event.event.decryptKey = this.decryptKey = {
+          msgtype : 'm.bad.encrypted'
+        }
+      })
+      
+    },
+
+    async decryptImage(){
 
       this.core.mtrx.getImage(this.chat, this.event).then(url => {
 
