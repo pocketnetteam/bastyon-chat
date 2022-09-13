@@ -31,7 +31,12 @@
        @eventImage="e => galleryImage(e)"
        @scroll="scroll"
        @menuIsVisible="menuIsVisibleHandler"
-      v-if="m_chat && membership === 'join' && ready" @getEvents="events"/>
+       v-if="m_chat && membership === 'join' && ready"
+       @getEvents="events"
+       :selectedMessages="selectedMessages"
+       :isRemoveSelectedMessages="isRemoveSelectedMessages"
+       @messagesIsDeleted="messagesIsDeleted"
+    />
 
     <div v-if="m_chat && membership === 'invite'" class="joinwrapper">
       <join :m_chat="m_chat" :chat="chat" :usersinfo="usersinfo" @creatorLeft="brokenInvitedRoom"/>
@@ -95,9 +100,25 @@
             :chat="m_chat"
             :usersinfo="usersinfo"
             :relationEvent="relationEvent"
-            v-if="!blockedUser"
+            v-if="!blockedUser && !selectedMessages.length"
             ref="chatInput"
         />
+
+        <div v-if="!!selectedMessages.length" class="center shareEventsWrapper">
+          <div class="work">
+            <div class="cnt">
+              <div @click="cancelDataMessages()" class="cancel">
+                <i class="fas fa-times"></i><span>{{ $t('cancel') }}</span>
+              </div>
+              <div @click="removeDataMessages()">
+                <i class="far fa-trash-alt"></i><span>{{ localisationTitles.delete }}</span>
+              </div>
+              <div @click="shareDataMessages()">
+                <i class="fas fa-share-alt"></i><span>{{ localisationTitles.share }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
 
         <div class="blockedcaption" v-if="blockedUser && m_chat">
           <span>You have blocked this user</span>
@@ -137,6 +158,9 @@
 <!-- THEMES BEGIN -->
 <!-- THEMES END -->
 
+<style lang="scss">
+
+</style>
 
 
 

@@ -118,8 +118,6 @@ export default {
 
       const src = this.pswp.currItem.src
 
-      console.log('src', src)
-
       if(window.cordova){
         this.$emit('sharecordova', src)
       }

@@ -23,6 +23,9 @@
           :loading="lloading"
           v-if="timeline"
           :scrollType="scrollType"
+          :selectedMessages="selectedMessages"
+          :isRemoveSelectedMessages="isRemoveSelectedMessages"
+          @messagesIsDeleted="messagesIsDeleted"
         />
       </div>
 

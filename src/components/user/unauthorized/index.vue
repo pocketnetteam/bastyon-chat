@@ -12,7 +12,18 @@
                             <i class="fas fa-user-slash"></i>
                         </div>
                         <div class="label">
-                            Unauthorized user
+                            User unauthorized 
+                        </div>
+
+                    </div>
+
+                    <div v-if="unauthorized == 'deleted'">
+
+                        <div class="icon">
+                            <i class="fas fa-user-slash"></i>
+                        </div>
+                        <div class="label">
+                            User deleted
                         </div>
 
                     </div>
@@ -188,6 +199,7 @@ export default {
         joinroom : state => state.joinroom,
 
         unauthorized: function() {
+            console.log('this.$store.state.unauthorized', this.$store.state.unauthorized)
 			return this.$store.state.unauthorized
 		},
 
@@ -212,8 +224,6 @@ export default {
 
             if(!auto)
                 this.loading = true
-
-            console.log("refresh")
 
             this.core.initWithUser().then(r => {
 

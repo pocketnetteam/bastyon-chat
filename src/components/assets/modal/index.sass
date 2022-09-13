@@ -120,8 +120,9 @@
     cursor: pointer
     +transition(0.3s)
 
-    &:hover
-        color : srgb(--text-color)
+    @media (pointer:fine)
+        &:hover
+            color : srgb(--text-color)
 
 .modal-header,
 .modal-footer 
