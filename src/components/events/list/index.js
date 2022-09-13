@@ -23,7 +23,7 @@ export default {
       c: 1,
       ls: 0,
       voiceMessageQueue: [],
-      countshow: 0
+      countshow: 0,
       multiSelect: false,
     };
   },
@@ -62,6 +62,15 @@ export default {
         }
       },
     },
+
+    notificationCount : function(){
+
+      console.log('notificationCount')
+     
+      if(this.lscroll && this.lscroll.scrollTop < 180 && this.chat && this.chat.getUnreadNotificationCount()){
+        this.scrollToNew()
+      }
+    }
   },
   computed: {
     sortedVoiceMessageQueue() {
@@ -78,7 +87,7 @@ export default {
       scrollbottomshow: function () {
         return this.lscroll && this.lscroll.scrollTop > 500;
       },
-      notificationCount : state => state.allnotifications
+      notificationCount : (state) => state.allnotifications
     }),
 
     eventsByPages: function () {
@@ -106,17 +115,22 @@ export default {
     this.core.menu(null);
   },
   updated: function() {
-    if(this.countshow === 0) {
+
+    
+
+    /*if(this.countshow === 0) {
       this.scrollToReadMessages();
     }
-    this.countshow = 1;
+    this.countshow = 1;*/
   },
   methods: {
     scrollToReadMessages: function () {
-      if(this.notificationCount > 0) {
-        const elem = "eventWrapper_" + (this.notificationCount + 1);
-        document.getElementById(elem).scrollIntoView()
-      }
+      /*if(this.notificationCount > 0) {
+        const elem = document.getElementById("eventWrapper_" + (this.notificationCount + 1));
+
+        if(elem)
+          elem.scrollIntoView()
+      }*/
     },
     showerror: function () {
       // stringifyiedError
