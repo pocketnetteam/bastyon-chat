@@ -30,6 +30,7 @@
              :last="last"
              :showmyicontrue="showmyicontrue"
              :fromreference="fromreference"
+             :searchText="searchText"
 
              ref="cmessage"
 
@@ -87,8 +88,6 @@
       left : 0
       top : 0
       padding : $r
-
-
 </style>
 
 <script>
@@ -124,8 +123,6 @@ export default {
       readedInterval : null,
     }
   },
-
-
   props: {
     event: Object,
     prevevent : Object,
@@ -140,7 +137,9 @@ export default {
     galleryData: {},
     goToGallery: Function,
     clientWidth: Number,
-    fromreference : Boolean
+    fromreference : Boolean,
+
+    searchText: String
   },
 
   computed: {

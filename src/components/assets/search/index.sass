@@ -16,14 +16,25 @@
             font-size: 0.9em
 
     .iconWrapper
+        display: flex
+        align-items: center
+        justify-content: center
         text-align: center
-        width: 50px
+        height: 20px
+        width: 30px
 
         i
             font-size: 0.8em
-            
+            width: 100%
 
 #search
+    padding: 0 1em
+    position: absolute
+    top: 50%
+    right: 0
+    transform: translateY(-50%)
+    width: 100%
+
     &.minimized
         &:not(.active)
                 
@@ -47,5 +58,52 @@
                     i
                         font-size: 0.8em
 
-       
-            
+    &.collapsed
+        display: unset
+        padding: 0
+        right: auto
+        max-width: unset
+        width: auto
+
+        .searchWrapper
+            background: none
+
+            .inputWrapper,
+            .matches
+                overflow: hidden
+                padding: 0
+                width: 0
+
+                input
+                    padding: 0
+
+            .iconWrapper
+                width: auto
+
+.searchWrapperEA #search
+    display: block
+    padding: 0 .5em
+    position: static
+    transform: none
+
+.iconWrapper
+    i
+        cursor: pointer
+
+.matches
+    font-size: .8em
+    padding: 0 1em
+
+    -webkit-touch-callout: none
+    -webkit-user-select: none
+     -khtml-user-select: none
+       -moz-user-select: none
+        -ms-user-select: none
+            user-select: none
+
+    .current-match
+        padding: 0 .5em
+
+    .prev-match,
+    .next-match
+        cursor: pointer

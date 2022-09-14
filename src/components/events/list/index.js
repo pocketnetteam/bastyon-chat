@@ -12,6 +12,7 @@ export default {
     scrollType: "",
     error: [Object, Error, String],
   },
+  inject: ['matches'],
   components: {},
   data: function () {
     return {
@@ -21,7 +22,7 @@ export default {
       menuOpen: false,
       c: 1,
       ls: 0,
-      voiceMessageQueue: [],
+      voiceMessageQueue: []
     };
   },
   provide() {
@@ -38,7 +39,7 @@ export default {
         if (next) {
           next.message.audioToggle();
         }
-      },
+      }
     };
   },
 
@@ -61,6 +62,7 @@ export default {
       scrollbottomshow: function () {
         return this.lscroll && this.lscroll.scrollTop > 500;
       },
+      minimized: state => state.minimized
     }),
 
     eventsByPages: function () {
@@ -201,6 +203,6 @@ export default {
         this.$refs["container"].scrollTop += -e.deltaY;
         return false;
       }
-    },
+    }
   },
 };

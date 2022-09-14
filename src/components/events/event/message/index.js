@@ -50,9 +50,11 @@ export default {
 
     return {
       referenceshowed : false,
+      markedText: null
     }
 
   },
+  inject: ['matches'],
   components: {
     actions,
     filePreview,
@@ -158,14 +160,17 @@ export default {
     },
 
     body: function () {
+      let bc = this.origin.event.content
 
-      var bc = this.origin.event.content
-
-      if (this.origin.event.content.msgtype == 'm.encrypted') {
+      if (bc.msgtype === 'm.encrypted') {
         bc = this.decryptEvent
       }
-
-      return bc.pbody || bc.body || ''
+      
+      const content = bc.pbody || bc.body || '';
+      
+      this.markText(content);
+  
+      return content
     },
 
     content: function () {
@@ -175,8 +180,6 @@ export default {
     badenctypted: function () {
       return this.decryptEvent.msgtype == 'm.bad.encrypted'
     },
-
-   
 
     textWithoutLinks: function () {
 
@@ -519,7 +522,39 @@ export default {
 
     showreference : function(){
       this.referenceshowed = !this.referenceshowed
+    },
+  
+    scrollTo: function () {
+      const evtWrp = this.$el.parentElement.parentElement,
+            parent = evtWrp.offsetParent
+    
+      /*Scroll eventsflex to message*/
+      parent.parentNode.scrollTop = (evtWrp.offsetTop - parent.offsetTop);
+    },
+  
+    markText: function (content) {
+      /*Highlight matched text*/
+      if (!this.matches) return
+      
+      this.markedText = this.matches.value.length && content?.includes(this.matches.value) ?
+          content.replace(new RegExp(`(${ this.matches.value })`, 'gi'), `<mark class="match">$1</mark>`) :
+        null
+      
+      /*Add highlighted parts to search*/
+      this.$nextTick(() => {
+        const localMsg = this.origin._localTimestamp !== this.origin._localTimestamp,
+              matches = Array.from(this.$el.querySelectorAll('mark'))
+        
+        if (localMsg) matches.reverse()
+  
+        matches
+          .forEach((mark, id) => {
+            if (this.markedText) {
+              mark.component = this
+              this.matches[`${ localMsg ? 'prepend' : 'append' }`](mark)
+            }
+          })
+      })
     }
-
   }
 }

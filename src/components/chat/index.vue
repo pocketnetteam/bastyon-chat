@@ -107,19 +107,6 @@
 
     </div>
 
-    <div class="encrypted" v-if="encrypted && membership != 'invite'" @mouseover="e => hoverEncrypt = true">
-      <i class="fas fa-lock"></i>
-    </div>
-
-    <div v-if="hoverEncrypt" class="encryptedInfo" @mouseover="e => hoverEncrypt = true" @mouseleave="e => hoverEncrypt = false" @click="e => hoverEncrypt = !hoverEncrypt">
-      <div id="slide">
-        <div class="encryptedTxtIcon">
-          <i class="fas fa-user-shield"></i>
-          <span>{{ $t("caption.encrypted") }}</span>
-        </div>
-      </div>
-    </div>
-
     <div class="attachements" v-if="attachements.length"> 
       <div class="attachementsWrapper">
         <attachement @cancel="e => abortSending(attachement.id)" v-for="attachement in attachements" :key="attachement.id" :attachement="attachement"/>

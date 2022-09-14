@@ -280,6 +280,14 @@ export default {
     chats,
     userUnauthorized
   },
+
+  provide() {
+    return {
+      isChatEncrypted: this.isChatEncrypted,
+      matches: this.matches
+    }
+  },
+
   props: {
     address: {
       type: String,
@@ -292,7 +300,7 @@ export default {
 
     pocketnet: {
       type: String,
-      default: ''
+      default: 'true'
     },
 
     mobile: {
@@ -302,7 +310,7 @@ export default {
 
     recording: {
       type: String,
-      default: ''
+      default: 'true'
     },
 
     ctheme: String,
@@ -315,7 +323,27 @@ export default {
       type: Boolean,
       default: false
     }
+  },
 
+  data: function () {
+    return {
+      /*Stack for "encrypted" chat icon*/
+      isChatEncrypted: {
+        value: false,
+        state: this.isChatEncryptedState
+      },
+
+      /*Stack for global search*/
+      matches: {
+        value: '',
+        all: [],
+        current: 0,
+        search: this.search,
+        prepend: this.prependMatch,
+        append: this.appendMatch,
+        clear: this.clearMatches
+      }
+    }
   },
 
   watch: {
@@ -339,7 +367,6 @@ export default {
     }
 
   },
-
 
   computed: {
 
@@ -508,6 +535,28 @@ export default {
         ]
       );
     },
+
+    isChatEncryptedState(state) {
+      this.isChatEncrypted.value = state
+    },
+
+    prependMatch(item) {
+      this.matches.all = [item].concat(this.matches.all)
+    },
+
+    appendMatch(item) {
+      this.matches.all.push(item)
+    },
+
+    clearMatches() {
+      this.matches.value = ''
+      this.matches.current = 0
+      this.matches.all.length = 0
+    },
+
+    search(text) {
+      this.matches.value = text.toLowerCase()
+    }
   },
 
   beforeCreate() {
@@ -515,7 +564,7 @@ export default {
   },
 
   created() {
-    // this.pocketnet = false
+    // this.pocketnet = 'true'
     // this.mobile = !this.pocketnet
 
     this.$store.commit('setPocketnet', this.pocketnet);

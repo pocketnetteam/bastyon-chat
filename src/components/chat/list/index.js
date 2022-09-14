@@ -183,8 +183,7 @@ export default {
     getEventsAndEncrypt : function(){
       var events = this.getEvents()
 
-      return Promise.all(_.map(events, (e) => { 
-
+      return Promise.all(_.map(events, (e) => {
 
         if(!this.chat.pcrypto) return Promise.resolve()
 
@@ -410,6 +409,7 @@ export default {
     readLast: function () {
       var events = this.timeline.getEvents();
 
+      console.log(events)
       this.readEvent(events[events.length - 1])
     },
 

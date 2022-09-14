@@ -5,11 +5,11 @@
 
     <div v-if="!unauthorized">
 
-      <div class="work searchWrapperEA" v-if="!minimized || active">
-        <search @search="search" :minimize="minimized"/>
+      <div class="searchWrapperEA" v-if="!minimized || active">
+        <search />
       </div>
 
-      <teamroom v-if="!searchText && this.chats.length <= 2 && chatsready == true" @click="openTeamRoom"></teamroom>
+      <teamroom v-if="!matches.value && this.chats.length <= 2 && chatsready === true" @click="openTeamRoom"></teamroom>
 
       <div class="listChatLoading" v-if="chatsready !== true">
         <dummypreviews/>
@@ -19,7 +19,7 @@
         <transition name="fade">
           <div class="desktopList" v-if="showchatslist">
 
-            <div class="chatswrapper" v-if="filteredchats.length || !searchText">
+            <div class="chatswrapper" v-if="filteredchats.length || !matches.value">
           
               <RecycleScroller
                   page-mode
