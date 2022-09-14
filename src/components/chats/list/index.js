@@ -1,11 +1,13 @@
 import { mapActions, mapState } from 'vuex'
 import dummypreviews from '@/components/chats/dummypreviews/index.vue'
 import preview from '@/components/chats/preview/index.vue'
+import AllContacts from '@/components/contacts/all/index.vue'
 import teamroom from '@/components/teamroom/index.vue'
 import f from "@/application/functions";
 
 export default {
 	name: "list",
+	inject: ['matches'],
 	data: function () {
 
 		return {
@@ -14,13 +16,13 @@ export default {
 			page: 0,
 			revealed: {},
 			lastEventDescription: '',
-			blocked: false,
-			searchText : ''
+			blocked: false
 		}
 
 	},
 	components: {
 		preview,
+		AllContacts,
 		/* SwipeOut,*
 		 SwipeList,*/
 		dummypreviews,
@@ -46,7 +48,7 @@ export default {
 		},
 
 		active : function(){
-			this.searchText = ''
+			// this.searchText = ''
 		}
 		//$route: 'getdata'
 	},
@@ -102,13 +104,12 @@ export default {
 			}
 
 		},
-
+		
 		chats: function (state) {
 			var self = this
 			var chats = [];
-
+			
 			_.each(state.chats, (chat) => {
-
 				if (this.deletedrooms[chat.roomId]) return
 
 				this.core.mtrx.kit.tetatetchat(this.m_chat)
@@ -124,7 +125,18 @@ export default {
 					return
 
 				} else {
-					chats.push(chat)
+					/*Load messages for every chat*/
+					let rm = this.core.mtrx.client.getRoom(chat.roomId),
+							ts = rm.getLiveTimeline(),
+							tl = new this.core.mtrx.sdk.TimelineWindow(this.core.mtrx.client, ts.getTimelineSet());
+					
+					tl.load().then(() => {
+						return this.getEventsAndDecrypt(rm, tl)
+					}).then((events) => {
+						chat.events = events.filter(f => f.event.decrypted?.msgtype === 'm.text' || f.event.content?.msgtype === 'm.text');
+					}).catch(() => {})
+					
+					chats.push(chat);
 				}
 
 			})
@@ -134,64 +146,6 @@ export default {
 			}).reverse()
 
 		},
-
-		filteredchats : function(){
-
-			var chats = this.chats;
-
-
-			if (this.searchText){
-
-				var mc = _.filter(_.map(chats, (c) => {
-
-					var users = this.core.mtrx.chatUsersInfo(c.roomId, 'anotherChatUsers')
-					var m_chat = this.core.mtrx.client.getRoom(c.roomId)
-
-					var usersnamestring = _.reduce(users, function(m, u){
-						return m + u.name.toLowerCase()
-					}, '')
-
-					var chatname = ''
-
-					if(m_chat && m_chat.getJoinRule() === 'public' && m_chat.currentState.getStateEvents('m.room.name').length > 0){
-						chatname = m_chat.currentState.getStateEvents('m.room.name')[0].getContent().name
-					  }
-
-					if(!chatname){
-						chatname = m_chat.name
-
-						if(chatname[0] == '#') chatname = ''
-					}
-
-					var sstring = (chatname + usersnamestring).toLowerCase()
-
-					var point = 0
-
-					if(sstring.indexOf(this.searchText) > -1){
-						point = this.searchText.length / sstring.length
-					}
-
-					return {
-						chat : m_chat.summary,
-						point
-					}
-
-				}), function(cc){
-					return cc.point
-				})
-
-				mc = _.sortBy(mc, function (cc) {
-					return cc.point
-				}).reverse()
-
-				chats = _.map(mc, (c) => {
-					return c.chat
-				} )
-
-			}
-
-			return chats
-		},	
 
 		withoutBlockedChats: function () {
 			var self = this
@@ -211,11 +165,31 @@ export default {
 
 	}),
 	methods: {
-
-		search(text) {
-			this.searchText = text.toLowerCase()
+		getEventsAndDecrypt(chat, timeline) {
+			let events = timeline.getEvents()
+			
+			return Promise.all(_.map(events, (e) => {
+				if (e.event.decrypted) return Promise.resolve()
+				if(f.deep(e, 'event.content.msgtype') !== 'm.encrypted') return Promise.resolve()
+				
+				return chat.pcrypto.decryptEvent(e.event).then(d => {
+					e.event.decrypted = d
+					
+					return Promise.resolve()
+				}).catch(e => {
+					
+					e.event.decrypted = {
+						msgtype : 'm.bad.encrypted'
+					}
+					
+					return Promise.resolve()
+				})
+				
+			})).then(() => {
+				return Promise.resolve(events)
+			})
 		},
-
+		
 		invitepnt() {
 			this.core.invitepnt()
 		},
@@ -376,6 +350,43 @@ export default {
 			if (!m_ch) return true
 
 			return this.core.mtrx.kit.tetatetchat(this.core.mtrx.client.getRoom(room.roomId))
+		},
+		
+		select : function(u){
+			this.$emit('select', u)
+		},
+		
+		toggleUser: function(id){
+			
+			if(!this.selected[id]){
+				
+				if(this.selectedlength >= 11){
+					
+					this.$store.commit('icon', {
+						icon : 'warning',
+						message : "At the moment, you can add no more than 12 users to the chat"
+					})
+					
+					return
+				}
+				
+				this.$set(this.selected, id, id)
+			}
+			
+			else
+				this.$delete(this.selected, id)
+			
+			this.$emit('selectedUsers', this.selected)
+		},
+		
+		shrinkResult(array, limit) {
+			array = [].concat(array)
+			if (limit && array.length > limit) array.length = limit
+			return array
+		},
+		
+		itemToggle(item) {
+			this[item] = this[item] ? null : 2
 		}
 	},
 	mounted() {

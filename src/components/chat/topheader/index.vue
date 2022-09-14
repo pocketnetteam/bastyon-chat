@@ -7,6 +7,10 @@
         <backButton action="chats"/>
       </template>
 
+      <template v-slot:leftadd>
+        <search chat="true" :minimize="!matches.value" />
+      </template>
+
       <template v-slot:info>
         <router-link v-if="chat" :to="'chatInfo?id=' + chat.roomId">
 
@@ -35,6 +39,21 @@
         <router-link v-if="chat" :to="'chatInfo?id=' + chat.roomId">
           <div class="iconbutton"><i class="fas fa-ellipsis-h"></i></div>
         </router-link>
+      </template>
+
+      <template v-slot:rightadd>
+        <div class="encrypted" v-if="isChatEncrypted.value" @mouseover="e => hoverEncrypt = true">
+          <i class="fas fa-lock"></i>
+        </div>
+
+        <div v-if="hoverEncrypt" class="encryptedInfo" @mouseover="e => hoverEncrypt = true" @mouseleave="e => hoverEncrypt = false" @click="e => hoverEncrypt = !hoverEncrypt">
+          <div id="slide">
+            <div class="encryptedTxtIcon">
+              <i class="fas fa-user-shield"></i>
+              <span>{{ $t("caption.encrypted") }}</span>
+            </div>
+          </div>
+        </div>
       </template>
 
       <!--<template v-slot:right>
