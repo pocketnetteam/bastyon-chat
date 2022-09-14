@@ -271,6 +271,15 @@ export default {
     chats,
     userUnauthorized
   },
+
+  provide() {
+    return {
+      isChatEncrypted: this.isChatEncrypted,
+      matches: this.matches,
+      markText: this.markText
+    }
+  },
+
   props: {
     address: {
       type: String,
@@ -296,7 +305,7 @@ export default {
       default: ''
     },
 
-    pkoindisabled : {
+    pkoindisabled: {
       type: String,
       default: ''
     },
@@ -311,7 +320,27 @@ export default {
       type: Boolean,
       default: false
     }
+  },
 
+  data: function () {
+    return {
+      /*Stack for "encrypted" chat icon*/
+      isChatEncrypted: {
+        value: false,
+        state: this.isChatEncryptedState
+      },
+
+      /*Stack for global search*/
+      matches: {
+        value: '',
+        all: [],
+        current: 0,
+        search: this.search,
+        prepend: this.prependMatch,
+        append: this.appendMatch,
+        clear: this.clearMatches
+      }
+    }
   },
 
   watch: {
@@ -344,7 +373,6 @@ export default {
     }
 
   },
-
 
   computed: {
 
@@ -398,14 +426,14 @@ export default {
   },
 
   methods: {
-    
+
     hide: function () {
 
       this.$store.commit('minimize', true);
 
       setTimeout(() => {
 
-        
+
 
         if (this.$route.name !== 'chats' &&
           /*this.$route.name !== 'chat' &&*/
@@ -420,7 +448,7 @@ export default {
 
       }, 500)
 
-
+      this.clearMatches()
     },
 
     iteraction: function () {
@@ -517,6 +545,38 @@ export default {
         ]
       );
     },
+
+    isChatEncryptedState(state) {
+      this.isChatEncrypted.value = state
+    },
+
+    prependMatch(item) {
+      this.matches.all = [item].concat(this.matches.all)
+    },
+
+    appendMatch(item) {
+      this.matches.all.push(item)
+    },
+
+    clearMatches() {
+      this.matches.value = ''
+      this.matches.current = 0
+      this.matches.all.length = 0
+    },
+
+    search(text) {
+      this.matches.value = text.toLowerCase()
+    },
+
+    markText: function (text, highlight) {
+      return this.matches.value && text.includes(this.matches.value) ?
+        text.replace(new RegExp(`(${ this.matches.value })`, 'gi'), (match) => {
+          const str = `<mark class="match${ highlight ? ' current' : '' }">${ match }</mark>`
+          highlight = null
+          return str
+        }) :
+      null
+    }
   },
 
   beforeCreate() {
@@ -524,8 +584,8 @@ export default {
   },
 
   created() {
-    /*this.pocketnet = false
-    this.mobile = !this.pocketnet
+    this.pocketnet = true
+    this.mobile = !this.pocketnet/*
     this.recording = true*/
 
     this.$store.commit('setPocketnet', this.pocketnet);
@@ -544,8 +604,8 @@ export default {
         this.setPusher(this.fcmtoken);
     }, 5000);
 
-    
-    
+
+
     var testUsers = {
       matrixMan: {
         address: f.hexEncode('PToMRMsMVh9dj4Cpa7yu1pB5iq65g4jrVC'),
@@ -782,7 +842,7 @@ export default {
     core.initWithUser(user).then(r => {
 
       return core.mtrx.wait().then(() => {
-        
+
         core.user.getContacts()
 
 
@@ -799,7 +859,7 @@ export default {
           }
         }, 100)
 
-        
+
 
         //this.connectCustomRecorder();
 

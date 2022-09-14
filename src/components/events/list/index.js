@@ -13,6 +13,7 @@ export default {
     selectedMessages: [],
     isRemoveSelectedMessages: false,
   },
+  inject: ['matches'],
   components: {},
   data: function () {
     return {
@@ -86,6 +87,7 @@ export default {
       scrollbottomshow: function () {
         return this.lscroll && this.lscroll.scrollTop > 500;
       },
+      minimized: state => state.minimized,
       notificationCount : (state) => state.allnotifications
     }),
 
@@ -151,7 +153,7 @@ export default {
     }, 35),
 
     ddscroll: function (e) {
-      /*var _ls = this.$refs['container'].scrollTop 
+      /*var _ls = this.$refs['container'].scrollTop
 
             if (Math.abs(_ls - this.ls) > 500 && this.c * _ls < this.c * this.ls){
             }

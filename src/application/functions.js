@@ -1297,7 +1297,7 @@ f.getCaretPosition = function(ctrl){
             'end': start + rangelen
         };
     } // IE >=9 and other browsers
-    else if (ctrl.selectionStart || ctrl.selectionStart == '0') {
+    else if (ctrl?.selectionStart || ctrl?.selectionStart === '0') {
         return {
             'start': ctrl.selectionStart,
             'end': ctrl.selectionEnd

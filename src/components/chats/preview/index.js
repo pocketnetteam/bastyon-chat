@@ -9,7 +9,9 @@ export default {
   props: {
     chat: Object,
     dummy: Boolean,
+    search: String
   },
+  inject: ['matches'],
 
   components: {
     chatName,
@@ -51,7 +53,7 @@ export default {
 
   mounted : function(){
 
-    
+  
   },
 
   computed: mapState({
@@ -131,7 +133,18 @@ export default {
         events = _.sortBy(events, function (e) {
           return e.event.origin_server_ts
         })
-
+        
+        /*Show matched message instead of last*/
+        if (this.matches?.value) {
+          const messages = _.filter(this.chat?.events, f => {
+            return (f.event?.content || f.event?.decrypted).body.includes(this.matches.value)
+          })
+          
+          if (messages.length) {
+            return _.filter(events, f => f.event.event_id === messages[messages.length - 1].event.event_id)[0]
+          }
+        }
+        
         if (events.length) {
           return events[events.length - 1]
         }

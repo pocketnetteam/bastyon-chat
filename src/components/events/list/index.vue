@@ -5,9 +5,9 @@
           <div class="errorWrapper" v-if="stringifyiedError" >
             <div class="error"><div>{{ $t("sendingerror") }}</div><div class="btnwrp"><button @click="showerror" class="button small">{{ $t("details") }}</button></div></div>
           </div>
-            
+
           <div class="eventWrapper"
-              
+
               v-for="(event, i) in events"
               :key="event.event.event_id"
           >
@@ -40,18 +40,15 @@
         <linepreloader />
       </div>
 
-      
+
 
     </div>
 
     <transition name="fade">
-      <div class="scrollbottom" v-show="scrollbottomshow" @click="scrolldown"> 
+      <div class="scrollbottom" v-show="scrollbottomshow" @click="scrolldown">
         <i class="fas fa-chevron-down"></i>
       </div>
     </transition>
-
- 
-
   </div>
 </template>
 

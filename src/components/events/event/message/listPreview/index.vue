@@ -51,7 +51,7 @@
 
     <div v-if="(content.msgtype === 'm.text') && !urlpreview" class="previewMessage">
 
-      <span v-if="senderName && senderName!= 'You'" class="txt sname" >{{ senderName }}:&nbsp;</span><span class="txt"><IncomingMessage :message="content.body"></IncomingMessage></span>
+      <span v-if="senderName && senderName!= 'You'" class="txt sname" >{{ senderName }}:&nbsp;</span><span class="txt"><IncomingMessage :message="content.body" :markedText="markMatches"></IncomingMessage></span>
     </div>
 
     <div v-if="content.msgtype === 'm.encrypted' && !urlpreview" class="previewMessage">
@@ -105,6 +105,7 @@ export default {
     readed: Object,
     my : Boolean
   },
+  inject: ['matches', 'markText'],
   components: {IncomingMessage},
   data: function () {
     return {
@@ -133,7 +134,7 @@ export default {
     tetatetchat : function(){
       return this.core.mtrx.kit.tetatetchat(this.chat)
     },
-    
+
     unknowngroupusers : function(){
       return this.core.mtrx.kit.unknowngroupusers(this.m_chat)
     },
@@ -185,8 +186,11 @@ export default {
         }
 
       }
-    }
+    },
 
+    markMatches: function () {
+      return this.markText((this.event.event.decrypted || this.event.event.content)?.body, true)
+    }
   }
 }
 </script>
