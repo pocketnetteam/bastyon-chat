@@ -4,13 +4,17 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "node themes.js && vue-cli-service build --dest C:/inetpub/wwwroot/pocketnet/chat",
+    "build": "node themes.js && vue-cli-service build --dest /run/media/freedom/Server/nginx/hosts/localhost/pocketnet/chat/",
     "build_mac": "node themes.js && vue-cli-service build --dest ~/work/pocketnet/chat",
     "themes": "node themes.js",
     "buildpocketnet": "npm run build -- --target wc-async --inline-vue --name matrix-element src/App.vue",
     "buildpocketnet_mac": "npm run build_mac -- --target wc-async --inline-vue --name matrix-element src/App.vue",
     "buildpocketnetdev": "npm run build -- --target wc-async --inline-vue --watch --name matrix-element src/App.vue",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "lint-staged": {
+      "**/*.{js,vue}": "prettier --write --ignore-unknown"
+    },
+    "lint-check": "yarn prettier --check './src/**/*.{js,vue}'"
   },
   "dependencies": {
     "@babel/preset-stage-0": "^7.8.3",
@@ -85,10 +89,10 @@
     "babel-preset-stage-0": "^6.24.1",
     "expose-loader": "^1.0.3",
     "gitignore-parser": "0.0.2",
-    "husky": "^8.0.2",
+    "husky": ">=6",
     "less": "^3.12.2",
     "less-loader": "^7.0.2",
-    "lint-staged": "^13.0.3",
+    "lint-staged": ">=10",
     "prettier": "2.7.1",
     "sass-loader": "^8.0.0",
     "ts-loader": "^8.3.0",
@@ -101,6 +105,7 @@
     "not dead"
   ],
   "lint-staged": {
-    "**/*": "prettier --write --ignore-unknown"
+    "**/*": "prettier --write --ignore-unknown",
+    "*.{js,css,md}": "prettier --write"
   }
 }
