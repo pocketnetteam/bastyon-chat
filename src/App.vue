@@ -764,7 +764,6 @@ export default {
             })
 
             .then((dialog) => {
-               console.log("CNF")
             })
 
     */

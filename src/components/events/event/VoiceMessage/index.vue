@@ -314,7 +314,6 @@ export default {
         this.audioContext = this.core.getAudioContext() //new (window.AudioContext || window.webkitAudioContext)() || null;
       } catch (e) {
         this.error = e
-        console.log(e)
       }
 
       if(this.error) return

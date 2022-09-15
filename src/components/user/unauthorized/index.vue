@@ -199,7 +199,6 @@ export default {
         joinroom : state => state.joinroom,
 
         unauthorized: function() {
-            console.log('this.$store.state.unauthorized', this.$store.state.unauthorized)
 			return this.$store.state.unauthorized
 		},
 

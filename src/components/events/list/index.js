@@ -65,7 +65,6 @@ export default {
 
     notificationCount : function(){
 
-      console.log('notificationCount')
      
       if(this.lscroll && this.lscroll.scrollTop < 180 && this.chat && this.chat.getUnreadNotificationCount()){
         this.scrollToNew()
@@ -247,7 +246,6 @@ export default {
       this.multiSelect = true;
     },
     selectMessage(message) {
-      console.log("this emit from liust");
       if (
         this.selectedMessages.filter(
           (item) => item.message_id === message.message_id
