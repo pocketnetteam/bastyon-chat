@@ -253,8 +253,12 @@ export default {
     },
 
     groupAvatar: function () {
-      return this.m_chat.currentState.getStateEvents('m.room.avatar')[0].event
-        .content.avatarUrl;
+
+      if (this.m_chat.currentState.getStateEvents('m.room.avatar')[0]){
+        return this.m_chat.currentState.getStateEvents('m.room.avatar')[0].event.content.avatarUrl; 
+      }
+
+     
     },
   },
   mounted() {

@@ -18,7 +18,7 @@
 <script>
 import f from '@/application/functions'
 import { mapState } from 'vuex';
-
+const unmuteAudio = require('unmute-ios-audio')
 export default {
   name: "VoiceMessage",
   props: {
@@ -145,6 +145,9 @@ export default {
         this.pause()
       }
       else{
+        if(f.isios())
+          unmuteAudio()
+
         this.play()
       }
     },

@@ -62,6 +62,8 @@
                     @uploadedAll="(result) => uploadUploadedAll(slotProps.item, result)"
                     @error="(error) => uploadError(slotProps.item, error)"
 
+                    :onlyimage="slotProps.item.upload.onlyimage"
+
                     :multiple="slotProps.item.upload.multiple"
                     :extensions="slotProps.item.upload.extensions"
                     :images="slotProps.item.upload.images"
