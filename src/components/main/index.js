@@ -28,7 +28,6 @@ export default {
         this.$route.path === '/chatInfo' ||
         this.$route.path === '/teamRoom' ||
         this.$route.path === '/invite',
-      minimized: true
     }
 
   },

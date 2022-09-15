@@ -535,6 +535,7 @@ export default {
 
   mounted() {
     getDecryptedMnemonic()
+    console.log(process.argv.argument, 'process.argv')
   },
 
   created() {

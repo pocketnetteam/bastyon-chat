@@ -73,7 +73,7 @@ var store = new Vuex.Store({
 
 		deletedrooms: {},
     	isLocalStorageChatAuth: false
-		//share : {url : 'https://yandex.ru/'} //null
+		// share : {url : 'https://yandex.ru/'} //null
 	},
 	getters: {
 		getUser: state => {
