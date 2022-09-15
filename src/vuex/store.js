@@ -72,7 +72,8 @@ var store = new Vuex.Store({
 		lastroom: null,
 		dontreadreceipts: false,
 		voicerecording : false,
-		deletedrooms: {}
+		deletedrooms: {},
+		pkoindisabled : false
 		//share : {url : 'https://yandex.ru/'} //null
 	},
 	getters: {
@@ -168,6 +169,10 @@ var store = new Vuex.Store({
 				mv.small()
 			}
 
+		},
+
+		pkoindisabled(state, value){
+			state.pkoindisabled = value && value == 'true' ? true : false
 		},
 
 		wasunhidden(state, value) {

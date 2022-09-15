@@ -296,6 +296,11 @@ export default {
       default: ''
     },
 
+    pkoindisabled : {
+      type: String,
+      default: ''
+    },
+
     ctheme: String,
 
     fcmtoken: String,
@@ -526,6 +531,7 @@ export default {
     this.$store.commit('setPocketnet', this.pocketnet);
     this.$store.commit('setMobile', this.mobile);
     this.$store.commit('setVoiceMessagesEnabled', this.recording);
+    this.$store.commit('pkoindisabled', this.pkoindisabled)
     this.$store.commit('clearall')
 
     this.$store.commit('ls')

@@ -91,6 +91,9 @@ export default {
 		connect: function () {
 			return this.$store.state.contact
 		},
+		pkoindisabled : function(){
+			return this.$store.state.pkoindisabled
+		},
 		menuItems: function () {
 			var menuItems = []
 
@@ -145,7 +148,7 @@ export default {
 			}
 
 
-			if (this.transaction) {
+			if (this.transaction && !this.pkoindisabled) {
 				menuItems.unshift({
 					click: "sendtransactionWrapper",
 					title: this.$i18n.t("button.sendCoins"),
