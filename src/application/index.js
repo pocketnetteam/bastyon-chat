@@ -579,6 +579,10 @@ class Core {
 
         this.audioContext = new (window.AudioContext || window.webkitAudioContext)() || null;
 
+        if(f.isios() && window.unmute){
+            unmute(this.audioContext, false, false);
+        }
+
         return this.audioContext
     }
 }

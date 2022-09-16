@@ -18,7 +18,6 @@
 <script>
 import f from '@/application/functions'
 import { mapState } from 'vuex';
-const unmuteAudio = require('unmute-ios-audio')
 export default {
   name: "VoiceMessage",
   props: {
@@ -145,8 +144,7 @@ export default {
         this.pause()
       }
       else{
-        if(f.isios())
-          unmuteAudio()
+        
 
         this.play()
       }
@@ -190,9 +188,12 @@ export default {
 
       this.audioContext = this.core.getAudioContext()
 
+      
+
       this.isPlaying = true
 
       this.audio = this.initAudioNode()
+
 
       if(this.currentTime >= this.duration){
         this.setTime(0)
@@ -276,6 +277,8 @@ export default {
 
     },
 
+    
+
     initAudioNode(){
 
       let audioNode = null
@@ -283,6 +286,8 @@ export default {
       audioNode = this.audioContext.createBufferSource();
       audioNode.buffer = this.audiobuffer
       audioNode.connect(this.audioContext.destination);
+
+      ///let unmuteHandle = unmute(context, allowBackgroundPlayback, forceIOSBehavior);
 
       audioNode.onended = () => {
 
