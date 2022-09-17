@@ -1,7 +1,7 @@
-import { mapActions, mapGetters, mapState } from "vuex";
-import preview from "@/components/contacts/preview/index.vue";
-import ModalWindow from "@/components/utils/ModalWindow.vue";
-import _ from "underscore";
+
+import {mapActions, mapGetters, mapState} from 'vuex'
+import preview from '@/components/contacts/preview/index.vue'
+import ModalWindow from '@/components/utils/ModalWindow.vue'
 
 export default {
   name: "contactsList",

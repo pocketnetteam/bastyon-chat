@@ -5,10 +5,25 @@
 </template>
 <script>
 
+
+//import {PhotoSwipe, PhotoSwipeGallery} from "@/editedplugins/v-photoswipe/src/index.js";
+
+
 export default {
   props: {
     images : Array,
     index : Number
+  },
+
+  components : {
+    //vPhotoswipe : PhotoSwipe,
+
+    vPhotoswipe : () => {
+      return import ("@/editedplugins/v-photoswipe/src/index.js").then(p => {
+        return p.PhotoSwipe
+      }) 
+    }
+    
   },
 
   data: () => {
@@ -49,8 +64,6 @@ export default {
     },
 
     init() {
-
-      console.log('this.index', this.index)
 
       this.isOpen = true
       this.$set(this.options, 'index', this.index)

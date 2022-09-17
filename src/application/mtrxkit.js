@@ -1,4 +1,3 @@
-var _ = require('underscore');
 import f from "@/application/functions";
 
 var cachestorage = {}

@@ -1,5 +1,3 @@
-var _ = require('underscore');
-
 var errors = {
     500 : 'networkerror',
     401 : 'unauthorized',

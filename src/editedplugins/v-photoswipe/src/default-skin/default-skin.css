@@ -423,7 +423,7 @@ a.pswp__share--download:hover {
 .pswp__top-bar {
   position: absolute;
   left: 0;
-  top: 0;
+  top: var(--app-margin-top);
   height: 44px;
   width: 100%; }
 

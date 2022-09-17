@@ -17,7 +17,7 @@
 
 
     </div>
-    <div v-if="!showPage" class="chat-container-pages-empty">
+    <div v-if="!showPage && !pocketnet" class="chat-container-pages-empty">
       <i class="fas fa-comments"></i>
     </div>
   </div>

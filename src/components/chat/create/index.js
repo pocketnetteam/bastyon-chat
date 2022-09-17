@@ -47,8 +47,6 @@ export default {
 
             if(!this.type) return false
 
-            console.log("this.selectedLength0,", this.selectedLength)
-
             if (this.type.id == 'privategroup'){
                return this.selectedLength > 1
             }

@@ -28,35 +28,13 @@ export default {
         this.$route.path === '/chatInfo' ||
         this.$route.path === '/teamRoom' ||
         this.$route.path === '/invite',
+      minimized: this.$store.state.mobile
     }
 
   },
 
   created: () => {},
 
-  watch: {
-    "$route.query.page": {
-      handler: function (page) {
-        this.page = page ? page : "chats";
-      },
-      deep: true,
-      immediate: true,
-    },
-    "$route.path": {
-      handler: function (path) {
-        this.showPage =
-          path === "/chat" ||
-          path === "/contact" ||
-          path === "/publicPreview" ||
-          path === "/chatSettings" ||
-          path === "/chatInfo" ||
-          path === "/teamRoom" ||
-          path === "/invite";
-      },
-      deep: true,
-      immediate: true,
-    },
-  },
 
   watch: {
     '$route.query.page': {
@@ -107,6 +85,7 @@ export default {
 
   computed: mapState({
     auth: (state) => state.auth,
+    pocketnet: (state) => state.pocketnet,
 
     ...mapState([
       "currentUserChat",

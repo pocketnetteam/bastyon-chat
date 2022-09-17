@@ -43,6 +43,7 @@
             transform: translate(-50%, -50%)
             +transition(0.3s)
 
+        
         &:hover
             .etable
                 >div
@@ -80,7 +81,8 @@
         position: absolute
         left : 0
         right : 0
-        top : 65px
+        //top : 65px
+        top : calc(65px + var(--app-margin-top))
         bottom : 90px
         overflow-y: auto
         overflow-x: hidden

@@ -1,7 +1,7 @@
 <template>
   <transition name="fade">
 
-    <div id="modal" :class="{'bin' : pocketnet, 'bout' : !pocketnet, minimized, active, mobile}">
+    <div id="modal" :class="{'bin' : pocketnet, 'bout' : !pocketnet, minimized: !minimized, active, mobile}">
       <div class="modal-backdrop" @click="close"></div>
       <div class="modal-wrapper">
         <div class="modal" role="dialog" aria-labelledby="modalTitle" aria-describedby="modalDescription">
