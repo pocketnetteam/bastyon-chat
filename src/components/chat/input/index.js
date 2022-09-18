@@ -940,8 +940,45 @@ export default {
 			console.error(err)
 		},
 
+		getFileIosCordova (path) {
+			return new Promise((resolve, reject) => {
+				window.resolveLocalFileSystemURL(path, (entry) => {
+
+
+					if(!entry){
+						return reject('noentry')
+					}
+	
+					entry.file((file) => {
+						var reader = new FileReader()
+
+						console.log('file', file)
+	
+						reader.onloadend = function() {
+							var blob = new Blob([new Uint8Array(this.result)], {type : file.type})
+
+							console.log('blob', blob)
+
+							entry.remove()
+
+							resolve(blob)
+						}
+
+						reader.onerror = (e) => {
+
+							entry.remove()
+							
+							reject(e)
+						}
+	
+						reader.readAsArrayBuffer(file)
+					})
+				})
+			})
+			
+		},
+
 		initRecordingCordova() {
-			if (this.prepareRecording || this.isRecording) return
 
 			this.prepareRecording = cancelable(this.core.media.permissions({ audio: true }).then(() => {
 				this.microphoneDisabled = false
@@ -959,17 +996,27 @@ export default {
 
 			this.prepareRecording.then(() => {
 
+				console.log("START RECORDING")
+
 				this.microphoneDisabled = false
 
 				var path = 'cdvfile://localhost/temporary/recording.mp3'
+
+				if(f.isios()) path = 'cdvfile://localhost/temporary/recording.m4a'
 
 				var sec = 0
 
 				this.audioContext = this.core.getAudioContext()
 
-				this.cordovaMediaRecorder = new Media(path, () => {
+				//var startedTime = (new Date()).getTime() / 1000
+
+				var media = this.cordovaMediaRecorder = new Media(path, () => {
+
+					console.log("MEDIA PREPARED", this.cancelledCordovaMediaRecorder)
 
 					this.recordTime = 0
+
+					media.release()
 
 					if (this.cancelledCordovaMediaRecorder) {
 
@@ -977,23 +1024,57 @@ export default {
 						return
 					}
 
-					f.fetchLocal(path).then(r => {
+					var fu = null
+
+					if(f.isios()){ fu = this.getFileIosCordova(path).then(blob => {
+						return Promise.resolve({
+							data : blob
+						})
+					})}
+
+					else{
+						fu = f.fetchLocal(path)
+					}
+
+					fu.then(r => {
+						///temp
+						/*if (f.isios())
+							r.duration = (new Date()).getTime() / 1000 - startedTime
+
+						console.log("R", r)
 
 						/*var e = {
 							data : r.data
 						}*/
 
+						console.log('media.duration', media.duration)
+
+						if (media.duration && media.duration > 0){
+							r.duration = media.duration
+						}
+
 						this.createVoiceMessage(r, true)
 
+						return Promise.resolve()
+
+					}).catch(e => {
+
+						this.clear()
+
+						console.error(e)
+					}).finally(() => {
+						
 					})
 
-				}, () => {
+				}, (e) => {
+
+					console.error(e)
 
 					this.isRecording = false
+					this.clear()
 
 				});
 
-				this.recordRmsData = []
 				var rmsdata = []
 
 				let currentPlaying = this.$store.state.currentPlayingVoiceMessage
@@ -1005,22 +1086,35 @@ export default {
 
 				this.interval = setInterval(() => {
 					// get media amplitude
-					this.cordovaMediaRecorder.getCurrentAmplitude(
-						// success callback
-						(amp) => {
 
-							rmsdata.push(amp * 1000)
+					if(f.isios()){
+						rmsdata.push(1)
 
-							if (rmsdata.length > 50) rmsdata = _.last(rmsdata, 50)
+						if (rmsdata.length > 50) rmsdata = _.last(rmsdata, 50)
+	
+						this.recordRmsData = _.clone(rmsdata)
+					}
+					else{
+						this.cordovaMediaRecorder.getCurrentAmplitude(
+							// success callback
+							(amp) => {
+	
+								rmsdata.push(amp * 1000)
+	
+								if (rmsdata.length > 50) rmsdata = _.last(rmsdata, 50)
+	
+								this.recordRmsData = _.clone(rmsdata)
+	
+	
+							},
+							function (e) {
+								console.log("E", e)
+							}
+						);
+					}
+					
 
-							this.recordRmsData = _.clone(rmsdata)
 
-
-						},
-						function (e) {
-							console.log("E", e)
-						}
-					);
 
 					sec = sec + 50
 
@@ -1029,14 +1123,18 @@ export default {
 				}, 50);
 
 				this.isRecording = true
-
-
+				this.cancelOpacity = 0
+				this.recordRmsData = []
+				this.recordTime = 0
+				this.record = null
 
 				this.cordovaMediaRecorder.startRecord();
 
+			}).catch((e) => { 
+				console.error(e)
 
 
-			}).catch(() => { }).finally(() => {
+			}).finally(() => {
 				this.prepareRecording = null
 			})
 
@@ -1044,11 +1142,13 @@ export default {
 
 		initRecording() {
 
+			if (this.prepareRecording || this.isRecording || this.cordovaMediaRecorder) return
+
+			console.log("INIT RECORDING")
+
 			if (window.cordova) {
 				return this.initRecordingCordova()
 			}
-
-			if (this.prepareRecording || this.isRecording) return
 
 			this.prepareRecording = cancelable(this.core.initMediaRecorder().then((recorder) => {
 
@@ -1137,33 +1237,85 @@ export default {
 		},
 
 
-		checkaudioForSend: function (sendnow) {
+		checkaudioForSend: function (record, sendnow) {
 
-			if (!this.record) {
-				return
-			}
-
-
-			if (this.record.duration < 1) {
+			if (record.duration < 1) {
 				this.clear()
 			}
 			else {
-				if (sendnow) this.sendVoiceMessage()
+				if (sendnow) {
+					this.sendVoiceMessage(record)
+				}
+				else{
+					this.record = record
+				}
 			}
 		},
 
+		getduration(file){
+
+			return new Promise((resolve, reject) => {
+				f.readFile(file).then(arraybuffer => {
+					try{
+						this.audioContext.decodeAudioData(arraybuffer, (buffer) => {
+							resolve(buffer.duration)
+						})
+					}catch(e){
+						reject(e)
+					}
+					
+				}).catch(reject)
+			})
+
+			
+
+		},
 
 		createVoiceMessage(event, sendnow) {
+			console.log('event', event)
 
+			var c = () => {
 
-			this.record = {
-				file: event.data,
-				id: f.makeid()
+				//this.record = 
+
+				this.checkaudioForSend({
+					file: event.data,
+					id: f.makeid(),
+					duration : event.duration
+				}, sendnow)
 			}
 
-			f.readFile(event.data).then(arraybuffer => {
+			if(event.duration){
 
-				return this.audioContext.decodeAudioData(arraybuffer, (buffer) => {
+				c()
+			}
+			else{
+				this.getduration(event.data).then(duration => {
+					event.duration = duration
+
+					c()
+				}).catch((e) => {
+					console.error(e)
+
+					this.clear()
+				})
+			}
+
+
+			/*f.readFile(event.data).then(arraybuffer => {
+
+				console.log('arraybuffer', arraybuffer)
+
+				this.audioContext.decodeAudioData(arraybuffer, (buffer) => {
+
+					console.log('this.record', this.record)
+					console.log('this.buffer', buffer)
+					
+
+					this.record = {
+						file: event.data,
+						id: f.makeid()
+					}
 
 					this.record.duration = buffer.duration
 
@@ -1175,7 +1327,7 @@ export default {
 				console.error('e', e)
 				this.clear()
 				//
-			})
+			})*/
 
 		},
 
@@ -1184,6 +1336,9 @@ export default {
 		},
 
 		stopRecording({ cancel, sendnow }) {
+
+			console.log("STOP RECORDING", this.isRecording)
+
 
 			this.$store.commit('SET_VOICERECORDING', false)
 
@@ -1234,18 +1389,24 @@ export default {
 					this.cancelledCordovaMediaRecorder = false
 				}
 
-
 				this.cordovaMediaRecorder.stopRecord()
-				//this.cordovaMediaRecorder.release()
 				this.cordovaMediaRecorder = null
+				
 			}
 
 		},
 
-		async sendVoiceMessage() {
+		async sendVoiceMessage(record) {
+
+			if(!record) record = this.record
+
+			if(!record) {
+				this.clear()
+			}
 
 			this.recordRmsData = []
-			const base64 = await this.core.convertAudioToBase64(this.record.file)
+
+			const base64 = await this.core.convertAudioToBase64(record.file)
 
 			const id = f.makeid()
 
@@ -1275,6 +1436,29 @@ export default {
 		clear() {
 			this.record = null
 			this.recordRmsData = []
+			this.recordTime = 0
+
+			if (this.interval) {
+				clearInterval(this.interval)
+				this.interval = null
+			}
+
+			if (this.cordovaMediaRecorder) {
+				this.cordovaMediaRecorder = null
+			}
+
+			if (this.mediaRecorder) {
+
+				this.mediaRecorder.stop()
+				this.mediaRecorder.stream.getTracks().forEach((track) => {
+					track.stop();
+				});
+				this.mediaRecorder = null
+			}
+
+			/*if (this.audioContext){
+				this.audioContext.close()
+			}*/
 		},
 
 		/*async convertAudioToBase64(blob) {

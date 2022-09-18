@@ -410,7 +410,7 @@ export default {
         if (this.$route.name !== 'chats' &&
           /*this.$route.name !== 'chat' &&*/
           this.$route.name !== 'contact' &&
-          this.$route.name !== 'chatInfo' &&
+          /*this.$route.name !== 'chatInfo' &&*/
           this.$route.name !== 'publicPreview' &&
           this.$route.name !== 'chatSettings' &&
           core.cancelDefaultRoute !== true) {
@@ -789,7 +789,7 @@ export default {
         setTimeout(() => {
           if (this.$route.name !== 'chats' &&
             /*this.$route.name !== 'chat' &&*/
-            this.$route.name !== 'chatInfo' &&
+            /*this.$route.name !== 'chatInfo' &&*/
             this.$route.name !== 'publicPreview' &&
             this.$route.name !== 'chatSettings' &&
             this.$route.name !== 'contact' &&

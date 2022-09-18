@@ -11,15 +11,23 @@ var Media = function () {
             audio : function(){
 
                 return new Promise((resolve, reject) => {
-  
-                    var needMic = true;
-                    var needCamera = false;
 
-                    cordova.plugins.iosrtc.requestPermission(needMic, needCamera, function (permissionApproved) {
-
-                        if(permissionApproved) resolve()
-                        else reject('permissions')
-                    })
+                    window.audioinput.checkMicrophonePermission(function(hasPermission) {
+                        if (hasPermission) {
+                            
+                            resolve();
+                        } 
+                        else {	        
+                            // Ask the user for permission to access the microphone
+                            window.audioinput.getMicrophonePermission(function(hasPermission, message) {
+                                if (hasPermission) {
+                                    resolve()
+                                } else {
+                                    reject('permissions')
+                                }
+                            });
+                        }
+                    });
 
                 })
     

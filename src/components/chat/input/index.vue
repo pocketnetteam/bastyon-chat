@@ -103,7 +103,7 @@
             </template>
 
 
-            <div v-if="!isRecording && record" class="iconbutton" @click="sendVoiceMessage">
+            <div v-if="!isRecording && record" class="iconbutton" @click="e => {sendVoiceMessage()}">
               <div>
                 <i class="icon fas fa-paper-plane"></i>
               </div>

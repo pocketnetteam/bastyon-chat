@@ -115,6 +115,8 @@ export default {
   methods: {
     goTo(e) {
 
+      if(!this.$refs.canvas) return
+
       var dr = e.offsetX / this.$refs.canvas.width * this.duration;
       
       

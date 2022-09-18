@@ -69,6 +69,9 @@ export default {
       re()
     },
     draw() {
+
+      if(!this.$refs.canvas) return
+
       const ctx = this.$refs.canvas.getContext(`2d`);
       let x = 0
       let count = 50
