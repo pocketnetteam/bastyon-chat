@@ -551,7 +551,7 @@ export default {
 
   created() {
 
-    this.pocketnet = false
+    this.pocketnet = true
     this.mobile = false
     this.recording = true
 
@@ -966,7 +966,7 @@ if (module.hot) {
     left: 23px !important;
     width: 344px !important;
     border-left: 0 !important;
-    #topheader.minimized .fix.active {
+    #topheader {
       transform: translate3d(-279px,-56px,0) !important;
     }
     .input_component {
