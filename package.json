@@ -10,10 +10,12 @@
     "themes": "node themes.js",
     "buildpocketnet": "npm run build -- --target wc-async --inline-vue --name matrix-element src/App.vue",
     "buildpocketnet_mac": "npm run build_mac -- --target wc-async --inline-vue --name matrix-element src/App.vue",
-    "buildpocketnetdev": "npm run build -- --target wc-async --inline-vue --watch --name matrix-element src/App.vue"
+    "buildpocketnetdev": "npm run build -- --target wc-async --inline-vue --watch --name matrix-element src/App.vue",
+    "precommit": "lint-staged"
   },
   "dependencies": {
     "@babel/preset-stage-0": "^7.8.3",
+    "@vue/eslint-config-airbnb": "^7.0.0",
     "another-json": "^0.2.0",
     "async-each": "^1.0.3",
     "autosize": "^4.0.4",
@@ -28,11 +30,13 @@
     "elliptic": "^6.5.4",
     "emoji-mart-vue-fast": "^10.2.1",
     "epic-spinners": "^1.1.0",
+    "eslint-config-airbnb": "^19.0.4",
     "exif-js": "^2.3.0",
     "extendable-media-recorder": "^6.6.5",
     "extendable-media-recorder-wav-encoder": "^7.0.68",
     "file-saver": "^2.0.5",
     "howler": "^2.2.3",
+    "husky": "^8.0.1",
     "ion-sound": "^3.0.7",
     "jquery": "^3.5.1",
     "linkifyjs": "^3.0.5",
@@ -40,7 +44,7 @@
     "moment": "^2.29.1",
     "pbkdf2": "^3.1.2",
     "qs": "^6.10.3",
-    "swiper": "^8.3.1",
+    "swiper": "^8.4.2",
     "underscore": "^1.13.2",
     "unhomoglyph": "^1.0.6",
     "v-click-outside": "^3.1.2",
@@ -75,7 +79,6 @@
     "@types/matrix-js-sdk": "^9.2.5",
     "@types/webpack-env": "^1.16.3",
     "@vue/cli-plugin-babel": "^4.5.15",
-    "@vue/cli-plugin-eslint": "^4.5.15",
     "@vue/cli-plugin-router": "^4.5.15",
     "@vue/cli-plugin-vuex": "^4.5.15",
     "@vue/cli-service": "^4.5.15",
@@ -85,6 +88,8 @@
     "babel-polyfill": "^6.26.0",
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-stage-0": "^6.24.1",
+    "eslint": "^8.23.1",
+    "eslint-plugin-vue": "^9.5.1",
     "expose-loader": "^1.0.3",
     "gitignore-parser": "0.0.2",
     "less": "^3.12.2",
@@ -98,5 +103,11 @@
     "> 1%",
     "last 2 versions",
     "not dead"
-  ]
+  ],
+  "lint-staged": {
+    "*.{js, vue}": [
+      "node_modules/.bin/eslint --ext",
+      "git add"
+    ]
+  }
 }
