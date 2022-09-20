@@ -9,7 +9,7 @@ module.exports = {
 		hotOnly: false,
 	},
 
-	publicPath: "/",
+	publicPath: process.argv[2] === 'true' ? '/messenger' : "/",
 	lintOnSave: false,
 
 	css: {
