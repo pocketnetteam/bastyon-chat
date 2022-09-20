@@ -71,9 +71,9 @@ var store = new Vuex.Store({
 		pinchat: false,
 		lastroom: null,
 		dontreadreceipts: false,
-    	isLocalStorageChatAuth: false,
-		voicerecording : false,
-		deletedrooms: {}
+
+		deletedrooms: {},
+    	isLocalStorageChatAuth: false
 		//share : {url : 'https://yandex.ru/'} //null
 	},
 	getters: {

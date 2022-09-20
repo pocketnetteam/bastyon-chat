@@ -28,7 +28,7 @@ export default {
         this.$route.path === '/chatInfo' ||
         this.$route.path === '/teamRoom' ||
         this.$route.path === '/invite',
-     // minimized: true
+      minimized: this.$store.state.mobile
     }
 
   },
@@ -85,6 +85,7 @@ export default {
 
   computed: mapState({
     auth: (state) => state.auth,
+    pocketnet: (state) => state.pocketnet,
 
     ...mapState([
       "currentUserChat",

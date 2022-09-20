@@ -253,7 +253,7 @@ export default {
     },
 
     groupAvatar: function () {
-      return this.m_chat.currentState.getStateEvents('m.room.avatar')[0].event
+      return this.m_chat.currentState.getStateEvents('m.room.avatar')[0]?.event
         .content.avatarUrl;
     },
   },

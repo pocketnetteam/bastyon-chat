@@ -36,6 +36,7 @@ export default {
     auth: (state) => state.auth,
     minimized: (state) => state.minimized,
     pocketnet: (state) => state.pocketnet,
+    mobile: (state) => state.mobile,
     active: (state) => state.active,
 
     ...mapState(["share", "closebybg"]),

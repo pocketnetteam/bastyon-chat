@@ -7,7 +7,7 @@
         bin: pocketnet,
         fix: pocketnet,
         bout: !pocketnet,
-        minimized,
+        minimized ,
         active,
         mobile,
         unselect
@@ -396,9 +396,9 @@ export default {
       return this.$store.state.loading;
     },
 
-    minimized: function () {
+    minimized : function () {
       if (this.mobile) return false;
-      return this.$store.state.minimized;
+      return this.$store.state.minimized ;
     },
 
     active: function () {
@@ -546,12 +546,13 @@ export default {
 
   mounted() {
     getDecryptedMnemonic()
+    console.log(process.argv.argument, 'process.argv')
   },
 
   created() {
 
-    this.pocketnet = false
-    this.mobile = !this.pocketnet
+    this.pocketnet = true
+    this.mobile = false
     this.recording = true
 
     if(this.isLocalStorageChatAuth) {
@@ -951,7 +952,7 @@ if (module.hot) {
 <!-- THEMES END -->
 
 <style lang="scss">
-.main-wrapper.minimized {
+.main-wrapper.minimized  {
   .chat-container-pages-empty {
     display: none !important;
   }
@@ -959,19 +960,53 @@ if (module.hot) {
     background: transparent !important;
   }
 }
-.chat-container-pages.minimized {
-  position: absolute !important;
-  left: 21px !important;
-  width: 344px !important;
-  border-left: 0 !important;
-  #topheader.minimized.fix.active {
-    transform: translate3d(-279px,-56px,0) !important;
+.rootcontent.fix {
+  .chat-container-pages {    
+    position: absolute !important;
+    left: 23px !important;
+    width: 344px !important;
+    border-left: 0 !important;
+    #topheader {
+      transform: translate3d(-279px,-56px,0) !important;
+    }
+    .input_component {
+      width: 344px;
+    }
+    #chatsTopheader.topheader {
+      width: 344px;
+    }
+    #events {
+      left: 0px !important;
+      width: 344px !important;
+    }
+    .inputWrapper {
+      width: 344px !important;
+      margin-left: -347px !important;
+    }
+    .dropdown.visible {
+      width: 344px !important;
+      left: -171px !important;
+    }
+    .menubgwrapper {
+      left: -300px !important;
+      width: 344px !important;
+    }
   }
-  .input_component {
-    width: 344px;
+  #wai-fixedmessageicon {
+    &.active {
+      .wrapper {
+        position: fixed;
+        top: 15px;
+        right: 8px;
+        left: auto;
+        width: 344px !important;
+        transform: none;
+      }
+    }
   }
-  #chatsTopheader.topheader {
-    width: 344px;
+  .fixedOnPageTop {
+    min-width: 344px !important;
   }
 }
+
 </style>
