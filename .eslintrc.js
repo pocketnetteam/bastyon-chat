@@ -8,7 +8,7 @@ module.exports = {
     'camelcase': 0,
     'curly': 0,
     'eol-last': 0,
-    'func-names': 2,
+    'func-names': 0,
     'guard-for-in': 0,
     'import/extensions': 0,
     'import/no-mutable-exports': 0,

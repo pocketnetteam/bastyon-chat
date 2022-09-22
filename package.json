@@ -11,7 +11,8 @@
     "buildpocketnet": "npm run build -- --target wc-async --inline-vue --name matrix-element src/App.vue",
     "buildpocketnet_mac": "npm run build_mac -- --target wc-async --inline-vue --name matrix-element src/App.vue",
     "buildpocketnetdev": "npm run build -- --target wc-async --inline-vue --watch --name matrix-element src/App.vue",
-    "precommit": "lint-staged"
+    "lint:js": "eslint . --ext .js,.vue src",
+    "lint:js:fix": "npm run lint:js -- --fix"
   },
   "dependencies": {
     "@babel/preset-stage-0": "^7.8.3",
@@ -40,6 +41,7 @@
     "ion-sound": "^3.0.7",
     "jquery": "^3.5.1",
     "linkifyjs": "^3.0.5",
+    "lint-staged": "^13.0.3",
     "miscreant": "^0.3.2",
     "moment": "^2.29.1",
     "pbkdf2": "^3.1.2",
@@ -103,11 +105,5 @@
     "> 1%",
     "last 2 versions",
     "not dead"
-  ],
-  "lint-staged": {
-    "*.{js, vue}": [
-      "node_modules/.bin/eslint --ext",
-      "git add"
-    ]
-  }
+  ]
 }
