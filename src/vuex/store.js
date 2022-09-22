@@ -3,7 +3,6 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import f from '@/application/functions.js'
 
-
 Vue.use(Vuex);
 
 var themes = {
@@ -270,6 +269,9 @@ var store = new Vuex.Store({
 		},
 		setMobile(state, mobile) {
 			state.mobile = mobile;
+		},
+		setIsLocalStorageChatAuth(state, isLocalStorageChatAuth) {
+			state.isLocalStorageChatAuth = isLocalStorageChatAuth;
 		},
 
 		setVoiceMessagesEnabled(state, voiceMessagesEnabled) {
@@ -1059,5 +1061,4 @@ var store = new Vuex.Store({
     },
   },
 });
-
 export default store;

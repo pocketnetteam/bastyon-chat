@@ -5,21 +5,16 @@
   "scripts": {
     "serve": "vue-cli-service serve --argument asdasd",
 
-    "build": "node themes.js && vue-cli-service build --dest C:/inetpub/wwwroot/pocketnet/chat",
-    "build_mac": "node themes.js && vue-cli-service build --dest ~/work/pocketnet/chat",
+    "build": "node vue.config.js false && node isMessenger.js false && node themes.js && vue-cli-service build --dest C:/inetpub/wwwroot/pocketnet/chat",
+    "build_mac": "node vue.config.js false && node isMessenger.js false && node themes.js && vue-cli-service build --dest ~/work/pocketnet/chat",
 
-    "build_messenger": "node themes.js && vue-cli-service build --dest C:/inetpub/wwwroot/pocketnet/messenger",
-    "build_mac_messenger": "node themes.js && vue-cli-service build --dest ~/work/pocketnet/messenger",
+    "build_messenger": "node vue.config.js false && node isMessenger.js true && node themes.js && vue-cli-service build",
 
     "lint": "vue-cli-service lint",
     "themes": "node themes.js",
 
     "buildpocketnet": "npm run build -- --target wc-async --inline-vue --name matrix-element src/App.vue",
     "buildpocketnet_mac": "npm run build_mac -- --target wc-async --inline-vue --name matrix-element src/App.vue",
-
-
-    "buildpocketnet_messenger": "npm run build_messenger -- --target wc-async --inline-vue --name matrix-element src/App.vue",
-    "buildpocketnet_mac_messenger": "npm run build_mac_messenger -- --target wc-async --inline-vue --name matrix-element src/App.vue",
 
     "buildpocketnetdev": "npm run build -- --target wc-async --inline-vue --watch --name matrix-element src/App.vue"
   },

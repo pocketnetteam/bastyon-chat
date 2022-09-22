@@ -200,6 +200,7 @@ import search from '@/components/assets/search/index.vue';
 import linepreloader from '@/components/assets/linepreloader/index.vue';
 
 import chats from '@/views/chats.vue'
+import isMessenger from '@/application/isMessenger.js'
 
 ////////
 
@@ -551,16 +552,18 @@ export default {
 
   created() {
 
-    this.pocketnet = true
-    this.mobile = false
-    this.recording = true
+    // this.pocketnet = true
+    // this.mobile = false
+    // this.recording = true
+
+    this.$store.commit('setIsLocalStorageChatAuth', isMessenger())
 
     if(this.isLocalStorageChatAuth) {
       const fromMnemonic = getDecryptedMnemonic();
       this.address = fromMnemonic.addressUser;
       this.privatekey = fromMnemonic.privateKey.toString('hex');
     }
-    
+
     this.$store.commit("setPocketnet", this.pocketnet);
     this.$store.commit("setMobile", this.mobile);
     this.$store.commit("setVoiceMessagesEnabled", this.recording);
