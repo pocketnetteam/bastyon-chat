@@ -10,6 +10,7 @@ module.exports = {
     'eol-last': 0,
     'func-names': 0,
     'guard-for-in': 0,
+    'global-require': 0,
     'import/extensions': 0,
     'import/no-mutable-exports': 0,
     'import/no-unresolved': 0,
