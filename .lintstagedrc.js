@@ -1,3 +1,3 @@
 module.exports = {
-  "src/**/*.js": ["npm run lint:js"],
+  "src/**/*.js": ["yarn run lint:js"],
 };
