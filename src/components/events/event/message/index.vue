@@ -67,7 +67,7 @@
         </div>
       </div>
       <div class="messageAudio" v-if="content.msgtype === 'm.audio'">
-        <VoiceMessage v-if="audioUrl" :audioBuffer="audioUrl" :id="event._localTimestamp || Date.now()"/>
+        <VoiceMessage v-if="audioUrl" :audioBuffer="audioUrl" :decryptedInfo="decryptedInfo" :id="event._localTimestamp || Date.now()"/>
       </div>
 
       <div class="maxcontent" :class="{'my' : my }" v-if="content.msgtype === 'm.encrypted' && !textWithoutLinks && badenctypted">
