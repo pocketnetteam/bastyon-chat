@@ -349,7 +349,7 @@ export default {
         })
       } catch (e) {
         this.error = e
-        console.error(e)
+        //console.error(e)
       }
 
     }

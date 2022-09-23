@@ -11,6 +11,8 @@ import ChatStorage from "./chatstorage";
 
 var axios = require('axios');
 
+console.log("sdk", sdk)
+
 
 class MTRX {
 
@@ -908,6 +910,8 @@ class MTRX {
 
   async getAudioUnencrypt(chat, event){
 
+    console.log('getAudioUnencrypt')
+
     if(event.event.content.audioData){
       return Promise.resolve(event.event.content.audioData)
     }
@@ -925,6 +929,8 @@ class MTRX {
   }
 
   async getAudio(chat, event) {
+
+    //console.log('decryptedAudio', event)
 
     if (event.event.decryptedAudio) {
       return Promise.resolve(event.event.decryptedAudio)

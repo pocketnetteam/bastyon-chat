@@ -305,7 +305,7 @@ export default {
       default: ''
     },
 
-    pkoindisabled: {
+    pkoindisabled : {
       type: String,
       default: ''
     },
@@ -584,9 +584,9 @@ export default {
   },
 
   created() {
-    this.pocketnet = true
-    this.mobile = !this.pocketnet/*
-    this.recording = true*/
+    this.pocketnet = false
+    this.mobile = !this.pocketnet
+    this.recording = TransformStreamDefaultController
 
     this.$store.commit('setPocketnet', this.pocketnet);
     this.$store.commit('setMobile', this.mobile);
@@ -769,7 +769,7 @@ export default {
       privateKey: this.privatekey
     }
 
-    var username = 'alchemist'
+    var username = 'nevermore'
 
     var user = (this.address && this.privatekey) ? actualUser : testUsers[`${username}`];
 
