@@ -1,5 +1,6 @@
 var prependcssvars = `@import "@/styles/variables/common.sass"; @import "@/styles/mixins/common.sass";`;
 const path = require('path');
+console.log('process.env.NODE_ENV', process.env.NODE_ENV)
 module.exports = {
 	devServer: {
 		open: process.platform === "darwin",
@@ -9,7 +10,7 @@ module.exports = {
 		hotOnly: false,
 	},
 
-	publicPath: process.argv[2] === 'true' ? '/messenger' : "/",
+	publicPath: process.env.NODE_ENV === 'messenger' ? '/messenger' : "./",
 	lintOnSave: false,
 
 	css: {

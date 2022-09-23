@@ -3,12 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "serve": "vue-cli-service serve --argument asdasd",
+    "serve": "vue-cli-service serve",
+    
+    "build": "node isMessenger.js false && node themes.js && vue-cli-service build --dest C:/inetpub/wwwroot/pocketnet/chat",
+    "build_mac": "node isMessenger.js false && node themes.js && vue-cli-service build --dest ~/work/pocketnet/chat",
 
-    "build": "node vue.config.js false && node isMessenger.js false && node themes.js && vue-cli-service build --dest C:/inetpub/wwwroot/pocketnet/chat",
-    "build_mac": "node vue.config.js false && node isMessenger.js false && node themes.js && vue-cli-service build --dest ~/work/pocketnet/chat",
-
-    "build_messenger": "node vue.config.js false && node isMessenger.js true && node themes.js && vue-cli-service build",
+    "build_messenger": "export NODE_ENV=messenger && node isMessenger.js true && node themes.js && vue-cli-service build",
 
     "lint": "vue-cli-service lint",
     "themes": "node themes.js",

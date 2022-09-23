@@ -346,7 +346,6 @@ export default {
       default: false,
     },
   },
-
   watch: {
     fcmtoken: function () {
       this.setPusher(this.fcmtoken);
