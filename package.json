@@ -7,6 +7,7 @@
     "build": "node themes.js && vue-cli-service build --dest C:/inetpub/wwwroot/pocketnet/chat",
     "build_mac": "node themes.js && vue-cli-service build --dest ~/work/pocketnet/chat",
     "lint": "vue-cli-service lint",
+    "lint:fix": "eslint 'src/**/*.{js,vue}' --fix",
     "themes": "node themes.js",
     "buildpocketnet": "npm run build -- --target wc-async --inline-vue --name matrix-element src/App.vue",
     "buildpocketnet_mac": "npm run build_mac -- --target wc-async --inline-vue --name matrix-element src/App.vue",

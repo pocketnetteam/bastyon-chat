@@ -9,8 +9,8 @@ module.exports = {
 		hotOnly: false,
 	},
 
-	publicPath: "/",
-	lintOnSave: false,
+  publicPath: '/',
+  lintOnSave: true,
 
 	css: {
 		loaderOptions: {
