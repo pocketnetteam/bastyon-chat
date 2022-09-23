@@ -10,7 +10,7 @@ module.exports = {
 		hotOnly: false,
 	},
 
-	publicPath: process.env.NODE_ENV === 'messenger' ? '/messenger' : "./",
+	publicPath: process.env.NODE_ENV === 'messenger' ? '/messenger' : "./",	
 	lintOnSave: false,
 
 	css: {
