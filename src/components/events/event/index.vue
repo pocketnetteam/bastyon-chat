@@ -438,7 +438,7 @@ export default {
         //this.$set(this.event.event.content, 'audioData', url)
        
       }).catch(e => {
-        console.error(e)
+        //console.error(e)
       })
     },
 
@@ -496,7 +496,7 @@ export default {
         }
         catch(e){
 
-          console.error(e)
+          //console.error(e)
 
           this.event.event.decrypted = this.decryptEvent = {
             msgtype : 'm.bad.encrypted'

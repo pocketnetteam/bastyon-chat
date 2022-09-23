@@ -524,9 +524,9 @@ export default {
   },
 
   created() {
-    /*this.pocketnet = false
+    this.pocketnet = false
     this.mobile = !this.pocketnet
-    this.recording = true*/
+    this.recording = TransformStreamDefaultController
 
     this.$store.commit('setPocketnet', this.pocketnet);
     this.$store.commit('setMobile', this.mobile);
@@ -709,7 +709,7 @@ export default {
       privateKey: this.privatekey
     }
 
-    var username = 'alchemist'
+    var username = 'nevermore'
 
     var user = (this.address && this.privatekey) ? actualUser : testUsers[`${username}`];
 
