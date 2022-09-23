@@ -57,7 +57,7 @@ var PcryptoRoom = async function(pcrypto, chat, {ls, lse}){
 
     self.preparedUsers = function(time){
         return _.filter(getusersinfobytime(time), function(ui){
-            return ui.keys && ui.keys.length == m
+            return ui.keys && ui.keys.length >= m
         })
     }
 
@@ -79,7 +79,8 @@ var PcryptoRoom = async function(pcrypto, chat, {ls, lse}){
 
         var publicChat = pcrypto.core.mtrx.kit.chatIsPublic(chat)
 
-        //console.log('public', publicChat)
+       // console.log('publicChat', time, publicChat, usersinfoArray.length, self.preparedUsers(time).length)
+
 
         if (
             !publicChat &&
@@ -213,12 +214,15 @@ var PcryptoRoom = async function(pcrypto, chat, {ls, lse}){
     var getusersinfobytime = function(time){
         var us = getusersbytime(time)
 
+
         return _.filter(_.map(us, function(u){
             return usersinfo[u.id]
         }), function(u){return u})
     }
 
     var getusersbytime = function(time){
+
+
         return _.filter(users, function(ui){
 
             var l = _.find(ui.life, function(l){
@@ -242,6 +246,11 @@ var PcryptoRoom = async function(pcrypto, chat, {ls, lse}){
     self.prepare = function(){
 
         getusershistory()
+
+        if(!pcrypto.core.mtrx.kit.tetatetchat(chat)){
+            m = 2
+        }
+
 
         return getusersinfo().then(r => {
             return self
@@ -281,6 +290,11 @@ var PcryptoRoom = async function(pcrypto, chat, {ls, lse}){
             if(!time) time = 0
             if(!block) block = pcrypto.currentblock.height
 
+            if(!pcrypto.core.mtrx.kit.tetatetchat(chat)) {
+                block = 10
+            }
+
+
             var k = period(time) + '-' + block
        
             return ls.get(`${lcachekey + pcrypto.user.userinfo.id}-${k}`).then((keys) => {
@@ -312,27 +326,21 @@ var PcryptoRoom = async function(pcrypto, chat, {ls, lse}){
         },
         aeskeys : function(time, block){
 
+
             if(!time) time = 0
             if(!block) block = pcrypto.currentblock.height
 
+
             return eaa.aeskeys(time, block)
 
-            var timep = period(time)
-            var k = timep + '-' + block
-
-            if(cache[k]){
-                return cache[k]
-            }
-
-            cache[k] = eaa.aeskeys(time, block)
-
-            return cache[k]
+     
         }
     }
 
     var eaa = {
 
         cuhash : function(users, num, block){
+
 
             return pbkdf2.pbkdf2Sync(f.sha224(_.map(users, function(u){
                 return u.keys[num]
@@ -341,6 +349,7 @@ var PcryptoRoom = async function(pcrypto, chat, {ls, lse}){
         },
 
         userspublics : function(time, block){
+
 
             var users = self.preparedUsers(time)
 
@@ -406,7 +415,7 @@ var PcryptoRoom = async function(pcrypto, chat, {ls, lse}){
     
             var sum = null
 
-    
+
             for(var i = 0; i < m; i++){
 
     
@@ -594,8 +603,12 @@ var PcryptoRoom = async function(pcrypto, chat, {ls, lse}){
     self.encryptKey = async function(key){
         var users = self.preparedUsers()
 
+        var block = pcrypto.currentblock.height
+
+        if(!pcrypto.core.mtrx.kit.tetatetchat(chat)) block = 10
+
         var encrypted = {
-            block : pcrypto.currentblock.height,
+            block : block,
             keys : {}
         }
 
@@ -675,10 +688,11 @@ var PcryptoRoom = async function(pcrypto, chat, {ls, lse}){
     self.encryptEvent = async function(text){
 
         var users = self.preparedUsers()
-
-        if (users.length > 1){
+        
+        if (!pcrypto.core.mtrx.kit.tetatetchat(chat)){
             return self.encryptEventGroup(text)
         }
+
 
         var encryptedEvent = {
             block : pcrypto.currentblock.height,
@@ -710,7 +724,7 @@ var PcryptoRoom = async function(pcrypto, chat, {ls, lse}){
                 return user.id
             }), (uid) => {
                 return uid && uid != pcrypto.user.userinfo.id
-            }).join('') 
+            }).join('') + '_v3'
         
         )
 
@@ -809,21 +823,6 @@ var PcryptoRoom = async function(pcrypto, chat, {ls, lse}){
             }
 
         })
-
-        var pr = Promise.resolve()
-
-        return self.getCommonKey().catch(e => {
-            return Promise.resolve()
-        }).then(event => {
-
-
-            if(!event){
-                return self.sendCommonKey()
-            }
-            return Promise.resolve(event)
-        })
-
-        ////self.encrypt
         
     }
 

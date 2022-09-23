@@ -446,7 +446,11 @@ export default {
 
     async decryptAudio(){
 
+      console.log("decryptAudiodecryptAudiodecryptAudiodecryptAudio")
+
       this.core.mtrx.getAudio(this.chat, this.event).then(url => {
+
+        console.log("HE")
 
         this.decryptedInfo = url
 

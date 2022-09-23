@@ -824,6 +824,9 @@ class MTRX {
 
     return new Promise(resolve => {
       if (chat.pcrypto.canBeEncrypt()) {
+
+        console.log("??????????")
+
         return chat.pcrypto.encryptFile(file).then(r => {
           info.secrets = r.secrets
           return resolve(r.file)
@@ -840,6 +843,8 @@ class MTRX {
 
       return promise
     }).then((audio) => {
+
+      console.log(audio, info)
 
       if (meta.aborted) return Promise.reject('aborted')
 
@@ -929,8 +934,6 @@ class MTRX {
   }
 
   async getAudio(chat, event) {
-
-    //console.log('decryptedAudio', event)
 
     if (event.event.decryptedAudio) {
       return Promise.resolve(event.event.decryptedAudio)
