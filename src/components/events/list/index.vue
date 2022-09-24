@@ -23,7 +23,7 @@
           </div>
             
           <div class="eventWrapper"
-              :id="'eventWrapper_' + (i + 1)"
+              
               v-for="(event, i) in events"
               :key="event.event.event_id"
           >

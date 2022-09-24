@@ -305,11 +305,6 @@ export default {
     chats,
     userUnauthorized,
   },
-  data() {
-    return {
-      isLocalStorageChatAuth: this.$store.state.isLocalStorageChatAuth
-    }
-  },
   props: {
     address: {
       type: String,
@@ -335,6 +330,11 @@ export default {
       default: "",
     },
 
+    pkoindisabled : {
+      type: String,
+      default: ''
+    },
+
     ctheme: String,
 
     fcmtoken: String,
@@ -346,7 +346,6 @@ export default {
       default: false,
     },
   },
-
   watch: {
     fcmtoken: function () {
       this.setPusher(this.fcmtoken);
@@ -438,13 +437,13 @@ export default {
 
         if (this.$route.name !== 'chats' &&
           /*this.$route.name !== 'chat' &&*/
-          this.$route.name !== "contact" &&
-          this.$route.name !== "chatInfo" &&
-          this.$route.name !== "publicPreview" &&
-          this.$route.name !== "chatSettings" &&
-          core.cancelDefaultRoute !== true
-        ) {
-          this.$router.push("/chats");
+          this.$route.name !== 'contact' &&
+          /*this.$route.name !== 'chatInfo' &&*/
+          this.$route.name !== 'publicPreview' &&
+          this.$route.name !== 'chatSettings' &&
+          core.cancelDefaultRoute !== true) {
+
+          this.$router.push('/chats').catch(e => {})
         }
       }, 500);
     },
@@ -556,9 +555,13 @@ export default {
     // this.mobile = false
     // this.recording = true
 
-    this.$store.commit('setIsLocalStorageChatAuth', isMessenger())
+    console.log('1', isMessenger(), '2', this.$store.state.isLocalStorageChatAuth)
 
-    if(this.isLocalStorageChatAuth) {
+    this.$store.commit('setIsLocalStorageChatAuth', isMessenger())
+    
+    console.log('3', isMessenger(), '4', this.$store.state.isLocalStorageChatAuth)
+
+    if(this.$store.state.isLocalStorageChatAuth) {
       const fromMnemonic = getDecryptedMnemonic();
       this.address = fromMnemonic.addressUser;
       this.privatekey = fromMnemonic.privateKey.toString('hex');
@@ -788,7 +791,7 @@ export default {
     var user =
       this.address && this.privatekey ? actualUser : testUsers[`${username}`];
 
-    if(this.isLocalStorageChatAuth) {
+    if(this.$store.state.isLocalStorageChatAuth) {
       var listofproxies = [
         {
             host : '5.pocketnet.app',
@@ -848,7 +851,7 @@ export default {
 
 
     */
-    if(this.isLocalStorageChatAuth) {
+    if(this.$store.state.isLocalStorageChatAuth) {
        var domain = "matrix.pocketnet.app";
     } else {
       var domain =
@@ -881,7 +884,6 @@ export default {
             })
 
             .then((dialog) => {
-               console.log("CNF")
             })
 
     */
@@ -902,7 +904,7 @@ export default {
         setTimeout(() => {
           if (this.$route.name !== 'chats' &&
             /*this.$route.name !== 'chat' &&*/
-            this.$route.name !== 'chatInfo' &&
+            /*this.$route.name !== 'chatInfo' &&*/
             this.$route.name !== 'publicPreview' &&
             this.$route.name !== 'chatSettings' &&
             this.$route.name !== 'contact' &&

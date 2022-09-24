@@ -47,7 +47,8 @@ class PNUser extends User {
 
         if(!this.state) return Promise.reject()
 
-        if(this.userinfo.name && (!this.userinfo.keys || !this.userinfo.keys.length)){
+
+        if(this.userinfo.name && !this.userinfo.deleted && (!this.userinfo.keys || !this.userinfo.keys.length)){
 
             if (window.POCKETNETINSTANCE){
 
@@ -188,13 +189,15 @@ class PNUser extends User {
 
     convertUser(info){
         return {
-            image : info.i,
-            name : decodeURI(info.name),
+            image : info.i || '',
+            name : info.name ? decodeURI(info.name) : '',
             id : f.hexEncode(info.address),
             source : info,
             keys : _.filter((info.k || "").split(','), function(f){
                 return f
             }),
+
+            deleted : info.deleted,
 
             nocache : info.nocache || false
         }

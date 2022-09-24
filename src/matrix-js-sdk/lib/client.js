@@ -2748,13 +2748,7 @@ MatrixClient.prototype.setRoomName = function (roomId, name, callback) {
 
 
 MatrixClient.prototype.setRoomAvatarUrl = function (roomId, url, callback) {
-  console.log(
-    "MatrixClient.prototype.setRoomAvatarUrl",
-    "roomId",
-    roomId,
-    "url",
-    url
-  );
+
   return this.sendStateEvent(
     roomId,
     "m.room.avatar",

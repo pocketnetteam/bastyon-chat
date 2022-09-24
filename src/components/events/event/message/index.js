@@ -461,7 +461,6 @@ export default {
     },
 
     menushowMultiSelect: function () {
-      console.log('emit work from menushowMultiSelect');
       this.$emit('showMultiSelect');
       this.selectMessage();
 
@@ -622,7 +621,6 @@ export default {
       });
     },
     removeMessage: function () {
-      console.log('salkdjlkasjd remove message');
       this.$emit('removeMessage', {
         message_id: this.origin.event.event_id,
       });

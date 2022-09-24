@@ -1107,8 +1107,21 @@ f.saveFileCordova = function(file, name, clbk, todownloads){
 
 }
 
+function iOS() {
+    return [
+        'iPad Simulator',
+        'iPhone Simulator',
+        'iPod Simulator',
+        'iPad',
+        'iPhone',
+        'iPod'
+    ].includes(navigator.platform)
+    // iPad on iOS 13 detection
+    || (navigator.userAgent.includes("Mac") && "ontouchend" in document)
+}
+
 f.isios = function () {
-    return (window.cordova && window.device && f.deep(window, 'device.platform') == 'iOS') || (navigator || {}).platform && /iPad|iPhone|iPod/.test(navigator.platform || '')
+    return (window.cordova && window.device && deep(window, 'device.platform') == 'iOS') || iOS()
 }
 
 f.now = function (date) {

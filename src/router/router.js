@@ -5,8 +5,8 @@ Vue.use(Router);
 
 
 const router = new Router({
-    routes: [
-      
+	base: process.env.NODE_ENV === 'messenger' ? '/messenger' : "/",
+    routes: [      
         {
             path: '/contacts',
             name: 'contacts',

@@ -70,8 +70,9 @@ var store = new Vuex.Store({
 		pinchat: false,
 		lastroom: null,
 		dontreadreceipts: false,
-
+		voicerecording : false,
 		deletedrooms: {},
+		pkoindisabled : false,
     	isLocalStorageChatAuth: false
 		//share : {url : 'https://yandex.ru/'} //null
 	},
@@ -168,6 +169,10 @@ var store = new Vuex.Store({
 				mv.small()
 			}
 
+		},
+
+		pkoindisabled(state, value){
+			state.pkoindisabled = value && value == 'true' ? true : false
 		},
 
 		wasunhidden(state, value) {
