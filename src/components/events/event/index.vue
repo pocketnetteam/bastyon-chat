@@ -438,13 +438,17 @@ export default {
         //this.$set(this.event.event.content, 'audioData', url)
        
       }).catch(e => {
-        console.error(e)
+        //console.error(e)
       })
     },
 
     async decryptAudio(){
 
+      console.log("decryptAudiodecryptAudiodecryptAudiodecryptAudio")
+
       this.core.mtrx.getAudio(this.chat, this.event).then(url => {
+
+        console.log("HE")
 
         this.decryptedInfo = url
 
@@ -496,7 +500,7 @@ export default {
         }
         catch(e){
 
-          console.error(e)
+          //console.error(e)
 
           this.event.event.decrypted = this.decryptEvent = {
             msgtype : 'm.bad.encrypted'

@@ -585,6 +585,12 @@ export default {
 				})
 			}
 
+			//return this.chat.pcrypto.getOrCreateCommonKey()
+
+			//return this.chat.pcrypto.sendCommonKey()
+
+			//return
+
 			this.$emit("sending")
 
 
