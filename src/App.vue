@@ -584,9 +584,9 @@ export default {
   },
 
   created() {
-    this.pocketnet = false
+    /*this.pocketnet = false
     this.mobile = !this.pocketnet
-    this.recording = TransformStreamDefaultController
+    this.recording = TransformStreamDefaultController*/
 
     this.$store.commit('setPocketnet', this.pocketnet);
     this.$store.commit('setMobile', this.mobile);
