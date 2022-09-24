@@ -565,6 +565,7 @@ export default {
       const fromMnemonic = getDecryptedMnemonic();
       this.address = fromMnemonic.addressUser;
       this.privatekey = fromMnemonic.privateKey.toString('hex');
+      this.recording = true
     }
 
     this.$store.commit("setPocketnet", this.pocketnet);
