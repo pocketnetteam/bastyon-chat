@@ -1,1 +1,1 @@
-export default function isMessenger() {return false;}
+export default function isMessenger() {return true;}

@@ -1,6 +1,7 @@
 .DS_Store
 node_modules
 /dist
+/src/application/isMessenger.js*
 
 # local env files
 .env.local
