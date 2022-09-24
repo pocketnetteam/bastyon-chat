@@ -2,10 +2,10 @@ import Vue from 'vue'
 import Router from 'vue-router'
 
 Vue.use(Router);
-
+import isMessenger from '@/application/isMessenger.js'
 
 const router = new Router({
-	base: process.env.NODE_ENV === 'messenger' ? '/messenger' : "/",
+	base: isMessenger() ? '/messenger' : "/",
     routes: [      
         {
             path: '/contacts',
