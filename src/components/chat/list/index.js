@@ -31,7 +31,7 @@ export default {
       cancelNextScroll: false,
       timeline: null,
       lastEvent: {},
-      scrollType: String,
+      scrollType: '',
       esize: {},
       p_b: false,
       p_f: false,

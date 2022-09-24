@@ -12,6 +12,7 @@ import ChatStorage from "./chatstorage";
 
 var axios = require('axios');
 
+
 class MTRX {
   constructor(core, p) {
     if (!p) p = {};
@@ -786,6 +787,8 @@ class MTRX {
       return promise
     }).then((audio) => {
 
+      console.log(audio, info)
+
       if (meta.aborted) return Promise.reject('aborted')
 
       return this.client.sendAudioMessage(chat.roomId, audio, info, 'Audio')
@@ -852,6 +855,8 @@ class MTRX {
   }
 
   async getAudioUnencrypt(chat, event){
+
+    console.log('getAudioUnencrypt')
 
     if(event.event.content.audioData){
       return Promise.resolve(event.event.content.audioData)
