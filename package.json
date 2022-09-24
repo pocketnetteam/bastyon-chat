@@ -9,6 +9,7 @@
     "build_mac": "node isMessenger.js false && node themes.js && vue-cli-service build --dest ~/work/pocketnet/chat",
 
     "build_messenger": "export NODE_ENV=messenger && node isMessenger.js true && node themes.js && vue-cli-service build",
+    "build_messenger_win64": "set NODE_ENV=messenger && node isMessenger.js true && node themes.js && vue-cli-service build",
 
     "lint": "vue-cli-service lint",
     "themes": "node themes.js",
