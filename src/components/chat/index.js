@@ -5,6 +5,7 @@ import join from '@/components/chat/join/index.vue'
 import attachement from '@/components/chat/attachement/index.vue'
 import f from "@/application/functions";
 import userRoomStatus from "@/components/chat/userRoomStatus/index.vue"
+import answerForm from '@/components/call/answerForm/index.vue';
 
 export default {
   name: 'chat',
@@ -18,7 +19,8 @@ export default {
     chatInput : () => import('@/components/chat/input/index.vue'),
     join,
     attachement,
-    userRoomStatus
+    userRoomStatus,
+    answerForm
   },
 
   data: function () {
@@ -135,7 +137,7 @@ export default {
     },
   },
   computed: mapState({
-
+    activeCall: state => state.activeCall,
     pocketnet: state => state.pocketnet,
     minimized: state => state.minimized,
     active: state => state.active,
