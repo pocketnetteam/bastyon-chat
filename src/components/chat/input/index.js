@@ -272,6 +272,27 @@ export default {
 	},
 
 	methods: {
+
+		call: function() {
+
+
+			let matrixCall = matrixcs.createNewMatrixCall( client, this.stateChat.roomId )
+
+			let local, remote
+
+			local = document.getElementById("local")
+			remote = document.getElementById("remote")
+			console.log(local, remote)
+
+			matrixCall.placeVideoCall(remote, local);
+
+			this.$store.dispatch('CALL', matrixCall)
+
+
+		},
+
+
+
 		wait: function () {
 			return this.$f.pretry(() => {
 				return this.core.mtrx.client && this.core.mtrx.access
