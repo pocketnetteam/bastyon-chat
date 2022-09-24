@@ -259,7 +259,6 @@ export default {
   },
   mounted() {
     const smthconstfortexst = this.events;
-    console.log('m.image', 'from info', smthconstfortexst);
     // this.changeName()
     this.eventsList()
     if(this.m_chat.getJoinRule() === 'public'){

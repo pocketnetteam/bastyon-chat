@@ -5,7 +5,6 @@ Vue.use(Router);
 
 
 const router = new Router({
-    history: createWebHashHistory(),
 	base: process.env.NODE_ENV === 'messenger' ? '/messenger' : "/",
     routes: [      
         {

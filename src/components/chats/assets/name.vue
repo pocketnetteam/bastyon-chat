@@ -4,7 +4,7 @@
     <div class="iconGroup" v-if="isShowGroupIcon">
       <i class="fas fa-user-friends"></i>
     </div>
-    <div>
+    <div class="nameofchat">
       {{ convertedName }}
     </div>
   </div>
@@ -12,6 +12,8 @@
 </template>
 
 <style scoped lang="sass">
+.nameofchat
+  white-space: nowrap
 .nameline
   display: flex
   align-items: flex-end

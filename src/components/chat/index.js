@@ -459,7 +459,6 @@ export default {
     },
 
     cancelDataMessages : function(){
-      console.log('this.selectedMessages', this.selectedMessages)
       this.selectedMessages = [];
     },
 

@@ -62,6 +62,14 @@ export default {
         }
       },
     },
+
+    notificationCount : function(){
+
+     
+      if(this.lscroll && this.lscroll.scrollTop < 180 && this.chat && this.chat.getUnreadNotificationCount()){
+        this.scrollToNew()
+      }
+    }
   },
   computed: {
     sortedVoiceMessageQueue() {
@@ -78,7 +86,7 @@ export default {
       scrollbottomshow: function () {
         return this.lscroll && this.lscroll.scrollTop > 500;
       },
-      notificationCount : state => state.allnotifications
+      notificationCount : (state) => state.allnotifications
     }),
 
     eventsByPages: function () {
@@ -106,17 +114,22 @@ export default {
     this.core.menu(null);
   },
   updated: function() {
-    if(this.countshow === 0) {
+
+    
+
+    /*if(this.countshow === 0) {
       this.scrollToReadMessages();
     }
-    this.countshow = 1;
+    this.countshow = 1;*/
   },
   methods: {
     scrollToReadMessages: function () {
-      if(this.notificationCount > 0) {
-        const elem = "eventWrapper_" + (this.notificationCount + 1);
-        document.getElementById(elem).scrollIntoView()
-      }
+      /*if(this.notificationCount > 0) {
+        const elem = document.getElementById("eventWrapper_" + (this.notificationCount + 1));
+
+        if(elem)
+          elem.scrollIntoView()
+      }*/
     },
     showerror: function () {
       // stringifyiedError
@@ -239,7 +252,6 @@ export default {
       this.multiSelect = true;
     },
     selectMessage(message) {
-      console.log("this emit from liust");
       if (
         this.selectedMessages.filter(
           (item) => item.message_id === message.message_id

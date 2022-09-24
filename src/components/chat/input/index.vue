@@ -68,6 +68,9 @@
                       (result) => uploadUploadedAll(slotProps.item, result)
                     "
                     @error="(error) => uploadError(slotProps.item, error)"
+
+                    :onlyimage="slotProps.item.upload.onlyimage"
+
                     :multiple="slotProps.item.upload.multiple"
                     :extensions="slotProps.item.upload.extensions"
                     :images="slotProps.item.upload.images"
@@ -107,7 +110,7 @@
             </template>
 
 
-            <div v-if="!isRecording && record" class="iconbutton" @click="sendVoiceMessage">
+            <div v-if="!isRecording && record" class="iconbutton" @click="e => {sendVoiceMessage()}">
               <div>
                 <i class="icon fas fa-paper-plane"></i>
               </div>
