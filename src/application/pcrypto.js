@@ -87,7 +87,7 @@ var PcryptoRoom = async function(pcrypto, chat, {ls, lse}){
 
             pcrypto.user && pcrypto.user.private && pcrypto.user.private.length == 12 && 
             users[pcrypto.user.userinfo.id] && 
-            /*pcrypto.core.mtrx.kit.tetatetchat(chat) &&*/
+            pcrypto.core.mtrx.kit.tetatetchat(chat) &&
             usersinfoArray.length > 1 && usersinfoArray.length < 50 && 
             self.preparedUsers(time).length / usersinfoArray.length > 0.6){
 
