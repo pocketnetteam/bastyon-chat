@@ -1,26 +1,32 @@
 <template>
-  <div class="voiceMessage">
+  <div class="voiceMessage" :class="{playing:isPlaying}">
     <div class="voiceMessage_wrapper">
-      <button class="voiceMessage_toggle" @click="audioToggle">
+      <button class="voiceMessage_toggle" :class="{encrypted}" @touchend="audioToggle" @click="audioToggleClick">
         <i :class="isPlaying ? 'fas fa-pause': 'fas fa-play'"></i>
       </button>
       <div class="voiceMessage_graph">
-        <canvas ref="canvas" width="160" height="50" @mousedown="goTo"></canvas>
+        <canvas ref="canvas" width="100" height="50" @mousedown="goTo"></canvas>
       </div>
       <div class="voiceMessage_options">
-        {{ getDurationString }}
+        <span v-if="!error">{{ getDurationString }}</span>
+        
+        <i v-if="error" class="fas fa-exclamation-circle"></i>
       </div>
+
+      <div class="encsign" v-if="encrypted && !error"><i class="fas fa-lock"></i></div>
+
     </div>
   </div>
 </template>
 
 <script>
 import f from '@/application/functions'
-
+import { mapState } from 'vuex';
 export default {
   name: "VoiceMessage",
   props: {
-    base64Audio: {
+    decryptedInfo : Object,
+    audioBuffer: {
       type: String | null,
       required: true
     },
@@ -33,6 +39,13 @@ export default {
       voiceMessage: null,
       isPlaying: false,
       interval: null,
+      audioContext : null,
+      audio : null,
+      duration : null,
+      currentTime : null,
+      signal : null,
+      audiobuffer : null,
+      error : null,
     }
   },
   inject: ['addToQueue', 'playNext'],
@@ -41,152 +54,311 @@ export default {
     this.initVoiceMessage()
   },
   beforeDestroy() {
+
     if (this.isPlaying) {
-      this.isPlaying = false
-      this.voiceMessage.audio.pause()
+      this.pause()
+    }
+
+    if(this.interval){
       clearInterval(this.interval)
+      this.interval = null
+    }
+      
+    //if(this.audioContext) this.audioContext.close()
+
+  },
+  watch : {
+    isPlaying : function(v){
+      if(!this.isPlaying){
+        
+
+        
+        
+      }
+      else{
+
+        
+
+      }
     }
   },
   computed: {
+
+    encrypted(){
+      return this.decryptedInfo ? true : false
+    },
+
+		...mapState({
+			mobile: state => state.mobile,
+		}),
+
     getDurationString() {
-      if (this.voiceMessage) {
+
+      if (this.duration) {
+
         let sec, min
-        if (this.voiceMessage.currentTime) {
-          sec = Math.floor(this.voiceMessage.currentTime / 1000)
-          min = Math.floor(this.voiceMessage.currentTime / 60000)
+        
+        if (this.currentTime) {
+          sec = Math.floor(this.currentTime)
+          min = Math.floor(this.currentTime / 60)
           return `${min}:${sec < 10 ? '0' + sec : sec}`
         }
-        sec = Math.floor(this.voiceMessage.duration / 1000)
-        min = Math.floor(this.voiceMessage.duration / 60000)
+
+        sec = Math.floor(this.duration)
+        min = Math.floor(this.duration / 60)
+
         return `${min}:${sec < 10 ? '0' + sec : sec}`
+
       }
+
       return '0:00'
     },
     percentPlayed() {
-      return this.voiceMessage.currentTime / this.voiceMessage.duration
+      return this.currentTime / this.duration
+    },
+
+    localBuffer(){
+      return f.copyArrayBuffer(this.audioBuffer)
     }
   },
   methods: {
     goTo(e) {
-      this.voiceMessage.audio.currentTime = e.offsetX / this.$refs.canvas.width * this.voiceMessage.audio.duration;
-      this.voiceMessage.currentTime = e.offsetX / this.$refs.canvas.width * this.voiceMessage.duration;
-      this.draw()
 
-      if (!this.isPlaying) {
-        this.isPlaying = true
-        this.voiceMessage.audio.play()
-        this.interval = setInterval(() => {
-          this.draw()
-          this.setTime()
-        }, 20);
+      if(!this.$refs.canvas) return
+
+      var dr = e.offsetX / this.$refs.canvas.width * this.duration;
+      
+      
+
+      if(!this.isPlaying) { 
+        this.setTime(dr)
+        this.play()
       }
+      else{
+        this.pause()
+        
+        setTimeout(() => {
+          this.setTime(dr)
+          this.play()
+        }, 20)
+        
+      }
+
+    },
+    audioToggleClick(){
+      if(this.mobile) return 
+
+      this.audioToggle()
     },
     audioToggle() {
-      this.isPlaying = !this.isPlaying
-      if (this.isPlaying) {
-        this.voiceMessage.audio.play()
-        this.interval = setInterval(() => {
-          this.draw()
-          this.setTime()
-        }, 20);
-      }else {
-        clearInterval(this.interval)
-        this.voiceMessage.audio.pause()
+      if(this.isPlaying){
+        this.pause()
+      }
+      else{
+        
+
+        this.play()
       }
     },
-    setTime() {
-      this.voiceMessage.currentTime = this.voiceMessage.audio.currentTime * 1000
+
+    pause(){
+
+      if(this.audio) {
+        this.audio.stop()
+        this.audio.disconnect()
+      }
+
+      
+      this.isPlaying = false
+
+      this.draw()
+
+      let currentPlaying = this.$store.state.currentPlayingVoiceMessage
+        
+      if (currentPlaying && currentPlaying.id == this.id) {
+        this.$store.commit('SET_CURRENT_PLAYING_VOICE_MESSAGE', null)
+      }
+
+      if(this.interval){
+        clearInterval(this.interval)
+        this.interval = null
+      }
     },
+
+    play(){
+
+      if(!this.audiobuffer) return
+
+      
+      if(this.error){
+
+        this.playNext(this.id)
+        
+        return
+      }
+
+      this.audioContext = this.core.getAudioContext()
+
+      
+
+      this.isPlaying = true
+
+      this.audio = this.initAudioNode()
+
+
+      if(this.currentTime >= this.duration){
+        this.setTime(0)
+      }
+      
+      if (this.audio.start) {
+        this.audio.start(0, this.currentTime);
+      } else if (this.audio.play) {
+        this.audio.play(0, this.currentTime);
+      } else if (this.audio.noteOn) {
+        this.audio.noteOn(0, this.currentTime);
+      }
+
+      let currentPlaying = this.$store.state.currentPlayingVoiceMessage
+        
+      if (currentPlaying && currentPlaying.id !== this.id) {
+          currentPlaying.pause()
+      }
+      
+      this.$store.commit('SET_CURRENT_PLAYING_VOICE_MESSAGE', this)
+
+      if(this.interval){
+        clearInterval(this.interval)
+      }
+
+      var t = 50
+
+      this.interval = setInterval(() => {
+
+        var time = this.currentTime + t / 1000
+
+        if(this.duration - t / 1000 < time) time = this.duration
+
+        if(this.currentTime > this.duration){
+          this.pause()
+        }
+
+        this.draw()
+        this.setTime(time)
+
+      }, t);
+
+    },
+
 
     draw() {
+
       const canvas = this.$refs.canvas
+
+      if(!this.signal) return
+      if(!canvas) return
+
+      const data = this.signal
+
+      var w = canvas.width
+      var h = canvas.height
+      var l = data.length
+      var perc = this.percentPlayed
+      
       const ctx = canvas.getContext("2d")
-      ctx.clearRect(0, 0, canvas.width, canvas.height)
-      const data = this.voiceMessage.signal
-      for (let i = 0; i < data.length; i++) {
-        let x = Math.floor(i / data.length * canvas.width);
-        let L = Math.abs(data[i] * canvas.height) + 1;
-        if (Math.floor(i / 200) === i / 200) { // Число 16 для больших аудиофайлов лучше побольше. Нужно подбирать.
-          if (i / data.length <= this.percentPlayed) {
-            ctx.fillStyle = '#00a4ff'
-          } else {
-            ctx.fillStyle = '#8bddfb'
-          }
-          ctx.fillRect(x, canvas.height / 2 - L / 2, 1, L);
-        }
-      }
-    },
-    async initVoiceMessage() {
+      ctx.clearRect(0, 0, w, h)
+      
+      var r = 0
+      var c = Math.floor (l / 20)
 
-      let audioContext
-      let audioNode
-      try {
-        audioContext = new (window.AudioContext || window.webkitAudioContext)() || null;
-        audioNode = new Audio(this.base64Audio) || null
-      } catch (e) {
-        console.log(e)
-      }
-      audioNode.onloadedmetadata = () => {
+      for (let i = 0; i < l; i = i + c) {
+        let x = Math.floor(i / l * w);
+        let L = Math.abs(data[i] * h) + 1;
 
-        const getDuration = () => {
-          audioNode.currentTime = 0
-          this.voiceMessage.duration = audioNode.duration * 1000
-          audioNode.removeEventListener('timeupdate', getDuration)
-        }
-        if (audioNode.duration === Infinity) {
-          audioNode.addEventListener('timeupdate', getDuration)
-          audioNode.currentTime = 1e101
+        
+        if (i / l <= perc) {
+          ctx.fillStyle = '#00a4ff'
         } else {
-          this.voiceMessage.duration = audioNode.duration * 1000
+          ctx.fillStyle = '#8bddfb'
         }
 
+        ctx.fillRect(x, h / 2 - L / 2, 2, L);
+        r++
 
       }
-      audioNode.onplay = () => {
-        let currentPlaying = this.$store.state.currentPlayingVoiceMessage
-        if (currentPlaying && currentPlaying.id !== this.id) {
-          currentPlaying.audioToggle()
-        }
-        this.$store.commit('SET_CURRENT_PLAYING_VOICE_MESSAGE', this)
-      }
-      audioNode.onpause = () => {
-        let currentPlaying = this.$store.state.currentPlayingVoiceMessage
-        if (currentPlaying && currentPlaying.id === this.id) {
-          this.$store.commit('SET_CURRENT_PLAYING_VOICE_MESSAGE', null)
-        }
-      }
+
+    },
+
+    
+
+    initAudioNode(){
+
+      let audioNode = null
+
+      audioNode = this.audioContext.createBufferSource();
+      audioNode.buffer = this.audiobuffer
+      audioNode.connect(this.audioContext.destination);
+
+      ///let unmuteHandle = unmute(context, allowBackgroundPlayback, forceIOSBehavior);
+
       audioNode.onended = () => {
-        this.$store.commit('SET_CURRENT_PLAYING_VOICE_MESSAGE', null)
-        this.isPlaying = false
-        this.voiceMessage.audio.currentTime = 0
-        this.voiceMessage.currentTime = 0
-        clearInterval(this.interval)
-        this.draw()
-        this.playNext(this.id, this.audioToggle)
-      }
-      this.addToQueue(this, this.id)
 
-      this.voiceMessage = {
-        audio: audioNode,
-        duration: 0,
-        currentTime: 0
+        this.audio = null
+
+        if(this.isPlaying){
+          setTimeout(() => {
+            this.playNext(this.id)
+          }, 300)
+        }
+        else{
+          
+        }
+
+        if(this.duration - 100 < this.currentTime) this.setTime(0)
+
+        this.pause()
+        
       }
 
-      const data = f._base64ToArrayBuffer(this.base64Audio.split(',')[1])
+      return audioNode
+    
+    },
+
+    setTime(time = 0){
+      this.currentTime = time
+    },
+
+    async initVoiceMessage() {
+      
       try {
-        await audioContext.decodeAudioData(data, (buffer) => {
+        this.audioContext = this.core.getAudioContext() //new (window.AudioContext || window.webkitAudioContext)() || null;
+      } catch (e) {
+        this.error = e
+      }
 
-          this.voiceMessage = {
-            audio: audioNode,
-            duration: 0,
-            currentTime: 0,
-            signal: buffer.getChannelData(0),
-          }
+      if(this.error) return
+
+      this.addToQueue(this, this.id)
+      
+      this.duration = 0
+      this.setTime(0)
+
+      //const data = f._base64ToArrayBuffer(this.base64Audio.split(',')[1])
+
+      try {
+        await this.audioContext.decodeAudioData(this.localBuffer, (buffer) => {
+
+          this.audiobuffer = buffer
+
+          this.duration = buffer.duration
+          this.setTime(0)
+
+          this.signal = buffer.getChannelData(0)
 
           this.draw()
         })
       } catch (e) {
-        console.log(e)
+        this.error = e
+        //console.error(e)
       }
 
     }
@@ -197,34 +369,38 @@ export default {
 <style scoped lang="scss">
 .voiceMessage {
   -webkit-tap-highlight-color: transparent;
+  display: flex;
+  contain: strict;
+  width: 230px;
+  height: 100%;
+  
 
   &_wrapper {
     display: flex;
     justify-content: flex-end;
     align-items: center;
     overflow: hidden;
-    height: 60px;
     min-width: 10em;
-    padding: 0 1em;
-    border-radius: 1em;
-    border-bottom-left-radius: 1em;
-    border-top-right-radius: 0;
+    padding: 0 0.5em;
+    padding-right: 1em;
+    border-radius: 2em;
+    background: srgb(--background-secondary-theme);
   }
 
   &_toggle {
     cursor: pointer;
-    height: 40px;
-    width: 40px;
-    margin-right: 1em;
+    height: 33px;
+    width: 33px;
+    margin-right: 0.5em;
     border-radius: 50%;
-    background: srgb(--color-bg-ac);
+    background: srgb(--neutral-grad-1);
     display: flex;
     align-items: center;
     justify-content: center;
-    color: white;
+    color: srgb(--color-bg-ac);
 
     i {
-      font-size: 15px;
+      font-size: 0.5em;
     }
   }
 
@@ -236,12 +412,48 @@ export default {
   &_options {
     display: flex;
     justify-content: center;
-    line-height: 1em;
     margin-left: 10px;
     padding: 2px 10px;
     min-width: 40px;
     background: srgb(--neutral-grad-1);
     border-radius: 10px;
+
+    span{
+      font-size: 0.8em;
+      color : srgb(--neutral-grad-3);
+    }
+  }
+
+  &.playing{
+    .voiceMessage_options {
+      span{
+        font-size: 0.8em;
+        color : srgb(--color-bg-ac-bright);
+      }
+    }
+  }
+
+  .fa-exclamation-circle{
+    font-size: 0.7em;
+    color : srgb(--color-bad);
+    padding : 0.5em;
+  }
+
+  .encsign{
+    position: absolute;
+    right: 0;
+    top : 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    padding-right: 0.35em;
+
+    i{
+      font-size: 0.5em;
+      color: srgb(--neutral-grad-2);
+      opacity: 0.6;
+      
+    }
   }
 }
 </style>

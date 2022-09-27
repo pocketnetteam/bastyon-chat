@@ -65,7 +65,6 @@ export default {
                 this.core.backtoapp()
         },  
         cordovashare : function(){
-            console.log(this.share);
 
             var share = this.share
 
@@ -80,8 +79,6 @@ export default {
 
                 options.files = _.filter(options.files, function(f){return f})
             }
-
-            console.log('options', options)
 
             if (window.plugins && window.plugins.socialsharing){
                 window.plugins.socialsharing.shareWithOptions(options);

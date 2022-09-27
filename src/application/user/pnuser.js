@@ -1,6 +1,5 @@
 import User from "./user.js";
 /*require("@/application/vendors/btc.js")*/
-var _ = require('underscore');
 import f from "../functions.js";
 
 class PNUser extends User {
@@ -48,7 +47,8 @@ class PNUser extends User {
 
         if(!this.state) return Promise.reject()
 
-        if(this.userinfo.name && (!this.userinfo.keys || !this.userinfo.keys.length)){
+
+        if(this.userinfo.name && !this.userinfo.deleted && (!this.userinfo.keys || !this.userinfo.keys.length)){
 
             if (window.POCKETNETINSTANCE){
 
@@ -133,6 +133,10 @@ class PNUser extends User {
 
     }
 
+    generateprivate(){
+        
+    }
+
     checkCredentials (){
 
         if(!this.credentials){
@@ -167,7 +171,7 @@ class PNUser extends User {
 
         
 
-        return this.core.api.pocketnet.userState(decodedAddress).then(r => {
+        return this.core.api.pocketnet.userStateMe(decodedAddress).then(r => {
 
             //return Promise.reject('unknown')
 
@@ -185,13 +189,15 @@ class PNUser extends User {
 
     convertUser(info){
         return {
-            image : info.i,
-            name : decodeURI(info.name),
+            image : info.i || '',
+            name : info.name ? decodeURI(info.name) : '',
             id : f.hexEncode(info.address),
             source : info,
             keys : _.filter((info.k || "").split(','), function(f){
                 return f
             }),
+
+            deleted : info.deleted,
 
             nocache : info.nocache || false
         }
@@ -216,10 +222,10 @@ class PNUser extends User {
     }
     userInfo(reload){
 
-
         return this.usersInfo(this.credentials.address, false, reload).then(info => {
 
             this.userinfo = info[0]
+            //this.userinfo.deleted = true
 
             return Promise.resolve(info[0])
 
@@ -235,9 +241,7 @@ class PNUser extends User {
                 return f.hexDecode(a)
             })
 
-        return this.core.api.pocketnet.userInfo(addresses, reload).then(infos => {
-
-            // console.log("infos", infos)
+        return this.core.api.pocketnet.userInfoCached(addresses, reload).then(infos => {
 
             infos = _.map(infos, (info) => {
 

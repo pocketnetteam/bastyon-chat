@@ -50,8 +50,6 @@ export default {
             var _searchParams = u.search.replace('?', '').split('&')
             var sp = {}
 
-             console.log('u.searchParams222',sp, _searchParams)
-
             _.each(_searchParams, function(s){
                 var ss = s.split('=')
 

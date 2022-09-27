@@ -1,9 +1,8 @@
-import {mapActions, mapState} from 'vuex';
+import { mapState} from 'vuex';
 
 import chatName from '@/components/chats/assets/name.vue'
 import chatIcon from '@/components/chats/assets/icon.vue'
 import chatTyping from '@/components/chats/assets/typing.vue'
-import typing from "@/components/chats/assets/typing";
 import contacts from '@/components/contacts/index.vue'
 import f from "@/application/functions";
 

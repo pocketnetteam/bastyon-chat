@@ -1,14 +1,11 @@
-import {mapState} from 'vuex';
 import actions from "@/components/events/event/actions/index.vue";
 import filePreview from "@/components/events/previews/filePreview/index.vue";
 import fileMessage from "@/components/events/event/fileMessage/index.vue";
 import listPreview from "@/components/events/event/message/listPreview/index.vue";
 import f from '@/application/functions'
-import VuePictureSwipe from 'vue-picture-swipe';
 import url from '@/components/events/event/url/index.vue'
 import imagesLoaded from 'vue-images-loaded'
 import dummypreviews from "@/components/chats/dummypreviews";
-import moment from "moment";
 import IncomingMessage from "./incomingMessage/incomingMessage.vue"
 import VoiceMessage from '@/components/events/event/VoiceMessage';
 
@@ -34,13 +31,23 @@ export default {
     chat: Object,
     encrypted: false,
     encryptedData: Boolean,
-    decryptedInfo: String,
+    decryptedInfo: null,
     error: String,
     withImage: Boolean,
     reference: Object,
     last : Boolean,
     showmyicontrue : false,
-    fromreference : Boolean
+    fromreference : Boolean,
+    multiSelect: {
+      default: false,
+      type: Boolean,
+    },
+    selectedMessages: {
+      default: [],
+      type: Array,
+    },
+    isRemoveSelectedMessages: false,
+    audioBuffer : null
   },
   directives: {
     imagesLoaded
@@ -59,12 +66,43 @@ export default {
     actions,
     filePreview,
     fileMessage,
-    VuePictureSwipe,
     listPreview,
     url,
     dummypreviews,
     IncomingMessage,
     VoiceMessage,
+  },
+  watch : {
+    isRemoveSelectedMessages: {
+      immediate: true,
+      handler: function () {
+        if (this.isRemoveSelectedMessages) {
+          for (let i = 0; i < this.selectedMessages.length; i++) {
+            if (
+              this.selectedMessages[i].message_id === this.origin.event.event_id
+            ) {
+              this.$emit('remove');
+
+              return this.core.mtrx.client.redactEvent(
+                this.chat.roomId,
+                this.origin.event.event_id,
+                null,
+                {
+                  reason: 'messagedeleting',
+                }
+              );
+            }
+          }
+          this.$emit('messagesIsDeleted', true);
+        }
+      },
+    },
+    readyToRender : {
+      immediate : true,
+      handler : function(){
+        if(this.readyToRender) this.$emit('readyToRender')
+      }
+    }
   },
   computed: {
     showburn : function(){  
@@ -90,13 +128,17 @@ export default {
     readyToRender : function(){
 
       var r = ( this.content.msgtype === 'm.encrypted' && !this.textWithoutLinks && this.badenctypted ) || 
-              ( (this.content.msgtype === 'm.text' || this.content.msgtype === 'm.encrypted') && this.textWithoutLinks) ||
-              (this.file) || (this.error) || 
-              (this.content.msgtype === 'm.image' && this.imageUrl) ||
-              (this.urlpreview) || 
-              (this.preview)
 
-              return r 
+        (this.content.membership) ||
+
+        ((this.content.msgtype === 'm.text' || this.content.msgtype === 'm.encrypted') && this.textWithoutLinks) ||
+        (this.file) || (this.error) || 
+        (this.content.msgtype === 'm.image' && this.imageUrl) ||
+        (this.content.msgtype === 'm.audio' && this.audioUrl) ||
+        (this.urlpreview) || 
+        (this.preview)
+
+      return r 
 
     },
     my: function () {
@@ -138,7 +180,7 @@ export default {
       
       return this.showmyicontrue || 
         this.content.msgtype === 'm.image' ||
-        this.content.msgtype === 'm.audio' ||
+        /*this.content.msgtype === 'm.audio' ||*/
         this.content.msgtype === 'm.file' || 
         this.urlpreview || (!this.$store.state.active && this.$store.state.minimized)
 
@@ -153,7 +195,6 @@ export default {
 
     replacedmintionsbody:function(){
       return this.body.replace(/@\w{68}:(\w{1,50})/g, function(str, l){
-        console.log("L", l)
         return '@' + l
       })
 
@@ -201,19 +242,23 @@ export default {
         if (this.encryptedData) {
           return this.decryptedInfo
         } else {
+
+          
+
           return this.content && this.content.url;
         }
 
       }
     },
+
     audioUrl: function () {
       if (this.content.msgtype === 'm.audio') {
 
-        if (this.encryptedData) {
-          return this.decryptedInfo
-        } else {
-          return this.content && this.content.url;
-        }
+        if(this.encryptedData && this.decryptedInfo) return this.decryptedInfo
+
+        return this.audioBuffer
+
+        //return this.content && this.content.audioData
       }
     },
 
@@ -244,7 +289,12 @@ export default {
           click: "reply",
           title: this.$i18n.t("button.reply"),
           icon: "fas fa-reply"
-        }
+        },
+        {
+          click: "showMultiSelect",
+          title: this.$i18n.t("button.select"),
+          icon: "fas fa-check-circle",
+        },
       ]
 
       if(!this.file){
@@ -311,10 +361,19 @@ export default {
       if (
         this.origin.event.content['m.relates_to'] &&
         this.origin.event.content['m.relates_to']['rel_type'] == 'm.replace') return true
-    }
+    },
 
+    selectedMessage: function () {
+      const elem = this.selectedMessages.filter(
+        (item) => item.message_id === this.origin.event.event_id
+      );
+      return elem[0]?.message_id === this.origin.event.event_id ? true : false;
+    },
   },
 
+  mounted() {
+
+  },
 
   methods: {
     gotoreference: function () {
@@ -356,6 +415,8 @@ export default {
 
     dropDownMenuShow: function () {
 
+      if(this.urlpreview) return
+
       setTimeout(() => {
         this.setmenu()
       }, 200)
@@ -378,7 +439,7 @@ export default {
       
       if (this.content.msgtype === 'm.image' && this.imageUrl) sharing.images = [this.imageUrl]
 
-      if (this.content.msgtype === 'm.audio' && this.decryptedInfo) sharing.audio = [this.decryptedInfo]
+      if (this.content.msgtype === 'm.audio' && this.audioUrl) sharing.audio = [this.audioUrl]
 
       if ((this.content.msgtype === 'm.text' || this.content.msgtype === 'm.encrypted') && trimmed) sharing.messages = [trimmed]
 
@@ -398,6 +459,13 @@ export default {
 
     menuedit: function () {
       this.$emit('editing', this.body)
+
+      return Promise.resolve()
+    },
+
+    menushowMultiSelect: function () {
+      this.$emit('showMultiSelect');
+      this.selectMessage();
 
       return Promise.resolve()
     },
@@ -523,38 +591,46 @@ export default {
     showreference : function(){
       this.referenceshowed = !this.referenceshowed
     },
-  
-    scrollTo: function () {
-      const evtWrp = this.$el.parentElement.parentElement,
-            parent = evtWrp.offsetParent
-    
-      /*Scroll eventsflex to message*/
-      parent.parentNode.scrollTop = (evtWrp.offsetTop - parent.offsetTop);
+
+    selectMessage: function () {
+      var sharing = {};
+
+      var trimmed = this.$f.trim(this.body);
+
+      if (this.content.msgtype === 'm.image' && this.imageUrl)
+        sharing.images = [this.imageUrl];
+
+      if (this.content.msgtype === 'm.audio' && this.decryptedInfo)
+        sharing.audio = [this.decryptedInfo];
+
+      if (
+        (this.content.msgtype === 'm.text' ||
+          this.content.msgtype === 'm.encrypted') &&
+        trimmed
+      )
+        sharing.messages = [trimmed];
+
+      //if(this.urlpreview) sharing.urls = [urlpreview]
+
+      if (this.file) {
+        sharing.download = true;
+      }
+
+      //sharing.route = 'chat?id=' + this.chat.roomId
+      sharing.from = this.userinfo.id;
+      this.$emit('selectMessage', {
+        message_id: this.origin.event.event_id,
+        ...sharing,
+      });
     },
-  
-    markText: function (content) {
-      /*Highlight matched text*/
-      if (!this.matches) return
-      
-      this.markedText = this.matches.value.length && content?.includes(this.matches.value) ?
-          content.replace(new RegExp(`(${ this.matches.value })`, 'gi'), `<mark class="match">$1</mark>`) :
-        null
-      
-      /*Add highlighted parts to search*/
-      this.$nextTick(() => {
-        const localMsg = this.origin._localTimestamp !== this.origin._localTimestamp,
-              matches = Array.from(this.$el.querySelectorAll('mark'))
-        
-        if (localMsg) matches.reverse()
-  
-        matches
-          .forEach((mark, id) => {
-            if (this.markedText) {
-              mark.component = this
-              this.matches[`${ localMsg ? 'prepend' : 'append' }`](mark)
-            }
-          })
-      })
+    removeMessage: function () {
+      this.$emit('removeMessage', {
+        message_id: this.origin.event.event_id,
+      });
+    },
+
+    eventMessage: function (state) {
+      state ? this.removeMessage() : this.selectMessage()
     }
   }
 }

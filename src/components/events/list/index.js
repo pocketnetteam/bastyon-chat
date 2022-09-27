@@ -1,6 +1,5 @@
 import { mapState } from "vuex";
 import f from "@/application/functions";
-import * as _ from "underscore";
 
 export default {
   name: "events",
@@ -11,6 +10,8 @@ export default {
     loading: Boolean,
     scrollType: "",
     error: [Object, Error, String],
+    selectedMessages: [],
+    isRemoveSelectedMessages: false,
   },
   inject: ['matches'],
   components: {},
@@ -22,13 +23,20 @@ export default {
       menuOpen: false,
       c: 1,
       ls: 0,
-      voiceMessageQueue: []
+      voiceMessageQueue: [],
+      countshow: 0,
+      multiSelect: false,
     };
   },
   provide() {
     return {
       addToQueue: (message, id) => {
-        this.voiceMessageQueue = [...this.voiceMessageQueue, { message, id }];
+        var f = _.find(this.voiceMessageQueue, (v) => {
+          return v.id == id
+        })
+
+        if(!f)
+          this.voiceMessageQueue = [...this.voiceMessageQueue, { message, id }];
       },
       playNext: (id) => {
         let current = this.sortedVoiceMessageQueue.findIndex((i) => {
@@ -37,7 +45,8 @@ export default {
         let next =
           current === -1 ? null : this.sortedVoiceMessageQueue[current + 1];
         if (next) {
-          next.message.audioToggle();
+          next.message.setTime(0)
+          next.message.play();
         }
       }
     };
@@ -45,11 +54,27 @@ export default {
 
   watch: {
     events: function () {},
-  },
 
+    selectedMessages: {
+      immediate: true,
+      handler: function () {
+        if (this.selectedMessages.length === 0) {
+          this.multiSelect = false;
+        }
+      },
+    },
+
+    notificationCount : function(){
+
+     
+      if(this.lscroll && this.lscroll.scrollTop < 180 && this.chat && this.chat.getUnreadNotificationCount()){
+        this.scrollToNew()
+      }
+    }
+  },
   computed: {
     sortedVoiceMessageQueue() {
-      return this.voiceMessageQueue.sort((a, b) => a.id - b.id);
+      return _.sortBy(this.voiceMessageQueue, (a) => {return a.id})
     },
 
     ios() {
@@ -62,7 +87,7 @@ export default {
       scrollbottomshow: function () {
         return this.lscroll && this.lscroll.scrollTop > 500;
       },
-      minimized: state => state.minimized
+      notificationCount : (state) => state.allnotifications
     }),
 
     eventsByPages: function () {
@@ -89,9 +114,24 @@ export default {
   destroyed: function () {
     this.core.menu(null);
   },
-  mounted: function () {},
+  updated: function() {
 
+    
+
+    /*if(this.countshow === 0) {
+      this.scrollToReadMessages();
+    }
+    this.countshow = 1;*/
+  },
   methods: {
+    scrollToReadMessages: function () {
+      /*if(this.notificationCount > 0) {
+        const elem = document.getElementById("eventWrapper_" + (this.notificationCount + 1));
+
+        if(elem)
+          elem.scrollIntoView()
+      }*/
+    },
     showerror: function () {
       // stringifyiedError
 
@@ -198,11 +238,34 @@ export default {
       if (this.scrollType === "custom") {
         return;
       } else {
-        console.log("e.deltaY", e.deltaY, "mousewheel function work");
         e.preventDefault();
         this.$refs["container"].scrollTop += -e.deltaY;
         return false;
       }
-    }
+    },
+    showMultiSelect() {
+      this.multiSelect = true;
+    },
+    selectMessage(message) {
+      if (
+        this.selectedMessages.filter(
+          (item) => item.message_id === message.message_id
+        ).length === 0
+      ) {
+        this.selectedMessages.push(message);
+      }
+    },
+    removeMessage(message) {
+      const index = this.selectedMessages.findIndex(
+        (item) => item.message_id === message.message_id
+      );
+      if (index !== -1) {
+        this.selectedMessages.splice(index, 1);
+      }
+    },
+
+    messagesIsDeleted(state) {
+      this.$emit("messagesIsDeleted", state);
+    },
   },
 };

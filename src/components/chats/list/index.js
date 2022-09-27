@@ -3,8 +3,6 @@ import dummypreviews from '@/components/chats/dummypreviews/index.vue'
 import preview from '@/components/chats/preview/index.vue'
 import teamroom from '@/components/teamroom/index.vue'
 import f from "@/application/functions";
-import moment from "moment";
-import _ from "underscore";
 
 export default {
 	name: "list",
@@ -88,7 +86,7 @@ export default {
 		]),
 
 		showchatslist : function(){
-			return !this.hideOptimization || this.wasunhidden
+			return !this.hideOptimization// || this.wasunhidden
 		},
 
 		rooms: function () {
@@ -312,7 +310,6 @@ export default {
 						manual: true
 					})
 
-					console.log('_share', _share)
 
 					this.core.mtrx.shareInChat(chat.roomId, _share).then(r => {
 

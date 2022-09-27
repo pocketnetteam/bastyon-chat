@@ -92,7 +92,6 @@
   </div>
 </template>
 <script>
-import _ from "underscore";
 import f from '@/application/functions'
 import IncomingMessage from '../incomingMessage/incomingMessage.vue'
 

@@ -68,4 +68,11 @@
 <!-- THEMES BEGIN -->
 <!-- THEMES END -->
 
+<style lang="scss">
+.card-content {
+  .chatGroupIcon img {
+    width: 100% !important;
+  }
+}
+</style>
 

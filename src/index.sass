@@ -137,26 +137,32 @@ button.button
         background: srgb(--color-good)
         border : 1px solid srgb(--color-good)
 
-        &:hover
-            background: srgba((--color-good), 0.9)
-            color : srgb(--text-on-bg-ac-color)
+        @media (pointer:fine)
+
+            &:hover
+                background: srgba((--color-good), 0.9)
+                color : srgb(--text-on-bg-ac-color)
 
     &.black
         background: srgb(--neutral-grad-0)
         border : 1px solid srgb(--neutral-grad-0)
         color : srgb(--neutral-grad-3)
 
-        &:hover
-            background: srgba((--neutral-grad-3), 0.9)
-            color : srgb(--text-on-bg-ac-color)
+        @media (pointer:fine)
+
+            &:hover
+                background: srgba((--neutral-grad-3), 0.9)
+                color : srgb(--text-on-bg-ac-color)
 
     &.orange
         background: srgb(--color-bg-orange)
         border : 1px solid  srgb(--color-bg-orange)
 
-        &:hover
-            background : srgba((--color-bg-orange), 0.9)
-            color :  srgb(--text-on-bg-ac-color)
+        @media (pointer:fine)
+
+            &:hover
+                background : srgba((--color-bg-orange), 0.9)
+                color :  srgb(--text-on-bg-ac-color)
 
     &.round
         width: 44px
@@ -180,12 +186,15 @@ button.button
         border : 1px solid transparent
         color : srgb(--color-txt-ac)
 
-        &:hover
-            color : srgb(--color-txt-gray)
+        @media (pointer:fine)
 
-    &:hover
-        background: transparent
-        color : srgb(--color-txt-ac)
+            &:hover
+                color : srgb(--color-txt-gray)
+
+    @media (pointer:fine)
+        &:hover
+            background: transparent
+            color : srgb(--color-txt-ac)
 
     &.underscored
         text-decoration: underline
@@ -222,9 +231,9 @@ button.button
             display: none!important
 
 
-.bout
-    .emojipicker
-        display: none!important
+//.bout
+//    .emojipicker
+//        display: none!important
 
 .iconbuttonRound
     width : 44px
@@ -237,21 +246,27 @@ button.button
     border-radius: 50%
     +transition(0.3s)
 
-    &:hover
-        color : srgb(--neutral-grad-4)
+    @media (pointer:fine)
+
+        &:hover
+            color : srgb(--neutral-grad-4)
 
     &.second
         background: srgb(--neutral-grad-2)
 
-        &:hover
-            color : srgb(--color-txt-ac)
+        @media (pointer:fine)
+
+            &:hover
+                color : srgb(--color-txt-ac)
 
     &.bright
         color : srgb(--text-on-bg-ac-color)
         background: srgb(--color-txt-ac)
 
-        &:hover
-            color : srgb(--color-txt-ac-1)
+        @media (pointer:fine)
+
+            &:hover
+                color : srgb(--color-txt-ac-1)
 
 .iconbuttonsmall
     cursor: pointer
@@ -262,8 +277,9 @@ button.button
     i
         font-size: 0.8em
 
-    &:hover
-        color : srgb(--neutral-grad-3)
+    @media (pointer:fine)
+        &:hover
+            color : srgb(--neutral-grad-3)
 
 .iconbutton
     cursor: pointer
@@ -271,8 +287,9 @@ button.button
     text-align: center
     +transition(0.3s)
 
-    &:hover
-        color : srgb(--neutral-grad-3)
+    @media (pointer:fine)
+        &:hover
+            color : srgb(--neutral-grad-3)
 
 .internalpocketnetlink
     a
@@ -292,12 +309,22 @@ button.button
     color : srgb(--text-color)
     font-size: 1.1em
 
+    
+
     .dmdv
         width: 1px
         height: 1px
         opacity: 0
         background: srgb(--background-total-theme)
 
+    &.unselect
+        -webkit-touch-callout: none
+        -webkit-user-select: none
+        -khtml-user-select: none
+        -moz-user-select: none
+        -ms-user-select: none
+        user-select: none
+        
     &.mobile
         -webkit-touch-callout: none
         -webkit-user-select: none
@@ -505,13 +532,14 @@ button.button
         display: table-cell
 
 
-
-
 .m-message-container.is-bottom-right
     padding : 0
     right: 56px
     bottom : 1.5 * $r
     width: auto
+
+.m-message-container.is-top-left
+    top : calc(0.5em + var(--app-margin-top))
 
 .notificationWrapper
     display: block
@@ -634,10 +662,12 @@ button.button
         width: 50px  
         margin-left: auto
         color: grey
-        opacity: 0.5
+        
 
-        &:hover
-            opacity: 1
+        @media (pointer:fine)
+            opacity: 0.5
+            &:hover
+                opacity: 1
 
 
 .collapsed 

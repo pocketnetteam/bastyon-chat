@@ -27,8 +27,6 @@ export default {
             if (this.id){
                 var contact = this.$store.state.users[f.hexEncode(this.id)]
 
-                console.log('contact', contact)
-    
                 return contact
             }
             
@@ -40,7 +38,6 @@ export default {
     },
 
     mounted : function(){
-        console.log('this.id', this.id)
         if(this.id)
             this.core.user.usersInfo(this.id, true).then(r => {
             })

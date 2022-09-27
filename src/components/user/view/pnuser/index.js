@@ -39,7 +39,7 @@ export default {
         gotopocketnetprofile : function(){
             if(this.core.backtoapp) this.core.backtoapp(this.href)
             else
-                window.open(this.href,"_blank")
+                window.open(this.href, "_blank")
         },
     },
 }

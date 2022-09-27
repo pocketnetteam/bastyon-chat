@@ -1,4 +1,3 @@
-var _ = require('underscore');
 import f from "@/application/functions";
 import ChatStorage from "./chatstorage";
 
@@ -58,7 +57,7 @@ var PcryptoRoom = async function(pcrypto, chat, {ls, lse}){
 
     self.preparedUsers = function(time){
         return _.filter(getusersinfobytime(time), function(ui){
-            return ui.keys && ui.keys.length == m
+            return ui.keys && ui.keys.length >= m
         })
     }
 
@@ -73,16 +72,23 @@ var PcryptoRoom = async function(pcrypto, chat, {ls, lse}){
         return false
     }
 
+
     self.canBeEncrypt = function(time){
 
         var usersinfoArray = _.toArray(usersinfo)
 
+        var publicChat = pcrypto.core.mtrx.kit.chatIsPublic(chat)
+
+       // console.log('publicChat', time, publicChat, usersinfoArray.length, self.preparedUsers(time).length)
+
+
         if (
+            !publicChat &&
 
             pcrypto.user && pcrypto.user.private && pcrypto.user.private.length == 12 && 
             users[pcrypto.user.userinfo.id] && 
             pcrypto.core.mtrx.kit.tetatetchat(chat) &&
-            usersinfoArray.length > 1 && usersinfoArray.length < 5 && 
+            usersinfoArray.length > 1 && usersinfoArray.length < 50 && 
             self.preparedUsers(time).length / usersinfoArray.length > 0.6){
 
             return true
@@ -202,12 +208,12 @@ var PcryptoRoom = async function(pcrypto, chat, {ls, lse}){
             }
         })
 
-        //console.log("history", history)
 
     }
 
     var getusersinfobytime = function(time){
         var us = getusersbytime(time)
+
 
         return _.filter(_.map(us, function(u){
             return usersinfo[u.id]
@@ -215,6 +221,8 @@ var PcryptoRoom = async function(pcrypto, chat, {ls, lse}){
     }
 
     var getusersbytime = function(time){
+
+
         return _.filter(users, function(ui){
 
             var l = _.find(ui.life, function(l){
@@ -239,14 +247,16 @@ var PcryptoRoom = async function(pcrypto, chat, {ls, lse}){
 
         getusershistory()
 
+        if(!pcrypto.core.mtrx.kit.tetatetchat(chat)){
+            m = 2
+        }
+
+
         return getusersinfo().then(r => {
             return self
         })
 
     }
-
-
-  
 
     var convert = {
         aeskeys : {
@@ -280,6 +290,11 @@ var PcryptoRoom = async function(pcrypto, chat, {ls, lse}){
             if(!time) time = 0
             if(!block) block = pcrypto.currentblock.height
 
+            if(!pcrypto.core.mtrx.kit.tetatetchat(chat)) {
+                block = 10
+            }
+
+
             var k = period(time) + '-' + block
        
             return ls.get(`${lcachekey + pcrypto.user.userinfo.id}-${k}`).then((keys) => {
@@ -311,27 +326,21 @@ var PcryptoRoom = async function(pcrypto, chat, {ls, lse}){
         },
         aeskeys : function(time, block){
 
+
             if(!time) time = 0
             if(!block) block = pcrypto.currentblock.height
 
+
             return eaa.aeskeys(time, block)
 
-            var timep = period(time)
-            var k = timep + '-' + block
-
-            if(cache[k]){
-                return cache[k]
-            }
-
-            cache[k] = eaa.aeskeys(time, block)
-
-            return cache[k]
+     
         }
     }
 
     var eaa = {
 
         cuhash : function(users, num, block){
+
 
             return pbkdf2.pbkdf2Sync(f.sha224(_.map(users, function(u){
                 return u.keys[num]
@@ -340,6 +349,7 @@ var PcryptoRoom = async function(pcrypto, chat, {ls, lse}){
         },
 
         userspublics : function(time, block){
+
 
             var users = self.preparedUsers(time)
 
@@ -405,7 +415,7 @@ var PcryptoRoom = async function(pcrypto, chat, {ls, lse}){
     
             var sum = null
 
-    
+
             for(var i = 0; i < m; i++){
 
     
@@ -483,9 +493,11 @@ var PcryptoRoom = async function(pcrypto, chat, {ls, lse}){
     }   
 
     self.decryptEvent = async function(event){
+
+        if(event.content.hash) return self.decryptEventGroup(event)
+
         if(!pcrypto.user.userinfo) {
             throw new Error('userinfo');
-            
         }
 
         if (event.decrypting){
@@ -591,8 +603,12 @@ var PcryptoRoom = async function(pcrypto, chat, {ls, lse}){
     self.encryptKey = async function(key){
         var users = self.preparedUsers()
 
+        var block = pcrypto.currentblock.height
+
+        if(!pcrypto.core.mtrx.kit.tetatetchat(chat)) block = 10
+
         var encrypted = {
-            block : pcrypto.currentblock.height,
+            block : block,
             keys : {}
         }
 
@@ -604,7 +620,6 @@ var PcryptoRoom = async function(pcrypto, chat, {ls, lse}){
             }
         }
 
-   
         encrypted.keys = f.Base64.encode(JSON.stringify(encrypted.keys))
         
         return encrypted
@@ -616,8 +631,19 @@ var PcryptoRoom = async function(pcrypto, chat, {ls, lse}){
             throw new Error('userinfo')
         }
 
-        var secrets = f.deep(event, 'content.info.secrets.keys') || f.deep(event, 'content.pbody.secrets.keys')
-        var block = f.deep(event, 'content.info.secrets.block') || f.deep(event, 'content.pbody.secrets.block')
+        var secrets = ''
+        var block = ''
+
+        if(event.type == 'm.room.encryption'){
+            secrets = event.content.keys
+            block = event.content.block
+        }
+        else{
+            secrets = f.deep(event, 'content.info.secrets.keys') || f.deep(event, 'content.pbody.secrets.keys')
+            block = f.deep(event, 'content.info.secrets.block') || f.deep(event, 'content.pbody.secrets.block')
+        }
+        
+        
         
 
         if(!secrets) throw new Error('secrets')
@@ -631,7 +657,7 @@ var PcryptoRoom = async function(pcrypto, chat, {ls, lse}){
 
         var body = JSON.parse(f.Base64.decode(secrets))
         var time = event.origin_server_ts || 1
-        
+
         if (sender == me){
 
             _.find(body, function(s, i){
@@ -662,6 +688,11 @@ var PcryptoRoom = async function(pcrypto, chat, {ls, lse}){
     self.encryptEvent = async function(text){
 
         var users = self.preparedUsers()
+        
+        if (!pcrypto.core.mtrx.kit.tetatetchat(chat)){
+            return self.encryptEventGroup(text)
+        }
+
 
         var encryptedEvent = {
             block : pcrypto.currentblock.height,
@@ -669,7 +700,6 @@ var PcryptoRoom = async function(pcrypto, chat, {ls, lse}){
             body : {}
         }
 
-        //console.log(users, encryptedEvent, text)
 
         for(var i = 0; i < users.length ; i++){
             var user = users[i]
@@ -683,6 +713,217 @@ var PcryptoRoom = async function(pcrypto, chat, {ls, lse}){
         encryptedEvent.body = f.Base64.encode(JSON.stringify(encryptedEvent.body))
         
         return encryptedEvent
+    }
+
+    var usershash = function(){
+        var users = self.preparedUsers()
+
+        var hash = f.md5(
+
+            _.filter( _.map(users, (user) => {
+                return user.id
+            }), (uid) => {
+                return uid && uid != pcrypto.user.userinfo.id
+            }).join('') + '_v3'
+        
+        )
+
+        return hash
+    }
+
+    self.sendCommonKey = function(){
+
+
+        return self.createMyCommonKey().then((result) => {
+
+
+            //return Promise.reject("HI")
+
+            return pcrypto.core.mtrx.client.sendStateEvent(
+                chat.roomId, 
+                "m.room.encryption", 
+                result.export, 
+                "pcrypto." + pcrypto.user.userinfo.id + "." + result.export.hash
+            )
+        }).then(r => {
+
+            return self.getCommonKey()
+
+        }).catch(e => {
+
+            console.error(e)
+
+            return Promise.reject(e)
+        })
+    }
+
+
+    var getCommonKeyEvent = function(userid, _hash){
+        var hash = _hash || usershash()
+
+        if(!userid) userid = pcrypto.user.userinfo.id
+
+        var state_key = "pcrypto." + userid + '.' + hash
+        var events = chat.currentState.getStateEvents("m.room.encryption")
+
+        var event = _.find(events, (e) => {
+            return e.event.state_key == state_key
+        })
+
+        if(event){
+            return event
+        }
+    }
+
+    
+    self.getCommonKey = function(userid, _hash){
+
+        return f.pretry(() => {
+            var e = getCommonKeyEvent(userid, _hash)
+
+            return e
+        }, 50, 5000).then(() => {
+            var e = getCommonKeyEvent(userid, _hash)
+
+            if(!e){
+                Promise.reject('m.room.encryption event not found')
+            }
+
+            return Promise.resolve(e.event)
+        })
+      
+       
+    }
+
+    self.getOrCreateCommonKey = function(){
+
+
+        var _e = null
+        var ce = getCommonKeyEvent()
+        var promise = null
+
+        if (ce){
+            promise = Promise.resolve(ce.event)
+        }
+        else{
+            promise = self.sendCommonKey()
+        }
+
+        return promise.then(event => {
+
+            _e = event
+
+            return self.decryptKey(event)
+        }).then(key => {
+
+            return {
+                key,
+                hash : _e.content.hash,
+                block : _e.content.block
+            }
+
+        })
+        
+    }
+
+    self.createMyCommonKey = function(){
+
+        var hash = usershash()
+
+        var result = {
+            private : {},
+            export : {}
+        }
+
+        return pcryptoFile.randomkey().then(key => {
+
+            result.private.secret = key
+
+            return pcryptoFile.key(key)
+
+        }).then(key => {
+
+            result.private.key = key
+            result.private.hash = hash
+            result.export.hash = hash
+
+
+            return self.encryptKey(result.private.secret)
+
+        }).then(encrypted => {
+
+            result.export.keys = encrypted.keys
+            result.export.block = encrypted.block
+
+            return result
+        })
+    }
+
+    self.decryptEventGroup = function(event){
+
+        if(!pcrypto.user.userinfo) {
+            throw new Error('userinfo');
+        }
+
+        if (event.decrypting){
+            return event.decrypting
+        }
+
+        var hash = event.content.hash
+        var sender = f.getmatrixid(event.sender);
+        var block = event.content.block
+
+        var dpromise = self.getCommonKey(sender, hash).then((event) => {
+            return self.decryptKey(event)
+        }).then(key => {
+            
+            return pcryptoFile.decrypt( Buffer.from(event.content.body, 'hex'), key ).then(decrypted => {
+                var dec = new TextDecoder();
+
+                var data = {
+                    body: dec.decode(new Uint8Array(decrypted)),
+                    msgtype: 'm.text'
+                }
+
+                return Promise.resolve(data)
+
+            })
+        })
+
+        .finally(() => {
+            delete event.decrypting
+        })
+
+        event.decrypting = dpromise
+
+        return dpromise
+    }
+
+    self.encryptEventGroup = async function(text){
+
+        var encryptedEvent = {
+            msgtype: 'm.encrypted',
+            body : {}
+        }
+
+        return self.getOrCreateCommonKey().then(info => {
+
+            encryptedEvent.block = info.block
+            encryptedEvent.hash = info.hash
+
+
+            let utf8Encode = new TextEncoder();
+
+
+            return pcryptoFile.encrypt( utf8Encode.encode(text), info.key ).then(encrypted => {
+
+                encryptedEvent.body = Buffer.from(encrypted).toString("hex")
+
+                return Promise.resolve(encryptedEvent)
+    
+            })
+
+        })
     }
 
     var decrypt = async function(keyData, {encrypted, nonce}){
@@ -767,18 +1008,8 @@ var PcryptoFile = function(){
 
             var token = window.crypto.getRandomValues(array).toString('hex');
             resolve(token)
-
-            /*ncrypto.randomBytes(24, function(err, buffer) {
-                var token = buffer.toString('hex');
-
-                console.log('token', token)
-
-                resolve(token)
-            });*/
         })
        
-
-        //return cryptoRandomString({length: 24});
     }
 
     self.key = function(str){
@@ -851,7 +1082,6 @@ var PcryptoFile = function(){
         p.charsetEnc = (p.charsetEnc || 'utf8')
         p.charsetDec = (p.charsetDec || 'hex')
 
-        //var strBytes = aesjs.utils[p.charsetEnc].toBytes(str);
 
         return self.key(secret).then(key => {
 
@@ -876,8 +1106,8 @@ var PcryptoFile = function(){
         p.charsetEnc = (p.charsetEnc || 'utf8')
         p.charsetDec = (p.charsetDec || 'hex')
 
-
         return self.key(secret).then(key => {
+
 
             if(!crypto.subtle) return Promise.reject('crypto.subtle')
 
@@ -890,6 +1120,7 @@ var PcryptoFile = function(){
         }).then(function (decrypted) {
             return decrypted
         }).catch(e => {
+            console.error(e)
             return Promise.reject(e)
         })
 
@@ -900,10 +1131,16 @@ var PcryptoFile = function(){
 
 var Pcrypto = function(core, p){
 
-    const EC = require('elliptic').ec
-    const secp256k1 = new EC('secp256k1')
+    //const EC = require('elliptic').ec
 
-    secp256k1CurveN = secp256k1.curve.n
+    secp256k1CurveN = new BN('fffffffffffffffffffffffffffffffebaaedce6af48a03bbfd25e8cd0364141', 16);
+
+
+    ///// 
+
+
+    //console.log('secp256k1CurveN', secp256k1CurveN, secp256k1CurveN.toJSON())
+    //console.log('bbn', bbn, bbn.toJSON())
 
     var self = this
     var ls, lse
