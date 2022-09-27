@@ -444,6 +444,31 @@ export default {
     iteraction: function () {
       this.$store.commit('setiteraction', true);
     },
+    importFontAwesome() {
+      /*Import fontawesome from parent is exists*/
+      this.$nextTick(() => {
+        const styles = Array.from(document.querySelectorAll('link')).filter(f => f.href.includes('fontawesome')),
+              links = document.createDocumentFragment(),
+              addLink = (src) => {
+                const link = document.createElement('style'),
+                      text = document.createTextNode(`@import url(${ src.href })`);
+
+                link.setAttribute('type', 'text/css');
+                link.append(text);
+
+                links.append(link);
+              };
+
+        if (styles.length) {
+          styles.forEach(addLink);
+        } else {
+          addLink({ href: 'https://use.fontawesome.com/releases/v5.2.0/css/all.css' });
+        }
+
+        this.$el.appendChild(links);
+      });
+      /*End import fontawesome from parent*/
+    },
     importInitialScripts() {
 
       /*if (scriptsadded) return
@@ -574,6 +599,7 @@ export default {
 
     this.$store.commit('ls')
 
+    this.importFontAwesome();
     this.importInitialScripts()
 
     this.generateTeamroomMessages();
@@ -873,7 +899,6 @@ if (module.hot) {
 </style>
 <style lang="sass" src="./index.sass"></style>
 <style>
-@import 'https://use.fontawesome.com/releases/v5.2.0/css/all.css';
 @import '@/../../public/css/main.css';
 @import '@/../../public/css/normalize.css';
 @import '@/../../public/css/emoji-mart.css';
