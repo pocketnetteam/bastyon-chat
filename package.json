@@ -6,11 +6,11 @@
     "serve": "vue-cli-service serve",
     "build": "node themes.js && vue-cli-service build --dest C:/inetpub/wwwroot/pocketnet/chat",
     "build_mac": "node themes.js && vue-cli-service build --dest ~/work/pocketnet/chat",
-    "lint": "vue-cli-service lint",
     "themes": "node themes.js",
     "buildpocketnet": "npm run build -- --target wc-async --inline-vue --name matrix-element src/App.vue",
     "buildpocketnet_mac": "npm run build_mac -- --target wc-async --inline-vue --name matrix-element src/App.vue",
-    "buildpocketnetdev": "npm run build -- --target wc-async --inline-vue --watch --name matrix-element src/App.vue"
+    "buildpocketnetdev": "npm run build -- --target wc-async --inline-vue --watch --name matrix-element src/App.vue",
+    "prepare": "husky install"
   },
   "dependencies": {
     "@babel/preset-stage-0": "^7.8.3",
@@ -75,11 +75,9 @@
     "@types/matrix-js-sdk": "^9.2.5",
     "@types/webpack-env": "^1.16.3",
     "@vue/cli-plugin-babel": "^4.5.15",
-    "@vue/cli-plugin-eslint": "^4.5.15",
     "@vue/cli-plugin-router": "^4.5.15",
     "@vue/cli-plugin-vuex": "^4.5.15",
     "@vue/cli-service": "^4.5.15",
-    "babel-eslint": "^10.1.0",
     "babel-loader": "^8.2.3",
     "babel-plugin-transform-vue-jsx": "^3.7.0",
     "babel-polyfill": "^6.26.0",
@@ -87,8 +85,11 @@
     "babel-preset-stage-0": "^6.24.1",
     "expose-loader": "^1.0.3",
     "gitignore-parser": "0.0.2",
+    "husky": "^8.0.2",
     "less": "^3.12.2",
     "less-loader": "^7.0.2",
+    "lint-staged": "^13.0.3",
+    "prettier": "2.7.1",
     "sass-loader": "^8.0.0",
     "ts-loader": "^8.3.0",
     "typescript": "^4.5.5",
@@ -98,5 +99,8 @@
     "> 1%",
     "last 2 versions",
     "not dead"
-  ]
+  ],
+  "lint-staged": {
+    "**/*": "prettier --write --ignore-unknown"
+  }
 }
