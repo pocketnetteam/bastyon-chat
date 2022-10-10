@@ -723,7 +723,7 @@ var PcryptoRoom = async function(pcrypto, chat, {ls, lse}){
                 return user.id
             }), (uid) => {
                 return uid && uid != pcrypto.user.userinfo.id
-            }).join('') + '_v3'
+            }).join('') + '_v4'
         
         )
 
