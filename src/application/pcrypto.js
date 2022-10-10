@@ -49,8 +49,8 @@ var PcryptoRoom = async function(pcrypto, chat, {ls, lse}){
     
     }
 
-    var lcachekey = 'pcrypto4_' + chat.roomId + '_';
-    var ecachekey = 'e_pcrypto4_';
+    var lcachekey = 'pcrypto5_' + chat.roomId + '_';
+    var ecachekey = 'e_pcrypto5_';
     var cache = {}
 
     
@@ -247,9 +247,9 @@ var PcryptoRoom = async function(pcrypto, chat, {ls, lse}){
 
         getusershistory()
 
-        if(!pcrypto.core.mtrx.kit.tetatetchat(chat)){
+        /*if(!pcrypto.core.mtrx.kit.tetatetchat(chat)){
             m = 2
-        }
+        }*/
 
 
         return getusersinfo().then(r => {
@@ -294,13 +294,10 @@ var PcryptoRoom = async function(pcrypto, chat, {ls, lse}){
                 block = 10
             }
 
-            console.log('block10', block)
-
 
             var k = period(time) + '-' + block
        
             return ls.get(`${lcachekey + pcrypto.user.userinfo.id}-${k}`).then((keys) => {
-
 
                 const keysPrepared = convert.aeskeys.out(keys);
 
@@ -342,7 +339,6 @@ var PcryptoRoom = async function(pcrypto, chat, {ls, lse}){
     var eaa = {
 
         cuhash : function(users, num, block){
-
 
             return pbkdf2.pbkdf2Sync(f.sha224(_.map(users, function(u){
                 return u.keys[num]
@@ -390,6 +386,7 @@ var PcryptoRoom = async function(pcrypto, chat, {ls, lse}){
             var users = self.preparedUsers(time)
     
             var sum = null
+
     
             for(var i = 0; i < m; i++){
     
@@ -464,9 +461,6 @@ var PcryptoRoom = async function(pcrypto, chat, {ls, lse}){
 
         var error = null
 
-
-        console.log('keys, k', keys, k)
-
         if (keys[userid]){
             try{
                 return await decrypt(keys[userid], {encrypted, nonce})
@@ -536,8 +530,6 @@ var PcryptoRoom = async function(pcrypto, chat, {ls, lse}){
             const time = event.origin_server_ts || 1;
             const block = event.content.block;
 
-            console.log('body', body, time, block)
-
             if (sender == me) {
                 _.find(body, function(s, i) {
                     if (i != me) {
@@ -555,8 +547,6 @@ var PcryptoRoom = async function(pcrypto, chat, {ls, lse}){
             if(!body[bodyindex]) {
                 throw new Error('emptyforme');
             }
-
-            console.log('bodyindex', bodyindex)
 
 
             return self.decrypt(keyindex, body[bodyindex], time, block).then(decrypted => {
@@ -942,8 +932,6 @@ var PcryptoRoom = async function(pcrypto, chat, {ls, lse}){
         var _encrypted = new Uint8Array(f._base64ToArrayBuffer(encrypted))
         var _nonce = new Uint8Array(f._base64ToArrayBuffer(nonce))
 
-        console.log('keyData, _encrypted, _nonce', keyData, _encrypted, _nonce)
-
         var k = await key.open(_encrypted, _nonce)
 
         var decrypted = await new TextDecoder().decode(k)
@@ -1117,11 +1105,7 @@ var PcryptoFile = function(){
         p.charsetEnc = (p.charsetEnc || 'utf8')
         p.charsetDec = (p.charsetDec || 'hex')
 
-        console.log('secret', secret, encryptedBytes, p)
-
         return self.key(secret).then(key => {
-
-            console.log('key', key)
 
 
             if(!crypto.subtle) return Promise.reject('crypto.subtle')
