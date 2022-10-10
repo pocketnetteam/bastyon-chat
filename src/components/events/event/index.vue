@@ -485,6 +485,8 @@ export default {
 
     async decrypt() {
 
+      console.log('this.event', this.event)
+
         if (this.event.event.decrypted){
 
           this.decryptEvent = this.event.event.decrypted
@@ -502,7 +504,7 @@ export default {
         }
         catch(e){
 
-          //console.error(e)
+          console.error(e)
 
           this.event.event.decrypted = this.decryptEvent = {
             msgtype : 'm.bad.encrypted'
