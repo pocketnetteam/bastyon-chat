@@ -117,10 +117,10 @@
             border-top-left-radius: 1em
 
   .maxcontent
-    max-width: 82%
+    max-width: 320px
 
     &.my
-      max-width: 87%
+      max-width: 320px
 
   &.allscreen
     flex-wrap: wrap
@@ -181,11 +181,33 @@
   .messageAudio
     margin-left: $r
     height: 50px
+    .reference 
+      padding: 0.5em
+      font-size: 0.9em;
+      height: 30px
+      display: flex
+      justify-content: space-between
+      align-items: center
+      color: srgb(--neutral-grad-2)
+      transition: .4s
+      white-space: nowrap !important
+      .referenceCaption
+        width: 100%
+        display: flex
+        justify-content: flex-end
+        align-items: center
+        button
+          width: 100%
+          display: block
+          margin-top: -0.5em
+
+
 
   .messageImg
     width: 85%
     position: relative
     margin-top: 0.25 * $r
+    max-width: 320px
 
     .img
       display: block
@@ -255,18 +277,82 @@
             display: block
             width: 100%
             height: 100%
+    &.referenceImg 
+      display: flex
+      flex-direction: column
+      justify-content: space-between
+      .encryptedDataIcon 
+        top: 30px
+    .reference 
+      padding: 0.5em
+      font-size: 0.9em;
+      height: 30px
+      display: flex
+      justify-content: space-between
+      align-items: center
+      color: srgb(--neutral-grad-2)
+      transition: .4s
+      white-space: nowrap !important
+      &:hover 
+        transition: .4s
+        background: srgb(--neutral-grad-0)
+      .referenceCaption
+        width: 100%
+        display: flex
+        justify-content: flex-end
+        align-items: center
+        button
+          width: 100%
+          display: block
+          margin-top: -0.5em
+
 
   .filePreview
     width: 90%
+    max-width: 320px
     border: 1px solid srgb(--neutral-grad-1)
     overflow: hidden
     border-radius: 10px
     position: relative
     margin-top: $r
     height: 100px
+    padding-left: 0 !important
 
     .table
       height: 100%
+
+    &.reference 
+      height: 130px
+      display: flex
+      flex-direction: column
+      justify-content: space-between
+      .table
+        height: calc(100% - 30px)
+      .encryptedDataIcon 
+        top: 30px
+    .reference 
+      padding: 0.5em
+      font-size: 0.9em;
+      height: 30px
+      display: flex
+      justify-content: space-between
+      align-items: center
+      color: srgb(--neutral-grad-2)
+      transition: .4s
+      white-space: nowrap !important
+      &:hover 
+        transition: .4s
+        background: srgb(--neutral-grad-0)
+      .referenceCaption
+        width: 100%
+        display: flex
+        justify-content: flex-end
+        align-items: center
+        button
+          width: 100%
+          display: block
+          margin-top: -0.5em
+
 
   .linkPreview
     width: 100%

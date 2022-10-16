@@ -696,7 +696,6 @@ class MTRX {
     var method = "toFileFetch";
 
     if (base64.indexOf("data:") > -1) method = "toFile";
-
     return f.Base64[method](base64).then((file) => {
       return this.sendImage(chat, base64, file, meta, p);
     });
@@ -706,7 +705,6 @@ class MTRX {
     var method = "toFileFetch";
 
     if (base64.indexOf("data:") > -1) method = "toFile";
-
     return f.Base64[method](base64).then((file) => {
       return this.sendAudio(chat, base64, file, meta, p);
     });
@@ -714,7 +712,6 @@ class MTRX {
 
   sendImage(chat, base64, file, meta, { relation, from } = {}) {
     if (!file) return this.sendImageBase64(chat, base64, meta);
-
     var i = new images();
     var info = {};
 
@@ -751,7 +748,12 @@ class MTRX {
       return promise
     }).then((image) => {
       if (meta.aborted) return Promise.reject('aborted')
-
+      if (meta.event && meta.event.event) {
+        info["m.relates_to"] = {
+          rel_type: meta.event.type,
+          event_id: this.clearEventId(meta.event.event),
+        };
+      }
       return this.client.sendImageMessage(chat.roomId, image, info, 'Image')
     })
   }
@@ -765,6 +767,13 @@ class MTRX {
     let info = {}
 
     info.from = from
+    
+    if (meta.event && meta.event.event) {
+      info["m.relates_to"] = {
+        rel_type: meta.event.type,
+        event_id: this.clearEventId(meta.event.event),
+      };
+    }
 
     return new Promise(resolve => {
 

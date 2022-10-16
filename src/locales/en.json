@@ -126,7 +126,8 @@
       "open" : "Open",
       "You" : "You",
       "chatsearchingempty" : "No chats found for the specified filter",
-      "sendmessage" : "Send message"
+      "sendmessage" : "Send message",
+      "clearHistory": "Clear history"
       
   },
 

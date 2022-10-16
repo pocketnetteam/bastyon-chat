@@ -132,9 +132,12 @@ export default {
       this.$emit('shareEvent', { event })
     },
 
+    
     removeEvent: function (event) {
       this.chat.getLiveTimeline().removeEvent(event.event.event_id);
     },
+
+
     wh: function () {
       if (this.esize.clientHeight) return this.esize.clientHeight;
     },

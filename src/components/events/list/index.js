@@ -71,6 +71,9 @@ export default {
       }
     }
   },
+  mounted() {
+    this.timeline = {};
+  },
   computed: {
     sortedVoiceMessageQueue() {
       return _.sortBy(this.voiceMessageQueue, (a) => {return a.id})

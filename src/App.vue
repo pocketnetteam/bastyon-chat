@@ -551,7 +551,7 @@ export default {
 
   created() {
 
-    // this.pocketnet = true
+    // this.pocketnet = false
     // this.mobile = false
     // this.recording = true
 
@@ -997,6 +997,10 @@ if (module.hot) {
     .menubgwrapper {
       left: -300px !important;
       width: 344px !important;
+    }
+    .relationEvent {
+      max-width: 702px !important;
+      margin: 0 auto !important;
     }
   }
   #wai-fixedmessageicon {

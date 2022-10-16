@@ -13,7 +13,7 @@
         <input type="text" v-model="m_chat.name" placeholder="Name" />
       </div>
       <div class="chatDescription" v-if="topic">
-        <textarea type="text" v-model="topicTxt" placeholder="Description" maxlength="74"></textarea>
+        <textarea type="text" v-model="topicTxt" placeholder="Description" maxlength="1000"></textarea>
       </div>
       <button class="button small rounded inSettings" @click="saveEdited()">
         {{ $t("button.save") }}

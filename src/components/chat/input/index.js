@@ -96,9 +96,8 @@ export default {
 		},
 		menuItems: function () {
 			var menuItems = []
-
-
-			if (!this.relationEvent) {
+			
+			if (!this.relationEvent || this.relationEvent.action === "Reply on Message") {
 
 				if (window.POCKETNETINSTANCE && window.POCKETNETINSTANCE.mobile.supportimagegallery()) {
 					menuItems.push({
@@ -126,8 +125,6 @@ export default {
 						}
 					})
 				}
-
-
 
 				menuItems.push({
 					click: "fileHandler",
@@ -579,7 +576,7 @@ export default {
 		},
 
 		send(text) {
-
+			
 			if (!this.chat) {
 				this.newchat().catch(e => {
 				})
@@ -685,7 +682,10 @@ export default {
 			}).then(() => {
 				if (meta.aborted)
 					return Promise.reject('aborted')
-
+				if(this.relationEvent) {
+					meta.event = this.relationEvent ? this.relationEvent : {}
+					this.$emit('sent')
+				}
 				return this.core.mtrx.sendImage(this.chat, base64, null, meta, { relation: this.relationEvent })
 
 			}).then(r => {
@@ -767,9 +767,11 @@ export default {
 
 
 			}).then((notenc) => {
-
+				if(this.relationEvent) {
+					this.$emit('sent')
+				}
 				return this.core.mtrx.sendFile(this.chat, file, meta, { relation: this.relationEvent }, notenc)
-
+				
 			}).then(() => {
 
 				this.$emit("sentData", {
@@ -1427,6 +1429,10 @@ export default {
 			this.$f.pretry(() => {
 				return this.chat
 			}).then(() => {
+				if(this.relationEvent) {
+					meta.event = this.relationEvent ? this.relationEvent : {}
+					this.$emit('sent')
+				}
 				return this.core.mtrx.sendAudio(this.chat, base64, null, meta, { relation: this.relationEvent })
 			}).catch(e => {
 				this.$emit('sentError', {

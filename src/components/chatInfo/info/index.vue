@@ -77,6 +77,12 @@
         {{ $t("caption.add") }} <i class="fas fa-user-plus"></i>
       </button>
 
+      <!-- <button class="button small black rounded" @click="clearRoom">
+        <span>
+          {{ $t("caption.clearHistory") }} <i class="fas fa-trash"></i>
+        </span>
+      </button> -->
+
       <button class="button small black rounded" @click="muteRoom">
         <span v-if="!roomMuted">
           {{ $t("caption.mute") }} <i class="fas fa-bell-slash"></i>

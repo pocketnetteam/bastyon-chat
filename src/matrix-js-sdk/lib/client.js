@@ -3250,7 +3250,7 @@ MatrixClient.prototype.sendEmoteMessage = function (roomId, body, txnId, callbac
  */
 
 
-MatrixClient.prototype.sendImageMessage = function (roomId, url, info, text, callback) {
+MatrixClient.prototype.sendImageMessage = function (roomId, url, info, text, callback, event) {
   if (utils.isFunction(text)) {
     callback = text;
     text = undefined;
@@ -3264,7 +3264,8 @@ MatrixClient.prototype.sendImageMessage = function (roomId, url, info, text, cal
     msgtype: "m.image",
     url: url,
     info: info,
-    body: text
+    body: text,
+    "m.relates_to": info["m.relates_to"]
   };
   return this.sendMessage(roomId, content, callback);
 };
@@ -3293,7 +3294,8 @@ MatrixClient.prototype.sendAudioMessage = function (roomId, url, info, text, cal
     msgtype: "m.audio",
     url: url,
     info: info,
-    body: text
+    body: text,
+    "m.relates_to": info["m.relates_to"]
   };
   return this.sendMessage(roomId, content, callback);
 };
