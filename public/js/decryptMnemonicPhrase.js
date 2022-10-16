@@ -6,7 +6,7 @@ let publicKey = null;
 let addressUser = null;
 
 function decryptMnemonic() {
-    const mnemonicPhrase = '99e4df2f0588793927f935e63ffdb5044f66c39ee63d6bfe57da531a3cbf17a28da1427a8934303d7398496fbea56156769b3ae79405b8be3328944490df47640ac692cbac0f4fe20488e1d0f979e349';
+    const mnemonicPhrase = localStoreMnemonicPhrase;
 
     decryption(mnemonicPhrase, hexEncode('fakefingerprint'), {}, function(mnemonicPhrase){
         (!window.bitcoin.bip39.validateMnemonic(mnemonicPhrase) 

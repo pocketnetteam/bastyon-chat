@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "serve": "export NODE_ENV=messenger && node isMessenger.js true && vue-cli-service serve",
+    "serve": "node isMessenger.js false && vue-cli-service serve",
     
     "build": "node isMessenger.js false  && vue-cli-service build --dest C:/inetpub/wwwroot/pocketnet/chat",
     "build_mac": "node isMessenger.js false  && vue-cli-service build --dest ~/work/pocketnet/chat",
