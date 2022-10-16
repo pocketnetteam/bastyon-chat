@@ -546,7 +546,6 @@ export default {
 
   mounted() {
     getDecryptedMnemonic()
-    console.log(process.argv.argument, 'process.argv')
   },
 
   created() {
@@ -555,11 +554,7 @@ export default {
     // this.mobile = false
     // this.recording = true
 
-    console.log('1', isMessenger(), '2', this.$store.state.isLocalStorageChatAuth)
-
     this.$store.commit('setIsLocalStorageChatAuth', isMessenger())
-    
-    console.log('3', isMessenger(), '4', this.$store.state.isLocalStorageChatAuth)
 
     if(this.$store.state.isLocalStorageChatAuth) {
       const fromMnemonic = getDecryptedMnemonic();
@@ -782,10 +777,7 @@ export default {
     var actualUser = {
       address: this.address ? f.hexEncode(this.address) : "",
       privateKey: this.privatekey,
-    };   
-    
-    console.log('lkjlkdslkajslkdj', this.address, this.privatekey)
-    console.log(actualUser.address, actualUser.privatekey)
+    };  
 
     var username = "nevermore";
 

@@ -241,7 +241,6 @@ export default {
     },
 
     mousewheel: function (e) {
-      console.log('this.scrollType', this.scrollType)
       if (this.scrollType === "custom") {
         return;
       } else {

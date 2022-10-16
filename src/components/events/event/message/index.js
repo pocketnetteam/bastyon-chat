@@ -372,10 +372,6 @@ export default {
     },
   },
 
-  mounted() {
-    console.log('this.content', this.content)
-  },
-
   methods: {
     gotoreference: function () {
       var id = this.reference.getId()
