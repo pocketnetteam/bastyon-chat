@@ -947,6 +947,9 @@ export default {
 		},
 
 		getFileIosCordova (path) {
+
+			console.log('load', path)
+
 			return new Promise((resolve, reject) => {
 				window.resolveLocalFileSystemURL(path, (entry) => {
 
@@ -979,6 +982,8 @@ export default {
 	
 						reader.readAsArrayBuffer(file)
 					})
+				}, (e) => {
+					reject(e)
 				})
 			})
 			
@@ -1006,7 +1011,7 @@ export default {
 
 				this.microphoneDisabled = false
 
-				var path = 'cdvfile://localhost/temporary/recording.mp3'
+				var path = 'recording.mp3'
 
 				if(f.isios()) path = 'cdvfile://localhost/temporary/recording.m4a'
 
@@ -1032,15 +1037,19 @@ export default {
 
 					var fu = null
 
-					if(f.isios()){ fu = this.getFileIosCordova(path).then(blob => {
-						return Promise.resolve({
-							data : blob
+					/*if(f.isios()){ */
+						
+						fu = this.getFileIosCordova(f.isios() ? path : window.cordova.file.externalDataDirectory + path).then(blob => {
+							return Promise.resolve({
+								data : blob
+							})
 						})
-					})}
+					
+					/*}
 
 					else{
 						fu = f.fetchLocal(path)
-					}
+					}*/
 
 					fu.then(r => {
 						///temp

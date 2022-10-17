@@ -204,7 +204,7 @@ class Core {
 
         }).catch(e => {
 
-
+            console.log("E", e)
             
             this.loading = false
 
