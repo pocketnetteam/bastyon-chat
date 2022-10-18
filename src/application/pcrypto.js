@@ -49,8 +49,8 @@ var PcryptoRoom = async function(pcrypto, chat, {ls, lse}){
     
     }
 
-    var lcachekey = 'pcrypto4_' + chat.roomId + '_';
-    var ecachekey = 'e_pcrypto4_';
+    var lcachekey = 'pcrypto5_' + chat.roomId + '_';
+    var ecachekey = 'e_pcrypto5_';
     var cache = {}
 
     
@@ -247,9 +247,9 @@ var PcryptoRoom = async function(pcrypto, chat, {ls, lse}){
 
         getusershistory()
 
-        if(!pcrypto.core.mtrx.kit.tetatetchat(chat)){
+        /*if(!pcrypto.core.mtrx.kit.tetatetchat(chat)){
             m = 2
-        }
+        }*/
 
 
         return getusersinfo().then(r => {
@@ -299,7 +299,6 @@ var PcryptoRoom = async function(pcrypto, chat, {ls, lse}){
        
             return ls.get(`${lcachekey + pcrypto.user.userinfo.id}-${k}`).then((keys) => {
 
-
                 const keysPrepared = convert.aeskeys.out(keys);
 
                 return { keys: keysPrepared, k }
@@ -340,7 +339,6 @@ var PcryptoRoom = async function(pcrypto, chat, {ls, lse}){
     var eaa = {
 
         cuhash : function(users, num, block){
-
 
             return pbkdf2.pbkdf2Sync(f.sha224(_.map(users, function(u){
                 return u.keys[num]
@@ -388,6 +386,7 @@ var PcryptoRoom = async function(pcrypto, chat, {ls, lse}){
             var users = self.preparedUsers(time)
     
             var sum = null
+
     
             for(var i = 0; i < m; i++){
     
@@ -724,7 +723,7 @@ var PcryptoRoom = async function(pcrypto, chat, {ls, lse}){
                 return user.id
             }), (uid) => {
                 return uid && uid != pcrypto.user.userinfo.id
-            }).join('') + '_v3'
+            }).join('') + '_v4'
         
         )
 

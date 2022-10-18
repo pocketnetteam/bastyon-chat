@@ -182,6 +182,12 @@ class MTRX {
         password: this.credentials.password,
       });
     } catch (e) {
+
+      if(e && e.indexOf && e.indexOf('M_USER_DEACTIVATED') > -1){
+        this.error = 'M_USER_DEACTIVATED'
+        return null
+      }
+
       if (await client.isUsernameAvailable(this.credentials.username)) {
         userData = await client.register(
           this.credentials.username,
@@ -489,7 +495,11 @@ class MTRX {
   init() {
       
     return this.createClient().then(() => {
-      
+
+      if(this.error){
+        return Promise.reject(this.error)
+      }
+
       return this.initdb()
     
     }).then(() => {
@@ -498,6 +508,15 @@ class MTRX {
 
       return Promise.resolve();
     });
+  }
+
+  deactivateAccount(){
+
+    if (this.client) {
+      return this.client.deactivateAccount(this.credentials, true)
+    }
+
+    return Promise.reject('noclient')
   }
 
   destroy() {

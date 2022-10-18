@@ -1001,7 +1001,7 @@ f.fetchLocal = function (url) {
         }
 
         xhr.onerror = function (e) {
-            console.error(e)
+            console.error(e, url)
             reject(new TypeError('Local request failed'))
         }
 
