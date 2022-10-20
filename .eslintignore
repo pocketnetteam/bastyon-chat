@@ -1,1 +1,4 @@
 /src/matrix-js-sdk
+/build/
+/config/
+/dist/

@@ -1,8 +1,11 @@
 module.exports = {
   root: true,
-  extends: [
-    'plugin:vue/vue3-essential',
-    '@vue/eslint-config-airbnb',
+  parserOptions: {
+    parser: 'babel-eslint'
+  },
+  extends: ['plugin:vue/essential', 'airbnb-base'],
+  plugins: [
+    'vue'
   ],
   rules: {
     'camelcase': 0,
