@@ -7,7 +7,7 @@
         bin: pocketnet,
         fix: pocketnet,
         bout: !pocketnet,
-        minimized ,
+        minimized: minimized ,
         active,
         mobile,
         unselect
@@ -402,8 +402,7 @@ export default {
     },
 
     active: function () {
-      if (this.mobile) return false;
-      return this.$store.state.active;
+      return true;
     },
 
     globalpreloader: function () {
@@ -544,13 +543,9 @@ export default {
     this.$store.commit("init");
   },
 
-  mounted() {
-    getDecryptedMnemonic()
-  },
-
   created() {
 
-    // this.pocketnet = false
+    // this.pocketnet = true
     // this.mobile = false
     // this.recording = true
 
@@ -922,6 +917,10 @@ export default {
 
     window.matrixchat = core;
   },
+
+  mounted() {
+    this.$store.commit('minimize', true);
+  }
 };
 
 if (module.hot) {
@@ -951,12 +950,42 @@ if (module.hot) {
 <!-- THEMES END -->
 
 <style lang="scss">
-.main-wrapper.minimized  {
+.rootcontent.minimized  {
   .chat-container-pages-empty {
     display: none !important;
   }
   .headerSpacerWrapperOvf {
     background: transparent !important;
+  }
+  .messageRow .maxcontent {
+    max-width: 295px !important;
+  }
+}
+.rootcontent.bout {
+  #maincontent .headerSpacerWrapper {
+    height: 82% !important;
+  }
+  .main-wrapper.minimized:not(.active) .topheader {
+    opacity: 1 !important;
+  }
+  .minimized:not(.active) .chatNameEdit,
+  .minimized:not(.active) .chatDescription {
+    display: block !important;
+  }
+  .main-wrapper.minimized .input_component {
+    width: 100% !important;
+  }
+  .main-wrapper.minimized .noswipepnt .work {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .main-wrapper.minimized .inputWrapper {
+    margin: 0 !important;
+    width: 100% !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 }
 .rootcontent.fix {

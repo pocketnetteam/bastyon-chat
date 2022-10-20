@@ -6,7 +6,7 @@
     :class="{
       bin: pocketnet,
       bout: !pocketnet,
-      minimized,
+      minimized: minimized,
       fix: pocketnet,
       active,
     }"

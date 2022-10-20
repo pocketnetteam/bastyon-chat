@@ -66,6 +66,7 @@ export default {
 
     ...mapState([
       "minimized",
+      "mobile",
       "active",
       "pocketnet",
       "chatsready",

@@ -99,13 +99,15 @@ export default {
 			
 			if (!this.relationEvent || this.relationEvent.action === "Reply on Message") {
 
-				if (window.POCKETNETINSTANCE && window.POCKETNETINSTANCE.mobile.supportimagegallery()) {
-					menuItems.push({
-						click: "cameraHandlerCustom",
-						title: this.$i18n.t("button.takePhotoOrVideo"),
-						icon: "fas fa-camera",
-
-					})
+				if (window.POCKETNETINSTANCE) {
+					// if(window.POCKETNETINSTANCE.mobile.supportimagegallery()) {
+					// 	menuItems.push({
+					// 		click: "cameraHandlerCustom",
+					// 		title: this.$i18n.t("button.takePhotoOrVideo"),
+					// 		icon: "fas fa-camera",
+	
+					// 	})
+					// }					
 				}
 				else {
 					menuItems.push({
@@ -258,7 +260,6 @@ export default {
 
 	mounted() {
 		this.ready = true
-
 
 		if (!this.chat && this.core.mtrx.client) {
 			this.newchat().catch(e => {

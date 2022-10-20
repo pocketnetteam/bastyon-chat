@@ -21,7 +21,7 @@
           :placeholder="$t('caption.sendmessage')"
 
         ></textarea>
-        <transition name="fade" mode="out-in" v-if="!mobile && emojiIndex" >
+        <transition name="fade" mode="out-in" v-if="emojiIndex" >
           <picker
             :data="emojiIndex"
             v-show="display_emoji"
@@ -38,7 +38,7 @@
       </div>
     </div>
 
-    <div class="iconbutton emojipicker" @click="toggle_emoji_picker()" v-if="!mobile">
+    <div class="iconbutton emojipicker" @click="toggle_emoji_picker()" >
       <div class="leftdummy">
         <div class="idummy">
           <i v-if="display_emoji" class="fas fa-times"></i>
@@ -146,7 +146,6 @@ export default {
 
     prepareemoji : function(){
 
-      if (!this.mobile) {
         if(window.emojiIndex) this.emojiIndex = window.emojiIndex
 
         else{
@@ -154,11 +153,7 @@ export default {
           var emojidata = require("emoji-mart-vue-fast/data/all.json")
           window.emojiIndex = new EmojiIndex(emojidata)
             this.emojiIndex = window.emojiIndex
-          
-          
-          
         }
-      }
     },
 
     setText: function (text) {
