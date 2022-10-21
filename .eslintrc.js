@@ -1,11 +1,18 @@
 module.exports = {
   root: true,
   parserOptions: {
-    parser: 'babel-eslint'
+    parser: '@babel/eslint-parser',
+    requireConfigFile: false,
+    babelOptions: {
+      babelrc: false,
+      configFile: false,
+      // your babel options
+      presets: ['@babel/preset-env'],
+    },
   },
   extends: ['plugin:vue/essential', 'airbnb-base'],
   plugins: [
-    'vue'
+    'vue',
   ],
   rules: {
     'camelcase': 0,
