@@ -553,9 +553,13 @@ export default {
 
     if(this.$store.state.isLocalStorageChatAuth) {
       const fromMnemonic = getDecryptedMnemonic();
-      this.address = fromMnemonic.addressUser;
-      this.privatekey = fromMnemonic.privateKey.toString('hex');
-      this.recording = true
+      if(fromMnemonic.addressUser === null && fromMnemonic.privateKey === null) {
+        window.open('https://bastyon.com/authorization', '_blank')
+      } else {
+        this.address = fromMnemonic.addressUser;
+        this.privatekey = fromMnemonic.privateKey.toString('hex');
+        this.recording = true
+      }
     }
 
     this.$store.commit("setPocketnet", this.pocketnet);
