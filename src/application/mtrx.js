@@ -11,6 +11,8 @@ import ChatStorage from "./chatstorage";
 
 var axios = require('axios');
 
+console.log("sdk", sdk)
+
 
 class MTRX {
 
@@ -199,6 +201,11 @@ class MTRX {
       })
 
     } catch (e) {
+
+      if(e && e.indexOf && e.indexOf('M_USER_DEACTIVATED') > -1){
+        this.error = 'M_USER_DEACTIVATED'
+        return null
+      }
 
       if (await client.isUsernameAvailable(this.credentials.username)) {
 
@@ -535,6 +542,10 @@ class MTRX {
   init() {
     return this.createClient().then(() => {
 
+      if(this.error){
+        return Promise.reject(this.error)
+      }
+
       return this.initdb()
     
     }).then(() => {
@@ -543,6 +554,15 @@ class MTRX {
 
       return Promise.resolve()
     })
+  }
+
+  deactivateAccount(){
+
+    if (this.client) {
+      return this.client.deactivateAccount(this.credentials, true)
+    }
+
+    return Promise.reject('noclient')
   }
 
   destroy() {
@@ -822,6 +842,9 @@ class MTRX {
 
     return new Promise(resolve => {
       if (chat.pcrypto.canBeEncrypt()) {
+
+        console.log("??????????")
+
         return chat.pcrypto.encryptFile(file).then(r => {
           info.secrets = r.secrets
           return resolve(r.file)
@@ -838,6 +861,8 @@ class MTRX {
 
       return promise
     }).then((audio) => {
+
+      console.log(audio, info)
 
       if (meta.aborted) return Promise.reject('aborted')
 
@@ -907,6 +932,8 @@ class MTRX {
   }
 
   async getAudioUnencrypt(chat, event){
+
+    console.log('getAudioUnencrypt')
 
     if(event.event.content.audioData){
       return Promise.resolve(event.event.content.audioData)
