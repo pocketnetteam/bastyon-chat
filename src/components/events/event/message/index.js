@@ -412,7 +412,7 @@ export default {
 
     dropDownMenuShow: function () {
 
-      if(this.urlpreview) return
+      // if(this.urlpreview) return
 
       setTimeout(() => {
         this.setmenu()

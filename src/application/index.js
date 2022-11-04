@@ -29,7 +29,6 @@ AudioRecorder.prototype.mimeType = 'audio/mpeg'
 class Core {
     constructor(vm, p){
         if(!p) p = {}
-        console.log('p', p)
         this.options = {
             listofproxies : p.listofproxies
         }

@@ -39,7 +39,7 @@ var ProxyRequest = function(app = {}, proxy){
                     controller.abort()
                 }
             }, ms)
-      
+
             promise.then(value => {
 
                 clearTimeout(timer)
@@ -73,7 +73,7 @@ var ProxyRequest = function(app = {}, proxy){
 
         if(!p) p = {}
 
-        if(!data) 
+        if(!data)
             data = {}
 
         var headers = _.extend({
@@ -97,7 +97,7 @@ var ProxyRequest = function(app = {}, proxy){
         return fetch(url, {
 
             method: p.method || 'POST',
-            mode: 'cors', 
+            mode: 'cors',
             headers: headers,
             signal : signal,
             body: JSON.stringify(data)
@@ -126,7 +126,7 @@ var ProxyRequest = function(app = {}, proxy){
                 return Promise.reject({
                     code : 408
                 })
-                
+
             }
 
             return Promise.reject(e)
@@ -225,7 +225,7 @@ var Proxy16 = function(meta, app, api){
 
             return true
         }
-        
+
     }
 
     self.export = function(){
@@ -256,7 +256,7 @@ var Proxy16 = function(meta, app, api){
                 reconnectws = true
             }
 
-            var lastid = self.id 
+            var lastid = self.id
 
             self.id = self.host + ":" + self.port + ":" + self.wss
 
@@ -362,7 +362,7 @@ var Proxy16 = function(meta, app, api){
                 if(!this.find(node.id)){
                     nodes.push(node)
                 }
-                
+
             },
 
             find : function(id){
@@ -433,7 +433,7 @@ var Proxy16 = function(meta, app, api){
         return promise.then(r => {
             return Promise.resolve(r)
         })
-       
+
     }
 
     self.fetchauth = function(path, data, p){
@@ -612,7 +612,7 @@ var Api = function(app){
     }
 
     self.editproxy = function(key, meta){
-        
+
         var proxy = self.get.byid(key)
 
         proxy.changed({
@@ -624,7 +624,7 @@ var Api = function(app){
         })
 
         return proxy
-        
+
     }
 
     var internal = {
@@ -638,7 +638,7 @@ var Api = function(app){
             manage : {
                 savelist : function(lsproxies){
                     localStorage['listofproxies'] = JSON.stringify(lsproxies || [])
-                },  
+                },
                 init : function(){
 
                     return this.addlocalelectronproxy().then(r => {
@@ -655,7 +655,7 @@ var Api = function(app){
                             current = 'pocketnet.app:8899:8099'
                             console.log("ADDED")
                         },5000)*/
-                    
+
                         try{ this.addlist(JSON.parse(localStorage['listofproxies'] || "[]")) }
                         catch(e){}
 
@@ -664,8 +664,6 @@ var Api = function(app){
                     }).then(r => {
 
                         var oldc = localStorage['currentproxy']
-
-                        console.log('oldc', oldc)
 
                         if (oldc){
                             return self.set.current(oldc)
@@ -680,7 +678,7 @@ var Api = function(app){
                     }).then(() => {
 
                         if(!current && proxies.length){
-                            current = proxies[0].id 
+                            current = proxies[0].id
                         }
 
                         inited = true
@@ -729,7 +727,7 @@ var Api = function(app){
 
                         return proxy
                     }
-                    
+
                 },
 
                 find : function(id){
@@ -742,7 +740,7 @@ var Api = function(app){
                     var promises = _.map(proxies, proxy => {
                         return proxy.api.ping()
                     })
-        
+
                     return Promise.all(promises)
                 },
             }
@@ -753,10 +751,8 @@ var Api = function(app){
 
         if(!method) return Promise.reject('method')
 
-        if(!options) 
+        if(!options)
             options = {}
-
-            console.log('options.proxy', options.proxy)
 
         return getproxy(options.proxy).then(proxy => {
 
@@ -786,19 +782,19 @@ var Api = function(app){
     }
 
     self.fetchauth = function(path, data, options){
-        if(!options) 
+        if(!options)
             options = {}
 
             options.auth  =true
 
         return self.fetch(path, data, options)
-    }   
+    }
 
     self.fetch = function(path, data, options){
 
         if(!useproxy) return Promise.reject('useproxy')
 
-        if(!options) 
+        if(!options)
             options = {}
 
 
@@ -839,7 +835,7 @@ var Api = function(app){
 
         use : () => {
 
-            return useproxy ? _.filter(proxies, proxy => { 
+            return useproxy ? _.filter(proxies, proxy => {
                 return proxy.ping
             }).length || !proxies.length : false
 
@@ -847,10 +843,10 @@ var Api = function(app){
 
         useexternal : () => {
 
-            return useproxy ? _.filter(proxies, proxy => { 
+            return useproxy ? _.filter(proxies, proxy => {
                 return proxy.ping && !proxy.direct
             }).length || !proxies.length : false
-            
+
         },
     }
 
@@ -889,7 +885,7 @@ var Api = function(app){
             fixednode = id
 
             localStorage['fixednode'] = fixednode
-        }   
+        }
     }
 
 
@@ -978,8 +974,8 @@ var Api = function(app){
             }
             else{
                 return self.get.working().then(wproxies => {
-                    if (wproxies.length){ 
-                        
+                    if (wproxies.length){
+
                         self.set.current(wproxies[0].id)
 
                     }
@@ -1019,7 +1015,7 @@ var Api = function(app){
     }
 
     return self
-}   
+}
 
-if(typeof module != "undefined"){ module.exports = {Api, ProxyRequest, Proxy16, Node}; } 
+if(typeof module != "undefined"){ module.exports = {Api, ProxyRequest, Proxy16, Node}; }
 else { window.Api = Api; window.ProxyRequest = ProxyRequest; window.Proxy16 = Proxy16 }

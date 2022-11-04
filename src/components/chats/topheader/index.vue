@@ -30,11 +30,11 @@
 
       
       <template v-slot:rightadd >
-        <router-link @click="gotona('settings')" v-if="!share && pocketnet">
+        <div @click="gotona('settings')" v-if="!share && pocketnet">
           <div class="iconbuttonsmall">
             <i class="fas fa-cog"></i>
           </div>
-        </router-link>
+        </div>
       </template>
 
       <template v-slot:right>

@@ -2,10 +2,10 @@
   <div class="aboutRoom">
     <div class="roomInfoWrapper noSwipe">
       <div :class="{'chatIconWrapper':'chatIconWrapper'}">
-        <chatIcon :slidesPerView="4" :dontuseslides="minimized && !active" :chat="chat" :m_chat="m_chat" :hideunseen="true"/>
-        <div class="chatGroupIcon">
+        <chatIcon :slidesPerView="4" :dontuseslides="minimized && !active" :chat="chat" :m_chat="m_chat" :hideunseen="false"/>
+        <!-- <div class="chatGroupIcon">
           <img :src="groupAvatar" alt="" />
-        </div>
+        </div> -->
       </div>
 
       <chatName :preview="true" :chat="chat" :m_chat="m_chat"

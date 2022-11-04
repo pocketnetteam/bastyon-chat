@@ -16,7 +16,7 @@
 
       <div class="chatwrapper" @click="iteraction">
         <div>
-          <div class="backface" v-if="closebybg" @click="hide"></div>
+          <!-- <div class="backface" v-if="closebybg" @click="hide"></div> -->
 
           <MainWrapper />
 
@@ -545,7 +545,7 @@ export default {
 
   created() {
 
-    // this.pocketnet = true
+    this.pocketnet = true
     // this.mobile = false
     // this.recording = true
 

@@ -1,6 +1,5 @@
 var prependcssvars = `@import "@/styles/variables/common.sass"; @import "@/styles/mixins/common.sass";`;
 const path = require('path');
-console.log('process.env.NODE_ENV', process.env.NODE_ENV)
 module.exports = {
 	devServer: {
 		open: process.platform === "darwin",
