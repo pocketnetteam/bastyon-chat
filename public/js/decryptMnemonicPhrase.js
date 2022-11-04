@@ -9,18 +9,18 @@ function decryptMnemonic() {
     const mnemonicPhrase = localStoreMnemonicPhrase;
 
     decryption(mnemonicPhrase, hexEncode('fakefingerprint'), {}, function(mnemonicPhrase){
-        (!window.bitcoin.bip39.validateMnemonic(mnemonicPhrase) 
-            ? setKeysPairFromPrivate(mnemonicPhrase, function(){}) 
+        (!window.bitcoin.bip39.validateMnemonic(mnemonicPhrase)
+            ? setKeysPairFromPrivate(mnemonicPhrase, function(){})
             : setKeys(mnemonicPhrase, function(){}))
-    })	   
+    })
 };
 decryptMnemonic();
 function getDecryptedMnemonic() {
     return {
-        privateKey: privateKey, 
-        publicKey: publicKey, 
+        privateKey: privateKey,
+        publicKey: publicKey,
         addressUser: addressUser
-    } 	 
+    }
 }
 
 decryptMnemonic();
@@ -108,19 +108,19 @@ function keyFromString (key, l, clbk) {
 function hexEncode(text) {
     var ch = 0;
     var result = "";
-  
+
     for (var i = 0; i < text.length; i++) {
       ch = text.charCodeAt(i);
       if (ch > 0xFF) ch -= 0x350;
       ch = ch.toString(16);
-  
+
       while (ch.length < 2) {
         ch = "0" + ch;
       }
-  
+
       result += ch;
     }
-  
+
     return result;
 };
 function setKeysPairFromPrivate(_private, clbk){
@@ -132,7 +132,7 @@ function setKeysPairFromPrivate(_private, clbk){
         try{
             keyPair = window.bitcoin.ECPair.fromWIF(_private)
         } catch (e){}
-    } 
+    }
 
     if(keyPair){
         setKeysPair(keyPair, function(){
@@ -145,16 +145,16 @@ function setKeysPairFromPrivate(_private, clbk){
     }
 }
 function setKeys(mnemonic, clbk) {
-    var keyPair =  keysFromMnemo(mnemonic)      
-    setKeysPair(keyPair, clbk)    
+    var keyPair =  keysFromMnemo(mnemonic)
+    setKeysPair(keyPair, clbk)
 }
 function setKeysPair(keyPair, clbk) {
     privateKey = keyPair.privateKey
-    publicKey = keyPair.publicKey  
+    publicKey = keyPair.publicKey
     addressUser = sdk.address.pnet(publicKey).address
 
     if (clbk)
-        clbk()  
+        clbk()
 }
 function keysFromMnemo(mnemonic) {
     if(!mnemonic) mnemonic = ''
@@ -162,7 +162,7 @@ function keysFromMnemo(mnemonic) {
     return keysFromSeed(seed)
 }
 function keysFromSeed(seed) {
-    var d = window.bitcoin.bip32.fromSeed(seed).derivePath(self.sdk.address.path(0)).toWIF()         
-    var keyPair = window.bitcoin.ECPair.fromWIF(d)	    
+    var d = window.bitcoin.bip32.fromSeed(seed).derivePath(self.sdk.address.path(0)).toWIF()
+    var keyPair = window.bitcoin.ECPair.fromWIF(d)
     return keyPair
 }

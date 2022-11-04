@@ -30,7 +30,7 @@
 
       
       <template v-slot:rightadd >
-        <div @click="gotona('settings')" v-if="!share && pocketnet">
+        <div @click="gotona('settings')" v-if="!share && pocketnet" class="chatSettingsButton">
           <div class="iconbuttonsmall">
             <i class="fas fa-cog"></i>
           </div>

@@ -964,6 +964,20 @@ if (module.hot) {
   .messageRow .maxcontent {
     max-width: 295px !important;
   }
+  .modal-backdrop, .modal-wrapper {
+    width: 344px;
+    left: -302px;
+  }
+  .main-wrapper {
+    .chatSettingsButton {
+      display: none;
+    }
+    &.active {
+      .chatSettingsButton {
+        display: block;
+      }
+    }
+  }
 }
 .rootcontent.bout {
   #maincontent .headerSpacerWrapper {
@@ -1017,7 +1031,6 @@ if (module.hot) {
     }
     .dropdown.visible {
       width: 344px !important;
-      left: -171px !important;
     }
     .menubgwrapper {
       left: -300px !important;
@@ -1043,6 +1056,10 @@ if (module.hot) {
   .fixedOnPageTop {
     min-width: 344px !important;
   }
+}
+
+.emoji-mart{
+  right: -99px !important;
 }
 
 </style>
