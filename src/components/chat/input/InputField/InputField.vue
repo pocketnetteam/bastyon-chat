@@ -1,6 +1,11 @@
 <template>
-  <div class="input_component">
-    <div class="input-wrapper">
+  <div 
+    class="input_component"
+    :class="type"
+  >
+    <div 
+      class="input-wrapper"
+    >
       <div class="textarea">
         <textarea
           id="textInput"
@@ -18,7 +23,7 @@
           @keyup="keyup"
           @click="keyup"
           @paste="paste_image"
-          :placeholder="$t('caption.sendmessage')"
+          :placeholder="$t(type === 'massmailing' ? 'caption.addMassMessageHolder' : 'caption.sendmessage')"
 
         ></textarea>
         <transition name="fade" mode="out-in" v-if="!mobile && emojiIndex" >
@@ -26,7 +31,7 @@
             :data="emojiIndex"
             v-show="display_emoji"
             @select="insert_emoji"
-            :style="{ width: '325px', position: 'absolute', bottom: '32px', right: '-60px', fontSize: '0.8em', fontFamily: 'Segoe UI' }"
+            :style="style"
             :exclude="exclude"
             :showPreview="false"
             :showSearch="false"
@@ -47,7 +52,7 @@
       </div>
     </div>
 
-    <div class="iconbutton" v-if="send" @click="send_text($event)">
+    <div class="iconbutton" v-if="send && type !== 'massmailing'" @click="send_text($event)">
       <div class="rightdummy">
         <div class="idummy">
           <i class="far fa-paper-plane"></i>
@@ -128,6 +133,11 @@ export default {
   },
 
   computed: {
+
+    style(){
+
+      return { zIndex: 2, width: '325px', position: 'absolute', top: this.type === 'massmailing' && '40px', bottom: this.type === 'massmailing' ? '0' : '32px', right: this.type === 'massmailing' ? '-38px' : '-60px', fontSize: '0.8em', fontFamily: 'Segoe UI' }
+    },
     mobile: function () {
       return !this.$store.state.pocketnet && this.$store.state.mobile
     },
@@ -180,6 +190,9 @@ export default {
     textchange: function (e) {
       this.text = e.target.value || ''
 
+      if (this.type === 'massmailing'){
+        this.$emit('input', this.text);
+      }
     },
 
 
@@ -207,7 +220,7 @@ export default {
 
     close_emoji_picker(event) {
       if (event.target.localName !== 'i') {
-        if (event.target.localName !== 'matrix-element') {
+        if (event.target.localName !== 'matrix-element' && event.target.localName !== 'textarea') {
           this.display_emoji = false
         }
       }
@@ -477,7 +490,8 @@ export default {
 
   props: {
     storagekey: String,
-    tipusers: Array
+    tipusers: Array,
+    type: String
   },
 
   
@@ -512,6 +526,13 @@ export default {
   align-items: center
   padding: 0 2 * $r
   padding-right: 0
+
+  &.massmailing
+    padding-right: 2 * $r
+    .inputWrapper
+      position: static
+      .chat-input
+        font-size: 0.9em
 
   /deep/ .emoji-mart .emoji-mart-emoji
     width: 25%
@@ -580,6 +601,7 @@ export default {
   // min-height: 26px
   overflow-y: auto
   resize: none
+  
 
   &::-webkit-scrollbar
     width: 0 !important

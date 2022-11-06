@@ -73,7 +73,12 @@ var store = new Vuex.Store({
 		dontreadreceipts: false,
 		voicerecording : false,
 		deletedrooms: {},
-		pkoindisabled : false
+		pkoindisabled : false,
+		recipientsTotal: 0,
+		recipients: [],
+		processMassMailing: false,
+		address: ''
+
 		//share : {url : 'https://yandex.ru/'} //null
 	},
 	getters: {
@@ -86,9 +91,16 @@ var store = new Vuex.Store({
 
 		getSignedUpUsers: state => {
 			return state.signedUpUsers
-		},
+		}
+	
 	},
 	mutations: {
+		SET_ADDRESS(state, address){
+			state.address = address;
+		},
+		PROCESS_MASS_MAILING(state, boo){
+			state.processMassMailing = boo
+		},
 		SET_CURRENT_PLAYING_VOICE_MESSAGE(state, message) {
 			state.currentPlayingVoiceMessage = message
 		},
@@ -512,6 +524,14 @@ var store = new Vuex.Store({
 
 		CLEAR_USERSINFO(state, v) {
 			state.users = {}
+		},
+
+		SET_RECIPIENTS(state, v) {
+			state.recipients = v;
+		},
+
+		SET_RECIPIENTS_TOTAL(state, v) {
+			state.recipientsTotal = v;
 		},
 
 		GALLERY(state, v) {

@@ -7,7 +7,12 @@ import contact from '@/components/contact/index.vue'
 export default {
   name: 'contacts',
   props: {
-
+    type: {
+      type: String,
+      default: function () {
+        return ''
+      }
+    },
     mode: {
       type: String,
       default: function () {
@@ -86,12 +91,16 @@ export default {
       return this.$store.state.users
     },
 
+    selectedInfo : function(){
+      return this.selected ? this.usersinfo[Object.values(this.selected)[0]] : {};
+    },
+
     u: function () {
       return this.$route.query.u
     },
 
     selectedlength : function(){
-      return _.toArray(this.selected).length
+      return this.type === 'massmailing' ? (this.selectedInfo?.source ? (this.selectedInfo?.source?.subscribers_count || 0) + 1 : 0) : _.toArray(this.selected).length 
     },
 
     contactsListFiltered() {
@@ -132,7 +141,15 @@ export default {
           return
         }
 
-        this.$set(this.selected, id, id)
+        if (this.type === 'massmailing'){
+
+          this.selected = {[id]: id};
+          
+        } else {
+
+          this.$set(this.selected, id, id)
+
+        }
       }
         
       else

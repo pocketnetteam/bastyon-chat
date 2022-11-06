@@ -311,7 +311,7 @@ var ApiWrapper = function (core) {
 			return self.pocketnet.userState(address)
 		},
 
-		userInfoCached: (addresses, reload) => {
+		userInfoCached: (addresses, reload, full) => {
 
 			var rescached = []
 
@@ -328,7 +328,7 @@ var ApiWrapper = function (core) {
 				})
 			}
 
-			return self.pocketnet.userInfo(addresses, reload).then(rs => {
+			return self.pocketnet.userInfo(addresses, reload, full).then(rs => {
 
 				
 				rs = _.toArray(rs)
@@ -352,10 +352,22 @@ var ApiWrapper = function (core) {
 			})
 		},
 
-		userInfo: (addresses, reload) => {
+		fullUserInfo: (addresses) => {
+
+			var parameters = [addresses];
+
+			return self.pocketnet.common({ parameters }, 'getuserprofile');
+
+		},
+
+		userInfo: (addresses, reload, full) => {
 
 			if(!addresses.length){
 				return Promise.resolve([])
+			}
+
+			if (full){
+				return self.pocketnet.fullUserInfo(addresses);
 			}
 
 			return crequest(addresses, 'pocketnet_userInfo', 'address', reload, {

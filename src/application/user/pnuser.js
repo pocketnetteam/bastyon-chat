@@ -232,7 +232,7 @@ class PNUser extends User {
         })
     }
 
-    usersInfo(addresses, dontdecode, reload){
+    usersInfo(addresses, dontdecode, reload, full){
 
         if(!_.isArray(addresses)) addresses = [addresses]
 
@@ -240,8 +240,8 @@ class PNUser extends User {
             addresses = _.map(addresses, function(a){
                 return f.hexDecode(a)
             })
-
-        return this.core.api.pocketnet.userInfoCached(addresses, reload).then(infos => {
+        
+        return this.core.api.pocketnet.userInfoCached(addresses, reload, full).then(infos => {
 
             infos = _.map(infos, (info) => {
 

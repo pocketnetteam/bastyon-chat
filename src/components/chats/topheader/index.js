@@ -18,7 +18,7 @@ export default {
             loading : false,
             newchatopened : false,
             createGroup: false,
-            contacts: false
+            contacts: false,
         }
 
     },
@@ -48,15 +48,29 @@ export default {
         
         ...mapState([
             'share',
-            'closebybg'
+            'closebybg',
+            'recipients',
+            'recipientsTotal',
+            'processMassMailing'
         ]),
 
         window : function(){
             return window
+        },
+
+        recipientsCompleted(){
+            return this.recipientsTotal - this.recipients.length;
         }
     }),
 
     methods : {
+        
+        resumeProcess : function(){
+
+            const chatMassMessage = JSON.parse(localStorage.getItem('chat_mass_message') || '{}');
+
+            this.$emit('sendMassMessage', chatMassMessage);
+        },
         changeCloseByBg : function(){
             this.$store.commit('closebybg', !this.closebybg)
         },
@@ -109,4 +123,5 @@ export default {
             this.$emit('newchat')
         }
     },
+
 }

@@ -713,6 +713,8 @@ export default {
 
     var user = (this.address && this.privatekey) ? actualUser : testUsers[`${username}`];
 
+    this.$store.commit('SET_ADDRESS', f.hexDecode(user.address))
+
     var listofproxies = f.deep(window, 'window.POCKETNETINSTANCE.options.listofproxies') || [
       {
         host: 'test.pocketnet.app',
@@ -815,7 +817,7 @@ export default {
 
     }, 3000)
 
-    window.matrixchat = core
+    window.matrixchat = core;
 
   }
 }

@@ -1,12 +1,10 @@
 <template>
   <div id="chatcreate">
-
     <div class="selecttype">
-
       <div class="work">
 
         <div class="types" v-if="!type">
-          <div class="type" @click="e => selecttype(type.id)" v-for="type in types" :key="type.id">
+          <div class="type" @click="e => selecttype(type.id)" v-for="type in viewTypes" :key="type.id">
             <div class="icon"><i :class="type.icon"></i></div><div><span>{{$t('type.' + type.id)}}</span></div></div>
         </div>
         <div class="selectedtype" v-if="type">
@@ -27,19 +25,37 @@
           
         </div>
       </div>
-
       <div class="creationbody">
-
           <div class="groupsettigns" v-if="type">
-            <div class="namebuttoncreate">
+            <div
+              v-if="type.id === 'massmailing'"
+            >
+              <div 
+                class="inputWrapper"
+              >
+                <div class="center">
+                  <InputField
+                    :type="type.id"
+                    @input="typeMassMessage"
+                    :placeholder="this.$i18n.t('caption.addMassMessageHolder')"
+                  />
+                </div>
+              </div>
+
+            </div>
+            <div 
+              v-else           
+              class="namebuttoncreate"
+            >
 
               <div class="groupNameInput">
                 <label>
-                  <input type="text" v-model="groupName" :placeholder="type.id === 'privategroup'? this.$i18n.t('caption.addGroupNamePlaceHolder') : this.$i18n.t('caption.addPublicChatName')"/>
+                  <input type="text" v-model="groupName" :placeholder="type.id === 'privategroup'? this.$i18n.t('caption.addGroupNamePlaceHolder') : this.$i18n.t('caption.addPublicChatName')"/> 
                 </label>
               </div>
 
             </div>
+
           </div>
 
           <div class="contactswrapper oneonone" v-if="!type">
@@ -47,7 +63,7 @@
           </div>
 
           <div class="contactswrapper" v-if="type">
-            <contacts :mode="'Selectmany'" @selectedUsers="selectedUsers"/>
+            <contacts :mode="'Selectmany'" :type="type.id" @selectedUsers="selectedUsers"/>
           </div>
           
       </div>

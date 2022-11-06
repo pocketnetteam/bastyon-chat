@@ -16,8 +16,28 @@
       
 
       <template v-slot:info>
-        <span v-if="!share">{{ $t("caption.chats") }}</span>
-        <span v-if="share">{{ $t("caption.shareWith") }}</span>
+        <div
+          v-if="recipients.length"
+          class="progress-mailing"
+        >
+          <div class="mailing-label">
+            <span>
+              Mailing progress
+            </span>
+            <i  
+              v-if="!processMassMailing"
+              class="fa fa-play"
+              @click="resumeProcess"
+            ></i>
+          </div>
+          <progress 
+            id="mailing" 
+            :max="recipientsTotal" 
+            :value="recipientsCompleted"
+          > {{recipientsCompleted}}% </progress>
+        </div>
+        <span v-if="!recipients.length && !share">{{ $t("caption.chats") }}</span>
+        <span v-if="!recipients.length && share">{{ $t("caption.shareWith") }}</span>
       </template>
 
       

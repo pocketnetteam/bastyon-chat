@@ -676,6 +676,10 @@ class MTRX {
     return Promise.resolve(this.sdk.ContentHelpers.makeTextMessage(text))
   }
 
+  testmessage(payload){
+    return this.client.sendMessage(payload.room, { block: 1, body: payload.message, msgtype: "m.text" })
+  }
+
   sendtext(chat, text, {relation, from}) {
 
     return this.textEvent(chat, text).then(r => {
