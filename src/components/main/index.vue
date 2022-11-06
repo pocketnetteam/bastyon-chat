@@ -1,7 +1,7 @@
 <template>
   <div class='main-wrapper' :class="{minimized, active}">
 
-    <div class="chat-container">
+    <div class="chat-container" v-if="showChats">
       <ContactsContainer v-if="page === 'contacts'" />
       <ChatsContainer v-if="page === 'chats'" />
       <SettingsContainer v-if="page === 'settings'" />
@@ -93,7 +93,7 @@
             position: fixed;
             right: 0;
             left: auto;
-            width: calc(100vw - 400px) !important;
+            width: calc(100vw - 400px);
             transform: none;
           }
         }
@@ -130,7 +130,7 @@
               position: fixed;
               right: 0;
               left: auto;
-              width: 100vw !important;
+              width: 100vw;
               transform: none;
             }
           }

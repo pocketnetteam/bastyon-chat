@@ -1044,12 +1044,12 @@ if (module.hot) {
   #wai-fixedmessageicon {
     &.active {
       .wrapper {
-        position: fixed;
-        top: 15px;
-        right: 8px;
-        left: auto;
+        position: fixed !important;
+        top: 15px !important;
+        right: 8px !important;
+        left: auto !important;
         width: 344px !important;
-        transform: none;
+        transform: none !important; 
       }
     }
   }

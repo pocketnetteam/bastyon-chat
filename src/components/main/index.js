@@ -98,6 +98,9 @@ export default {
     showFooter: function () {
       return this.$route.name != "chat" || this.minimized;
     },
+    showChats() {
+      return this.pocketnet && this.$route.name !== "chats" ? false : true
+    }
   }),
 
   methods: {
