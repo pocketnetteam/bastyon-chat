@@ -3,7 +3,7 @@
 var _interopRequireWildcard = require("@babel/runtime/helpers/interopRequireWildcard");
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
+  value: true,
 });
 var _exportNames = {
   request: true,
@@ -15,7 +15,7 @@ var _exportNames = {
   createNewMatrixCall: true,
   setMatrixCallAudioOutput: true,
   setMatrixCallAudioInput: true,
-  setMatrixCallVideoInput: true
+  setMatrixCallVideoInput: true,
 };
 exports.request = request;
 exports.getRequest = getRequest;
@@ -26,25 +26,25 @@ Object.defineProperty(exports, "createNewMatrixCall", {
   enumerable: true,
   get: function () {
     return _call.createNewMatrixCall;
-  }
+  },
 });
 Object.defineProperty(exports, "setMatrixCallAudioOutput", {
   enumerable: true,
   get: function () {
     return _call.setAudioOutput;
-  }
+  },
 });
 Object.defineProperty(exports, "setMatrixCallAudioInput", {
   enumerable: true,
   get: function () {
     return _call.setAudioInput;
-  }
+  },
 });
 Object.defineProperty(exports, "setMatrixCallVideoInput", {
   enumerable: true,
   get: function () {
     return _call.setVideoInput;
-  }
+  },
 });
 exports.ContentHelpers = void 0;
 
@@ -58,7 +58,7 @@ Object.keys(_memoryCryptoStore).forEach(function (key) {
     enumerable: true,
     get: function () {
       return _memoryCryptoStore[key];
-    }
+    },
   });
 });
 
@@ -72,7 +72,7 @@ Object.keys(_memory).forEach(function (key) {
     enumerable: true,
     get: function () {
       return _memory[key];
-    }
+    },
   });
 });
 
@@ -86,7 +86,7 @@ Object.keys(_scheduler).forEach(function (key) {
     enumerable: true,
     get: function () {
       return _scheduler[key];
-    }
+    },
   });
 });
 
@@ -100,7 +100,7 @@ Object.keys(_client).forEach(function (key) {
     enumerable: true,
     get: function () {
       return _client[key];
-    }
+    },
   });
 });
 
@@ -114,7 +114,7 @@ Object.keys(_httpApi).forEach(function (key) {
     enumerable: true,
     get: function () {
       return _httpApi[key];
-    }
+    },
   });
 });
 
@@ -128,7 +128,7 @@ Object.keys(_autodiscovery).forEach(function (key) {
     enumerable: true,
     get: function () {
       return _autodiscovery[key];
-    }
+    },
   });
 });
 
@@ -142,7 +142,7 @@ Object.keys(_syncAccumulator).forEach(function (key) {
     enumerable: true,
     get: function () {
       return _syncAccumulator[key];
-    }
+    },
   });
 });
 
@@ -156,7 +156,7 @@ Object.keys(_errors).forEach(function (key) {
     enumerable: true,
     get: function () {
       return _errors[key];
-    }
+    },
   });
 });
 
@@ -170,7 +170,7 @@ Object.keys(_event).forEach(function (key) {
     enumerable: true,
     get: function () {
       return _event[key];
-    }
+    },
   });
 });
 
@@ -184,7 +184,7 @@ Object.keys(_room).forEach(function (key) {
     enumerable: true,
     get: function () {
       return _room[key];
-    }
+    },
   });
 });
 
@@ -198,7 +198,7 @@ Object.keys(_group).forEach(function (key) {
     enumerable: true,
     get: function () {
       return _group[key];
-    }
+    },
   });
 });
 
@@ -212,7 +212,7 @@ Object.keys(_eventTimeline).forEach(function (key) {
     enumerable: true,
     get: function () {
       return _eventTimeline[key];
-    }
+    },
   });
 });
 
@@ -226,7 +226,7 @@ Object.keys(_eventTimelineSet).forEach(function (key) {
     enumerable: true,
     get: function () {
       return _eventTimelineSet[key];
-    }
+    },
   });
 });
 
@@ -240,7 +240,7 @@ Object.keys(_roomMember).forEach(function (key) {
     enumerable: true,
     get: function () {
       return _roomMember[key];
-    }
+    },
   });
 });
 
@@ -254,7 +254,7 @@ Object.keys(_roomState).forEach(function (key) {
     enumerable: true,
     get: function () {
       return _roomState[key];
-    }
+    },
   });
 });
 
@@ -268,7 +268,7 @@ Object.keys(_user).forEach(function (key) {
     enumerable: true,
     get: function () {
       return _user[key];
-    }
+    },
   });
 });
 
@@ -282,7 +282,7 @@ Object.keys(_filter).forEach(function (key) {
     enumerable: true,
     get: function () {
       return _filter[key];
-    }
+    },
   });
 });
 
@@ -296,7 +296,7 @@ Object.keys(_timelineWindow).forEach(function (key) {
     enumerable: true,
     get: function () {
       return _timelineWindow[key];
-    }
+    },
   });
 });
 
@@ -310,7 +310,7 @@ Object.keys(_interactiveAuth).forEach(function (key) {
     enumerable: true,
     get: function () {
       return _interactiveAuth[key];
-    }
+    },
   });
 });
 
@@ -324,7 +324,7 @@ Object.keys(_serviceTypes).forEach(function (key) {
     enumerable: true,
     get: function () {
       return _serviceTypes[key];
-    }
+    },
   });
 });
 
@@ -338,7 +338,7 @@ Object.keys(_indexeddb).forEach(function (key) {
     enumerable: true,
     get: function () {
       return _indexeddb[key];
-    }
+    },
   });
 });
 
@@ -352,7 +352,7 @@ Object.keys(_webstorage).forEach(function (key) {
     enumerable: true,
     get: function () {
       return _webstorage[key];
-    }
+    },
   });
 });
 
@@ -366,7 +366,7 @@ Object.keys(_indexeddbCryptoStore).forEach(function (key) {
     enumerable: true,
     get: function () {
       return _indexeddbCryptoStore[key];
-    }
+    },
   });
 });
 
@@ -380,7 +380,7 @@ Object.keys(_contentRepo).forEach(function (key) {
     enumerable: true,
     get: function () {
       return _contentRepo[key];
-    }
+    },
   });
 });
 
@@ -425,7 +425,6 @@ function request(r) {
  * @return {requestFunction} The current request function.
  */
 
-
 function getRequest() {
   return requestInstance;
 }
@@ -435,7 +434,6 @@ function getRequest() {
  * previous value, along with the options and callback arguments.
  * @param {requestWrapperFunction} wrapper The wrapping function.
  */
-
 
 function wrapRequest(wrapper) {
   const origRequest = requestInstance;
@@ -452,7 +450,6 @@ let cryptoStoreFactory = () => new _memoryCryptoStore.MemoryCryptoStore();
  * @param {Function} fac  a function which will return a new
  *    {@link module:crypto.store.base~CryptoStore}.
  */
-
 
 function setCryptoStoreFactory(fac) {
   cryptoStoreFactory = fac;
@@ -484,14 +481,16 @@ function setCryptoStoreFactory(fac) {
 function createClient(opts) {
   if (typeof opts === "string") {
     opts = {
-      "baseUrl": opts
+      baseUrl: opts,
     };
   }
 
   opts.request = opts.request || requestInstance;
-  opts.store = opts.store || new _memory.MemoryStore({
-    localStorage: global.localStorage
-  });
+  opts.store =
+    opts.store ||
+    new _memory.MemoryStore({
+      localStorage: global.localStorage,
+    });
   opts.scheduler = opts.scheduler || new _scheduler.MatrixScheduler();
   opts.cryptoStore = opts.cryptoStore || cryptoStoreFactory();
   return new _client.MatrixClient(opts);
@@ -524,13 +523,13 @@ function createClient(opts) {
  */
 
 /**
-  * The request callback interface for performing HTTP requests. This matches the
-  * API for the {@link https://github.com/request/request#requestoptions-callback|
-  * request NPM module}. The SDK will implement a callback which meets this
-  * interface in order to handle the HTTP response.
-  * @callback requestCallback
-  * @param {Error} err The error if one occurred, else falsey.
-  * @param {Object} response The HTTP response which consists of
-  * <code>{statusCode: {Number}, headers: {Object}}</code>
-  * @param {Object} body The parsed HTTP response body.
-  */
+ * The request callback interface for performing HTTP requests. This matches the
+ * API for the {@link https://github.com/request/request#requestoptions-callback|
+ * request NPM module}. The SDK will implement a callback which meets this
+ * interface in order to handle the HTTP response.
+ * @callback requestCallback
+ * @param {Error} err The error if one occurred, else falsey.
+ * @param {Object} response The HTTP response which consists of
+ * <code>{statusCode: {Number}, headers: {Object}}</code>
+ * @param {Object} body The parsed HTTP response body.
+ */

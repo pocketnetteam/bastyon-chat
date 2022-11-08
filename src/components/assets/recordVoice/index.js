@@ -1,185 +1,156 @@
-import { mapState } from 'vuex';
+import { mapState } from "vuex";
 
 export default {
-	name: "recordVoice",
-	props: {
-		isRecording: {
-			type: Boolean,
-			required: true
-		},
-		prepareRecording: {
-			type: Boolean
-		},
-		disabled: Boolean,
-	},
-	data() {
-		return {
-			start: 0,
-			isHold: false,
-			direction: null
-		}
-	},
-	computed: {
-		...mapState({
-			mobile: state => state.mobile,
-		})
-	},
-	mounted() {
-	
-	},
-	beforeDestroy() {
+  name: "recordVoice",
+  props: {
+    isRecording: {
+      type: Boolean,
+      required: true,
+    },
+    prepareRecording: {
+      type: Boolean,
+    },
+    disabled: Boolean,
+  },
+  data() {
+    return {
+      start: 0,
+      isHold: false,
+      direction: null,
+    };
+  },
+  computed: {
+    ...mapState({
+      mobile: (state) => state.mobile,
+    }),
+  },
+  mounted() {},
+  beforeDestroy() {
+    document.removeEventListener("mousemove", this.handleMove);
+    document.removeEventListener("touchmove", this.handleMove);
 
-		document.removeEventListener('mousemove', this.handleMove)
-		document.removeEventListener('touchmove', this.handleMove)
+    if (this.isRecording) {
+      this.$emit("onRecordingStop", { cancel: true });
+    }
+  },
+  methods: {
+    mouseup: function (e) {
+      if (!this.mobile) this.handleTouchEnd(e);
+    },
 
-		if (this.isRecording) {
-			this.$emit('onRecordingStop', {cancel : true})
-		}
-	},
-	methods: {
+    mousedown: function (e) {
+      if (!this.mobile) this.handleTouchStart(e);
+    },
 
-		mouseup : function(e){
-			if(!this.mobile)
-				this.handleTouchEnd(e)
-		},
+    handleTouchStart(e) {
+      console.log("E", e, this.isHold, this.isRecording);
 
-		mousedown : function(e){
-			if(!this.mobile)
-				this.handleTouchStart(e)
-		},
-		
-		handleTouchStart(e) {
+      if (!this.isRecording) {
+        this.$emit("onRecordingStart");
+      } else {
+        if (this.isHold) return;
+      }
 
-			console.log("E", e, this.isHold, this.isRecording)
+      this.start = {
+        Y: e.changedTouches ? e.changedTouches[0].pageY : e.pageY,
+        X: e.changedTouches ? e.changedTouches[0].pageX : e.pageX,
+      };
 
+      if (!this.mobile) document.addEventListener("mousemove", this.handleMove);
+      else document.addEventListener("touchmove", this.handleMove);
+    },
+    handleTouchEnd(e) {
+      console.log("E", e, this.isHold);
 
-			if(!this.isRecording) {
-				this.$emit('onRecordingStart')
-			}
+      if (this.isHold) return;
 
-			else{
-				if(this.isHold) return
-			}
+      if (this.isRecording || this.prepareRecording) {
+        this.$emit("onRecordingStop", {
+          sendnow: true,
+        });
+      }
 
-			this.start = {
-				Y: e.changedTouches ? e.changedTouches[0].pageY : e.pageY,
-				X: e.changedTouches ? e.changedTouches[0].pageX : e.pageX
-			}
+      document.removeEventListener("mousemove", this.handleMove);
+      document.removeEventListener("touchmove", this.handleMove);
 
-			if(!this.mobile)
-				document.addEventListener('mousemove', this.handleMove)
-			else
-				document.addEventListener('touchmove', this.handleMove)
+      this.clearStyle();
+    },
 
-		},
-		handleTouchEnd(e) {
-			console.log("E", e, this.isHold)
+    clearStyle() {
+      if (this.$refs.toggle) {
+        this.$refs.toggle.style.transform = `translate(0,0)`;
+        this.$refs.toggle.classList.remove("outside");
+      }
 
-			if (this.isHold) return
+      if (this.$refs.holder) {
+        this.$refs.holder.classList.remove("active");
+      }
+    },
 
-			if (this.isRecording || this.prepareRecording) {
-				this.$emit('onRecordingStop', {
-					sendnow : true
-				})
-			}
+    handleMove(e) {
+      console.log("E", e, this.isRecording);
 
-			document.removeEventListener('mousemove', this.handleMove)
-			document.removeEventListener('touchmove', this.handleMove)
+      if (!this.isRecording) return;
 
-			this.clearStyle()
+      let deltaY = this.start.Y - e.pageY;
+      let deltaX = this.start.X - e.pageX;
 
-		},
+      if (e?.changedTouches?.length) {
+        deltaY = this.start.Y - e.changedTouches[0].pageY;
+        deltaX = this.start.X - e.changedTouches[0].pageX;
+      }
 
-		clearStyle(){
+      if (deltaY > 5 && deltaX < 5) {
+        this.direction = "Y";
+      } else {
+        this.direction = "X";
+      }
 
-			if (this.$refs.toggle){
-				this.$refs.toggle.style.transform = `translate(0,0)`
-				this.$refs.toggle.classList.remove('outside')
-			}
+      if (deltaY > 5 && this.direction === "Y") {
+        if (!this.$refs.holder.classList.contains("active"))
+          this.$refs.holder.classList.add("active");
 
-			if (this.$refs.holder){
-				this.$refs.holder.classList.remove('active')
-			}
-		},
+        this.$refs.toggle.style.transform = `translate(0,-${deltaY}px)`;
 
-		handleMove(e) {
+        if (deltaY > 70) {
+          this.$refs.toggle.style.transform = `translate(0,0)`;
 
-			console.log("E", e, this.isRecording)
+          document.removeEventListener("mousemove", this.handleMove);
+          document.removeEventListener("touchmove", this.handleMove);
+          //document.removeEventListener('mouseup', this.handleTouchEnd)
 
-			if(!this.isRecording) return
+          this.isHold = true;
+        }
+      } else if (deltaX > 5 && this.direction === "X") {
+        this.$refs.toggle.style.transform = `translate(-${deltaX}px, 0)`;
 
-			let deltaY = this.start.Y - e.pageY
-			let deltaX = this.start.X - e.pageX
+        if (!this.$refs.holder.classList.contains("outside"))
+          this.$refs.toggle.classList.add("outside");
 
-			if (e?.changedTouches?.length) {
-				deltaY = this.start.Y - e.changedTouches[0].pageY
-				deltaX = this.start.X - e.changedTouches[0].pageX
-			}
+        this.$emit("canceling", (deltaX - 5) / 130);
 
-			if (deltaY > 5 && deltaX < 5) {
-				this.direction = 'Y'
-			} else {
-				this.direction = 'X'
-			}
+        if (deltaX > 130) {
+          this.$refs.toggle.style.transform = `translate(0,0)`;
+          document.removeEventListener("mousemove", this.handleMove);
+          document.removeEventListener("touchmove", this.handleMove);
+          //document.removeEventListener('mouseup', this.handleTouchEnd)
+          this.$emit("onRecordingStop", { cancel: true });
+          this.$emit("onClear");
+        }
+      } else {
+        this.clearStyle();
+      }
+    },
 
+    recordEnd(e) {
+      this.clearStyle();
 
-			if (deltaY > 5 && this.direction === 'Y') {
+      if (this.isRecording && this.isHold) {
+        this.$emit("onRecordingStop", {});
+        this.isHold = false;
 
-				if(!this.$refs.holder.classList.contains('active'))
-					this.$refs.holder.classList.add('active')
-
-				this.$refs.toggle.style.transform = `translate(0,-${deltaY}px)`
-
-				if (deltaY > 70) {
-					this.$refs.toggle.style.transform = `translate(0,0)`
-
-					document.removeEventListener('mousemove', this.handleMove)
-					document.removeEventListener('touchmove', this.handleMove)
-					//document.removeEventListener('mouseup', this.handleTouchEnd)
-
-					this.isHold = true
-				}
-
-
-			} else if (deltaX > 5 && this.direction === 'X') {
-
-				this.$refs.toggle.style.transform = `translate(-${deltaX}px, 0)`
-
-				if(!this.$refs.holder.classList.contains('outside'))
-					this.$refs.toggle.classList.add('outside')
-
-				this.$emit('canceling', (deltaX - 5) / 130)
-				
-				if (deltaX > 130) {
-					this.$refs.toggle.style.transform = `translate(0,0)`
-					document.removeEventListener('mousemove', this.handleMove)
-					document.removeEventListener('touchmove', this.handleMove)
-					//document.removeEventListener('mouseup', this.handleTouchEnd)
-					this.$emit('onRecordingStop', { cancel: true })
-					this.$emit('onClear')
-				}
-
-			}
-			else {
-				this.clearStyle()
-			}
-		},
-
-		recordEnd(e) {
-
-			this.clearStyle()
-
-			if (this.isRecording && this.isHold) {
-
-				this.$emit('onRecordingStop', {})
-				this.isHold = false
-
-				return
-
-			}
-
-		},
-
-		
-	}
-}
+        return;
+      }
+    },
+  },
+};

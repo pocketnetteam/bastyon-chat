@@ -31,10 +31,10 @@ export default {
     return {
       addToQueue: (message, id) => {
         var f = _.find(this.voiceMessageQueue, (v) => {
-          return v.id == id
-        })
+          return v.id == id;
+        });
 
-        if(!f)
+        if (!f)
           this.voiceMessageQueue = [...this.voiceMessageQueue, { message, id }];
       },
       playNext: (id) => {
@@ -44,7 +44,7 @@ export default {
         let next =
           current === -1 ? null : this.sortedVoiceMessageQueue[current + 1];
         if (next) {
-          next.message.setTime(0)
+          next.message.setTime(0);
           next.message.play();
         }
       },
@@ -63,20 +63,25 @@ export default {
       },
     },
 
-    notificationCount : function(){
-
-     
-      if(this.lscroll && this.lscroll.scrollTop < 180 && this.chat && this.chat.getUnreadNotificationCount()){
-        this.scrollToNew()
+    notificationCount: function () {
+      if (
+        this.lscroll &&
+        this.lscroll.scrollTop < 180 &&
+        this.chat &&
+        this.chat.getUnreadNotificationCount()
+      ) {
+        this.scrollToNew();
       }
-    }
+    },
   },
   mounted() {
     this.timeline = {};
   },
   computed: {
     sortedVoiceMessageQueue() {
-      return _.sortBy(this.voiceMessageQueue, (a) => {return a.id})
+      return _.sortBy(this.voiceMessageQueue, (a) => {
+        return a.id;
+      });
     },
 
     ios() {
@@ -89,7 +94,7 @@ export default {
       scrollbottomshow: function () {
         return this.lscroll && this.lscroll.scrollTop > 500;
       },
-      notificationCount : (state) => state.allnotifications
+      notificationCount: (state) => state.allnotifications,
     }),
 
     eventsByPages: function () {
@@ -116,10 +121,7 @@ export default {
   destroyed: function () {
     this.core.menu(null);
   },
-  updated: function() {
-
-    
-
+  updated: function () {
     /*if(this.countshow === 0) {
       this.scrollToReadMessages();
     }

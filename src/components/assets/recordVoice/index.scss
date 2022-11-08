@@ -1,5 +1,4 @@
 .recordButton {
-  
   &_wrapper {
     position: relative;
   }
@@ -15,7 +14,7 @@
     background: lightslategrey;
     border-radius: 50%;
     bottom: 98px;
-    transition: .1s;
+    transition: 0.1s;
     right: 9px;
 
     .icon {
@@ -55,27 +54,27 @@
     &.active {
       background: srgb(--color-bg-ac);
       animation: pulse 1.2s infinite;
-      
+
       .icon {
-        color : srgb(--text-on-bg-shadow-color);
+        color: srgb(--text-on-bg-shadow-color);
       }
 
-      &:before{
+      &:before {
         position: absolute;
         left: -30px;
-        bottom : -30px;
+        bottom: -30px;
         right: -30px;
         top: -30px;
         content: "";
         border-radius: 50%;
-        border : 35px solid srgba(--color-bg-ac, 0.5);
+        border: 35px solid srgba(--color-bg-ac, 0.5);
         animation: pulse 1.2s infinite;
       }
     }
 
-    &.disabled{
+    &.disabled {
       .icon {
-        color : srgb(--neutral-grad-2);
+        color: srgb(--neutral-grad-2);
       }
     }
 
@@ -84,13 +83,12 @@
     }
   }
 
-  &_stop{
+  &_stop {
     background: srgb(--color-bad);
-    color : srgb(--text-on-bg-shadow-color);
+    color: srgb(--text-on-bg-shadow-color);
     font-size: 0.7em;
   }
 }
-
 
 @keyframes pulse {
   0% {

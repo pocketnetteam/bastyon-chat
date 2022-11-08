@@ -1,9 +1,6 @@
 <template>
   <div>
-    <transition
-      :name="transition"
-      :mode="mode"
-    >
+    <transition :name="transition" :mode="mode">
       <slot></slot>
     </transition>
     <div class="overlay-top"></div>
@@ -15,58 +12,57 @@
 
 <script>
 export default {
-  name: 'vue-page-transition',
-  props: ['name'],
-  data () {
+  name: "vue-page-transition",
+  props: ["name"],
+  data() {
     return {
-      transition: 'fade',
-      mode: 'out-in',
-    }
+      transition: "fade",
+      mode: "out-in",
+    };
   },
-  created () {
+  created() {
     this.$router.beforeEach((to, from, next) => {
       this.transition = to.meta.transition
         ? to.meta.transition
-        : this.$props.name
+        : this.$props.name;
 
-      next()
-    })
+      next();
+    });
   },
-}
+};
 </script>
 
 <style>
-  :root {
-    --overlay-bg: #1867c0;
-    --transition-duration: .35s;
-  }
+:root {
+  --overlay-bg: #1867c0;
+  --transition-duration: 0.35s;
+}
 </style>
 
 <style lang="scss" scoped>
 // fade
-@import '../styles/transitions/fade/fade';
-@import '../styles/transitions/fade/fade-in-down';
-@import '../styles/transitions/fade/fade-in-right';
-@import '../styles/transitions/fade/fade-in-up';
-@import '../styles/transitions/fade/fade-in-left';
+@import "../styles/transitions/fade/fade";
+@import "../styles/transitions/fade/fade-in-down";
+@import "../styles/transitions/fade/fade-in-right";
+@import "../styles/transitions/fade/fade-in-up";
+@import "../styles/transitions/fade/fade-in-left";
 
 // zoom
-@import '../styles/transitions/zoom/zoom';
+@import "../styles/transitions/zoom/zoom";
 
 // flip
-@import '../styles/transitions/flip/flip-x';
-@import '../styles/transitions/flip/flip-y';
+@import "../styles/transitions/flip/flip-x";
+@import "../styles/transitions/flip/flip-y";
 
 // overlay
-@import '../styles/transitions/overlay/overlay-right';
-@import '../styles/transitions/overlay/overlay-down';
-@import '../styles/transitions/overlay/overlay-up';
-@import '../styles/transitions/overlay/overlay-left';
-@import '../styles/transitions/overlay/overlay-up-full';
-@import '../styles/transitions/overlay/overlay-right-full';
-@import '../styles/transitions/overlay/overlay-down-full';
-@import '../styles/transitions/overlay/overlay-left-full';
-@import '../styles/transitions/overlay/overlay-up-down';
-@import '../styles/transitions/overlay/overlay-left-right';
+@import "../styles/transitions/overlay/overlay-right";
+@import "../styles/transitions/overlay/overlay-down";
+@import "../styles/transitions/overlay/overlay-up";
+@import "../styles/transitions/overlay/overlay-left";
+@import "../styles/transitions/overlay/overlay-up-full";
+@import "../styles/transitions/overlay/overlay-right-full";
+@import "../styles/transitions/overlay/overlay-down-full";
+@import "../styles/transitions/overlay/overlay-left-full";
+@import "../styles/transitions/overlay/overlay-up-down";
+@import "../styles/transitions/overlay/overlay-left-right";
 </style>
-

@@ -8,7 +8,7 @@ import { Logger } from "loglevel";
  */
 export declare const logger: PrefixedLogger;
 interface PrefixedLogger extends Logger {
-    withPrefix?: (prefix: string) => PrefixedLogger;
-    prefix?: string;
+  withPrefix?: (prefix: string) => PrefixedLogger;
+  prefix?: string;
 }
 export {};

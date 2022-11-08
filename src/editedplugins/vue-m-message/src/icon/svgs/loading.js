@@ -1,7 +1,7 @@
 export default {
-  name: 'loading',
-  viewBox: '0 0 50 50',
-  class: 'm-loading-icon m-loading-wipe',
+  name: "loading",
+  viewBox: "0 0 50 50",
+  class: "m-loading-icon m-loading-wipe",
   defs: `<style>
     .m-loading-icon {
       stroke: #343640;
@@ -47,5 +47,5 @@ export default {
       }
     }
   </style>`,
-  html: '<circle cx="25" cy="25" r="20" class="m-loading-icon-bg-path"></circle><circle cx="25" cy="25" r="20" class="m-loading-icon-active-path"></circle>'
-}
+  html: '<circle cx="25" cy="25" r="20" class="m-loading-icon-bg-path"></circle><circle cx="25" cy="25" r="20" class="m-loading-icon-active-path"></circle>',
+};

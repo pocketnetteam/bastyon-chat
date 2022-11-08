@@ -3,7 +3,7 @@
 var _interopRequireWildcard = require("@babel/runtime/helpers/interopRequireWildcard");
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
+  value: true,
 });
 exports.MemoryStore = MemoryStore;
 
@@ -35,8 +35,11 @@ limitations under the License.
  * @module store/memory
  */
 function isValidFilterId(filterId) {
-  const isValidStr = typeof filterId === "string" && !!filterId && filterId !== "undefined" && // exclude these as we've serialized undefined in localStorage before
-  filterId !== "null";
+  const isValidStr =
+    typeof filterId === "string" &&
+    !!filterId &&
+    filterId !== "undefined" && // exclude these as we've serialized undefined in localStorage before
+    filterId !== "null";
   return isValidStr || typeof filterId === "number";
 }
 /**
@@ -47,24 +50,29 @@ function isValidFilterId(filterId) {
  * some forms of data such as tokens. Rooms will NOT be stored.
  */
 
-
 function MemoryStore(opts) {
   opts = opts || {};
-  this.rooms = {// roomId: Room
+  this.rooms = {
+    // roomId: Room
   };
-  this.groups = {// groupId: Group
+  this.groups = {
+    // groupId: Group
   };
-  this.users = {// userId: User
+  this.users = {
+    // userId: User
   };
   this.syncToken = null;
-  this.filters = {// userId: {
+  this.filters = {
+    // userId: {
     //    filterId: Filter
     // }
   };
-  this.accountData = {// type : content
+  this.accountData = {
+    // type : content
   };
   this.localStorage = opts.localStorage;
-  this._oobMembers = {// roomId: [member events]
+  this._oobMembers = {
+    // roomId: [member events]
   };
   this._clientOptions = {};
 }
@@ -152,7 +160,9 @@ MemoryStore.prototype = {
       user.setDisplayName(member.name);
 
       if (member.events.member) {
-        user.setRawDisplayName(member.events.member.getDirectionalContent().displayname);
+        user.setRawDisplayName(
+          member.events.member.getDirectionalContent().displayname
+        );
       }
     }
 
@@ -186,7 +196,10 @@ MemoryStore.prototype = {
    */
   removeRoom: function (roomId) {
     if (this.rooms[roomId]) {
-      this.rooms[roomId].removeListener("RoomState.members", this._onRoomMember);
+      this.rooms[roomId].removeListener(
+        "RoomState.members",
+        this._onRoomMember
+      );
     }
 
     delete this.rooms[roomId];
@@ -245,7 +258,8 @@ MemoryStore.prototype = {
    * @param {string} token The token associated with these events.
    * @param {boolean} toStart True if these are paginated results.
    */
-  storeEvents: function (room, events, token, toStart) {// no-op because they've already been added to the room instance.
+  storeEvents: function (room, events, token, toStart) {
+    // no-op because they've already been added to the room instance.
   },
 
   /**
@@ -404,16 +418,20 @@ MemoryStore.prototype = {
    * @return {Promise} An immediately resolved promise.
    */
   deleteAllData: function () {
-    this.rooms = {// roomId: Room
+    this.rooms = {
+      // roomId: Room
     };
-    this.users = {// userId: User
+    this.users = {
+      // userId: User
     };
     this.syncToken = null;
-    this.filters = {// userId: {
+    this.filters = {
+      // userId: {
       //    filterId: Filter
       // }
     };
-    this.accountData = {// type : content
+    this.accountData = {
+      // type : content
     };
     return Promise.resolve();
   },
@@ -451,5 +469,5 @@ MemoryStore.prototype = {
   storeClientOptions: function (options) {
     this._clientOptions = Object.assign({}, options);
     return Promise.resolve();
-  }
+  },
 };

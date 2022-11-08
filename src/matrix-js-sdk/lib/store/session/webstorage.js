@@ -3,7 +3,7 @@
 var _interopRequireWildcard = require("@babel/runtime/helpers/interopRequireWildcard");
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
+  value: true,
 });
 exports.WebStorageSessionStore = WebStorageSessionStore;
 
@@ -49,8 +49,16 @@ const E2E_PREFIX = "session.e2e.";
 function WebStorageSessionStore(webStore) {
   this.store = webStore;
 
-  if (!utils.isFunction(webStore.getItem) || !utils.isFunction(webStore.setItem) || !utils.isFunction(webStore.removeItem) || !utils.isFunction(webStore.key) || typeof webStore.length !== 'number') {
-    throw new Error("Supplied webStore does not meet the WebStorage API interface");
+  if (
+    !utils.isFunction(webStore.getItem) ||
+    !utils.isFunction(webStore.setItem) ||
+    !utils.isFunction(webStore.removeItem) ||
+    !utils.isFunction(webStore.key) ||
+    typeof webStore.length !== "number"
+  ) {
+    throw new Error(
+      "Supplied webStore does not meet the WebStorage API interface"
+    );
   }
 }
 
@@ -78,13 +86,14 @@ WebStorageSessionStore.prototype = {
    * @return {object} A map from user ID to map of device ID to keys for the device.
    */
   getAllEndToEndDevices: function () {
-    const prefix = keyEndToEndDevicesForUser('');
+    const prefix = keyEndToEndDevicesForUser("");
     const devices = {};
 
     for (let i = 0; i < this.store.length; ++i) {
       const key = this.store.key(i);
       const userId = key.substr(prefix.length);
-      if (key.startsWith(prefix)) devices[userId] = getJsonItem(this.store, key);
+      if (key.startsWith(prefix))
+        devices[userId] = getJsonItem(this.store, key);
     }
 
     return devices;
@@ -106,7 +115,7 @@ WebStorageSessionStore.prototype = {
    * Removes all end to end device data from the store
    */
   removeEndToEndDeviceData: function () {
-    removeByPrefix(this.store, keyEndToEndDevicesForUser(''));
+    removeByPrefix(this.store, keyEndToEndDevicesForUser(""));
     removeByPrefix(this.store, KEY_END_TO_END_DEVICE_LIST_TRACKING_STATUS);
     removeByPrefix(this.store, KEY_END_TO_END_DEVICE_SYNC_TOKEN);
   },
@@ -127,11 +136,11 @@ WebStorageSessionStore.prototype = {
    * @return {object} A map of {deviceKey -> {sessionId -> session pickle}}
    */
   getAllEndToEndSessions: function () {
-    const deviceKeys = getKeysWithPrefix(this.store, keyEndToEndSessions(''));
+    const deviceKeys = getKeysWithPrefix(this.store, keyEndToEndSessions(""));
     const results = {};
 
     for (const k of deviceKeys) {
-      const unprefixedKey = k.substr(keyEndToEndSessions('').length);
+      const unprefixedKey = k.substr(keyEndToEndSessions("").length);
       results[unprefixedKey] = getJsonItem(this.store, k);
     }
 
@@ -143,7 +152,7 @@ WebStorageSessionStore.prototype = {
    * This is used after migrating sessions awat from the sessions store.
    */
   removeAllEndToEndSessions: function () {
-    removeByPrefix(this.store, keyEndToEndSessions(''));
+    removeByPrefix(this.store, keyEndToEndSessions(""));
   },
 
   /**
@@ -152,7 +161,7 @@ WebStorageSessionStore.prototype = {
    * @return {{senderKey: string, sessionId: string}}
    */
   getAllEndToEndInboundGroupSessionKeys: function () {
-    const prefix = E2E_PREFIX + 'inboundgroupsessions/';
+    const prefix = E2E_PREFIX + "inboundgroupsessions/";
     const result = [];
 
     for (let i = 0; i < this.store.length; i++) {
@@ -165,10 +174,9 @@ WebStorageSessionStore.prototype = {
       // senderKey being a (32-byte) curve25519 key, base64-encoded
       // (hence 43 characters long).
 
-
       result.push({
         senderKey: key.substr(prefix.length, 43),
-        sessionId: key.substr(prefix.length + 44)
+        sessionId: key.substr(prefix.length + 44),
       });
     }
 
@@ -179,7 +187,7 @@ WebStorageSessionStore.prototype = {
     return this.store.getItem(key);
   },
   removeAllEndToEndInboundGroupSessions: function () {
-    removeByPrefix(this.store, E2E_PREFIX + 'inboundgroupsessions/');
+    removeByPrefix(this.store, E2E_PREFIX + "inboundgroupsessions/");
   },
 
   /**
@@ -187,18 +195,18 @@ WebStorageSessionStore.prototype = {
    * @return {object} roomId -> object with the end-to-end info for the room.
    */
   getAllEndToEndRooms: function () {
-    const roomKeys = getKeysWithPrefix(this.store, keyEndToEndRoom(''));
+    const roomKeys = getKeysWithPrefix(this.store, keyEndToEndRoom(""));
     const results = {};
 
     for (const k of roomKeys) {
-      const unprefixedKey = k.substr(keyEndToEndRoom('').length);
+      const unprefixedKey = k.substr(keyEndToEndRoom("").length);
       results[unprefixedKey] = getJsonItem(this.store, k);
     }
 
     return results;
   },
   removeAllEndToEndRooms: function () {
-    removeByPrefix(this.store, keyEndToEndRoom(''));
+    removeByPrefix(this.store, keyEndToEndRoom(""));
   },
   setLocalTrustedBackupPubKey: function (pubkey) {
     this.store.setItem(KEY_END_TO_END_TRUSTED_BACKUP_PUBKEY, pubkey);
@@ -207,12 +215,14 @@ WebStorageSessionStore.prototype = {
   // thing until cross-signing lands.
   getLocalTrustedBackupPubKey: function () {
     return this.store.getItem(KEY_END_TO_END_TRUSTED_BACKUP_PUBKEY);
-  }
+  },
 };
 const KEY_END_TO_END_ACCOUNT = E2E_PREFIX + "account";
 const KEY_END_TO_END_DEVICE_SYNC_TOKEN = E2E_PREFIX + "device_sync_token";
-const KEY_END_TO_END_DEVICE_LIST_TRACKING_STATUS = E2E_PREFIX + "device_tracking";
-const KEY_END_TO_END_TRUSTED_BACKUP_PUBKEY = E2E_PREFIX + "trusted_backup_pubkey";
+const KEY_END_TO_END_DEVICE_LIST_TRACKING_STATUS =
+  E2E_PREFIX + "device_tracking";
+const KEY_END_TO_END_TRUSTED_BACKUP_PUBKEY =
+  E2E_PREFIX + "trusted_backup_pubkey";
 
 function keyEndToEndDevicesForUser(userId) {
   return E2E_PREFIX + "devices/" + userId;

@@ -3,7 +3,7 @@
 var _interopRequireWildcard = require("@babel/runtime/helpers/interopRequireWildcard");
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
+  value: true,
 });
 exports.getHttpUriForMxc = getHttpUriForMxc;
 
@@ -44,16 +44,23 @@ limitations under the License.
  * for such URLs.
  * @return {string} The complete URL to the content.
  */
-function getHttpUriForMxc(baseUrl, mxc, width, height, resizeMethod, allowDirectLinks) {
+function getHttpUriForMxc(
+  baseUrl,
+  mxc,
+  width,
+  height,
+  resizeMethod,
+  allowDirectLinks
+) {
   if (typeof mxc !== "string" || !mxc) {
-    return '';
+    return "";
   }
 
   if (mxc.indexOf("mxc://") !== 0) {
     if (allowDirectLinks) {
       return mxc;
     } else {
-      return '';
+      return "";
     }
   }
 
@@ -88,5 +95,11 @@ function getHttpUriForMxc(baseUrl, mxc, width, height, resizeMethod, allowDirect
     serverAndMediaId = serverAndMediaId.substr(0, fragmentOffset);
   }
 
-  return baseUrl + prefix + serverAndMediaId + (utils.keys(params).length === 0 ? "" : "?" + utils.encodeParams(params)) + fragment;
+  return (
+    baseUrl +
+    prefix +
+    serverAndMediaId +
+    (utils.keys(params).length === 0 ? "" : "?" + utils.encodeParams(params)) +
+    fragment
+  );
 }

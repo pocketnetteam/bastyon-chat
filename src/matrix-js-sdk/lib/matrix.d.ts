@@ -32,7 +32,12 @@ export * from "./crypto/store/indexeddb-crypto-store";
 export * from "./content-repo";
 export * as ContentHelpers from "./content-helpers";
 
-export { createNewMatrixCall, setAudioOutput as setMatrixCallAudioOutput, setAudioInput as setMatrixCallAudioInput, setVideoInput as setMatrixCallVideoInput, } from "./webrtc/call";
+export {
+  createNewMatrixCall,
+  setAudioOutput as setMatrixCallAudioOutput,
+  setAudioInput as setMatrixCallAudioInput,
+  setVideoInput as setMatrixCallVideoInput,
+} from "./webrtc/call";
 /**
  * The function used to perform HTTP requests. Only use this if you want to
  * use a different HTTP library, e.g. Angular's <code>$http</code>. This should
@@ -52,8 +57,15 @@ export declare function getRequest(): any;
  * @param {requestWrapperFunction} wrapper The wrapping function.
  */
 export declare function wrapRequest(wrapper: any): void;
-declare type Store = StubStore | MemoryStore | LocalIndexedDBStoreBackend | RemoteIndexedDBStoreBackend;
-declare type CryptoStore = MemoryCryptoStore | LocalStorageCryptoStore | IndexedDBCryptoStore;
+declare type Store =
+  | StubStore
+  | MemoryStore
+  | LocalIndexedDBStoreBackend
+  | RemoteIndexedDBStoreBackend;
+declare type CryptoStore =
+  | MemoryCryptoStore
+  | LocalStorageCryptoStore
+  | IndexedDBCryptoStore;
 /**
  * Configure a different factory to be used for creating crypto stores
  *
@@ -62,64 +74,85 @@ declare type CryptoStore = MemoryCryptoStore | LocalStorageCryptoStore | Indexed
  */
 export declare function setCryptoStoreFactory(fac: any): void;
 export interface ICreateClientOpts {
-    baseUrl: string;
-    idBaseUrl?: string;
-    store?: Store;
-    cryptoStore?: CryptoStore;
-    scheduler?: MatrixScheduler;
-    request?: Request;
-    userId?: string;
-    deviceId?: string;
-    accessToken?: string;
-    identityServer?: any;
-    localTimeoutMs?: number;
-    useAuthorizationHeader?: boolean;
-    timelineSupport?: boolean;
-    queryParams?: Record<string, unknown>;
-    deviceToImport?: {
-        olmDevice: {
-            pickledAccount: string;
-            sessions: Array<Record<string, any>>;
-            pickleKey: string;
-        };
-        userId: string;
-        deviceId: string;
+  baseUrl: string;
+  idBaseUrl?: string;
+  store?: Store;
+  cryptoStore?: CryptoStore;
+  scheduler?: MatrixScheduler;
+  request?: Request;
+  userId?: string;
+  deviceId?: string;
+  accessToken?: string;
+  identityServer?: any;
+  localTimeoutMs?: number;
+  useAuthorizationHeader?: boolean;
+  timelineSupport?: boolean;
+  queryParams?: Record<string, unknown>;
+  deviceToImport?: {
+    olmDevice: {
+      pickledAccount: string;
+      sessions: Array<Record<string, any>>;
+      pickleKey: string;
     };
-    pickleKey?: string;
-    sessionStore?: any;
-    unstableClientRelationAggregation?: boolean;
-    verificationMethods?: Array<any>;
-    forceTURN?: boolean;
-    iceCandidatePoolSize?: number;
-    supportsCallTransfer?: boolean;
-    fallbackICEServerAllowed?: boolean;
-    cryptoCallbacks?: ICryptoCallbacks;
+    userId: string;
+    deviceId: string;
+  };
+  pickleKey?: string;
+  sessionStore?: any;
+  unstableClientRelationAggregation?: boolean;
+  verificationMethods?: Array<any>;
+  forceTURN?: boolean;
+  iceCandidatePoolSize?: number;
+  supportsCallTransfer?: boolean;
+  fallbackICEServerAllowed?: boolean;
+  cryptoCallbacks?: ICryptoCallbacks;
 }
 export interface ICryptoCallbacks {
-    getCrossSigningKey?: (keyType: string, pubKey: Uint8Array) => Promise<Uint8Array>;
-    saveCrossSigningKeys?: (keys: Record<string, Uint8Array>) => void;
-    shouldUpgradeDeviceVerifications?: (users: Record<string, any>) => Promise<string[]>;
-    getSecretStorageKey?: (keys: {
-        keys: Record<string, ISecretStorageKeyInfo>;
-    }, name: string) => Promise<[string, Uint8Array] | null>;
-    cacheSecretStorageKey?: (keyId: string, keyInfo: ISecretStorageKeyInfo, key: Uint8Array) => void;
-    onSecretRequested?: (userId: string, deviceId: string, requestId: string, secretName: string, deviceTrust: IDeviceTrustLevel) => Promise<string>;
-    getDehydrationKey?: (keyInfo: ISecretStorageKeyInfo, checkFunc: (Uint8Array: any) => void) => Promise<Uint8Array>;
+  getCrossSigningKey?: (
+    keyType: string,
+    pubKey: Uint8Array
+  ) => Promise<Uint8Array>;
+  saveCrossSigningKeys?: (keys: Record<string, Uint8Array>) => void;
+  shouldUpgradeDeviceVerifications?: (
+    users: Record<string, any>
+  ) => Promise<string[]>;
+  getSecretStorageKey?: (
+    keys: {
+      keys: Record<string, ISecretStorageKeyInfo>;
+    },
+    name: string
+  ) => Promise<[string, Uint8Array] | null>;
+  cacheSecretStorageKey?: (
+    keyId: string,
+    keyInfo: ISecretStorageKeyInfo,
+    key: Uint8Array
+  ) => void;
+  onSecretRequested?: (
+    userId: string,
+    deviceId: string,
+    requestId: string,
+    secretName: string,
+    deviceTrust: IDeviceTrustLevel
+  ) => Promise<string>;
+  getDehydrationKey?: (
+    keyInfo: ISecretStorageKeyInfo,
+    checkFunc: (Uint8Array: any) => void
+  ) => Promise<Uint8Array>;
 }
 export interface ISecretStorageKeyInfo {
-    passphrase?: {
-        algorithm: "m.pbkdf2";
-        iterations: number;
-        salt: string;
-    };
-    iv?: string;
-    mac?: string;
+  passphrase?: {
+    algorithm: "m.pbkdf2";
+    iterations: number;
+    salt: string;
+  };
+  iv?: string;
+  mac?: string;
 }
 export interface IDeviceTrustLevel {
-    isVerified(): boolean;
-    isCrossSigningVerified(): boolean;
-    isLocallyVerified(): boolean;
-    isTofu(): boolean;
+  isVerified(): boolean;
+  isCrossSigningVerified(): boolean;
+  isLocallyVerified(): boolean;
+  isTofu(): boolean;
 }
 /**
  * Construct a Matrix Client. Similar to {@link module:client.MatrixClient}
@@ -171,13 +204,13 @@ export declare function createClient(opts: ICreateClientOpts | string): any;
  * @param {requestCallback} callback The request callback.
  */
 /**
-  * The request callback interface for performing HTTP requests. This matches the
-  * API for the {@link https://github.com/request/request#requestoptions-callback|
-  * request NPM module}. The SDK will implement a callback which meets this
-  * interface in order to handle the HTTP response.
-  * @callback requestCallback
-  * @param {Error} err The error if one occurred, else falsey.
-  * @param {Object} response The HTTP response which consists of
-  * <code>{statusCode: {Number}, headers: {Object}}</code>
-  * @param {Object} body The parsed HTTP response body.
-  */
+ * The request callback interface for performing HTTP requests. This matches the
+ * API for the {@link https://github.com/request/request#requestoptions-callback|
+ * request NPM module}. The SDK will implement a callback which meets this
+ * interface in order to handle the HTTP response.
+ * @callback requestCallback
+ * @param {Error} err The error if one occurred, else falsey.
+ * @param {Object} response The HTTP response which consists of
+ * <code>{statusCode: {Number}, headers: {Object}}</code>
+ * @param {Object} body The parsed HTTP response body.
+ */

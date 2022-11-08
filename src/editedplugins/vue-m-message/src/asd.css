@@ -96,7 +96,7 @@
 }
 .m-message-content .listPreview .invitedEvent span {
   display: block;
-  font-size: .8em;
+  font-size: 0.8em;
 }
 .m-message-content .listPreview .invitedEvent .txt {
   color: #707070;
@@ -178,7 +178,7 @@
   vertical-align: middle;
 }
 .m-message--button:hover {
-  color: #F56C6C;
+  color: #f56c6c;
 }
 .m-message--arrow-down.is-collapsed {
   transform: rotate(90deg);

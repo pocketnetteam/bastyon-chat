@@ -3,7 +3,7 @@
 var _interopRequireWildcard = require("@babel/runtime/helpers/interopRequireWildcard");
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
+  value: true,
 });
 exports.User = User;
 
@@ -70,7 +70,7 @@ function User(userId) {
   this.currentlyActive = false;
   this.events = {
     presence: null,
-    profile: null
+    profile: null,
   };
 
   this._updateModifiedTime();
@@ -100,15 +100,24 @@ User.prototype.setPresenceEvent = function (event) {
     eventsToFire.push("User.presence");
   }
 
-  if (event.getContent().avatar_url && event.getContent().avatar_url !== this.avatarUrl) {
+  if (
+    event.getContent().avatar_url &&
+    event.getContent().avatar_url !== this.avatarUrl
+  ) {
     eventsToFire.push("User.avatarUrl");
   }
 
-  if (event.getContent().displayname && event.getContent().displayname !== this.displayName) {
+  if (
+    event.getContent().displayname &&
+    event.getContent().displayname !== this.displayName
+  ) {
     eventsToFire.push("User.displayName");
   }
 
-  if (event.getContent().currently_active !== undefined && event.getContent().currently_active !== this.currentlyActive) {
+  if (
+    event.getContent().currently_active !== undefined &&
+    event.getContent().currently_active !== this.currentlyActive
+  ) {
     eventsToFire.push("User.currentlyActive");
   }
 
@@ -143,7 +152,6 @@ User.prototype.setPresenceEvent = function (event) {
  * @param {string} name The new display name.
  */
 
-
 User.prototype.setDisplayName = function (name) {
   const oldName = this.displayName;
 
@@ -163,7 +171,6 @@ User.prototype.setDisplayName = function (name) {
  * @param {string} name The new display name.
  */
 
-
 User.prototype.setRawDisplayName = function (name) {
   if (typeof name === "string") {
     this.rawDisplayName = name;
@@ -177,7 +184,6 @@ User.prototype.setRawDisplayName = function (name) {
  * @param {string} url The new avatar URL.
  */
 
-
 User.prototype.setAvatarUrl = function (url) {
   const oldUrl = this.avatarUrl;
   this.avatarUrl = url;
@@ -190,7 +196,6 @@ User.prototype.setAvatarUrl = function (url) {
  * Update the last modified time to the current time.
  */
 
-
 User.prototype._updateModifiedTime = function () {
   this._modified = Date.now();
 };
@@ -201,7 +206,6 @@ User.prototype._updateModifiedTime = function () {
  * @return {number} The timestamp
  */
 
-
 User.prototype.getLastModifiedTime = function () {
   return this._modified;
 };
@@ -210,7 +214,6 @@ User.prototype.getLastModifiedTime = function () {
  * It is *NOT* accurate if this.currentlyActive is true.
  * @return {number} The timestamp
  */
-
 
 User.prototype.getLastActiveTs = function () {
   return this.lastPresenceTs - this.lastActiveAgo;
@@ -221,9 +224,9 @@ User.prototype.getLastActiveTs = function () {
  * @fires module:client~MatrixClient#event:"User._unstable_statusMessage"
  */
 
-
 User.prototype._unstable_updateStatusMessage = function (event) {
-  if (!event.getContent()) this._unstable_statusMessage = "";else this._unstable_statusMessage = event.getContent()["status"];
+  if (!event.getContent()) this._unstable_statusMessage = "";
+  else this._unstable_statusMessage = event.getContent()["status"];
 
   this._updateModifiedTime();
 

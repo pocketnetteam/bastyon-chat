@@ -1,7 +1,7 @@
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
+  value: true,
 });
 exports.IllegalMethod = void 0;
 
@@ -47,7 +47,6 @@ class IllegalMethod extends _Base.VerificationBase {
   async _doVerification() {
     throw new Error("Verification is not possible with this method");
   }
-
 }
 
 exports.IllegalMethod = IllegalMethod;

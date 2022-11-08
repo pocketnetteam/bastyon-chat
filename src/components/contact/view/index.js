@@ -1,31 +1,25 @@
-import { mapState } from 'vuex';
+import { mapState } from "vuex";
 
 export default {
-    name: 'contactView',
-    props: {
-        contact : Object
-    },
+  name: "contactView",
+  props: {
+    contact: Object,
+  },
 
-    data : function(){
+  data: function () {
+    return {
+      loading: false,
+    };
+  },
 
-        return {
-            loading : false
-        }
+  created: () => {},
 
-    },
+  watch: {
+    //$route: 'getdata'
+  },
+  computed: mapState({
+    auth: (state) => state.auth,
+  }),
 
-    created : () => {
-
-    },
-
-    watch: {
-        //$route: 'getdata'
-    },
-    computed: mapState({
-        auth : state => state.auth,
-    }),
-
-    methods : {
-        
-    },
-}
+  methods: {},
+};

@@ -1,7 +1,7 @@
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
+  value: true,
 });
 exports.VerificationBase = exports.SwitchStartEventError = void 0;
 
@@ -45,7 +45,6 @@ class SwitchStartEventError extends Error {
     super();
     this.startEvent = startEvent;
   }
-
 }
 
 exports.SwitchStartEventError = SwitchStartEventError;
@@ -101,11 +100,16 @@ class VerificationBase extends _events.EventEmitter {
 
     const sender = this.startEvent.getSender();
     const content = this.startEvent.getContent();
-    return sender === this._baseApis.getUserId() && content.from_device === this._baseApis.getDeviceId();
+    return (
+      sender === this._baseApis.getUserId() &&
+      content.from_device === this._baseApis.getDeviceId()
+    );
   }
 
   _resetTimer() {
-    _logger.logger.info("Refreshing/starting the verification transaction timeout timer");
+    _logger.logger.info(
+      "Refreshing/starting the verification transaction timeout timer"
+    );
 
     if (this._transactionTimeoutTimer !== null) {
       clearTimeout(this._transactionTimeoutTimer);
@@ -155,9 +159,12 @@ class VerificationBase extends _events.EventEmitter {
 
   switchStartEvent(event) {
     if (this.canSwitchStartEvent(event)) {
-      _logger.logger.log("Verification Base: switching verification start event", {
-        restartingFlow: !!this._rejectEvent
-      });
+      _logger.logger.log(
+        "Verification Base: switching verification start event",
+        {
+          restartingFlow: !!this._rejectEvent,
+        }
+      );
 
       if (this._rejectEvent) {
         const reject = this._rejectEvent;
@@ -189,18 +196,24 @@ class VerificationBase extends _events.EventEmitter {
 
       if (reject) {
         const content = e.getContent();
-        const {
-          reason,
-          code
-        } = content;
-        reject(new Error(`Other side cancelled verification ` + `because ${reason} (${code})`));
+        const { reason, code } = content;
+        reject(
+          new Error(
+            `Other side cancelled verification ` + `because ${reason} (${code})`
+          )
+        );
       }
     } else if (this._expectedEvent) {
       // only cancel if there is an event expected.
       // if there is no event expected, it means verify() wasn't called
       // and we're just replaying the timeline events when syncing
       // after a refresh when the events haven't been stored in the cache yet.
-      const exception = new Error("Unexpected message: expecting " + this._expectedEvent + " but got " + e.getType());
+      const exception = new Error(
+        "Unexpected message: expecting " +
+          this._expectedEvent +
+          " but got " +
+          e.getType()
+      );
       this._expectedEvent = undefined;
 
       if (this._rejectEvent) {
@@ -216,19 +229,21 @@ class VerificationBase extends _events.EventEmitter {
   done() {
     this._endTimer(); // always kill the activity timer
 
-
     if (!this._done) {
       this.request.onVerifierFinished();
 
       this._resolve();
 
-      return (0, _CrossSigning.requestKeysDuringVerification)(this._baseApis, this.userId, this.deviceId);
+      return (0, _CrossSigning.requestKeysDuringVerification)(
+        this._baseApis,
+        this.userId,
+        this.deviceId
+      );
     }
   }
 
   cancel(e) {
     this._endTimer(); // always kill the activity timer
-
 
     if (!this._done) {
       this.cancelled = true;
@@ -249,20 +264,21 @@ class VerificationBase extends _events.EventEmitter {
 
             if (e.getType() === "m.key.verification.cancel") {
               content.code = content.code || "m.unknown";
-              content.reason = content.reason || content.body || "Unknown reason";
+              content.reason =
+                content.reason || content.body || "Unknown reason";
 
               this._send("m.key.verification.cancel", content);
             } else {
               this._send("m.key.verification.cancel", {
                 code: "m.unknown",
-                reason: content.body || "Unknown reason"
+                reason: content.body || "Unknown reason",
               });
             }
           }
         } else {
           this._send("m.key.verification.cancel", {
             code: "m.unknown",
-            reason: e.toString()
+            reason: e.toString(),
           });
         }
       }
@@ -278,8 +294,7 @@ class VerificationBase extends _events.EventEmitter {
       } // Also emit a 'cancel' event that the app can listen for to detect cancellation
       // before calling verify()
 
-
-      this.emit('cancel', e);
+      this.emit("cancel", e);
     }
   }
   /**
@@ -288,7 +303,6 @@ class VerificationBase extends _events.EventEmitter {
    * @returns {Promise} Promise which resolves when the verification has
    *     completed.
    */
-
 
   verify() {
     if (this._promise) return this._promise;
@@ -315,8 +329,10 @@ class VerificationBase extends _events.EventEmitter {
 
       this._resetTimer(); // restart the timeout
 
-
-      Promise.resolve(this._doVerification()).then(this.done.bind(this), this.cancel.bind(this));
+      Promise.resolve(this._doVerification()).then(
+        this.done.bind(this),
+        this.cancel.bind(this)
+      );
     }
 
     return this._promise;
@@ -329,7 +345,7 @@ class VerificationBase extends _events.EventEmitter {
     const verifiedDevices = [];
 
     for (const [keyId, keyInfo] of Object.entries(keys)) {
-      const deviceId = keyId.split(':', 2)[1];
+      const deviceId = keyId.split(":", 2)[1];
 
       const device = this._baseApis.getStoredDevice(userId, deviceId);
 
@@ -337,37 +353,49 @@ class VerificationBase extends _events.EventEmitter {
         await verifier(keyId, device, keyInfo);
         verifiedDevices.push(deviceId);
       } else {
-        const crossSigningInfo = this._baseApis._crypto._deviceList.getStoredCrossSigningForUser(userId);
+        const crossSigningInfo =
+          this._baseApis._crypto._deviceList.getStoredCrossSigningForUser(
+            userId
+          );
 
         if (crossSigningInfo && crossSigningInfo.getId() === deviceId) {
-          await verifier(keyId, _deviceinfo.DeviceInfo.fromStorage({
-            keys: {
-              [keyId]: deviceId
-            }
-          }, deviceId), keyInfo);
+          await verifier(
+            keyId,
+            _deviceinfo.DeviceInfo.fromStorage(
+              {
+                keys: {
+                  [keyId]: deviceId,
+                },
+              },
+              deviceId
+            ),
+            keyInfo
+          );
           verifiedDevices.push(deviceId);
         } else {
-          _logger.logger.warn(`verification: Could not find device ${deviceId} to verify`);
+          _logger.logger.warn(
+            `verification: Could not find device ${deviceId} to verify`
+          );
         }
       }
     } // if none of the keys could be verified, then error because the app
     // should be informed about that
 
-
     if (!verifiedDevices.length) {
       throw new Error("No devices could be verified");
     }
 
-    _logger.logger.info("Verification completed! Marking devices verified: ", verifiedDevices); // TODO: There should probably be a batch version of this, otherwise it's going
+    _logger.logger.info(
+      "Verification completed! Marking devices verified: ",
+      verifiedDevices
+    ); // TODO: There should probably be a batch version of this, otherwise it's going
     // to upload each signature in a separate API call which is silly because the
     // API supports as many signatures as you like.
-
 
     for (const deviceId of verifiedDevices) {
       await this._baseApis.setDeviceVerified(userId, deviceId);
     }
   }
-
 }
 
 exports.VerificationBase = VerificationBase;

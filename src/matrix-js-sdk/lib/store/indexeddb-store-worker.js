@@ -1,7 +1,7 @@
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
+  value: true,
 });
 exports.IndexedDBStoreWorker = void 0;
 
@@ -59,112 +59,115 @@ class IndexedDBStoreWorker {
    * @param {Object} ev The message event
    */
 
-
   onMessage(ev) {
     const msg = ev.data;
     let prom;
 
     switch (msg.command) {
-      case '_setupWorker':
+      case "_setupWorker":
         this.backend = new _indexeddbLocalBackend.LocalIndexedDBStoreBackend( // this is the 'indexedDB' global (where global != window
-        // because it's a web worker and there is no window).
-        indexedDB, msg.args[0]);
+          // because it's a web worker and there is no window).
+          indexedDB,
+          msg.args[0]
+        );
         prom = Promise.resolve();
         break;
 
-      case 'connect':
+      case "connect":
         prom = this.backend.connect();
         break;
 
-      case 'isNewlyCreated':
+      case "isNewlyCreated":
         prom = this.backend.isNewlyCreated();
         break;
 
-      case 'clearDatabase':
-        prom = this.backend.clearDatabase().then(result => {
+      case "clearDatabase":
+        prom = this.backend.clearDatabase().then((result) => {
           // This returns special classes which can't be cloned
           // across to the main script, so don't try.
           return {};
         });
         break;
 
-      case 'getSavedSync':
+      case "getSavedSync":
         prom = this.backend.getSavedSync(false);
         break;
 
-      case 'setSyncData':
+      case "setSyncData":
         prom = this.backend.setSyncData(...msg.args);
         break;
 
-      case 'syncToDatabase':
+      case "syncToDatabase":
         prom = this.backend.syncToDatabase(...msg.args).then(() => {
           // This also returns IndexedDB events which are not cloneable
           return {};
         });
         break;
 
-      case 'getUserPresenceEvents':
+      case "getUserPresenceEvents":
         prom = this.backend.getUserPresenceEvents();
         break;
 
-      case 'getNextBatchToken':
+      case "getNextBatchToken":
         prom = this.backend.getNextBatchToken();
         break;
 
-      case 'getOutOfBandMembers':
+      case "getOutOfBandMembers":
         prom = this.backend.getOutOfBandMembers(msg.args[0]);
         break;
 
-      case 'clearOutOfBandMembers':
+      case "clearOutOfBandMembers":
         prom = this.backend.clearOutOfBandMembers(msg.args[0]);
         break;
 
-      case 'setOutOfBandMembers':
+      case "setOutOfBandMembers":
         prom = this.backend.setOutOfBandMembers(msg.args[0], msg.args[1]);
         break;
 
-      case 'getClientOptions':
+      case "getClientOptions":
         prom = this.backend.getClientOptions();
         break;
 
-      case 'storeClientOptions':
+      case "storeClientOptions":
         prom = this.backend.storeClientOptions(msg.args[0]);
         break;
     }
 
     if (prom === undefined) {
       this.postMessage({
-        command: 'cmd_fail',
+        command: "cmd_fail",
         seq: msg.seq,
         // Can't be an Error because they're not structured cloneable
-        error: "Unrecognised command"
+        error: "Unrecognised command",
       });
       return;
     }
 
-    prom.then(ret => {
-      this.postMessage.call(null, {
-        command: 'cmd_success',
-        seq: msg.seq,
-        result: ret
-      });
-    }, err => {
-      _logger.logger.error("Error running command: " + msg.command);
+    prom.then(
+      (ret) => {
+        this.postMessage.call(null, {
+          command: "cmd_success",
+          seq: msg.seq,
+          result: ret,
+        });
+      },
+      (err) => {
+        _logger.logger.error("Error running command: " + msg.command);
 
-      _logger.logger.error(err);
+        _logger.logger.error(err);
 
-      this.postMessage.call(null, {
-        command: 'cmd_fail',
-        seq: msg.seq,
-        // Just send a string because Error objects aren't cloneable
-        error: {
-          message: err.message,
-          name: err.name
-        }
-      });
-    });
+        this.postMessage.call(null, {
+          command: "cmd_fail",
+          seq: msg.seq,
+          // Just send a string because Error objects aren't cloneable
+          error: {
+            message: err.message,
+            name: err.name,
+          },
+        });
+      }
+    );
   }
-
 }
 
 exports.IndexedDBStoreWorker = IndexedDBStoreWorker;

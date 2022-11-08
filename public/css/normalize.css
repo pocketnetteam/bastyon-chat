@@ -166,11 +166,14 @@ textarea {
   margin: 0; /* 2 */
 }
 
-button, input, select, textarea{
-    background-color: transparent;
-    border-style: none;
-    color: inherit;
-    outline: none;
+button,
+input,
+select,
+textarea {
+  background-color: transparent;
+  border-style: none;
+  color: inherit;
+  outline: none;
 }
 
 /**
@@ -179,7 +182,8 @@ button, input, select, textarea{
  */
 
 button,
-input { /* 1 */
+input {
+  /* 1 */
   overflow: visible;
 }
 
@@ -189,7 +193,8 @@ input { /* 1 */
  */
 
 button,
-select { /* 1 */
+select {
+  /* 1 */
   text-transform: none;
 }
 

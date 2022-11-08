@@ -12,7 +12,11 @@
         >
           <i class="fas fa-times"></i>
         </div>
-        <div class="iconbutton" @click="gotoapp" v-if="!pocketnet && mobile && !share && !isLocalStorageChatAuth">
+        <div
+          class="iconbutton"
+          @click="gotoapp"
+          v-if="!pocketnet && mobile && !share && !isLocalStorageChatAuth"
+        >
           <i class="fas fa-angle-left"></i>
         </div>
       </template>
@@ -28,9 +32,12 @@
         <span v-if="share">{{ $t("caption.shareWith") }}</span>
       </template>
 
-      
-      <template v-slot:rightadd >
-        <div @click="gotona('settings')" v-if="!share && pocketnet" class="chatSettingsButton">
+      <template v-slot:rightadd>
+        <div
+          @click="gotona('settings')"
+          v-if="!share && pocketnet"
+          class="chatSettingsButton"
+        >
           <div class="iconbuttonsmall">
             <i class="fas fa-cog"></i>
           </div>

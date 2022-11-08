@@ -1,21 +1,27 @@
 <template>
-  <div class='main-wrapper' :class="{minimized, active}">
-
+  <div class="main-wrapper" :class="{ minimized, active }">
     <div class="chat-container" v-if="showChats">
       <ContactsContainer v-if="page === 'contacts'" />
       <ChatsContainer v-if="page === 'chats'" />
       <SettingsContainer v-if="page === 'settings'" />
       <FooterChat />
     </div>
-    <div v-if="showPage" class="chat-container-pages" :class="{minimized: minimized}">
+    <div
+      v-if="showPage"
+      class="chat-container-pages"
+      :class="{ minimized: minimized }"
+    >
       <vue-page-transition name="fade-in-right" v-if="!mobile">
-          <router-view></router-view>
+        <router-view></router-view>
       </vue-page-transition>
       <router-view v-else></router-view>
 
-      <gallery v-if="gallery" :images="gallery.images" :index="gallery.index" @close="closeGallery"/>
-
-
+      <gallery
+        v-if="gallery"
+        :images="gallery.images"
+        :index="gallery.index"
+        @close="closeGallery"
+      />
     </div>
     <div v-if="!showPage && !pocketnet" class="chat-container-pages-empty">
       <i class="fas fa-comments"></i>

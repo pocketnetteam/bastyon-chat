@@ -1,7 +1,6 @@
-
-import {mapActions, mapGetters, mapState} from 'vuex'
-import preview from '@/components/contacts/preview/index.vue'
-import ModalWindow from '@/components/utils/ModalWindow.vue'
+import { mapActions, mapGetters, mapState } from "vuex";
+import preview from "@/components/contacts/preview/index.vue";
+import ModalWindow from "@/components/utils/ModalWindow.vue";
 
 export default {
   name: "contactsList",
@@ -44,18 +43,16 @@ export default {
     },
 
     navigateToProfile(id, contact) {
-
-      if(this.mode == "Select"){
-        this.select(contact)
-      }
-      else{
+      if (this.mode == "Select") {
+        this.select(contact);
+      } else {
         this.$router.push({
-          path: '/contact',
+          path: "/contact",
           query: {
             ...this.$route.query,
             id: id,
           },
-        })
+        });
       }
     },
 

@@ -7,7 +7,7 @@
   max-width: 80%;
   flex-grow: 2;
 
-  .indicatorWrapper{
+  .indicatorWrapper {
     min-width: 20px;
     width: 20px;
     margin-right: 1em;
@@ -17,7 +17,6 @@
   }
 
   .indicator {
-    
     height: 6px;
     width: 6px;
     background: #ff033e;
@@ -45,13 +44,12 @@
     margin-right: 1em;
   }
   .graph {
-    margin : 0 auto;
+    margin: 0 auto;
     width: 100px;
     display: flex;
     justify-content: center;
     overflow: hidden;
     border-radius: 15px;
-      
   }
 }
 
@@ -68,7 +66,7 @@
   text-align: center;
   align-items: center;
 
-  span{
+  span {
     white-space: nowrap;
     font-size: 0.9em;
   }

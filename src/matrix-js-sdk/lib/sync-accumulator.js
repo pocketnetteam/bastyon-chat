@@ -1,7 +1,7 @@
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
+  value: true,
 });
 exports.SyncAccumulator = void 0;
 
@@ -56,11 +56,14 @@ class SyncAccumulator {
     opts = opts || {};
     opts.maxTimelineEntries = opts.maxTimelineEntries || 50;
     this.opts = opts;
-    this.accountData = {//$event_type: Object
+    this.accountData = {
+      //$event_type: Object
     };
-    this.inviteRooms = {//$roomId: { ... sync 'invite' json data ... }
+    this.inviteRooms = {
+      //$roomId: { ... sync 'invite' json data ... }
     };
-    this.joinRooms = {//$roomId: {
+    this.joinRooms = {
+      //$roomId: {
       //    _currentState: { $event_type: { $state_key: json } },
       //    _timeline: [
       //       { event: $event, token: null|token },
@@ -87,7 +90,7 @@ class SyncAccumulator {
     this.groups = {
       invite: {},
       join: {},
-      leave: {}
+      leave: {},
     };
   }
 
@@ -106,8 +109,7 @@ class SyncAccumulator {
       return;
     } // Clobbers based on event type.
 
-
-    syncResponse.account_data.events.forEach(e => {
+    syncResponse.account_data.events.forEach((e) => {
       this.accountData[e.type] = e;
     });
   }
@@ -117,27 +119,41 @@ class SyncAccumulator {
    * @param {boolean} fromDatabase True if the sync response is one saved to the database
    */
 
-
   _accumulateRooms(syncResponse, fromDatabase) {
     if (!syncResponse.rooms) {
       return;
     }
 
     if (syncResponse.rooms.invite) {
-      Object.keys(syncResponse.rooms.invite).forEach(roomId => {
-        this._accumulateRoom(roomId, "invite", syncResponse.rooms.invite[roomId], fromDatabase);
+      Object.keys(syncResponse.rooms.invite).forEach((roomId) => {
+        this._accumulateRoom(
+          roomId,
+          "invite",
+          syncResponse.rooms.invite[roomId],
+          fromDatabase
+        );
       });
     }
 
     if (syncResponse.rooms.join) {
-      Object.keys(syncResponse.rooms.join).forEach(roomId => {
-        this._accumulateRoom(roomId, "join", syncResponse.rooms.join[roomId], fromDatabase);
+      Object.keys(syncResponse.rooms.join).forEach((roomId) => {
+        this._accumulateRoom(
+          roomId,
+          "join",
+          syncResponse.rooms.join[roomId],
+          fromDatabase
+        );
       });
     }
 
     if (syncResponse.rooms.leave) {
-      Object.keys(syncResponse.rooms.leave).forEach(roomId => {
-        this._accumulateRoom(roomId, "leave", syncResponse.rooms.leave[roomId], fromDatabase);
+      Object.keys(syncResponse.rooms.leave).forEach((roomId) => {
+        this._accumulateRoom(
+          roomId,
+          "leave",
+          syncResponse.rooms.leave[roomId],
+          fromDatabase
+        );
       });
     }
   }
@@ -170,7 +186,6 @@ class SyncAccumulator {
           delete this.inviteRooms[roomId];
         } // (3)
 
-
         this._accumulateJoinState(roomId, data, fromDatabase);
 
         break;
@@ -188,7 +203,6 @@ class SyncAccumulator {
 
       default:
         _logger.logger.error("Unknown cateogory: ", category);
-
     }
   }
 
@@ -200,16 +214,15 @@ class SyncAccumulator {
 
     if (!this.inviteRooms[roomId]) {
       this.inviteRooms[roomId] = {
-        invite_state: data.invite_state
+        invite_state: data.invite_state,
       };
       return;
     } // accumulate extra keys for invite->invite transitions
     // clobber based on event type / state key
     // We expect invite_state to be small, so just loop over the events
 
-
     const currentData = this.inviteRooms[roomId];
-    data.invite_state.events.forEach(e => {
+    data.invite_state.events.forEach((e) => {
       let hasAdded = false;
 
       for (let i = 0; i < currentData.invite_state.events.length; i++) {
@@ -227,7 +240,6 @@ class SyncAccumulator {
       }
     });
   } // Accumulate timeline and state events in a room.
-
 
   _accumulateJoinState(roomId, data, fromDatabase) {
     // We expect this function to be called a lot (every /sync) so we want
@@ -271,7 +283,7 @@ class SyncAccumulator {
         _accountData: Object.create(null),
         _unreadNotifications: {},
         _summary: {},
-        _readReceipts: {}
+        _readReceipts: {},
       };
     }
 
@@ -279,11 +291,10 @@ class SyncAccumulator {
 
     if (data.account_data && data.account_data.events) {
       // clobber based on type
-      data.account_data.events.forEach(e => {
+      data.account_data.events.forEach((e) => {
         currentData._accountData[e.type] = e;
       });
     } // these probably clobber, spec is unclear.
-
 
     if (data.unread_notifications) {
       currentData._unreadNotifications = data.unread_notifications;
@@ -301,7 +312,7 @@ class SyncAccumulator {
     }
 
     if (data.ephemeral && data.ephemeral.events) {
-      data.ephemeral.events.forEach(e => {
+      data.ephemeral.events.forEach((e) => {
         // We purposefully do not persist m.typing events.
         // Technically you could refresh a browser before the timer on a
         // typing event is up, so it'll look like you aren't typing when
@@ -325,24 +336,22 @@ class SyncAccumulator {
         // of a hassle to work with. We'll inflate this back out when
         // getJSON() is called.
 
-
-        Object.keys(e.content).forEach(eventId => {
+        Object.keys(e.content).forEach((eventId) => {
           if (!e.content[eventId]["m.read"]) {
             return;
           }
 
-          Object.keys(e.content[eventId]["m.read"]).forEach(userId => {
+          Object.keys(e.content[eventId]["m.read"]).forEach((userId) => {
             // clobber on user ID
             currentData._readReceipts[userId] = {
               data: e.content[eventId]["m.read"][userId],
-              eventId: eventId
+              eventId: eventId,
             };
           });
         });
       });
     } // if we got a limited sync, we need to remove all timeline entries or else
     // we will have gaps in the timeline.
-
 
     if (data.timeline && data.timeline.limited) {
       currentData._timeline = [];
@@ -351,9 +360,8 @@ class SyncAccumulator {
     // - State events under the 'state' key.
     // - State events in the 'timeline'.
 
-
     if (data.state && data.state.events) {
-      data.state.events.forEach(e => {
+      data.state.events.forEach((e) => {
         setState(currentData._currentState, e);
       });
     }
@@ -370,7 +378,10 @@ class SyncAccumulator {
           transformedEvent = Object.assign({}, e);
 
           if (transformedEvent.unsigned !== undefined) {
-            transformedEvent.unsigned = Object.assign({}, transformedEvent.unsigned);
+            transformedEvent.unsigned = Object.assign(
+              {},
+              transformedEvent.unsigned
+            );
           }
 
           const age = e.unsigned ? e.unsigned.age : e.age;
@@ -381,20 +392,23 @@ class SyncAccumulator {
 
         currentData._timeline.push({
           event: transformedEvent,
-          token: index === 0 ? data.timeline.prev_batch : null
+          token: index === 0 ? data.timeline.prev_batch : null,
         });
       });
     } // attempt to prune the timeline by jumping between events which have
     // pagination tokens.
 
-
     if (currentData._timeline.length > this.opts.maxTimelineEntries) {
-      const startIndex = currentData._timeline.length - this.opts.maxTimelineEntries;
+      const startIndex =
+        currentData._timeline.length - this.opts.maxTimelineEntries;
 
       for (let i = startIndex; i < currentData._timeline.length; i++) {
         if (currentData._timeline[i].token) {
           // keep all events after this, including this one
-          currentData._timeline = currentData._timeline.slice(i, currentData._timeline.length);
+          currentData._timeline = currentData._timeline.slice(
+            i,
+            currentData._timeline.length
+          );
           break;
         }
       }
@@ -405,33 +419,44 @@ class SyncAccumulator {
    * @param {Object} syncResponse the complete /sync JSON
    */
 
-
   _accumulateGroups(syncResponse) {
     if (!syncResponse.groups) {
       return;
     }
 
     if (syncResponse.groups.invite) {
-      Object.keys(syncResponse.groups.invite).forEach(groupId => {
-        this._accumulateGroup(groupId, "invite", syncResponse.groups.invite[groupId]);
+      Object.keys(syncResponse.groups.invite).forEach((groupId) => {
+        this._accumulateGroup(
+          groupId,
+          "invite",
+          syncResponse.groups.invite[groupId]
+        );
       });
     }
 
     if (syncResponse.groups.join) {
-      Object.keys(syncResponse.groups.join).forEach(groupId => {
-        this._accumulateGroup(groupId, "join", syncResponse.groups.join[groupId]);
+      Object.keys(syncResponse.groups.join).forEach((groupId) => {
+        this._accumulateGroup(
+          groupId,
+          "join",
+          syncResponse.groups.join[groupId]
+        );
       });
     }
 
     if (syncResponse.groups.leave) {
-      Object.keys(syncResponse.groups.leave).forEach(groupId => {
-        this._accumulateGroup(groupId, "leave", syncResponse.groups.leave[groupId]);
+      Object.keys(syncResponse.groups.leave).forEach((groupId) => {
+        this._accumulateGroup(
+          groupId,
+          "leave",
+          syncResponse.groups.leave[groupId]
+        );
       });
     }
   }
 
   _accumulateGroup(groupId, category, data) {
-    for (const cat of ['invite', 'join', 'leave']) {
+    for (const cat of ["invite", "join", "leave"]) {
       delete this.groups[cat][groupId];
     }
 
@@ -453,7 +478,6 @@ class SyncAccumulator {
    * a list of raw events which represent global account data.
    */
 
-
   getJSON(forDatabase) {
     const data = {
       join: {},
@@ -469,59 +493,60 @@ class SyncAccumulator {
       // it is unclear *when* we can safely remove the room from the DB.
       // Instead, we assume that if you're loading from the DB, you've
       // refreshed the page, which means you've seen the kick/ban already.
-      leave: {}
+      leave: {},
     };
-    Object.keys(this.inviteRooms).forEach(roomId => {
+    Object.keys(this.inviteRooms).forEach((roomId) => {
       data.invite[roomId] = this.inviteRooms[roomId];
     });
-    Object.keys(this.joinRooms).forEach(roomId => {
+    Object.keys(this.joinRooms).forEach((roomId) => {
       const roomData = this.joinRooms[roomId];
       const roomJson = {
         ephemeral: {
-          events: []
+          events: [],
         },
         account_data: {
-          events: []
+          events: [],
         },
         state: {
-          events: []
+          events: [],
         },
         timeline: {
           events: [],
-          prev_batch: null
+          prev_batch: null,
         },
         unread_notifications: roomData._unreadNotifications,
-        summary: roomData._summary
+        summary: roomData._summary,
       }; // Add account data
 
-      Object.keys(roomData._accountData).forEach(evType => {
+      Object.keys(roomData._accountData).forEach((evType) => {
         roomJson.account_data.events.push(roomData._accountData[evType]);
       }); // Add receipt data
 
       const receiptEvent = {
         type: "m.receipt",
         room_id: roomId,
-        content: {// $event_id: { "m.read": { $user_id: $json } }
-        }
+        content: {
+          // $event_id: { "m.read": { $user_id: $json } }
+        },
       };
-      Object.keys(roomData._readReceipts).forEach(userId => {
+      Object.keys(roomData._readReceipts).forEach((userId) => {
         const receiptData = roomData._readReceipts[userId];
 
         if (!receiptEvent.content[receiptData.eventId]) {
           receiptEvent.content[receiptData.eventId] = {
-            "m.read": {}
+            "m.read": {},
           };
         }
 
-        receiptEvent.content[receiptData.eventId]["m.read"][userId] = receiptData.data;
+        receiptEvent.content[receiptData.eventId]["m.read"][userId] =
+          receiptData.data;
       }); // add only if we have some receipt data
 
       if (Object.keys(receiptEvent.content).length > 0) {
         roomJson.ephemeral.events.push(receiptEvent);
       } // Add timeline data
 
-
-      roomData._timeline.forEach(msgData => {
+      roomData._timeline.forEach((msgData) => {
         if (!roomJson.timeline.prev_batch) {
           // the first event we add to the timeline MUST match up to
           // the prev_batch token.
@@ -546,7 +571,10 @@ class SyncAccumulator {
           transformedEvent = Object.assign({}, msgData.event);
 
           if (transformedEvent.unsigned !== undefined) {
-            transformedEvent.unsigned = Object.assign({}, transformedEvent.unsigned);
+            transformedEvent.unsigned = Object.assign(
+              {},
+              transformedEvent.unsigned
+            );
           }
 
           delete transformedEvent._localTs;
@@ -561,18 +589,19 @@ class SyncAccumulator {
       // by "reverse clobbering" from the end of the timeline to the start.
       // Convert maps back into arrays.
 
-
       const rollBackState = Object.create(null);
 
       for (let i = roomJson.timeline.events.length - 1; i >= 0; i--) {
         const timelineEvent = roomJson.timeline.events[i];
 
-        if (timelineEvent.state_key === null || timelineEvent.state_key === undefined) {
+        if (
+          timelineEvent.state_key === null ||
+          timelineEvent.state_key === undefined
+        ) {
           continue; // not a state event
         } // since we're going back in time, we need to use the previous
         // state value else we'll break causality. We don't have the
         // complete previous state event, so we need to create one.
-
 
         const prevStateEvent = (0, _utils.deepCopy)(timelineEvent);
 
@@ -589,8 +618,8 @@ class SyncAccumulator {
         setState(rollBackState, prevStateEvent);
       }
 
-      Object.keys(roomData._currentState).forEach(evType => {
-        Object.keys(roomData._currentState[evType]).forEach(stateKey => {
+      Object.keys(roomData._currentState).forEach((evType) => {
+        Object.keys(roomData._currentState[evType]).forEach((stateKey) => {
           let ev = roomData._currentState[evType][stateKey];
 
           if (rollBackState[evType] && rollBackState[evType][stateKey]) {
@@ -605,27 +634,30 @@ class SyncAccumulator {
     }); // Add account data
 
     const accData = [];
-    Object.keys(this.accountData).forEach(evType => {
+    Object.keys(this.accountData).forEach((evType) => {
       accData.push(this.accountData[evType]);
     });
     return {
       nextBatch: this.nextBatch,
       roomsData: data,
       groupsData: this.groups,
-      accountData: accData
+      accountData: accData,
     };
   }
 
   getNextBatchToken() {
     return this.nextBatch;
   }
-
 }
 
 exports.SyncAccumulator = SyncAccumulator;
 
 function setState(eventMap, event) {
-  if (event.state_key === null || event.state_key === undefined || !event.type) {
+  if (
+    event.state_key === null ||
+    event.state_key === undefined ||
+    !event.type
+  ) {
     return;
   }
 

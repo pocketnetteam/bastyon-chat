@@ -1,7 +1,6 @@
-
 :root {
   --overlay-bg: #1867c0;
-  --transition-duration: .35s;
+  --transition-duration: 0.35s;
 }
 
 .fade-enter-active[data-v-4c22b934],
@@ -15,17 +14,17 @@
   opacity: 0;
 }
 @keyframes fadeInDown {
-from {
+  from {
     transform: translate3d(0, -40px, 0);
-}
-to {
+  }
+  to {
     transform: translate3d(0, 0, 0);
     opacity: 1;
-}
+  }
 }
 .fade-in-down-leave-to[data-v-4c22b934] {
   opacity: 0;
-  transition: opacity .3s;
+  transition: opacity 0.3s;
 }
 .fade-in-down-enter[data-v-4c22b934] {
   opacity: 0;
@@ -33,22 +32,22 @@ to {
 }
 .fade-in-down-enter-to[data-v-4c22b934] {
   opacity: 0;
-  animation-duration: .7s;
+  animation-duration: 0.7s;
   animation-fill-mode: both;
   animation-name: fadeInDown;
 }
 @keyframes fadeInRight {
-from {
+  from {
     transform: translate3d(40px, 0, 0);
-}
-to {
+  }
+  to {
     transform: translate3d(0, 0, 0);
     opacity: 1;
-}
+  }
 }
 .fade-in-right-leave-to[data-v-4c22b934] {
   opacity: 0;
-  transition: opacity .3s;
+  transition: opacity 0.3s;
 }
 .fade-in-right-enter[data-v-4c22b934] {
   opacity: 0;
@@ -56,22 +55,22 @@ to {
 }
 .fade-in-right-enter-to[data-v-4c22b934] {
   opacity: 0;
-  animation-duration: .7s;
+  animation-duration: 0.7s;
   animation-fill-mode: both;
   animation-name: fadeInRight;
 }
 @keyframes fadeInUp {
-from {
+  from {
     transform: translate3d(0, 40px, 0);
-}
-to {
+  }
+  to {
     transform: translate3d(0, 0, 0);
     opacity: 1;
-}
+  }
 }
 .fade-in-up-leave-to[data-v-4c22b934] {
   opacity: 0;
-  transition: opacity .3s;
+  transition: opacity 0.3s;
 }
 .fade-in-up-enter[data-v-4c22b934] {
   opacity: 0;
@@ -79,22 +78,22 @@ to {
 }
 .fade-in-up-enter-to[data-v-4c22b934] {
   opacity: 0;
-  animation-duration: .7s;
+  animation-duration: 0.7s;
   animation-fill-mode: both;
   animation-name: fadeInUp;
 }
 @keyframes fadeInLeft {
-from {
+  from {
     transform: translate3d(-40px, 0, 0);
-}
-to {
+  }
+  to {
     transform: translate3d(0, 0, 0);
     opacity: 1;
-}
+  }
 }
 .fade-in-left-leave-to[data-v-4c22b934] {
   opacity: 0;
-  transition: opacity .3s;
+  transition: opacity 0.3s;
 }
 .fade-in-left-enter[data-v-4c22b934] {
   opacity: 0;
@@ -102,7 +101,7 @@ to {
 }
 .fade-in-left-enter-to[data-v-4c22b934] {
   opacity: 0;
-  animation-duration: .7s;
+  animation-duration: 0.7s;
   animation-fill-mode: both;
   animation-name: fadeInLeft;
 }
@@ -227,7 +226,7 @@ to {
   height: 100vh;
   width: 0;
   background: var(--overlay-bg);
-  transition-duration: .35s;
+  transition-duration: 0.35s;
 }
 .overlay-left-enter ~ .overlay-left[data-v-4c22b934],
 .overlay-left-leave-to ~ .overlay-left[data-v-4c22b934] {
@@ -245,7 +244,7 @@ to {
 }
 .overlay-left-enter-active[data-v-4c22b934],
 .overlay-left-leave-active[data-v-4c22b934] {
-  transition-duration: .35s;
+  transition-duration: 0.35s;
 }
 .overlay-up-full-enter ~ .overlay-bottom[data-v-4c22b934] {
   height: 100vh;

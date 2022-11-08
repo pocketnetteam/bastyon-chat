@@ -1,7 +1,11 @@
 <template>
   <div class="m-message" v-show="visible">
-    <div class="m-message-icons" @click="handleClick" v-if="iconImg || $slots.icon">
-      <img :src="iconImg" v-if="iconImg" class="m-message--icon" alt="Img"/>
+    <div
+      class="m-message-icons"
+      @click="handleClick"
+      v-if="iconImg || $slots.icon"
+    >
+      <img :src="iconImg" v-if="iconImg" class="m-message--icon" alt="Img" />
       <slot name="icon" v-else></slot>
     </div>
     <div class="m-message-content" @click="handleClick">
@@ -11,10 +15,10 @@
         </slot>
       </div>
 
-      <event :event="event" :chat="chat" :preview="true" v-if="event && chat"/>
+      <event :event="event" :chat="chat" :preview="true" v-if="event && chat" />
       <div class="m-message--body" v-else>
         <slot name="message">
-<!--          {{ message }}-->
+          <!--          {{ message }}-->
         </slot>
       </div>
       <!--  <listPreview :event="event" :decryptEvent="decrypt" :chat="chat" :notificationPreview="true" />-->
@@ -23,9 +27,8 @@
 </template>
 
 <script>
-
 export default {
-  name: 'm-mmessage',
+  name: "m-mmessage",
   props: {
     event: event,
     iconImg: String,
@@ -37,40 +40,36 @@ export default {
     supportHTML: Boolean, // content support html
     isCollapsed: {
       type: Boolean,
-      default: true
-    }
+      default: true,
+    },
   },
   data() {
     return {
       visible: true,
       collapsed: this.isCollapsed,
-    }
+    };
   },
-  
+
   components: {
-    'event': () => import('@/components/events/event/index.vue')
+    event: () => import("@/components/events/event/index.vue"),
   },
   methods: {
-    
     triggerCollapse() {
-      this.collapsed = !this.collapsed
+      this.collapsed = !this.collapsed;
     },
     handleClick: function () {
-      if (typeof this.clickHandler === 'function') this.clickHandler(this.close)
-
+      if (typeof this.clickHandler === "function")
+        this.clickHandler(this.close);
     },
     close() {
-      this.visible = false
+      this.visible = false;
     },
     handleClose() {
-      if (typeof this.closeHandler === 'function') this.closeHandler(this.close)
-      else this.close()
-    }
+      if (typeof this.closeHandler === "function")
+        this.closeHandler(this.close);
+      else this.close();
+    },
   },
-  mounted() {
-
-  }
-
-
-}
+  mounted() {},
+};
 </script>

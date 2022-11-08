@@ -1,26 +1,22 @@
-import { mapState } from 'vuex';
+import { mapState } from "vuex";
 
 export default {
-    name: 'eventsCommon',
-    props: {
-        event: Object,
-        preview: Boolean,
-        userinfo : Object
-    },
+  name: "eventsCommon",
+  props: {
+    event: Object,
+    preview: Boolean,
+    userinfo: Object,
+  },
 
-    data : function(){
+  data: function () {
+    return {
+      loading: false,
+    };
+  },
 
-        return {
-            loading : false
-        }
+  computed: mapState({
+    auth: (state) => state.auth,
+  }),
 
-    },
-
-    computed: mapState({
-        auth : state => state.auth,
-    }),
-
-    methods : {
-        
-    },
-}
+  methods: {},
+};

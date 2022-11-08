@@ -3,7 +3,7 @@
 var _interopRequireWildcard = require("@babel/runtime/helpers/interopRequireWildcard");
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
+  value: true,
 });
 exports.RoomMember = RoomMember;
 
@@ -68,7 +68,7 @@ function RoomMember(roomId, userId) {
   this.user = null;
   this.membership = null;
   this.events = {
-    member: null
+    member: null,
   };
   this._isOutOfBand = false;
 
@@ -89,7 +89,6 @@ RoomMember.prototype.markOutOfBand = function () {
  * from the sync state so it available across browser sessions.
  */
 
-
 RoomMember.prototype.isOutOfBand = function () {
   return this._isOutOfBand;
 };
@@ -103,7 +102,6 @@ RoomMember.prototype.isOutOfBand = function () {
  * @fires module:client~MatrixClient#event:"RoomMember.membership"
  */
 
-
 RoomMember.prototype.setMembershipEvent = function (event, roomState) {
   if (event.getType() !== "m.room.member") {
     return;
@@ -114,8 +112,13 @@ RoomMember.prototype.setMembershipEvent = function (event, roomState) {
   const oldMembership = this.membership;
   this.membership = event.getDirectionalContent().membership;
   const oldName = this.name;
-  this.name = calculateDisplayName(this.userId, event.getDirectionalContent().displayname, roomState);
-  this.rawDisplayName = event.getDirectionalContent().displayname || this.userId;
+  this.name = calculateDisplayName(
+    this.userId,
+    event.getDirectionalContent().displayname,
+    roomState
+  );
+  this.rawDisplayName =
+    event.getDirectionalContent().displayname || this.userId;
 
   if (oldMembership !== this.membership) {
     this._updateModifiedTime();
@@ -136,7 +139,6 @@ RoomMember.prototype.setMembershipEvent = function (event, roomState) {
  * event
  * @fires module:client~MatrixClient#event:"RoomMember.powerLevel"
  */
-
 
 RoomMember.prototype.setPowerLevelEvent = function (powerLevelEvent) {
   if (powerLevelEvent.getType() !== "m.room.power_levels") {
@@ -162,12 +164,14 @@ RoomMember.prototype.setPowerLevelEvent = function (powerLevelEvent) {
   this.powerLevelNorm = 0;
 
   if (maxLevel > 0) {
-    this.powerLevelNorm = this.powerLevel * 100 / maxLevel;
+    this.powerLevelNorm = (this.powerLevel * 100) / maxLevel;
   } // emit for changes in powerLevelNorm as well (since the app will need to
   // redraw everyone's level if the max has changed)
 
-
-  if (oldPowerLevel !== this.powerLevel || oldPowerLevelNorm !== this.powerLevelNorm) {
+  if (
+    oldPowerLevel !== this.powerLevel ||
+    oldPowerLevelNorm !== this.powerLevelNorm
+  ) {
     this._updateModifiedTime();
 
     this.emit("RoomMember.powerLevel", powerLevelEvent, this);
@@ -179,7 +183,6 @@ RoomMember.prototype.setPowerLevelEvent = function (powerLevelEvent) {
  * @param {MatrixEvent} event The typing event
  * @fires module:client~MatrixClient#event:"RoomMember.typing"
  */
-
 
 RoomMember.prototype.setTypingEvent = function (event) {
   if (event.getType() !== "m.typing") {
@@ -209,7 +212,6 @@ RoomMember.prototype.setTypingEvent = function (event) {
  * Update the last modified time to the current time.
  */
 
-
 RoomMember.prototype._updateModifiedTime = function () {
   this._modified = Date.now();
 };
@@ -220,20 +222,21 @@ RoomMember.prototype._updateModifiedTime = function () {
  * @return {number} The timestamp
  */
 
-
 RoomMember.prototype.getLastModifiedTime = function () {
   return this._modified;
 };
 
 RoomMember.prototype.isKicked = function () {
-  return this.membership === "leave" && this.events.member.getSender() !== this.events.member.getStateKey();
+  return (
+    this.membership === "leave" &&
+    this.events.member.getSender() !== this.events.member.getStateKey()
+  );
 };
 /**
  * If this member was invited with the is_direct flag set, return
  * the user that invited this member
  * @return {string} user id of the inviter
  */
-
 
 RoomMember.prototype.getDMInviter = function () {
   // when not available because that room state hasn't been loaded in,
@@ -277,8 +280,14 @@ RoomMember.prototype.getDMInviter = function () {
  * @return {?string} the avatar URL or null.
  */
 
-
-RoomMember.prototype.getAvatarUrl = function (baseUrl, width, height, resizeMethod, allowDefault, allowDirectLinks) {
+RoomMember.prototype.getAvatarUrl = function (
+  baseUrl,
+  width,
+  height,
+  resizeMethod,
+  allowDefault,
+  allowDirectLinks
+) {
   if (allowDefault === undefined) {
     allowDefault = true;
   }
@@ -289,7 +298,14 @@ RoomMember.prototype.getAvatarUrl = function (baseUrl, width, height, resizeMeth
     return null;
   }
 
-  const httpUrl = (0, _contentRepo.getHttpUriForMxc)(baseUrl, rawUrl, width, height, resizeMethod, allowDirectLinks);
+  const httpUrl = (0, _contentRepo.getHttpUriForMxc)(
+    baseUrl,
+    rawUrl,
+    width,
+    height,
+    resizeMethod,
+    allowDirectLinks
+  );
 
   if (httpUrl) {
     return httpUrl;
@@ -301,7 +317,6 @@ RoomMember.prototype.getAvatarUrl = function (baseUrl, width, height, resizeMeth
  * get the mxc avatar url, either from a state event, or from a lazily loaded member
  * @return {string} the mxc avatar url
  */
-
 
 RoomMember.prototype.getMxcAvatarUrl = function () {
   if (this.events.member) {
@@ -322,7 +337,6 @@ function calculateDisplayName(selfUserId, displayName, roomState) {
   } // First check if the displayname is something we consider truthy
   // after stripping it of zero width characters and padding spaces
 
-
   if (!utils.removeHiddenChars(displayName)) {
     return selfUserId;
   }
@@ -332,7 +346,6 @@ function calculateDisplayName(selfUserId, displayName, roomState) {
   } // Next check if the name contains something that look like a mxid
   // If it does, it may be someone trying to impersonate someone else
   // Show full mxid in this case
-
 
   let disambiguate = MXID_PATTERN.test(displayName);
 
@@ -347,7 +360,7 @@ function calculateDisplayName(selfUserId, displayName, roomState) {
     // Also show mxid if there are other people with the same or similar
     // displayname, after hidden character removal.
     const userIds = roomState.getUserIdsWithDisplayName(displayName);
-    disambiguate = userIds.some(u => u !== selfUserId);
+    disambiguate = userIds.some((u) => u !== selfUserId);
   }
 
   if (disambiguate) {

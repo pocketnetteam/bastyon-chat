@@ -1,19 +1,17 @@
 <template>
-    <div class="contacts-preview">
-      <div class="previewWrapper" :style="isUser">
-        <div class="iconWrapper">
-          <userpic :userinfo="contact" :mode="'Contacts'"/>
-        </div>
-        <div class="infoWrapper">
-          <div class="summaryLine">
-
-            <div class="caption">
-              <span>{{ contact.name }}</span>
-            </div>
-
+  <div class="contacts-preview">
+    <div class="previewWrapper" :style="isUser">
+      <div class="iconWrapper">
+        <userpic :userinfo="contact" :mode="'Contacts'" />
+      </div>
+      <div class="infoWrapper">
+        <div class="summaryLine">
+          <div class="caption">
+            <span>{{ contact.name }}</span>
           </div>
         </div>
       </div>
+    </div>
   </div>
 </template>
 
@@ -22,24 +20,3 @@
 
 <!-- THEMES BEGIN -->
 <!-- THEMES END -->
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

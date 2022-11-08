@@ -1,32 +1,29 @@
-import {mapState} from 'vuex';
-import info from "@/components/chatInfo/info/index.vue"
+import { mapState } from "vuex";
+import info from "@/components/chatInfo/info/index.vue";
 
 export default {
-  name: 'chatInfo',
+  name: "chatInfo",
 
   components: {
-    info
+    info,
   },
   props: {
     chat: {},
-    events: {}
+    events: {},
   },
 
   data: function () {
-    return {}
-
+    return {};
   },
 
-  created() {
-
-  },
+  created() {},
 
   mounted() {
-    this.$store.commit('blockactive', {value : true, item : 'chatinfo'})
+    this.$store.commit("blockactive", { value: true, item: "chatinfo" });
   },
 
   destroyed() {
-    this.$store.commit('blockactive', {value : false, item : 'chatinfo'})
+    this.$store.commit("blockactive", { value: false, item: "chatinfo" });
   },
 
   watch: {
@@ -34,16 +31,16 @@ export default {
   },
 
   computed: mapState({
-    pocketnet: state => state.pocketnet,
-    minimized: state => state.minimized,
-    active: state => state.active,
-    auth: state => state.auth,
+    pocketnet: (state) => state.pocketnet,
+    minimized: (state) => state.minimized,
+    active: (state) => state.active,
+    auth: (state) => state.auth,
     m_chat: function () {
       if (this.chat && this.chat.roomId) {
-        var m_chat = this.core.mtrx.client.getRoom(this.chat.roomId)
+        var m_chat = this.core.mtrx.client.getRoom(this.chat.roomId);
 
-        return m_chat || {}
+        return m_chat || {};
       }
     },
   }),
-}
+};

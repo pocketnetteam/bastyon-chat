@@ -1,7 +1,7 @@
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
+  value: true,
 });
 exports.RoomList = void 0;
 
@@ -40,11 +40,15 @@ class RoomList {
   }
 
   async init() {
-    await this._cryptoStore.doTxn('readwrite', [_indexeddbCryptoStore.IndexedDBCryptoStore.STORE_ROOMS], txn => {
-      this._cryptoStore.getEndToEndRooms(txn, result => {
-        this._roomEncryption = result;
-      });
-    });
+    await this._cryptoStore.doTxn(
+      "readwrite",
+      [_indexeddbCryptoStore.IndexedDBCryptoStore.STORE_ROOMS],
+      (txn) => {
+        this._cryptoStore.getEndToEndRooms(txn, (result) => {
+          this._roomEncryption = result;
+        });
+      }
+    );
   }
 
   getRoomEncryption(roomId) {
@@ -60,11 +64,14 @@ class RoomList {
     // as it prevents the Crypto::setRoomEncryption from calling
     // this twice for consecutive m.room.encryption events
     this._roomEncryption[roomId] = roomInfo;
-    await this._cryptoStore.doTxn('readwrite', [_indexeddbCryptoStore.IndexedDBCryptoStore.STORE_ROOMS], txn => {
-      this._cryptoStore.storeEndToEndRoom(roomId, roomInfo, txn);
-    });
+    await this._cryptoStore.doTxn(
+      "readwrite",
+      [_indexeddbCryptoStore.IndexedDBCryptoStore.STORE_ROOMS],
+      (txn) => {
+        this._cryptoStore.storeEndToEndRoom(roomId, roomInfo, txn);
+      }
+    );
   }
-
 }
 
 exports.RoomList = RoomList;

@@ -30,40 +30,40 @@ export default {
     },
 
     query: function () {
-      return this.$route.query
+      return this.$route.query;
     },
 
-    activesettings : function(){
-      return this.query.page == 'settings'
+    activesettings: function () {
+      return this.query.page == "settings";
     },
 
-    activecontacts : function(){
-      return this.query.page == 'contacts'
+    activecontacts: function () {
+      return this.query.page == "contacts";
     },
 
-    activechats : function(){
-      return this.query.page === undefined || this.query.page == 'chats'
+    activechats: function () {
+      return this.query.page === undefined || this.query.page == "chats";
     },
 
     mobile: function () {
       return this.$store.state.mobile;
     },
   }),
-  methods : {
-    gotona(r){
+  methods: {
+    gotona(r) {
       this.$router.push({
         path: this.$router.path,
         query: {
           ...this.$route.query,
           page: r,
         },
-      })
-      this.$store.commit('active', true)
-      this.$store.commit('setiteraction', true)
+      });
+      this.$store.commit("active", true);
+      this.$store.commit("setiteraction", true);
     },
 
-    movefromchat : function(){
-      if(this.core.backtoapp) this.core.backtoapp()
-    }
-  }
-}
+    movefromchat: function () {
+      if (this.core.backtoapp) this.core.backtoapp();
+    },
+  },
+};

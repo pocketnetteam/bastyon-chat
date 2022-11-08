@@ -3,7 +3,7 @@
 var _interopRequireWildcard = require("@babel/runtime/helpers/interopRequireWildcard");
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
+  value: true,
 });
 exports.IndexedDBCryptoStore = void 0;
 
@@ -13,11 +13,15 @@ var _localStorageCryptoStore = require("./localStorage-crypto-store");
 
 var _memoryCryptoStore = require("./memory-crypto-store");
 
-var IndexedDBCryptoStoreBackend = _interopRequireWildcard(require("./indexeddb-crypto-store-backend"));
+var IndexedDBCryptoStoreBackend = _interopRequireWildcard(
+  require("./indexeddb-crypto-store-backend")
+);
 
 var _errors = require("../../errors");
 
-var IndexedDBHelpers = _interopRequireWildcard(require("../../indexeddb-helpers"));
+var IndexedDBHelpers = _interopRequireWildcard(
+  require("../../indexeddb-helpers")
+);
 
 /*
 Copyright 2017 Vector Creations Ltd
@@ -76,7 +80,6 @@ class IndexedDBCryptoStore {
    * or a MemoryCryptoStore
    */
 
-
   startup() {
     if (this._backendPromise) {
       return this._backendPromise;
@@ -84,67 +87,92 @@ class IndexedDBCryptoStore {
 
     this._backendPromise = new Promise((resolve, reject) => {
       if (!this._indexedDB) {
-        reject(new Error('no indexeddb support available'));
+        reject(new Error("no indexeddb support available"));
         return;
       }
 
       _logger.logger.log(`connecting to indexeddb ${this._dbName}`);
 
-      const req = this._indexedDB.open(this._dbName, IndexedDBCryptoStoreBackend.VERSION);
+      const req = this._indexedDB.open(
+        this._dbName,
+        IndexedDBCryptoStoreBackend.VERSION
+      );
 
-      req.onupgradeneeded = ev => {
+      req.onupgradeneeded = (ev) => {
         const db = ev.target.result;
         const oldVersion = ev.oldVersion;
         IndexedDBCryptoStoreBackend.upgradeDatabase(db, oldVersion);
       };
 
       req.onblocked = () => {
-        _logger.logger.log(`can't yet open IndexedDBCryptoStore because it is open elsewhere`);
+        _logger.logger.log(
+          `can't yet open IndexedDBCryptoStore because it is open elsewhere`
+        );
       };
 
-      req.onerror = ev => {
+      req.onerror = (ev) => {
         _logger.logger.log("Error connecting to indexeddb", ev);
 
         reject(ev.target.error);
       };
 
-      req.onsuccess = r => {
+      req.onsuccess = (r) => {
         const db = r.target.result;
 
         _logger.logger.log(`connected to indexeddb ${this._dbName}`);
 
         resolve(new IndexedDBCryptoStoreBackend.Backend(db));
       };
-    }).then(backend => {
-      // Edge has IndexedDB but doesn't support compund keys which we use fairly extensively.
-      // Try a dummy query which will fail if the browser doesn't support compund keys, so
-      // we can fall back to a different backend.
-      return backend.doTxn('readonly', [IndexedDBCryptoStore.STORE_INBOUND_GROUP_SESSIONS, IndexedDBCryptoStore.STORE_INBOUND_GROUP_SESSIONS_WITHHELD], txn => {
-        backend.getEndToEndInboundGroupSession('', '', txn, () => {});
-      }).then(() => {
-        return backend;
+    })
+      .then((backend) => {
+        // Edge has IndexedDB but doesn't support compund keys which we use fairly extensively.
+        // Try a dummy query which will fail if the browser doesn't support compund keys, so
+        // we can fall back to a different backend.
+        return backend
+          .doTxn(
+            "readonly",
+            [
+              IndexedDBCryptoStore.STORE_INBOUND_GROUP_SESSIONS,
+              IndexedDBCryptoStore.STORE_INBOUND_GROUP_SESSIONS_WITHHELD,
+            ],
+            (txn) => {
+              backend.getEndToEndInboundGroupSession("", "", txn, () => {});
+            }
+          )
+          .then(() => {
+            return backend;
+          });
+      })
+      .catch((e) => {
+        if (e.name === "VersionError") {
+          _logger.logger.warn("Crypto DB is too new for us to use!", e); // don't fall back to a different store: the user has crypto data
+          // in this db so we should use it or nothing at all.
+
+          throw new _errors.InvalidCryptoStoreError(
+            _errors.InvalidCryptoStoreError.TOO_NEW
+          );
+        }
+
+        _logger.logger.warn(
+          `unable to connect to indexeddb ${this._dbName}` +
+            `: falling back to localStorage store: ${e}`
+        );
+
+        try {
+          return new _localStorageCryptoStore.LocalStorageCryptoStore(
+            global.localStorage
+          );
+        } catch (e) {
+          _logger.logger.warn(
+            `unable to open localStorage: falling back to in-memory store: ${e}`
+          );
+
+          return new _memoryCryptoStore.MemoryCryptoStore();
+        }
+      })
+      .then((backend) => {
+        this._backend = backend;
       });
-    }).catch(e => {
-      if (e.name === 'VersionError') {
-        _logger.logger.warn("Crypto DB is too new for us to use!", e); // don't fall back to a different store: the user has crypto data
-        // in this db so we should use it or nothing at all.
-
-
-        throw new _errors.InvalidCryptoStoreError(_errors.InvalidCryptoStoreError.TOO_NEW);
-      }
-
-      _logger.logger.warn(`unable to connect to indexeddb ${this._dbName}` + `: falling back to localStorage store: ${e}`);
-
-      try {
-        return new _localStorageCryptoStore.LocalStorageCryptoStore(global.localStorage);
-      } catch (e) {
-        _logger.logger.warn(`unable to open localStorage: falling back to in-memory store: ${e}`);
-
-        return new _memoryCryptoStore.MemoryCryptoStore();
-      }
-    }).then(backend => {
-      this._backend = backend;
-    });
     return this._backendPromise;
   }
   /**
@@ -153,11 +181,10 @@ class IndexedDBCryptoStore {
    * @returns {Promise} resolves when the store has been cleared.
    */
 
-
   deleteAllData() {
     return new Promise((resolve, reject) => {
       if (!this._indexedDB) {
-        reject(new Error('no indexeddb support available'));
+        reject(new Error("no indexeddb support available"));
         return;
       }
 
@@ -166,10 +193,12 @@ class IndexedDBCryptoStore {
       const req = this._indexedDB.deleteDatabase(this._dbName);
 
       req.onblocked = () => {
-        _logger.logger.log(`can't yet delete IndexedDBCryptoStore because it is open elsewhere`);
+        _logger.logger.log(
+          `can't yet delete IndexedDBCryptoStore because it is open elsewhere`
+        );
       };
 
-      req.onerror = ev => {
+      req.onerror = (ev) => {
         _logger.logger.log("Error deleting data from indexeddb", ev);
 
         reject(ev.target.error);
@@ -180,7 +209,7 @@ class IndexedDBCryptoStore {
 
         resolve();
       };
-    }).catch(e => {
+    }).catch((e) => {
       // in firefox, with indexedDB disabled, this fails with a
       // DOMError. We treat this as non-fatal, so that people can
       // still use the app.
@@ -198,7 +227,6 @@ class IndexedDBCryptoStore {
    *    same instance as passed in, or the existing one.
    */
 
-
   getOrAddOutgoingRoomKeyRequest(request) {
     return this._backend.getOrAddOutgoingRoomKeyRequest(request);
   }
@@ -212,7 +240,6 @@ class IndexedDBCryptoStore {
    *    {@link module:crypto/store/base~OutgoingRoomKeyRequest}, or null if
    *    not found
    */
-
 
   getOutgoingRoomKeyRequest(requestBody) {
     return this._backend.getOutgoingRoomKeyRequest(requestBody);
@@ -228,7 +255,6 @@ class IndexedDBCryptoStore {
    *    requests in those states, an arbitrary one is chosen.
    */
 
-
   getOutgoingRoomKeyRequestByState(wantedStates) {
     return this._backend.getOutgoingRoomKeyRequestByState(wantedStates);
   }
@@ -239,7 +265,6 @@ class IndexedDBCryptoStore {
    * @param {Number} wantedState
    * @return {Promise<Array<*>>} Returns an array of requests in the given state
    */
-
 
   getAllOutgoingRoomKeyRequestsByState(wantedState) {
     return this._backend.getAllOutgoingRoomKeyRequestsByState(wantedState);
@@ -255,9 +280,12 @@ class IndexedDBCryptoStore {
    *    {@link module:crypto/store/base~OutgoingRoomKeyRequest}
    */
 
-
   getOutgoingRoomKeyRequestsByTarget(userId, deviceId, wantedStates) {
-    return this._backend.getOutgoingRoomKeyRequestsByTarget(userId, deviceId, wantedStates);
+    return this._backend.getOutgoingRoomKeyRequestsByTarget(
+      userId,
+      deviceId,
+      wantedStates
+    );
   }
   /**
    * Look for an existing room key request by id and state, and update it if
@@ -272,9 +300,12 @@ class IndexedDBCryptoStore {
    *    updated request, or null if no matching row was found
    */
 
-
   updateOutgoingRoomKeyRequest(requestId, expectedState, updates) {
-    return this._backend.updateOutgoingRoomKeyRequest(requestId, expectedState, updates);
+    return this._backend.updateOutgoingRoomKeyRequest(
+      requestId,
+      expectedState,
+      updates
+    );
   }
   /**
    * Look for an existing room key request by id and state, and delete it if
@@ -285,7 +316,6 @@ class IndexedDBCryptoStore {
    *
    * @returns {Promise} resolves once the operation is completed
    */
-
 
   deleteOutgoingRoomKeyRequest(requestId, expectedState) {
     return this._backend.deleteOutgoingRoomKeyRequest(requestId, expectedState);
@@ -299,7 +329,6 @@ class IndexedDBCryptoStore {
    * @param {function(string)} func Called with the account pickle
    */
 
-
   getAccount(txn, func) {
     this._backend.getAccount(txn, func);
   }
@@ -310,7 +339,6 @@ class IndexedDBCryptoStore {
    * @param {*} txn An active transaction. See doTxn().
    * @param {string} newData The new account pickle to store.
    */
-
 
   storeAccount(txn, newData) {
     this._backend.storeAccount(txn, newData);
@@ -324,7 +352,6 @@ class IndexedDBCryptoStore {
    *        { key_type: base64 encoded seed } where key type = user_signing_key_seed or self_signing_key_seed
    */
 
-
   getCrossSigningKeys(txn, func) {
     this._backend.getCrossSigningKeys(txn, func);
   }
@@ -333,7 +360,6 @@ class IndexedDBCryptoStore {
    * @param {function(string)} func Called with the private key
    * @param {string} type A key type
    */
-
 
   getSecretStorePrivateKey(txn, func, type) {
     this._backend.getSecretStorePrivateKey(txn, func, type);
@@ -344,7 +370,6 @@ class IndexedDBCryptoStore {
    * @param {*} txn An active transaction. See doTxn().
    * @param {string} keys keys object as getCrossSigningKeys()
    */
-
 
   storeCrossSigningKeys(txn, keys) {
     this._backend.storeCrossSigningKeys(txn, keys);
@@ -357,7 +382,6 @@ class IndexedDBCryptoStore {
    * @param {string} key keys object as getCrossSigningKeys()
    */
 
-
   storeSecretStorePrivateKey(txn, type, key) {
     this._backend.storeSecretStorePrivateKey(txn, type, key);
   } // Olm sessions
@@ -367,7 +391,6 @@ class IndexedDBCryptoStore {
    * @param {*} txn An active transaction. See doTxn().
    * @param {function(int)} func Called with the count of sessions
    */
-
 
   countEndToEndSessions(txn, func) {
     this._backend.countEndToEndSessions(txn, func);
@@ -385,7 +408,6 @@ class IndexedDBCryptoStore {
    *     a message.
    */
 
-
   getEndToEndSession(deviceKey, sessionId, txn, func) {
     this._backend.getEndToEndSession(deviceKey, sessionId, txn, func);
   }
@@ -401,7 +423,6 @@ class IndexedDBCryptoStore {
    *     a message.
    */
 
-
   getEndToEndSessions(deviceKey, txn, func) {
     this._backend.getEndToEndSessions(deviceKey, txn, func);
   }
@@ -413,7 +434,6 @@ class IndexedDBCryptoStore {
    *     and session keys.
    */
 
-
   getAllEndToEndSessions(txn, func) {
     this._backend.getAllEndToEndSessions(txn, func);
   }
@@ -424,7 +444,6 @@ class IndexedDBCryptoStore {
    * @param {string} sessionInfo Session information object
    * @param {*} txn An active transaction. See doTxn().
    */
-
 
   storeEndToEndSession(deviceKey, sessionId, sessionInfo, txn) {
     this._backend.storeEndToEndSession(deviceKey, sessionId, sessionInfo, txn);
@@ -452,9 +471,13 @@ class IndexedDBCryptoStore {
    *     to Base64 end-to-end session.
    */
 
-
   getEndToEndInboundGroupSession(senderCurve25519Key, sessionId, txn, func) {
-    this._backend.getEndToEndInboundGroupSession(senderCurve25519Key, sessionId, txn, func);
+    this._backend.getEndToEndInboundGroupSession(
+      senderCurve25519Key,
+      sessionId,
+      txn,
+      func
+    );
   }
   /**
    * Fetches all inbound group sessions in the store
@@ -463,7 +486,6 @@ class IndexedDBCryptoStore {
    *     in the store with an object having keys {senderKey, sessionId,
    *     sessionData}, then once with null to indicate the end of the list.
    */
-
 
   getAllEndToEndInboundGroupSessions(txn, func) {
     this._backend.getAllEndToEndInboundGroupSessions(txn, func);
@@ -478,9 +500,18 @@ class IndexedDBCryptoStore {
    * @param {*} txn An active transaction. See doTxn().
    */
 
-
-  addEndToEndInboundGroupSession(senderCurve25519Key, sessionId, sessionData, txn) {
-    this._backend.addEndToEndInboundGroupSession(senderCurve25519Key, sessionId, sessionData, txn);
+  addEndToEndInboundGroupSession(
+    senderCurve25519Key,
+    sessionId,
+    sessionData,
+    txn
+  ) {
+    this._backend.addEndToEndInboundGroupSession(
+      senderCurve25519Key,
+      sessionId,
+      sessionData,
+      txn
+    );
   }
   /**
    * Writes an end-to-end inbound group session to the store.
@@ -492,13 +523,32 @@ class IndexedDBCryptoStore {
    * @param {*} txn An active transaction. See doTxn().
    */
 
-
-  storeEndToEndInboundGroupSession(senderCurve25519Key, sessionId, sessionData, txn) {
-    this._backend.storeEndToEndInboundGroupSession(senderCurve25519Key, sessionId, sessionData, txn);
+  storeEndToEndInboundGroupSession(
+    senderCurve25519Key,
+    sessionId,
+    sessionData,
+    txn
+  ) {
+    this._backend.storeEndToEndInboundGroupSession(
+      senderCurve25519Key,
+      sessionId,
+      sessionData,
+      txn
+    );
   }
 
-  storeEndToEndInboundGroupSessionWithheld(senderCurve25519Key, sessionId, sessionData, txn) {
-    this._backend.storeEndToEndInboundGroupSessionWithheld(senderCurve25519Key, sessionId, sessionData, txn);
+  storeEndToEndInboundGroupSessionWithheld(
+    senderCurve25519Key,
+    sessionId,
+    sessionData,
+    txn
+  ) {
+    this._backend.storeEndToEndInboundGroupSessionWithheld(
+      senderCurve25519Key,
+      sessionId,
+      sessionData,
+      txn
+    );
   } // End-to-end device tracking
 
   /**
@@ -512,7 +562,6 @@ class IndexedDBCryptoStore {
    * @param {*} txn An active transaction. See doTxn().
    */
 
-
   storeEndToEndDeviceData(deviceData, txn) {
     this._backend.storeEndToEndDeviceData(deviceData, txn);
   }
@@ -523,7 +572,6 @@ class IndexedDBCryptoStore {
    * @param {function(Object)} func Function called with the
    *     device data
    */
-
 
   getEndToEndDeviceData(txn, func) {
     this._backend.getEndToEndDeviceData(txn, func);
@@ -536,7 +584,6 @@ class IndexedDBCryptoStore {
    * @param {*} txn An active transaction. See doTxn().
    */
 
-
   storeEndToEndRoom(roomId, roomInfo, txn) {
     this._backend.storeEndToEndRoom(roomId, roomInfo, txn);
   }
@@ -545,7 +592,6 @@ class IndexedDBCryptoStore {
    * @param {*} txn An active transaction. See doTxn().
    * @param {function(Object)} func Function called with the end to end encrypted rooms
    */
-
 
   getEndToEndRooms(txn, func) {
     this._backend.getEndToEndRooms(txn, func);
@@ -558,7 +604,6 @@ class IndexedDBCryptoStore {
    * @returns {Promise} resolves to an array of inbound group sessions
    */
 
-
   getSessionsNeedingBackup(limit) {
     return this._backend.getSessionsNeedingBackup(limit);
   }
@@ -567,7 +612,6 @@ class IndexedDBCryptoStore {
    * @param {*} txn An active transaction. See doTxn(). (optional)
    * @returns {Promise} resolves to the number of sessions
    */
-
 
   countSessionsNeedingBackup(txn) {
     return this._backend.countSessionsNeedingBackup(txn);
@@ -579,7 +623,6 @@ class IndexedDBCryptoStore {
    * @returns {Promise} resolves when the sessions are unmarked
    */
 
-
   unmarkSessionsNeedingBackup(sessions, txn) {
     return this._backend.unmarkSessionsNeedingBackup(sessions, txn);
   }
@@ -589,7 +632,6 @@ class IndexedDBCryptoStore {
    * @param {*} txn An active transaction. See doTxn(). (optional)
    * @returns {Promise} resolves when the sessions are marked
    */
-
 
   markSessionsNeedingBackup(sessions, txn) {
     return this._backend.markSessionsNeedingBackup(sessions, txn);
@@ -602,9 +644,13 @@ class IndexedDBCryptoStore {
    * @param {*} txn An active transaction. See doTxn(). (optional)
    */
 
-
   addSharedHistoryInboundGroupSession(roomId, senderKey, sessionId, txn) {
-    this._backend.addSharedHistoryInboundGroupSession(roomId, senderKey, sessionId, txn);
+    this._backend.addSharedHistoryInboundGroupSession(
+      roomId,
+      senderKey,
+      sessionId,
+      txn
+    );
   }
   /**
    * Get the shared-history group session for a room.
@@ -612,7 +658,6 @@ class IndexedDBCryptoStore {
    * @param {*} txn An active transaction. See doTxn(). (optional)
    * @returns {Promise} Resolves to an array of [senderKey, sessionId]
    */
-
 
   getSharedHistoryInboundGroupSessions(roomId, txn) {
     return this._backend.getSharedHistoryInboundGroupSessions(roomId, txn);
@@ -640,19 +685,19 @@ class IndexedDBCryptoStore {
    *     exception will propagate to the caller of the getFoo method.
    */
 
-
   doTxn(mode, stores, func, log) {
     return this._backend.doTxn(mode, stores, func, log);
   }
-
 }
 
 exports.IndexedDBCryptoStore = IndexedDBCryptoStore;
-IndexedDBCryptoStore.STORE_ACCOUNT = 'account';
-IndexedDBCryptoStore.STORE_SESSIONS = 'sessions';
-IndexedDBCryptoStore.STORE_INBOUND_GROUP_SESSIONS = 'inbound_group_sessions';
-IndexedDBCryptoStore.STORE_INBOUND_GROUP_SESSIONS_WITHHELD = 'inbound_group_sessions_withheld';
-IndexedDBCryptoStore.STORE_SHARED_HISTORY_INBOUND_GROUP_SESSIONS = 'shared_history_inbound_group_sessions';
-IndexedDBCryptoStore.STORE_DEVICE_DATA = 'device_data';
-IndexedDBCryptoStore.STORE_ROOMS = 'rooms';
-IndexedDBCryptoStore.STORE_BACKUP = 'sessions_needing_backup';
+IndexedDBCryptoStore.STORE_ACCOUNT = "account";
+IndexedDBCryptoStore.STORE_SESSIONS = "sessions";
+IndexedDBCryptoStore.STORE_INBOUND_GROUP_SESSIONS = "inbound_group_sessions";
+IndexedDBCryptoStore.STORE_INBOUND_GROUP_SESSIONS_WITHHELD =
+  "inbound_group_sessions_withheld";
+IndexedDBCryptoStore.STORE_SHARED_HISTORY_INBOUND_GROUP_SESSIONS =
+  "shared_history_inbound_group_sessions";
+IndexedDBCryptoStore.STORE_DEVICE_DATA = "device_data";
+IndexedDBCryptoStore.STORE_ROOMS = "rooms";
+IndexedDBCryptoStore.STORE_BACKUP = "sessions_needing_backup";

@@ -1,11 +1,15 @@
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
+  value: true,
 });
 exports.createCryptoStoreCacheCallbacks = createCryptoStoreCacheCallbacks;
 exports.requestKeysDuringVerification = requestKeysDuringVerification;
-exports.DeviceTrustLevel = exports.UserTrustLevel = exports.CrossSigningLevel = exports.CrossSigningInfo = void 0;
+exports.DeviceTrustLevel =
+  exports.UserTrustLevel =
+  exports.CrossSigningLevel =
+  exports.CrossSigningInfo =
+    void 0;
 
 var _olmlib = require("./olmlib");
 
@@ -61,9 +65,9 @@ class CrossSigningInfo extends _events.EventEmitter {
   constructor(userId, callbacks, cacheCallbacks) {
     super(); // you can't change the userId
 
-    Object.defineProperty(this, 'userId', {
+    Object.defineProperty(this, "userId", {
       enumerable: true,
-      value: userId
+      value: userId,
     });
     this._callbacks = callbacks || {};
     this._cacheCallbacks = cacheCallbacks || {};
@@ -93,7 +97,7 @@ class CrossSigningInfo extends _events.EventEmitter {
     return {
       keys: this.keys,
       firstUse: this.firstUse,
-      crossSigningVerifiedBefore: this.crossSigningVerifiedBefore
+      crossSigningVerifiedBefore: this.crossSigningVerifiedBefore,
     };
   }
   /**
@@ -105,9 +109,9 @@ class CrossSigningInfo extends _events.EventEmitter {
    * @returns {Array} An array with [ public key, Olm.PkSigning ]
    */
 
-
   async getCrossSigningKey(type, expectedPubkey) {
-    const shouldCache = ["master", "self_signing", "user_signing"].indexOf(type) >= 0;
+    const shouldCache =
+      ["master", "self_signing", "user_signing"].indexOf(type) >= 0;
 
     if (!this._callbacks.getCrossSigningKey) {
       throw new Error("No getCrossSigningKey callback supplied");
@@ -132,7 +136,10 @@ class CrossSigningInfo extends _events.EventEmitter {
     let privkey;
 
     if (this._cacheCallbacks.getCrossSigningKeyCache && shouldCache) {
-      privkey = await this._cacheCallbacks.getCrossSigningKeyCache(type, expectedPubkey);
+      privkey = await this._cacheCallbacks.getCrossSigningKeyCache(
+        type,
+        expectedPubkey
+      );
     }
 
     const cacheresult = validateKey(privkey);
@@ -153,14 +160,16 @@ class CrossSigningInfo extends _events.EventEmitter {
     }
     /* No keysource even returned a key */
 
-
     if (!privkey) {
-      throw new Error("getCrossSigningKey callback for " + type + " returned falsey");
+      throw new Error(
+        "getCrossSigningKey callback for " + type + " returned falsey"
+      );
     }
     /* We got some keys from the keysource, but none of them were valid */
 
-
-    throw new Error("Key type " + type + " from getCrossSigningKey callback did not match");
+    throw new Error(
+      "Key type " + type + " from getCrossSigningKey callback did not match"
+    );
   }
   /**
    * Check whether the private keys exist in secret storage.
@@ -173,10 +182,10 @@ class CrossSigningInfo extends _events.EventEmitter {
    *     key
    */
 
-
   async isStoredInSecretStorage(secretStorage) {
     // check what SSSS keys have encrypted the master key (if any)
-    const stored = (await secretStorage.isStored("m.cross_signing.master", false)) || {}; // then check which of those SSSS keys have also encrypted the SSK and USK
+    const stored =
+      (await secretStorage.isStored("m.cross_signing.master", false)) || {}; // then check which of those SSSS keys have also encrypted the SSK and USK
 
     function intersect(s) {
       for (const k of Object.keys(stored)) {
@@ -187,7 +196,9 @@ class CrossSigningInfo extends _events.EventEmitter {
     }
 
     for (const type of ["self_signing", "user_signing"]) {
-      intersect((await secretStorage.isStored(`m.cross_signing.${type}`, false)) || {});
+      intersect(
+        (await secretStorage.isStored(`m.cross_signing.${type}`, false)) || {}
+      );
     }
 
     return Object.keys(stored).length ? stored : null;
@@ -200,7 +211,6 @@ class CrossSigningInfo extends _events.EventEmitter {
    * @param {Map} keys The keys to store
    * @param {SecretStorage} secretStorage The secret store using account data
    */
-
 
   static async storeInSecretStorage(keys, secretStorage) {
     for (const [type, privateKey] of keys) {
@@ -218,7 +228,6 @@ class CrossSigningInfo extends _events.EventEmitter {
    * @return {Uint8Array} The private key
    */
 
-
   static async getFromSecretStorage(type, secretStorage) {
     const encodedKey = await secretStorage.get(`m.cross_signing.${type}`);
 
@@ -235,7 +244,6 @@ class CrossSigningInfo extends _events.EventEmitter {
    * "self_signing", or "user_signing". Optional, will check all by default.
    * @returns {boolean} True if all keys are stored in the local cache.
    */
-
 
   async isStoredInKeyCache(type) {
     const cacheCallbacks = this._cacheCallbacks;
@@ -255,7 +263,6 @@ class CrossSigningInfo extends _events.EventEmitter {
    *
    * @returns {Map} A map from key type (string) to private key (Uint8Array)
    */
-
 
   async getCrossSigningKeysFromCache() {
     const keys = new Map();
@@ -284,7 +291,6 @@ class CrossSigningInfo extends _events.EventEmitter {
    * @return {string} the ID
    */
 
-
   getId(type) {
     type = type || "master";
     if (!this.keys[type]) return null;
@@ -299,15 +305,20 @@ class CrossSigningInfo extends _events.EventEmitter {
    * @param {CrossSigningLevel} level The key types to reset
    */
 
-
   async resetKeys(level) {
     if (!this._callbacks.saveCrossSigningKeys) {
       throw new Error("No saveCrossSigningKeys callback supplied");
     } // If we're resetting the master key, we reset all keys
 
-
-    if (level === undefined || level & CrossSigningLevel.MASTER || !this.keys.master) {
-      level = CrossSigningLevel.MASTER | CrossSigningLevel.USER_SIGNING | CrossSigningLevel.SELF_SIGNING;
+    if (
+      level === undefined ||
+      level & CrossSigningLevel.MASTER ||
+      !this.keys.master
+    ) {
+      level =
+        CrossSigningLevel.MASTER |
+        CrossSigningLevel.USER_SIGNING |
+        CrossSigningLevel.SELF_SIGNING;
     } else if (level === 0) {
       return;
     }
@@ -324,10 +335,10 @@ class CrossSigningInfo extends _events.EventEmitter {
         masterPub = masterSigning.init_with_seed(privateKeys.master);
         keys.master = {
           user_id: this.userId,
-          usage: ['master'],
+          usage: ["master"],
           keys: {
-            ['ed25519:' + masterPub]: masterPub
-          }
+            ["ed25519:" + masterPub]: masterPub,
+          },
         };
       } else {
         [masterPub, masterSigning] = await this.getCrossSigningKey("master");
@@ -341,12 +352,17 @@ class CrossSigningInfo extends _events.EventEmitter {
           const sskPub = sskSigning.init_with_seed(privateKeys.self_signing);
           keys.self_signing = {
             user_id: this.userId,
-            usage: ['self_signing'],
+            usage: ["self_signing"],
             keys: {
-              ['ed25519:' + sskPub]: sskPub
-            }
+              ["ed25519:" + sskPub]: sskPub,
+            },
           };
-          (0, _olmlib.pkSign)(keys.self_signing, masterSigning, this.userId, masterPub);
+          (0, _olmlib.pkSign)(
+            keys.self_signing,
+            masterSigning,
+            this.userId,
+            masterPub
+          );
         } finally {
           sskSigning.free();
         }
@@ -360,12 +376,17 @@ class CrossSigningInfo extends _events.EventEmitter {
           const uskPub = uskSigning.init_with_seed(privateKeys.user_signing);
           keys.user_signing = {
             user_id: this.userId,
-            usage: ['user_signing'],
+            usage: ["user_signing"],
             keys: {
-              ['ed25519:' + uskPub]: uskPub
-            }
+              ["ed25519:" + uskPub]: uskPub,
+            },
           };
-          (0, _olmlib.pkSign)(keys.user_signing, masterSigning, this.userId, masterPub);
+          (0, _olmlib.pkSign)(
+            keys.user_signing,
+            masterSigning,
+            this.userId,
+            masterPub
+          );
         } finally {
           uskSigning.free();
         }
@@ -384,7 +405,6 @@ class CrossSigningInfo extends _events.EventEmitter {
    * unsets the keys, used when another session has reset the keys, to disable cross-signing
    */
 
-
   clearKeys() {
     this.keys = {};
   }
@@ -394,7 +414,11 @@ class CrossSigningInfo extends _events.EventEmitter {
 
     if (keys.master) {
       if (keys.master.user_id !== this.userId) {
-        const error = "Mismatched user ID " + keys.master.user_id + " in master key from " + this.userId;
+        const error =
+          "Mismatched user ID " +
+          keys.master.user_id +
+          " in master key from " +
+          this.userId;
 
         _logger.logger.error(error);
 
@@ -409,7 +433,6 @@ class CrossSigningInfo extends _events.EventEmitter {
         this.firstUse = false;
       } // otherwise, same key, so no change
 
-
       signingKeys.master = keys.master;
     } else if (this.keys.master) {
       signingKeys.master = this.keys.master;
@@ -421,7 +444,11 @@ class CrossSigningInfo extends _events.EventEmitter {
 
     if (keys.user_signing) {
       if (keys.user_signing.user_id !== this.userId) {
-        const error = "Mismatched user ID " + keys.master.user_id + " in user_signing key from " + this.userId;
+        const error =
+          "Mismatched user ID " +
+          keys.master.user_id +
+          " in user_signing key from " +
+          this.userId;
 
         _logger.logger.error(error);
 
@@ -433,14 +460,17 @@ class CrossSigningInfo extends _events.EventEmitter {
       } catch (e) {
         _logger.logger.error("invalid signature on user-signing key"); // FIXME: what do we want to do here?
 
-
         throw e;
       }
     }
 
     if (keys.self_signing) {
       if (keys.self_signing.user_id !== this.userId) {
-        const error = "Mismatched user ID " + keys.master.user_id + " in self_signing key from " + this.userId;
+        const error =
+          "Mismatched user ID " +
+          keys.master.user_id +
+          " in self_signing key from " +
+          this.userId;
 
         _logger.logger.error(error);
 
@@ -452,11 +482,9 @@ class CrossSigningInfo extends _events.EventEmitter {
       } catch (e) {
         _logger.logger.error("invalid signature on self-signing key"); // FIXME: what do we want to do here?
 
-
         throw e;
       }
     } // if everything checks out, then save the keys
-
 
     if (keys.master) {
       this.keys.master = keys.master; // if the master key is set, then the old self-signing and
@@ -485,7 +513,9 @@ class CrossSigningInfo extends _events.EventEmitter {
 
   async signObject(data, type) {
     if (!this.keys[type]) {
-      throw new Error("Attempted to sign with " + type + " key but no such key present");
+      throw new Error(
+        "Attempted to sign with " + type + " key but no such key present"
+      );
     }
 
     const [pubkey, signing] = await this.getCrossSigningKey(type);
@@ -510,7 +540,9 @@ class CrossSigningInfo extends _events.EventEmitter {
 
   async signDevice(userId, device) {
     if (userId !== this.userId) {
-      throw new Error(`Trying to sign ${userId}'s device; can only sign our own device`);
+      throw new Error(
+        `Trying to sign ${userId}'s device; can only sign our own device`
+      );
     }
 
     if (!this.keys.self_signing) {
@@ -519,12 +551,15 @@ class CrossSigningInfo extends _events.EventEmitter {
       return;
     }
 
-    return this.signObject({
-      algorithms: device.algorithms,
-      keys: device.keys,
-      device_id: device.deviceId,
-      user_id: userId
-    }, "self_signing");
+    return this.signObject(
+      {
+        algorithms: device.algorithms,
+        keys: device.keys,
+        device_id: device.deviceId,
+        user_id: userId,
+      },
+      "self_signing"
+    );
   }
   /**
    * Check whether a given user is trusted.
@@ -534,11 +569,16 @@ class CrossSigningInfo extends _events.EventEmitter {
    * @returns {UserTrustLevel}
    */
 
-
   checkUserTrust(userCrossSigning) {
     // if we're checking our own key, then it's trusted if the master key
     // and self-signing key match
-    if (this.userId === userCrossSigning.userId && this.getId() && this.getId() === userCrossSigning.getId() && this.getId("self_signing") && this.getId("self_signing") === userCrossSigning.getId("self_signing")) {
+    if (
+      this.userId === userCrossSigning.userId &&
+      this.getId() &&
+      this.getId() === userCrossSigning.getId() &&
+      this.getId("self_signing") &&
+      this.getId("self_signing") === userCrossSigning.getId("self_signing")
+    ) {
       return new UserTrustLevel(true, true, this.firstUse);
     }
 
@@ -550,7 +590,7 @@ class CrossSigningInfo extends _events.EventEmitter {
 
     let userTrusted;
     const userMaster = userCrossSigning.keys.master;
-    const uskId = this.getId('user_signing');
+    const uskId = this.getId("user_signing");
 
     try {
       (0, _olmlib.pkVerify)(userMaster, uskId, this.userId);
@@ -559,7 +599,11 @@ class CrossSigningInfo extends _events.EventEmitter {
       userTrusted = false;
     }
 
-    return new UserTrustLevel(userTrusted, userCrossSigning.crossSigningVerifiedBefore, userCrossSigning.firstUse);
+    return new UserTrustLevel(
+      userTrusted,
+      userCrossSigning.crossSigningVerifiedBefore,
+      userCrossSigning.firstUse
+    );
   }
   /**
    * Check whether a given device is trusted.
@@ -572,39 +616,63 @@ class CrossSigningInfo extends _events.EventEmitter {
    * @returns {DeviceTrustLevel}
    */
 
-
-  checkDeviceTrust(userCrossSigning, device, localTrust, trustCrossSignedDevices) {
+  checkDeviceTrust(
+    userCrossSigning,
+    device,
+    localTrust,
+    trustCrossSignedDevices
+  ) {
     const userTrust = this.checkUserTrust(userCrossSigning);
     const userSSK = userCrossSigning.keys.self_signing;
 
     if (!userSSK) {
       // if the user has no self-signing key then we cannot make any
       // trust assertions about this device from cross-signing
-      return new DeviceTrustLevel(false, false, localTrust, trustCrossSignedDevices);
+      return new DeviceTrustLevel(
+        false,
+        false,
+        localTrust,
+        trustCrossSignedDevices
+      );
     }
 
     const deviceObj = deviceToObject(device, userCrossSigning.userId);
 
     try {
       // if we can verify the user's SSK from their master key...
-      (0, _olmlib.pkVerify)(userSSK, userCrossSigning.getId(), userCrossSigning.userId); // ...and this device's key from their SSK...
+      (0, _olmlib.pkVerify)(
+        userSSK,
+        userCrossSigning.getId(),
+        userCrossSigning.userId
+      ); // ...and this device's key from their SSK...
 
-      (0, _olmlib.pkVerify)(deviceObj, publicKeyFromKeyInfo(userSSK), userCrossSigning.userId); // ...then we trust this device as much as far as we trust the user
+      (0, _olmlib.pkVerify)(
+        deviceObj,
+        publicKeyFromKeyInfo(userSSK),
+        userCrossSigning.userId
+      ); // ...then we trust this device as much as far as we trust the user
 
-      return DeviceTrustLevel.fromUserTrustLevel(userTrust, localTrust, trustCrossSignedDevices);
+      return DeviceTrustLevel.fromUserTrustLevel(
+        userTrust,
+        localTrust,
+        trustCrossSignedDevices
+      );
     } catch (e) {
-      return new DeviceTrustLevel(false, false, localTrust, trustCrossSignedDevices);
+      return new DeviceTrustLevel(
+        false,
+        false,
+        localTrust,
+        trustCrossSignedDevices
+      );
     }
   }
   /**
    * @returns {object} Cache callbacks
    */
 
-
   getCacheCallbacks() {
     return this._cacheCallbacks;
   }
-
 }
 
 exports.CrossSigningInfo = CrossSigningInfo;
@@ -615,14 +683,14 @@ function deviceToObject(device, userId) {
     keys: device.keys,
     device_id: device.deviceId,
     user_id: userId,
-    signatures: device.signatures
+    signatures: device.signatures,
   };
 }
 
 const CrossSigningLevel = {
   MASTER: 4,
   USER_SIGNING: 2,
-  SELF_SIGNING: 1
+  SELF_SIGNING: 1,
 };
 /**
  * Represents the ways in which we trust a user
@@ -640,14 +708,12 @@ class UserTrustLevel {
    * @returns {bool} true if this user is verified via any means
    */
 
-
   isVerified() {
     return this.isCrossSigningVerified();
   }
   /**
    * @returns {bool} true if this user is verified via cross signing
    */
-
 
   isCrossSigningVerified() {
     return this._crossSigningVerified;
@@ -657,7 +723,6 @@ class UserTrustLevel {
    * the history of verifications observed by this device).
    */
 
-
   wasCrossSigningVerified() {
     return this._crossSigningVerifiedBefore;
   }
@@ -665,42 +730,54 @@ class UserTrustLevel {
    * @returns {bool} true if this user's key is trusted on first use
    */
 
-
   isTofu() {
     return this._tofu;
   }
-
 }
 /**
  * Represents the ways in which we trust a device
  */
 
-
 exports.UserTrustLevel = UserTrustLevel;
 
 class DeviceTrustLevel {
-  constructor(crossSigningVerified, tofu, localVerified, trustCrossSignedDevices) {
+  constructor(
+    crossSigningVerified,
+    tofu,
+    localVerified,
+    trustCrossSignedDevices
+  ) {
     this._crossSigningVerified = crossSigningVerified;
     this._tofu = tofu;
     this._localVerified = localVerified;
     this._trustCrossSignedDevices = trustCrossSignedDevices;
   }
 
-  static fromUserTrustLevel(userTrustLevel, localVerified, trustCrossSignedDevices) {
-    return new DeviceTrustLevel(userTrustLevel._crossSigningVerified, userTrustLevel._tofu, localVerified, trustCrossSignedDevices);
+  static fromUserTrustLevel(
+    userTrustLevel,
+    localVerified,
+    trustCrossSignedDevices
+  ) {
+    return new DeviceTrustLevel(
+      userTrustLevel._crossSigningVerified,
+      userTrustLevel._tofu,
+      localVerified,
+      trustCrossSignedDevices
+    );
   }
   /**
    * @returns {bool} true if this device is verified via any means
    */
 
-
   isVerified() {
-    return Boolean(this.isLocallyVerified() || this._trustCrossSignedDevices && this.isCrossSigningVerified());
+    return Boolean(
+      this.isLocallyVerified() ||
+        (this._trustCrossSignedDevices && this.isCrossSigningVerified())
+    );
   }
   /**
    * @returns {bool} true if this device is verified via cross signing
    */
-
 
   isCrossSigningVerified() {
     return this._crossSigningVerified;
@@ -708,7 +785,6 @@ class DeviceTrustLevel {
   /**
    * @returns {bool} true if this device is verified locally
    */
-
 
   isLocallyVerified() {
     return this._localVerified;
@@ -718,11 +794,9 @@ class DeviceTrustLevel {
    * that is trusted on first use
    */
 
-
   isTofu() {
     return this._tofu;
   }
-
 }
 
 exports.DeviceTrustLevel = DeviceTrustLevel;
@@ -730,10 +804,14 @@ exports.DeviceTrustLevel = DeviceTrustLevel;
 function createCryptoStoreCacheCallbacks(store, olmdevice) {
   return {
     getCrossSigningKeyCache: async function (type, _expectedPublicKey) {
-      const key = await new Promise(resolve => {
-        return store.doTxn('readonly', [_indexeddbCryptoStore.IndexedDBCryptoStore.STORE_ACCOUNT], txn => {
-          store.getSecretStorePrivateKey(txn, resolve, type);
-        });
+      const key = await new Promise((resolve) => {
+        return store.doTxn(
+          "readonly",
+          [_indexeddbCryptoStore.IndexedDBCryptoStore.STORE_ACCOUNT],
+          (txn) => {
+            store.getSecretStorePrivateKey(txn, resolve, type);
+          }
+        );
       });
 
       if (key && key.ciphertext) {
@@ -746,15 +824,25 @@ function createCryptoStoreCacheCallbacks(store, olmdevice) {
     },
     storeCrossSigningKeyCache: async function (type, key) {
       if (!(key instanceof Uint8Array)) {
-        throw new Error(`storeCrossSigningKeyCache expects Uint8Array, got ${key}`);
+        throw new Error(
+          `storeCrossSigningKeyCache expects Uint8Array, got ${key}`
+        );
       }
 
       const pickleKey = Buffer.from(olmdevice._pickleKey);
-      key = await (0, _aes.encryptAES)((0, _olmlib.encodeBase64)(key), pickleKey, type);
-      return store.doTxn('readwrite', [_indexeddbCryptoStore.IndexedDBCryptoStore.STORE_ACCOUNT], txn => {
-        store.storeSecretStorePrivateKey(txn, type, key);
-      });
-    }
+      key = await (0, _aes.encryptAES)(
+        (0, _olmlib.encodeBase64)(key),
+        pickleKey,
+        type
+      );
+      return store.doTxn(
+        "readwrite",
+        [_indexeddbCryptoStore.IndexedDBCryptoStore.STORE_ACCOUNT],
+        (txn) => {
+          store.storeSecretStorePrivateKey(txn, type, key);
+        }
+      );
+    },
   };
 }
 /**
@@ -765,7 +853,6 @@ function createCryptoStoreCacheCallbacks(store, olmdevice) {
  * @param {string} deviceId The device ID being verified
  */
 
-
 async function requestKeysDuringVerification(baseApis, userId, deviceId) {
   // If this is a self-verification, ask the other party for keys
   if (baseApis.getUserId() !== userId) {
@@ -775,7 +862,6 @@ async function requestKeysDuringVerification(baseApis, userId, deviceId) {
   _logger.logger.log("Cross-signing: Self-verification done; requesting keys"); // This happens asynchronously, and we're not concerned about waiting for
   // it.  We return here in order to test.
 
-
   return new Promise((resolve, reject) => {
     const client = baseApis;
     const original = client._crypto._crossSigningInfo; // We already have all of the infrastructure we need to validate and
@@ -783,18 +869,26 @@ async function requestKeysDuringVerification(baseApis, userId, deviceId) {
     // up callbacks that request them from the other device and call
     // CrossSigningInfo.getCrossSigningKey() to validate/cache
 
-    const crossSigning = new CrossSigningInfo(original.userId, {
-      getCrossSigningKey: async type => {
-        _logger.logger.debug("Cross-signing: requesting secret", type, deviceId);
+    const crossSigning = new CrossSigningInfo(
+      original.userId,
+      {
+        getCrossSigningKey: async (type) => {
+          _logger.logger.debug(
+            "Cross-signing: requesting secret",
+            type,
+            deviceId
+          );
 
-        const {
-          promise
-        } = client.requestSecret(`m.cross_signing.${type}`, [deviceId]);
-        const result = await promise;
-        const decoded = (0, _olmlib.decodeBase64)(result);
-        return Uint8Array.from(decoded);
-      }
-    }, original._cacheCallbacks);
+          const { promise } = client.requestSecret(`m.cross_signing.${type}`, [
+            deviceId,
+          ]);
+          const result = await promise;
+          const decoded = (0, _olmlib.decodeBase64)(result);
+          return Uint8Array.from(decoded);
+        },
+      },
+      original._cacheCallbacks
+    );
     crossSigning.keys = original.keys; // XXX: get all keys out if we get one key out
     // https://github.com/vector-im/element-web/issues/12604
     // then change here to reject on the timeout
@@ -804,13 +898,15 @@ async function requestKeysDuringVerification(baseApis, userId, deviceId) {
       setTimeout(resolve, KEY_REQUEST_TIMEOUT_MS, new Error("Timeout"));
     }); // also request and cache the key backup key
 
-    const backupKeyPromise = new Promise(async resolve => {
+    const backupKeyPromise = new Promise(async (resolve) => {
       const cachedKey = await client._crypto.getSessionBackupPrivateKey();
 
       if (!cachedKey) {
         _logger.logger.info("No cached backup key found. Requesting...");
 
-        const secretReq = client.requestSecret('m.megolm_backup.v1', [deviceId]);
+        const secretReq = client.requestSecret("m.megolm_backup.v1", [
+          deviceId,
+        ]);
         const base64Key = await secretReq.promise;
 
         _logger.logger.info("Got key backup key, decoding...");
@@ -819,22 +915,34 @@ async function requestKeysDuringVerification(baseApis, userId, deviceId) {
 
         _logger.logger.info("Decoded backup key, storing...");
 
-        client._crypto.storeSessionBackupPrivateKey(Uint8Array.from(decodedKey));
+        client._crypto.storeSessionBackupPrivateKey(
+          Uint8Array.from(decodedKey)
+        );
 
         _logger.logger.info("Backup key stored. Starting backup restore...");
 
         const backupInfo = await client.getKeyBackupVersion(); // no need to await for this - just let it go in the bg
 
-        client.restoreKeyBackupWithCache(undefined, undefined, backupInfo).then(() => {
-          _logger.logger.info("Backup restored.");
-        });
+        client
+          .restoreKeyBackupWithCache(undefined, undefined, backupInfo)
+          .then(() => {
+            _logger.logger.info("Backup restored.");
+          });
       }
 
       resolve();
     }); // We call getCrossSigningKey() for its side-effects
 
-    return Promise.race([Promise.all([crossSigning.getCrossSigningKey("master"), crossSigning.getCrossSigningKey("self_signing"), crossSigning.getCrossSigningKey("user_signing"), backupKeyPromise]), timeout]).then(resolve, reject);
-  }).catch(e => {
+    return Promise.race([
+      Promise.all([
+        crossSigning.getCrossSigningKey("master"),
+        crossSigning.getCrossSigningKey("self_signing"),
+        crossSigning.getCrossSigningKey("user_signing"),
+        backupKeyPromise,
+      ]),
+      timeout,
+    ]).then(resolve, reject);
+  }).catch((e) => {
     _logger.logger.warn("Cross-signing: failure while requesting keys:", e);
   });
 }

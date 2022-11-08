@@ -1,9 +1,9 @@
-import Vue from 'vue'
+import Vue from "vue";
 
 export interface MessageOptions {
   title?: string;
   message: string;
-  type?: 'info' | 'success' | 'error' | 'warning' | 'loading';
+  type?: "info" | "success" | "error" | "warning" | "loading";
   isCollapsed: boolean;
   width?: string;
   showClose: boolean;
@@ -15,38 +15,45 @@ export interface MessageOptions {
   zIndex: number | 1010;
   iconImg?: string;
   hasMask: boolean;
-  position?: 'top-left' | 'top-center' | 'top-right' | 'center' | 'bottom-left' | 'bottom-center' | 'bottom-right'
+  position?:
+    | "top-left"
+    | "top-center"
+    | "top-right"
+    | "center"
+    | "bottom-left"
+    | "bottom-center"
+    | "bottom-right";
 }
 
 export declare class MessageComponent extends Vue {
   readonly id: number;
-  close (): void;
+  close(): void;
   message: string;
   title?: string;
 }
 
 export interface IMessage {
   (options: MessageOptions): MessageComponent;
-  info (msg: string): MessageComponent;
-  info (options: MessageOptions): MessageComponent;
+  info(msg: string): MessageComponent;
+  info(options: MessageOptions): MessageComponent;
 
-  success (msg: string): MessageComponent;
-  success (options: MessageOptions): MessageComponent;
+  success(msg: string): MessageComponent;
+  success(options: MessageOptions): MessageComponent;
 
-  error (msg: string): MessageComponent;
-  error (options: MessageOptions): MessageComponent;
+  error(msg: string): MessageComponent;
+  error(options: MessageOptions): MessageComponent;
 
-  warning (msg: string): MessageComponent;
-  warning (options: MessageOptions): MessageComponent;
+  warning(msg: string): MessageComponent;
+  warning(options: MessageOptions): MessageComponent;
 
-  loading (msg: string): MessageComponent;
-  loading (options: MessageOptions): MessageComponent;
+  loading(msg: string): MessageComponent;
+  loading(options: MessageOptions): MessageComponent;
 
-  close (id: number, userOnClose?: () => void): void;
-  closeAll (): void;
+  close(id: number, userOnClose?: () => void): void;
+  closeAll(): void;
 }
 
-declare function Message (options: MessageOptions): MessageComponent
+declare function Message(options: MessageOptions): MessageComponent;
 
 declare namespace Message {
   const install: (vue: typeof Vue, options?: { name: string }) => void;
@@ -65,10 +72,10 @@ declare namespace Message {
   const closeAll: () => void;
 }
 
-declare module 'vue/types/vue' {
+declare module "vue/types/vue" {
   interface Vue {
-    $message: IMessage
+    $message: IMessage;
   }
 }
 
-export default Message
+export default Message;

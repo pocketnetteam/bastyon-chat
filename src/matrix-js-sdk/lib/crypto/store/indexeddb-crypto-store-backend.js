@@ -3,7 +3,7 @@
 var _interopRequireWildcard = require("@babel/runtime/helpers/interopRequireWildcard");
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
+  value: true,
 });
 exports.upgradeDatabase = upgradeDatabase;
 exports.Backend = exports.VERSION = void 0;
@@ -50,8 +50,10 @@ class Backend {
     // attempts to delete the database will block (and subsequent
     // attempts to re-create it will also block).
 
-    db.onversionchange = ev => {
-      _logger.logger.log(`versionchange for indexeddb ${this._dbName}: closing`);
+    db.onversionchange = (ev) => {
+      _logger.logger.log(
+        `versionchange for indexeddb ${this._dbName}: closing`
+      );
 
       db.close();
     };
@@ -67,7 +69,6 @@ class Backend {
    *    same instance as passed in, or the existing one.
    */
 
-
   getOrAddOutgoingRoomKeyRequest(request) {
     const requestBody = request.requestBody;
     return new Promise((resolve, reject) => {
@@ -75,18 +76,24 @@ class Backend {
 
       txn.onerror = reject; // first see if we already have an entry for this request.
 
-      this._getOutgoingRoomKeyRequest(txn, requestBody, existing => {
+      this._getOutgoingRoomKeyRequest(txn, requestBody, (existing) => {
         if (existing) {
           // this entry matches the request - return it.
-          _logger.logger.log(`already have key request outstanding for ` + `${requestBody.room_id} / ${requestBody.session_id}: ` + `not sending another`);
+          _logger.logger.log(
+            `already have key request outstanding for ` +
+              `${requestBody.room_id} / ${requestBody.session_id}: ` +
+              `not sending another`
+          );
 
           resolve(existing);
           return;
         } // we got to the end of the list without finding a match
         // - add the new request.
 
-
-        _logger.logger.log(`enqueueing key request for ${requestBody.room_id} / ` + requestBody.session_id);
+        _logger.logger.log(
+          `enqueueing key request for ${requestBody.room_id} / ` +
+            requestBody.session_id
+        );
 
         txn.oncomplete = () => {
           resolve(request);
@@ -108,14 +115,13 @@ class Backend {
    *    not found
    */
 
-
   getOutgoingRoomKeyRequest(requestBody) {
     return new Promise((resolve, reject) => {
       const txn = this._db.transaction("outgoingRoomKeyRequests", "readonly");
 
       txn.onerror = reject;
 
-      this._getOutgoingRoomKeyRequest(txn, requestBody, existing => {
+      this._getOutgoingRoomKeyRequest(txn, requestBody, (existing) => {
         resolve(existing);
       });
     });
@@ -133,13 +139,15 @@ class Backend {
    *    not found.
    */
 
-
   _getOutgoingRoomKeyRequest(txn, requestBody, callback) {
     const store = txn.objectStore("outgoingRoomKeyRequests");
     const idx = store.index("session");
-    const cursorReq = idx.openCursor([requestBody.room_id, requestBody.session_id]);
+    const cursorReq = idx.openCursor([
+      requestBody.room_id,
+      requestBody.session_id,
+    ]);
 
-    cursorReq.onsuccess = ev => {
+    cursorReq.onsuccess = (ev) => {
       const cursor = ev.target.result;
 
       if (!cursor) {
@@ -156,7 +164,6 @@ class Backend {
         return;
       } // look at the next entry in the index
 
-
       cursor.continue();
     };
   }
@@ -171,7 +178,6 @@ class Backend {
    *    requests in those states, an arbitrary one is chosen.
    */
 
-
   getOutgoingRoomKeyRequestByState(wantedStates) {
     if (wantedStates.length === 0) {
       return Promise.resolve(null);
@@ -179,7 +185,6 @@ class Backend {
     // in a single transaction, to avoid having a race with the insertion
     // code.
     // index into the wantedStates array
-
 
     let stateIndex = 0;
     let result;
@@ -192,7 +197,6 @@ class Backend {
         result = cursor.value;
         return;
       } // try the next state in the list
-
 
       stateIndex++;
 
@@ -220,7 +224,6 @@ class Backend {
    * @return {Promise<Array<*>>} All elements in a given state
    */
 
-
   getAllOutgoingRoomKeyRequestsByState(wantedState) {
     return new Promise((resolve, reject) => {
       const txn = this._db.transaction("outgoingRoomKeyRequests", "readonly");
@@ -229,9 +232,9 @@ class Backend {
       const index = store.index("state");
       const request = index.getAll(wantedState);
 
-      request.onsuccess = ev => resolve(ev.target.result);
+      request.onsuccess = (ev) => resolve(ev.target.result);
 
-      request.onerror = ev => reject(ev.target.error);
+      request.onerror = (ev) => reject(ev.target.error);
     });
   }
 
@@ -245,10 +248,12 @@ class Backend {
       if (cursor) {
         const keyReq = cursor.value;
 
-        if (keyReq.recipients.includes({
-          userId,
-          deviceId
-        })) {
+        if (
+          keyReq.recipients.includes({
+            userId,
+            deviceId,
+          })
+        ) {
           results.push(keyReq);
         }
 
@@ -289,7 +294,6 @@ class Backend {
    *    updated request, or null if no matching row was found
    */
 
-
   updateOutgoingRoomKeyRequest(requestId, expectedState, updates) {
     let result = null;
 
@@ -303,7 +307,10 @@ class Backend {
       const data = cursor.value;
 
       if (data.state != expectedState) {
-        _logger.logger.warn(`Cannot update room key request from ${expectedState} ` + `as it was already updated to ${data.state}`);
+        _logger.logger.warn(
+          `Cannot update room key request from ${expectedState} ` +
+            `as it was already updated to ${data.state}`
+        );
 
         return;
       }
@@ -315,7 +322,9 @@ class Backend {
 
     const txn = this._db.transaction("outgoingRoomKeyRequests", "readwrite");
 
-    const cursorReq = txn.objectStore("outgoingRoomKeyRequests").openCursor(requestId);
+    const cursorReq = txn
+      .objectStore("outgoingRoomKeyRequests")
+      .openCursor(requestId);
     cursorReq.onsuccess = onsuccess;
     return promiseifyTxn(txn).then(() => result);
   }
@@ -329,13 +338,14 @@ class Backend {
    * @returns {Promise} resolves once the operation is completed
    */
 
-
   deleteOutgoingRoomKeyRequest(requestId, expectedState) {
     const txn = this._db.transaction("outgoingRoomKeyRequests", "readwrite");
 
-    const cursorReq = txn.objectStore("outgoingRoomKeyRequests").openCursor(requestId);
+    const cursorReq = txn
+      .objectStore("outgoingRoomKeyRequests")
+      .openCursor(requestId);
 
-    cursorReq.onsuccess = ev => {
+    cursorReq.onsuccess = (ev) => {
       const cursor = ev.target.result;
 
       if (!cursor) {
@@ -345,7 +355,10 @@ class Backend {
       const data = cursor.value;
 
       if (data.state != expectedState) {
-        _logger.logger.warn(`Cannot delete room key request in state ${data.state} ` + `(expected ${expectedState})`);
+        _logger.logger.warn(
+          `Cannot delete room key request in state ${data.state} ` +
+            `(expected ${expectedState})`
+        );
 
         return;
       }
@@ -355,7 +368,6 @@ class Backend {
 
     return promiseifyTxn(txn);
   } // Olm Account
-
 
   getAccount(txn, func) {
     const objectStore = txn.objectStore("account");
@@ -411,7 +423,6 @@ class Backend {
     objectStore.put(key, `ssss_cache:${type}`);
   } // Olm Sessions
 
-
   countEndToEndSessions(txn, func) {
     const objectStore = txn.objectStore("sessions");
     const countReq = objectStore.count();
@@ -437,7 +448,7 @@ class Backend {
       if (cursor) {
         results[cursor.value.sessionId] = {
           session: cursor.value.session,
-          lastReceivedMessageTs: cursor.value.lastReceivedMessageTs
+          lastReceivedMessageTs: cursor.value.lastReceivedMessageTs,
         };
         cursor.continue();
       } else {
@@ -459,7 +470,7 @@ class Backend {
         if (getReq.result) {
           func({
             session: getReq.result.session,
-            lastReceivedMessageTs: getReq.result.lastReceivedMessageTs
+            lastReceivedMessageTs: getReq.result.lastReceivedMessageTs,
           });
         } else {
           func(null);
@@ -496,7 +507,7 @@ class Backend {
       deviceKey,
       sessionId,
       session: sessionInfo.session,
-      lastReceivedMessageTs: sessionInfo.lastReceivedMessageTs
+      lastReceivedMessageTs: sessionInfo.lastReceivedMessageTs,
     });
   }
 
@@ -508,7 +519,7 @@ class Backend {
       deviceKey,
       type,
       fixed,
-      time: Date.now()
+      time: Date.now(),
     });
     return promiseifyTxn(txn);
   }
@@ -522,7 +533,7 @@ class Backend {
     const index = objectStore.index("deviceKey");
     const req = index.getAll(deviceKey);
 
-    req.onsuccess = event => {
+    req.onsuccess = (event) => {
       const problems = req.result;
 
       if (!problems.length) {
@@ -538,7 +549,7 @@ class Backend {
       for (const problem of problems) {
         if (problem.time > timestamp) {
           result = Object.assign({}, problem, {
-            fixed: lastProblem.fixed
+            fixed: lastProblem.fixed,
           });
           return;
         }
@@ -555,36 +566,33 @@ class Backend {
     return result;
   } // FIXME: we should probably prune this when devices get deleted
 
-
   async filterOutNotifiedErrorDevices(devices) {
     const txn = this._db.transaction("notified_error_devices", "readwrite");
 
     const objectStore = txn.objectStore("notified_error_devices");
     const ret = [];
-    await Promise.all(devices.map(device => {
-      return new Promise(resolve => {
-        const {
-          userId,
-          deviceInfo
-        } = device;
-        const getReq = objectStore.get([userId, deviceInfo.deviceId]);
+    await Promise.all(
+      devices.map((device) => {
+        return new Promise((resolve) => {
+          const { userId, deviceInfo } = device;
+          const getReq = objectStore.get([userId, deviceInfo.deviceId]);
 
-        getReq.onsuccess = function () {
-          if (!getReq.result) {
-            objectStore.put({
-              userId,
-              deviceId: deviceInfo.deviceId
-            });
-            ret.push(device);
-          }
+          getReq.onsuccess = function () {
+            if (!getReq.result) {
+              objectStore.put({
+                userId,
+                deviceId: deviceInfo.deviceId,
+              });
+              ret.push(device);
+            }
 
-          resolve();
-        };
-      });
-    }));
+            resolve();
+          };
+        });
+      })
+    );
     return ret;
   } // Inbound group sessions
-
 
   getEndToEndInboundGroupSession(senderCurve25519Key, sessionId, txn, func) {
     let session = false;
@@ -608,8 +616,13 @@ class Backend {
       }
     };
 
-    const withheldObjectStore = txn.objectStore("inbound_group_sessions_withheld");
-    const withheldGetReq = withheldObjectStore.get([senderCurve25519Key, sessionId]);
+    const withheldObjectStore = txn.objectStore(
+      "inbound_group_sessions_withheld"
+    );
+    const withheldGetReq = withheldObjectStore.get([
+      senderCurve25519Key,
+      sessionId,
+    ]);
 
     withheldGetReq.onsuccess = function () {
       try {
@@ -640,7 +653,7 @@ class Backend {
           func({
             senderKey: cursor.value.senderCurve25519Key,
             sessionId: cursor.value.sessionId,
-            sessionData: cursor.value.session
+            sessionData: cursor.value.session,
           });
         } catch (e) {
           abortWithException(txn, e);
@@ -657,43 +670,66 @@ class Backend {
     };
   }
 
-  addEndToEndInboundGroupSession(senderCurve25519Key, sessionId, sessionData, txn) {
+  addEndToEndInboundGroupSession(
+    senderCurve25519Key,
+    sessionId,
+    sessionData,
+    txn
+  ) {
     const objectStore = txn.objectStore("inbound_group_sessions");
     const addReq = objectStore.add({
       senderCurve25519Key,
       sessionId,
-      session: sessionData
+      session: sessionData,
     });
 
-    addReq.onerror = ev => {
-      if (addReq.error.name === 'ConstraintError') {
+    addReq.onerror = (ev) => {
+      if (addReq.error.name === "ConstraintError") {
         // This stops the error from triggering the txn's onerror
         ev.stopPropagation(); // ...and this stops it from aborting the transaction
 
         ev.preventDefault();
 
-        _logger.logger.log("Ignoring duplicate inbound group session: " + senderCurve25519Key + " / " + sessionId);
+        _logger.logger.log(
+          "Ignoring duplicate inbound group session: " +
+            senderCurve25519Key +
+            " / " +
+            sessionId
+        );
       } else {
-        abortWithException(txn, new Error("Failed to add inbound group session: " + addReq.error));
+        abortWithException(
+          txn,
+          new Error("Failed to add inbound group session: " + addReq.error)
+        );
       }
     };
   }
 
-  storeEndToEndInboundGroupSession(senderCurve25519Key, sessionId, sessionData, txn) {
+  storeEndToEndInboundGroupSession(
+    senderCurve25519Key,
+    sessionId,
+    sessionData,
+    txn
+  ) {
     const objectStore = txn.objectStore("inbound_group_sessions");
     objectStore.put({
       senderCurve25519Key,
       sessionId,
-      session: sessionData
+      session: sessionData,
     });
   }
 
-  storeEndToEndInboundGroupSessionWithheld(senderCurve25519Key, sessionId, sessionData, txn) {
+  storeEndToEndInboundGroupSessionWithheld(
+    senderCurve25519Key,
+    sessionId,
+    sessionData,
+    txn
+  ) {
     const objectStore = txn.objectStore("inbound_group_sessions_withheld");
     objectStore.put({
       senderCurve25519Key,
       sessionId,
-      session: sessionData
+      session: sessionData,
     });
   }
 
@@ -741,12 +777,14 @@ class Backend {
     };
   } // session backups
 
-
   getSessionsNeedingBackup(limit) {
     return new Promise((resolve, reject) => {
       const sessions = [];
 
-      const txn = this._db.transaction(["sessions_needing_backup", "inbound_group_sessions"], "readonly");
+      const txn = this._db.transaction(
+        ["sessions_needing_backup", "inbound_group_sessions"],
+        "readonly"
+      );
 
       txn.onerror = reject;
 
@@ -768,7 +806,7 @@ class Backend {
             sessions.push({
               senderKey: sessionGetReq.result.senderCurve25519Key,
               sessionId: sessionGetReq.result.sessionId,
-              sessionData: sessionGetReq.result.session
+              sessionData: sessionGetReq.result.session,
             });
           };
 
@@ -800,13 +838,18 @@ class Backend {
     }
 
     const objectStore = txn.objectStore("sessions_needing_backup");
-    return Promise.all(sessions.map(session => {
-      return new Promise((resolve, reject) => {
-        const req = objectStore.delete([session.senderKey, session.sessionId]);
-        req.onsuccess = resolve;
-        req.onerror = reject;
-      });
-    }));
+    return Promise.all(
+      sessions.map((session) => {
+        return new Promise((resolve, reject) => {
+          const req = objectStore.delete([
+            session.senderKey,
+            session.sessionId,
+          ]);
+          req.onsuccess = resolve;
+          req.onerror = reject;
+        });
+      })
+    );
   }
 
   markSessionsNeedingBackup(sessions, txn) {
@@ -815,53 +858,61 @@ class Backend {
     }
 
     const objectStore = txn.objectStore("sessions_needing_backup");
-    return Promise.all(sessions.map(session => {
-      return new Promise((resolve, reject) => {
-        const req = objectStore.put({
-          senderCurve25519Key: session.senderKey,
-          sessionId: session.sessionId
+    return Promise.all(
+      sessions.map((session) => {
+        return new Promise((resolve, reject) => {
+          const req = objectStore.put({
+            senderCurve25519Key: session.senderKey,
+            sessionId: session.sessionId,
+          });
+          req.onsuccess = resolve;
+          req.onerror = reject;
         });
-        req.onsuccess = resolve;
-        req.onerror = reject;
-      });
-    }));
+      })
+    );
   }
 
   addSharedHistoryInboundGroupSession(roomId, senderKey, sessionId, txn) {
     if (!txn) {
-      txn = this._db.transaction("shared_history_inbound_group_sessions", "readwrite");
+      txn = this._db.transaction(
+        "shared_history_inbound_group_sessions",
+        "readwrite"
+      );
     }
 
-    const objectStore = txn.objectStore("shared_history_inbound_group_sessions");
+    const objectStore = txn.objectStore(
+      "shared_history_inbound_group_sessions"
+    );
     const req = objectStore.get([roomId]);
 
     req.onsuccess = () => {
-      const {
-        sessions
-      } = req.result || {
-        sessions: []
+      const { sessions } = req.result || {
+        sessions: [],
       };
       sessions.push([senderKey, sessionId]);
       objectStore.put({
         roomId,
-        sessions
+        sessions,
       });
     };
   }
 
   getSharedHistoryInboundGroupSessions(roomId, txn) {
     if (!txn) {
-      txn = this._db.transaction("shared_history_inbound_group_sessions", "readonly");
+      txn = this._db.transaction(
+        "shared_history_inbound_group_sessions",
+        "readonly"
+      );
     }
 
-    const objectStore = txn.objectStore("shared_history_inbound_group_sessions");
+    const objectStore = txn.objectStore(
+      "shared_history_inbound_group_sessions"
+    );
     const req = objectStore.get([roomId]);
     return new Promise((resolve, reject) => {
       req.onsuccess = () => {
-        const {
-          sessions
-        } = req.result || {
-          sessions: []
+        const { sessions } = req.result || {
+          sessions: [],
         };
         resolve(sessions);
       };
@@ -887,26 +938,31 @@ class Backend {
     const result = func(txn);
 
     if (PROFILE_TRANSACTIONS) {
-      promise.then(() => {
-        const elapsedTime = Date.now() - startTime;
-        log.debug(`Finished ${description}, took ${elapsedTime} ms`);
-      }, () => {
-        const elapsedTime = Date.now() - startTime;
-        log.error(`Failed ${description}, took ${elapsedTime} ms`);
-      });
+      promise.then(
+        () => {
+          const elapsedTime = Date.now() - startTime;
+          log.debug(`Finished ${description}, took ${elapsedTime} ms`);
+        },
+        () => {
+          const elapsedTime = Date.now() - startTime;
+          log.error(`Failed ${description}, took ${elapsedTime} ms`);
+        }
+      );
     }
 
     return promise.then(() => {
       return result;
     });
   }
-
 }
 
 exports.Backend = Backend;
 
 function upgradeDatabase(db, oldVersion) {
-  _logger.logger.log(`Upgrading IndexedDBCryptoStore from version ${oldVersion}` + ` to ${VERSION}`);
+  _logger.logger.log(
+    `Upgrading IndexedDBCryptoStore from version ${oldVersion}` +
+      ` to ${VERSION}`
+  );
 
   if (oldVersion < 1) {
     // The database did not previously exist.
@@ -919,14 +975,14 @@ function upgradeDatabase(db, oldVersion) {
 
   if (oldVersion < 3) {
     const sessionsStore = db.createObjectStore("sessions", {
-      keyPath: ["deviceKey", "sessionId"]
+      keyPath: ["deviceKey", "sessionId"],
     });
     sessionsStore.createIndex("deviceKey", "deviceKey");
   }
 
   if (oldVersion < 4) {
     db.createObjectStore("inbound_group_sessions", {
-      keyPath: ["senderCurve25519Key", "sessionId"]
+      keyPath: ["senderCurve25519Key", "sessionId"],
     });
   }
 
@@ -940,48 +996,52 @@ function upgradeDatabase(db, oldVersion) {
 
   if (oldVersion < 7) {
     db.createObjectStore("sessions_needing_backup", {
-      keyPath: ["senderCurve25519Key", "sessionId"]
+      keyPath: ["senderCurve25519Key", "sessionId"],
     });
   }
 
   if (oldVersion < 8) {
     db.createObjectStore("inbound_group_sessions_withheld", {
-      keyPath: ["senderCurve25519Key", "sessionId"]
+      keyPath: ["senderCurve25519Key", "sessionId"],
     });
   }
 
   if (oldVersion < 9) {
     const problemsStore = db.createObjectStore("session_problems", {
-      keyPath: ["deviceKey", "time"]
+      keyPath: ["deviceKey", "time"],
     });
     problemsStore.createIndex("deviceKey", "deviceKey");
     db.createObjectStore("notified_error_devices", {
-      keyPath: ["userId", "deviceId"]
+      keyPath: ["userId", "deviceId"],
     });
   }
 
   if (oldVersion < 10) {
     db.createObjectStore("shared_history_inbound_group_sessions", {
-      keyPath: ["roomId"]
+      keyPath: ["roomId"],
     });
   } // Expand as needed.
-
 }
 
 function createDatabase(db) {
-  const outgoingRoomKeyRequestsStore = db.createObjectStore("outgoingRoomKeyRequests", {
-    keyPath: "requestId"
-  }); // we assume that the RoomKeyRequestBody will have room_id and session_id
+  const outgoingRoomKeyRequestsStore = db.createObjectStore(
+    "outgoingRoomKeyRequests",
+    {
+      keyPath: "requestId",
+    }
+  ); // we assume that the RoomKeyRequestBody will have room_id and session_id
   // properties, to make the index efficient.
 
-  outgoingRoomKeyRequestsStore.createIndex("session", ["requestBody.room_id", "requestBody.session_id"]);
+  outgoingRoomKeyRequestsStore.createIndex("session", [
+    "requestBody.room_id",
+    "requestBody.session_id",
+  ]);
   outgoingRoomKeyRequestsStore.createIndex("state", "state");
 }
 /*
  * Aborts a transaction with a given exception
  * The transaction promise will be rejected with this exception.
  */
-
 
 function abortWithException(txn, e) {
   // We cheekily stick our exception onto the transaction object here
@@ -991,7 +1051,8 @@ function abortWithException(txn, e) {
 
   try {
     txn.abort();
-  } catch (e) {// sometimes we won't be able to abort the transaction
+  } catch (e) {
+    // sometimes we won't be able to abort the transaction
     // (ie. if it's aborted or completed)
   }
 }
@@ -1006,7 +1067,7 @@ function promiseifyTxn(txn) {
       resolve();
     };
 
-    txn.onerror = event => {
+    txn.onerror = (event) => {
       if (txn._mx_abortexception !== undefined) {
         reject(txn._mx_abortexception);
       } else {
@@ -1016,7 +1077,7 @@ function promiseifyTxn(txn) {
       }
     };
 
-    txn.onabort = event => {
+    txn.onabort = (event) => {
       if (txn._mx_abortexception !== undefined) {
         reject(txn._mx_abortexception);
       } else {

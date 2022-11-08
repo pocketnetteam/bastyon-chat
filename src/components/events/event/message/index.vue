@@ -1,30 +1,59 @@
 <template>
   <div class="eventsMessage">
-
-    <div class="reference referenceTop" :class="{my}"  v-if="referenceshowed && reference && !preview && !fromreference">
-
+    <div
+      class="reference referenceTop"
+      :class="{ my }"
+      v-if="referenceshowed && reference && !preview && !fromreference"
+    >
       <eventsEvent
         :event="reference"
         :chat="chat"
         :preview="false"
         :fromreference="true"
       />
-
     </div>
 
-    <div v-touch:touchhold="dropDownMenuShow" :class="{referenceshowed, showmeta : showmeta, my,'messageRow': 'messageRow', urlpreview : urlpreview, allscreen : urlpreview || content.msgtype === 'm.image'|| file, aligncenter : content.msgtype === 'm.audio'}" :my="my" v-if="!preview && content.msgtype !== 'm.notice'">
+    <div
+      v-touch:touchhold="dropDownMenuShow"
+      :class="{
+        referenceshowed,
+        showmeta: showmeta,
+        my,
+        messageRow: 'messageRow',
+        urlpreview: urlpreview,
+        allscreen: urlpreview || content.msgtype === 'm.image' || file,
+        aligncenter: content.msgtype === 'm.audio',
+      }"
+      :my="my"
+      v-if="!preview && content.msgtype !== 'm.notice'"
+    >
+      <div
+        class="timeWrapper"
+        v-if="
+          urlpreview ||
+          imageUrl ||
+          content.msgtype === 'm.image' ||
+          (showmeta && my) ||
+          file
+        "
+      >
+        <i
+          :class="'fas fa-fire burn ' + showburn"
+          v-if="showburn"
+          @click="showwhenburn"
+        ></i>
 
-      <div class="timeWrapper" v-if="(urlpreview || imageUrl || content.msgtype === 'm.image') || (showmeta && (my)) || file">
-        
-        <i :class="'fas fa-fire burn ' + showburn" v-if="showburn" @click="showwhenburn"></i>
-        
         <span>
           {{ format_date(origin._localTimestamp) || "Now" }}
         </span>
       </div>
 
       <div class="actionsWrapper">
-        <div v-if="multiSelect" class="multiSelect" @click="eventMessage(selectedMessage)">
+        <div
+          v-if="multiSelect"
+          class="multiSelect"
+          @click="eventMessage(selectedMessage)"
+        >
           <i v-if="selectedMessage" class="far fa-check-circle"></i>
           <i v-else class="far fa-circle"></i>
         </div>
@@ -33,35 +62,55 @@
         </div>
       </div>
 
-      <div class="iconWrapper" v-if="!my || showmyicon" @click="core.mtrx.opencontact(userinfo)">
-          <userpic :userinfo="userinfo"/>
+      <div
+        class="iconWrapper"
+        v-if="!my || showmyicon"
+        @click="core.mtrx.opencontact(userinfo)"
+      >
+        <userpic :userinfo="userinfo" />
       </div>
 
-      <div class="fromimagesfiles" v-if="(content.from || imageFrom) && (file || (content.msgtype === 'm.image' && imageUrl) || ( content.msgtype === 'm.audio' && audioUrl))">
-          <div class="fromCaption">
-            <i class="fas fa-share-alt"></i> <span>{{ $t("caption.messagefrom") }}</span>
+      <div
+        class="fromimagesfiles"
+        v-if="
+          (content.from || imageFrom) &&
+          (file ||
+            (content.msgtype === 'm.image' && imageUrl) ||
+            (content.msgtype === 'm.audio' && audioUrl))
+        "
+      >
+        <div class="fromCaption">
+          <i class="fas fa-share-alt"></i>
+          <span>{{ $t("caption.messagefrom") }}</span>
+        </div>
+      </div>
+
+      <div
+        class="messageImg"
+        :class="{ referenceImg: reference }"
+        v-if="content.msgtype === 'm.image'"
+      >
+        <div
+          class="reference showreference"
+          @click="showreference"
+          v-if="reference && !preview && !fromreference"
+        >
+          <eventsEvent
+            v-if="!referenceshowed"
+            :event="reference"
+            :chat="chat"
+            :preview="true"
+          />
+
+          <div class="referenceCaption">
+            <span v-if="!referenceshowed"><i class="fas fa-share"></i></span>
+            <button class="button ghost small" v-else>Hide</button>
           </div>
-      </div>
-
-      <div class="messageImg" :class="{referenceImg:reference}" v-if="content.msgtype === 'm.image'">
-        <div class="reference showreference" @click="showreference" v-if="reference && !preview && !fromreference">
-
-            <eventsEvent
-              v-if="!referenceshowed"
-              :event="reference"
-              :chat="chat"
-              :preview="true"
-            />
-
-            <div class="referenceCaption">
-              <span v-if="!referenceshowed"><i class="fas fa-share"></i></span>
-              <button class="button ghost small" v-else>Hide</button>
-            </div>
-
         </div>
         <div class="" v-if="imageUrl">
-
-          <div class="encryptedDataIcon" v-if="encryptedData"><i class="fas fa-lock"></i></div>
+          <div class="encryptedDataIcon" v-if="encryptedData">
+            <i class="fas fa-lock"></i>
+          </div>
           <div class="imgMsg">
             <div
               class="showImage"
@@ -69,11 +118,14 @@
               @click="openImageGallery(origin)"
             >
               <div class="abswrapper">
-              <img :src="imageUrl" alt="" v-images-loaded:on.loaded="imagesLoaded">
+                <img
+                  :src="imageUrl"
+                  alt=""
+                  v-images-loaded:on.loaded="imagesLoaded"
+                />
               </div>
             </div>
           </div>
-
         </div>
 
         <div class="preloaderImage" :style="imagePaddingStyle(content)" v-else>
@@ -81,48 +133,76 @@
         </div>
       </div>
       <div class="messageAudio" v-if="content.msgtype === 'm.audio'">
-         <div class="reference showreference" @click="showreference" v-if="reference && !preview && !fromreference">
+        <div
+          class="reference showreference"
+          @click="showreference"
+          v-if="reference && !preview && !fromreference"
+        >
+          <eventsEvent
+            v-if="!referenceshowed"
+            :event="reference"
+            :chat="chat"
+            :preview="true"
+          />
 
-            <eventsEvent
-              v-if="!referenceshowed"
-              :event="reference"
-              :chat="chat"
-              :preview="true"
-            />
-
-            <div class="referenceCaption">
-              <span v-if="!referenceshowed"><i class="fas fa-share"></i></span>
-              <button class="button ghost small" v-else>Hide</button>
-            </div>
-
+          <div class="referenceCaption">
+            <span v-if="!referenceshowed"><i class="fas fa-share"></i></span>
+            <button class="button ghost small" v-else>Hide</button>
+          </div>
         </div>
-        <VoiceMessage v-if="audioUrl" :audioBuffer="audioUrl" :decryptedInfo="decryptedInfo" :id="event._localTimestamp || Date.now()"/>
+        <VoiceMessage
+          v-if="audioUrl"
+          :audioBuffer="audioUrl"
+          :decryptedInfo="decryptedInfo"
+          :id="event._localTimestamp || Date.now()"
+        />
       </div>
 
-      <div class="maxcontent" :class="{'my' : my }" v-if="content.msgtype === 'm.encrypted' && !textWithoutLinks && badenctypted">
+      <div
+        class="maxcontent"
+        :class="{ my: my }"
+        v-if="
+          content.msgtype === 'm.encrypted' && !textWithoutLinks && badenctypted
+        "
+      >
         <div class="badenctyptedText">
-          <span>{{ $t("caption.unabletoDecrypt") }}</span> <i class="fas fa-undo decryptagain" @click="decryptagain"></i>
+          <span>{{ $t("caption.unabletoDecrypt") }}</span>
+          <i class="fas fa-undo decryptagain" @click="decryptagain"></i>
         </div>
       </div>
 
-      <div class="maxcontent" :class="{'my' : my }" v-if="(content.msgtype === 'm.text' || content.msgtype === 'm.encrypted') && textWithoutLinks">
+      <div
+        class="maxcontent"
+        :class="{ my: my }"
+        v-if="
+          (content.msgtype === 'm.text' || content.msgtype === 'm.encrypted') &&
+          textWithoutLinks
+        "
+      >
         <div class="messageText">
-
           <div class="edited" v-if="edited">
             <i class="fas fa-pen"></i> {{ $t("caption.edited") }}
           </div>
           <div class="msgtext">
             <IncomingMessage :message="textWithoutLinks"></IncomingMessage>
           </div>
-          <div class="sendername" v-if="(!content.from && !my && showmeta) || (showmyicon && !my)">
-            <span><b>{{userinfo.name}}</b></span> 
+          <div
+            class="sendername"
+            v-if="(!content.from && !my && showmeta) || (showmyicon && !my)"
+          >
+            <span
+              ><b>{{ userinfo.name }}</b></span
+            >
             &middot;
             <span>
               {{ format_date(origin._localTimestamp) || "Now" }}
             </span>
           </div>
-          <div class="reference showreference" @click="showreference" v-if="reference && !preview && !fromreference">
-
+          <div
+            class="reference showreference"
+            @click="showreference"
+            v-if="reference && !preview && !fromreference"
+          >
             <eventsEvent
               v-if="!referenceshowed"
               :event="reference"
@@ -134,38 +214,46 @@
               <span v-if="!referenceshowed"><i class="fas fa-share"></i></span>
               <button class="button ghost small" v-else>Hide</button>
             </div>
-
           </div>
 
           <div class="from" v-if="content.from">
             <div class="fromCaption">
               <i class="fas fa-share-alt"></i>
-              <span>{{ $t("caption.messagefrom") }} {{ this.userinfo.name }}</span>
+              <span
+                >{{ $t("caption.messagefrom") }} {{ this.userinfo.name }}</span
+              >
             </div>
           </div>
-
         </div>
-        
       </div>
 
-      <div class="filePreview" :class="{reference:reference}" v-if="file">
-        <div class="reference showreference" @click="showreference" v-if="reference && !preview && !fromreference">
+      <div class="filePreview" :class="{ reference: reference }" v-if="file">
+        <div
+          class="reference showreference"
+          @click="showreference"
+          v-if="reference && !preview && !fromreference"
+        >
+          <eventsEvent
+            v-if="!referenceshowed"
+            :event="reference"
+            :chat="chat"
+            :preview="true"
+          />
 
-            <eventsEvent
-              v-if="!referenceshowed"
-              :event="reference"
-              :chat="chat"
-              :preview="true"
-            />
-
-            <div class="referenceCaption">
-              <span v-if="!referenceshowed"><i class="fas fa-share"></i></span>
-              <button class="button ghost small" v-else>Hide</button>
-            </div>
-
+          <div class="referenceCaption">
+            <span v-if="!referenceshowed"><i class="fas fa-share"></i></span>
+            <button class="button ghost small" v-else>Hide</button>
+          </div>
         </div>
-        <fileMessage :encryptedData="encryptedData" :file="file" :downloaded="downloaded" @download="download"/>
-        <div class="encryptedDataIcon" v-if="encryptedData"><i class="fas fa-lock"></i></div>
+        <fileMessage
+          :encryptedData="encryptedData"
+          :file="file"
+          :downloaded="downloaded"
+          @download="download"
+        />
+        <div class="encryptedDataIcon" v-if="encryptedData">
+          <i class="fas fa-lock"></i>
+        </div>
 
         <div class="badencrypted" v-if="error">
           <span>{{ $t("caption.unabletoDecrypt") }}</span>
@@ -174,32 +262,45 @@
 
       <div class="linkPreview" v-if="urlpreview">
         <div class="pr" v-if="!sending">
-          <url :url="urlpreview" :urllink="urlpreview" :preview="true" @updatedSize="updatedSize" v-if="!origin.localRedactionEvent() && !origin.getRedactionEvent()"/>
+          <url
+            :url="urlpreview"
+            :urllink="urlpreview"
+            :preview="true"
+            @updatedSize="updatedSize"
+            v-if="!origin.localRedactionEvent() && !origin.getRedactionEvent()"
+          />
         </div>
         <div v-else>
-          <linepreloader/>
+          <linepreloader />
         </div>
       </div>
-      
     </div>
-<!--sdfsf-->
+    <!--sdfsf-->
     <div class="messagePreview" v-if="preview">
-      <listPreview :my="my" :event="origin" :decryptEvent="decryptEvent" :userinfo="userinfo" :chat="chat" :readed="readed" />
+      <listPreview
+        :my="my"
+        :event="origin"
+        :decryptEvent="decryptEvent"
+        :userinfo="userinfo"
+        :chat="chat"
+        :readed="readed"
+      />
     </div>
 
-    <div class="statusWrapper" v-if="my && readed && !preview && !fromreference">
+    <div
+      class="statusWrapper"
+      v-if="my && readed && !preview && !fromreference"
+    >
       <div class="my">
-        <i class="fas fa-check-double" ></i> <span>{{$t("caption.messageRead")}}</span>
+        <i class="fas fa-check-double"></i>
+        <span>{{ $t("caption.messageRead") }}</span>
         <!--<date v-if="readed.data" :date="readed.data.ts"/>-->
       </div>
     </div>
   </div>
-
 </template>
 
-
-<script src="./index.js">
-</script>
+<script src="./index.js"></script>
 <style scoped lang="sass" src="./index.sass"></style>
 
 <!-- THEMES BEGIN -->

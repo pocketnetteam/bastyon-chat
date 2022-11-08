@@ -1,6 +1,6 @@
 <template>
   <div class="caption">
-      {{ caption.toUpperCase() }}
+    {{ caption.toUpperCase() }}
   </div>
 </template>
 
@@ -9,24 +9,3 @@
 
 <!-- THEMES BEGIN -->
 <!-- THEMES END -->
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

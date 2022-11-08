@@ -5,13 +5,13 @@
 
   to {
     transform: translate3d(0, 0, 0);
-    opacity: 1
+    opacity: 1;
   }
 }
 
 .fade-in-right-leave-to {
   opacity: 0;
-  transition: opacity .1s;
+  transition: opacity 0.1s;
 }
 
 .fade-in-right-enter {
@@ -21,7 +21,7 @@
 
 .fade-in-right-enter-to {
   opacity: 0;
-  animation-duration: .2s;
+  animation-duration: 0.2s;
   animation-fill-mode: both;
   animation-name: fadeInRight;
 }

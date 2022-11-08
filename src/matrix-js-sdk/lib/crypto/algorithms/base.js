@@ -1,10 +1,16 @@
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
+  value: true,
 });
 exports.registerAlgorithm = registerAlgorithm;
-exports.UnknownDeviceError = exports.DecryptionError = exports.DecryptionAlgorithm = exports.EncryptionAlgorithm = exports.DECRYPTION_CLASSES = exports.ENCRYPTION_CLASSES = void 0;
+exports.UnknownDeviceError =
+  exports.DecryptionError =
+  exports.DecryptionAlgorithm =
+  exports.EncryptionAlgorithm =
+  exports.DECRYPTION_CLASSES =
+  exports.ENCRYPTION_CLASSES =
+    void 0;
 
 /*
 Copyright 2016 OpenMarket Ltd
@@ -77,7 +83,6 @@ class EncryptionAlgorithm {
    * @param {module:models/room} room the room the event is in
    */
 
-
   prepareToEncrypt(room) {}
   /**
    * Encrypt a message event
@@ -101,9 +106,7 @@ class EncryptionAlgorithm {
    * @public
    */
 
-
   onRoomMembership(event, member, oldMembership) {}
-
 }
 /**
  * base type for decryption implementations
@@ -117,7 +120,6 @@ class EncryptionAlgorithm {
  * @param {string=} params.roomId The ID of the room we will be receiving
  *     from. Null for to-device events.
  */
-
 
 exports.EncryptionAlgorithm = EncryptionAlgorithm;
 
@@ -150,8 +152,8 @@ class DecryptionAlgorithm {
    * @param {module:models/event.MatrixEvent} params event key event
    */
 
-
-  onRoomKeyEvent(params) {// ignore by default
+  onRoomKeyEvent(params) {
+    // ignore by default
   }
   /**
    * Import a room key
@@ -159,8 +161,8 @@ class DecryptionAlgorithm {
    * @param {module:crypto/OlmDevice.MegolmSessionData} session
    */
 
-
-  importRoomKey(session) {// ignore by default
+  importRoomKey(session) {
+    // ignore by default
   }
   /**
    * Determine if we have the keys necessary to respond to a room key request
@@ -169,7 +171,6 @@ class DecryptionAlgorithm {
    * @return {Promise<boolean>} true if we have the keys and could (theoretically) share
    *  them; else false.
    */
-
 
   hasKeysForKeyRequest(keyRequest) {
     return Promise.resolve(false);
@@ -180,9 +181,10 @@ class DecryptionAlgorithm {
    * @param {module:crypto~IncomingRoomKeyRequest} keyRequest
    */
 
-
   shareKeysWithDevice(keyRequest) {
-    throw new Error("shareKeysWithDevice not supported for this DecryptionAlgorithm");
+    throw new Error(
+      "shareKeysWithDevice not supported for this DecryptionAlgorithm"
+    );
   }
   /**
    * Retry decrypting all the events from a sender that haven't been
@@ -191,10 +193,9 @@ class DecryptionAlgorithm {
    * @param {string} senderKey the sender's key
    */
 
-
-  async retryDecryptionFromSender(senderKey) {// ignore by default
+  async retryDecryptionFromSender(senderKey) {
+    // ignore by default
   }
-
 }
 /**
  * Exception thrown when decryption fails
@@ -208,29 +209,31 @@ class DecryptionAlgorithm {
  * @extends Error
  */
 
-
 exports.DecryptionAlgorithm = DecryptionAlgorithm;
 
 class DecryptionError extends Error {
   constructor(code, msg, details) {
     super(msg);
     this.code = code;
-    this.name = 'DecryptionError';
+    this.name = "DecryptionError";
     this.detailedString = _detailedStringForDecryptionError(this, details);
   }
-
 }
 
 exports.DecryptionError = DecryptionError;
 
 function _detailedStringForDecryptionError(err, details) {
-  let result = err.name + '[msg: ' + err.message;
+  let result = err.name + "[msg: " + err.message;
 
   if (details) {
-    result += ', ' + Object.keys(details).map(k => k + ': ' + details[k]).join(', ');
+    result +=
+      ", " +
+      Object.keys(details)
+        .map((k) => k + ": " + details[k])
+        .join(", ");
   }
 
-  result += ']';
+  result += "]";
   return result;
 }
 /**
@@ -243,14 +246,12 @@ function _detailedStringForDecryptionError(err, details) {
  * @extends Error
  */
 
-
 class UnknownDeviceError extends Error {
   constructor(msg, devices) {
     super(msg);
     this.name = "UnknownDeviceError";
     this.devices = devices;
   }
-
 }
 /**
  * Registers an encryption/decryption class for a particular algorithm
@@ -265,7 +266,6 @@ class UnknownDeviceError extends Error {
  *     module:crypto/algorithms/base.DecryptionAlgorithm|DecryptionAlgorithm}
  *     implementation
  */
-
 
 exports.UnknownDeviceError = UnknownDeviceError;
 

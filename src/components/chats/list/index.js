@@ -81,17 +81,15 @@ export default {
       "wasunhidden",
     ]),
 
-  
-
     rooms: function () {
       return this.core.mtrx.client.getRooms();
     },
     empty: function () {
       return this.core.mtrx.ready && this.chats.length === 0;
     },
-		showchatslist : function(){
-			return !this.hideOptimization// || this.wasunhidden
-		},
+    showchatslist: function () {
+      return !this.hideOptimization; // || this.wasunhidden
+    },
 
     topchatid: function () {
       if (this.chats && this.chats.length) {
@@ -261,148 +259,127 @@ export default {
 					this.$store.state.lastroom.id == chat.roomId) {
 					this.$router.push('chat?id=' + this.$store.state.lastroom.id)
 				}*/
-			}
-			else {
+      } else {
+        if (this.share) {
+          var _share = this.share;
 
-				if (this.share) {
+          this.$store.commit("SHARE", null);
 
-					var _share = this.share
+          this.$store.commit("icon", {
+            icon: "loading",
+            message: "",
+            manual: true,
+          });
 
-					this.$store.commit('SHARE', null)
+          this.core.mtrx
+            .shareInChat(chat.roomId, _share)
+            .then((r) => {
+              this.$store.commit("icon", {
+                icon: "success",
+                message: "",
+              });
 
-					this.$store.commit('icon', {
-						icon: 'loading',
-						message: "",
-						manual: true
-					})
+              this.$router.push({
+                path: "chat",
+                query: {
+                  ...this.$route.query,
+                  id: chat.roomId,
+                },
+              });
+            })
+            .catch((e) => {
+              console.error(e);
 
+              this.$store.commit("icon", {
+                icon: "error",
+                message: "",
+              });
 
-					this.core.mtrx.shareInChat(chat.roomId, _share).then(r => {
+              if (_share.route) {
+                this.$router.push({
+                  path: "chat",
+                  query: {
+                    ...this.$route.query,
+                    id: chat.roomId,
+                  },
+                });
+              }
+            });
+        } else {
+          this.$router.push("chat?id=" + chat.roomId).catch((e) => {});
+        }
+      }
+    },
+    fbClick(e) {},
+    sbClick(e) {},
+    openTeamRoom: function () {
+      if (this.hmode) {
+        this.$store.commit("active", true);
+        this.$store.commit("blockactive", { value: true, item: "main" });
+        this.$store.commit("setiteraction", true);
+      } else {
+        setTimeout(() => {
+          this.$store.commit("SET_READEDTEAMMESSAGES", this.pocketteammessages);
+          this.$store.commit(
+            "ALL_NOTIFICATIONS_COUNT",
+            this.core.mtrx.client.getRooms()
+          );
+        }, 500);
 
-						this.$store.commit('icon', {
-							icon: 'success',
-							message: "",
-						})
+        this.$router.push("/teamroom").catch((e) => {});
+      }
+    },
+    // keyboard
+    onKeyDown(e) {
+      if (e.keyCode !== 16) return;
+      this.enabled = false;
+    },
+    onKeyUp(e) {
+      if (e.keyCode !== 16) return;
+      this.enabled = true;
+    },
+    removeRoom(room) {
+      this.$dialog
+        .confirm("Do you really want to leave room?", {
+          okText: this.$i18n.t("yes"),
+          cancelText: this.$i18n.t("cancel"),
+        })
 
-						this.$router.push({
-							path: 'chat',
-							query: {
-								...this.$route.query,
-								id: chat.roomId,
-							},
-						})
+        .then((dialog) => {
+          this.core.mtrx.client.leave(room).then((r) => {
+            this.core.mtrx.client
+              .forget(room, true)
+              .then((r) => {
+                return r;
+              })
+              .then((r) => {
+                this.$store.commit("DELETE_ROOM", room);
+                this.$router.push({ path: "/chats" }).catch((e) => {});
+              });
+          });
+        });
+    },
 
-					}).catch(e => {
+    tetatetchat(room) {
+      if (!room) return true;
 
-						console.error(e)
+      var m_ch = this.core.mtrx.client.getRoom(room.roomId);
 
-						this.$store.commit('icon', {
-							icon: 'error',
-							message: "",
-						})
+      if (!m_ch) return true;
 
-						if (_share.route) {
-							this.$router.push({
-								path: 'chat',
-								query: {
-									...this.$route.query,
-									id: chat.roomId,
-								},
-							})
-						}
+      return this.core.mtrx.kit.tetatetchat(
+        this.core.mtrx.client.getRoom(room.roomId)
+      );
+    },
+  },
+  mounted() {
+    // ideally should be in some global handler/store
+    window.addEventListener("keydown", this.onKeyDown);
+    window.addEventListener("keyup", this.onKeyUp);
 
-					})
-
-				} else {
-					this.$router.push('chat?id=' + chat.roomId).catch(e => {})
-				}
-
-			}
-
-		},
-		fbClick(e) {
-		},
-		sbClick(e) {
-		},
-		openTeamRoom: function () {
-			if (this.hmode) {
-
-				this.$store.commit('active', true)
-				this.$store.commit('blockactive', { value: true, item: 'main' })
-				this.$store.commit('setiteraction', true)
-
-			}
-			else {
-				setTimeout(() => {
-
-					this.$store.commit('SET_READEDTEAMMESSAGES', this.pocketteammessages);
-					this.$store.commit('ALL_NOTIFICATIONS_COUNT', this.core.mtrx.client.getRooms());
-
-				}, 500);
-
-				this.$router.push('/teamroom').catch(e => {});
-			}
-
-
-		},
-		// keyboard
-		onKeyDown(e) {
-			if (e.keyCode !== 16) return;
-			this.enabled = false;
-		},
-		onKeyUp(e) {
-			if (e.keyCode !== 16) return;
-			this.enabled = true;
-		},
-		removeRoom(room) {
-
-			this.$dialog.confirm(
-				'Do you really want to leave room?', {
-				okText: this.$i18n.t("yes"),
-				cancelText: this.$i18n.t("cancel")
-			})
-
-				.then((dialog) => {
-
-					this.core.mtrx.client.leave(room).then(r => {
-						this.core.mtrx.client.forget(room, true).then(r => {
-							return r
-						}).then(r => {
-							this.$store.commit('DELETE_ROOM', room);
-							this.$router.push({ path: '/chats' }).catch(e => {})
-						})
-					})
-
-				})
-
-
-		},
-
-		tetatetchat(room) {
-
-
-			if (!room) return true
-
-			var m_ch = this.core.mtrx.client.getRoom(room.roomId)
-
-			if (!m_ch) return true
-
-			return this.core.mtrx.kit.tetatetchat(this.core.mtrx.client.getRoom(room.roomId))
-		}
-	},
-	mounted() {
-
-		// ideally should be in some global handler/store
-		window.addEventListener('keydown', this.onKeyDown);
-		window.addEventListener('keyup', this.onKeyUp);
-
-
-		if (!this.hmode) {
-			this.$store.commit('SET_LAST_ROOM', null);
-		}
-		else {
-		}
-
-
-	}
-}
+    if (!this.hmode) {
+      this.$store.commit("SET_LAST_ROOM", null);
+    } else {
+    }
+  },
+};

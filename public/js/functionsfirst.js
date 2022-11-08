@@ -13,12 +13,12 @@ deep = function(obj, key){
 
 
     }
-    else{	
+    else{
         _key = key.split(".");
         tkey = _key[0];
     }
 
-    
+
 
     if(typeof obj == 'undefined' || !obj) return undefined;
 
@@ -62,7 +62,7 @@ topPreloader = function(percent){
 
     var inip = el.attr('percent') || 0;
 
-    el.attr('percent', percent); 
+    el.attr('percent', percent);
 
     div.width((percent - inip) + "%")
 
@@ -70,7 +70,7 @@ topPreloader = function(percent){
 
 
         el.addClass('complete');
-        el.attr('percent', 0); 
+        el.attr('percent', 0);
 
         setTimeout(function(){
 
@@ -84,12 +84,12 @@ topPreloader = function(percent){
             },300)
 
         },500)
-        
+
     }
     else{
         el.fadeIn(1);
     }
-    
+
 }
 
 makeid = function(valid){
@@ -132,7 +132,7 @@ MD5 = function(d){result = M(V(Y(X(d),8*d.length)));return result.toLowerCase()}
 retry = function(_function, clbk, time, totaltime){
     if(!time) time = 20;
 
-    var totalTimeCounter = 0 
+    var totalTimeCounter = 0
 
     var interval = setInterval(function(){
 
@@ -186,7 +186,7 @@ slowMade = function(_function, timer, time){
 
     if (!time) time = 20
 
-    if (timer) 
+    if (timer)
         clearTimeout(timer);
 
         timer = setTimeout(_function, time);
@@ -211,7 +211,7 @@ parameters = function(uri, split){
             uri = window.location.search.substr(1);
         }
 
-        
+
     }
     else{
         if(split){
@@ -225,7 +225,7 @@ parameters = function(uri, split){
                 uri = ''
             }
 
-            
+
         }
     }
 
@@ -234,7 +234,7 @@ parameters = function(uri, split){
     var r = {};
     uParts = uri.split('&');
     for (p in uParts)
-    {	
+    {
         uParts[p] = uParts[p].split('=');
 
         var p2 = _.clone(uParts[p]);
@@ -265,7 +265,7 @@ lazyEach = function(p){
             if(_.indexOf(item, name) > -1){
                 newName = _name;
                 return true;
-            } 
+            }
         })
 
         if(newName){
@@ -299,7 +299,7 @@ lazyEach = function(p){
             {
                 newEach[name] = function(){
 
-                    var _arguments = arguments;				
+                    var _arguments = arguments;
 
                     var callback = function(){
 
@@ -317,9 +317,9 @@ lazyEach = function(p){
 
                         _each(item, progress, l, _arguments, index);
 
-                        if(p.sync) 
+                        if(p.sync)
                         {
-                            
+
                             if(p.array[index + 1])
                             {
                                 go(index + 1);
@@ -368,7 +368,7 @@ lazyEach = function(p){
     p.all || (p.all = {});
 
     p.each.success || (p.each.success = function(){});
-    p.each.fail || (p.each.fail = function(){});	
+    p.each.fail || (p.each.fail = function(){});
 
     if (!p.array || p.array.length == 0)
     {
@@ -385,18 +385,18 @@ lazyEach = function(p){
 
     var progress = 0;
 
-    if (p.all.before) 
+    if (p.all.before)
         p.all.before(p);
 
     if(!p.sync)
     {
-        _.each(p.array, function(item, index){					
+        _.each(p.array, function(item, index){
             go(index)
         })
     }
     else
     {
-        go(0);		
+        go(0);
     }
 }
 
@@ -423,7 +423,7 @@ lazyActions = function(farray, clbk){
 
 
 importScripts = function(src, storage, callback, appendTo, i, app){
-    if(typeof i == 'undefined' || i == null) 
+    if(typeof i == 'undefined' || i == null)
         i = 0;
     else
         i++;
@@ -432,7 +432,7 @@ importScripts = function(src, storage, callback, appendTo, i, app){
     else{
 
         if(!storage[src[i].src])
-        {	
+        {
 
             importScript(src[i].src, function(){
                 storage[src[i].src] = true;
@@ -445,7 +445,7 @@ importScripts = function(src, storage, callback, appendTo, i, app){
         {
             importScripts(src, storage, callback, appendTo, i, app);
         }
-        
+
     }
 }
 
@@ -455,7 +455,7 @@ importScript = function(src, callback, appendTo, app, module, _require) {
 
         var pref = '../';
 
-        
+
 
         if(typeof _Electron != 'undefined' && _Electron == true) pref = './'
 
@@ -463,7 +463,7 @@ importScript = function(src, callback, appendTo, app, module, _require) {
 
         if(module) {
             delete require.cache[require.resolve(pref + src)]
-            
+
             var script = require(pref + src);
 
             app.modules[module] = {
@@ -483,7 +483,7 @@ importScript = function(src, callback, appendTo, app, module, _require) {
                 require(pref + src);
             }
 
-            
+
         }
 
         callback();
@@ -517,7 +517,7 @@ importScript = function(src, callback, appendTo, app, module, _require) {
     appendTo.appendChild(script);
 }
 
-importCss = function(src, _document) { 
+importCss = function(src, _document) {
 
     if(!_document) _document = document
 
@@ -528,7 +528,7 @@ importCss = function(src, _document) {
     src += "?v=117"
 
     link.setAttribute('href', src);
-    
+
     var appendTo = _document.getElementsByTagName('body')[0];
 
     appendTo.appendChild(link);

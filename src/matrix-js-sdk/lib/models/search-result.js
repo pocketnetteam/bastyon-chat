@@ -3,7 +3,7 @@
 var _interopRequireWildcard = require("@babel/runtime/helpers/interopRequireWildcard");
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
+  value: true,
 });
 exports.SearchResult = SearchResult;
 
@@ -52,7 +52,6 @@ function SearchResult(rank, eventContext) {
  * @param {function} eventMapper
  * @return {SearchResult}
  */
-
 
 SearchResult.fromJson = function (jsonObj, eventMapper) {
   const jsonContext = jsonObj.context || {};

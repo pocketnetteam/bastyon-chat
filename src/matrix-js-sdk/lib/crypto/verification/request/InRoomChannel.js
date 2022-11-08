@@ -1,7 +1,7 @@
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
+  value: true,
 });
 exports.InRoomRequests = exports.InRoomChannel = void 0;
 
@@ -55,7 +55,6 @@ class InRoomChannel {
   }
   /** The transaction id generated/used by this verification channel */
 
-
   get transactionId() {
     return this._requestEventId;
   }
@@ -83,7 +82,6 @@ class InRoomChannel {
    * @return {number} the timestamp when the event was sent
    */
 
-
   getTimestamp(event) {
     return event.getTs();
   }
@@ -92,7 +90,6 @@ class InRoomChannel {
    * @param {string} type the event type to check
    * @returns {bool} boolean flag
    */
-
 
   static canCreateRequest(type) {
     return type === _VerificationRequest.REQUEST_TYPE;
@@ -103,9 +100,10 @@ class InRoomChannel {
    * @returns {string} the transaction id
    */
 
-
   static getTransactionId(event) {
-    if (InRoomChannel.getEventType(event) === _VerificationRequest.REQUEST_TYPE) {
+    if (
+      InRoomChannel.getEventType(event) === _VerificationRequest.REQUEST_TYPE
+    ) {
       return event.getId();
     } else {
       const relation = event.getRelation();
@@ -125,7 +123,6 @@ class InRoomChannel {
    * @returns {bool} whether the event is valid and should be passed to handleEvent
    */
 
-
   static validateEvent(event, client) {
     const txnId = InRoomChannel.getTransactionId(event);
 
@@ -139,20 +136,31 @@ class InRoomChannel {
 
     if (type === _VerificationRequest.REQUEST_TYPE) {
       if (!content || typeof content.to !== "string" || !content.to.length) {
-        _logger.logger.log("InRoomChannel: validateEvent: " + "no valid to " + (content && content.to));
+        _logger.logger.log(
+          "InRoomChannel: validateEvent: " +
+            "no valid to " +
+            (content && content.to)
+        );
 
         return false;
       } // ignore requests that are not direct to or sent by the syncing user
 
-
       if (!InRoomChannel.getOtherPartyUserId(event, client)) {
-        _logger.logger.log("InRoomChannel: validateEvent: " + `not directed to or sent by me: ${event.getSender()}` + `, ${content && content.to}`);
+        _logger.logger.log(
+          "InRoomChannel: validateEvent: " +
+            `not directed to or sent by me: ${event.getSender()}` +
+            `, ${content && content.to}`
+        );
 
         return false;
       }
     }
 
-    return _VerificationRequest.VerificationRequest.validateEvent(type, event, client);
+    return _VerificationRequest.VerificationRequest.validateEvent(
+      type,
+      event,
+      client
+    );
   }
   /**
    * As m.key.verification.request events are as m.room.message events with the InRoomChannel
@@ -162,7 +170,6 @@ class InRoomChannel {
    * @returns {string} the "symbolic" event type
    */
 
-
   static getEventType(event) {
     const type = event.getType();
 
@@ -170,9 +177,7 @@ class InRoomChannel {
       const content = event.getContent();
 
       if (content) {
-        const {
-          msgtype
-        } = content;
+        const { msgtype } = content;
 
         if (msgtype === _VerificationRequest.REQUEST_TYPE) {
           return _VerificationRequest.REQUEST_TYPE;
@@ -194,7 +199,6 @@ class InRoomChannel {
    * @returns {Promise} a promise that resolves when any requests as an anwser to the passed-in event are sent.
    */
 
-
   async handleEvent(event, request, isLiveEvent) {
     // prevent processing the same event multiple times, as under
     // some circumstances Room.timeline can get emitted twice for the same event
@@ -209,7 +213,6 @@ class InRoomChannel {
       return;
     } // set userId if not set already
 
-
     if (this.userId === null) {
       const userId = InRoomChannel.getOtherPartyUserId(event, this._client);
 
@@ -218,14 +221,16 @@ class InRoomChannel {
       }
     } // ignore events not sent by us or the other party
 
-
     const ownUserId = this._client.getUserId();
 
     const sender = event.getSender();
 
     if (this.userId !== null) {
       if (sender !== ownUserId && sender !== this.userId) {
-        _logger.logger.log(`InRoomChannel: ignoring verification event from ` + `non-participating sender ${sender}`);
+        _logger.logger.log(
+          `InRoomChannel: ignoring verification event from ` +
+            `non-participating sender ${sender}`
+        );
 
         return;
       }
@@ -239,7 +244,13 @@ class InRoomChannel {
 
     const isSentByUs = event.getSender() === this._client.getUserId();
 
-    return await request.handleEvent(type, event, isLiveEvent, isRemoteEcho, isSentByUs);
+    return await request.handleEvent(
+      type,
+      event,
+      isLiveEvent,
+      isRemoteEcho,
+      isSentByUs
+    );
   }
   /**
    * Adds the transaction id (relation) back to a received event
@@ -249,7 +260,6 @@ class InRoomChannel {
    * @param {MatrixEvent} event the received event
    * @returns {Object} the content object with the relation added again
    */
-
 
   completedContentFromEvent(event) {
     // ensure m.related_to is included in e2ee rooms
@@ -268,27 +278,35 @@ class InRoomChannel {
    * @returns {object} the complete content, as it will be sent.
    */
 
-
   completeContent(type, content) {
     content = Object.assign({}, content);
 
-    if (type === _VerificationRequest.REQUEST_TYPE || type === _VerificationRequest.READY_TYPE || type === _VerificationRequest.START_TYPE) {
+    if (
+      type === _VerificationRequest.REQUEST_TYPE ||
+      type === _VerificationRequest.READY_TYPE ||
+      type === _VerificationRequest.START_TYPE
+    ) {
       content.from_device = this._client.getDeviceId();
     }
 
     if (type === _VerificationRequest.REQUEST_TYPE) {
       // type is mapped to m.room.message in the send method
       content = {
-        body: this._client.getUserId() + " is requesting to verify " + "your key, but your client does not support in-chat key " + "verification.  You will need to use legacy key " + "verification to verify keys.",
+        body:
+          this._client.getUserId() +
+          " is requesting to verify " +
+          "your key, but your client does not support in-chat key " +
+          "verification.  You will need to use legacy key " +
+          "verification to verify keys.",
         msgtype: _VerificationRequest.REQUEST_TYPE,
         to: this.userId,
         from_device: content.from_device,
-        methods: content.methods
+        methods: content.methods,
       };
     } else {
       content[M_RELATES_TO] = {
         rel_type: M_REFERENCE,
-        event_id: this.transactionId
+        event_id: this.transactionId,
       };
     }
 
@@ -301,7 +319,6 @@ class InRoomChannel {
    * @returns {Promise} the promise of the request
    */
 
-
   send(type, uncompletedContent) {
     const content = this.completeContent(type, uncompletedContent);
     return this.sendCompleted(type, content);
@@ -313,7 +330,6 @@ class InRoomChannel {
    * @returns {Promise} the promise of the request
    */
 
-
   async sendCompleted(type, content) {
     let sendType = type;
 
@@ -321,13 +337,16 @@ class InRoomChannel {
       sendType = MESSAGE_TYPE;
     }
 
-    const response = await this._client.sendEvent(this._roomId, sendType, content);
+    const response = await this._client.sendEvent(
+      this._roomId,
+      sendType,
+      content
+    );
 
     if (type === _VerificationRequest.REQUEST_TYPE) {
       this._requestEventId = response.event_id;
     }
   }
-
 }
 
 exports.InRoomChannel = InRoomChannel;
@@ -356,7 +375,11 @@ class InRoomRequests {
   }
 
   setRequest(event, request) {
-    this._setRequest(event.getRoomId(), InRoomChannel.getTransactionId(event), request);
+    this._setRequest(
+      event.getRoomId(),
+      InRoomChannel.getTransactionId(event),
+      request
+    );
   }
 
   setRequestByChannel(channel, request) {
@@ -400,7 +423,6 @@ class InRoomRequests {
       }
     }
   }
-
 }
 
 exports.InRoomRequests = InRoomRequests;

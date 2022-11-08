@@ -72,7 +72,6 @@
 <!-- THEMES BEGIN -->
 <!-- THEMES END -->
 
-
 <style lang="scss">
 .card-content {
   .chatGroupIcon img {
@@ -80,4 +79,3 @@
   }
 }
 </style>
-

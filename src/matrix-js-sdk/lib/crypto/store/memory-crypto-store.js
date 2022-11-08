@@ -5,19 +5,52 @@ var _interopRequireWildcard = require("@babel/runtime/helpers/interopRequireWild
 var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
+  value: true,
 });
 exports.MemoryCryptoStore = void 0;
 
-var _defineProperty2 = _interopRequireDefault(require("@babel/runtime/helpers/defineProperty"));
+var _defineProperty2 = _interopRequireDefault(
+  require("@babel/runtime/helpers/defineProperty")
+);
 
 var _logger = require("../../logger");
 
 var utils = _interopRequireWildcard(require("../../utils"));
 
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+function ownKeys(object, enumerableOnly) {
+  var keys = Object.keys(object);
+  if (Object.getOwnPropertySymbols) {
+    var symbols = Object.getOwnPropertySymbols(object);
+    if (enumerableOnly)
+      symbols = symbols.filter(function (sym) {
+        return Object.getOwnPropertyDescriptor(object, sym).enumerable;
+      });
+    keys.push.apply(keys, symbols);
+  }
+  return keys;
+}
 
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { (0, _defineProperty2.default)(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+function _objectSpread(target) {
+  for (var i = 1; i < arguments.length; i++) {
+    var source = arguments[i] != null ? arguments[i] : {};
+    if (i % 2) {
+      ownKeys(Object(source), true).forEach(function (key) {
+        (0, _defineProperty2.default)(target, key, source[key]);
+      });
+    } else if (Object.getOwnPropertyDescriptors) {
+      Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
+    } else {
+      ownKeys(Object(source)).forEach(function (key) {
+        Object.defineProperty(
+          target,
+          key,
+          Object.getOwnPropertyDescriptor(source, key)
+        );
+      });
+    }
+  }
+  return target;
+}
 
 /**
  * Internal module. in-memory storage for e2e.
@@ -61,7 +94,6 @@ class MemoryCryptoStore {
    * @return {Promise} resolves to the store.
    */
 
-
   async startup() {
     // No startup work to do for the memory store.
     return this;
@@ -71,7 +103,6 @@ class MemoryCryptoStore {
    *
    * @returns {Promise} Promise which resolves when the store has been cleared.
    */
-
 
   deleteAllData() {
     return Promise.resolve();
@@ -87,7 +118,6 @@ class MemoryCryptoStore {
    *    same instance as passed in, or the existing one.
    */
 
-
   getOrAddOutgoingRoomKeyRequest(request) {
     const requestBody = request.requestBody;
     return utils.promiseTry(() => {
@@ -96,14 +126,20 @@ class MemoryCryptoStore {
 
       if (existing) {
         // this entry matches the request - return it.
-        _logger.logger.log(`already have key request outstanding for ` + `${requestBody.room_id} / ${requestBody.session_id}: ` + `not sending another`);
+        _logger.logger.log(
+          `already have key request outstanding for ` +
+            `${requestBody.room_id} / ${requestBody.session_id}: ` +
+            `not sending another`
+        );
 
         return existing;
       } // we got to the end of the list without finding a match
       // - add the new request.
 
-
-      _logger.logger.log(`enqueueing key request for ${requestBody.room_id} / ` + requestBody.session_id);
+      _logger.logger.log(
+        `enqueueing key request for ${requestBody.room_id} / ` +
+          requestBody.session_id
+      );
 
       this._outgoingRoomKeyRequests.push(request);
 
@@ -121,7 +157,6 @@ class MemoryCryptoStore {
    *    not found
    */
 
-
   getOutgoingRoomKeyRequest(requestBody) {
     return Promise.resolve(this._getOutgoingRoomKeyRequest(requestBody));
   }
@@ -136,7 +171,6 @@ class MemoryCryptoStore {
    * @return {module:crypto/store/base~OutgoingRoomKeyRequest?}
    *    the matching request, or null if not found
    */
-
 
   _getOutgoingRoomKeyRequest(requestBody) {
     for (const existing of this._outgoingRoomKeyRequests) {
@@ -157,7 +191,6 @@ class MemoryCryptoStore {
    *    there are no pending requests in those states
    */
 
-
   getOutgoingRoomKeyRequestByState(wantedStates) {
     for (const req of this._outgoingRoomKeyRequests) {
       for (const state of wantedStates) {
@@ -175,9 +208,10 @@ class MemoryCryptoStore {
    * @return {Promise<Array<*>>} All OutgoingRoomKeyRequests in state
    */
 
-
   getAllOutgoingRoomKeyRequestsByState(wantedState) {
-    return Promise.resolve(this._outgoingRoomKeyRequests.filter(r => r.state == wantedState));
+    return Promise.resolve(
+      this._outgoingRoomKeyRequests.filter((r) => r.state == wantedState)
+    );
   }
 
   getOutgoingRoomKeyRequestsByTarget(userId, deviceId, wantedStates) {
@@ -185,10 +219,13 @@ class MemoryCryptoStore {
 
     for (const req of this._outgoingRoomKeyRequests) {
       for (const state of wantedStates) {
-        if (req.state === state && req.recipients.includes({
-          userId,
-          deviceId
-        })) {
+        if (
+          req.state === state &&
+          req.recipients.includes({
+            userId,
+            deviceId,
+          })
+        ) {
           results.push(req);
         }
       }
@@ -209,7 +246,6 @@ class MemoryCryptoStore {
    *    updated request, or null if no matching row was found
    */
 
-
   updateOutgoingRoomKeyRequest(requestId, expectedState, updates) {
     for (const req of this._outgoingRoomKeyRequests) {
       if (req.requestId !== requestId) {
@@ -217,7 +253,10 @@ class MemoryCryptoStore {
       }
 
       if (req.state != expectedState) {
-        _logger.logger.warn(`Cannot update room key request from ${expectedState} ` + `as it was already updated to ${req.state}`);
+        _logger.logger.warn(
+          `Cannot update room key request from ${expectedState} ` +
+            `as it was already updated to ${req.state}`
+        );
 
         return Promise.resolve(null);
       }
@@ -238,7 +277,6 @@ class MemoryCryptoStore {
    * @returns {Promise} resolves once the operation is completed
    */
 
-
   deleteOutgoingRoomKeyRequest(requestId, expectedState) {
     for (let i = 0; i < this._outgoingRoomKeyRequests.length; i++) {
       const req = this._outgoingRoomKeyRequests[i];
@@ -248,7 +286,10 @@ class MemoryCryptoStore {
       }
 
       if (req.state != expectedState) {
-        _logger.logger.warn(`Cannot delete room key request in state ${req.state} ` + `(expected ${expectedState})`);
+        _logger.logger.warn(
+          `Cannot delete room key request in state ${req.state} ` +
+            `(expected ${expectedState})`
+        );
 
         return Promise.resolve(null);
       }
@@ -260,7 +301,6 @@ class MemoryCryptoStore {
 
     return Promise.resolve(null);
   } // Olm Account
-
 
   getAccount(txn, func) {
     func(this._account);
@@ -287,7 +327,6 @@ class MemoryCryptoStore {
     this._privateKeys[type] = key;
   } // Olm Sessions
 
-
   countEndToEndSessions(txn, func) {
     return Object.keys(this._sessions).length;
   }
@@ -304,10 +343,16 @@ class MemoryCryptoStore {
   getAllEndToEndSessions(txn, func) {
     Object.entries(this._sessions).forEach(([deviceKey, deviceSessions]) => {
       Object.entries(deviceSessions).forEach(([sessionId, session]) => {
-        func(_objectSpread(_objectSpread({}, session), {}, {
-          deviceKey,
-          sessionId
-        }));
+        func(
+          _objectSpread(
+            _objectSpread({}, session),
+            {},
+            {
+              deviceKey,
+              sessionId,
+            }
+          )
+        );
       });
     });
   }
@@ -324,11 +369,12 @@ class MemoryCryptoStore {
   }
 
   async storeEndToEndSessionProblem(deviceKey, type, fixed) {
-    const problems = this._sessionProblems[deviceKey] = this._sessionProblems[deviceKey] || [];
+    const problems = (this._sessionProblems[deviceKey] =
+      this._sessionProblems[deviceKey] || []);
     problems.push({
       type,
       fixed,
-      time: Date.now()
+      time: Date.now(),
     });
     problems.sort((a, b) => {
       return a.time - b.time;
@@ -347,7 +393,7 @@ class MemoryCryptoStore {
     for (const problem of problems) {
       if (problem.time > timestamp) {
         return Object.assign({}, problem, {
-          fixed: lastProblem.fixed
+          fixed: lastProblem.fixed,
         });
       }
     }
@@ -364,10 +410,7 @@ class MemoryCryptoStore {
     const ret = [];
 
     for (const device of devices) {
-      const {
-        userId,
-        deviceInfo
-      } = device;
+      const { userId, deviceInfo } = device;
 
       if (userId in notifiedErrorDevices) {
         if (!(deviceInfo.deviceId in notifiedErrorDevices[userId])) {
@@ -377,7 +420,7 @@ class MemoryCryptoStore {
       } else {
         ret.push(device);
         notifiedErrorDevices[userId] = {
-          [deviceInfo.deviceId]: true
+          [deviceInfo.deviceId]: true,
         };
       }
     }
@@ -385,10 +428,12 @@ class MemoryCryptoStore {
     return ret;
   } // Inbound Group Sessions
 
-
   getEndToEndInboundGroupSession(senderCurve25519Key, sessionId, txn, func) {
-    const k = senderCurve25519Key + '/' + sessionId;
-    func(this._inboundGroupSessions[k] || null, this._inboundGroupSessionsWithheld[k] || null);
+    const k = senderCurve25519Key + "/" + sessionId;
+    func(
+      this._inboundGroupSessions[k] || null,
+      this._inboundGroupSessionsWithheld[k] || null
+    );
   }
 
   getAllEndToEndInboundGroupSessions(txn, func) {
@@ -400,30 +445,45 @@ class MemoryCryptoStore {
       func({
         senderKey: key.substr(0, 43),
         sessionId: key.substr(44),
-        sessionData: this._inboundGroupSessions[key]
+        sessionData: this._inboundGroupSessions[key],
       });
     }
 
     func(null);
   }
 
-  addEndToEndInboundGroupSession(senderCurve25519Key, sessionId, sessionData, txn) {
-    const k = senderCurve25519Key + '/' + sessionId;
+  addEndToEndInboundGroupSession(
+    senderCurve25519Key,
+    sessionId,
+    sessionData,
+    txn
+  ) {
+    const k = senderCurve25519Key + "/" + sessionId;
 
     if (this._inboundGroupSessions[k] === undefined) {
       this._inboundGroupSessions[k] = sessionData;
     }
   }
 
-  storeEndToEndInboundGroupSession(senderCurve25519Key, sessionId, sessionData, txn) {
-    this._inboundGroupSessions[senderCurve25519Key + '/' + sessionId] = sessionData;
+  storeEndToEndInboundGroupSession(
+    senderCurve25519Key,
+    sessionId,
+    sessionData,
+    txn
+  ) {
+    this._inboundGroupSessions[senderCurve25519Key + "/" + sessionId] =
+      sessionData;
   }
 
-  storeEndToEndInboundGroupSessionWithheld(senderCurve25519Key, sessionId, sessionData, txn) {
-    const k = senderCurve25519Key + '/' + sessionId;
+  storeEndToEndInboundGroupSessionWithheld(
+    senderCurve25519Key,
+    sessionId,
+    sessionData,
+    txn
+  ) {
+    const k = senderCurve25519Key + "/" + sessionId;
     this._inboundGroupSessionsWithheld[k] = sessionData;
   } // Device Data
-
 
   getEndToEndDeviceData(txn, func) {
     func(this._deviceData);
@@ -432,7 +492,6 @@ class MemoryCryptoStore {
   storeEndToEndDeviceData(deviceData, txn) {
     this._deviceData = deviceData;
   } // E2E rooms
-
 
   storeEndToEndRoom(roomId, roomInfo, txn) {
     this._rooms[roomId] = roomInfo;
@@ -450,7 +509,7 @@ class MemoryCryptoStore {
         sessions.push({
           senderKey: session.substr(0, 43),
           sessionId: session.substr(44),
-          sessionData: this._inboundGroupSessions[session]
+          sessionData: this._inboundGroupSessions[session],
         });
 
         if (limit && session.length >= limit) {
@@ -468,7 +527,7 @@ class MemoryCryptoStore {
 
   unmarkSessionsNeedingBackup(sessions) {
     for (const session of sessions) {
-      const sessionKey = session.senderKey + '/' + session.sessionId;
+      const sessionKey = session.senderKey + "/" + session.sessionId;
       delete this._sessionsNeedingBackup[sessionKey];
     }
 
@@ -477,7 +536,7 @@ class MemoryCryptoStore {
 
   markSessionsNeedingBackup(sessions) {
     for (const session of sessions) {
-      const sessionKey = session.senderKey + '/' + session.sessionId;
+      const sessionKey = session.senderKey + "/" + session.sessionId;
       this._sessionsNeedingBackup[sessionKey] = true;
     }
 
@@ -491,14 +550,14 @@ class MemoryCryptoStore {
   }
 
   getSharedHistoryInboundGroupSessions(roomId) {
-    return Promise.resolve(this._sharedHistoryInboundGroupSessions[roomId] || []);
+    return Promise.resolve(
+      this._sharedHistoryInboundGroupSessions[roomId] || []
+    );
   } // Session key backups
-
 
   doTxn(mode, stores, func) {
     return Promise.resolve(func(null));
   }
-
 }
 
 exports.MemoryCryptoStore = MemoryCryptoStore;

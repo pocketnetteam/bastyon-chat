@@ -1,7 +1,7 @@
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
+  value: true,
 });
 exports.EventTimeline = EventTimeline;
 
@@ -61,8 +61,8 @@ function EventTimeline(eventTimelineSet) {
   this._nextTimeline = null; // this is used by client.js
 
   this._paginationRequests = {
-    'b': null,
-    'f': null
+    b: null,
+    f: null,
   };
   this._name = this._roomId + ":" + new Date().toISOString();
 }
@@ -70,7 +70,6 @@ function EventTimeline(eventTimelineSet) {
  * Symbolic constant for methods which take a 'direction' argument:
  * refers to the start of the timeline, or backwards in time.
  */
-
 
 EventTimeline.BACKWARDS = "b";
 /**
@@ -105,7 +104,6 @@ EventTimeline.prototype.initialiseState = function (stateEvents) {
   // timeline) and possibly the sender (which seems like it should never be
   // reset but in practice causes a lot of the tests to break).
 
-
   for (const e of stateEvents) {
     Object.freeze(e);
   }
@@ -126,7 +124,6 @@ EventTimeline.prototype.initialiseState = function (stateEvents) {
  *
  * @return {EventTimeline} the new timeline
  */
-
 
 EventTimeline.prototype.forkLive = function (direction) {
   const forkState = this.getState(direction);
@@ -152,7 +149,6 @@ EventTimeline.prototype.forkLive = function (direction) {
  * @return {EventTimeline} the new timeline
  */
 
-
 EventTimeline.prototype.fork = function (direction) {
   const forkState = this.getState(direction);
   const timeline = new EventTimeline(this._eventTimelineSet);
@@ -165,7 +161,6 @@ EventTimeline.prototype.fork = function (direction) {
  * @return {string} room ID
  */
 
-
 EventTimeline.prototype.getRoomId = function () {
   return this._roomId;
 };
@@ -174,7 +169,6 @@ EventTimeline.prototype.getRoomId = function () {
  * @return {Filter} filter
  */
 
-
 EventTimeline.prototype.getFilter = function () {
   return this._eventTimelineSet.getFilter();
 };
@@ -182,7 +176,6 @@ EventTimeline.prototype.getFilter = function () {
  * Get the timelineSet for this timeline
  * @return {EventTimelineSet} timelineSet
  */
-
 
 EventTimeline.prototype.getTimelineSet = function () {
   return this._eventTimelineSet;
@@ -199,7 +192,6 @@ EventTimeline.prototype.getTimelineSet = function () {
  * @return {number}
  */
 
-
 EventTimeline.prototype.getBaseIndex = function () {
   return this._baseIndex;
 };
@@ -208,7 +200,6 @@ EventTimeline.prototype.getBaseIndex = function () {
  *
  * @return {MatrixEvent[]} An array of MatrixEvents
  */
-
 
 EventTimeline.prototype.getEvents = function () {
   return this._events;
@@ -222,7 +213,6 @@ EventTimeline.prototype.getEvents = function () {
  *
  * @return {RoomState} state at the start/end of the timeline
  */
-
 
 EventTimeline.prototype.getState = function (direction) {
   if (direction == EventTimeline.BACKWARDS) {
@@ -243,7 +233,6 @@ EventTimeline.prototype.getState = function (direction) {
  * @return {?string} pagination token
  */
 
-
 EventTimeline.prototype.getPaginationToken = function (direction) {
   return this.getState(direction).paginationToken;
 };
@@ -257,7 +246,6 @@ EventTimeline.prototype.getPaginationToken = function (direction) {
  *   pagination token for going forwards in time.
  */
 
-
 EventTimeline.prototype.setPaginationToken = function (token, direction) {
   this.getState(direction).paginationToken = token;
 };
@@ -270,7 +258,6 @@ EventTimeline.prototype.setPaginationToken = function (token, direction) {
  * @return {?EventTimeline} previous or following timeline, if they have been
  * joined up.
  */
-
 
 EventTimeline.prototype.getNeighbouringTimeline = function (direction) {
   if (direction == EventTimeline.BACKWARDS) {
@@ -293,10 +280,17 @@ EventTimeline.prototype.getNeighbouringTimeline = function (direction) {
  * it is already set.
  */
 
-
-EventTimeline.prototype.setNeighbouringTimeline = function (neighbour, direction) {
+EventTimeline.prototype.setNeighbouringTimeline = function (
+  neighbour,
+  direction
+) {
   if (this.getNeighbouringTimeline(direction)) {
-    throw new Error("timeline already has a neighbouring timeline - " + "cannot reset neighbour (direction: " + direction + ")");
+    throw new Error(
+      "timeline already has a neighbouring timeline - " +
+        "cannot reset neighbour (direction: " +
+        direction +
+        ")"
+    );
   }
 
   if (direction == EventTimeline.BACKWARDS) {
@@ -307,7 +301,6 @@ EventTimeline.prototype.setNeighbouringTimeline = function (neighbour, direction
     throw new Error("Invalid direction '" + direction + "'");
   } // make sure we don't try to paginate this timeline
 
-
   this.setPaginationToken(null, direction);
 };
 /**
@@ -317,13 +310,15 @@ EventTimeline.prototype.setNeighbouringTimeline = function (neighbour, direction
  * @param {boolean}  atStart     true to insert new event at the start
  */
 
-
 EventTimeline.prototype.addEvent = function (event, atStart) {
   const stateContext = atStart ? this._startState : this._endState; // only call setEventMetadata on the unfiltered timelineSets
 
   const timelineSet = this.getTimelineSet();
 
-  if (timelineSet.room && timelineSet.room.getUnfilteredTimelineSet() === timelineSet) {
+  if (
+    timelineSet.room &&
+    timelineSet.room.getUnfilteredTimelineSet() === timelineSet
+  ) {
     EventTimeline.setEventMetadata(event, stateContext, atStart); // modify state
 
     if (event.isState()) {
@@ -338,7 +333,7 @@ EventTimeline.prototype.addEvent = function (event, atStart) {
       // member event, whereas we want to set the .sender value for the ACTUAL
       // member event itself.
 
-      if (!event.sender || event.getType() === "m.room.member" && !atStart) {
+      if (!event.sender || (event.getType() === "m.room.member" && !atStart)) {
         EventTimeline.setEventMetadata(event, stateContext, atStart);
       }
     }
@@ -354,7 +349,6 @@ EventTimeline.prototype.addEvent = function (event, atStart) {
 
   this._events.splice(insertIndex, 0, event); // insert element
 
-
   if (atStart) {
     this._baseIndex++;
   }
@@ -367,8 +361,11 @@ EventTimeline.prototype.addEvent = function (event, atStart) {
  * @param {bool} toStartOfTimeline  if true the event's forwardLooking flag is set false
  */
 
-
-EventTimeline.setEventMetadata = function (event, stateContext, toStartOfTimeline) {
+EventTimeline.setEventMetadata = function (
+  event,
+  stateContext,
+  toStartOfTimeline
+) {
   // set sender and target properties
   event.sender = stateContext.getSentinelMember(event.getSender());
 
@@ -393,7 +390,6 @@ EventTimeline.setEventMetadata = function (event, stateContext, toStartOfTimelin
  * @return {?MatrixEvent} removed event, or null if not found
  */
 
-
 EventTimeline.prototype.removeEvent = function (eventId) {
   for (let i = this._events.length - 1; i >= 0; i--) {
     const ev = this._events[i];
@@ -416,7 +412,6 @@ EventTimeline.prototype.removeEvent = function (eventId) {
  *
  * @return {string} name for this timeline
  */
-
 
 EventTimeline.prototype.toString = function () {
   return this._name;

@@ -1,48 +1,53 @@
 <template>
-    <div id="chatTopheader">
-
+  <div id="chatTopheader">
     <topheader>
-
       <template v-slot:left>
         <backButton action="back" />
       </template>
 
       <template v-slot:info>
-        <router-link v-if="chat && cog" :to="`/chatSettings?id=${chat.roomId.replace('!', '%')}`">
+        <router-link
+          v-if="chat && cog"
+          :to="`/chatSettings?id=${chat.roomId.replace('!', '%')}`"
+        >
           <span>{{ $t("caption.Info") }}</span>
         </router-link>
         <span v-else>{{ $t("caption.Info") }}</span>
       </template>
 
       <template v-slot:right>
-        <router-link v-if="chat && cog" :to="`/chatSettings?id=${chat.roomId.replace('!', '%')}`">
+        <router-link
+          v-if="chat && cog"
+          :to="`/chatSettings?id=${chat.roomId.replace('!', '%')}`"
+        >
           <i class="fas fa-cog"></i>
         </router-link>
       </template>
-
     </topheader>
-    </div>
+  </div>
 </template>
 
 <script>
 export default {
-  data: function (){
+  data: function () {
     return {
-      cog: false
-    }
+      cog: false,
+    };
   },
   props: {
-    chat: {}
+    chat: {},
   },
   mounted() {
-    var room = this.core.mtrx.client.getRoom(this.chat.roomId)
-    if(room.getMember(this.core.mtrx.client.credentials.userId).powerLevel === 100 && !room.tetatet){
-      this.cog = true
+    var room = this.core.mtrx.client.getRoom(this.chat.roomId);
+    if (
+      room.getMember(this.core.mtrx.client.credentials.userId).powerLevel ===
+        100 &&
+      !room.tetatet
+    ) {
+      this.cog = true;
     }
-  }
-}
+  },
+};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

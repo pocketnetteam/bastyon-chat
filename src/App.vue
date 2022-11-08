@@ -7,13 +7,12 @@
         bin: pocketnet,
         fix: pocketnet,
         bout: !pocketnet,
-        minimized: minimized ,
+        minimized: minimized,
         active,
         mobile,
-        unselect
+        unselect,
       }"
     >
-
       <div class="chatwrapper" @click="iteraction">
         <div>
           <!-- <div class="backface" v-if="closebybg" @click="hide"></div> -->
@@ -134,12 +133,12 @@
 </template>
 
 <script>
-import MainWrapper from './components/main/index.vue'
-import userUnauthorized from './components/user/unauthorized/index.vue'
-import store from "@/vuex/store"
-import router from "@/router/router"
-import modal from '@/components/assets/modal/index.vue'
-import pmenu from '@/components/assets/pmenu/index.vue'
+import MainWrapper from "./components/main/index.vue";
+import userUnauthorized from "./components/user/unauthorized/index.vue";
+import store from "@/vuex/store";
+import router from "@/router/router";
+import modal from "@/components/assets/modal/index.vue";
+import pmenu from "@/components/assets/pmenu/index.vue";
 
 import VuePageTransition from "@/editedplugins/vue-page-transition/src/index.js";
 import TextareaAutosize from "vue-textarea-autosize";
@@ -178,54 +177,50 @@ import Core from "@/application/index.js";
 
 ////////
 
-Vue.config.productionTip = false
-Vue.prototype.$f = f
+Vue.config.productionTip = false;
+Vue.prototype.$f = f;
 
+import VueVirtualScroller from "vue-virtual-scroller";
+import preloader from "@/components/assets/preloader/index.vue";
+import fixedmessageicon from "@/components/assets/fixedmessageicon/index.vue";
+import date from "@/components/assets/date/index.vue";
+import userpic from "@/components/assets/userpic/index.vue";
+import userspic from "@/components/assets/userspic/index.vue";
+import bgimage from "@/components/assets/bgimage.vue";
+import logotype from "@/components/assets/logotype/index.vue";
+import dropdownMenu from "@/components/assets/dropdownMenu/index.vue";
 
-import VueVirtualScroller from 'vue-virtual-scroller'
-import preloader from '@/components/assets/preloader/index.vue'
-import fixedmessageicon from '@/components/assets/fixedmessageicon/index.vue'
-import date from '@/components/assets/date/index.vue'
-import userpic from '@/components/assets/userpic/index.vue'
-import userspic from '@/components/assets/userspic/index.vue'
-import bgimage from '@/components/assets/bgimage.vue'
-import logotype from '@/components/assets/logotype/index.vue'
-import dropdownMenu from '@/components/assets/dropdownMenu/index.vue';
+import backButton from "@/components/assets/backButton/index.vue";
+import topheader from "@/components/assets/topheader/index.vue";
+import maincontent from "@/components/assets/maincontent/index.vue";
+import search from "@/components/assets/search/index.vue";
 
-import backButton from '@/components/assets/backButton/index.vue';
-import topheader from '@/components/assets/topheader/index.vue';
-import maincontent from '@/components/assets/maincontent/index.vue';
-import search from '@/components/assets/search/index.vue';
+import linepreloader from "@/components/assets/linepreloader/index.vue";
 
-import linepreloader from '@/components/assets/linepreloader/index.vue';
-
-import chats from '@/views/chats.vue'
-import isMessenger from '@/application/isMessenger.js'
+import chats from "@/views/chats.vue";
+import isMessenger from "@/application/isMessenger.js";
 
 ////////
 
+Vue.component("pmenu", pmenu);
+Vue.component("modal", modal);
 
-Vue.component('pmenu', pmenu)
-Vue.component('modal', modal)
+Vue.component("preloader", preloader);
+Vue.component("date", date);
+Vue.component("userpic", userpic);
+Vue.component("userspic", userspic);
+Vue.component("fixedmessageicon", fixedmessageicon);
+Vue.component("bgimage", bgimage);
+Vue.component("logotype", logotype);
+Vue.component("dropdownMenu", dropdownMenu);
+Vue.component("backButton", backButton);
+Vue.component("topheader", topheader);
+Vue.component("maincontent", maincontent);
+Vue.component("search", search);
+Vue.component("linepreloader", linepreloader);
 
-Vue.component('preloader', preloader)
-Vue.component('date', date)
-Vue.component('userpic', userpic)
-Vue.component('userspic', userspic)
-Vue.component('fixedmessageicon', fixedmessageicon)
-Vue.component('bgimage', bgimage)
-Vue.component('logotype', logotype)
-Vue.component('dropdownMenu', dropdownMenu)
-Vue.component('backButton', backButton)
-Vue.component('topheader', topheader)
-Vue.component('maincontent', maincontent)
-Vue.component('search', search)
-Vue.component('linepreloader', linepreloader)
-
-
-Vue.use(VueVirtualScroller)
-Vue.directive('click-outside', {
-
+Vue.use(VueVirtualScroller);
+Vue.directive("click-outside", {
   bind: function (el, binding, vnode) {
     el.clickOutsideEvent = function (event) {
       if (!(el == event.target || el.contains(event.target))) {
@@ -330,9 +325,9 @@ export default {
       default: "",
     },
 
-    pkoindisabled : {
+    pkoindisabled: {
       type: String,
-      default: ''
+      default: "",
     },
 
     ctheme: String,
@@ -362,19 +357,17 @@ export default {
 
         // Update the teamroom messages
         this.generateTeamroomMessages();
-
-      }
+      },
     },
 
-    mobile : function(){
-      this.$store.commit('setMobile', this.mobile);
-      this.$store.commit('minimize')
+    mobile: function () {
+      this.$store.commit("setMobile", this.mobile);
+      this.$store.commit("minimize");
     },
-    pocketnet : function(){
-      this.$store.commit('setPocketnet', this.pocketnet);
-      this.$store.commit('minimize')
-    }
-
+    pocketnet: function () {
+      this.$store.commit("setPocketnet", this.pocketnet);
+      this.$store.commit("minimize");
+    },
   },
 
   computed: {
@@ -396,9 +389,9 @@ export default {
       return this.$store.state.loading;
     },
 
-    minimized : function () {
+    minimized: function () {
       if (this.mobile) return false;
-      return this.$store.state.minimized ;
+      return this.$store.state.minimized;
     },
 
     active: function () {
@@ -417,32 +410,26 @@ export default {
       return !this.$store.state.pinchat;
     },
 
-
-    unselect:function(){
-      return this.$store.state.voicerecording
-    }
-
+    unselect: function () {
+      return this.$store.state.voicerecording;
+    },
   },
 
   methods: {
-    
     hide: function () {
       this.$store.commit("minimize", true);
 
       setTimeout(() => {
-
-
-        
-
-        if (this.$route.name !== 'chats' &&
+        if (
+          this.$route.name !== "chats" &&
           /*this.$route.name !== 'chat' &&*/
-          this.$route.name !== 'contact' &&
+          this.$route.name !== "contact" &&
           /*this.$route.name !== 'chatInfo' &&*/
-          this.$route.name !== 'publicPreview' &&
-          this.$route.name !== 'chatSettings' &&
-          core.cancelDefaultRoute !== true) {
-
-          this.$router.push('/chats').catch(e => {})
+          this.$route.name !== "publicPreview" &&
+          this.$route.name !== "chatSettings" &&
+          core.cancelDefaultRoute !== true
+        ) {
+          this.$router.push("/chats").catch((e) => {});
         }
       }, 500);
     },
@@ -544,21 +531,23 @@ export default {
   },
 
   created() {
-
-    // this.pocketnet = true
+    // this.pocketnet = true;
     // this.mobile = false
     // this.recording = true
 
-    this.$store.commit('setIsLocalStorageChatAuth', isMessenger())
+    this.$store.commit("setIsLocalStorageChatAuth", isMessenger());
 
-    if(this.$store.state.isLocalStorageChatAuth) {
+    if (this.$store.state.isLocalStorageChatAuth) {
       const fromMnemonic = getDecryptedMnemonic();
-      if(fromMnemonic.addressUser === null && fromMnemonic.privateKey === null) {
-        window.open('https://bastyon.com/authorization', '_blank')
+      if (
+        fromMnemonic.addressUser === null &&
+        fromMnemonic.privateKey === null
+      ) {
+        window.open("https://bastyon.com/authorization", "_blank");
       } else {
         this.address = fromMnemonic.addressUser;
-        this.privatekey = fromMnemonic.privateKey.toString('hex');
-        this.recording = true
+        this.privatekey = fromMnemonic.privateKey.toString("hex");
+        this.recording = true;
       }
     }
 
@@ -576,8 +565,6 @@ export default {
       if (this.fcmtoken && window.cordova) this.setPusher(this.fcmtoken);
     }, 5000);
 
-    
-    
     var testUsers = {
       matrixMan: {
         address: f.hexEncode("PToMRMsMVh9dj4Cpa7yu1pB5iq65g4jrVC"),
@@ -771,57 +758,56 @@ export default {
           "27b42dfba3d20ae7a945e09dd0688137fa7963fd48b94f7b4027dc4eed874a96",
       },
     };
-    
 
     var actualUser = {
       address: this.address ? f.hexEncode(this.address) : "",
       privateKey: this.privatekey,
-    };  
+    };
 
     var username = "nevermore";
 
     var user =
       this.address && this.privatekey ? actualUser : testUsers[`${username}`];
 
-    if(this.$store.state.isLocalStorageChatAuth) {
+    if (this.$store.state.isLocalStorageChatAuth) {
       var listofproxies = [
         {
-            host : '5.pocketnet.app',
-            port : 8899,
-            wss : 8099
-          },
-          {
-            host : '1.pocketnet.app',
-            port : 8899,
-            wss : 8099
-          },
-          {
-            host : '2.pocketnet.app',
-            port : 8899,
-            wss : 8099
-          },
-          {
-            host : '3.pocketnet.app',
-            port : 8899,
-            wss : 8099
-          },
-          {
-            host : '4.pocketnet.app',
-            port : 8899,
-            wss : 8099
-          }
-      ]
+          host: "5.pocketnet.app",
+          port: 8899,
+          wss: 8099,
+        },
+        {
+          host: "1.pocketnet.app",
+          port: 8899,
+          wss: 8099,
+        },
+        {
+          host: "2.pocketnet.app",
+          port: 8899,
+          wss: 8099,
+        },
+        {
+          host: "3.pocketnet.app",
+          port: 8899,
+          wss: 8099,
+        },
+        {
+          host: "4.pocketnet.app",
+          port: 8899,
+          wss: 8099,
+        },
+      ];
     } else {
-        var listofproxies = f.deep(
-          window,
-          "window.POCKETNETINSTANCE.options.listofproxies"
-        ) || [
-          {
-            host: "test.pocketnet.app",
-            port: 8899,
-            wss: 8099,
-          },
-          /*{
+      var listofproxies = f.deep(
+        window,
+        "window.POCKETNETINSTANCE.options.listofproxies"
+      ) || [
+        {
+          host: "test.pocketnet.app",
+          port: 8899,
+          wss: 8099,
+        },
+        /*{
               host : 'pocketnet.app',
               port : 8899,
               wss : 8099
@@ -831,9 +817,8 @@ export default {
               port : 8899,
               wss : 8099
           }*/
-        ]
+      ];
     }
-
 
     /*
 
@@ -844,14 +829,13 @@ export default {
 
 
     */
-    if(this.$store.state.isLocalStorageChatAuth) {
-       var domain = "matrix.pocketnet.app";
+    if (this.$store.state.isLocalStorageChatAuth) {
+      var domain = "matrix.pocketnet.app";
     } else {
       var domain =
         f.deep(window, "window.POCKETNETINSTANCE.options.matrix") ||
         "test.matrix.pocketnet.app";
     }
-   
 
     core = new Core(this, {
       domain: domain,
@@ -886,30 +870,25 @@ export default {
           message : "Downloaded"
         })*/
 
+    core
+      .initWithUser(user)
+      .then((r) => {
+        return core.mtrx.wait().then(() => {
+          core.user.getContacts();
 
-    core.initWithUser(user).then(r => {
-
-      return core.mtrx.wait().then(() => {
-        
-        core.user.getContacts()
-
-
-        setTimeout(() => {
-          if (this.$route.name !== 'chats' &&
-            /*this.$route.name !== 'chat' &&*/
-            /*this.$route.name !== 'chatInfo' &&*/
-            this.$route.name !== 'publicPreview' &&
-            this.$route.name !== 'chatSettings' &&
-            this.$route.name !== 'contact' &&
-            core.cancelDefaultRoute !== true) {
-
-            this.$router.push('/chats').catch(e => {})
-          }
-        }, 100)
-
-      
-
-          
+          setTimeout(() => {
+            if (
+              this.$route.name !== "chats" &&
+              /*this.$route.name !== 'chat' &&*/
+              /*this.$route.name !== 'chatInfo' &&*/
+              this.$route.name !== "publicPreview" &&
+              this.$route.name !== "chatSettings" &&
+              this.$route.name !== "contact" &&
+              core.cancelDefaultRoute !== true
+            ) {
+              this.$router.push("/chats").catch((e) => {});
+            }
+          }, 100);
         });
       })
       .catch((g) => {});
@@ -923,8 +902,8 @@ export default {
   },
 
   mounted() {
-    this.$store.commit('minimize', true);
-  }
+    this.$store.commit("minimize", true);
+  },
 };
 
 if (module.hot) {
@@ -954,7 +933,7 @@ if (module.hot) {
 <!-- THEMES END -->
 
 <style lang="scss">
-.rootcontent.minimized  {
+.rootcontent.minimized {
   .chat-container-pages-empty {
     display: none !important;
   }
@@ -964,7 +943,8 @@ if (module.hot) {
   .messageRow .maxcontent {
     max-width: 295px !important;
   }
-  .modal-backdrop, .modal-wrapper {
+  .modal-backdrop,
+  .modal-wrapper {
     width: 344px;
     left: -302px;
   }
@@ -1007,13 +987,13 @@ if (module.hot) {
   }
 }
 .rootcontent.fix {
-  .chat-container-pages {    
+  .chat-container-pages {
     position: absolute !important;
     left: 23px !important;
     width: 344px !important;
     border-left: 0 !important;
     #topheader {
-      transform: translate3d(-279px,-56px,0) !important;
+      transform: translate3d(-279px, -56px, 0) !important;
     }
     .input_component {
       width: 344px;
@@ -1049,7 +1029,7 @@ if (module.hot) {
         right: 8px !important;
         left: auto !important;
         width: 344px !important;
-        transform: none !important; 
+        transform: none !important;
       }
     }
   }
@@ -1058,8 +1038,7 @@ if (module.hot) {
   }
 }
 
-.emoji-mart{
+.emoji-mart {
   right: -99px !important;
 }
-
 </style>

@@ -1,4 +1,4 @@
-import PhotoSwipe from './photoswipe.vue'
-import PhotoSwipeGallery from './photoswipe-gallery.vue'
+import PhotoSwipe from "./photoswipe.vue";
+import PhotoSwipeGallery from "./photoswipe-gallery.vue";
 
-export { PhotoSwipe, PhotoSwipeGallery }
+export { PhotoSwipe, PhotoSwipeGallery };

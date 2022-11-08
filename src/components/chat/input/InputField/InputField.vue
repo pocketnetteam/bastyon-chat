@@ -19,14 +19,20 @@
           @click="keyup"
           @paste="paste_image"
           :placeholder="$t('caption.sendmessage')"
-
         ></textarea>
-        <transition name="fade" mode="out-in" v-if="emojiIndex" >
+        <transition name="fade" mode="out-in" v-if="emojiIndex">
           <picker
             :data="emojiIndex"
             v-show="display_emoji"
             @select="insert_emoji"
-            :style="{ width: '325px', position: 'absolute', bottom: '32px', right: '-60px', fontSize: '0.8em', fontFamily: 'Segoe UI' }"
+            :style="{
+              width: '325px',
+              position: 'absolute',
+              bottom: '32px',
+              right: '-60px',
+              fontSize: '0.8em',
+              fontFamily: 'Segoe UI',
+            }"
             :exclude="exclude"
             :showPreview="false"
             :showSearch="false"
@@ -38,7 +44,7 @@
       </div>
     </div>
 
-    <div class="iconbutton emojipicker" @click="toggle_emoji_picker()" >
+    <div class="iconbutton emojipicker" @click="toggle_emoji_picker()">
       <div class="leftdummy">
         <div class="idummy">
           <i v-if="display_emoji" class="fas fa-times"></i>
@@ -58,56 +64,52 @@
 </template>
 
 <script>
-import Images from '@/application/utils/images.js'
+import Images from "@/application/utils/images.js";
 import "emoji-mart-vue-fast/css/emoji-mart.css";
 import f from "@/application/functions";
-import {Picker, EmojiIndex} from 'emoji-mart-vue-fast'
+import { Picker, EmojiIndex } from "emoji-mart-vue-fast";
 
-import vClickOutside from 'v-click-outside'
+import vClickOutside from "v-click-outside";
 
-import picturePreview from '@/components/chat/input/picturePreview/picturePreview'
+import picturePreview from "@/components/chat/input/picturePreview/picturePreview";
 
-let images = new Images()
+let images = new Images();
 
 export default {
-  name: 'InputField',
+  name: "InputField",
   components: {
     Picker,
     picturePreview,
   },
 
   directives: {
-    clickOutside: vClickOutside.directive
+    clickOutside: vClickOutside.directive,
   },
 
   watch: {
     text: {
       immediately: true,
       handler: function (current, prev) {
-
         if (current) {
-
-          this.send = true
-          this.$emit('FilledInput')
-
+          this.send = true;
+          this.$emit("FilledInput");
         } else {
-
-          this.send = false
-          this.$emit('emptyInput')
+          this.send = false;
+          this.$emit("emptyInput");
         }
 
-        this.textarea_resize()
-      }
+        this.textarea_resize();
+      },
     },
   },
 
   data() {
     return {
       send: false,
-     
+
       ready: false,
-      text: '',
-      exclude: ['flags'],
+      text: "",
+      exclude: ["flags"],
       display_emoji: false,
       content_height: 26,
       pasted_data: [],
@@ -115,21 +117,21 @@ export default {
 
       upload: {
         multiple: true,
-        extensions: ['image/jpg', 'image/jpeg', 'image/png'],
+        extensions: ["image/jpg", "image/jpeg", "image/png"],
         images: {
           resize: {
-            type: 'fit'
-          }
-        }
+            type: "fit",
+          },
+        },
       },
       hidden_previews: null,
-      emojiIndex : null
-    }
+      emojiIndex: null,
+    };
   },
 
   computed: {
     mobile: function () {
-      return !this.$store.state.pocketnet && this.$store.state.mobile
+      return !this.$store.state.pocketnet && this.$store.state.mobile;
     },
 
     /*emojiIndex: function () {
@@ -139,364 +141,318 @@ export default {
       return window.emojiIndex
 
     }*/
-
   },
 
   methods: {
-
-    prepareemoji : function(){
-
-        if(window.emojiIndex) this.emojiIndex = window.emojiIndex
-
-        else{
-
-          var emojidata = require("emoji-mart-vue-fast/data/all.json")
-          window.emojiIndex = new EmojiIndex(emojidata)
-            this.emojiIndex = window.emojiIndex
-        }
+    prepareemoji: function () {
+      if (window.emojiIndex) this.emojiIndex = window.emojiIndex;
+      else {
+        var emojidata = require("emoji-mart-vue-fast/data/all.json");
+        window.emojiIndex = new EmojiIndex(emojidata);
+        this.emojiIndex = window.emojiIndex;
+      }
     },
 
     setText: function (text) {
-      this.text = text
+      this.text = text;
 
-      this.savetextinstorage()
+      this.savetextinstorage();
 
       setTimeout(() => {
-        this.textarea_resize()
-        this.focus()
-      })
-
+        this.textarea_resize();
+        this.focus();
+      });
     },
 
     focused: function () {
-      this.$emit('focused')
+      this.$emit("focused");
     },
 
     textchange: function (e) {
-      this.text = e.target.value || ''
-
+      this.text = e.target.value || "";
     },
-
 
     savetextinstorage: function () {
       if (this.storagekey) {
-        localStorage[this.storagekey] = this.text || ''
+        localStorage[this.storagekey] = this.text || "";
       }
     },
     send_empty_array() {
-      this.$emit('userSearched', [])
+      this.$emit("userSearched", []);
     },
 
     focus() {
-      this.$refs['textarea'].focus()
+      this.$refs["textarea"].focus();
     },
 
     blur() {
-      this.$refs['textarea'].blur()
+      this.$refs["textarea"].blur();
     },
 
     blurifempty() {
-      if (!this.text)
-        this.blur()
+      if (!this.text) this.blur();
     },
 
     close_emoji_picker(event) {
-      if (event.target.localName !== 'i') {
-        if (event.target.localName !== 'matrix-element') {
-          this.display_emoji = false
+      if (event.target.localName !== "i") {
+        if (event.target.localName !== "matrix-element") {
+          this.display_emoji = false;
         }
       }
     },
 
     textarea_resize() {
-
       if (!this.text) {
-        this.textarea_resize_reset()
+        this.textarea_resize_reset();
       } else {
-        this.$refs.textarea.style.height = 1 + 'px'
-        this.$refs.textarea.style.height = this.$refs.textarea.scrollHeight + 'px'
-        this.display_emoji = false
+        this.$refs.textarea.style.height = 1 + "px";
+        this.$refs.textarea.style.height =
+          this.$refs.textarea.scrollHeight + "px";
+        this.display_emoji = false;
       }
-
-
     },
 
     textarea_resize_reset() {
-      this.$refs.textarea.style.height = this.content_height + 'px'
+      this.$refs.textarea.style.height = this.content_height + "px";
     },
     toggle_emoji_picker() {
-      this.display_emoji = !this.display_emoji
+      this.display_emoji = !this.display_emoji;
     },
 
     send_text(event) {
-
-      if (this.text && this.text !== '\n') {
-
-        this.display_emoji = false
-        this.$emit('chatMessage', this.text)
-        this.$emit('emptyInput')
-        this.send = false
-        this.text = ''
-
+      if (this.text && this.text !== "\n") {
+        this.display_emoji = false;
+        this.$emit("chatMessage", this.text);
+        this.$emit("emptyInput");
+        this.send = false;
+        this.text = "";
       }
 
-      this.savetextinstorage()
-
+      this.savetextinstorage();
     },
 
     insert_emoji(emoji) {
       this.text += emoji.native;
 
-      this.savetextinstorage()
+      this.savetextinstorage();
     },
     paste_image(event) {
-
-      this.get_base64(event)
-
+      this.get_base64(event);
     },
     get_base64(event) {
-      this.pasted_data = event.clipboardData.items
+      this.pasted_data = event.clipboardData.items;
 
       if (this.pasted_data.length) {
-
         for (let index in this.pasted_data) {
-          let item = this.pasted_data[index]
+          let item = this.pasted_data[index];
 
-          let correct_image_type = this.upload.extensions.includes(item.type)
+          let correct_image_type = this.upload.extensions.includes(item.type);
 
           if (correct_image_type) {
-
-
-            var blob = item.getAsFile()
+            var blob = item.getAsFile();
             var reader = new FileReader();
 
-            reader.onload = event => {
-
-              this.$dialog.confirm(
-                'Do you really want to send attachment?', {
-                  okText: 'Yes',
-                  cancelText: 'No, cancel'
+            reader.onload = (event) => {
+              this.$dialog
+                .confirm("Do you really want to send attachment?", {
+                  okText: "Yes",
+                  cancelText: "No, cancel",
                 })
 
                 .then((dialog) => {
-                  var base64 = event.target.result
-                  this.resize_image(base64, item.type)
-
-                })
-            }
-            reader.readAsDataURL(blob)
-
-
+                  var base64 = event.target.result;
+                  this.resize_image(base64, item.type);
+                });
+            };
+            reader.readAsDataURL(blob);
           }
         }
-
       }
     },
     resize_image(data, type) {
-      return images.autorotation(null, data).then(base64 => {
-        let _type = this.upload.images.resize.type || 'def'
+      return images
+        .autorotation(null, data)
+        .then((base64) => {
+          let _type = this.upload.images.resize.type || "def";
 
-        return images.resize[_type](base64, 1024, 1024, type, 0.9).then(base64 => {
-
-          this.$emit('base64', base64)
-
-        }).catch(error => console.error('Failed to resize image', error))
-      }).catch(error => console.error('Failed to resize image', error))
+          return images.resize[_type](base64, 1024, 1024, type, 0.9)
+            .then((base64) => {
+              this.$emit("base64", base64);
+            })
+            .catch((error) => console.error("Failed to resize image", error));
+        })
+        .catch((error) => console.error("Failed to resize image", error));
     },
 
     getsearchposition(position) {
+      if (!position.start || !this.text.length) return null;
 
-      if (!position.start || !this.text.length) return null
+      var sposition = { start: position.start, middle: 0, end: position.end };
 
-      var sposition = {start: position.start, middle: 0, end: position.end}
+      var i = position.start;
+      var dg = false;
+      var br = false;
 
-      var i = position.start
-      var dg = false
-      var br = false
+      var reg = /[a-zA-Z0-9]{1}/;
 
-      var reg = /[a-zA-Z0-9]{1}/
-
-      sposition.middle = i
+      sposition.middle = i;
 
       do {
+        var char = this.text[i];
 
-        var char = this.text[i]
-
-        if (char == '@') {
-
+        if (char == "@") {
           if (position.start == i || (i > 0 && reg.test(this.text[i - 1]))) {
-            br = true
+            br = true;
           } else {
-            dg = true
+            dg = true;
           }
         } else {
-
           if (reg.test(char)) {
-            sposition.start = i
-          } else br = true
+            sposition.start = i;
+          } else br = true;
         }
 
-        i--
-
-      } while (i >= 0 && i <= position.start && !dg && !br)
+        i--;
+      } while (i >= 0 && i <= position.start && !dg && !br);
 
       if (!dg) {
-        sposition = null
+        sposition = null;
       } else {
-
-        br = false
-        i = position.end
+        br = false;
+        i = position.end;
 
         do {
           if (!this.text[i] || reg.test(this.text[i])) {
-            sposition.end = i
+            sposition.end = i;
           } else {
-            br = true
+            br = true;
           }
 
-          i++
-
-        } while (i <= this.text.length && !br)
+          i++;
+        } while (i <= this.text.length && !br);
       }
 
-      return sposition
-
+      return sposition;
     },
-
 
     getsearch(position) {
+      var sposition = this.getsearchposition(position);
 
-      var sposition = this.getsearchposition(position)
+      if (!sposition) return null;
 
-      if (!sposition) return null
-
-      return this.text.substring(sposition.start, sposition.middle)
-
+      return this.text.substring(sposition.start, sposition.middle);
     },
 
-
     keydown(event) {
-
       if (event.keyCode === 40 || event.keyCode === 38) {
-
         if (this.tipusers && this.tipusers.length) {
+          this.$emit("browsetip", event.keyCode === 40 ? true : false);
 
-          this.$emit('browsetip', event.keyCode === 40 ? true : false)
+          event.preventDefault();
 
-          event.preventDefault()
-
-          return false
+          return false;
         }
-
       }
 
-
       if (event.keyCode === 39 || event.keyCode === 13) {
-
         if (this.tipusers && this.tipusers.length) {
+          this.$emit("selectcurrenttip");
 
-          this.$emit('selectcurrenttip')
+          event.preventDefault();
 
-          event.preventDefault()
-
-          return false
-
+          return false;
         }
-
       }
 
       if (event.keyCode === 13) {
         if (this.mobile) {
-          this.text = this.text + '\n'
+          this.text = this.text + "\n";
         } else {
-          this.send_text(event)
+          this.send_text(event);
         }
 
-        event.preventDefault()
+        event.preventDefault();
 
-        return false
+        return false;
       }
     },
 
     keyup(event) {
-
       if (this.block) {
-        event.preventDefault()
+        event.preventDefault();
 
-        return false
+        return false;
       }
 
-      var position = f.getCaretPosition(this.$refs['textarea'])
+      var position = f.getCaretPosition(this.$refs["textarea"]);
 
-      var value = this.getsearch(position)
+      var value = this.getsearch(position);
 
-      this.$emit('tipsearchrequest', value)
+      this.$emit("tipsearchrequest", value);
 
-      this.savetextinstorage()
+      this.savetextinstorage();
     },
 
     blured() {
-
       setTimeout(() => {
-        this.$emit('tipsearchrequest', null)
-      }, 300)
-
+        this.$emit("tipsearchrequest", null);
+      }, 300);
     },
 
     inserttip(text) {
+      this.$emit("tipsearchrequest", null);
 
-      this.$emit('tipsearchrequest', null)
+      this.block = true;
+      this.$refs["textarea"];
 
-      this.block = true
-      this.$refs['textarea']
+      var position = this.getsearchposition(
+        f.getCaretPosition(this.$refs["textarea"])
+      );
 
-      var position = this.getsearchposition(f.getCaretPosition(this.$refs['textarea']))
-
-      this.text = this.text.substring(0, position.start) + text + this.text.substring(position.end + 1)
-
+      this.text =
+        this.text.substring(0, position.start) +
+        text +
+        this.text.substring(position.end + 1);
 
       if (!this.text[position.end + 1]) {
-        this.text = this.text + ' '
+        this.text = this.text + " ";
       }
 
-      if (!this.text[position.end + 1] == ' ') position.end++
+      if (!this.text[position.end + 1] == " ") position.end++;
 
-      f.setCaretPosition(this.$refs['textarea'], position.end + 1, position.end + 1)
+      f.setCaretPosition(
+        this.$refs["textarea"],
+        position.end + 1,
+        position.end + 1
+      );
 
       setTimeout(() => {
-        this.block = false
-      }, 350)
-
-    }
+        this.block = false;
+      }, 350);
+    },
   },
 
   props: {
     storagekey: String,
-    tipusers: Array
+    tipusers: Array,
   },
 
-  
-
-  creared() {
-
-  },
+  creared() {},
 
   mounted() {
-
     if (!this.mobile) {
-      this.focus()
+      this.focus();
     }
 
-    this.prepareemoji()
+    this.prepareemoji();
 
-
-    this.$refs.textarea.style.height = '26px'
+    this.$refs.textarea.style.height = "26px";
 
     if (this.storagekey && localStorage[this.storagekey]) {
-      this.text = localStorage[this.storagekey]
+      this.text = localStorage[this.storagekey];
     }
-  }
-}
+  },
+};
 </script>
 
 <style scoped lang="sass">
@@ -584,5 +540,4 @@ export default {
 
 .fade-enter, .fade-leave-to
   opacity: 0
-
 </style>

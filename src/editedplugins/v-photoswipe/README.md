@@ -1,20 +1,20 @@
-# Vue PhotoSwipe  
+# Vue PhotoSwipe
 
 ![npm](https://img.shields.io/npm/l/express.svg)
 
 
 PhotoSwipe, PhotoSwipeGallery component for Vuejs base on [PhotoSwipe](http://photoswipe.com/).
 
-## Installation  
+## Installation
 
-### NPM  
+### NPM
 ``` bash
-  npm install --save v-photoswipe  
+  npm install --save v-photoswipe
 ```
 
-## Usage  
+## Usage
 
-### Template  
+### Template
 
 ``` html
 <template>
@@ -36,10 +36,10 @@ PhotoSwipe, PhotoSwipeGallery component for Vuejs base on [PhotoSwipe](http://ph
     </div>
     <v-photoswipe :isOpen="isOpen" :items="items" :options="options" @close="hidePhotoSwipe"></v-photoswipe>
   </div>
-</template>  
+</template>
 ```
 
-### JS  
+### JS
 
 ``` js
 import { PhotoSwipe, PhotoSwipeGallery } from 'v-photoswipe'
@@ -80,12 +80,12 @@ export default {
       this.isOpen = false
     }
   }
-}  
+}
 ```
 
 ## Props
 
-### PhotoSwipe & PhotoSwipeGallery  
+### PhotoSwipe & PhotoSwipeGallery
 
 | Name                | Type        | Default | Required | Description               |
 |---------------------|-------------|---------|----------|---------------------------|
@@ -111,16 +111,16 @@ export default {
 | shareLinkClick      | Function    |         |          | Photoswipe event listener |
 
 
-## Slot   
+## Slot
 
-### PhotoSwipeGallery    
+### PhotoSwipeGallery
 
 | Name    | Type      | Default      | Required | Description |
 |---------|-----------|--------------|----------|-------------|
 | item    | Object    | HTML Img Tag | false    |             |
 
 
-## Demo  
+## Demo
 
 coming soon...
 

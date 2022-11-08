@@ -10,10 +10,12 @@ export default {
     chat: Object,
     filterType: String,
 
-    error : [Object, Error, String],
+    error: [Object, Error, String],
     selectedMessages: {
-      type : Array,
-      default : () => {return []}
+      type: Array,
+      default: () => {
+        return [];
+      },
     },
     isRemoveSelectedMessages: false,
   },
@@ -31,7 +33,7 @@ export default {
       cancelNextScroll: false,
       timeline: null,
       lastEvent: {},
-      scrollType: '',
+      scrollType: "",
       esize: {},
       p_b: false,
       p_f: false,
@@ -54,18 +56,14 @@ export default {
   watch: {
     //$route: 'getdata'
 
-
-    active : function(){
-
+    active: function () {
       // if(this.minimized && !this.active){
       //   this.scrollToNew(0)
       // }
-
       // if(this.minimized && this.active){
       //   this.readAll();
       // }
-
-    }
+    },
   },
   computed: mapState({
     lloading: function () {
@@ -129,14 +127,12 @@ export default {
       this.$emit("shareEvent", { event });
     },
     shareEvent: function ({ event }) {
-      this.$emit('shareEvent', { event })
+      this.$emit("shareEvent", { event });
     },
 
-    
     removeEvent: function (event) {
       this.chat.getLiveTimeline().removeEvent(event.event.event_id);
     },
-
 
     wh: function () {
       if (this.esize.clientHeight) return this.esize.clientHeight;
@@ -191,73 +187,67 @@ export default {
       return events;
     },
 
-    getEventsAndEncrypt : function(){
-      var events = this.getEvents()
+    getEventsAndEncrypt: function () {
+      var events = this.getEvents();
 
-      return Promise.all(_.map(events, (e) => { 
+      return Promise.all(
+        _.map(events, (e) => {
+          if (!this.chat.pcrypto) return Promise.resolve();
 
+          if (e.event.decrypted) return Promise.resolve();
 
-        if(!this.chat.pcrypto) return Promise.resolve()
+          var pr = null;
+          var subtype = f.deep(e, "event.content.msgtype");
 
+          //if(f.deep(e, 'event.content.msgtype') != 'm.encrypted') return Promise.resolve()
 
-        if (e.event.decrypted) return Promise.resolve()
+          var einfo =
+            f.deep(e, "event.content.info.secrets") ||
+            f.deep(e, "event.content.pbody.secrets");
 
+          if (einfo) {
+            if (subtype == "m.image") {
+            }
 
-        var pr = null
-        var subtype = f.deep(e, 'event.content.msgtype')
+            if (subtype == "m.audio") {
+              pr = this.core.mtrx.getAudio(this.chat, e).catch((error) => {
+                console.error(error);
 
+                e.event.decrypted = {
+                  msgtype: "m.bad.encrypted",
+                };
+              });
+            }
 
+            if (subtype == "m.encrypted") {
+              pr = this.chat.pcrypto
+                .decryptEvent(e.event)
+                .then((d) => {
+                  e.event.decrypted = d;
 
-        //if(f.deep(e, 'event.content.msgtype') != 'm.encrypted') return Promise.resolve()
+                  return Promise.resolve();
+                })
+                .catch((e) => {
+                  e.event.decrypted = {
+                    msgtype: "m.bad.encrypted",
+                  };
 
-        var einfo = f.deep(e, 'event.content.info.secrets') || f.deep(e, 'event.content.pbody.secrets')
-
-        if(einfo) {
-          if(subtype == 'm.image'){
-            
+                  return Promise.resolve();
+                });
+            }
+          } else {
+            if (subtype == "m.audio") {
+              pr = this.core.mtrx.getAudioUnencrypt(this.chat, e);
+            }
           }
 
-          if(subtype == 'm.audio'){
-            pr = this.core.mtrx.getAudio(this.chat, e).catch(error => {
+          if (!pr) return Promise.resolve();
 
-              console.error(error)
+          return pr.catch((e) => {
+            return Promise.resolve();
+          });
 
-              e.event.decrypted = {
-                msgtype : 'm.bad.encrypted'
-              }
-
-            })
-          }
-
-          if(subtype == 'm.encrypted'){
-            pr = this.chat.pcrypto.decryptEvent(e.event).then(d => {
-              e.event.decrypted = d
-    
-              return Promise.resolve()
-            }).catch(e => {
-    
-              e.event.decrypted = {
-                msgtype : 'm.bad.encrypted'
-              }
-    
-              return Promise.resolve()
-            })
-          }
-        }
-        else{
-          if(subtype == 'm.audio'){
-            pr = this.core.mtrx.getAudioUnencrypt(this.chat, e)
-          }
-        }
-
-        if(!pr) return Promise.resolve()
-
-        return pr.catch(e => {
-          return Promise.resolve()
-        })
-
-
-        /*return this.chat.pcrypto.decryptEvent(e.event).then(d => {
+          /*return this.chat.pcrypto.decryptEvent(e.event).then(d => {
           e.event.decrypted = d
           return Promise.resolve()
         }).catch(e => {
@@ -266,10 +256,10 @@ export default {
           }
           return Promise.resolve()
         })*/
-
-      })).then(() => {
-        return Promise.resolve(events)
-      })
+        })
+      ).then(() => {
+        return Promise.resolve(events);
+      });
     },
 
     relations: function (events) {
@@ -368,53 +358,44 @@ export default {
     paginate: function (direction, rnd) {
       //$(this.$el).find('.eventsflex')[0]
 
-      if (!this.loading && this.timeline && !this['p_' + direction]) {
-
+      if (!this.loading && this.timeline && !this["p_" + direction]) {
         if (this.timeline.canPaginate(direction) || rnd) {
+          this["p_" + direction] = true;
 
-          this['p_' + direction] = true
+          let count = /*this.firstPaginate ? 24 : */ 20;
 
-          let count = /*this.firstPaginate ? 24 : */20;
+          this.timeline
+            .paginate(direction, count)
+            .then((e) => {
+              return Promise.resolve();
+            })
+            .catch((e) => {
+              return Promise.resolve();
+            })
+            .then((r) => {
+              return this.getEventsAndEncrypt();
+            })
+            .then((events) => {
+              this.events = events;
 
-          this.timeline.paginate(direction, count).then(e => {
+              this.firstPaginate = false;
 
-            return Promise.resolve()
+              // this.readAll();
 
-          }).catch(e => {
-
-            return Promise.resolve()
-
-          }).then(r => {
-
-            return this.getEventsAndEncrypt()
-
-          }).then(events => {
-            this.events = events;
-
-            this.firstPaginate = false
-
-            // this.readAll();
-
-            this['p_' + direction] = false;
-          })
-
+              this["p_" + direction] = false;
+            });
+        } else {
+          this.readAll();
         }
-        else{
-
-            this.readAll();
-          
-        }
-
       }
-
     },
 
     autoPaginateAll: function () {
-      if (this.filterType === 'images') {
-        this.autoPaginate('b')
+      if (this.filterType === "images") {
+        this.autoPaginate("b");
       } else {
-        this.autoPaginate('b')
-        this.autoPaginate('f')
+        this.autoPaginate("b");
+        this.autoPaginate("f");
       }
     },
 
@@ -494,23 +475,16 @@ export default {
             i--;
           }
 
-
-          if(e){
-            this.core.mtrx.client.setRoomReadMarkers(
-              this.chat.currentState.roomId,
-              e.eventId,
-              e, {
-                hidden : !this.settings_read ? true : false
-              }).then(r => {
-  
-              return r
-            })
+          if (e) {
+            this.core.mtrx.client
+              .setRoomReadMarkers(this.chat.currentState.roomId, e.eventId, e, {
+                hidden: !this.settings_read ? true : false,
+              })
+              .then((r) => {
+                return r;
+              });
           }
-
-          
-
-        }, 1000)
-
+        }, 1000);
     },
 
     //////////////
@@ -545,12 +519,11 @@ export default {
     },
 
     menuIsVisibleHandler: function (isVisible) {
-
-      this.$emit('menuIsVisible', isVisible);
+      this.$emit("menuIsVisible", isVisible);
     },
 
     messagesIsDeleted: function (state) {
-      this.$emit('messagesIsDeleted', state);
+      this.$emit("messagesIsDeleted", state);
     },
   },
 };

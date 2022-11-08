@@ -1,25 +1,23 @@
 <template>
-  <div id="settings" :class="{mobile : !pocketnet}">
-  
-  
+  <div id="settings" :class="{ mobile: !pocketnet }">
     <div class="infoPart">
-
-
-      <div :class="'inputWrapper ' + value.id"  v-for="(value, index) in settings" :key="index">
-
+      <div
+        :class="'inputWrapper ' + value.id"
+        v-for="(value, index) in settings"
+        :key="index"
+      >
         <div class="forInput">
-          <toggle-button @change="e => set_settings(value.id, e)" :value="get_settings(value.id)"/>
+          <toggle-button
+            @change="(e) => set_settings(value.id, e)"
+            :value="get_settings(value.id)"
+          />
         </div>
 
         <div class="label">
           <label :for="'settings_' + value.id">{{ $t(value.label) }}</label>
         </div>
-
       </div>
-        
-        
     </div>
-  
   </div>
 </template>
 
@@ -28,24 +26,3 @@
 
 <!-- THEMES BEGIN -->
 <!-- THEMES END -->
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

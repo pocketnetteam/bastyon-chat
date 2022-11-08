@@ -1,10 +1,8 @@
 <template>
-  <div class="page contacts">   
-
+  <div class="page contacts">
     <topheader>
-
       <template v-slot:left>
-        <div class="back"  v-on:click='back'>
+        <div class="back" v-on:click="back">
           <div class="iconbutton">
             <i class="fas fa-angle-left"></i>
           </div>
@@ -12,13 +10,14 @@
       </template>
 
       <template v-slot:info>
-        <span>{{title}}</span>
+        <span>{{ title }}</span>
       </template>
 
       <template v-slot:right>
-        <div class="iconbutton" @click="openMore" v-if="navigator.share"><i class="fas fa-share-alt"></i></div>
+        <div class="iconbutton" @click="openMore" v-if="navigator.share">
+          <i class="fas fa-share-alt"></i>
+        </div>
       </template>
-     
     </topheader>
 
     <maincontent>
@@ -26,7 +25,6 @@
         <inviteChoice ref="inviteChoice"></inviteChoice>
       </template>
     </maincontent>
-
   </div>
 </template>
 
@@ -35,50 +33,41 @@
 .topheader
   top: 0
   z-index: 999
-
 </style>
 
 <script>
-
-
-import inviteChoice from '@/components/invite/index.vue'
-import { mapState } from 'vuex';
+import inviteChoice from "@/components/invite/index.vue";
+import { mapState } from "vuex";
 
 export default {
-  name: 'pageinvite',
+  name: "pageinvite",
   data: function () {
-    return {
-
-    }
+    return {};
   },
   components: {
-    inviteChoice
+    inviteChoice,
   },
 
   computed: mapState({
-    pocketnet: state => state.pocketnet,
-    minimized: state => state.minimized,
-    title: function(){
-      return this.$i18n.t("caption.inviteFriend")
+    pocketnet: (state) => state.pocketnet,
+    minimized: (state) => state.minimized,
+    title: function () {
+      return this.$i18n.t("caption.inviteFriend");
     },
-    navigator : function(){
-      return navigator || {}
-    }
+    navigator: function () {
+      return navigator || {};
+    },
   }),
 
-  
-
-  methods : {
-    back: function() {
+  methods: {
+    back: function () {
       this.$refs.inviteChoice.back();
     },
-    openMore: function() {
+    openMore: function () {
       this.$refs.inviteChoice.openMore();
-    }
+    },
   },
 
-  mounted() {
-    
-  }
-}
+  mounted() {},
+};
 </script>

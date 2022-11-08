@@ -4,19 +4,14 @@
   "private": true,
   "scripts": {
     "serve": "node isMessenger.js false && vue-cli-service serve",
-    
     "build": "node isMessenger.js false  && vue-cli-service build --dest C:/inetpub/wwwroot/pocketnet/chat",
     "build_mac": "node isMessenger.js false  && vue-cli-service build --dest ~/work/pocketnet/chat",
-
     "build_messenger": "export NODE_ENV=messenger && node isMessenger.js true  && vue-cli-service build",
     "build_messenger_win64": "set NODE_ENV=messenger && node isMessenger.js true  && vue-cli-service build",
-
     "lint": "vue-cli-service lint",
     "themes": "node themes.js",
-
     "buildpocketnet": "npm run build -- --target wc-async --inline-vue --name matrix-element src/App.vue",
     "buildpocketnet_mac": "npm run build_mac -- --target wc-async --inline-vue --name matrix-element src/App.vue",
-
     "buildpocketnetdev": "npm run build -- --target wc-async --inline-vue --watch --name matrix-element src/App.vue"
   },
   "dependencies": {

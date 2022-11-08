@@ -1,9 +1,15 @@
 <template>
-  <div id={id} class={className}>
+  <div id="{id}" class="{className}">
     <div class="pswp-thumbnails">
-      <a :key="index" :item="item" v-for="(item, index) in items" @click="showPhotoSwipe($event, index)" class="pswp-thumbnail">
+      <a
+        :key="index"
+        :item="item"
+        v-for="(item, index) in items"
+        @click="showPhotoSwipe($event, index)"
+        class="pswp-thumbnail"
+      >
         <slot :item="item">
-          <img :src="item.src" alt="picture"/>
+          <img :src="item.src" alt="picture" />
         </slot>
       </a>
     </div>
@@ -18,66 +24,66 @@
 </template>
 
 <script>
-import PhotoSwipe from './photoswipe.vue'
-import events from './events'
+import PhotoSwipe from "./photoswipe.vue";
+import events from "./events";
 export default {
-  name: 'v-photoswipe-gallery',
+  name: "v-photoswipe-gallery",
   components: {
-    'v-photoswipe': PhotoSwipe
+    "v-photoswipe": PhotoSwipe,
   },
   props: {
     items: {
       type: Array,
-      required: true
+      required: true,
     },
     options: {
       type: Object,
-      default: {}
+      default: {},
     },
     isOpen: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
-  data () {
+  data() {
     return {
       opened: this.isOpen,
-      opts: {}
-    }
+      opts: {},
+    };
   },
   watch: {
-    isOpen (val, oldVal) {
+    isOpen(val, oldVal) {
       if (val !== this.opened) {
-        this.opened = val
+        this.opened = val;
       }
-    }
+    },
   },
   methods: {
-    showPhotoSwipe (e, index) {
-      e.preventDefault()
+    showPhotoSwipe(e, index) {
+      e.preventDefault();
       this.opts = Object.assign(this.options, {
-        index
-      })
-      this.opened = true
+        index,
+      });
+      this.opened = true;
     },
-    handleClose () {
-      this.opened = false
-    }
+    handleClose() {
+      this.opened = false;
+    },
   },
-  mounted () {
-    events.forEach(e => {
+  mounted() {
+    events.forEach((e) => {
       this.$refs.pswp.$on(e, (...args) => {
-        args.unshift(this)
-        this.$emit(e, [...args])
-      })
-    })
-  }
-}
+        args.unshift(this);
+        this.$emit(e, [...args]);
+      });
+    });
+  },
+};
 </script>
 
 <style lang="css">
-  .pswp-thumbnails .pswp-thumbnail {
-    font-size: 0;
-    cursor: pointer;
-  }
+.pswp-thumbnails .pswp-thumbnail {
+  font-size: 0;
+  cursor: pointer;
+}
 </style>

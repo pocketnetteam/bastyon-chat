@@ -3,7 +3,7 @@
 var _interopRequireWildcard = require("@babel/runtime/helpers/interopRequireWildcard");
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
+  value: true,
 });
 exports.LocalIndexedDBStoreBackend = LocalIndexedDBStoreBackend;
 
@@ -37,29 +37,29 @@ const VERSION = 3;
 function createDatabase(db) {
   // Make user store, clobber based on user ID. (userId property of User objects)
   db.createObjectStore("users", {
-    keyPath: ["userId"]
+    keyPath: ["userId"],
   }); // Make account data store, clobber based on event type.
   // (event.type property of MatrixEvent objects)
 
   db.createObjectStore("accountData", {
-    keyPath: ["type"]
+    keyPath: ["type"],
   }); // Make /sync store (sync tokens, room data, etc), always clobber (const key).
 
   db.createObjectStore("sync", {
-    keyPath: ["clobber"]
+    keyPath: ["clobber"],
   });
 }
 
 function upgradeSchemaV2(db) {
   const oobMembersStore = db.createObjectStore("oob_membership_events", {
-    keyPath: ["room_id", "state_key"]
+    keyPath: ["room_id", "state_key"],
   });
   oobMembersStore.createIndex("room", "room_id");
 }
 
 function upgradeSchemaV3(db) {
   db.createObjectStore("client_options", {
-    keyPath: ["clobber"]
+    keyPath: ["clobber"],
   });
 }
 /**
@@ -73,18 +73,16 @@ function upgradeSchemaV3(db) {
  * resultMapper.
  */
 
-
 function selectQuery(store, keyRange, resultMapper) {
   const query = store.openCursor(keyRange);
   return new Promise((resolve, reject) => {
     const results = [];
 
-    query.onerror = event => {
+    query.onerror = (event) => {
       reject(new Error("Query failed: " + event.target.errorCode));
     }; // collect results
 
-
-    query.onsuccess = event => {
+    query.onsuccess = (event) => {
       const cursor = event.target.result;
 
       if (!cursor) {
@@ -126,12 +124,12 @@ function reqAsPromise(req) {
   return new Promise((resolve, reject) => {
     req.onsuccess = () => resolve(req);
 
-    req.onerror = err => reject(err);
+    req.onerror = (err) => reject(err);
   });
 }
 
 function reqAsCursorPromise(req) {
-  return reqAsEventPromise(req).then(event => event.target.result);
+  return reqAsEventPromise(req).then((event) => event.target.result);
 }
 /**
  * Does the actual reading from and writing to the indexeddb
@@ -144,7 +142,6 @@ function reqAsCursorPromise(req) {
  * @param {string=} dbName Optional database name. The same name must be used
  * to open the same database.
  */
-
 
 function LocalIndexedDBStoreBackend(indexedDBInterface, dbName) {
   this.indexedDB = indexedDBInterface;
@@ -168,7 +165,9 @@ LocalIndexedDBStoreBackend.prototype = {
    */
   connect: function () {
     if (!this._disconnected) {
-      _logger.logger.log(`LocalIndexedDBStoreBackend.connect: already connected or connecting`);
+      _logger.logger.log(
+        `LocalIndexedDBStoreBackend.connect: already connected or connecting`
+      );
 
       return Promise.resolve();
     }
@@ -179,11 +178,13 @@ LocalIndexedDBStoreBackend.prototype = {
 
     const req = this.indexedDB.open(this._dbName, VERSION);
 
-    req.onupgradeneeded = ev => {
+    req.onupgradeneeded = (ev) => {
       const db = ev.target.result;
       const oldVersion = ev.oldVersion;
 
-      _logger.logger.log(`LocalIndexedDBStoreBackend.connect: upgrading from ${oldVersion}`);
+      _logger.logger.log(
+        `LocalIndexedDBStoreBackend.connect: upgrading from ${oldVersion}`
+      );
 
       if (oldVersion < 1) {
         // The database did not previously exist.
@@ -198,16 +199,19 @@ LocalIndexedDBStoreBackend.prototype = {
       if (oldVersion < 3) {
         upgradeSchemaV3(db);
       } // Expand as needed.
-
     };
 
     req.onblocked = () => {
-      _logger.logger.log(`can't yet open LocalIndexedDBStoreBackend because it is open elsewhere`);
+      _logger.logger.log(
+        `can't yet open LocalIndexedDBStoreBackend because it is open elsewhere`
+      );
     };
 
-    _logger.logger.log(`LocalIndexedDBStoreBackend.connect: awaiting connection...`);
+    _logger.logger.log(
+      `LocalIndexedDBStoreBackend.connect: awaiting connection...`
+    );
 
-    return reqAsEventPromise(req).then(ev => {
+    return reqAsEventPromise(req).then((ev) => {
       _logger.logger.log(`LocalIndexedDBStoreBackend.connect: connected`);
 
       this.db = ev.target.result; // add a poorly-named listener for when deleteDatabase is called
@@ -231,18 +235,23 @@ LocalIndexedDBStoreBackend.prototype = {
    * @return {Promise} Resolves on success
    */
   _init: function () {
-    return Promise.all([this._loadAccountData(), this._loadSyncData()]).then(([accountData, syncData]) => {
-      _logger.logger.log(`LocalIndexedDBStoreBackend: loaded initial data`);
+    return Promise.all([this._loadAccountData(), this._loadSyncData()]).then(
+      ([accountData, syncData]) => {
+        _logger.logger.log(`LocalIndexedDBStoreBackend: loaded initial data`);
 
-      this._syncAccumulator.accumulate({
-        next_batch: syncData.nextBatch,
-        rooms: syncData.roomsData,
-        groups: syncData.groupsData,
-        account_data: {
-          events: accountData
-        }
-      }, true);
-    });
+        this._syncAccumulator.accumulate(
+          {
+            next_batch: syncData.nextBatch,
+            rooms: syncData.roomsData,
+            groups: syncData.groupsData,
+            account_data: {
+              events: accountData,
+            },
+          },
+          true
+        );
+      }
+    );
   },
 
   /**
@@ -267,7 +276,7 @@ LocalIndexedDBStoreBackend.prototype = {
 
       let oobWritten = false;
 
-      request.onsuccess = event => {
+      request.onsuccess = (event) => {
         const cursor = event.target.result;
 
         if (!cursor) {
@@ -290,11 +299,14 @@ LocalIndexedDBStoreBackend.prototype = {
         cursor.continue();
       };
 
-      request.onerror = err => {
+      request.onerror = (err) => {
         reject(err);
       };
-    }).then(events => {
-      _logger.logger.log(`LL: got ${events && events.length}` + ` membershipEvents from storage for room ${roomId} ...`);
+    }).then((events) => {
+      _logger.logger.log(
+        `LL: got ${events && events.length}` +
+          ` membershipEvents from storage for room ${roomId} ...`
+      );
 
       return events;
     });
@@ -308,11 +320,14 @@ LocalIndexedDBStoreBackend.prototype = {
    * @param {event[]} membershipEvents the membership events to store
    */
   setOutOfBandMembers: async function (roomId, membershipEvents) {
-    _logger.logger.log(`LL: backend about to store ${membershipEvents.length}` + ` members for ${roomId}`);
+    _logger.logger.log(
+      `LL: backend about to store ${membershipEvents.length}` +
+        ` members for ${roomId}`
+    );
 
     const tx = this.db.transaction(["oob_membership_events"], "readwrite");
     const store = tx.objectStore("oob_membership_events");
-    membershipEvents.forEach(e => {
+    membershipEvents.forEach((e) => {
       store.put(e);
     }); // aside from all the events, we also write a marker object to the store
     // to mark the fact that OOB members have been written for this room.
@@ -323,7 +338,7 @@ LocalIndexedDBStoreBackend.prototype = {
     const markerObject = {
       room_id: roomId,
       oob_written: true,
-      state_key: 0
+      state_key: 0,
     };
     store.put(markerObject);
     await txnAsPromise(tx);
@@ -341,14 +356,29 @@ LocalIndexedDBStoreBackend.prototype = {
     const store = readTx.objectStore("oob_membership_events");
     const roomIndex = store.index("room");
     const roomRange = IDBKeyRange.only(roomId);
-    const minStateKeyProm = reqAsCursorPromise(roomIndex.openKeyCursor(roomRange, "next")).then(cursor => cursor && cursor.primaryKey[1]);
-    const maxStateKeyProm = reqAsCursorPromise(roomIndex.openKeyCursor(roomRange, "prev")).then(cursor => cursor && cursor.primaryKey[1]);
-    const [minStateKey, maxStateKey] = await Promise.all([minStateKeyProm, maxStateKeyProm]);
+    const minStateKeyProm = reqAsCursorPromise(
+      roomIndex.openKeyCursor(roomRange, "next")
+    ).then((cursor) => cursor && cursor.primaryKey[1]);
+    const maxStateKeyProm = reqAsCursorPromise(
+      roomIndex.openKeyCursor(roomRange, "prev")
+    ).then((cursor) => cursor && cursor.primaryKey[1]);
+    const [minStateKey, maxStateKey] = await Promise.all([
+      minStateKeyProm,
+      maxStateKeyProm,
+    ]);
     const writeTx = this.db.transaction(["oob_membership_events"], "readwrite");
     const writeStore = writeTx.objectStore("oob_membership_events");
-    const membersKeyRange = IDBKeyRange.bound([roomId, minStateKey], [roomId, maxStateKey]);
+    const membersKeyRange = IDBKeyRange.bound(
+      [roomId, minStateKey],
+      [roomId, maxStateKey]
+    );
 
-    _logger.logger.log(`LL: Deleting all users + marker in storage for ` + `room ${roomId}, with key range:`, [roomId, minStateKey], [roomId, maxStateKey]);
+    _logger.logger.log(
+      `LL: Deleting all users + marker in storage for ` +
+        `room ${roomId}, with key range:`,
+      [roomId, minStateKey],
+      [roomId, maxStateKey]
+    );
 
     await reqAsPromise(writeStore.delete(membersKeyRange));
   },
@@ -365,14 +395,19 @@ LocalIndexedDBStoreBackend.prototype = {
       const req = this.indexedDB.deleteDatabase(this._dbName);
 
       req.onblocked = () => {
-        _logger.logger.log(`can't yet delete indexeddb ${this._dbName}` + ` because it is open elsewhere`);
+        _logger.logger.log(
+          `can't yet delete indexeddb ${this._dbName}` +
+            ` because it is open elsewhere`
+        );
       };
 
-      req.onerror = ev => {
+      req.onerror = (ev) => {
         // in firefox, with indexedDB disabled, this fails with a
         // DOMError. We treat this as non-fatal, so that we can still
         // use the app.
-        _logger.logger.warn(`unable to delete js-sdk store indexeddb: ${ev.target.error}`);
+        _logger.logger.warn(
+          `unable to delete js-sdk store indexeddb: ${ev.target.error}`
+        );
 
         resolve();
       };
@@ -420,7 +455,15 @@ LocalIndexedDBStoreBackend.prototype = {
   syncToDatabase: function (userTuples) {
     const syncData = this._syncAccumulator.getJSON(true);
 
-    return Promise.all([this._persistUserPresenceEvents(userTuples), this._persistAccountData(syncData.accountData), this._persistSyncData(syncData.nextBatch, syncData.roomsData, syncData.groupsData)]);
+    return Promise.all([
+      this._persistUserPresenceEvents(userTuples),
+      this._persistAccountData(syncData.accountData),
+      this._persistSyncData(
+        syncData.nextBatch,
+        syncData.roomsData,
+        syncData.groupsData
+      ),
+    ]);
   },
 
   /**
@@ -441,7 +484,7 @@ LocalIndexedDBStoreBackend.prototype = {
         // constant key so will always clobber
         nextBatch: nextBatch,
         roomsData: roomsData,
-        groupsData: groupsData
+        groupsData: groupsData,
       }); // put == UPSERT
 
       return txnAsPromise(txn);
@@ -483,7 +526,7 @@ LocalIndexedDBStoreBackend.prototype = {
       for (const tuple of tuples) {
         store.put({
           userId: tuple[0],
-          event: tuple[1]
+          event: tuple[1],
         }); // put == UPSERT
       }
 
@@ -501,7 +544,7 @@ LocalIndexedDBStoreBackend.prototype = {
     return utils.promiseTry(() => {
       const txn = this.db.transaction(["users"], "readonly");
       const store = txn.objectStore("users");
-      return selectQuery(store, undefined, cursor => {
+      return selectQuery(store, undefined, (cursor) => {
         return [cursor.value.userId, cursor.value.event];
       });
     });
@@ -517,9 +560,9 @@ LocalIndexedDBStoreBackend.prototype = {
     return utils.promiseTry(() => {
       const txn = this.db.transaction(["accountData"], "readonly");
       const store = txn.objectStore("accountData");
-      return selectQuery(store, undefined, cursor => {
+      return selectQuery(store, undefined, (cursor) => {
         return cursor.value;
-      }).then(result => {
+      }).then((result) => {
         _logger.logger.log(`LocalIndexedDBStoreBackend: loaded account data`);
 
         return result;
@@ -537,9 +580,9 @@ LocalIndexedDBStoreBackend.prototype = {
     return utils.promiseTry(() => {
       const txn = this.db.transaction(["sync"], "readonly");
       const store = txn.objectStore("sync");
-      return selectQuery(store, undefined, cursor => {
+      return selectQuery(store, undefined, (cursor) => {
         return cursor.value;
-      }).then(results => {
+      }).then((results) => {
         _logger.logger.log(`LocalIndexedDBStoreBackend: loaded sync data`);
 
         if (results.length > 1) {
@@ -554,11 +597,11 @@ LocalIndexedDBStoreBackend.prototype = {
     return Promise.resolve().then(() => {
       const txn = this.db.transaction(["client_options"], "readonly");
       const store = txn.objectStore("client_options");
-      return selectQuery(store, undefined, cursor => {
+      return selectQuery(store, undefined, (cursor) => {
         if (cursor.value && cursor.value && cursor.value.options) {
           return cursor.value.options;
         }
-      }).then(results => results[0]);
+      }).then((results) => results[0]);
     });
   },
   storeClientOptions: async function (options) {
@@ -567,9 +610,9 @@ LocalIndexedDBStoreBackend.prototype = {
     store.put({
       clobber: "-",
       // constant key so will always clobber
-      options: options
+      options: options,
     }); // put == UPSERT
 
     await txnAsPromise(txn);
-  }
+  },
 };

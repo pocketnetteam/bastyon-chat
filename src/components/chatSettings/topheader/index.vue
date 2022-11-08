@@ -1,8 +1,6 @@
 <template>
-    <div id="chatTopheader">
-
+  <div id="chatTopheader">
     <topheader>
-
       <template v-slot:left>
         <backButton action="back" />
       </template>
@@ -11,16 +9,12 @@
         <span>{{ $t("caption.settings") }}</span>
       </template>
 
-      <template v-slot:right>
-
-      </template>
-
+      <template v-slot:right> </template>
     </topheader>
-    </div>
+  </div>
 </template>
 <script>
 export default {
-  methods: {
-  }
-}
+  methods: {},
+};
 </script>

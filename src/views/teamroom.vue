@@ -1,41 +1,37 @@
 <template>
-    <div class="page chats">   
+  <div class="page chats">
+    <topheader class="topheader">
+      <template v-slot:left>
+        <backButton action="chats" />
+      </template>
+      <template v-slot:info>
+        <span class="nameline">Bastyon</span>
+      </template>
+    </topheader>
 
-        <topheader class="topheader">
-            <template v-slot:left>
-                <backButton action="chats"/>
-            </template>
-            <template v-slot:info>
-                <span class="nameline">Bastyon</span>
-            </template>
-        </topheader>
+    <maincontent>
+      <template v-slot:content>
+        <div
+          v-for="message in pocketteammessages"
+          :key="message.id"
+          class="messageRow"
+        >
+          <div class="logo"></div>
 
-        <maincontent>
-
-            <template v-slot:content>
-
-                <div v-for="message in pocketteammessages" :key="message.id" class="messageRow">
-
-                    <div class="logo"></div>
-
-                    <div class="maxcontent">
-                        <div class="messageText">
-                            <div class="sendername">
-                                <span>Bastyon</span>
-                            </div>
-                            <div class="msgtext">
-                                <div v-html="message.text"></div>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-
-            </template>
-
-        </maincontent>
-
-    </div>
+          <div class="maxcontent">
+            <div class="messageText">
+              <div class="sendername">
+                <span>Bastyon</span>
+              </div>
+              <div class="msgtext">
+                <div v-html="message.text"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </template>
+    </maincontent>
+  </div>
 </template>
 
 <style scoped lang="sass">
@@ -67,7 +63,7 @@
 
   .maxcontent
     max-width: 85%
-  
+
   &.allscreen
     flex-wrap : wrap
 
@@ -92,44 +88,31 @@
 
     .msgtext
         text-align: left
-
 </style>
 
 <script>
-
-import topheader from '@/components/assets/topheader/index.vue';
-import { mapState } from 'vuex';
+import topheader from "@/components/assets/topheader/index.vue";
+import { mapState } from "vuex";
 export default {
-  name: 'teamroom',
+  name: "teamroom",
   components: {
-
     topheader,
-
   },
 
-  props : {
-    
+  props: {},
+
+  data: function () {
+    return {};
   },
 
-  data : function(){
-    return {
-
-    }
-  },
-
-  computed:  mapState({
-      pocketnet: state => state.pocketnet,
-      minimized: state => state.minimized,
-      pocketteammessages: state => state.pocketteammessages
+  computed: mapState({
+    pocketnet: (state) => state.pocketnet,
+    minimized: (state) => state.minimized,
+    pocketteammessages: (state) => state.pocketteammessages,
   }),
 
-  methods : {
+  methods: {},
 
-  },
-
-  mounted() {
-      
-  }
-
-}
+  mounted() {},
+};
 </script>

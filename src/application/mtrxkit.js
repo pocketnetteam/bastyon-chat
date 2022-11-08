@@ -1,282 +1,284 @@
 import f from "@/application/functions";
 
-var cachestorage = {}
+var cachestorage = {};
 
 class MTRXKIT {
-
   constructor(core, p) {
-    if (!p) p = {}
+    if (!p) p = {};
 
-    this.core = core
+    this.core = core;
   }
 
-  tetatetchat(m_chat){
-    if(!m_chat) return false
- 
-    if(typeof m_chat.tetatet != 'undefined') return m_chat.tetatet
+  tetatetchat(m_chat) {
+    if (!m_chat) return false;
 
-    var users = this.core.mtrx.chatUsersInfo(m_chat.roomId)
-    var tt = false
+    if (typeof m_chat.tetatet != "undefined") return m_chat.tetatet;
 
-    if(users.length == 2){
-      tt = m_chat.name == '#' + this.tetatetid(users[0], users[1])
+    var users = this.core.mtrx.chatUsersInfo(m_chat.roomId);
+    var tt = false;
+
+    if (users.length == 2) {
+      tt = m_chat.name == "#" + this.tetatetid(users[0], users[1]);
     }
-    if(users.length > 1) m_chat.tetatet = tt
+    if (users.length > 1) m_chat.tetatet = tt;
 
-    return tt
+    return tt;
   }
 
   tetatetid(user1, user2) {
-
     var seed = 2;
 
-    if(user1.id == user2.id) return null
+    if (user1.id == user2.id) return null;
 
-    var id = parseInt(user1.id, 16) * parseInt(user2.id, 16) * seed
+    var id = parseInt(user1.id, 16) * parseInt(user2.id, 16) * seed;
 
-    if(cachestorage[id]) return cachestorage[id]
+    if (cachestorage[id]) return cachestorage[id];
 
-    var hash = f.sha224(id.toString()).toString('hex')
+    var hash = f.sha224(id.toString()).toString("hex");
 
-    cachestorage[id] = hash
+    cachestorage[id] = hash;
 
-    return hash
+    return hash;
   }
 
-  unknowngroupusers(m_chat){
-    return m_chat && m_chat._selfMembership === 'invite' && !m_chat.summary.members && !this.tetatetchat(this.m_chat)
+  unknowngroupusers(m_chat) {
+    return (
+      m_chat &&
+      m_chat._selfMembership === "invite" &&
+      !m_chat.summary.members &&
+      !this.tetatetchat(this.m_chat)
+    );
   }
 
-  usersFromChats(m_chats){
-    var users = {}
-    
+  usersFromChats(m_chats) {
+    var users = {};
+
     _.each(m_chats, (chat) => {
-
-      users[chat.roomId] = _.map(_.uniq([].concat(_.toArray(chat.currentState.members), chat.summary.members || []), (r) => {
-        return r.userId
-
-      }), function(r){
-
-        return {
-          userId : f.getmatrixid(r.userId),
-          membership : r.membership,
-          powerLevel : r.powerLevel
+      users[chat.roomId] = _.map(
+        _.uniq(
+          [].concat(
+            _.toArray(chat.currentState.members),
+            chat.summary.members || []
+          ),
+          (r) => {
+            return r.userId;
+          }
+        ),
+        function (r) {
+          return {
+            userId: f.getmatrixid(r.userId),
+            membership: r.membership,
+            powerLevel: r.powerLevel,
+          };
         }
+      );
+    });
 
-      }) 
-    })
-
-
-
-    return users
+    return users;
   }
 
-  prepareChat(m_chat){
-		return this.usersInfoForChatsStore([m_chat]).then(() => {
-      return this.core.pcrypto.addroom(m_chat)
-    })
-	}
+  prepareChat(m_chat) {
+    return this.usersInfoForChatsStore([m_chat]).then(() => {
+      return this.core.pcrypto.addroom(m_chat);
+    });
+  }
 
-  fillContacts(m_chats){
-
+  fillContacts(m_chats) {
     m_chats = _.filter(m_chats, (ch) => {
-      return ch._selfMembership == 'join' && ch.name.length == 57
-    })
+      return ch._selfMembership == "join" && ch.name.length == 57;
+    });
 
-    return this.usersInfoForChatsStore(m_chats).then(i => {
-
-      this.core.store.commit('SET_CONTACTS_FROM_MATRIX', _.filter(i, (m) => {
-        return !this.core.user.userinfo || m.id !== this.core.user.userinfo.id
-      }))
-
-    })
+    return this.usersInfoForChatsStore(m_chats).then((i) => {
+      this.core.store.commit(
+        "SET_CONTACTS_FROM_MATRIX",
+        _.filter(i, (m) => {
+          return (
+            !this.core.user.userinfo || m.id !== this.core.user.userinfo.id
+          );
+        })
+      );
+    });
   }
 
-  usersInfoForChatsStore(m_chats, reload){
+  usersInfoForChatsStore(m_chats, reload) {
+    return this.usersInfoForChats(m_chats, reload)
+      .then((i) => {
+        this.core.store.commit("SET_CHATS_USERS", this.usersFromChats(m_chats));
 
-    return this.usersInfoForChats(m_chats, reload).then(i => {
-
-      this.core.store.commit('SET_CHATS_USERS', this.usersFromChats(m_chats))
-
-      return Promise.resolve(i)
-    }).catch(e => {
-      return Promise.resolve()
-    })
-  }
-
-  allchatmembers(m_chats, reload, withinvite){
-    var members = []
-    var promises = []
-
-
-    if(withinvite){
-      var promises = _.map(m_chats, (chat) => {
-
-
-        if(chat._selfMembership === 'invite' && (!chat.summary.members || reload) && !chat.summary.membersloading){
-  
-          chat.summary.membersloading = true
-  
-          return chat._loadMembersFromServer().then(r => {
-  
-            chat.summary.membersloading = false
-  
-            chat.summary.members = _.map(r,  (user) => {
-    
-              return {
-                name: f.getmatrixid(user.state_key),
-                membership: user.content.membership,
-                user: user,
-                userId : user.state_key,
-                powerLevel : user.content.powerLevel || 0
-              }
-    
-            })
-  
-            if(chat._selfMembership === 'invite' && this.core.user.userinfo){
-  
-              if(!_.find(chat.summary.members, (m) => {
-                return m.userId == this.core.user.matrixId(this.core.user.userinfo.id)
-              } )){
-  
-                chat.summary.members.push({
-                  name: this.core.user.userinfo.id,
-                  membership: 'invite',
-                  user: this.core.user.userinfo,
-                  userId : this.core.user.matrixId(this.core.user.userinfo.id),
-                  powerLevel : 0
-                })
-  
-              }
-  
-            }
-  
-            return Promise.resolve()
-    
-          }).catch(e => {
-              
-            chat.summary.membersloading = false
-  
-            return Promise.resolve()
-          })
-        }
-  
-        return Promise.resolve()
-  
+        return Promise.resolve(i);
       })
+      .catch((e) => {
+        return Promise.resolve();
+      });
+  }
+
+  allchatmembers(m_chats, reload, withinvite) {
+    var members = [];
+    var promises = [];
+
+    if (withinvite) {
+      var promises = _.map(m_chats, (chat) => {
+        if (
+          chat._selfMembership === "invite" &&
+          (!chat.summary.members || reload) &&
+          !chat.summary.membersloading
+        ) {
+          chat.summary.membersloading = true;
+
+          return chat
+            ._loadMembersFromServer()
+            .then((r) => {
+              chat.summary.membersloading = false;
+
+              chat.summary.members = _.map(r, (user) => {
+                return {
+                  name: f.getmatrixid(user.state_key),
+                  membership: user.content.membership,
+                  user: user,
+                  userId: user.state_key,
+                  powerLevel: user.content.powerLevel || 0,
+                };
+              });
+
+              if (
+                chat._selfMembership === "invite" &&
+                this.core.user.userinfo
+              ) {
+                if (
+                  !_.find(chat.summary.members, (m) => {
+                    return (
+                      m.userId ==
+                      this.core.user.matrixId(this.core.user.userinfo.id)
+                    );
+                  })
+                ) {
+                  chat.summary.members.push({
+                    name: this.core.user.userinfo.id,
+                    membership: "invite",
+                    user: this.core.user.userinfo,
+                    userId: this.core.user.matrixId(this.core.user.userinfo.id),
+                    powerLevel: 0,
+                  });
+                }
+              }
+
+              return Promise.resolve();
+            })
+            .catch((e) => {
+              chat.summary.membersloading = false;
+
+              return Promise.resolve();
+            });
+        }
+
+        return Promise.resolve();
+      });
     }
 
-    return Promise.all(promises).then(r => {
-
+    return Promise.all(promises).then((r) => {
       _.each(m_chats, (chat) => {
-        members = members.concat(_.toArray(chat.currentState.members), chat.summary.members || [])
-      })
+        members = members.concat(
+          _.toArray(chat.currentState.members),
+          chat.summary.members || []
+        );
+      });
 
-      members = _.uniq(members, function(m){
-        return m.userId
-      })
+      members = _.uniq(members, function (m) {
+        return m.userId;
+      });
 
-      return Promise.resolve(members)
-    })
+      return Promise.resolve(members);
+    });
   }
 
   usersInfoForChats(m_chats, reload) {
-
     /// TODO FILTER CONTACTS
 
-    return this.allchatmembers(m_chats, reload).then(members => {
-
-      return this.usersInfo(members, reload)
-    })
-    
+    return this.allchatmembers(m_chats, reload).then((members) => {
+      return this.usersInfo(members, reload);
+    });
   }
 
   usersInfoById(id) {
+    var ids = [f.getmatrixid(id)];
 
-    var ids = [f.getmatrixid(id)]
-
-    return this.core.user.usersInfo(ids, false).then( r => {
-      return Promise.resolve(r[0])
-    })
+    return this.core.user.usersInfo(ids, false).then((r) => {
+      return Promise.resolve(r[0]);
+    });
   }
 
   usersInfo(members, reload) {
-
     var ids = _.map(members, function (m) {
-      return f.getmatrixid(m.userId)
-    })
+      return f.getmatrixid(m.userId);
+    });
 
-    ids = _.uniq(ids)
+    ids = _.uniq(ids);
 
-    return this.core.user.usersInfo(ids, false, reload)
+    return this.core.user.usersInfo(ids, false, reload);
   }
 
   groupId(users) {
     let id = [];
-    let idForInviting = []
-    let self = this
+    let idForInviting = [];
+    let self = this;
 
-    users.forEach( (user) => {
-      idForInviting.push( this.core.user.matrixId(user.id) )
-    })
+    users.forEach((user) => {
+      idForInviting.push(this.core.user.matrixId(user.id));
+    });
 
     users.forEach(function (user) {
-      let idsForHash = parseInt(user.id, 16)
+      let idsForHash = parseInt(user.id, 16);
 
-      id.push(idsForHash)
-    })
+      id.push(idsForHash);
+    });
 
     const groupNameId = id.reduce((product, n) => product * n, 1);
-    const mGroupNamId = f.makeid(groupNameId)
-    let hash = f.sha224(mGroupNamId.toString()).toString('hex')
+    const mGroupNamId = f.makeid(groupNameId);
+    let hash = f.sha224(mGroupNamId.toString()).toString("hex");
 
-    return {hash: hash, idForInviting: idForInviting}
-
+    return { hash: hash, idForInviting: idForInviting };
   }
 
   groupIdLight(ids) {
-
     let id = [];
-    let idForInviting = []
-    let self = this
+    let idForInviting = [];
+    let self = this;
 
-    var domains = [null]
+    var domains = [null];
 
-    if (window.chatinvitedomains) domains = [].concat(domains, window.chatinvitedomains)
+    if (window.chatinvitedomains)
+      domains = [].concat(domains, window.chatinvitedomains);
 
     _.each(domains, (domain) => {
-
       _.each(ids, (id) => {
-        idForInviting.push( this.core.user.matrixId(id, domain) )
-      })
+        idForInviting.push(this.core.user.matrixId(id, domain));
+      });
+    });
 
-    })
-
-   
     _.each(ids, (_id) => {
-      let idsForHash = parseInt(_id, 16)
+      let idsForHash = parseInt(_id, 16);
 
-      id.push(idsForHash)
-    })
+      id.push(idsForHash);
+    });
 
     const groupNameId = id.reduce((product, n) => product * n, 1);
-    const mGroupNamId = f.makeid(groupNameId)
+    const mGroupNamId = f.makeid(groupNameId);
 
-    let hash = f.sha224(mGroupNamId.toString()).toString('hex')
-    return {hash: hash, idForInviting: idForInviting}
+    let hash = f.sha224(mGroupNamId.toString()).toString("hex");
+    return { hash: hash, idForInviting: idForInviting };
   }
 
-  chatIsPublic(chat){
-    var join_rules = chat.currentState.getStateEvents("m.room.join_rules")
+  chatIsPublic(chat) {
+    var join_rules = chat.currentState.getStateEvents("m.room.join_rules");
 
-    console.log('join_rules', join_rules)
+    console.log("join_rules", join_rules);
 
     return _.find(join_rules, (v) => {
-        return f.deep(v, 'event.content.join_rule') == 'public'
-    }) ? true : false
+      return f.deep(v, "event.content.join_rule") == "public";
+    })
+      ? true
+      : false;
   }
-
-  
 }
 
-export default MTRXKIT
+export default MTRXKIT;

@@ -1,7 +1,7 @@
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
+  value: true,
 });
 exports.PushProcessor = PushProcessor;
 
@@ -29,7 +29,13 @@ limitations under the License.
 /**
  * @module pushprocessor
  */
-const RULEKINDS_IN_ORDER = ['override', 'content', 'room', 'sender', 'underride']; // The default override rules to apply to the push rules that arrive from the server.
+const RULEKINDS_IN_ORDER = [
+  "override",
+  "content",
+  "room",
+  "sender",
+  "underride",
+]; // The default override rules to apply to the push rules that arrive from the server.
 // We do this for two reasons:
 //   1. Synapse is unlikely to send us the push rule in an incremental sync - see
 //      https://github.com/matrix-org/synapse/pull/4867#issuecomment-481446072 for
@@ -37,36 +43,47 @@ const RULEKINDS_IN_ORDER = ['override', 'content', 'room', 'sender', 'underride'
 //   2. We often want to start using push rules ahead of the server supporting them,
 //      and so we can put them here.
 
-const DEFAULT_OVERRIDE_RULES = [{
-  // For homeservers which don't support MSC1930 yet
-  rule_id: ".m.rule.tombstone",
-  default: true,
-  enabled: true,
-  conditions: [{
-    kind: "event_match",
-    key: "type",
-    pattern: "m.room.tombstone"
-  }, {
-    kind: "event_match",
-    key: "state_key",
-    pattern: ""
-  }],
-  actions: ["notify", {
-    set_tweak: "highlight",
-    value: true
-  }]
-}, {
-  // For homeservers which don't support MSC2153 yet
-  rule_id: ".m.rule.reaction",
-  default: true,
-  enabled: true,
-  conditions: [{
-    kind: "event_match",
-    key: "type",
-    pattern: "m.reaction"
-  }],
-  actions: ["dont_notify"]
-}];
+const DEFAULT_OVERRIDE_RULES = [
+  {
+    // For homeservers which don't support MSC1930 yet
+    rule_id: ".m.rule.tombstone",
+    default: true,
+    enabled: true,
+    conditions: [
+      {
+        kind: "event_match",
+        key: "type",
+        pattern: "m.room.tombstone",
+      },
+      {
+        kind: "event_match",
+        key: "state_key",
+        pattern: "",
+      },
+    ],
+    actions: [
+      "notify",
+      {
+        set_tweak: "highlight",
+        value: true,
+      },
+    ],
+  },
+  {
+    // For homeservers which don't support MSC2153 yet
+    rule_id: ".m.rule.reaction",
+    default: true,
+    enabled: true,
+    conditions: [
+      {
+        kind: "event_match",
+        key: "type",
+        pattern: "m.reaction",
+      },
+    ],
+    actions: ["dont_notify"],
+  },
+];
 /**
  * Construct a Push Processor.
  * @constructor
@@ -74,11 +91,16 @@ const DEFAULT_OVERRIDE_RULES = [{
  */
 
 function PushProcessor(client) {
-  const cachedGlobToRegex = {// $glob: RegExp,
+  const cachedGlobToRegex = {
+    // $glob: RegExp,
   };
 
   const matchingRuleFromKindSet = (ev, kindset) => {
-    for (let ruleKindIndex = 0; ruleKindIndex < RULEKINDS_IN_ORDER.length; ++ruleKindIndex) {
+    for (
+      let ruleKindIndex = 0;
+      ruleKindIndex < RULEKINDS_IN_ORDER.length;
+      ++ruleKindIndex
+    ) {
       const kind = RULEKINDS_IN_ORDER[ruleKindIndex];
       const ruleset = kindset[kind];
 
@@ -111,50 +133,50 @@ function PushProcessor(client) {
 
   const templateRuleToRaw = function (kind, tprule) {
     const rawrule = {
-      'rule_id': tprule.rule_id,
-      'actions': tprule.actions,
-      'conditions': []
+      rule_id: tprule.rule_id,
+      actions: tprule.actions,
+      conditions: [],
     };
 
     switch (kind) {
-      case 'underride':
-      case 'override':
+      case "underride":
+      case "override":
         rawrule.conditions = tprule.conditions;
         break;
 
-      case 'room':
+      case "room":
         if (!tprule.rule_id) {
           return null;
         }
 
         rawrule.conditions.push({
-          'kind': 'event_match',
-          'key': 'room_id',
-          'value': tprule.rule_id
+          kind: "event_match",
+          key: "room_id",
+          value: tprule.rule_id,
         });
         break;
 
-      case 'sender':
+      case "sender":
         if (!tprule.rule_id) {
           return null;
         }
 
         rawrule.conditions.push({
-          'kind': 'event_match',
-          'key': 'user_id',
-          'value': tprule.rule_id
+          kind: "event_match",
+          key: "user_id",
+          value: tprule.rule_id,
         });
         break;
 
-      case 'content':
+      case "content":
         if (!tprule.pattern) {
           return null;
         }
 
         rawrule.conditions.push({
-          'kind': 'event_match',
-          'key': 'content.body',
-          'pattern': tprule.pattern
+          kind: "event_match",
+          key: "content.body",
+          pattern: tprule.pattern,
         });
         break;
     }
@@ -164,10 +186,10 @@ function PushProcessor(client) {
 
   const eventFulfillsCondition = function (cond, ev) {
     const condition_functions = {
-      "event_match": eventFulfillsEventMatchCondition,
-      "contains_display_name": eventFulfillsDisplayNameCondition,
-      "room_member_count": eventFulfillsRoomMemberCountCondition,
-      "sender_notification_permission": eventFulfillsSenderNotifPermCondition
+      event_match: eventFulfillsEventMatchCondition,
+      contains_display_name: eventFulfillsDisplayNameCondition,
+      room_member_count: eventFulfillsRoomMemberCountCondition,
+      sender_notification_permission: eventFulfillsSenderNotifPermCondition,
     };
 
     if (condition_functions[cond.kind]) {
@@ -176,12 +198,11 @@ function PushProcessor(client) {
     // but given that rules can be added to the base rules on a server,
     // it's probably better to not match unknown conditions.
 
-
     return false;
   };
 
   const eventFulfillsSenderNotifPermCondition = function (cond, ev) {
-    const notifLevelKey = cond['key'];
+    const notifLevelKey = cond["key"];
 
     if (!notifLevelKey) {
       return false;
@@ -195,8 +216,10 @@ function PushProcessor(client) {
     // the point the event is in the DAG. Unfortunately the js-sdk does not store
     // this.
 
-
-    return room.currentState.mayTriggerNotifOfType(notifLevelKey, ev.getSender());
+    return room.currentState.mayTriggerNotifOfType(
+      notifLevelKey,
+      ev.getSender()
+    );
   };
 
   const eventFulfillsRoomMemberCountCondition = function (cond, ev) {
@@ -225,20 +248,20 @@ function PushProcessor(client) {
     }
 
     switch (ineq) {
-      case '':
-      case '==':
+      case "":
+      case "==":
         return memberCount == rhs;
 
-      case '<':
+      case "<":
         return memberCount < rhs;
 
-      case '>':
+      case ">":
         return memberCount > rhs;
 
-      case '<=':
+      case "<=":
         return memberCount <= rhs;
 
-      case '>=':
+      case ">=":
         return memberCount >= rhs;
 
       default:
@@ -253,20 +276,30 @@ function PushProcessor(client) {
       content = ev.getClearContent();
     }
 
-    if (!content || !content.body || typeof content.body != 'string') {
+    if (!content || !content.body || typeof content.body != "string") {
       return false;
     }
 
     const room = client.getRoom(ev.getRoomId());
 
-    if (!room || !room.currentState || !room.currentState.members || !room.currentState.getMember(client.credentials.userId)) {
+    if (
+      !room ||
+      !room.currentState ||
+      !room.currentState.members ||
+      !room.currentState.getMember(client.credentials.userId)
+    ) {
       return false;
     }
 
-    const displayName = room.currentState.getMember(client.credentials.userId).name; // N.B. we can't use \b as it chokes on unicode. however \W seems to be okay
+    const displayName = room.currentState.getMember(
+      client.credentials.userId
+    ).name; // N.B. we can't use \b as it chokes on unicode. however \W seems to be okay
     // as shorthand for [^0-9A-Za-z_].
 
-    const pat = new RegExp("(^|\\W)" + (0, _utils.escapeRegExp)(displayName) + "(\\W|$)", 'i');
+    const pat = new RegExp(
+      "(^|\\W)" + (0, _utils.escapeRegExp)(displayName) + "(\\W|$)",
+      "i"
+    );
     return content.body.search(pat) > -1;
   };
 
@@ -277,7 +310,7 @@ function PushProcessor(client) {
 
     const val = valueForDottedKey(cond.key, ev);
 
-    if (typeof val !== 'string') {
+    if (typeof val !== "string") {
       return false;
     }
 
@@ -285,16 +318,16 @@ function PushProcessor(client) {
       return cond.value === val;
     }
 
-    if (typeof cond.pattern !== 'string') {
+    if (typeof cond.pattern !== "string") {
       return false;
     }
 
     let regex;
 
-    if (cond.key == 'content.body') {
-      regex = createCachedRegex('(^|\\W)', cond.pattern, '(\\W|$)');
+    if (cond.key == "content.body") {
+      regex = createCachedRegex("(^|\\W)", cond.pattern, "(\\W|$)");
     } else {
-      regex = createCachedRegex('^', cond.pattern, '$');
+      regex = createCachedRegex("^", cond.pattern, "$");
     }
 
     return !!val.match(regex);
@@ -305,20 +338,23 @@ function PushProcessor(client) {
       return cachedGlobToRegex[glob];
     }
 
-    cachedGlobToRegex[glob] = new RegExp(prefix + (0, _utils.globToRegexp)(glob) + suffix, 'i');
+    cachedGlobToRegex[glob] = new RegExp(
+      prefix + (0, _utils.globToRegexp)(glob) + suffix,
+      "i"
+    );
     return cachedGlobToRegex[glob];
   };
 
   const valueForDottedKey = function (key, ev) {
-    const parts = key.split('.');
+    const parts = key.split(".");
     let val; // special-case the first component to deal with encrypted messages
 
     const firstPart = parts[0];
 
-    if (firstPart === 'content') {
+    if (firstPart === "content") {
       val = ev.getContent();
       parts.shift();
-    } else if (firstPart === 'type') {
+    } else if (firstPart === "type") {
       val = ev.getType();
       parts.shift();
     } else {
@@ -363,7 +399,7 @@ function PushProcessor(client) {
     if (actionObj.tweaks.highlight === undefined) {
       // if it isn't specified, highlight if it's a content
       // rule but otherwise not
-      actionObj.tweaks.highlight = rule.kind == 'content';
+      actionObj.tweaks.highlight = rule.kind == "content";
     }
 
     return actionObj;
@@ -377,7 +413,6 @@ function PushProcessor(client) {
       ret &= eventFulfillsCondition(cond, ev);
     } //console.log("Rule "+rule.rule_id+(ret ? " matches" : " doesn't match"));
 
-
     return ret;
   };
   /**
@@ -387,7 +422,6 @@ function PushProcessor(client) {
    *
    * @return {PushAction}
    */
-
 
   this.actionsForEvent = function (ev) {
     return pushActionsForEventAndRulesets(ev, client.pushRules);
@@ -399,9 +433,8 @@ function PushProcessor(client) {
    * @return {object} The push rule, or null if no such rule was found
    */
 
-
   this.getPushRuleById = function (ruleId) {
-    for (const scope of ['global']) {
+    for (const scope of ["global"]) {
       if (client.pushRules[scope] === undefined) continue;
 
       for (const kind of RULEKINDS_IN_ORDER) {
@@ -425,19 +458,18 @@ function PushProcessor(client) {
  * @return {object} A object with key 'notify' (true or false) and an object of actions
  */
 
-
 PushProcessor.actionListToActionsObject = function (actionlist) {
   const actionobj = {
-    'notify': false,
-    'tweaks': {}
+    notify: false,
+    tweaks: {},
   };
 
   for (let i = 0; i < actionlist.length; ++i) {
     const action = actionlist[i];
 
-    if (action === 'notify') {
+    if (action === "notify") {
       actionobj.notify = true;
-    } else if (typeof action === 'object') {
+    } else if (typeof action === "object") {
       if (action.value === undefined) {
         action.value = true;
       }
@@ -456,7 +488,6 @@ PushProcessor.actionListToActionsObject = function (actionlist) {
  * @returns {object} The rewritten rules
  */
 
-
 PushProcessor.rewriteDefaultRules = function (incomingRules) {
   let newRules = JSON.parse(JSON.stringify(incomingRules)); // deep clone
   // These lines are mostly to make the tests happy. We shouldn't run into these
@@ -469,7 +500,9 @@ PushProcessor.rewriteDefaultRules = function (incomingRules) {
   const globalOverrides = newRules.global.override;
 
   for (const override of DEFAULT_OVERRIDE_RULES) {
-    const existingRule = globalOverrides.find(r => r.rule_id === override.rule_id);
+    const existingRule = globalOverrides.find(
+      (r) => r.rule_id === override.rule_id
+    );
 
     if (existingRule) {
       // Copy over the actions, default, and conditions. Don't touch the user's

@@ -3,7 +3,7 @@
 var _interopRequireWildcard = require("@babel/runtime/helpers/interopRequireWildcard");
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
+  value: true,
 });
 exports.IndexedDBStore = IndexedDBStore;
 
@@ -101,7 +101,7 @@ function IndexedDBStore(opts) {
   _memory.MemoryStore.call(this, opts);
 
   if (!opts.indexedDB) {
-    throw new Error('Missing required option: indexedDB');
+    throw new Error("Missing required option: indexedDB");
   }
 
   if (opts.workerScript) {
@@ -113,9 +113,16 @@ function IndexedDBStore(opts) {
       workerApi = global.Worker;
     }
 
-    this.backend = new _indexeddbRemoteBackend.RemoteIndexedDBStoreBackend(opts.workerScript, opts.dbName, workerApi);
+    this.backend = new _indexeddbRemoteBackend.RemoteIndexedDBStoreBackend(
+      opts.workerScript,
+      opts.dbName,
+      workerApi
+    );
   } else {
-    this.backend = new _indexeddbLocalBackend.LocalIndexedDBStoreBackend(opts.indexedDB, opts.dbName);
+    this.backend = new _indexeddbLocalBackend.LocalIndexedDBStoreBackend(
+      opts.indexedDB,
+      opts.dbName
+    );
   }
 
   this.startedUp = false;
@@ -123,7 +130,8 @@ function IndexedDBStore(opts) {
   // the database, such that we can derive the set if users that have been
   // modified since we last saved.
 
-  this._userModifiedMap = {// user_id : timestamp
+  this._userModifiedMap = {
+    // user_id : timestamp
   };
 }
 
@@ -131,12 +139,14 @@ utils.inherits(IndexedDBStore, _memory.MemoryStore);
 utils.extend(IndexedDBStore.prototype, _events.EventEmitter.prototype);
 
 IndexedDBStore.exists = function (indexedDB, dbName) {
-  return _indexeddbLocalBackend.LocalIndexedDBStoreBackend.exists(indexedDB, dbName);
+  return _indexeddbLocalBackend.LocalIndexedDBStoreBackend.exists(
+    indexedDB,
+    dbName
+  );
 };
 /**
  * @return {Promise} Resolved when loaded from indexed db.
-  */
-
+ */
 
 IndexedDBStore.prototype.startup = function () {
   if (this.startedUp) {
@@ -147,31 +157,33 @@ IndexedDBStore.prototype.startup = function () {
 
   _logger.logger.log(`IndexedDBStore.startup: connecting to backend`);
 
-  return this.backend.connect().then(() => {
-    _logger.logger.log(`IndexedDBStore.startup: loading presence events`);
+  return this.backend
+    .connect()
+    .then(() => {
+      _logger.logger.log(`IndexedDBStore.startup: loading presence events`);
 
-    return this.backend.getUserPresenceEvents();
-  }).then(userPresenceEvents => {
-    _logger.logger.log(`IndexedDBStore.startup: processing presence events`);
+      return this.backend.getUserPresenceEvents();
+    })
+    .then((userPresenceEvents) => {
+      _logger.logger.log(`IndexedDBStore.startup: processing presence events`);
 
-    userPresenceEvents.forEach(([userId, rawEvent]) => {
-      const u = new _user.User(userId);
+      userPresenceEvents.forEach(([userId, rawEvent]) => {
+        const u = new _user.User(userId);
 
-      if (rawEvent) {
-        u.setPresenceEvent(new _event.MatrixEvent(rawEvent));
-      }
+        if (rawEvent) {
+          u.setPresenceEvent(new _event.MatrixEvent(rawEvent));
+        }
 
-      this._userModifiedMap[u.userId] = u.getLastModifiedTime();
-      this.storeUser(u);
+        this._userModifiedMap[u.userId] = u.getLastModifiedTime();
+        this.storeUser(u);
+      });
     });
-  });
 };
 /**
  * @return {Promise} Resolves with a sync response to restore the
  * client state to where it was at the last save, or null if there
  * is no saved sync data.
  */
-
 
 IndexedDBStore.prototype.getSavedSync = degradable(function () {
   return this.backend.getSavedSync();
@@ -186,24 +198,27 @@ IndexedDBStore.prototype.isNewlyCreated = degradable(function () {
  * for this sync, otherwise null.
  */
 
-IndexedDBStore.prototype.getSavedSyncToken = degradable(function () {
+(IndexedDBStore.prototype.getSavedSyncToken = degradable(function () {
   return this.backend.getNextBatchToken();
-}, "getSavedSyncToken"),
-/**
- * Delete all data from this store.
- * @return {Promise} Resolves if the data was deleted from the database.
- */
-IndexedDBStore.prototype.deleteAllData = degradable(function () {
-  _memory.MemoryStore.prototype.deleteAllData.call(this);
+}, "getSavedSyncToken")),
+  /**
+   * Delete all data from this store.
+   * @return {Promise} Resolves if the data was deleted from the database.
+   */
+  (IndexedDBStore.prototype.deleteAllData = degradable(function () {
+    _memory.MemoryStore.prototype.deleteAllData.call(this);
 
-  return this.backend.clearDatabase().then(() => {
-    _logger.logger.log("Deleted indexeddb data.");
-  }, err => {
-    _logger.logger.error(`Failed to delete indexeddb data: ${err}`);
+    return this.backend.clearDatabase().then(
+      () => {
+        _logger.logger.log("Deleted indexeddb data.");
+      },
+      (err) => {
+        _logger.logger.error(`Failed to delete indexeddb data: ${err}`);
 
-    throw err;
-  });
-});
+        throw err;
+      }
+    );
+  }));
 /**
  * Whether this store would like to save its data
  * Note that obviously whether the store wants to save or
@@ -225,7 +240,6 @@ IndexedDBStore.prototype.wantsSave = function () {
  * @return {Promise} Promise resolves after the write completes
  *     (or immediately if no write is performed)
  */
-
 
 IndexedDBStore.prototype.save = function (force) {
   if (force || this.wantsSave()) {
@@ -275,11 +289,19 @@ IndexedDBStore.prototype.getOutOfBandMembers = degradable(function (roomId) {
  * @returns {Promise} when all members have been stored
  */
 
-IndexedDBStore.prototype.setOutOfBandMembers = degradable(function (roomId, membershipEvents) {
-  _memory.MemoryStore.prototype.setOutOfBandMembers.call(this, roomId, membershipEvents);
+IndexedDBStore.prototype.setOutOfBandMembers = degradable(function (
+  roomId,
+  membershipEvents
+) {
+  _memory.MemoryStore.prototype.setOutOfBandMembers.call(
+    this,
+    roomId,
+    membershipEvents
+  );
 
   return this.backend.setOutOfBandMembers(roomId, membershipEvents);
-}, "setOutOfBandMembers");
+},
+"setOutOfBandMembers");
 IndexedDBStore.prototype.clearOutOfBandMembers = degradable(function (roomId) {
   _memory.MemoryStore.prototype.clearOutOfBandMembers.call(this);
 
@@ -311,7 +333,10 @@ function degradable(func, fallback) {
     try {
       return await func.call(this, ...args);
     } catch (e) {
-      _logger.logger.error("IndexedDBStore failure, degrading to MemoryStore", e);
+      _logger.logger.error(
+        "IndexedDBStore failure, degrading to MemoryStore",
+        e
+      );
 
       this.emit("degraded", e);
 
@@ -335,11 +360,13 @@ function degradable(func, fallback) {
       // `IndexedDBStore` also maintain the state that `MemoryStore` uses (many are
       // not overridden at all).
 
-
       Object.setPrototypeOf(this, _memory.MemoryStore.prototype);
 
       if (fallback) {
-        return await _memory.MemoryStore.prototype[fallback].call(this, ...args);
+        return await _memory.MemoryStore.prototype[fallback].call(
+          this,
+          ...args
+        );
       }
     }
   };

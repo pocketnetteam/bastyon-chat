@@ -1,18 +1,16 @@
-import { mapState } from 'vuex';
+import { mapState } from "vuex";
 
 export default {
-    name: 'date',
-    props: ['date'],
+  name: "date",
+  props: ["date"],
 
-    computed: mapState({
-        auth : state => state.auth,
+  computed: mapState({
+    auth: (state) => state.auth,
 
-        label : function(){
+    label: function () {
+      moment.locale(this.$i18n.locale);
 
-            moment.locale(this.$i18n.locale)
-
-            return moment(moment.utc(this.date).toDate()).local().fromNow();
-
-        }
-    }),
-}
+      return moment(moment.utc(this.date).toDate()).local().fromNow();
+    },
+  }),
+};

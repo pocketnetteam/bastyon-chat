@@ -3,12 +3,12 @@ table of contents](TOC.md)
 
 # Miscellaneous
 
-* [.gitignore](#gitignore)
-* [.editorconfig](#editorconfig)
-* [Server Configuration](#server-configuration)
-* [robots.txt](#robotstxt)
-* [humans.txt](#humanstxt)
-* [browserconfig.xml](#browserconfigxml)
+- [.gitignore](#gitignore)
+- [.editorconfig](#editorconfig)
+- [Server Configuration](#server-configuration)
+- [robots.txt](#robotstxt)
+- [humans.txt](#humanstxt)
+- [browserconfig.xml](#browserconfigxml)
 
 --
 
@@ -31,9 +31,8 @@ globally ignore:
     excludesfile = ~/.gitignore
 ```
 
-* More on global ignores: https://help.github.com/articles/ignoring-files/
-* Comprehensive set of ignores on GitHub: https://github.com/github/gitignore
-
+- More on global ignores: https://help.github.com/articles/ignoring-files/
+- Comprehensive set of ignores on GitHub: https://github.com/github/gitignore
 
 ## .editorconfig
 
@@ -49,15 +48,14 @@ them to better suit your needs.
 In order for your editor/IDE to apply the
 [properties](https://editorconfig.org/#supported-properties) from the
 `.editorconfig` file, you may need to [install a
-plugin]( https://editorconfig.org/#download).
+plugin](https://editorconfig.org/#download).
 
-__N.B.__ If you aren't using the server configurations provided by HTML5
+**N.B.** If you aren't using the server configurations provided by HTML5
 Boilerplate, we highly encourage you to configure your server to block
 access to `.editorconfig` files, as they can disclose sensitive information!
 
 For more details, please refer to the [EditorConfig
 project](https://editorconfig.org/).
-
 
 ## Server Configuration
 
@@ -71,12 +69,12 @@ A `.htaccess` (hypertext access) file is an [Apache HTTP server
 configuration file](https://github.com/h5bp/server-configs-apache).
 The `.htaccess` file is mostly used for:
 
-* Rewriting URLs
-* Controlling cache
-* Authentication
-* Server-side includes
-* Redirects
-* Gzipping
+- Rewriting URLs
+- Controlling cache
+- Authentication
+- Server-side includes
+- Redirects
+- Gzipping
 
 If you have access to the main server configuration file (usually called
 `httpd.conf`), you should add the logic from the `.htaccess` file in, for
@@ -88,18 +86,18 @@ https://github.com/h5bp/server-configs-apache#enable-apache-httpd-modules.
 
 In the repo the `.htaccess` is used for:
 
-* Allowing cross-origin access to web fonts
-* CORS header for images when browsers request it
-* Enable `404.html` as 404 error document
-* Making the website experience better for IE users better
-* Media UTF-8 as character encoding for `text/html` and `text/plain`
-* Enabling the rewrite URLs engine
-* Forcing or removing the `www.` at the begin of a URL
-* It blocks access to directories without a default document
-* It blocks access to files that can expose sensitive information.
-* It reduces MIME type security risks
-* It forces compressing (gzipping)
-* It tells the browser whether they should request a specific file from the
+- Allowing cross-origin access to web fonts
+- CORS header for images when browsers request it
+- Enable `404.html` as 404 error document
+- Making the website experience better for IE users better
+- Media UTF-8 as character encoding for `text/html` and `text/plain`
+- Enabling the rewrite URLs engine
+- Forcing or removing the `www.` at the begin of a URL
+- It blocks access to directories without a default document
+- It blocks access to files that can expose sensitive information.
+- It reduces MIME type security risks
+- It forces compressing (gzipping)
+- It tells the browser whether they should request a specific file from the
   server or whether they should grab it from the browser's cache
 
 When using `.htaccess` we recommend reading all inline comments (the rules after
@@ -113,7 +111,6 @@ section](https://httpd.apache.org/docs/current/howto/htaccess.html).
 Notice that the original repo for the `.htaccess` file is [this
 one](https://github.com/h5bp/server-configs-apache).
 
-
 ## robots.txt
 
 The `robots.txt` file is used to give instructions to web robots on what can
@@ -121,8 +118,8 @@ be crawled from the website.
 
 By default, the file provided by this project includes the next two lines:
 
- * `User-agent: *` -  the following rules apply to all web robots
- * `Disallow:` - everything on the website is allowed to be crawled
+- `User-agent: *` - the following rules apply to all web robots
+- `Disallow:` - everything on the website is allowed to be crawled
 
 If you want to disallow certain pages you will need to specify the path in a
 `Disallow` directive (e.g.: `Disallow: /path`) or, if you want to disallow
@@ -137,8 +134,8 @@ you want to block access to private content, use proper authentication instead.
 
 For more information about `robots.txt`, please see:
 
-  * [robotstxt.org](https://www.robotstxt.org/)
-  * [How Google handles the `robots.txt` file](https://developers.google.com/webmasters/control-crawl-index/docs/robots_txt)
+- [robotstxt.org](https://www.robotstxt.org/)
+- [How Google handles the `robots.txt` file](https://developers.google.com/webmasters/control-crawl-index/docs/robots_txt)
 
 ## humans.txt
 
@@ -147,13 +144,12 @@ the website.
 
 The provided file contains three sections:
 
-  * `TEAM` - this is intended to list the group of people responsible for the website
-  * `THANKS` - this is intended to list the group of people that have contributed
+- `TEAM` - this is intended to list the group of people responsible for the website
+- `THANKS` - this is intended to list the group of people that have contributed
   to the website
-  * `TECHNOLOGY COLOPHON` - the section lists technologies used to make the website
-  
-For more information about `humans.txt`, please see: http://humanstxt.org/
+- `TECHNOLOGY COLOPHON` - the section lists technologies used to make the website
 
+For more information about `humans.txt`, please see: http://humanstxt.org/
 
 ## browserconfig.xml
 
@@ -163,11 +159,11 @@ tile colors, custom images or even [live tiles](https://msdn.microsoft.com/libra
 
 By default, the file points to 2 placeholder tile images:
 
-* `tile.png` (558x558px): used for `Small`, `Medium` and `Large` tiles.
+- `tile.png` (558x558px): used for `Small`, `Medium` and `Large` tiles.
   This image resizes automatically when necessary.
-* `tile-wide.png` (558x270px): user for `Wide` tiles.
+- `tile-wide.png` (558x270px): user for `Wide` tiles.
 
 Notice that IE11 uses the same images when adding a site to the `favorites`.
 
 For more in-depth information about the `browserconfig.xml` file, please
-see [MSDN](https://docs.microsoft.com/en-us/previous-versions/windows/internet-explorer/ie-developer/platform-apis/dn320426(v=vs.85)).
+see [MSDN](<https://docs.microsoft.com/en-us/previous-versions/windows/internet-explorer/ie-developer/platform-apis/dn320426(v=vs.85)>).

@@ -1,108 +1,108 @@
 {
-    "_from": "vue-m-message",
-    "_id": "vue-m-message@3.0.0",
-    "_inBundle": false,
-    "_integrity": "sha512-E1Jz9icM8fX1cXDZi2nTaIQBbeTSkkoGQVR2VW6jc8ISjDZsYSEMYqenVqPzvS1lDoSLKW0d512cbUU0FYXV7g==",
-    "_location": "/vue-m-message",
-    "_phantomChildren": {},
-    "_requested": {
-        "type": "tag",
-        "registry": true,
-        "raw": "vue-m-message",
-        "name": "vue-m-message",
-        "escapedName": "vue-m-message",
-        "rawSpec": "",
-        "saveSpec": null,
-        "fetchSpec": "latest"
-    },
-    "_requiredBy": [
-        "#USER",
-        "/"
-    ],
-    "_resolved": "https://registry.npmjs.org/vue-m-message/-/vue-m-message-3.0.0.tgz",
-    "_shasum": "0fddc4759128bcf3b48a89710e5e236681f6c690",
-    "_spec": "vue-m-message",
-    "_where": "C:\\inetpub2020\\wwwroot\\wellai\\assistant",
-    "author": {
-        "name": "Lanyue",
-        "email": "lanyueos@qq.com"
-    },
-    "browserslist": [
-        "> 1%",
-        "last 2 versions"
-    ],
-    "bugs": {
-        "url": "https://github.com/mengdu/m-message/issues"
-    },
-    "bundleDependencies": false,
-    "deprecated": false,
-    "description": "A message plugin base on Vue",
-    "devDependencies": {
-        "@vue/cli-plugin-babel": "^4.0.0",
-        "@vue/cli-plugin-eslint": "^4.0.0",
-        "@vue/cli-service": "^4.0.0",
-        "babel-eslint": "^10.0.3",
-        "core-js": "^3.3.2",
-        "eslint": "^5.16.0",
-        "eslint-plugin-vue": "^5.0.0",
-        "less": "^3.10.3",
-        "less-loader": "^5.0.0",
-        "vue": "^2.6.10",
-        "vue-dotmd-loader": "^0.2.0",
-        "vue-router": "^3.1.5",
-        "vue-template-compiler": "^2.6.10"
-    },
-    "eslintConfig": {
-        "root": true,
-        "env": {
-            "node": true
-        },
-        "extends": [
-            "plugin:vue/essential",
-            "eslint:recommended"
-        ],
-        "rules": {
-            "no-unused-vars": "warn"
-        },
-        "parserOptions": {
-            "parser": "babel-eslint"
-        }
-    },
-    "eslintIgnore": [
-        "**/*.md"
-    ],
-    "files": [
-        "src",
-        "dist",
-        "types",
-        "README-zh.md"
-    ],
-    "github": "https://github.com/mengdu/m-message",
-    "homepage": "https://mengdu.github.io/m-message/index.html",
-    "keywords": [
-        "vue-m-message",
-        "m-message"
-    ],
-    "license": "MIT",
-    "main": "src/index.js",
+  "_from": "vue-m-message",
+  "_id": "vue-m-message@3.0.0",
+  "_inBundle": false,
+  "_integrity": "sha512-E1Jz9icM8fX1cXDZi2nTaIQBbeTSkkoGQVR2VW6jc8ISjDZsYSEMYqenVqPzvS1lDoSLKW0d512cbUU0FYXV7g==",
+  "_location": "/vue-m-message",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "tag",
+    "registry": true,
+    "raw": "vue-m-message",
     "name": "vue-m-message",
-    "postcss": {
-        "plugins": {
-            "autoprefixer": {}
-        }
+    "escapedName": "vue-m-message",
+    "rawSpec": "",
+    "saveSpec": null,
+    "fetchSpec": "latest"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/vue-m-message/-/vue-m-message-3.0.0.tgz",
+  "_shasum": "0fddc4759128bcf3b48a89710e5e236681f6c690",
+  "_spec": "vue-m-message",
+  "_where": "C:\\inetpub2020\\wwwroot\\wellai\\assistant",
+  "author": {
+    "name": "Lanyue",
+    "email": "lanyueos@qq.com"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions"
+  ],
+  "bugs": {
+    "url": "https://github.com/mengdu/m-message/issues"
+  },
+  "bundleDependencies": false,
+  "deprecated": false,
+  "description": "A message plugin base on Vue",
+  "devDependencies": {
+    "@vue/cli-plugin-babel": "^4.0.0",
+    "@vue/cli-plugin-eslint": "^4.0.0",
+    "@vue/cli-service": "^4.0.0",
+    "babel-eslint": "^10.0.3",
+    "core-js": "^3.3.2",
+    "eslint": "^5.16.0",
+    "eslint-plugin-vue": "^5.0.0",
+    "less": "^3.10.3",
+    "less-loader": "^5.0.0",
+    "vue": "^2.6.10",
+    "vue-dotmd-loader": "^0.2.0",
+    "vue-router": "^3.1.5",
+    "vue-template-compiler": "^2.6.10"
+  },
+  "eslintConfig": {
+    "root": true,
+    "env": {
+      "node": true
     },
-    "repository": {
-        "type": "https",
-        "url": "git+https://github.com/mengdu/m-message.git"
+    "extends": [
+      "plugin:vue/essential",
+      "eslint:recommended"
+    ],
+    "rules": {
+      "no-unused-vars": "warn"
     },
-    "scripts": {
-        "build:docs": "vue-cli-service build",
-        "build:lib": "vue-cli-service lint && vue-cli-service build --dest dist --target lib --name index src/index.js",
-        "dev": "vue-cli-service serve",
-        "lint": "vue-cli-service lint",
-        "open": "dev serve -o docs"
-    },
-    "types": "types/index.d.ts",
-    "version": "3.0.0",
-    "website": "https://lanyueos.com"
+    "parserOptions": {
+      "parser": "babel-eslint"
+    }
+  },
+  "eslintIgnore": [
+    "**/*.md"
+  ],
+  "files": [
+    "src",
+    "dist",
+    "types",
+    "README-zh.md"
+  ],
+  "github": "https://github.com/mengdu/m-message",
+  "homepage": "https://mengdu.github.io/m-message/index.html",
+  "keywords": [
+    "vue-m-message",
+    "m-message"
+  ],
+  "license": "MIT",
+  "main": "src/index.js",
+  "name": "vue-m-message",
+  "postcss": {
+    "plugins": {
+      "autoprefixer": {}
+    }
+  },
+  "repository": {
+    "type": "https",
+    "url": "git+https://github.com/mengdu/m-message.git"
+  },
+  "scripts": {
+    "build:docs": "vue-cli-service build",
+    "build:lib": "vue-cli-service lint && vue-cli-service build --dest dist --target lib --name index src/index.js",
+    "dev": "vue-cli-service serve",
+    "lint": "vue-cli-service lint",
+    "open": "dev serve -o docs"
+  },
+  "types": "types/index.d.ts",
+  "version": "3.0.0",
+  "website": "https://lanyueos.com"
 }

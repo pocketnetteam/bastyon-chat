@@ -5,13 +5,11 @@ table of contents](TOC.md)
 
 By default, HTML5 Boilerplate provides two `html` pages:
 
-* [`index.html`](#indexhtml) - a default HTML skeleton that should form the
+- [`index.html`](#indexhtml) - a default HTML skeleton that should form the
   basis of all pages on your website
-* `404.html` - a placeholder 404 error page
-
+- `404.html` - a placeholder 404 error page
 
 ## `index.html`
-
 
 ### The `no-js` Class
 
@@ -20,33 +18,32 @@ explicitly add custom styles based on whether JavaScript is disabled
 (`.no-js`) or enabled (`.js`). Using this technique also helps [avoid the
 FOUC](https://www.paulirish.com/2009/avoiding-the-fouc-v3/).
 
-
 ## Language Attribute
 
 Please consider specifying the language of your content by adding a [value](https://www.iana.org/assignments/language-subtag-registry/language-subtag-registry) to the `lang`
 attribute in the `<html>` as in this example:
 
 ```html
-<html class="no-js" lang="en">
+<html class="no-js" lang="en"></html>
 ```
 
 ### The order of the `<title>` and `<meta>` tags
 
-The charset declaration (`<meta charset="utf-8">`) must be included completely 
+The charset declaration (`<meta charset="utf-8">`) must be included completely
 within the [first 1024 bytes of the document](https://www.whatwg.org/specs/web-apps/current-work/multipage/semantics.html#charset)
 and should be specified as early as possible (before any content that could
-be controlled by an attacker, such as a `<title>` element) in order to avoid a 
+be controlled by an attacker, such as a `<title>` element) in order to avoid a
 potential [encoding-related security issue](https://code.google.com/archive/p/doctype-mirror/wikis/ArticleUtf7.wiki)
 in Internet Explorer
 
 ## Meta Description
 
-The `description` meta tag provides a short description of the page. 
-In some situations this description is used as a part of the snippet 
+The `description` meta tag provides a short description of the page.
+In some situations this description is used as a part of the snippet
 shown in the search results.
 
 ```html
-<meta name="description" content="This is a description">
+<meta name="description" content="This is a description" />
 ```
 
 Google's [Create good meta descriptions](https://support.google.com/webmasters/answer/35624?hl=en#meta-descriptions)
@@ -61,34 +58,35 @@ MDN Web Docs](https://developer.mozilla.org/en-US/docs/Mozilla/Mobile/Viewport_m
 HTML5 Boilerplate comes with a simple setup that strikes a good balance for general use cases.
 
 ```html
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 ```
 
 If you want to take advantage of edge-to-edge displays of iPhone X/XS/XR you can do
-so with additional viewport parameters. [Check the WebKit blog](https://webkit.org/blog/7929/designing-websites-for-iphone-x/) 
+so with additional viewport parameters. [Check the WebKit blog](https://webkit.org/blog/7929/designing-websites-for-iphone-x/)
 for details.
 
 ## Web App Manifest
 
-HTML5 Boilerplate includes a simple web app manifest file. 
+HTML5 Boilerplate includes a simple web app manifest file.
 
-The web app manifest is a simple JSON file that allows you to control how your 
+The web app manifest is a simple JSON file that allows you to control how your
 app appears on a device's home screen, what it looks like when it launches
 in that context and what happens when it is launched. This allows for much greater
-control over the UI of a saved site or web app on a mobile device. 
+control over the UI of a saved site or web app on a mobile device.
 
 It's linked to from the HTML as follows:
 
 ```html
-<link rel="manifest" href="site.webmanifest">
+<link rel="manifest" href="site.webmanifest" />
 ```
-Our [site.webmanifest](https://github.com/h5bp/html5-boilerplate/blob/master/src/site.webmanifest) contains a very skeletal "app" definition, just to show the basic usage. 
+
+Our [site.webmanifest](https://github.com/h5bp/html5-boilerplate/blob/master/src/site.webmanifest) contains a very skeletal "app" definition, just to show the basic usage.
 You should fill this file out with [more information about your site or application](https://developer.mozilla.org/en-US/docs/Web/Manifest)
 
 ## Favicons and Touch Icon
 
-The shortcut icons should be put in the root directory of your site. `favicon.ico` 
-is automatically picked up by browsers if it's placed in the root.  HTML5
+The shortcut icons should be put in the root directory of your site. `favicon.ico`
+is automatically picked up by browsers if it's placed in the root. HTML5
 Boilerplate comes with a default set of icons (include favicon and one Apple
 Touch Icon) that you can use as a baseline to create your own.
 
@@ -118,7 +116,7 @@ This allows you to target parts of your CSS and JavaScript based on the
 features supported by a browser.
 
 Starting with version 3 Modernizr can be customized using the [modernizr-config.json](https://github.com/h5bp/html5-boilerplate/blob/master/modernizr-config.json) and the
-[Modernizr command line utility](https://www.npmjs.com/package/modernizr-cli). 
+[Modernizr command line utility](https://www.npmjs.com/package/modernizr-cli).
 
 ## What About Polyfills?
 
@@ -139,8 +137,8 @@ just put it before the other scripts in the bottom of the page:
 
 If you like to just include the polyfills yourself, you could include them in
 `js/plugins.js`. When you have a bunch of polyfills to load in, you could
-also create a `polyfills.js` file in the `js/vendor` directory or include the files 
-individually and combine them using a build tool. Always ensure that the polyfills 
+also create a `polyfills.js` file in the `js/vendor` directory or include the files
+individually and combine them using a build tool. Always ensure that the polyfills
 are all loaded before any other JavaScript.
 
 There are some misconceptions about Modernizr and polyfills. It's important
@@ -179,7 +177,7 @@ site or application.
 Finally, an optimized version of the Google Universal Analytics tracking code is
 included.
 
-We use `analytics.js` rather than the newer `gtag.js` as 
+We use `analytics.js` rather than the newer `gtag.js` as
 [it's faster and supports tasks and plugins](https://github.com/philipwalton/analyticsjs-boilerplate/issues/19#issuecomment-333714370)
 
 The beacon transport mechanism is used to send all hits [which saves HTTP requests and improves performance](https://philipwalton.com/articles/the-google-analytics-setup-i-use-on-every-site-i-build/#loading-analytics.js).
@@ -201,5 +199,3 @@ solutions](https://trends.builtwith.com/analytics/Google-Analytics) out there.
 However, its usage isn't set in stone, and you SHOULD consider exploring the
 [alternatives](https://en.wikipedia.org/wiki/List_of_web_analytics_software)
 and use whatever suits your needs best.
-
-
