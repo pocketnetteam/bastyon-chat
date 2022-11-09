@@ -100,7 +100,7 @@ export default {
     },
 
     selectedlength : function(){
-      return this.type === 'massmailing' ? (this.selectedInfo?.source ? (this.selectedInfo?.source?.subscribers_count || 0) + 1 : 0) : _.toArray(this.selected).length 
+      return this.type === 'massmailing' ? (this.selectedInfo?.source ? (this.selectedInfo?.source?.subscribers_count || 0) : 0) : _.toArray(this.selected).length;
     },
 
     contactsListFiltered() {
