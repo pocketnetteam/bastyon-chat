@@ -136,7 +136,7 @@ export default {
 
     style(){
 
-      return { zIndex: 2, width: '325px', position: 'absolute', top: this.type === 'massmailing' && '40px', bottom: this.type === 'massmailing' ? '0' : '32px', right: this.type === 'massmailing' ? '-38px' : '-60px', fontSize: '0.8em', fontFamily: 'Segoe UI' }
+      return { zIndex: 2, height: '318px', width: '325px', position: 'absolute', top: this.type === 'massmailing' && '40px', bottom: this.type === 'massmailing' ? '0' : '32px', right: this.type === 'massmailing' ? '-38px' : '-60px', fontSize: '0.8em', fontFamily: 'Segoe UI' }
     },
     mobile: function () {
       return !this.$store.state.pocketnet && this.$store.state.mobile
