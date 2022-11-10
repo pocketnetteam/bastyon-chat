@@ -11,12 +11,12 @@
 
     </div>
 
-    <chatPreview :usersinfo="usersinfo" :chat="chat" :m_chat="m_chat" :undefinedRoom="creatorLeft"/>
-    
     <div class="tip" v-if="!blockedCheck">
       <span v-if="!creatorLeft">{{ $t("caption.chatInviteDecline") }}</span>
       <span v-if="creatorLeft">{{ $t("caption.creatorLeft") }}</span>
     </div>
+
+    <chatPreview :usersinfo="usersinfo" :chat="chat" :m_chat="m_chat" :undefinedRoom="creatorLeft"/>
 
 
     <div v-if="!hiddenInParent" class="joinAction fixedOnPageBottom" :class="{'bin' : pocketnet, 'bout' : !pocketnet}">

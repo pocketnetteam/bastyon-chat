@@ -53,7 +53,7 @@
 
                     var image = new Image()
 
-                    image.src = this.src
+                    image.src = this.imageSrc.replace('bastyon.com:8092', 'pocketnet.app:8092').replace('test.pocketnet', 'pocketnet')
                     image.onload = () => {
                         this.loaded = true
                     }
