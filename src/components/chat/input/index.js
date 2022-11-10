@@ -948,8 +948,6 @@ export default {
 
 		getFileIosCordova (path) {
 
-			console.log('load', path)
-
 			return new Promise((resolve, reject) => {
 				window.resolveLocalFileSystemURL(path, (entry) => {
 
@@ -960,13 +958,9 @@ export default {
 	
 					entry.file((file) => {
 						var reader = new FileReader()
-
-						console.log('file', file)
 	
 						reader.onloadend = function() {
 							var blob = new Blob([new Uint8Array(this.result)], {type : file.type})
-
-							console.log('blob', blob)
 
 							entry.remove()
 
@@ -1007,8 +1001,6 @@ export default {
 
 			this.prepareRecording.then(() => {
 
-				console.log("START RECORDING")
-
 				this.microphoneDisabled = false
 
 				var path = 'recording.mp3'
@@ -1022,8 +1014,6 @@ export default {
 				//var startedTime = (new Date()).getTime() / 1000
 
 				var media = this.cordovaMediaRecorder = new Media(path, () => {
-
-					console.log("MEDIA PREPARED", this.cancelledCordovaMediaRecorder)
 
 					this.recordTime = 0
 
@@ -1062,7 +1052,6 @@ export default {
 							data : r.data
 						}*/
 
-						console.log('media.duration', media.duration)
 
 						if (media.duration && media.duration > 0){
 							r.duration = media.duration
@@ -1158,8 +1147,6 @@ export default {
 		initRecording() {
 
 			if (this.prepareRecording || this.isRecording || this.cordovaMediaRecorder) return
-
-			console.log("INIT RECORDING")
 
 			if (window.cordova) {
 				return this.initRecordingCordova()
@@ -1287,8 +1274,6 @@ export default {
 		},
 
 		createVoiceMessage(event, sendnow) {
-			console.log('event', event)
-
 			var c = () => {
 
 				//this.record = 
