@@ -45,6 +45,10 @@ class Notifier {
 		// If cordova is available, use the media plugin to play a sound
 		if (window.Media && window.cordova && window.cordova.file && window.cordova.file.applicationDirectory) {
 
+
+			return 
+
+			
 			var soundSrc = window.cordova.file.applicationDirectory + 'www/sounds/glass.mp3';
 			if (soundSrc.startsWith('file://'))
 				soundSrc = soundSrc.substring(7);
