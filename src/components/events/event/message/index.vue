@@ -11,7 +11,11 @@
       />
 
     </div>
-
+    <div class="fromimagesfiles" v-if="(content.from || imageFrom) && (file || (content.msgtype === 'm.image' && imageUrl) || ( content.msgtype === 'm.audio' && audioUrl))">
+          <div class="fromCaption">
+            <i class="fas fa-share-alt"></i> <span>{{ $t("caption.messagefrom") }} {{userinfo.name}}</span>
+          </div>
+      </div>
     <div v-touch:touchhold="dropDownMenuShow" :class="{referenceshowed, showmeta : showmeta, my,'messageRow': 'messageRow', urlpreview : urlpreview, allscreen : urlpreview || content.msgtype === 'm.image'|| file, aligncenter : content.msgtype === 'm.audio'}" :my="my" v-if="!preview && content.msgtype !== 'm.notice'">
 
       <div class="timeWrapper" v-if="(urlpreview || imageUrl || content.msgtype === 'm.image') || (showmeta && (my)) || file">
@@ -35,12 +39,6 @@
 
       <div class="iconWrapper" v-if="!my || showmyicon" @click="core.mtrx.opencontact(userinfo)">
           <userpic :userinfo="userinfo"/>
-      </div>
-
-      <div class="fromimagesfiles" v-if="(content.from || imageFrom) && (file || (content.msgtype === 'm.image' && imageUrl) || ( content.msgtype === 'm.audio' && audioUrl))">
-          <div class="fromCaption">
-            <i class="fas fa-share-alt"></i> <span>{{ $t("caption.messagefrom") }}</span>
-          </div>
       </div>
 
       <div class="messageImg" v-if="content.msgtype === 'm.image'">
@@ -111,7 +109,7 @@
           <div class="from" v-if="content.from">
             <div class="fromCaption">
               <i class="fas fa-share-alt"></i>
-              <span>{{ $t("caption.messagefrom") }} {{ this.userinfo.name }}</span>
+              <span>{{ $t("caption.messagefrom") }} {{ userinfo.name }}</span>
             </div>
           </div>
 
