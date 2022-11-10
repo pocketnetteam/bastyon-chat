@@ -49,11 +49,11 @@
             load : function(){
                 if(this.src){
 
-                    this.imageSrc = this.src
+                    this.imageSrc = this.src.replace('bastyon.com:8092', 'pocketnet.app:8092').replace('test.pocketnet', 'pocketnet')
 
                     var image = new Image()
 
-                    image.src = this.imageSrc.replace('bastyon.com:8092', 'pocketnet.app:8092').replace('test.pocketnet', 'pocketnet')
+                    image.src = this.imageSrc
                     image.onload = () => {
                         this.loaded = true
                     }
