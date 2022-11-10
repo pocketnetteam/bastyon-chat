@@ -50,8 +50,6 @@ export default {
 		
 		handleTouchStart(e) {
 
-			console.log("E", e, this.isHold, this.isRecording)
-
 
 			if(!this.isRecording) {
 				this.$emit('onRecordingStart')
@@ -73,7 +71,6 @@ export default {
 
 		},
 		handleTouchEnd(e) {
-			console.log("E", e, this.isHold)
 
 			if (this.isHold) return
 
@@ -103,8 +100,6 @@ export default {
 		},
 
 		handleMove(e) {
-
-			console.log("E", e, this.isRecording)
 
 			if(!this.isRecording) return
 
