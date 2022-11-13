@@ -56,9 +56,6 @@ export default {
   },
 
   mounted() {
-
-    console.log(this.chat)
-
     this.getuserinfo()
     this.$store.commit('active', true)
     this.$store.commit('blockactive', {value: true, item: 'chat'})
@@ -104,11 +101,8 @@ export default {
       immediate: true,
       handler: function () {
 
-        
-        if (this.m_chat && !_.isEmpty(this.m_chat)) {
 
-          console.log('this.m_chat', this.m_chat)
-          console.log('getType', this.m_chat.getType())
+        if (this.m_chat && !_.isEmpty(this.m_chat)) {
           this.core.mtrx.kit.allchatmembers([this.m_chat], false, true).then(r => {
             return this.core.mtrx.kit.prepareChat(this.m_chat)
           }).then(r => {
@@ -332,6 +326,17 @@ export default {
         this.$refs['chatInput'].focus()
       }
 
+    },
+
+    shareEvent: function ({event}) {
+      this.relationEvent = {
+        type: 'm.reference',
+        event: event,
+        action: this.$i18n.t('caption.shareMessage'),
+      };
+      if (this.$refs['chatInput']) {
+        this.$refs['chatInput'].focus();
+      }
     },
 
     editingEvent: function ({event, text}) {

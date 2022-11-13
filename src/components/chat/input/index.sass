@@ -114,10 +114,15 @@
     margin-right: 0.5 *$r
     padding-top: 0.5 *$r
     padding-bottom: 0.5 *$r
+    transition: .4s
 
     /deep/ .previewWrapper
       padding-left: 0.5 *$r !important
       padding-right: 0.5 * $r !important
+    &:hover
+      cursor: pointer
+      background: srgb(--background-main)
+      transition: .4s
 
     &.selected
       background: srgb(--background-main)

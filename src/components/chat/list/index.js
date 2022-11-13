@@ -31,7 +31,7 @@ export default {
       cancelNextScroll: false,
       timeline: null,
       lastEvent: {},
-      scrollType: String,
+      scrollType: "",
       esize : {},
       p_b: false,
       p_f: false,
@@ -128,6 +128,12 @@ export default {
     },
     replyEvent: function ({event}) {
       this.$emit('replyEvent', {event})
+    },
+    shareEvent: function ({ event }) {
+      this.$emit("shareEvent", { event });
+    },
+    shareEvent: function ({ event }) {
+      this.$emit("shareEvent", { event });
     },
 
     removeEvent: function (event) {

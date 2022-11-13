@@ -25,7 +25,7 @@ import { mapState } from 'vuex';
 export default {
   name: "VoiceMessage",
   props: {
-    decryptedInfo : Object,
+    decryptedInfo : [Object, ArrayBuffer],
     audioBuffer: {
       type: String | null,
       required: true

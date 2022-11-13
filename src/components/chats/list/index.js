@@ -71,6 +71,7 @@ export default {
 
 		...mapState([
 			'minimized',
+			'mobile',
 			'active',
 			'pocketnet',
 			'chatsready',
@@ -284,7 +285,13 @@ export default {
 							message: "",
 						})
 
-						this.$router.push(_share.route || 'chat?id=' + chat.roomId).catch(e => {})
+						this.$router.push({
+							path: 'chat',
+							query: {
+								...this.$route.query,
+								id: chat.roomId,
+							},
+						});
 
 					}).catch(e => {
 
@@ -296,7 +303,13 @@ export default {
 						})
 
 						if (_share.route) {
-							this.$router.push(_share.route).catch(e => {})
+							this.$router.push({
+								path: 'chat',
+								query: {
+									...this.$route.query,
+									id: chat.roomId,
+								},
+							});
 						}
 
 					})

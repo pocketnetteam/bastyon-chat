@@ -18,7 +18,8 @@ export default {
             loading : false,
             newchatopened : false,
             createGroup: false,
-            contacts: false
+            contacts: false,
+            isLocalStorageChatAuth: this.$store.state.isLocalStorageChatAuth,
         }
 
     },
@@ -107,6 +108,16 @@ export default {
 
         newchat : function(){
             this.$emit('newchat')
-        }
+        },
+
+        gotona(r) {
+            this.$router.push({
+                path: this.$router.path,
+                query: {
+                    ...this.$route.query,
+                    page: r,
+    },
+            });
+        },
     },
 }

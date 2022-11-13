@@ -97,16 +97,17 @@ export default {
 		menuItems: function () {
 			var menuItems = []
 
+			if (!this.relationEvent || this.relationEvent.action === "Reply on Message") {
 
-			if (!this.relationEvent) {
+				if (window.POCKETNETINSTANCE) {
+					// if(window.POCKETNETINSTANCE.mobile.supportimagegallery()) {
+					// 	menuItems.push({
+					// 		click: "cameraHandlerCustom",
+					// 		title: this.$i18n.t("button.takePhotoOrVideo"),
+					// 		icon: "fas fa-camera",
 
-				if (window.POCKETNETINSTANCE && window.POCKETNETINSTANCE.mobile.supportimagegallery()) {
-					menuItems.push({
-						click: "cameraHandlerCustom",
-						title: this.$i18n.t("button.takePhotoOrVideo"),
-						icon: "fas fa-camera",
-
-					})
+					// 	})
+					// }
 				}
 				else {
 					menuItems.push({
@@ -262,7 +263,6 @@ export default {
 	mounted() {
 		this.ready = true
 
-
 		if (!this.chat && this.core.mtrx.client) {
 			this.newchat().catch(e => {
 				return Promise.resolve()
@@ -333,7 +333,7 @@ export default {
 				multiple: true,
 
 				action: ({ base64 }, resolve) => {
-					
+
 
 					return this.resizeImage(base64).then(base64 => {
 
@@ -416,9 +416,9 @@ export default {
 			})
 
 			/*.then(({txid, from}) => {
-	  
+
 			  return this.core.mtrx.transaction(this.chat.roomId, txid)
-	  
+
 			})*/
 
 		},
@@ -685,7 +685,10 @@ export default {
 			}).then(() => {
 				if (meta.aborted)
 					return Promise.reject('aborted')
-
+				if(this.relationEvent) {
+					meta.event = this.relationEvent ? this.relationEvent : {}
+					this.$emit('sent')
+				}
 				return this.core.mtrx.sendImage(this.chat, base64, null, meta, { relation: this.relationEvent })
 
 			}).then(r => {
@@ -767,7 +770,9 @@ export default {
 
 
 			}).then((notenc) => {
-
+				if(this.relationEvent) {
+					this.$emit('sent')
+				}
 				return this.core.mtrx.sendFile(this.chat, file, meta, { relation: this.relationEvent }, notenc)
 
 			}).then(() => {
@@ -957,12 +962,12 @@ export default {
 					if(!entry){
 						return reject('noentry')
 					}
-	
+
 					entry.file((file) => {
 						var reader = new FileReader()
 
 						console.log('file', file)
-	
+
 						reader.onloadend = function() {
 							var blob = new Blob([new Uint8Array(this.result)], {type : file.type})
 
@@ -976,17 +981,17 @@ export default {
 						reader.onerror = (e) => {
 
 							entry.remove()
-							
+
 							reject(e)
 						}
-	
+
 						reader.readAsArrayBuffer(file)
 					})
 				}, (e) => {
 					reject(e)
 				})
 			})
-			
+
 		},
 
 		initRecordingCordova() {
@@ -1038,13 +1043,13 @@ export default {
 					var fu = null
 
 					/*if(f.isios()){ */
-						
+
 						fu = this.getFileIosCordova(f.isios() ? path : window.cordova.file.externalDataDirectory + path).then(blob => {
 							return Promise.resolve({
 								data : blob
 							})
 						})
-					
+
 					/*}
 
 					else{
@@ -1078,7 +1083,7 @@ export default {
 
 						console.error(e)
 					}).finally(() => {
-						
+
 					})
 
 				}, (e) => {
@@ -1106,28 +1111,28 @@ export default {
 						rmsdata.push(1)
 
 						if (rmsdata.length > 50) rmsdata = _.last(rmsdata, 50)
-	
+
 						this.recordRmsData = _.clone(rmsdata)
 					}
 					else{
 						this.cordovaMediaRecorder.getCurrentAmplitude(
 							// success callback
 							(amp) => {
-	
+
 								rmsdata.push(amp * 1000)
-	
+
 								if (rmsdata.length > 50) rmsdata = _.last(rmsdata, 50)
-	
+
 								this.recordRmsData = _.clone(rmsdata)
-	
-	
+
+
 							},
 							function (e) {
 								console.log("E", e)
 							}
 						);
 					}
-					
+
 
 
 
@@ -1145,7 +1150,7 @@ export default {
 
 				this.cordovaMediaRecorder.startRecord();
 
-			}).catch((e) => { 
+			}).catch((e) => {
 				console.error(e)
 
 
@@ -1278,11 +1283,11 @@ export default {
 					}catch(e){
 						reject(e)
 					}
-					
+
 				}).catch(reject)
 			})
 
-			
+
 
 		},
 
@@ -1291,7 +1296,7 @@ export default {
 
 			var c = () => {
 
-				//this.record = 
+				//this.record =
 
 				this.checkaudioForSend({
 					file: event.data,
@@ -1325,7 +1330,7 @@ export default {
 
 					console.log('this.record', this.record)
 					console.log('this.buffer', buffer)
-					
+
 
 					this.record = {
 						file: event.data,
@@ -1406,7 +1411,7 @@ export default {
 
 				this.cordovaMediaRecorder.stopRecord()
 				this.cordovaMediaRecorder = null
-				
+
 			}
 
 		},
@@ -1436,6 +1441,10 @@ export default {
 			this.$f.pretry(() => {
 				return this.chat
 			}).then(() => {
+				if(this.relationEvent) {
+					meta.event = this.relationEvent ? this.relationEvent : {}
+					this.$emit('sent')
+				}
 				return this.core.mtrx.sendAudio(this.chat, base64, null, meta, { relation: this.relationEvent })
 			}).catch(e => {
 				this.$emit('sentError', {

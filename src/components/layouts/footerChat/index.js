@@ -31,16 +31,20 @@ export default {
       return this.$route.name
     },
 
+    query : function (){
+      return this.$route.query;
+    },
+
     activesettings : function(){
-      return this.current == 'settings'
+      return this.query.page == 'settings';
     },
 
     activecontacts : function(){
-      return this.current == 'contact' || this.current == 'contacts'
+      return this.query.page == 'contacts';
     },
 
     activechats : function(){
-      return this.current == 'chat' || this.current == 'chats'
+      return this.query.page === undefined || this.query.page == 'chats';
     },
 
     mobile : function(){
@@ -50,7 +54,13 @@ export default {
   }),
   methods : {
     gotona(r){
-      this.$router.push(r).catch(e => {})
+      this.$router.push({
+        path: this.$router.path,
+        query: {
+          ...this.$route.query,
+          page: r,
+        },
+      });
       this.$store.commit('active', true)
       this.$store.commit('setiteraction', true)
     },

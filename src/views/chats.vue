@@ -44,6 +44,7 @@
     .headerSpacerWrapper
       overflow: visible !important
     .headerSpacerWrapperOvf
+      background: #ffffff
       overflow: visible !important
 
 
@@ -101,7 +102,7 @@ export default {
       this.$router.push({
         path: 'chat',
         query: {'id': chat.room_id}
-      }).catch(e => {})
+      });
     },
 
     scrolltop : function(){

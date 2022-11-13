@@ -71,6 +71,9 @@ export default {
       }
     }
   },
+  mounted() {
+    this.timeline = {};
+  },
   computed: {
     sortedVoiceMessageQueue() {
       return _.sortBy(this.voiceMessageQueue, (a) => {return a.id})
@@ -198,6 +201,10 @@ export default {
       this.$emit("replyEvent", { event });
     },
 
+    shareEvent: function ({ event }) {
+      this.$emit("shareEvent", { event });
+    },
+
     removeEvent: function (event) {
       this.$emit("removeEvent", event);
     },
@@ -238,7 +245,9 @@ export default {
         return;
       } else {
         e.preventDefault();
-        this.$refs["container"].scrollTop += -e.deltaY;
+        var dy = e.deltaY;
+
+        this.$refs["container"].scrollTop += -dy;
         return false;
       }
     },

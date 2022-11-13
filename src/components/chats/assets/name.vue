@@ -13,10 +13,10 @@
 
 <style scoped lang="sass">
 .nameofchat
-  white-space: nowrap
+  max-height: 38px
+  width: 132px
 .nameline
-  display: flex
-  align-items: flex-end
+  display: flex !important
   justify-content: center
 
 .iconGroup

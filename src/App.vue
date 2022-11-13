@@ -4,7 +4,7 @@
          :class="{pip, 'bin' : pocketnet, 'fix' : pocketnet, 'bout' : !pocketnet, minimized, active, mobile, unselect}">
       <div class="chatwrapper" @click="iteraction">
         <div>
-          <div class="backface" v-if="closebybg" @click="hide"></div>
+          <!-- <div class="backface" v-if="closebybg" @click="hide"></div> -->
 
           <MainWrapper/>
 
@@ -166,6 +166,7 @@ import search from '@/components/assets/search/index.vue';
 import linepreloader from '@/components/assets/linepreloader/index.vue';
 
 import chats from '@/views/chats.vue'
+import isMessenger from '@/application/isMessenger.js'
 
 ////////
 
@@ -373,9 +374,7 @@ export default {
     },
 
     active: function () {
-
-      if (this.mobile) return false
-      return this.$store.state.active
+      return true;
     },
 
     globalpreloader: function () {
@@ -524,14 +523,29 @@ export default {
   },
 
   created() {
-    /*this.pocketnet = false
-    this.mobile = !this.pocketnet
-    this.recording = TransformStreamDefaultController*/
+    // this.pocketnet = true;
+    // this.mobile = false
+    // this.recording = true
+
+    this.$store.commit('setIsLocalStorageChatAuth', isMessenger());
+
+    if (this.$store.state.isLocalStorageChatAuth) {
+      const fromMnemonic = getDecryptedMnemonic();
+      if (
+        fromMnemonic.addressUser === null &&
+        fromMnemonic.privateKey === null
+      ) {
+        window.open('https://bastyon.com/authorization', '_blank');
+      } else {
+        this.address = fromMnemonic.addressUser;
+        this.privatekey = fromMnemonic.privateKey.toString('hex');
+        this.recording = true;
+      }
+    }
 
     this.$store.commit('setPocketnet', this.pocketnet);
     this.$store.commit('setMobile', this.mobile);
     this.$store.commit('setVoiceMessagesEnabled', this.recording);
-    this.$store.commit('pkoindisabled', this.pkoindisabled)
     this.$store.commit('clearall')
 
     this.$store.commit('ls')
@@ -713,23 +727,56 @@ export default {
 
     var user = (this.address && this.privatekey) ? actualUser : testUsers[`${username}`];
 
-    var listofproxies = f.deep(window, 'window.POCKETNETINSTANCE.options.listofproxies') || [
-      {
-        host: 'test.pocketnet.app',
-        port: 8899,
-        wss: 8099
-      }
-      /*{
-          host : 'pocketnet.app',
-          port : 8899,
-          wss : 8099
-      },
-      {
-          host : '1.pocketnet.app',
-          port : 8899,
-          wss : 8099
-      }*/
-    ]
+    if (this.$store.state.isLocalStorageChatAuth) {
+      var listofproxies = [
+        {
+          host: "5.pocketnet.app",
+          port: 8899,
+          wss: 8099,
+        },
+        {
+          host: "1.pocketnet.app",
+          port: 8899,
+          wss: 8099,
+        },
+        {
+          host: "2.pocketnet.app",
+          port: 8899,
+          wss: 8099,
+        },
+        {
+          host: "3.pocketnet.app",
+          port: 8899,
+          wss: 8099,
+        },
+        {
+          host: "4.pocketnet.app",
+          port: 8899,
+          wss: 8099,
+        },
+      ];
+    } else {
+      var listofproxies = f.deep(
+          window,
+          "window.POCKETNETINSTANCE.options.listofproxies"
+      ) || [
+        {
+          host: "test.pocketnet.app",
+          port: 8899,
+          wss: 8099,
+        },
+        /*{
+              host : 'pocketnet.app',
+              port : 8899,
+              wss : 8099
+          },
+          {
+              host : '1.pocketnet.app',
+              port : 8899,
+              wss : 8099
+          }*/
+      ];
+    }
 
     /*
 
@@ -741,7 +788,13 @@ export default {
 
     */
 
-    var domain = f.deep(window, 'window.POCKETNETINSTANCE.options.matrix') || 'test.matrix.pocketnet.app'
+    if (this.$store.state.isLocalStorageChatAuth) {
+      var domain = 'matrix.pocketnet.app';
+    } else {
+      var domain =
+          f.deep(window, 'window.POCKETNETINSTANCE.options.matrix') ||
+          'test.matrix.pocketnet.app';
+    }
 
     core = new Core(this, {
       domain: domain,
@@ -782,7 +835,7 @@ export default {
     core.initWithUser(user).then(r => {
 
       return core.mtrx.wait().then(() => {
-        
+
         core.user.getContacts()
 
 
@@ -798,11 +851,6 @@ export default {
             this.$router.push('/chats').catch(e => {})
           }
         }, 100)
-
-        
-
-        //this.connectCustomRecorder();
-
       })
 
     }).catch(g => {
@@ -817,7 +865,11 @@ export default {
 
     window.matrixchat = core
 
-  }
+  },
+
+  mounted() {
+    this.$store.commit('minimize', true);
+  },
 }
 
 if (module.hot) {
@@ -850,3 +902,113 @@ if (module.hot) {
 <!-- THEMES BEGIN -->
 <!-- THEMES END -->
 
+<style lang="scss">
+.rootcontent.minimized {
+  .chat-container-pages-empty {
+    display: none !important;
+  }
+  .headerSpacerWrapperOvf {
+    background: transparent !important;
+  }
+  .messageRow .maxcontent {
+    max-width: 295px !important;
+  }
+  .modal-backdrop,
+  .modal-wrapper {
+    width: 344px;
+    left: -302px;
+  }
+  .main-wrapper {
+    .chatSettingsButton {
+      display: none;
+    }
+    &.active {
+      .chatSettingsButton {
+        display: block;
+      }
+    }
+  }
+}
+.rootcontent.bout {
+  #maincontent .headerSpacerWrapper {
+    height: 82% !important;
+  }
+  .main-wrapper.minimized:not(.active) .topheader {
+    opacity: 1 !important;
+  }
+  .minimized:not(.active) .chatNameEdit,
+  .minimized:not(.active) .chatDescription {
+    display: block !important;
+  }
+  .main-wrapper.minimized .input_component {
+    width: 100% !important;
+  }
+  .main-wrapper.minimized .noswipepnt .work {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .main-wrapper.minimized .inputWrapper {
+    margin: 0 !important;
+    width: 100% !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+.rootcontent.fix {
+  .chat-container-pages {
+    position: absolute !important;
+    left: 23px !important;
+    width: 344px !important;
+    border-left: 0 !important;
+    #topheader {
+      transform: translate3d(-279px, -56px, 0) !important;
+    }
+    .input_component {
+      width: 344px;
+    }
+    #chatsTopheader.topheader {
+      width: 344px;
+    }
+    #events {
+      left: 0px !important;
+      width: 344px !important;
+    }
+    .inputWrapper {
+      width: 344px !important;
+      margin-left: -347px !important;
+    }
+    .dropdown.visible {
+      width: 344px !important;
+    }
+    .menubgwrapper {
+      left: -300px !important;
+      width: 344px !important;
+    }
+    .relationEvent {
+      max-width: 702px !important;
+      margin: 0 auto !important;
+    }
+  }
+  #wai-fixedmessageicon {
+    &.active {
+      .wrapper {
+        position: fixed !important;
+        top: 15px !important;
+        right: 8px !important;
+        left: auto !important;
+        width: 344px !important;
+        transform: none !important;
+      }
+    }
+  }
+  .fixedOnPageTop {
+    min-width: 344px !important;
+  }
+}
+
+.emoji-mart {
+  right: -99px !important;
+}
+</style>

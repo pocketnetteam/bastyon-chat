@@ -5,7 +5,7 @@
     <div class="infoPart">
 
 
-      <div :class="'inputWrapper ' + value.id"  v-for="value in settings">
+      <div :class="'inputWrapper ' + value.id"  v-for="(value, index) in settings" :key="index">
 
         <div class="forInput">
           <toggle-button @change="e => set_settings(value.id, e)" :value="get_settings(value.id)"/>

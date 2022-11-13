@@ -145,6 +145,21 @@ export default {
       'active'
     ]),
 
+    m_chat : function () {
+      if (this.chat && this.chat.roomId) {
+        let pushRules = this.core.mtrx.client._pushProcessor.getPushRuleById(
+          this.chat.roomId
+        );
+        if (pushRules !== null) {
+          this.roomMuted = true;
+        }
+
+        let m_chat = this.core.mtrx.client.getRoom(this.chat.roomId);
+
+        return m_chat || {};
+      }
+    },
+
     curation : function(){
       if(window.POCKETNETINSTANCE && window.POCKETNETINSTANCE.curation()) return true
     },
@@ -254,11 +269,26 @@ export default {
 
     groupAvatar: function () {
 
-      if (this.m_chat.currentState.getStateEvents('m.room.avatar')[0]){
-        return this.m_chat.currentState.getStateEvents('m.room.avatar')[0].event.content.avatarUrl; 
-      }
+      return this.m_chat.currentState.getStateEvents('m.room.avatar')[0]?.event
+        .content.avatarUrl;
 
-     
+
+    },
+    clearRoom() {
+      // var events = this.m_chat.getLiveTimeline().getEvents();
+      // console.log(events)
+      // let chatHistory = this.m_chat.getLiveTimeline()._events.map((option) => ({
+      //   id: option.event.event_id,
+      // }));
+      // console.log(events, this.core.mtrx.client, this.chat.roomId, chatHistory, this.m_chat.getLiveTimeline())
+      // for(let i = 0; i < events.length; i++) {
+      //   this.core.mtrx.client.redactEvent(this.chat.roomId, events[i].event.event_id, null, {
+      //     reason: "messagedeleting",
+      //   })
+      // //   // this.m_chat.getLiveTimeline().removeEvent(chatHistory[i].id)
+      // }
+      // removeEvent(event.event.event_id)
+      // console.log('this.m_chat.getLiveTimeline()', this.m_chat.getLiveTimeline()._events)
     },
   },
   mounted() {
@@ -528,6 +558,23 @@ export default {
         urls : [this.shareRoomLink],
         route : 'chatInfo?id=' + this.chat.roomId
       })
-    }
+    },
+
+    clearRoom(){
+      // var events = this.m_chat.getLiveTimeline().getEvents();
+      // console.log(events)
+      // let chatHistory = this.m_chat.getLiveTimeline()._events.map((option) => ({
+      //   id: option.event.event_id,
+      // }));
+      // console.log(events, this.core.mtrx.client, this.chat.roomId, chatHistory, this.m_chat.getLiveTimeline())
+      // for(let i = 0; i < events.length; i++) {
+      //   this.core.mtrx.client.redactEvent(this.chat.roomId, events[i].event.event_id, null, {
+      //     reason: "messagedeleting",
+      //   })
+      // //   // this.m_chat.getLiveTimeline().removeEvent(chatHistory[i].id)
+      // }
+      // removeEvent(event.event.event_id)
+      // console.log('this.m_chat.getLiveTimeline()', this.m_chat.getLiveTimeline()._events)
+    },
   }
 }

@@ -5,7 +5,7 @@
       <template v-slot:left>
         <div class="iconbutton" @click="cancelShare" v-if="share"><i class="fas fa-times"></i></div>
         <div class="iconbutton" @click="minimizeall" v-if="(!minimized || active) && pocketnet && !share"><i class="fas fa-times"></i></div>
-        <div class="iconbutton" @click="gotoapp" v-if="!pocketnet && !share"><i class="fas fa-angle-left"></i></div>
+        <div class="iconbutton" @click="gotoapp" v-if="!pocketnet && mobile && !share && !isLocalStorageChatAuth"><i class="fas fa-angle-left"></i></div>
       </template>
 
       <template v-slot:leftadd >
@@ -13,22 +13,22 @@
           <i class="fas fa-map-pin"></i>
         </div>-->
       </template>
-      
+
 
       <template v-slot:info>
         <span v-if="!share">{{ $t("caption.chats") }}</span>
         <span v-if="share">{{ $t("caption.shareWith") }}</span>
       </template>
 
-      
+
       <template v-slot:rightadd >
-        <router-link to="settings" v-if="!share && pocketnet">
+        <div @click="gotona('settings')" v-if="!share && pocketnet" class="chatSettingsButton">
           <div class="iconbuttonsmall">
             <i class="fas fa-cog"></i>
           </div>
-        </router-link>
+        </div>
       </template>
-     
+
 
       <template v-slot:right>
 
@@ -39,13 +39,13 @@
         </div>
 
       </div>
-        
+
 
       </template>
     </topheader>
 
 
-  
+
   </div>
 </template>
 
