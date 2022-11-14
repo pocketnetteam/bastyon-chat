@@ -820,6 +820,11 @@ class MTRX {
       if (promise.abort) meta.abort = promise.abort;
 
       return Promise.resolve(file);
+    }).then((file) => {
+      var promise = this.core.mtrx.uploadContent(file, true);
+      if (promise.abort) meta.abort = promise.abort;
+
+      return promise;
     }).then((image) => {
       if (meta.aborted) return Promise.reject('aborted')
 
