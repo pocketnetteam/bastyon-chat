@@ -455,9 +455,9 @@ export default {
 
       //if(this.urlpreview) sharing.urls = [urlpreview]
 
-      if (this.file) {
-        sharing.download = true
-      }
+      // if (this.file) {
+      //   sharing.download = true
+      // }
 
       //sharing.route = 'chat?id=' + this.chat.roomId
       sharing.from = this.userinfo.id

@@ -1,5 +1,5 @@
 <template>
-  <div class='main-wrapper' :class="{minimized, active}">
+  <div class="main-wrapper" :class="{minimized, active}">
 
     <div class="chat-container" v-if="showChats">
       <ContactsContainer v-if="page === 'contacts'" />

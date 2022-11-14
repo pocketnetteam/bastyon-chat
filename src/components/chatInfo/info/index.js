@@ -222,16 +222,6 @@ export default {
 
 
     },
-    m_chat: function () {
-
-      if (this.chat && this.chat.roomId) {
-
-        var m_chat = this.core.mtrx.client.getRoom(this.chat.roomId)
-
-        return m_chat || {}
-
-      }
-    },
 
     galleryImages: function () {
 

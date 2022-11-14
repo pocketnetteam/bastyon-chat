@@ -11,9 +11,6 @@ import ChatStorage from "./chatstorage";
 
 var axios = require('axios');
 
-console.log("sdk", sdk)
-
-
 class MTRX {
 
   constructor(core, p) {
