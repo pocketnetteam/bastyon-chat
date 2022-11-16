@@ -913,11 +913,6 @@ if (module.hot) {
   .messageRow .maxcontent {
     max-width: 295px !important;
   }
-  .modal-backdrop,
-  .modal-wrapper {
-    width: 344px;
-    left: -302px;
-  }
   .main-wrapper {
     .chatSettingsButton {
       display: none;
@@ -928,8 +923,45 @@ if (module.hot) {
       }
     }
   }
+  .dropdown.visible {
+    left: -171px;
+  }
+  .headerSpacerWrapper {
+    .modal-backdrop,
+    .modal-wrapper {
+      left: -299px;
+    }
+  }
+  .headerSpacerWrapper {
+    .headerSpacer {
+      .modal-backdrop,
+      .modal-wrapper {
+        left: 0px !important;
+      }
+    }
+  }
+  .modal-backdrop,
+  .modal-wrapper {
+    left: -299px;
+    width: 344px;
+  }
+  .relationEvent {
+    position: absolute;
+    left: -344px;
+    top: -79px;
+    width: 344px;
+  }
 }
 .rootcontent.bout {
+
+  .modal-backdrop,
+  .modal-wrapper {
+    left: 0 !important;
+    width: auto !important;
+  }
+  .dropdown.visible {
+    left: 50%;
+  }
   #maincontent .headerSpacerWrapper {
     height: 82% !important;
   }
