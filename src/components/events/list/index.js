@@ -241,6 +241,7 @@ export default {
     },
 
     mousewheel: function (e) {
+
       if (this.scrollType === "custom") {
         return;
       } else {

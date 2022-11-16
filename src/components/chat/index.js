@@ -56,6 +56,7 @@ export default {
   },
 
   mounted() {
+
     this.getuserinfo()
     this.$store.commit('active', true)
     this.$store.commit('blockactive', {value: true, item: 'chat'})

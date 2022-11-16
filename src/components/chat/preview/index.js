@@ -50,5 +50,11 @@ export default {
       return this.core.mtrx.chatUsersInfo(this.chat.roomId, 'anotherChatUsers')
     },
 
+  },
+
+  methods : {
+    empty : function(user){
+      return _.isEmpty(user)
+    }
   }
 }

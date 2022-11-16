@@ -104,8 +104,10 @@ export default {
           return `${min}:${sec < 10 ? '0' + sec : sec}`
         }
 
-        sec = Math.floor(this.duration)
         min = Math.floor(this.duration / 60)
+
+        sec = Math.floor(this.duration - min * 60)
+        
 
         return `${min}:${sec < 10 ? '0' + sec : sec}`
 

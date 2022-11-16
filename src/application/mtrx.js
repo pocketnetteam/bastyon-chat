@@ -11,6 +11,7 @@ import ChatStorage from "./chatstorage";
 
 var axios = require('axios');
 
+
 class MTRX {
 
   constructor(core, p) {
@@ -858,6 +859,7 @@ class MTRX {
 
     return new Promise(resolve => {
       if (chat.pcrypto.canBeEncrypt()) {
+
         return chat.pcrypto.encryptFile(file).then(r => {
           info.secrets = r.secrets
           return resolve(r.file)
@@ -874,8 +876,6 @@ class MTRX {
 
       return promise
     }).then((audio) => {
-
-      console.log(audio, info)
 
       if (meta.aborted) return Promise.reject('aborted')
 
@@ -954,8 +954,6 @@ class MTRX {
   }
 
   async getAudioUnencrypt(chat, event){
-
-    console.log('getAudioUnencrypt')
 
     if(event.event.content.audioData){
       return Promise.resolve(event.event.content.audioData)
