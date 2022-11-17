@@ -4,15 +4,12 @@
       <i class="fas fa-user-friends"></i>
     </div>
     <div class="nameofchat">
-      {{ convertedName }}
+      {{ convertedName.toString().slice(0, 13) }}
     </div>
   </div>
 </template>
 
 <style scoped lang="sass">
-.nameofchat
-  max-height: 38px
-  width: 132px
 .nameline
   display: flex !important
   justify-content: center
@@ -51,6 +48,7 @@ export default {
 
       return this.core.mtrx.anotherChatUsers(this.chat.roomId);
     },
+
 
     convertedName: function () {
       if (
