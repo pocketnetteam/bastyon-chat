@@ -904,6 +904,25 @@ if (module.hot) {
 
 <style lang="scss">
 .rootcontent.minimized {
+  .inputWrapper {
+    .dropdown .backgr, .menuwrapper {
+      left: -171px;
+      width: 344px;
+    }
+  }
+  .chat-container-pages {
+    .modal-backdrop {
+      width: 344px !important;
+      left: -300px !important;
+    }
+    .modal-wrapper {
+      top: 7% !important;
+      right: 0 !important;
+      left: -300px !important;
+      transform: translate(0) !important;
+      z-index: 123123123123;
+    }
+  }
   .chat-container-pages-empty {
     display: none !important;
   }
@@ -912,6 +931,10 @@ if (module.hot) {
   }
   .messageRow .maxcontent {
     max-width: 295px !important;
+  }
+  .modal-backdrop,
+  .modal-wrapper {
+    width: 344px;
   }
   .main-wrapper {
     .chatSettingsButton {
@@ -952,19 +975,34 @@ if (module.hot) {
     width: 344px;
   }
 }
+.previewWrapper {
+  .nameofchat {
+    white-space: nowrap;
+    overflow: hidden;
+  } 
+}
+.nameofchat {
+  max-width: 132px;
+}
+.headerLine {
+  .nameofchat {
+    max-height: 38px;
+    line-height: 1.1em;
+  width: 132px;
+  }
+}
 .rootcontent.bout {
-
-  .modal-backdrop,
+  .modal-backdrop {
+    width: 100vw !important;
+  }
   .modal-wrapper {
-    left: 0 !important;
-    width: auto !important;
+    top: 60px !important;
+    right: 50% !important;
+    transform: translate(50%) !important;
   }
-  .dropdown.visible {
-    left: 50%;
-  }
-  #maincontent .headerSpacerWrapper {
+  /* #maincontent .headerSpacerWrapper {
     height: 82% !important;
-  }
+  } */
   .main-wrapper.minimized:not(.active) .topheader {
     opacity: 1 !important;
   }
