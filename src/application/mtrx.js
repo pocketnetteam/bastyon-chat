@@ -457,16 +457,10 @@ class MTRX {
   }
 
   initEvents() {
-
     let self = this
 
     let userId = this.core.mtrx.client.credentials.userId
 
-
-    this.client.on("Call.incoming", function(call) {
-      console.log('incoming call')
-      core.store.dispatch('CALL', call)
-    });
 
 
     this.client.on("RoomMember.membership", (event, member) => {

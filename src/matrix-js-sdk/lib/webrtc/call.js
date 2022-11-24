@@ -307,6 +307,7 @@ class MatrixCall extends _events.EventEmitter {
         try {
           await localVidEl.play();
         } catch (e) {
+          console.log('Failed to play local video element answer',e)
           _logger.logger.info("Failed to play local video element", e);
         }
       }
@@ -327,6 +328,7 @@ class MatrixCall extends _events.EventEmitter {
       try {
         myAnswer = await this.peerConn.createAnswer();
       } catch (err) {
+        console.log(2,err)
         _logger.logger.debug("Failed to create answer: ", err);
 
         this.terminate(CallParty.Local, CallErrorCode.CreateAnswer, true);
@@ -530,7 +532,12 @@ class MatrixCall extends _events.EventEmitter {
 
       if (ev.track.kind === 'video') {
         if (this.remoteVideoElement) {
-          this.playRemoteVideo();
+          try {
+            this.playRemoteVideo();
+          } catch (e) {
+            console.log('onTrack',e)
+            throw e
+          }
         }
       } else {
         if (this.remoteAudioElement) this.playRemoteAudio();
@@ -764,7 +771,9 @@ class MatrixCall extends _events.EventEmitter {
 
       try {
         await element.play();
+        console.log('local ok')
       } catch (e) {
+        console.log('Failed to play local video element set',e)
         _logger.logger.info("Failed to play local video element", e);
       }
     }
@@ -776,17 +785,27 @@ class MatrixCall extends _events.EventEmitter {
    */
 
 
-  setRemoteVideoElement(element) {
+  async setRemoteVideoElement(element) {
     if (element === this.remoteVideoElement) return;
-    element.autoplay = true; // if we already have an audio element set, use that instead and mute the audio
+    // if we already have an audio element set, use that instead and mute the audio
     // on this video element.
 
     if (this.remoteAudioElement) element.muted = true;
     this.remoteVideoElement = element;
 
-    if (this.remoteStream) {
-      this.playRemoteVideo();
+    if (!this.remoteStream) return
+    this.remoteVideoElement.srcObject = this.remoteStream;
+    // this.remoteVideoElement.muted = true;
+
+    console.log('remoteEl', this.remoteVideoElement)
+
+    try {
+      await this.remoteVideoElement.play();
+    } catch (e) {
+      console.log('Failed to play remote video element set',e)
+      _logger.logger.info("Failed to play remote video element", e)
     }
+
   }
   /**
    * Set the remote <code>&lt;audio&gt;</code> DOM element. If this call is active,
@@ -1246,6 +1265,7 @@ class MatrixCall extends _events.EventEmitter {
 
 
   async onAnswerReceived(event) {
+    console.log('answer received',event)
     _logger.logger.debug(`Got answer for call ID ${this.callId} from party ID ${event.getContent().party_id}`);
 
     if (this.callHasEnded()) {
@@ -1267,6 +1287,7 @@ class MatrixCall extends _events.EventEmitter {
     try {
       await this.peerConn.setRemoteDescription(event.getContent().answer);
     } catch (e) {
+      console.log(5,e)
       _logger.logger.debug("Failed to set remote description", e);
 
       this.terminate(CallParty.Local, CallErrorCode.SetRemoteDescription, false);
@@ -1282,6 +1303,7 @@ class MatrixCall extends _events.EventEmitter {
           selected_party_id: this.opponentPartyId
         });
       } catch (err) {
+        console.log(6,err)
         // This isn't fatal, and will just mean that if another party has raced to answer
         // the call, they won't know they got rejected, so we carry on & don't retry.
         _logger.logger.warn("Failed to send select_answer event", err);
@@ -1411,6 +1433,7 @@ class MatrixCall extends _events.EventEmitter {
     try {
       await this.remoteAudioElement.play();
     } catch (e) {
+      console.log('Failed to play remote audio element play', e)
       _logger.logger.error("Failed to play remote audio element", e);
     }
   }
@@ -1430,10 +1453,12 @@ class MatrixCall extends _events.EventEmitter {
     _logger.logger.info("playing remote video. stream active? " + this.remoteStream.active);
 
     try {
-      await this.remoteVideoElement.play();
-    } catch (e) {
+      this.remoteVideoElement.play()
+    }   catch(e)  {
+      console.log("Failed to play remote video elemento", e)
       _logger.logger.info("Failed to play remote video element", e);
     }
+
   }
 
   setState(state) {
@@ -1683,6 +1708,7 @@ class MatrixCall extends _events.EventEmitter {
       const mediaStream = await navigator.mediaDevices.getUserMedia(constraints);
       this.gotUserMediaForInvite(mediaStream);
     } catch (e) {
+      console.log('place with cosntraints', e)
       this.getUserMediaFailed(e);
       return;
     }
@@ -1782,7 +1808,7 @@ function setTracksEnabled(tracks, enabled) {
 
 function getUserMediaContraints(type) {
   const isWebkit = !!navigator.webkitGetUserMedia;
-
+  console.log(navigator.mediaDevices.getSupportedConstraints())
   switch (type) {
     case ConstraintsType.Audio:
       {
@@ -1808,6 +1834,9 @@ function getUserMediaContraints(type) {
             deviceId: videoInput ? {
               ideal: videoInput
             } : undefined,
+            // facingMode: {
+            //   exact : 'user'
+            // },
 
             /* We want 640x360.  Chrome will give it only if we ask exactly,
                FF refuses entirely if we ask exactly, so have to ask for ideal

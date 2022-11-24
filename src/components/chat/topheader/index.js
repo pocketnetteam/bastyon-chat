@@ -170,6 +170,8 @@ export default {
   computed: mapState({
     auth: state => state.auth,
 
+    isCallsActive: state => state.isCallsActive,
+
     m_chat: function () {
 
       if (this.chat && this.chat.roomId) {
@@ -210,6 +212,18 @@ export default {
 
   }),
   methods: {
+    bcCall: function() {
+      console.log('init call')
+      let local = document.querySelector('body')
+      try {
+        let matrixCall = this.core.mtrx.bastyonCalls.initCall(this.chat.roomId, local)
+        this.$store.dispatch('CALL', matrixCall)
+      } catch (e) {
+        console.log('ошибка при создании звонка', e)
+        return
+      }
+    },
+
     navigateToProfile(id) {
       this.$router.push({path: `/contact?id=${f.getmatrixid(id)}`}).catch(e => {})
     },

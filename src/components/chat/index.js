@@ -5,7 +5,6 @@ import join from '@/components/chat/join/index.vue'
 import attachement from '@/components/chat/attachement/index.vue'
 import f from "@/application/functions";
 import userRoomStatus from "@/components/chat/userRoomStatus/index.vue"
-import answerForm from '@/components/call/answerForm/index.vue';
 
 export default {
   name: 'chat',
@@ -20,7 +19,6 @@ export default {
     join,
     attachement,
     userRoomStatus,
-    answerForm
   },
 
   data: function () {
