@@ -120,7 +120,7 @@ class Core {
             }
 
             if(window.POCKETNETINSTANCE && window.POCKETNETINSTANCE.platform){
-                p.el = window.POCKETNETINSTANCE.platform.getCallsOptions()
+                p = window.POCKETNETINSTANCE.platform.getCallsOptions()
 
             }
 
