@@ -1834,9 +1834,9 @@ function getUserMediaContraints(type) {
             deviceId: videoInput ? {
               ideal: videoInput
             } : undefined,
-            // facingMode: {
-            //   exact : 'user'
-            // },
+            facingMode: {
+              exact : 'user'
+            },
 
             /* We want 640x360.  Chrome will give it only if we ask exactly,
                FF refuses entirely if we ask exactly, so have to ask for ideal
