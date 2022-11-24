@@ -73,7 +73,8 @@ var store = new Vuex.Store({
 		dontreadreceipts: false,
 		voicerecording : false,
 		deletedrooms: {},
-		pkoindisabled : false
+		pkoindisabled : false,
+		isCallsActive: null,
 		//share : {url : 'https://yandex.ru/'} //null
 	},
 	getters: {
@@ -89,6 +90,12 @@ var store = new Vuex.Store({
 		},
 	},
 	mutations: {
+		SET_CALL(state, isActive) {
+			state.isCallsActive = isActive
+		},
+		CLEAR_CALL(state, ) {
+			state.isCallsActive = null
+		},
 		SET_CURRENT_PLAYING_VOICE_MESSAGE(state, message) {
 			state.currentPlayingVoiceMessage = message
 		},

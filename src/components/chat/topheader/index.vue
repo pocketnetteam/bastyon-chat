@@ -31,6 +31,10 @@
         </router-link>
       </template>
 
+      <template v-slot:rightadd>
+        <div v-if="isCallsActive" class="call btn iconbutton" @click="bcCall" ><i class="fas fa-video"></i></div>
+      </template>
+
       <template v-slot:right>
         <router-link v-if="chat" :to="'chatInfo?id=' + chat.roomId">
           <div class="iconbutton"><i class="fas fa-ellipsis-h"></i></div>
