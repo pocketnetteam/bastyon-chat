@@ -328,7 +328,7 @@ class MatrixCall extends _events.EventEmitter {
       try {
         myAnswer = await this.peerConn.createAnswer();
       } catch (err) {
-        console.log(2,err)
+        console.log('create answer',err)
         _logger.logger.debug("Failed to create answer: ", err);
 
         this.terminate(CallParty.Local, CallErrorCode.CreateAnswer, true);
@@ -344,6 +344,7 @@ class MatrixCall extends _events.EventEmitter {
         });
         this.sendAnswer();
       } catch (err) {
+        console.log('connecting', err)
         _logger.logger.debug("Error setting local description!", err);
 
         this.terminate(CallParty.Local, CallErrorCode.SetLocalDescription, true);
@@ -495,12 +496,14 @@ class MatrixCall extends _events.EventEmitter {
       _logger.logger.debug("Call ID " + this.callId + ": ICE connection state changed to: " + this.peerConn.iceConnectionState); // ideally we'd consider the call to be connected when we get media but
       // chrome doesn't implement any of the 'onstarted' events yet
 
+      console.log(this.peerConn.iceConnectionState)
 
-      if (this.peerConn.iceConnectionState == 'connected') {
+      if ('onIceConnectionStateChanged', this.peerConn.iceConnectionState) {
         this.setState(CallState.Connected);
       } else if (this.peerConn.iceConnectionState == 'failed') {
         this.hangup(CallErrorCode.IceFailed, false);
       }
+
     });
     (0, _defineProperty2.default)(this, "onSignallingStateChanged", () => {
       _logger.logger.debug("call " + this.callId + ": Signalling state changed to: " + this.peerConn.signalingState);
@@ -594,6 +597,7 @@ class MatrixCall extends _events.EventEmitter {
       }
     });
     (0, _defineProperty2.default)(this, "onAnsweredElsewhere", msg => {
+      console.log('ans', msg)
       _logger.logger.debug("Call ID " + this.callId + " answered elsewhere");
 
       this.terminate(CallParty.Remote, CallErrorCode.AnsweredElsewhere, true);
@@ -605,7 +609,7 @@ class MatrixCall extends _events.EventEmitter {
     this.ourPartyId = this.client.deviceId; // Array of Objects with urls, username, credential keys
 
     this.turnServers = opts.turnServers || [];
-
+    console.log('servers', this.turnServers)
     if (this.turnServers.length === 0 && this.client.isFallbackICEServerAllowed()) {
       this.turnServers.push({
         urls: [FALLBACK_ICE_SERVER]
@@ -1270,13 +1274,13 @@ class MatrixCall extends _events.EventEmitter {
 
     if (this.callHasEnded()) {
       _logger.logger.debug(`Ignoring answer because call ID ${this.callId} has ended`);
-
+      console.log(`Ignoring answer because call ID ${this.callId} has ended`);
       return;
     }
 
     if (this.opponentPartyId !== undefined) {
       _logger.logger.info(`Ignoring answer from party ID ${event.getContent().party_id}: ` + `we already have an answer/reject from ${this.opponentPartyId}`);
-
+      console.log(`Ignoring answer from party ID ${event.getContent().party_id}: ` + `we already have an answer/reject from ${this.opponentPartyId}`);
       return;
     }
 
@@ -1465,6 +1469,7 @@ class MatrixCall extends _events.EventEmitter {
     const oldState = this.state;
     this.state = state;
     this.emit(CallEvent.State, state, oldState);
+    console.log('emited', state)
   }
   /**
    * Internal
@@ -1834,9 +1839,7 @@ function getUserMediaContraints(type) {
             deviceId: videoInput ? {
               ideal: videoInput
             } : undefined,
-            facingMode: {
-              exact : 'user'
-            },
+            facingMode: ['user', 'environment'],
 
             /* We want 640x360.  Chrome will give it only if we ask exactly,
                FF refuses entirely if we ask exactly, so have to ask for ideal
