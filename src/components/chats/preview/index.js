@@ -128,6 +128,8 @@ export default {
 
         })
 
+        
+
         events = _.sortBy(events, function (e) {
           return e.event.origin_server_ts
         })

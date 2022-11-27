@@ -533,7 +533,7 @@ export default {
 
   created() {
     this.pocketnet = true;
-    // this.mobile = false
+    this.mobile = false
     // this.recording = true
 
     this.$store.commit("setIsLocalStorageChatAuth", isMessenger());
@@ -1018,6 +1018,9 @@ if (module.hot) {
   }
 }
 .rootcontent.bout {
+  .chat-container-pages #maincontent .headerSpacerWrapper {
+    right: -44px !important;
+  }
   .chat-container #maincontent .headerSpacer {
     padding-bottom: 30px;
   }
@@ -1082,6 +1085,9 @@ if (module.hot) {
     }
     .dropdown.visible {
       width: 344px !important;
+      .inputWrapper {
+        margin-left: 0 !important;
+      }
     }
     .menubgwrapper {
       left: -300px !important;
