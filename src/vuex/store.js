@@ -731,32 +731,6 @@ var store = new Vuex.Store({
 
 		},
 
-		FETCH_EVENTS({ commit }) {
-			var m_chats = f.deep(store._vm, "core.mtrx.store.rooms") || {};
-
-			var events = {};
-
-			_.each(m_chats, function (chat) {
-				events[chat.roomId] = {};
-
-				var timeline = [].concat(
-					chat.timeline,
-					chat.currentState.getStateEvents("m.room.member")
-				);
-
-				events[chat.roomId].timeline = timeline;
-			});
-
-			_.each(events, function (e) {
-				e.timeline = _.sortBy(e.timeline, function (event) {
-					return event.getDate();
-				});
-			});
-
-			commit("SET_EVENTS_TO_STORE", events);
-
-			allTrue(data.typing);
-		},
 		DELETE_ROOM(state, roomid) {
 			Vue.set(state.deletedrooms, roomid, true);
 		},
@@ -1034,6 +1008,34 @@ var store = new Vuex.Store({
 					return Promise.resolve();
 				});
 		},
+		FETCH_EVENTS({ commit }) {
+			var m_chats = f.deep(store._vm, "core.mtrx.store.rooms") || {};
+	  
+			var events = {};
+	  
+			_.each(m_chats, function (chat) {
+			  events[chat.roomId] = {};
+	  
+			  var timeline = [].concat(
+				chat.timeline,
+				chat.currentState.getStateEvents("m.room.member")
+			  );
+	  
+			  events[chat.roomId].timeline = timeline;
+			});
+	  
+			_.each(events, function (e) {
+			  e.timeline = _.sortBy(e.timeline, function (event) {
+				return event.getDate();
+			  });
+			});
+	  
+			commit("SET_EVENTS_TO_STORE", events);
+	  
+			//store._vm.core.mtrx.kit.usersInfoForChatsStore(m_chats).then(i => {
+	  
+			//})
+		  },
 	}
 })
 

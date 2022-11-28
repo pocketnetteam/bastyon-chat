@@ -532,8 +532,8 @@ export default {
   },
 
   created() {
-    this.pocketnet = true;
-    this.mobile = false
+    // this.pocketnet = true;
+    // this.mobile = false
     // this.recording = true
 
     this.$store.commit("setIsLocalStorageChatAuth", isMessenger());
