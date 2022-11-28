@@ -168,6 +168,11 @@ export default {
 
 
   computed: mapState({
+
+    isGroup: function() {
+      return this.m_chat.name.slice(0, 1) === '@';
+    },
+
     auth: state => state.auth,
 
     isCallsActive: state => state.isCallsActive,

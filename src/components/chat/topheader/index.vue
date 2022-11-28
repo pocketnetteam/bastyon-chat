@@ -32,7 +32,7 @@
       </template>
 
       <template v-slot:rightadd>
-        <div v-if="isCallsActive" class="call btn iconbutton" @click="bcCall" ><i class="fas fa-video"></i></div>
+        <div v-if="isCallsActive && !isGroup" class="call btn iconbutton" @click="bcCall" ><i class="fas fa-video"></i></div>
       </template>
 
       <template v-slot:right>
