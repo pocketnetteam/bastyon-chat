@@ -366,7 +366,7 @@ class MatrixCall extends _events.EventEmitter {
     });
     (0, _defineProperty2.default)(this, "onIceGatheringStateChange", event => {
       _logger.logger.debug("ice gathering state changed to " + this.peerConn.iceGatheringState);
-
+      console.log("ice gathering state changed to " + this.peerConn.iceGatheringState);
       if (this.peerConn.iceGatheringState === 'complete' && !this.sentEndOfCandidates) {
         // If we didn't get an empty-string candidate to signal the end of candidates,
         // create one ourselves now gathering has finished.
@@ -387,7 +387,7 @@ class MatrixCall extends _events.EventEmitter {
 
       if (this.callHasEnded()) {
         _logger.logger.debug("Ignoring newly created offer on call ID " + this.callId + " because the call has ended");
-
+        console.log("Ignoring newly created offer on call ID " + this.callId + " because the call has ended");
         return;
       }
 
@@ -395,7 +395,7 @@ class MatrixCall extends _events.EventEmitter {
         await this.peerConn.setLocalDescription(description);
       } catch (err) {
         _logger.logger.debug("Error setting local description!", err);
-
+        console.log("Error setting local description!", err);
         this.terminate(CallParty.Local, CallErrorCode.SetLocalDescription, true);
         return;
       }
@@ -496,17 +496,19 @@ class MatrixCall extends _events.EventEmitter {
       _logger.logger.debug("Call ID " + this.callId + ": ICE connection state changed to: " + this.peerConn.iceConnectionState); // ideally we'd consider the call to be connected when we get media but
       // chrome doesn't implement any of the 'onstarted' events yet
 
-      console.log(this.peerConn.iceConnectionState)
+      console.log("Call ID " + this.callId + ": ICE connection state changed to: " + this.peerConn.iceConnectionState);
 
       if ('onIceConnectionStateChanged', this.peerConn.iceConnectionState) {
         this.setState(CallState.Connected);
       } else if (this.peerConn.iceConnectionState == 'failed') {
+        console.log('failed')
         this.hangup(CallErrorCode.IceFailed, false);
       }
 
     });
     (0, _defineProperty2.default)(this, "onSignallingStateChanged", () => {
       _logger.logger.debug("call " + this.callId + ": Signalling state changed to: " + this.peerConn.signalingState);
+      console.log("call " + this.callId + ": Signalling state changed to: " + this.peerConn.signalingState);
     });
     (0, _defineProperty2.default)(this, "onTrack", ev => {
       if (ev.streams.length === 0) {
@@ -610,10 +612,11 @@ class MatrixCall extends _events.EventEmitter {
 
     this.turnServers = opts.turnServers || [];
     console.log('servers', this.turnServers)
-    if (this.turnServers.length === 0 && this.client.isFallbackICEServerAllowed()) {
+    if (this.turnServers.length === 0) {
       this.turnServers.push({
         urls: [FALLBACK_ICE_SERVER]
       });
+
     }
 
     for (const server of this.turnServers) {
@@ -862,6 +865,7 @@ class MatrixCall extends _events.EventEmitter {
 
     if (!haveTurnCreds) {
       _logger.logger.warn("Failed to get TURN credentials! Proceeding with call anyway...");
+      console.log("Failed to get TURN credentials! Proceeding with call anyway...initWithInvite");
     }
 
     this.peerConn = this.createPeerConnection(); // we must set the party ID before await-ing on anything: the call event
@@ -1703,6 +1707,7 @@ class MatrixCall extends _events.EventEmitter {
 
     if (!haveTurnCreds) {
       _logger.logger.warn("Failed to get TURN credentials! Proceeding with call anyway...");
+      console.log("Failed to get TURN credentials! Proceeding with call anyway...placeCallWithConstraints");
     } // create the peer connection now so it can be gathering candidates while we get user
     // media (assuming a candidate pool size is configured)
 
@@ -1720,18 +1725,21 @@ class MatrixCall extends _events.EventEmitter {
   }
 
   createPeerConnection() {
+    console.log('new peer con',this.forceTURN, this.turnServers, this.client._iceCandidatePoolSize)
     const pc = new window.RTCPeerConnection({
       iceTransportPolicy: this.forceTURN ? 'relay' : undefined,
       iceServers: this.turnServers,
       iceCandidatePoolSize: this.client._iceCandidatePoolSize
     }); // 'connectionstatechange' would be better, but firefox doesn't implement that.
-
+    console.log('createPeerConnection', pc)
     pc.addEventListener('iceconnectionstatechange', this.onIceConnectionStateChanged);
     pc.addEventListener('signalingstatechange', this.onSignallingStateChanged);
     pc.addEventListener('icecandidate', this.gotLocalIceCandidate);
     pc.addEventListener('icegatheringstatechange', this.onIceGatheringStateChange);
     pc.addEventListener('track', this.onTrack);
     pc.addEventListener('negotiationneeded', this.onNegotiationNeeded);
+    pc.addEventListener('icecandidateerror', (e) => {
+      console.log('icecandidateerror',e)});
     return pc;
   }
 
@@ -1973,6 +1981,7 @@ function createNewMatrixCall(client, roomId, options) {
     // call level options
     forceTURN: client._forceTURN || optionsForceTURN
   };
+  console.log('opts', opts)
   const call = new MatrixCall(opts);
   client.reEmitter.reEmit(call, Object.values(CallEvent));
   return call;
