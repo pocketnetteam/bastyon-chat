@@ -5139,10 +5139,11 @@ MatrixClient.prototype._checkTurnServers = async function () {
     console.log('Fetching new TURN credentials')
     try {
       const res = await this.turnServer();
+      // if (res.uris) { now we have no servers from back
       if (true) {
-        _logger.logger.log("Got TURN URIs: " + res.uris + " refresh in " + res.ttl + " secs"); // map the response to a format that can be fed to RTCPeerConnection
-        console.log("Got TURN URIs: " + res.uris + " refresh in " + res.ttl + " secs");
-
+        // _logger.logger.log("Got TURN URIs: " + res.uris + " refresh in " + res.ttl + " secs"); // map the response to a format that can be fed to RTCPeerConnection
+        // console.log("Got TURN URIs: " + res.uris + " refresh in " + res.ttl + " secs");
+        // hardcoded
         const servers = {
           urls: "turn:turn.pocketnet.app",
           username: "stunuser",
