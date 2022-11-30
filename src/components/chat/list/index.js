@@ -84,10 +84,11 @@ export default {
       var types = {
         'm.room.message': true,
         'p.room.encrypt.message': true,
+        'p.room.': true,
         'm.room.image': true,
         'm.room.audio': true,
         'm.room.file': true,
-        'm.room.member': true,
+        'm.call.candidates': true,
         'm.fully_read': true
       }
 
@@ -140,20 +141,23 @@ export default {
     },
     getEvents: function () {
       var events = this.timeline.getEvents()
-
       events = _.filter(events, e => {
 
         var type = e.event.type;
 
-        if (e.localRedactionEvent() || e.getRedactionEvent()) return
+        if (e.localRedactionEvent() || e.getRedactionEvent()){
+          console.log('1', e.event.type)
+          return
+        }
 
         if (e.event.type === 'm.room.power_levels' && Object.keys(e.event.content.users).length === 1) {
+          console.log('2', e.event.type)
           return
         }
         if (this.chat.currentState.getMembers().length <= 2 && e.event.type === 'm.room.member' && 'm.room.power_levels') {
+          console.log('3', e.event.type)
           return
         }
-
         return !this.eventsTypes || this.eventsTypes[type]
 
       })

@@ -183,12 +183,12 @@ export default {
     type: function () {
 
       var t = f.deep(this, 'event.event.type')
-
       if (['m.room.member'].indexOf(t) > -1) return 'member'
       if (['m.room.message'].indexOf(t) > -1) return 'message'
       if (['m.room.name'].indexOf(t) > -1) return 'member'
       if (['m.room.power_levels'].indexOf(t) > -1)return 'member'
       if (['m.room.redaction'].indexOf(t) > -1) return 'message'
+      if (['m.call.candidates'].indexOf(t) > -1) return 'message'
       if (['m.room.topic'].indexOf(t) > -1) {
         return 'member'
       }
