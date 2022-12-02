@@ -41,11 +41,6 @@
           <userpic :userinfo="userinfo"/>
       </div>
 
-      <div class="fromimagesfiles" v-if="(content.from || imageFrom) && (file || (content.msgtype === 'm.image' && imageUrl) || ( content.msgtype === 'm.audio' && audioUrl))">
-          <div class="fromCaption">
-            <i class="fas fa-share-alt"></i> <span>{{ $t("caption.messagefrom") }}</span>
-          </div>
-      </div>
 
       <div class="messageImg" :class="{ referenceImg: reference }" v-if="content.msgtype === 'm.image'">
         <div class="reference showreference" @click="showreference" v-if="reference && !preview && !fromreference">

@@ -15,12 +15,14 @@
 .nameline
   display: flex !important
   justify-content: center
+  align-items: center
 
 .iconGroup
+  display: block
   font-size: 0.4em
-  width: 16px
+  width: 16px !important
   text-align: center
-  height: 16px
+  height: 16px !important
   line-height: 16px
   border-radius: 8px
   background: srgb(--neutral-grad-2)

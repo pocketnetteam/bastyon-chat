@@ -15,7 +15,7 @@
     >
       <div class="chatwrapper" @click="iteraction">
         <div>
-          <!-- <div class="backface" v-if="closebybg" @click="hide"></div> -->
+          <div class="backface" v-if="closebybg" @click="hide"></div>
 
           <MainWrapper />
 
@@ -407,17 +407,17 @@ export default {
       if (!this.unauthorized) return this.$store.state.share;
     },
 
-    closebybg: function () {
-      return !this.$store.state.pinchat;
-    },
-
     unselect: function () {
       return this.$store.state.voicerecording;
     },
+    closebybg() {
+      return this.$store.state.active;
+    }
   },
 
   methods: {
     hide: function () {
+      this.closebybg = false;
       this.$store.commit("minimize", true);
 
       setTimeout(() => {
@@ -972,9 +972,6 @@ if (module.hot) {
       }
     }
   }
-  .dropdown.visible {
-    left: -171px;
-  }
   .headerSpacerWrapper {
     .modal-backdrop,
     .modal-wrapper {
@@ -1012,15 +1009,12 @@ if (module.hot) {
 }
 .headerLine {
   .nameofchat {
-    max-height: 38px;
-    line-height: 1.1em;
+    max-height: 30px;
+    line-height: 1em;
     width: 132px;
   }
 }
 .rootcontent.bout {
-  .chat-container-pages #maincontent .headerSpacerWrapper {
-    right: -44px !important;
-  }
   .chat-container #maincontent .headerSpacer {
     padding-bottom: 30px;
   }
@@ -1058,6 +1052,30 @@ if (module.hot) {
     display: flex;
     align-items: center;
     justify-content: center;
+  }
+  .chat-container-pages {
+    .chatPreview, .joinAction {
+      display: block !important;
+      position: static !important;
+    }
+    .joinAction {
+      margin: auto 0 0 0;
+    }
+    .joinwrapper {
+      padding-bottom: 0 !important;
+      .maskedtop {
+        height: 100% !important;
+        display: flex !important;
+        flex-direction: column !important;
+        .caption {
+          width: 100% !important;
+          span {
+            font-size: 1.5em;
+            color: black;
+          }
+        }
+      }
+    }
   }
 }
 .rootcontent.fix {
