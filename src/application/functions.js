@@ -412,6 +412,8 @@ var stringEq = function (s1, s2) {
 }
 
 var pretry = function (_function, time, totaltime) {
+
+
     return new Promise((resolve, reject) => {
 
         retry(_function, resolve, time, totaltime)
@@ -422,6 +424,8 @@ var pretry = function (_function, time, totaltime) {
 var retry = function (_function, clbk, time, totaltime) {
 
     if (_function()){
+
+        
 
         if (clbk) clbk();
 
@@ -434,7 +438,8 @@ var retry = function (_function, clbk, time, totaltime) {
 
     var interval = setInterval(function () {
 
-        if (_function() || (totaltime && totaltime >= totalTimeCounter)) {
+        if (_function() || (totaltime && totaltime <= totalTimeCounter)) {
+
 
             clearInterval(interval);
 
@@ -996,7 +1001,7 @@ f.fetchLocal = function (url) {
         }
 
         xhr.onerror = function (e) {
-            console.error(e)
+            console.error(e, url)
             reject(new TypeError('Local request failed'))
         }
 

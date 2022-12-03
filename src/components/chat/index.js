@@ -103,8 +103,6 @@ export default {
 
         
         if (this.m_chat && !_.isEmpty(this.m_chat)) {
-
-
           this.core.mtrx.kit.allchatmembers([this.m_chat], false, true).then(r => {
             return this.core.mtrx.kit.prepareChat(this.m_chat)
           }).then(r => {

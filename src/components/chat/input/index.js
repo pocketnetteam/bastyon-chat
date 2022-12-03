@@ -585,6 +585,12 @@ export default {
 				})
 			}
 
+			//return this.chat.pcrypto.getOrCreateCommonKey()
+
+			//return this.chat.pcrypto.sendCommonKey()
+
+			//return
+
 			this.$emit("sending")
 
 
@@ -941,6 +947,7 @@ export default {
 		},
 
 		getFileIosCordova (path) {
+
 			return new Promise((resolve, reject) => {
 				window.resolveLocalFileSystemURL(path, (entry) => {
 
@@ -951,13 +958,9 @@ export default {
 	
 					entry.file((file) => {
 						var reader = new FileReader()
-
-						console.log('file', file)
 	
 						reader.onloadend = function() {
 							var blob = new Blob([new Uint8Array(this.result)], {type : file.type})
-
-							console.log('blob', blob)
 
 							entry.remove()
 
@@ -973,6 +976,8 @@ export default {
 	
 						reader.readAsArrayBuffer(file)
 					})
+				}, (e) => {
+					reject(e)
 				})
 			})
 			
@@ -996,11 +1001,9 @@ export default {
 
 			this.prepareRecording.then(() => {
 
-				console.log("START RECORDING")
-
 				this.microphoneDisabled = false
 
-				var path = 'cdvfile://localhost/temporary/recording.mp3'
+				var path = 'recording.mp3'
 
 				if(f.isios()) path = 'cdvfile://localhost/temporary/recording.m4a'
 
@@ -1011,8 +1014,6 @@ export default {
 				//var startedTime = (new Date()).getTime() / 1000
 
 				var media = this.cordovaMediaRecorder = new Media(path, () => {
-
-					console.log("MEDIA PREPARED", this.cancelledCordovaMediaRecorder)
 
 					this.recordTime = 0
 
@@ -1026,15 +1027,19 @@ export default {
 
 					var fu = null
 
-					if(f.isios()){ fu = this.getFileIosCordova(path).then(blob => {
-						return Promise.resolve({
-							data : blob
+					/*if(f.isios()){ */
+						
+						fu = this.getFileIosCordova(f.isios() ? path : window.cordova.file.externalDataDirectory + path).then(blob => {
+							return Promise.resolve({
+								data : blob
+							})
 						})
-					})}
+					
+					/*}
 
 					else{
 						fu = f.fetchLocal(path)
-					}
+					}*/
 
 					fu.then(r => {
 						///temp
@@ -1047,7 +1052,6 @@ export default {
 							data : r.data
 						}*/
 
-						console.log('media.duration', media.duration)
 
 						if (media.duration && media.duration > 0){
 							r.duration = media.duration
@@ -1143,8 +1147,6 @@ export default {
 		initRecording() {
 
 			if (this.prepareRecording || this.isRecording || this.cordovaMediaRecorder) return
-
-			console.log("INIT RECORDING")
 
 			if (window.cordova) {
 				return this.initRecordingCordova()
@@ -1272,8 +1274,6 @@ export default {
 		},
 
 		createVoiceMessage(event, sendnow) {
-			console.log('event', event)
-
 			var c = () => {
 
 				//this.record = 

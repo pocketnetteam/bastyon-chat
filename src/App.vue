@@ -584,8 +584,8 @@ export default {
   },
 
   created() {
-    this.pocketnet = true
-    this.mobile = !this.pocketnet/*
+    /*this.pocketnet = true
+    this.mobile = !this.pocketnet
     this.recording = true*/
 
     this.$store.commit('setPocketnet', this.pocketnet);
@@ -769,7 +769,7 @@ export default {
       privateKey: this.privatekey
     }
 
-    var username = 'alchemist'
+    var username = 'nevermore'
 
     var user = (this.address && this.privatekey) ? actualUser : testUsers[`${username}`];
 

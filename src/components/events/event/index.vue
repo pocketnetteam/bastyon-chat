@@ -440,7 +440,7 @@ export default {
         //this.$set(this.event.event.content, 'audioData', url)
 
       }).catch(e => {
-        console.error(e)
+        //console.error(e)
       })
     },
 

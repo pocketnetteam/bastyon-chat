@@ -1,7 +1,7 @@
 <template>
   <div class="voiceMessage" :class="{playing:isPlaying}">
     <div class="voiceMessage_wrapper">
-      <button class="voiceMessage_toggle" @touchend="audioToggle" @click="audioToggleClick">
+      <button class="voiceMessage_toggle" :class="{encrypted}" @touchend="audioToggle" @click="audioToggleClick">
         <i :class="isPlaying ? 'fas fa-pause': 'fas fa-play'"></i>
       </button>
       <div class="voiceMessage_graph">
@@ -9,8 +9,12 @@
       </div>
       <div class="voiceMessage_options">
         <span v-if="!error">{{ getDurationString }}</span>
+        
         <i v-if="error" class="fas fa-exclamation-circle"></i>
       </div>
+
+      <div class="encsign" v-if="encrypted && !error"><i class="fas fa-lock"></i></div>
+
     </div>
   </div>
 </template>
@@ -21,6 +25,7 @@ import { mapState } from 'vuex';
 export default {
   name: "VoiceMessage",
   props: {
+    decryptedInfo : Object,
     audioBuffer: {
       type: String | null,
       required: true
@@ -79,6 +84,10 @@ export default {
   },
   computed: {
 
+    encrypted(){
+      return this.decryptedInfo ? true : false
+    },
+
 		...mapState({
 			mobile: state => state.mobile,
 		}),
@@ -95,8 +104,10 @@ export default {
           return `${min}:${sec < 10 ? '0' + sec : sec}`
         }
 
-        sec = Math.floor(this.duration)
         min = Math.floor(this.duration / 60)
+
+        sec = Math.floor(this.duration - min * 60)
+        
 
         return `${min}:${sec < 10 ? '0' + sec : sec}`
 
@@ -349,7 +360,7 @@ export default {
         })
       } catch (e) {
         this.error = e
-        console.error(e)
+        //console.error(e)
       }
 
     }
@@ -428,6 +439,23 @@ export default {
     font-size: 0.7em;
     color : srgb(--color-bad);
     padding : 0.5em;
+  }
+
+  .encsign{
+    position: absolute;
+    right: 0;
+    top : 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    padding-right: 0.35em;
+
+    i{
+      font-size: 0.5em;
+      color: srgb(--neutral-grad-2);
+      opacity: 0.6;
+      
+    }
   }
 }
 </style>
