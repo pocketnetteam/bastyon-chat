@@ -2,8 +2,8 @@
   <div class="call">
     <div class="call-icon"><i class="fas fa-phone"></i></div>
     <div class="call-info">
-      <div class="call-info_title">Входящий звонок</div>
-      <div class="call-info_duration">1 min</div>
+      <div class="call-info_title">{{my ? 'Outgoing ':'Incoming '}} call</div>
+<!--      <div class="call-info_duration">1 min</div>-->
     </div>
   </div>
 </template>
@@ -11,6 +11,9 @@
 <script>
 export default {
   name: "Call",
+  props: {
+    my: Boolean,
+  },
   mounted() {
     // console.log('cl',this.core.mtrx.client)
   }
