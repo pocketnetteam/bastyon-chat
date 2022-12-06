@@ -128,6 +128,11 @@ class Core {
 
             if (typeof BastyonCalls) {
                 this.mtrx.bastyonCalls = new BastyonCalls(this.client || client, matrixcs, p.el, p.parameters)
+                this.mtrx.bastyonCalls.on('initcall', () => {
+                    if (this.vm.$store.state.currentPlayingVoiceMessage) {
+                        this.vm.$store.state.currentPlayingVoiceMessage.pause()
+                    }
+                })
             }
 
 
@@ -139,7 +144,6 @@ class Core {
 
         console.log('Calls ready')
     }
-
     canback = function(){
         return this.store.state.gallery ? false : true
     }
