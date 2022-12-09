@@ -25,9 +25,8 @@ export default {
     display: flex;
     align-items: center;
     width: 265px;
-    height: 60px;
-
-    padding: 8px 24px 8px 8px;
+    height: 48px;
+    padding: 4px 24px 4px 4px;
     border-radius: 12px;
     margin: 0 10px;
     background-color: srgba(--neutral-grad-1, 0.8);
@@ -46,8 +45,8 @@ export default {
       display: flex;
       justify-content: center;
       align-items: center;
-      width: 44px;
-      height: 44px;
+      width: 40px;
+      height: 40px;
       background: rgba(0, 0, 0, 0.06);
       border-radius: 12px;
       margin-right: 8px;

@@ -114,17 +114,19 @@ class Core {
                     getUserInfo: async (address) => {
                         address = f.hexDecode(address.split(':')[0].replace('@',''))
                         return this.user.usersInfo([address], true, false)
+                    },
+                    getWithLocale: (key) => {
+                        console.log(this)
+                        return this.vm.$i18n.t(key)
                     }
                 },
+
 
             }
 
             if(window.POCKETNETINSTANCE && window.POCKETNETINSTANCE.platform){
                 p = window.POCKETNETINSTANCE.platform.getCallsOptions()
-
             }
-
-            console.log('paras', this || client, matrixcs, p.el, p.parameters)
 
             if (typeof BastyonCalls) {
                 this.mtrx.bastyonCalls = new BastyonCalls(this.client || client, matrixcs, p.el, p.parameters)
@@ -132,6 +134,11 @@ class Core {
                     if (this.vm.$store.state.currentPlayingVoiceMessage) {
                         this.vm.$store.state.currentPlayingVoiceMessage.pause()
                     }
+
+                    if (window?.POCKETNETINSTANCE?.platform) {
+                        console.log('available', window?.POCKETNETINSTANCE?.platform)
+                    }
+
                 })
             }
 
