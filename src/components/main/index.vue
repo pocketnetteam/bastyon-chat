@@ -106,9 +106,6 @@
     display: block;
     .chat-container {
       width: 100%;
-      .fixedOnPageTop {
-        width: 400px;
-      }
       &-pages {
         position: fixed;
         top: 0;
