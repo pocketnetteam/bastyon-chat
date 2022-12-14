@@ -936,12 +936,7 @@ if (module.hot) {
 
 <style lang="scss">
 .rootcontent.minimized {
-  .dropdown.visible {
-    .backgr {
-      top: -718px !important;
-      height: 762px !important;
-    }
-  }
+  
   .chat-container-pages {
     .modal-backdrop {
       width: 344px !important;
@@ -1109,6 +1104,7 @@ if (module.hot) {
     }
     .dropdown.visible {
       width: 344px !important;
+      left: -171px;
       .inputWrapper {
         margin-left: 0 !important;
       }
