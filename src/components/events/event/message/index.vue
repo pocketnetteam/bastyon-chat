@@ -69,7 +69,7 @@
       </div>
 
       <div class="messageCall" v-if="content.call_id">
-        <Call :class="{'my' : my }" :my="my"/>
+        <Call :class="{'my' : my }" :my="my" :event="event"/>
       </div>
 
       <div class="maxcontent" :class="{'my' : my }" v-if="content.msgtype === 'm.encrypted' && !textWithoutLinks && badenctypted">

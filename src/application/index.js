@@ -136,7 +136,7 @@ class Core {
                     }
 
                     if (window?.POCKETNETINSTANCE?.platform) {
-                        console.log('available', window?.POCKETNETINSTANCE?.platform)
+                        console.log('pocketnet available', window?.POCKETNETINSTANCE?.platform)
                     }
 
                 })

@@ -1,8 +1,8 @@
 <template>
   <div class="call">
-    <div class="call-icon"><i class="fas fa-phone"></i></div>
+    <div class="call-icon" :class="this.getDescription() === 'ended' ? 'ended' : ''"><i :class="this.getDescription() === 'reject' ? 'fas fa-phone-slash' : 'fas fa-phone' "></i></div>
     <div class="call-info">
-      <div class="call-info_title">{{my ? 'Outgoing ':'Incoming '}} call</div>
+      <div class="call-info_title">{{ $t(this.getDescription()) }}</div>
 <!--      <div class="call-info_duration">1 min</div>-->
     </div>
   </div>
@@ -13,9 +13,27 @@ export default {
   name: "Call",
   props: {
     my: Boolean,
+    event: Object,
+
   },
-  mounted() {
-    // console.log('cl',this.core.mtrx.client)
+  methods: {
+    getDescription: function (){
+      let status
+
+      if (this.event.event.type === 'm.call.invite') {
+        status = this.my ? 'outgoingCall' : 'incomingCall'
+      }
+
+      if (this.event.event.type === 'm.call.hangup') {
+        status = 'ended'
+      }
+
+      if (this.event.event.type === 'm.call.reject') {
+        status = 'reject'
+      }
+
+      return status
+    }
   }
 }
 </script>
@@ -51,6 +69,12 @@ export default {
       border-radius: 12px;
       margin-right: 8px;
       color: srgb(--color-bg-ac-bright);
+
+      &.ended {
+        i {
+          transform: rotate(-135deg);
+        }
+      }
       i {
         transform: rotate(90deg);
       }

@@ -211,7 +211,14 @@
     "micdevicenotfound" : "Audio recording device not found",
 
 
-    "endedCall" : "Call is over",
-    "incomingCall" : "Incoming сall"
-
+    "endedCall" : "Call completed",
+    "incomingCall" : "Incoming call",
+    "outgoingCall" : "Outgoing call",
+    "m.call.invite" : "Incoming call from",
+    "m.call.hangup" : "Call completed",
+    "m.call.reject" : "Call rejected",
+    "m.call.answer" : "Active call",
+    "wait": "Waiting for a response",
+    "ended": "Call completed",
+    "reject" : "Call rejected"
 }

@@ -611,7 +611,6 @@ class MatrixCall extends _events.EventEmitter {
     this.ourPartyId = this.client.deviceId; // Array of Objects with urls, username, credential keys
 
     this.turnServers = opts.turnServers || [];
-    console.log('servers', this.turnServers)
     if (this.turnServers.length === 0) {
       this.turnServers.push({
         urls: [FALLBACK_ICE_SERVER]
@@ -1982,7 +1981,6 @@ function createNewMatrixCall(client, roomId, options) {
     // call level options
     forceTURN: client._forceTURN || optionsForceTURN
   };
-  console.log('opts', opts)
   const call = new MatrixCall(opts);
   client.reEmitter.reEmit(call, Object.values(CallEvent));
   return call;
