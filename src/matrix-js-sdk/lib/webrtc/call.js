@@ -307,7 +307,6 @@ class MatrixCall extends _events.EventEmitter {
         try {
           await localVidEl.play();
         } catch (e) {
-          console.log('Failed to play local video element answer',e)
           _logger.logger.info("Failed to play local video element", e);
         }
       }
@@ -599,7 +598,6 @@ class MatrixCall extends _events.EventEmitter {
       }
     });
     (0, _defineProperty2.default)(this, "onAnsweredElsewhere", msg => {
-      console.log('ans', msg)
       _logger.logger.debug("Call ID " + this.callId + " answered elsewhere");
 
       this.terminate(CallParty.Remote, CallErrorCode.AnsweredElsewhere, true);
@@ -803,7 +801,6 @@ class MatrixCall extends _events.EventEmitter {
     this.remoteVideoElement.srcObject = this.remoteStream;
     // this.remoteVideoElement.muted = true;
 
-    console.log('remoteEl', this.remoteVideoElement)
 
     try {
       await this.remoteVideoElement.play();
@@ -1310,7 +1307,6 @@ class MatrixCall extends _events.EventEmitter {
           selected_party_id: this.opponentPartyId
         });
       } catch (err) {
-        console.log(6,err)
         // This isn't fatal, and will just mean that if another party has raced to answer
         // the call, they won't know they got rejected, so we carry on & don't retry.
         _logger.logger.warn("Failed to send select_answer event", err);
@@ -1440,7 +1436,6 @@ class MatrixCall extends _events.EventEmitter {
     try {
       await this.remoteAudioElement.play();
     } catch (e) {
-      console.log('Failed to play remote audio element play', e)
       _logger.logger.error("Failed to play remote audio element", e);
     }
   }
@@ -1462,7 +1457,6 @@ class MatrixCall extends _events.EventEmitter {
     try {
       this.remoteVideoElement.play()
     }   catch(e)  {
-      console.log("Failed to play remote video elemento", e)
       _logger.logger.info("Failed to play remote video element", e);
     }
 
@@ -1472,7 +1466,6 @@ class MatrixCall extends _events.EventEmitter {
     const oldState = this.state;
     this.state = state;
     this.emit(CallEvent.State, state, oldState);
-    console.log('emited', state)
   }
   /**
    * Internal
@@ -1483,7 +1476,6 @@ class MatrixCall extends _events.EventEmitter {
 
 
   sendVoipEvent(eventType, content) {
-    console.log('voip event')
     return this.client.sendEvent(this.roomId, eventType, Object.assign({}, content, {
       version: VOIP_PROTO_VERSION,
       call_id: this.callId,
@@ -1707,7 +1699,6 @@ class MatrixCall extends _events.EventEmitter {
 
     if (!haveTurnCreds) {
       _logger.logger.warn("Failed to get TURN credentials! Proceeding with call anyway...");
-      console.log("Failed to get TURN credentials! Proceeding with call anyway...placeCallWithConstraints");
     } // create the peer connection now so it can be gathering candidates while we get user
     // media (assuming a candidate pool size is configured)
 
@@ -1718,28 +1709,23 @@ class MatrixCall extends _events.EventEmitter {
       const mediaStream = await navigator.mediaDevices.getUserMedia(constraints);
       this.gotUserMediaForInvite(mediaStream);
     } catch (e) {
-      console.log('place with cosntraints', e)
       this.getUserMediaFailed(e);
       return;
     }
   }
 
   createPeerConnection() {
-    console.log('new peer con',this.forceTURN, this.turnServers, this.client._iceCandidatePoolSize)
     const pc = new window.RTCPeerConnection({
       iceTransportPolicy: this.forceTURN ? 'relay' : undefined,
       iceServers: this.turnServers,
       iceCandidatePoolSize: this.client._iceCandidatePoolSize
     }); // 'connectionstatechange' would be better, but firefox doesn't implement that.
-    console.log('createPeerConnection', pc)
     pc.addEventListener('iceconnectionstatechange', this.onIceConnectionStateChanged);
     pc.addEventListener('signalingstatechange', this.onSignallingStateChanged);
     pc.addEventListener('icecandidate', this.gotLocalIceCandidate);
     pc.addEventListener('icegatheringstatechange', this.onIceGatheringStateChange);
     pc.addEventListener('track', this.onTrack);
     pc.addEventListener('negotiationneeded', this.onNegotiationNeeded);
-    pc.addEventListener('icecandidateerror', (e) => {
-      console.log('icecandidateerror',e)});
     return pc;
   }
 
@@ -1821,7 +1807,6 @@ function setTracksEnabled(tracks, enabled) {
 
 function getUserMediaContraints(type) {
   const isWebkit = !!navigator.webkitGetUserMedia;
-  console.log(navigator.mediaDevices.getSupportedConstraints())
   switch (type) {
     case ConstraintsType.Audio:
       {

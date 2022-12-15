@@ -183,7 +183,6 @@ export default {
       events = events.reverse()
 
       this.$emit('getEvents', events)
-      console.log('IN C',events)
       // events = _.filter(events, function (e) {
       //   return e.ty
       // })
