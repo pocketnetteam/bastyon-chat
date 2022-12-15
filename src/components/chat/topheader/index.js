@@ -222,7 +222,7 @@ export default {
       let local = document.querySelector('body')
       try {
         let matrixCall = this.core.mtrx.bastyonCalls.initCall(this.chat.roomId, local)
-        this.$store.dispatch('CALL', matrixCall)
+        if (matrixCall) this.$store.dispatch('CALL', matrixCall)
       } catch (e) {
         console.log('ошибка при создании звонка', e)
         return

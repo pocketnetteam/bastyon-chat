@@ -933,7 +933,9 @@ class MatrixCall extends _events.EventEmitter {
     if (this.inviteOrAnswerSent) {
       return;
     }
+    console.log('call js answer', this)
 
+    console.log(`Answering call ${this.callId} of type ${this.type}`)
     _logger.logger.debug(`Answering call ${this.callId} of type ${this.type}`);
 
     if (!this.localAVStream && !this.waitForLocalAVStream) {
@@ -949,6 +951,7 @@ class MatrixCall extends _events.EventEmitter {
         this.waitForLocalAVStream = false;
         this.gotUserMediaForAnswer(mediaStream);
       } catch (e) {
+        console.log('media failed')
         this.getUserMediaFailed(e);
         return;
       }
