@@ -101,8 +101,8 @@
 <script>
 import MainWrapper from './components/main/index.vue'
 import userUnauthorized from './components/user/unauthorized/index.vue'
-import store from '@/vuex/store'
-import router from '@/router/router'
+import store from "@/vuex/store"
+import router from "@/router/router"
 import modal from '@/components/assets/modal/index.vue'
 import pmenu from '@/components/assets/pmenu/index.vue'
 
@@ -114,13 +114,13 @@ import '@/editedplugins/vue-m-message/dist/index.css'
 import Vue2TouchEvents from 'vue2-touch-events'
 
 
-import VuejsDialog from 'vuejs-dialog'
+import VuejsDialog from 'vuejs-dialog';
 
-Vue.use(VuejsDialog)
+Vue.use(VuejsDialog);
 
 import ToggleButton from 'vue-js-toggle-button'
 
-import eventsEvent from '@/components/events/event/index.vue'
+import eventsEvent from '@/components/events/event/index.vue';
 
 Vue.component('eventsEvent', eventsEvent)
 ////////
@@ -134,12 +134,12 @@ Vue.use(ToggleButton)
 
 ////////
 
-import 'vuejs-dialog/dist/vuejs-dialog.min.css'
+import 'vuejs-dialog/dist/vuejs-dialog.min.css';
 
 /// app
 
 import f from '@/application/functions.js'
-import Vue from 'vue'
+import Vue from 'vue';
 import Core from '@/application/index.js'
 
 ////////
@@ -156,14 +156,14 @@ import userpic from '@/components/assets/userpic/index.vue'
 import userspic from '@/components/assets/userspic/index.vue'
 import bgimage from '@/components/assets/bgimage.vue'
 import logotype from '@/components/assets/logotype/index.vue'
-import dropdownMenu from '@/components/assets/dropdownMenu/index.vue'
+import dropdownMenu from '@/components/assets/dropdownMenu/index.vue';
 
-import backButton from '@/components/assets/backButton/index.vue'
-import topheader from '@/components/assets/topheader/index.vue'
-import maincontent from '@/components/assets/maincontent/index.vue'
-import search from '@/components/assets/search/index.vue'
+import backButton from '@/components/assets/backButton/index.vue';
+import topheader from '@/components/assets/topheader/index.vue';
+import maincontent from '@/components/assets/maincontent/index.vue';
+import search from '@/components/assets/search/index.vue';
 
-import linepreloader from '@/components/assets/linepreloader/index.vue'
+import linepreloader from '@/components/assets/linepreloader/index.vue';
 
 import chats from '@/views/chats.vue'
 import isMessenger from '@/application/isMessenger.js'
