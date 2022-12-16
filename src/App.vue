@@ -120,7 +120,7 @@ Vue.use(VuejsDialog);
 
 import ToggleButton from 'vue-js-toggle-button'
 
-import eventsEvent from '@/components/events/event/index.vue';
+import eventsEvent from "@/components/events/event/index.vue";
 
 Vue.component('eventsEvent', eventsEvent)
 ////////
@@ -545,10 +545,10 @@ export default {
       }
     }
 
-    this.$store.commit("setPocketnet", this.pocketnet);
-    this.$store.commit("setMobile", this.mobile);
-    this.$store.commit("setVoiceMessagesEnabled", this.recording);
-    this.$store.commit("clearall");
+    this.$store.commit('setPocketnet', this.pocketnet);
+    this.$store.commit('setMobile', this.mobile);
+    this.$store.commit('setVoiceMessagesEnabled', this.recording);
+    this.$store.commit('clearall');
 
     this.$store.commit("ls");
 
