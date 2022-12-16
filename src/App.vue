@@ -936,11 +936,18 @@ if (module.hot) {
 
 <style lang="scss">
 .rootcontent.minimized {
-  
+  .chat-container {
+    .modal-backdrop {
+      top: -60px !important;
+      border: 10px 10px 0 0 !important;
+    }
+  }
   .chat-container-pages {
     .modal-backdrop {
       width: 344px !important;
       left: -300px !important;
+      top: -60px !important;
+      border: 10px 10px 0 0 !important;
     }
     .modal-wrapper {
       top: 7% !important;
@@ -964,12 +971,20 @@ if (module.hot) {
     width: 344px;
   }
   .main-wrapper {
+    #topheader {
+        z-index: -1;
+      }
+  }
+  .main-wrapper {
     .chatSettingsButton {
       display: none;
     }
     &.active {
       .chatSettingsButton {
         display: block;
+      }
+      #topheader {
+        z-index: 1;
       }
     }
   }
@@ -1020,12 +1035,13 @@ if (module.hot) {
     padding-bottom: 30px;
   }
   .modal-backdrop {
+    left: 0 !important;
     width: 100vw !important;
   }
   .modal-wrapper {
     top: 60px !important;
     right: 50% !important;
-    transform: translate(50%) !important;
+    transform: translateX(50%) !important;
     width: 100% !important;
     max-width: 500px !important;
   }
@@ -1077,6 +1093,9 @@ if (module.hot) {
         }
       }
     }
+    .headerSpacerWrapperOvf {
+      left: 40px !important;
+    }
   }
 }
 .rootcontent.fix {
@@ -1116,6 +1135,7 @@ if (module.hot) {
     .relationEvent {
       max-width: 702px !important;
       margin: 0 auto !important;
+      background: #fff !important;
     }
   }
   #wai-fixedmessageicon {
