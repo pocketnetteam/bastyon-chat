@@ -67,11 +67,6 @@
       #topheader.minimized.fix {
         left: -44px !important;
       }
-      .minimized {
-        .headerSpacerWrapper {
-          left: -44px !important;
-        }
-      }
       .fixedOnPageTop {
         width: 100%;
       }

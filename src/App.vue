@@ -1059,9 +1059,6 @@ if (module.hot) {
         }
       }
     }
-    .headerSpacerWrapperOvf {
-      left: 40px !important;
-    }
   }
 }
 .rootcontent.fix {
@@ -1070,6 +1067,11 @@ if (module.hot) {
     left: 23px !important;
     width: 344px !important;
     border-left: 0 !important;
+    .minimized {
+        .headerSpacerWrapper {
+          left: -44px !important;
+        }
+      }
     #topheader {
       transform: translate3d(-279px, -56px, 0) !important;
     }
