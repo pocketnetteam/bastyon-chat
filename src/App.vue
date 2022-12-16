@@ -525,9 +525,9 @@ export default {
 
 
   created() {
-    // this.pocketnet = true;
-    // this.mobile = false
-    // this.recording = true
+    /*this.pocketnet = true
+    this.mobile = !this.pocketnet
+    this.recording = true*/
 
     this.$store.commit("setIsLocalStorageChatAuth", isMessenger());
 
@@ -549,9 +549,9 @@ export default {
     this.$store.commit('setMobile', this.mobile);
     this.$store.commit('setVoiceMessagesEnabled', this.recording);
     this.$store.commit('pkoindisabled', this.pkoindisabled)
-    this.$store.commit('clearall');
+    this.$store.commit('clearall')
 
-    this.$store.commit('ls');
+    this.$store.commit('ls')
 
     this.importInitialScripts()
 
@@ -831,28 +831,35 @@ export default {
           message : "Downloaded"
         })*/
 
-    core
-      .initWithUser(user)
-      .then((r) => {
-        return core.mtrx.wait().then(() => {
-          core.user.getContacts();
+        core.initWithUser(user).then(r => {
 
-          setTimeout(() => {
-            if (
-              this.$route.name !== "chats" &&
-              /*this.$route.name !== 'chat' &&*/
-              /*this.$route.name !== 'chatInfo' &&*/
-              this.$route.name !== "publicPreview" &&
-              this.$route.name !== "chatSettings" &&
-              this.$route.name !== "contact" &&
-              core.cancelDefaultRoute !== true
-            ) {
-              this.$router.push("/chats").catch((e) => {});
-            }
-          }, 100);
-        });
-      })
-      .catch((g) => {});
+          return core.mtrx.wait().then(() => {
+            
+            core.user.getContacts()
+
+
+            setTimeout(() => {
+              if (this.$route.name !== 'chats' &&
+                /*this.$route.name !== 'chat' &&*/
+                /*this.$route.name !== 'chatInfo' &&*/
+                this.$route.name !== 'publicPreview' &&
+                this.$route.name !== 'chatSettings' &&
+                this.$route.name !== 'contact' &&
+                core.cancelDefaultRoute !== true) {
+
+                this.$router.push('/chats').catch(e => {})
+              }
+            }, 100)
+
+            
+
+            //this.connectCustomRecorder();
+
+          })
+
+    }).catch(g => {
+
+    })
 
     setInterval(() => {
       if (this.$store.state.autohide || !this.$store.state.iteraction)
