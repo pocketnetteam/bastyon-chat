@@ -831,31 +831,31 @@ export default {
           message : "Downloaded"
         })*/
 
-        core.initWithUser(user).then(r => {
+      core.initWithUser(user).then(r => {
 
-          return core.mtrx.wait().then(() => {
-            
-            core.user.getContacts()
+        return core.mtrx.wait().then(() => {
+          
+          core.user.getContacts()
 
 
-            setTimeout(() => {
-              if (this.$route.name !== 'chats' &&
-                /*this.$route.name !== 'chat' &&*/
-                /*this.$route.name !== 'chatInfo' &&*/
-                this.$route.name !== 'publicPreview' &&
-                this.$route.name !== 'chatSettings' &&
-                this.$route.name !== 'contact' &&
-                core.cancelDefaultRoute !== true) {
+          setTimeout(() => {
+            if (this.$route.name !== 'chats' &&
+              /*this.$route.name !== 'chat' &&*/
+              /*this.$route.name !== 'chatInfo' &&*/
+              this.$route.name !== 'publicPreview' &&
+              this.$route.name !== 'chatSettings' &&
+              this.$route.name !== 'contact' &&
+              core.cancelDefaultRoute !== true) {
 
-                this.$router.push('/chats').catch(e => {})
-              }
-            }, 100)
+              this.$router.push('/chats').catch(e => {})
+            }
+          }, 100)
 
-            
+          
 
-            //this.connectCustomRecorder();
+          //this.connectCustomRecorder();
 
-          })
+        })
 
     }).catch(g => {
 
