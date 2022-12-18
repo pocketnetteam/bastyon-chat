@@ -44,7 +44,7 @@
     .headerSpacerWrapper
       overflow: visible !important
     .headerSpacerWrapperOvf
-      background: #ffffff
+      background: srgb(--background-hidden-layer);    
       overflow: visible !important
 
 

@@ -100,7 +100,7 @@
         overflow-y: scroll
         overflow-x: hidden
         overscroll-behavior : contain
-        background: #ffffff
+        background: srgb(--background-hidden-layer);
         
 
     &.minimized
@@ -123,7 +123,7 @@
                 .headerSpacerWrapperOvf
                     -webkit-mask-image: linear-gradient(to top, transparent 3%, black 10%)
                     mask-image: linear-gradient(to top, transparent 3%, black 10%)
-                    background: #ffffff
+                    background: srgb(--background-hidden-layer);
                 /deep/
                     .maskedtop
                         -webkit-mask-image: linear-gradient(to bottom, transparent 3%, black 10%)
@@ -136,7 +136,7 @@
                 overflow: visible
                 will-change: transform
                 +transitionopt(0.3s, transform)
-                background: #ffffff
+                background: srgb(--background-hidden-layer);
             .headerSpacer
                 position: absolute
                 height: 100%
@@ -159,7 +159,7 @@
 
                 .headerSpacerWrapperOvf
                     transform: translate3d(-300px, 4px, 0)
-                    background: #ffffff
+                    background: srgb(--background-hidden-layer);
                     .headerSpacer
                         border-radius: 8px
                         border-top-left-radius: 0

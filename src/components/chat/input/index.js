@@ -97,65 +97,38 @@ export default {
 		menuItems: function () {
 			var menuItems = []
 
-			if (!this.relationEvent || this.relationEvent.action === "Reply on Message") {
-
-				if (window.POCKETNETINSTANCE) {
-					// if(window.POCKETNETINSTANCE.mobile.supportimagegallery()) {
-					// 	menuItems.push({
-					// 		click: "cameraHandlerCustom",
-					// 		title: this.$i18n.t("button.takePhotoOrVideo"),
-					// 		icon: "fas fa-camera",
-
-					// 	})
-					// }
-				}
-				else {
+			
+			if (window.POCKETNETINSTANCE) {
+				if(window.POCKETNETINSTANCE.mobile.supportimagegallery()) {
 					menuItems.push({
-						click: "cameraHandler",
+						click: "cameraHandlerCustom",
 						title: this.$i18n.t("button.takePhotoOrVideo"),
 						icon: "fas fa-camera",
 
-						upload: {
-							multiple: true,
-							extensions: ['jpg', 'jpeg', 'png', 'webp'],
-							maxsize: 100,
-							images: {
-								resize: {
-									type: 'fit'
-								}
-							}
-						}
 					})
 				}
-
-
-
+			}
+			else {
 				menuItems.push({
-					click: "fileHandler",
-					title: this.$i18n.t("button.sendFile"),
-					icon: "fas fa-sticky-note",
+					click: "cameraHandler",
+					title: this.$i18n.t("button.takePhotoOrVideo"),
+					icon: "fas fa-camera",
 
 					upload: {
 						multiple: true,
-						extensions: [],
-						maxsize: 25,
+						extensions: ['jpg', 'jpeg', 'png', 'webp'],
+						maxsize: 100,
 						images: {
 							resize: {
 								type: 'fit'
 							}
 						}
-					},
+					}
 				})
 			}
 
 
-			if (this.transaction && !this.pkoindisabled) {
-				menuItems.push({
-					click: "cameraHandlerCustom",
-					title: this.$i18n.t("button.takePhotoOrVideo"),
-					icon: "fas fa-camera",
 
-				})
 			menuItems.push({
 				click: "fileHandler",
 				title: this.$i18n.t("button.sendFile"),
@@ -172,6 +145,10 @@ export default {
 					}
 				},
 			})
+			
+
+
+			if (this.transaction && !this.pkoindisabled) {
 				menuItems.unshift({
 					click: "sendtransactionWrapper",
 					title: this.$i18n.t("button.sendCoins"),

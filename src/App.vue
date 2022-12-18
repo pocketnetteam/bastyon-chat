@@ -388,7 +388,7 @@ export default {
     },
 
     closebybg: function () {
-      return !this.$store.state.pinchat
+      return this.$store.state.active;
     },
 
     unselect:function(){
@@ -907,6 +907,9 @@ if (module.hot) {
       top: -60px !important;
       border: 10px 10px 0 0 !important;
     }
+    .modal-wrapper {
+      top: 0 !important;
+    }
   }
   .chat-container-pages {
     .modal-backdrop {
@@ -916,7 +919,7 @@ if (module.hot) {
       border: 10px 10px 0 0 !important;
     }
     .modal-wrapper {
-      top: 7% !important;
+      top: 0 !important;
       right: 0 !important;
       left: -300px !important;
       transform: translate(0) !important;
@@ -976,7 +979,7 @@ if (module.hot) {
   .relationEvent {
     position: absolute;
     left: -344px;
-    top: -79px;
+    top: -92px;
     width: 344px;
   }
 }
@@ -997,9 +1000,19 @@ if (module.hot) {
   }
 }
 .rootcontent.bout {
-  .chat-container #maincontent .headerSpacer {
+  .chat-container { 
+    #maincontent .headerSpacer {
     padding-bottom: 30px;
+    }
+    .footer-chat.bout {
+      padding-bottom: 0 !important;
+      
+      .menuItems {
+        height: 83%;
+      }
+    }
   }
+  
   .modal-backdrop {
     left: 0 !important;
     width: 100vw !important;
@@ -1054,9 +1067,25 @@ if (module.hot) {
           width: 100% !important;
           span {
             font-size: 1.5em;
-            color: black;
           }
         }
+      }
+    }
+    .chatInputWrapper {
+      bottom: -55px !important;
+      border-top: 1px solid srgb(--background-secondary-theme);
+      #chatInput {
+        height: 78px;
+        margin: 20px 0 0 0;
+      }
+    }
+    .dropdown {
+      .backgr {
+        top: -145px;
+    bottom: 55px;
+      }
+      .menuwrapper {
+        bottom: 55px;
       }
     }
   }
@@ -1086,8 +1115,8 @@ if (module.hot) {
       width: 344px !important;
     }
     .inputWrapper {
-      width: 344px !important;
-      margin-left: -347px !important;
+      width: 334px !important;
+      margin-left: -342px !important;
     }
     .dropdown.visible {
       width: 344px !important;
@@ -1103,7 +1132,7 @@ if (module.hot) {
     .relationEvent {
       max-width: 702px !important;
       margin: 0 auto !important;
-      background: #fff;
+      background: srgb(--background-total-theme);
     }
   }
   #wai-fixedmessageicon {

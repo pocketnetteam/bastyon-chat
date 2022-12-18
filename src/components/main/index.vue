@@ -63,7 +63,6 @@
       position: relative;
       height: 100%;
       width: calc(100% - 400px);
-      border-left: 1px solid rgb(235, 235, 240);
       #topheader.minimized.fix {
         left: -44px !important;
       }
@@ -76,7 +75,6 @@
         justify-content: center;
         align-items: center;
         width: calc(100% - 400px);
-        background: #f1f1f1;
         i {
           transform: scale(2);
           color: rgb(0, 164, 255);
@@ -109,7 +107,7 @@
         bottom: 0;
         width: 100%;
         z-index: 999;
-        background: #fff;
+        background: srgb(--background-hidden-layer);
         .fixedOnPageTop {
           width: 100%;
         }

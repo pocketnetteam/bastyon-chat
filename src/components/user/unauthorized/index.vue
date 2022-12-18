@@ -125,8 +125,8 @@
 
     #userUnauthorized
         height: 100vh
-        width: 100vw
-        background: #fff
+        width: 100vw      
+        background: srgb(--background-hidden-layer);
         position: fixed;
         top: 0;
         left: 0;
