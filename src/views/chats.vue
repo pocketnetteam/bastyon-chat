@@ -88,6 +88,7 @@ export default {
       active: state => state.active,
       mobile : state => state.mobile,
       hiddenInParent : state => state.hiddenInParent,
+      joinroom : state => state.joinroom
   }),
 
   methods : {
@@ -112,8 +113,16 @@ export default {
   },
 
   mounted() {
+
+    if (this.joinroom){
+
+      this.$router.push('/publicPreview?id=' + this.joinroom);
+      this.$store.commit('JOINROOM', null)
+
+    }
     
   }
 
 }
 </script>
+
