@@ -43,6 +43,7 @@ var store = new Vuex.Store({
 		pocketnet: '',
 		mobile: '',
 		voiceMessagesEnabled: '',
+		isCallsEnabled: '',
 		currentPlayingVoiceMessage: null,
 		current_user: {},
 		minimized: true,
@@ -286,6 +287,9 @@ var store = new Vuex.Store({
 
 		setVoiceMessagesEnabled(state, voiceMessagesEnabled) {
 			state.voiceMessagesEnabled = voiceMessagesEnabled;
+		},
+		setCallsEnabled(state, isCallsEnabled) {
+			state.isCallsEnabled = isCallsEnabled;
 		},
 
 		ls(state) {

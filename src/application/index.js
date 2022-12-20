@@ -107,6 +107,7 @@ class Core {
     }
 
     setCalls = function() {
+        console.log('set calls')
         try {
             let p = {
                 el : document.querySelector('body'),
@@ -133,6 +134,20 @@ class Core {
                 this.mtrx.bastyonCalls.on('initcall', () => {
                     if (this.vm.$store.state.currentPlayingVoiceMessage) {
                         this.vm.$store.state.currentPlayingVoiceMessage.pause()
+                    }
+
+                    if (window?.POCKETNETINSTANCE?.playingvideo) {
+                        console.log(window.POCKETNETINSTANCE.playingvideo)
+                        window?.POCKETNETINSTANCE?.playingvideo.pause()
+                        if (document.exitFullscreen) {
+                            document.exitFullscreen();
+                        } else if (document.webkitExitFullscreen) {
+                            document.webkitExitFullscreen();
+                        } else if (document.mozCancelFullScreen) {
+                            document.mozCancelFullScreen();
+                        } else if (document.msExitFullscreen) {
+                            document.msExitFullscreen();
+                        }
                     }
 
                     if (window?.POCKETNETINSTANCE?.platform) {
@@ -244,7 +259,11 @@ class Core {
 
             if (f.deep(this.user,'userinfo.name'))
                 this.mtrx.client.setDisplayName(f.deep(this.user,'userinfo.name'))
-            this.setCalls()
+
+            if (this.vm.$store.state.isCallsEnabled) {
+                this.setCalls()
+            }
+
             return Promise.resolve()
 
         }).catch(e => {

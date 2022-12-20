@@ -938,6 +938,7 @@ class MatrixCall extends _events.EventEmitter {
     console.log(`Answering call ${this.callId} of type ${this.type}`)
     _logger.logger.debug(`Answering call ${this.callId} of type ${this.type}`);
 
+    console.log(`Answering call ${this.callId} of type ${this.type}`)
     if (!this.localAVStream && !this.waitForLocalAVStream) {
       const constraints = getUserMediaContraints(this.type == CallType.Video ? ConstraintsType.Video : ConstraintsType.Audio);
 
