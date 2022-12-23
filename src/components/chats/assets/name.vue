@@ -5,25 +5,24 @@
       <i class="fas fa-user-friends"></i>
     </div>
     <div class="nameofchat">
-      {{ convertedName }}
+      {{ convertedName.toString().slice(0, 13) }}
     </div>
   </div>
 
 </template>
 
 <style scoped lang="sass">
-.nameofchat
-  white-space: nowrap
 .nameline
-  display: flex
-  align-items: flex-end
+  display: flex !important
   justify-content: center
+  align-items: center
 
 .iconGroup
+  display: block
   font-size: 0.4em
-  width: 16px
+  width: 16px !important
   text-align: center
-  height: 16px
+  height: 16px !important
   line-height: 16px
   border-radius: 8px
   background: srgb(--neutral-grad-2)
@@ -57,10 +56,15 @@ export default {
       return this.core.mtrx.anotherChatUsers(this.chat.roomId)
     },
 
-    convertedName : function(){
-      if(this.m_chat && this.m_chat.getJoinRule() === 'public' && this.m_chat.currentState.getStateEvents('m.room.name').length > 0){
-
-        return this.m_chat.currentState.getStateEvents('m.room.name')[0].getContent().name
+    convertedName: function () {
+      if (
+        this.m_chat &&
+        this.m_chat.getJoinRule() === "public" &&
+        this.m_chat.currentState.getStateEvents("m.room.name").length > 0
+      ) {
+        return this.m_chat.currentState
+          .getStateEvents("m.room.name")[0]
+          .getContent().name;
       }
       var users = _.filter(this.users, (user) => {
         return user.userId != this.core.user.userinfo.id

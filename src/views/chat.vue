@@ -58,6 +58,7 @@
 
     .headerSpacerWrapperOvf
       overflow: visible
+      background: srgb(--background-hidden-layer);
 </style>
 
 <script>

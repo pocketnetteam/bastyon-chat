@@ -1,19 +1,35 @@
 
 import FooterChat from '../layouts/footerChat/index.vue'
 import gallery from '@/components/gallery/index.vue'
+import ChatsContainer from '@/components/main/components/ChatsContainer.vue';
+import ContactsContainer from '@/components/main/components/ContactsContainer.vue';
+import SettingsContainer from '@/components/main/components/SettingsContainer.vue';
 import {mapState} from 'vuex'
 
 export default {
   name: "mainWrapper",
   components: {
     FooterChat,
-    gallery
+    gallery,
+    ChatsContainer,
+    ContactsContainer,
+    SettingsContainer,
   },
   data: function () {
 
     return {
       prevRoute: null,
-      loading: false
+      loading: false,
+      page: this.$route.query.page ? this.$route.query.page : 'chats',
+      showPage:
+        this.$route.path === '/chat' ||
+        this.$route.path === '/contact' ||
+        this.$route.path === '/publicPreview' ||
+        this.$route.path === '/chatSettings' ||
+        this.$route.path === '/chatInfo' ||
+        this.$route.path === '/teamRoom' ||
+        this.$route.path === '/invite',
+      minimized: this.$store.state.mobile,
     }
 
   },
@@ -23,7 +39,39 @@ export default {
   },
 
   watch: {
-    //$route: 'getdata'
+    '$route.query.page': {
+      handler: function (page) {
+        this.page = page ? page : "chats";
+  },
+      deep: true,
+      immediate: true,
+    },
+    '$route.path': {
+      handler: function (path) {
+        this.showPage =
+          path === '/chat' ||
+          path === '/contact' ||
+          path === '/publicPreview' ||
+          path === '/chatSettings' ||
+          path === '/chatInfo' ||
+          path === '/teamRoom' ||
+          path === '/invite';
+      },
+      deep: true,
+      immediate: true,
+    },
+  },
+
+  mounted() {
+    this.page = this.$route.query.page ? this.$route.query.page : "chats";
+    this.showPage =
+      this.$route.path === '/chat' ||
+      this.$route.path === '/contact' ||
+      this.$route.path === '/publicPreview' ||
+      this.$route.path === '/chatSettings' ||
+      this.$route.path === '/chatInfo' ||
+      this.$route.path === '/teamRoom' ||
+      this.$route.path === '/invite';
   },
 
   beforeRouteEnter(to, from, next) {
@@ -39,6 +87,7 @@ export default {
 
   computed: mapState({
     auth: state => state.auth,
+    pocketnet: (state) => state.pocketnet,
 
     ...mapState([
       'currentUserChat',
@@ -52,6 +101,9 @@ export default {
       return this.$route.name != 'chat' || this.minimized
     },
 
+    showChats() {
+      return this.pocketnet && this.$route.name !== 'chats' ? false : true;
+    },
   }),
 
   methods: {

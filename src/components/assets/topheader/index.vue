@@ -1,5 +1,5 @@
 <template>
-  <div id="topheader" class="fixedOnPageTop" @mouseleave="mouseleave" :class="{'bin' : pocketnet, 'bout' : !pocketnet, minimized, fix : pocketnet, active}">
+  <div id="topheader" class="fixedOnPageTop" @mouseleave="mouseleave" :class="{'bin' : pocketnet, 'bout' : !pocketnet, 'minimized': minimized, fix : pocketnet, active}">
   
     <div class="topheader ">
       <div class="work">

@@ -166,6 +166,7 @@ import search from '@/components/assets/search/index.vue';
 import linepreloader from '@/components/assets/linepreloader/index.vue';
 
 import chats from '@/views/chats.vue'
+import isMessenger from '@/application/isMessenger.js'
 
 ////////
 
@@ -374,8 +375,7 @@ export default {
 
     active: function () {
 
-      if (this.mobile) return false
-      return this.$store.state.active
+      return true
     },
 
     globalpreloader: function () {
@@ -388,7 +388,7 @@ export default {
     },
 
     closebybg: function () {
-      return !this.$store.state.pinchat
+      return this.$store.state.active;
     },
 
     unselect:function(){
@@ -523,10 +523,27 @@ export default {
     this.$store.commit('init');
   },
 
+
   created() {
     /*this.pocketnet = true
     this.mobile = !this.pocketnet
     this.recording = true*/
+
+    this.$store.commit("setIsLocalStorageChatAuth", isMessenger());
+
+    if (this.$store.state.isLocalStorageChatAuth) {
+      const fromMnemonic = getDecryptedMnemonic();
+      if (
+        fromMnemonic.addressUser === null &&
+        fromMnemonic.privateKey === null
+      ) {
+        window.open("https://bastyon.com/authorization", "_blank");
+      } else {
+        this.address = fromMnemonic.addressUser;
+        this.privatekey = fromMnemonic.privateKey.toString("hex");
+        this.recording = true;
+      }
+    }
 
     this.$store.commit('setPocketnet', this.pocketnet);
     this.$store.commit('setMobile', this.mobile);
@@ -544,8 +561,6 @@ export default {
         this.setPusher(this.fcmtoken);
     }, 5000);
 
-    
-    
     var testUsers = {
       matrixMan: {
         address: f.hexEncode('PToMRMsMVh9dj4Cpa7yu1pB5iq65g4jrVC'),
@@ -705,31 +720,65 @@ export default {
     }
 
     var actualUser = {
-      address: this.address ? f.hexEncode(this.address) : '',
-      privateKey: this.privatekey
+      address: this.address ? f.hexEncode(this.address) : "",
+      privateKey: this.privatekey,
+    };
+
+    var username = "nevermore";
+
+    var user =
+      this.address && this.privatekey ? actualUser : testUsers[`${username}`];
+
+    if (this.$store.state.isLocalStorageChatAuth) {
+      var listofproxies = [
+        {
+          host: "5.pocketnet.app",
+          port: 8899,
+          wss: 8099,
+        },
+        {
+          host: "1.pocketnet.app",
+          port: 8899,
+          wss: 8099,
+        },
+        {
+          host: "2.pocketnet.app",
+          port: 8899,
+          wss: 8099,
+        },
+        {
+          host: "3.pocketnet.app",
+          port: 8899,
+          wss: 8099,
+        },
+        {
+          host: "4.pocketnet.app",
+          port: 8899,
+          wss: 8099,
+        },
+      ];
+    } else {
+      var listofproxies = f.deep(
+        window,
+        "window.POCKETNETINSTANCE.options.listofproxies"
+      ) || [
+        {
+          host: "test.pocketnet.app",
+          port: 8899,
+          wss: 8099,
+        },
+        /*{
+              host : 'pocketnet.app',
+              port : 8899,
+              wss : 8099
+          },
+          {
+              host : '1.pocketnet.app',
+              port : 8899,
+              wss : 8099
+          }*/
+      ];
     }
-
-    var username = 'nevermore'
-
-    var user = (this.address && this.privatekey) ? actualUser : testUsers[`${username}`];
-
-    var listofproxies = f.deep(window, 'window.POCKETNETINSTANCE.options.listofproxies') || [
-      {
-        host: 'test.pocketnet.app',
-        port: 8899,
-        wss: 8099
-      }
-      /*{
-          host : 'pocketnet.app',
-          port : 8899,
-          wss : 8099
-      },
-      {
-          host : '1.pocketnet.app',
-          port : 8899,
-          wss : 8099
-      }*/
-    ]
 
     /*
 
@@ -741,25 +790,28 @@ export default {
 
     */
 
-    var domain = f.deep(window, 'window.POCKETNETINSTANCE.options.matrix') || 'test.matrix.pocketnet.app'
+    if (this.$store.state.isLocalStorageChatAuth) {
+      var domain = "matrix.pocketnet.app";
+    } else {
+      var domain =
+        f.deep(window, "window.POCKETNETINSTANCE.options.matrix") ||
+        "test.matrix.pocketnet.app";
+    }
 
     core = new Core(this, {
       domain: domain,
       mtrx: {
-        logger: function () {
-
-        }
+        logger: function () {},
       },
 
       listofproxies: listofproxies,
 
       servers: {
-        pocketnet: 'https://pocketnet.app:8888'
-      }
-    })
+        pocketnet: "https://pocketnet.app:8888",
+      },
+    });
 
-    core.init()
-
+    core.init();
 
     /*
 
@@ -811,18 +863,20 @@ export default {
 
     setInterval(() => {
       if (this.$store.state.autohide || !this.$store.state.iteraction)
-        this.$store.commit('active', false)
+        this.$store.commit("active", false);
+    }, 3000);
 
-    }, 3000)
+    window.matrixchat = core;
+  },
 
-    window.matrixchat = core
-
-  }
-}
+  mounted() {
+    this.$store.commit("minimize", true);
+  },
+};
 
 if (module.hot) {
   module.hot.accept(context.id, () => {
-    const {messages: newMessages} = loadMessages();
+    const { messages: newMessages } = loadMessages();
 
     Object.keys(newMessages)
       .filter((locale) => messages[locale] !== newMessages[locale])
@@ -832,21 +886,273 @@ if (module.hot) {
       });
   });
 }
-
-
 </script>
 
-<style src="./editedplugins/vue-m-message/dist/index.css">
-
-</style>
+<style src="./editedplugins/vue-m-message/dist/index.css"></style>
 <style lang="sass" src="./index.sass"></style>
 <style>
-@import 'https://use.fontawesome.com/releases/v5.2.0/css/all.css';
-@import '@/../../public/css/main.css';
-@import '@/../../public/css/normalize.css';
-@import '@/../../public/css/emoji-mart.css';
+@import "https://use.fontawesome.com/releases/v5.2.0/css/all.css";
+@import "@/../../public/css/main.css";
+@import "@/../../public/css/normalize.css";
+@import "@/../../public/css/emoji-mart.css";
 </style>
 
 <!-- THEMES BEGIN -->
 <!-- THEMES END -->
 
+<style lang="scss">
+.rootcontent.minimized {
+  .chat-container {
+    .modal-backdrop {
+      top: -60px !important;
+      border: 10px 10px 0 0 !important;
+    }
+    .modal-wrapper {
+      top: 0 !important;
+    }
+  }
+  .chat-container-pages {
+    .modal-backdrop {
+      width: 344px !important;
+      left: -300px !important;
+      top: -60px !important;
+      border: 10px 10px 0 0 !important;
+    }
+    .modal-wrapper {
+      top: 0 !important;
+      right: 0 !important;
+      left: -300px !important;
+      transform: translate(0) !important;
+      z-index: 123123123123;
+    }
+  }
+  .chat-container-pages-empty {
+    display: none !important;
+  }
+  .headerSpacerWrapperOvf {
+    background: transparent !important;
+  }
+  .messageRow .maxcontent {
+    max-width: 295px !important;
+  }
+  .modal-backdrop,
+  .modal-wrapper {
+    width: 344px;
+  }
+  .main-wrapper {
+    #topheader {
+        z-index: -1;
+      }
+  }
+  .main-wrapper {
+    .chatSettingsButton {
+      display: none;
+    }
+    &.active {
+      .chatSettingsButton {
+        display: block;
+      }
+      #topheader {
+        z-index: 1;
+      }
+    }
+  }
+  .headerSpacerWrapper {
+    .modal-backdrop,
+    .modal-wrapper {
+      left: -299px;
+    }
+  }
+  .headerSpacerWrapper {
+    .headerSpacer {
+      .modal-backdrop,
+      .modal-wrapper {
+        left: 0px !important;
+      }
+    }
+  }
+  .modal-backdrop,
+  .modal-wrapper {
+    left: -299px;
+    width: 344px;
+  }
+  .relationEvent {
+    position: absolute;
+    left: -344px;
+    top: -92px;
+    width: 344px;
+  }
+}
+.previewWrapper {
+  .nameofchat {
+    white-space: nowrap;
+    overflow: hidden;
+  }
+}
+.nameofchat {
+  max-width: 132px;
+}
+.headerLine {
+  .nameofchat {
+    max-height: 30px;
+    line-height: 1em;
+    width: 132px;
+  }
+}
+.rootcontent.bout {
+  .chat-container { 
+    #maincontent .headerSpacer {
+    padding-bottom: 30px;
+    }
+    .footer-chat.bout {
+      padding-bottom: 0 !important;
+      
+      .menuItems {
+        height: 83%;
+      }
+    }
+  }
+  
+  .modal-backdrop {
+    left: 0 !important;
+    width: 100vw !important;
+  }
+  .modal-wrapper {
+    top: 60px !important;
+    right: 50% !important;
+    transform: translateX(50%) !important;
+    width: 100% !important;
+    max-width: 500px !important;
+  }
+  /* #maincontent .headerSpacerWrapper {
+    height: 82% !important;
+  } */
+  .main-wrapper.minimized:not(.active) .topheader {
+    opacity: 1 !important;
+  }
+  .minimized:not(.active) .chatNameEdit,
+  .minimized:not(.active) .chatDescription {
+    display: block !important;
+  }
+  .main-wrapper.minimized .input_component {
+    width: 100% !important;
+  }
+  .main-wrapper.minimized .noswipepnt .work {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .main-wrapper.minimized .inputWrapper {
+    margin: 0 !important;
+    width: 100% !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .chat-container-pages {
+    .chatPreview, .joinAction {
+      display: block !important;
+      position: static !important;
+    }
+    .joinAction {
+      margin: auto 0 0 0;
+    }
+    .joinwrapper {
+      padding-bottom: 0 !important;
+      .maskedtop {
+        height: 100% !important;
+        display: flex !important;
+        flex-direction: column !important;
+        .caption {
+          width: 100% !important;
+          span {
+            font-size: 1.5em;
+          }
+        }
+      }
+    }
+    .chatInputWrapper {
+      bottom: -55px !important;
+      border-top: 1px solid srgb(--background-secondary-theme);
+      #chatInput {
+        height: 78px;
+        margin: 20px 0 0 0;
+      }
+    }
+    .dropdown {
+      .backgr {
+        top: -145px;
+    bottom: 55px;
+      }
+      .menuwrapper {
+        bottom: 55px;
+      }
+    }
+  }
+}
+.rootcontent.fix {
+  .chat-container-pages {
+    position: absolute !important;
+    left: 23px !important;
+    width: 344px !important;
+    border-left: 0 !important;
+    .minimized {
+        .headerSpacerWrapper {
+          left: -44px !important;
+        }
+      }
+    #topheader {
+      transform: translate3d(-279px, -56px, 0) !important;
+    }
+    .input_component {
+      width: 344px;
+    }
+    #chatsTopheader.topheader {
+      width: 344px;
+    }
+    #events {
+      left: 0px !important;
+      width: 344px !important;
+    }
+    .inputWrapper {
+      width: 334px !important;
+      margin-left: -342px !important;
+    }
+    .dropdown.visible {
+      width: 344px !important;
+      left: -171px;
+      .inputWrapper {
+        margin-left: 0 !important;
+      }
+    }
+    .menubgwrapper {
+      left: -300px !important;
+      width: 344px !important;
+    }
+    .relationEvent {
+      max-width: 702px !important;
+      margin: 0 auto !important;
+      background: srgb(--background-total-theme);
+    }
+  }
+  #wai-fixedmessageicon {
+    &.active {
+      .wrapper {
+        position: fixed !important;
+        top: 15px !important;
+        right: 8px !important;
+        left: auto !important;
+        width: 344px !important;
+        transform: none !important;
+      }
+    }
+  }
+  .fixedOnPageTop {
+    min-width: 344px !important;
+  }
+}
+
+.emoji-mart {
+  right: -99px !important;
+}
+</style>

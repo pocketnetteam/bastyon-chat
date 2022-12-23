@@ -665,8 +665,6 @@ var Api = function(app){
 
                         var oldc = localStorage['currentproxy']
 
-                        console.log('oldc', oldc)
-
                         if (oldc){
                             return self.set.current(oldc)
                         }
@@ -755,8 +753,6 @@ var Api = function(app){
 
         if(!options) 
             options = {}
-
-            console.log('options.proxy', options.proxy)
 
         return getproxy(options.proxy).then(proxy => {
 

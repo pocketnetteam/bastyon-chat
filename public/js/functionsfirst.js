@@ -533,3 +533,15 @@ importCss = function(src, _document) {
 
     appendTo.appendChild(link);
 }
+
+
+self.sdk = {
+    address: {
+        path: function (n) {
+            return "m/44'/0'/0'/" + n + "'"
+        },
+        pnet: function (pubkey) {
+            return bitcoin.payments['p2pkh']({ pubkey })
+        },
+    },
+}

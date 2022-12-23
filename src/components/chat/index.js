@@ -102,7 +102,7 @@ export default {
       immediate: true,
       handler: function () {
 
-        
+
         if (this.m_chat && !_.isEmpty(this.m_chat)) {
           this.core.mtrx.kit.allchatmembers([this.m_chat], false, true).then(r => {
             return this.core.mtrx.kit.prepareChat(this.m_chat)
@@ -327,6 +327,17 @@ export default {
         this.$refs['chatInput'].focus()
       }
 
+    },
+
+    shareEvent: function ({event}) {
+      this.relationEvent = {
+        type: 'm.reference',
+        event: event,
+        action: this.$i18n.t('caption.shareMessage'),
+      };
+      if (this.$refs['chatInput']) {
+        this.$refs['chatInput'].focus();
+      }
     },
 
     editingEvent: function ({event, text}) {
