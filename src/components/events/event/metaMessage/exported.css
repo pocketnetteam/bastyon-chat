@@ -11898,6 +11898,14 @@
 .pocketnet_iframe .share_common .sharepanel > div.right {
   margin-left: auto;
 }
+.pocketnet_iframe .share_common .sharepanel .boost {
+  cursor: pointer;
+  color: rgb(var(--color-star-yellow));
+  border-radius: 8px;
+  padding: 4px 10px;
+  background: rgb(var(--background-secondary-theme));
+  box-shadow: 0 5px 7px -5px rgba(var(--color-shadow-base), 0.4);
+}
 .pocketnet_iframe .share_common .sharepanel > div.right .itemwr > div.iconwr {
   text-align: center;
   width: 40px;
