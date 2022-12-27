@@ -817,13 +817,25 @@ class MTRX {
       return Promise.resolve(file)
 
 
-    }).then(file => {
-      var promise = this.core.mtrx.uploadContent(file, true)
-      if (promise.abort) meta.abort = promise.abort
+    }).then((file) => {
+      let promise = this.core.mtrx.uploadContent(file);
+      if (promise.abort) meta.abort = promise.abort;
 
-      return promise
+      return Promise.resolve(file);
+    }).then((file) => {
+      var promise = this.core.mtrx.uploadContent(file, true);
+      if (promise.abort) meta.abort = promise.abort;
+
+      return promise;
     }).then((image) => {
       if (meta.aborted) return Promise.reject('aborted')
+
+      if (meta.event && meta.event.event) {
+        info['m.relates_to'] = {
+          rel_type: meta.event.type,
+          event_id: this.clearEventId(meta.event.event),
+        };
+      }
 
       return this.client.sendImageMessage(chat.roomId, image, info, 'Image')
     })
@@ -838,6 +850,13 @@ class MTRX {
     let info = {}
 
     info.from = from
+
+    if (meta.event && meta.event.event) {
+      info['m.relates_to'] = {
+        rel_type: meta.event.type,
+        event_id: this.clearEventId(meta.event.event),
+      };
+    }
 
     return new Promise(resolve => {
       if (chat.pcrypto.canBeEncrypt()) {
@@ -862,7 +881,16 @@ class MTRX {
       if (meta.aborted) return Promise.reject('aborted')
 
       return this.client.sendAudioMessage(chat.roomId, audio, info, 'Audio')
-    })
+    }).then((file) => {
+      let promise = this.core.mtrx.uploadContent(file);
+      if (promise.abort) meta.abort = promise.abort;
+
+      return promise;
+    }).then((audio) => {
+      if (meta.aborted) return Promise.reject('aborted');
+      console.log('info', info);
+      return this.client.sendAudioMessage(chat.roomId, audio, info, 'Audio');
+    });
 
   }
 

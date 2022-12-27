@@ -2,10 +2,10 @@
   <div class="aboutRoom">
     <div class="roomInfoWrapper noSwipe">
       <div :class="{'chatIconWrapper':'chatIconWrapper'}">
-        <chatIcon :slidesPerView="4" :dontuseslides="minimized && !active" :chat="chat" :m_chat="m_chat" :hideunseen="true"/>
-        <div class="chatGroupIcon">
+        <chatIcon :slidesPerView="4" :dontuseslides="minimized && !active" :chat="chat" :m_chat="m_chat" :hideunseen="false"/>
+        <!-- <div class="chatGroupIcon">
           <img :src="groupAvatar" alt="" />
-        </div>
+        </div> -->
       </div>
 
       <chatName :preview="true" :chat="chat" :m_chat="m_chat"
@@ -76,6 +76,12 @@
       <button class="button small rounded" @click="modalInviteUser" v-if="canInvite">
         {{ $t("caption.add") }} <i class="fas fa-user-plus"></i>
       </button>
+
+      <!-- <button class="button small black rounded" @click="clearRoom">
+        <span>
+          {{ $t("caption.clearHistory") }} <i class="fas fa-trash"></i>
+        </span>
+      </button> -->
 
       <button class="button small black rounded" @click="muteRoom">
         <span v-if="!roomMuted">

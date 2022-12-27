@@ -44,6 +44,7 @@
     .headerSpacerWrapper
       overflow: visible !important
     .headerSpacerWrapperOvf
+      background: srgb(--background-hidden-layer);    
       overflow: visible !important
 
 
@@ -88,6 +89,7 @@ export default {
       active: state => state.active,
       mobile : state => state.mobile,
       hiddenInParent : state => state.hiddenInParent,
+      joinroom : state => state.joinroom
   }),
 
   methods : {
@@ -101,7 +103,7 @@ export default {
       this.$router.push({
         path: 'chat',
         query: {'id': chat.room_id}
-      }).catch(e => {})
+      });
     },
 
     scrolltop : function(){
@@ -112,8 +114,16 @@ export default {
   },
 
   mounted() {
+
+    if (this.joinroom){
+
+      this.$router.push('/publicPreview?id=' + this.joinroom);
+      this.$store.commit('JOINROOM', null)
+
+    }
     
   }
 
 }
 </script>
+

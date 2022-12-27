@@ -293,16 +293,20 @@ export default {
           title: this.$i18n.t("button.select"),
           icon: "fas fa-check-circle",
         },
-      ]
-
-      if(!this.file){
-        menu.push({
+        {
           click: "share",
           title: this.$i18n.t("button.share"),
           icon: "fas fa-share-alt"
-        })
-      }
+        },
+      ];
 
+      // if(!this.file){
+      //   menu.push({
+      //     click: "share",
+      //     title: this.$i18n.t("button.share"),
+      //     icon: "fas fa-share-alt"
+      //   })
+      // }
 
       if (this.my) {
         menu.push({
@@ -413,7 +417,7 @@ export default {
 
     dropDownMenuShow: function () {
 
-      if(this.urlpreview) return
+      // if(this.urlpreview) return
 
       setTimeout(() => {
         this.setmenu()
@@ -433,8 +437,17 @@ export default {
 
       var sharing = {}
 
-      var trimmed = this.$f.trim(this.body)
-      
+      var trimmed;
+      if (this.content.msgtype !== 'm.file') {
+        trimmed = this.$f.trim(this.body);
+      }
+      if (
+        this.content.msgtype === 'm.file' ||
+        this.content.msgtype === 'm.encrypted'
+      ) {
+        sharing.files = [this.file];
+      }
+
       if (this.content.msgtype === 'm.image' && this.imageUrl) sharing.images = [this.imageUrl]
 
       if (this.content.msgtype === 'm.audio' && this.audioUrl) sharing.audio = [this.audioUrl]
@@ -443,9 +456,9 @@ export default {
 
       //if(this.urlpreview) sharing.urls = [urlpreview]
 
-      if (this.file) {
-        sharing.download = true
-      }
+      // if (this.file) {
+      //   sharing.download = true
+      // }
 
       //sharing.route = 'chat?id=' + this.chat.roomId
       sharing.from = this.userinfo.id
@@ -593,7 +606,16 @@ export default {
     selectMessage: function () {
       var sharing = {};
 
-      var trimmed = this.$f.trim(this.body);
+      var trimmed;
+      if (this.content.msgtype !== 'm.file') {
+        trimmed = this.$f.trim(this.body);
+      }
+      if (
+        this.content.msgtype === 'm.file' ||
+        this.content.msgtype === 'm.encrypted'
+      ) {
+        sharing.files = [this.file];
+      }
 
       if (this.content.msgtype === 'm.image' && this.imageUrl)
         sharing.images = [this.imageUrl];
@@ -610,9 +632,9 @@ export default {
 
       //if(this.urlpreview) sharing.urls = [urlpreview]
 
-      if (this.file) {
-        sharing.download = true;
-      }
+      // if (this.file) {
+      //   sharing.download = true;
+      // }
 
       //sharing.route = 'chat?id=' + this.chat.roomId
       sharing.from = this.userinfo.id;

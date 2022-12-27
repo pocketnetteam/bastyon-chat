@@ -41,7 +41,16 @@
           <userpic :userinfo="userinfo"/>
       </div>
 
-      <div class="messageImg" v-if="content.msgtype === 'm.image'">
+
+      <div class="messageImg" :class="{ referenceImg: reference }" v-if="content.msgtype === 'm.image'">
+        <div class="reference showreference" @click="showreference" v-if="reference && !preview && !fromreference">
+          <eventsEvent v-if="!referenceshowed" :event="reference" :chat="chat" :preview="true" />
+
+          <div class="referenceCaption">
+            <span v-if="!referenceshowed"><i class="fas fa-share"></i></span>
+            <button class="button ghost small" v-else>Hide</button>
+          </div>
+        </div>
 
         <div class="" v-if="imageUrl">
 
@@ -65,6 +74,14 @@
         </div>
       </div>
       <div class="messageAudio" v-if="content.msgtype === 'm.audio'">
+        <div class="reference showreference" @click="showreference" v-if="reference && !preview && !fromreference">
+          <eventsEvent v-if="!referenceshowed" :event="reference" :chat="chat" :preview="true" />
+
+          <div class="referenceCaption">
+            <span v-if="!referenceshowed"><i class="fas fa-share"></i></span>
+            <button class="button ghost small" v-else>Hide</button>
+          </div>
+        </div>
         <VoiceMessage v-if="audioUrl" :audioBuffer="audioUrl" :decryptedInfo="decryptedInfo" :id="event._localTimestamp || Date.now()"/>
       </div>
 
@@ -118,10 +135,19 @@
           </div>
 
         </div>
-        
+
       </div>
 
-      <div class="filePreview" v-if="file">
+      <div class="filePreview" :class="{ reference: reference }" v-if="file">
+        <div class="reference showreference" @click="showreference" v-if="reference && !preview && !fromreference">
+          <eventsEvent v-if="!referenceshowed" :event="reference" :chat="chat" :preview="true" />
+
+          <div class="referenceCaption">
+            <span v-if="!referenceshowed"><i class="fas fa-share"></i></span>
+            <button class="button ghost small" v-else>Hide</button>
+          </div>
+        </div>
+
         <fileMessage :encryptedData="encryptedData" :file="file" :downloaded="downloaded" @download="download"/>
         <div class="encryptedDataIcon" v-if="encryptedData"><i class="fas fa-lock"></i></div>
 

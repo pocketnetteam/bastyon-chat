@@ -17,7 +17,7 @@
       
       <div class="Swipes" v-else>
         <transition name="fade">
-          <div class="desktopList" v-if="showchatslist">
+          <div class="desktopList" v-if="showchatslist || mobile">
 
             <div class="chatswrapper" v-if="filteredchats.length || !searchText">
           

@@ -159,7 +159,22 @@
 <!-- THEMES END -->
 
 <style lang="scss">
+.inputWrapper {
+  max-width: 702px;
+  margin: 0 auto;
+}
+.chatInputWrapper .bin {
+  width: 100% !important;
+}
 
+@media only screen and (max-width: 768px) {
+  .chatInputWrapper {
+    width: 100% !important;
+    .bin {
+      width: 100% !important;
+    }
+  }
+}
 </style>
 
 
