@@ -537,7 +537,6 @@ export default {
     this.$store.commit('setCallsEnabled', this.iscallsenabled)
     this.$store.commit('setPocketnet', this.pocketnet);
     this.$store.commit('setMobile', this.mobile);
-
     this.$store.commit('setVoiceMessagesEnabled', this.recording);
     this.$store.commit('pkoindisabled', this.pkoindisabled)
     this.$store.commit('clearall')

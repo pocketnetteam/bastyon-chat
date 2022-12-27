@@ -288,9 +288,6 @@ var store = new Vuex.Store({
 		setVoiceMessagesEnabled(state, voiceMessagesEnabled) {
 			state.voiceMessagesEnabled = voiceMessagesEnabled;
 		},
-		setCallsEnabled(state, isCallsEnabled) {
-			state.isCallsEnabled = isCallsEnabled;
-		},
 
 		ls(state) {
 			if (typeof localStorage.getItem('pinchat') != 'undefined')
@@ -609,13 +606,6 @@ var store = new Vuex.Store({
 
 	},
 	actions: {
-		CALL({commit}, call) {
-			commit('SET_CALL', call)
-		},
-		HANGUP_CALL({commit}) {
-			commit('CLEAR_CALL')
-		},
-
 		SET_CHAT_MEMBERS({ commit }, chat) {
 
 		},

@@ -503,7 +503,6 @@ class MatrixCall extends _events.EventEmitter {
         console.log('failed')
         this.hangup(CallErrorCode.IceFailed, false);
       }
-
     });
     (0, _defineProperty2.default)(this, "onSignallingStateChanged", () => {
       _logger.logger.debug("call " + this.callId + ": Signalling state changed to: " + this.peerConn.signalingState);
@@ -808,7 +807,6 @@ class MatrixCall extends _events.EventEmitter {
       console.log('Failed to play remote video element set',e)
       _logger.logger.info("Failed to play remote video element", e)
     }
-
   }
   /**
    * Set the remote <code>&lt;audio&gt;</code> DOM element. If this call is active,
@@ -933,12 +931,8 @@ class MatrixCall extends _events.EventEmitter {
     if (this.inviteOrAnswerSent) {
       return;
     }
-    console.log('call js answer', this)
-
     console.log(`Answering call ${this.callId} of type ${this.type}`)
     _logger.logger.debug(`Answering call ${this.callId} of type ${this.type}`);
-
-    console.log(`Answering call ${this.callId} of type ${this.type}`)
     if (!this.localAVStream && !this.waitForLocalAVStream) {
       const constraints = getUserMediaContraints(this.type == CallType.Video ? ConstraintsType.Video : ConstraintsType.Audio);
 
@@ -1295,7 +1289,6 @@ class MatrixCall extends _events.EventEmitter {
     try {
       await this.peerConn.setRemoteDescription(event.getContent().answer);
     } catch (e) {
-      console.log(5,e)
       _logger.logger.debug("Failed to set remote description", e);
 
       this.terminate(CallParty.Local, CallErrorCode.SetRemoteDescription, false);
@@ -1463,7 +1456,6 @@ class MatrixCall extends _events.EventEmitter {
     }   catch(e)  {
       _logger.logger.info("Failed to play remote video element", e);
     }
-
   }
 
   setState(state) {
@@ -1811,6 +1803,7 @@ function setTracksEnabled(tracks, enabled) {
 
 function getUserMediaContraints(type) {
   const isWebkit = !!navigator.webkitGetUserMedia;
+
   switch (type) {
     case ConstraintsType.Audio:
       {
