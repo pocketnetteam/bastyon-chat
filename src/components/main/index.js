@@ -121,7 +121,6 @@ export default {
 
         for (const info of usersInfo){
 
-          console.log('this.massMessageAvailable', this.massMessageAvailable);
           if (!this.massMessageAvailable){
             this.$store.commit('icon', {
               icon: 'error',
@@ -129,9 +128,7 @@ export default {
             })
             this.$store.commit('PROCESS_MASS_MAILING', false);
             break;
-          } else {
-            console.log('limit!!!!!!!')
-          }
+          } 
 
           const id = this.core.mtrx.kit.tetatetid(info, this.core.user.userinfo)
 
