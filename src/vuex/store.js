@@ -72,6 +72,7 @@ var store = new Vuex.Store({
 		pinchat: false,
 		lastroom: null,
 		dontreadreceipts: false,
+		donotdisturb: false,
 		voicerecording : false,
 		deletedrooms: {},
 		pkoindisabled : false,
@@ -207,6 +208,7 @@ var store = new Vuex.Store({
 
 			localStorage['dontreadreceipts'] = value ? true : ''
 		},
+
 
 		SET_LAST_ROOM(state, value) {
 
@@ -766,6 +768,7 @@ var store = new Vuex.Store({
 
 			//state.chatusers = v || {}
 		},
+
 
 		SET_CONTACTS_FROM_MATRIX(state, v) {
 			var mp = {};

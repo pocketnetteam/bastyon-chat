@@ -220,7 +220,12 @@ export default {
   }),
   methods: {
     bcCall: function() {
-      console.log('init call')
+      let res = this.m_chat.currentState.getStateEvents("m.room.calls")
+      let isEnable = res[res.length-1]?.event?.content?.enabled
+      if (!isEnable && this.m_chat.myUserId !== res[res.length-1]?.event?.sender) {
+        console.log('The user has restricted the possibility of calls')
+        return
+      }
       let local = document.querySelector('body')
       try {
         let matrixCall = this.core.mtrx.bastyonCalls.initCall(this.chat.roomId, local)
