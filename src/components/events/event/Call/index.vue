@@ -42,7 +42,7 @@ export default {
   .call {
     display: flex;
     align-items: center;
-    width: 265px;
+    width: 230px;
     height: 48px;
     padding: 4px 24px 4px 4px;
     border-radius: 12px;

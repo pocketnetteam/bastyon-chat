@@ -497,9 +497,9 @@ class MatrixCall extends _events.EventEmitter {
 
       console.log("Call ID " + this.callId + ": ICE connection state changed to: " + this.peerConn.iceConnectionState);
 
-      if ('onIceConnectionStateChanged', this.peerConn.iceConnectionState) {
+      if (this.peerConn.iceConnectionState == 'connected') {
         this.setState(CallState.Connected);
-      } else if (this.peerConn.iceConnectionState == 'failed') {
+      } else if (this.peerConn.iceConnectionState == 'disconnected') {
         console.log('failed')
         this.hangup(CallErrorCode.IceFailed, false);
       }
