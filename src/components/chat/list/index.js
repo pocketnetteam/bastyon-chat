@@ -284,11 +284,14 @@ export default {
           if (rt) {
             var last = rt.getLastReplacement()
 
+
             if (last) {
+
               e.event.content.body = last.event.content.body
               e.event.content.edited = last.event.event_id
               e.event.content.block = last.event.content.block
               e.event.content.msgtype = last.event.content.msgtype
+              e.event.decrypted = last.event.decrypted
             }
 
           }
