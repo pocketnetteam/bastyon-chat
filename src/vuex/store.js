@@ -43,6 +43,7 @@ var store = new Vuex.Store({
 		pocketnet: '',
 		mobile: '',
 		voiceMessagesEnabled: '',
+		isCallsEnabled: '',
 		currentPlayingVoiceMessage: null,
 		current_user: {},
 		minimized: false,
@@ -71,9 +72,11 @@ var store = new Vuex.Store({
 		pinchat: false,
 		lastroom: null,
 		dontreadreceipts: false,
+		donotdisturb: false,
 		voicerecording : false,
 		deletedrooms: {},
 		pkoindisabled : false,
+		isCallsActive: null,
 		isLocalStorageChatAuth: false,
 		//share : {url : 'https://yandex.ru/'} //null
 	},
@@ -90,6 +93,13 @@ var store = new Vuex.Store({
 		},
 	},
 	mutations: {
+		SET_CALL(state, isActive) {
+			console.log('set calls', isActive)
+			state.isCallsActive = isActive
+		},
+		CLEAR_CALL(state, ) {
+			state.isCallsActive = null
+		},
 		SET_CURRENT_PLAYING_VOICE_MESSAGE(state, message) {
 			state.currentPlayingVoiceMessage = message
 		},
@@ -199,6 +209,7 @@ var store = new Vuex.Store({
 			localStorage['dontreadreceipts'] = value ? true : ''
 		},
 
+
 		SET_LAST_ROOM(state, value) {
 
 			if (!value) state.lastroom = null
@@ -284,7 +295,9 @@ var store = new Vuex.Store({
 		setVoiceMessagesEnabled(state, voiceMessagesEnabled) {
 			state.voiceMessagesEnabled = voiceMessagesEnabled;
 		},
-
+		setCallsEnabled(state, isCallsEnabled) {
+			state.isCallsEnabled = isCallsEnabled;
+		},
 		ls(state) {
 			if (typeof localStorage.getItem('pinchat') != 'undefined')
 				state.pinchat = localStorage.getItem('pinchat') ? true : false
@@ -756,13 +769,14 @@ var store = new Vuex.Store({
 			//state.chatusers = v || {}
 		},
 
+
 		SET_CONTACTS_FROM_MATRIX(state, v) {
 			var mp = {};
 
 			_.each(v, function (c) {
 				if (
-					f.getmatrixid(c.id) !=
-					(store._vm.core.user.userinfo && store._vm.core.user.userinfo.id)
+				  f.getmatrixid(c.id) !=
+				  (store._vm.core.user.userinfo && store._vm.core.user.userinfo.id)
 				)
 					mp[c.id] = c;
 			});
@@ -809,8 +823,8 @@ var store = new Vuex.Store({
 			state.gallery = v || null;
 
 			var fullscreenmode = f.deep(
-				window,
-				"window.POCKETNETINSTANCE.mobile.fullscreenmode"
+			  window,
+			  "window.POCKETNETINSTANCE.mobile.fullscreenmode"
 			);
 
 			if (fullscreenmode) {
@@ -867,8 +881,8 @@ var store = new Vuex.Store({
 				state.readedteammessages = readedMessages;
 				// Update local storage
 				localStorage.setItem(
-					"readedpocketteammessages",
-					JSON.stringify(readedMessages)
+				  "readedpocketteammessages",
+				  JSON.stringify(readedMessages)
 				);
 			}
 		},
@@ -876,164 +890,32 @@ var store = new Vuex.Store({
 		SET_MENU(state, v) {
 			state.menu = v;
 		},
-	},
-	actions: {
-		SET_CHAT_MEMBERS({ commit }, chat) {},
-		TYPING_EVENT({ commit }, member) {
-			let room = member.roomId;
-			let name = member.name;
-			let data = { room, name, typing: member.typing };
-			commit("SET_TYPING_TO_STORE", data);
-		},
-		CHAT_MEMBERS({ commit }) {},
-		SHOW_GALLERY_FROMEVENTS({ commit, dispatch }, { events, event }) {
-			var images = [],
-				index = 0;
-
-			var encrypted = function (event) {
-				return f.deep(event, "event.content.info.secrets") ? true : false;
-			};
-
-			_.each(events, (event) => {
-				if (event.event.content.msgtype === "m.image") {
-					var url = event.event.content.url;
-
-					if (encrypted(event)) {
-						url = event.event.decryptedImage;
-					}
-
-					images.push({
-						src: url,
-						w: event.event.content.info.w || 500,
-						h: event.event.content.info.h || 500,
-						eventId: event.event.event_id,
-					});
-				}
-			});
-
-			images = _.filter(images, function (i) {
-				return i.src;
-			});
-
-			index = images
-				.map(function (e) {
-					return e.eventId;
-				})
-				.indexOf(event.event.event_id);
-
-			dispatch("SHOW_GALLERY", { images, index });
-		},
-		SHOW_GALLERY({ commit }, { images, index }) {
-			if (!index) index = 0;
-
-			if (!images) images = [];
-
-			if (images.length) {
-				commit("GALLERY", {
-					images: images,
-					index: index,
-				});
-			} else {
-				commit("GALLERY", null);
-			}
-		},
-
-		RELOAD_CHAT_USERS({ commit }, m_chats) {
-			return store._vm.core.mtrx.kit
-				.usersInfoForChats(m_chats, true)
-				.then((i) => {
-					commit(
-						"SET_CHATS_USERS",
-						store._vm.core.mtrx.kit.usersFromChats(m_chats)
-					);
-					return Promise.resolve();
-				})
-				.catch((e) => {
-					return Promise.resolve();
-				});
-		},
-
-		FETCH_CHATS({ commit }) {
-			var m_chats = f.deep(store._vm, "core.mtrx.store.rooms") || {};
-
-			var id = store._vm.core.user.myMatrixId();
-
-			var chats = _.map(m_chats, function (r) {
-				if (r.getLastActiveTimestamp() === -9007199254740991) {
-					if (r.getMember(id)) {
-						r.summary.lastModified =
-							r.getMember(id).events.member.event.origin_server_ts;
-					}
-				} else {
-					r.summary.lastModified = r.getLastActiveTimestamp();
-				}
-				return r.summary;
-			});
-
-			commit("SET_PRECHATS_TO_STORE", chats);
-
-			return store._vm.core.mtrx.kit.allchatmembers(m_chats).then((r) => {
-				commit("SET_CHATS_TO_STORE", chats);
-				commit(
-					"SET_CHATS_USERS",
-					store._vm.core.mtrx.kit.usersFromChats(m_chats)
-				);
-
-				return store._vm.core.mtrx.kit.fillContacts(m_chats);
-			});
-
-			return Promise.resolve();
-
-			return store._vm.core.mtrx.kit
-				.usersInfoForChats(m_chats)
-				.then((i) => {
-					commit(
-						"SET_CHATS_USERS",
-						store._vm.core.mtrx.kit.usersFromChats(m_chats)
-					);
-					commit(
-						"SET_CONTACTS_FROM_MATRIX",
-						_.filter(i, (m) => {
-							return (
-								m.id !==
-								(store._vm.core.user.userinfo &&
-									store._vm.core.user.userinfo.id)
-							);
-						})
-					);
-
-					return Promise.resolve();
-				})
-				.catch((e) => {
-					return Promise.resolve();
-				});
-		},
 		FETCH_EVENTS({ commit }) {
 			var m_chats = f.deep(store._vm, "core.mtrx.store.rooms") || {};
-	  
+
 			var events = {};
-	  
+
 			_.each(m_chats, function (chat) {
 			  events[chat.roomId] = {};
-	  
+
 			  var timeline = [].concat(
 				chat.timeline,
 				chat.currentState.getStateEvents("m.room.member")
 			  );
-	  
+
 			  events[chat.roomId].timeline = timeline;
 			});
-	  
+
 			_.each(events, function (e) {
 			  e.timeline = _.sortBy(e.timeline, function (event) {
 				return event.getDate();
 			  });
 			});
-	  
+
 			commit("SET_EVENTS_TO_STORE", events);
-	  
+
 			//store._vm.core.mtrx.kit.usersInfoForChatsStore(m_chats).then(i => {
-	  
+
 			//})
 		  },
 	}

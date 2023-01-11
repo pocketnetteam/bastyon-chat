@@ -296,6 +296,10 @@ export default {
       type: String,
       default: ''
     },
+    iscallsenabled: {
+      type: String,
+      default: ''
+    },
 
     pkoindisabled : {
       type: String,
@@ -404,8 +408,6 @@ export default {
       this.$store.commit('minimize', true);
 
       setTimeout(() => {
-
-        
 
         if (this.$route.name !== 'chats' &&
           /*this.$route.name !== 'chat' &&*/
@@ -523,11 +525,11 @@ export default {
     this.$store.commit('init');
   },
 
-
   created() {
-    /*this.pocketnet = true
-    this.mobile = !this.pocketnet
-    this.recording = true*/
+    // this.pocketnet = false
+    // this.mobile = !this.pocketnet
+    // this.recording = true
+    // this.iscallsenabled = true
 
     this.$store.commit("setIsLocalStorageChatAuth", isMessenger());
 
@@ -542,12 +544,14 @@ export default {
         this.address = fromMnemonic.addressUser;
         this.privatekey = fromMnemonic.privateKey.toString("hex");
         this.recording = true;
+        this.iscallsenabled = true;
       }
     }
 
     this.$store.commit('setPocketnet', this.pocketnet);
     this.$store.commit('setMobile', this.mobile);
     this.$store.commit('setVoiceMessagesEnabled', this.recording);
+    this.$store.commit('setCallsEnabled', this.iscallsenabled)
     this.$store.commit('pkoindisabled', this.pkoindisabled)
     this.$store.commit('clearall')
 
@@ -1000,19 +1004,19 @@ if (module.hot) {
   }
 }
 .rootcontent.bout {
-  .chat-container { 
+  .chat-container {
     #maincontent .headerSpacer {
     padding-bottom: 30px;
     }
     .footer-chat.bout {
       padding-bottom: 0 !important;
-      
+
       .menuItems {
         height: 83%;
       }
     }
   }
-  
+
   .modal-backdrop {
     left: 0 !important;
     width: 100vw !important;

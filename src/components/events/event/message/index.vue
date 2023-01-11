@@ -18,7 +18,7 @@
       </div>
     <div v-touch:touchhold="dropDownMenuShow" :class="{referenceshowed, showmeta : showmeta, my,'messageRow': 'messageRow', urlpreview : urlpreview, allscreen : urlpreview || content.msgtype === 'm.image'|| file, aligncenter : content.msgtype === 'm.audio'}" :my="my" v-if="!preview && content.msgtype !== 'm.notice'">
 
-      <div class="timeWrapper" v-if="(urlpreview || imageUrl || content.msgtype === 'm.image') || (showmeta && (my)) || file">
+      <div class="timeWrapper" v-if="(urlpreview || imageUrl || content.msgtype === 'm.image') || (showmeta && (my)) || file || content.call_id">
         
         <i :class="'fas fa-fire burn ' + showburn" v-if="showburn" @click="showwhenburn"></i>
         
@@ -27,7 +27,7 @@
         </span>
       </div>
 
-      <div class="actionsWrapper">
+      <div class="actionsWrapper" v-if="content.msgtype !== 'm.file' && !content.call_id">
         <div v-if="multiSelect" class="multiSelect" @click="eventMessage(selectedMessage)">
           <i v-if="selectedMessage" class="far fa-check-circle"></i>
           <i v-else class="far fa-circle"></i>
@@ -83,6 +83,10 @@
           </div>
         </div>
         <VoiceMessage v-if="audioUrl" :audioBuffer="audioUrl" :decryptedInfo="decryptedInfo" :id="event._localTimestamp || Date.now()"/>
+      </div>
+
+      <div class="messageCall" v-if="content.call_id">
+        <Call :class="{'my' : my }" :my="my" :event="event"/>
       </div>
 
       <div class="maxcontent" :class="{'my' : my }" v-if="content.msgtype === 'm.encrypted' && !textWithoutLinks && badenctypted">
