@@ -203,6 +203,7 @@
     "checked" : "Yes",
     "unchecked" : "No",
     "settings_read" : "Send read receipts",
+    "settings_disturb" : "Do not disturb",
     "messagewasburn" : "This message remains only in the memory of your device",
     "messagewillburn" : "The message will be deleted soon",
 

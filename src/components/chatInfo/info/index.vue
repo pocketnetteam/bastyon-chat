@@ -92,6 +92,7 @@
         </span>
       </button>
 
+
       <button class="button small  rounded badbutton" @click="forgetRoom()" v-if="!tetatet">
         {{ $t("caption.leave") }} <i class="fas fa-sign-out-alt"></i>
       </button>
