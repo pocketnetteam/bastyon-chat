@@ -169,7 +169,7 @@ var PcryptoRoom = async function(pcrypto, chat, {ls, lse}){
         var h = getuserseventshistory()
 
         for(var i = h.length - 1; i >= 0; i--){
-            if(h[i].time < time|| !time && !period){
+            if((h[i].time < time || !time) && !period){
                 period = i
             }
         }
@@ -503,7 +503,7 @@ var PcryptoRoom = async function(pcrypto, chat, {ls, lse}){
             return event.decrypting
         }
 
-        var k = `${ecachekey + pcrypto.user.userinfo.id}-${event.event_id}`
+        var k = `${ecachekey + pcrypto.user.userinfo.id}-${(event.content ? event.content.edited : '') || event.event_id}`
 
         var dpromise = lse.get(k).then((stored) => {
 
