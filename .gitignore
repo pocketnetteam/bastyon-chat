@@ -2,6 +2,7 @@
 node_modules
 /dist
 /src/application/isMessenger.js*
+service-worker.js
 
 # local env files
 .env.local

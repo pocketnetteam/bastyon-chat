@@ -52,7 +52,7 @@
         :class="{'bin' : pocketnet, 'bout' : !pocketnet}"
     >
 
-      <div>
+      <div class="fixedInputOnBottom">
 
       
 

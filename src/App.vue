@@ -327,7 +327,8 @@ export default {
         if (availableLocales[this.localization]) {
           i18n.locale = this.localization
         } else {
-          i18n.locale = 'en'
+          i18n.locale = localStorage.getItem('loc') 
+          //  'en'
         }
 
         // Update the teamroom messages
@@ -529,15 +530,27 @@ export default {
     this.mobile = !this.pocketnet
     this.recording = true*/
 
+    // const usertheme = localStorage.getitem('usertheme');
+    //   const newusertheme = usertheme === 'white' ? 'white' : 'black'
+     
+
     this.$store.commit("setIsLocalStorageChatAuth", isMessenger());
 
-    if (this.$store.state.isLocalStorageChatAuth) {
+   
+    if (this.$store.state.isLocalStorageChatAuth) {      
       const fromMnemonic = getDecryptedMnemonic();
+
+      if (document.documentElement.hasAttribute('theme')){
+        document.documentElement.removeAttribute('theme');
+      }
+      
+      document.documentElement.setAttribute('theme', localStorage.getItem('usertheme'));
       if (
         fromMnemonic.addressUser === null &&
         fromMnemonic.privateKey === null
       ) {
-        window.open("https://bastyon.com/authorization", "_blank");
+        this.$router.push('/authorization')
+        // window.open("https://bastyon.com/authorization", "_blank");
       } else {
         this.address = fromMnemonic.addressUser;
         this.privatekey = fromMnemonic.privateKey.toString("hex");
@@ -869,8 +882,8 @@ export default {
     window.matrixchat = core;
   },
 
-  mounted() {
-    this.$store.commit("minimize", true);
+  mounted() {    
+    this.$store.commit("minimize", true);    
   },
 };
 
@@ -1000,15 +1013,21 @@ if (module.hot) {
   }
 }
 .rootcontent.bout {
+  #events {
+    
+      &.mobile {
+        padding-bottom: 100px !important;
+      }
+    }
   .chat-container { 
     #maincontent .headerSpacer {
     padding-bottom: 30px;
     }
     .footer-chat.bout {
       padding-bottom: 0 !important;
-      
+      height: 96px !important;
       .menuItems {
-        height: 83%;
+        height: 77%;
       }
     }
   }
@@ -1072,12 +1091,15 @@ if (module.hot) {
       }
     }
     .chatInputWrapper {
-      bottom: -55px !important;
+      bottom: -22px !important;
       border-top: 1px solid srgb(--background-secondary-theme);
       #chatInput {
-        height: 78px;
         margin: 20px 0 0 0;
       }
+    }
+    .fixedInputOnBottom {
+      height: 100%;
+    min-height: 63px;
     }
     .dropdown {
       .backgr {
@@ -1089,8 +1111,65 @@ if (module.hot) {
       }
     }
   }
+  .scrollbottom {
+    bottom: 7em !important;
+  }
+}
+.rootcontent.bout.minimized {
+
+  .relationEvent {
+      position: relative !important;
+      left: 0 !important;
+      top: 0 !important; 
+      display: flex !important;
+      align-items: flex-end !important;
+      width: 100% !important;
+    }
+  .chat-container {
+    #modal {
+      .modal-backdrop {
+        width: 100% !important;
+        left: 0 !important;  
+      }
+      .modal-wrapper {
+        top: 40px !important;
+        left: 50% !important;
+        transform: translateX(-50%) !important;
+      }
+    }
+  }
+  .chat-container-pages {
+    #modal {
+      display: none;
+    }
+    .chatInputWrapper {
+      padding-bottom: 35px !important;
+    }
+  }
+}
+.eventWrapper {
+  .previewMessage {
+    max-width: 248px !important;
+    .txt.sname {
+      padding: 0 4px 0 0 !important;
+    }
+  }
+}
+.chatInputWrapper {
+  .previewMessage {
+    max-height: 35px !important;
+    overflow: auto;
+  }
 }
 .rootcontent.fix {
+  .shareEventsWrapper {
+    .cnt {
+      position: absolute !important;
+      left: -337px !important;
+      top: -38px !important;
+      width: 334px !important;
+    }
+  }
   .chat-container-pages {
     position: absolute !important;
     left: 23px !important;

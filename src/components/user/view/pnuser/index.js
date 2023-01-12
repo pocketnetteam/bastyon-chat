@@ -31,7 +31,7 @@ export default {
         href : function(){
             var domain = window.pocketnetdomain || 'pocketnet.app'
 
-            return 'https://'+domain+'/' + this. userinfo.source.name
+            return 'https://'+domain+'/' + this.userinfo.source.name
         },
     }),
 

@@ -6,6 +6,7 @@
         <userView :userinfo="contact" :blocked="blocked" />
       </div>
     </div>
+
     <div class="actionsWrapper" v-if="contact.id !== activeuser.id">
       <contactActions :contact="contact" :blocked="blocked" />
     </div>

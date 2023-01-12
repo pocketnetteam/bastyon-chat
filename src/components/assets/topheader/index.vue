@@ -4,6 +4,11 @@
     <div class="topheader ">
       <div class="work">
         <div class="headerLine">
+        
+          <div v-if="!pocketnet" class="user-pic-fixed-custom" style="position: fixed; top: 4px; left: 10px; z-index: 9999999999; width: 55px; height: 55px; border-radius: 50%;">
+            <img :src="activeuser.image" style="width: 45px; height: 45px; border-radius: 50%;" />
+          </div>
+
           <div class="leftIcon icon" @mouseenter="mouseenter">
             <slot name="left">
               &nbsp;

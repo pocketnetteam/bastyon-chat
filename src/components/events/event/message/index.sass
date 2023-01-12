@@ -18,8 +18,10 @@
     opacity: 1 !important
 
   .mnwrapper
-    opacity: 0
+    opacity: 1
     +transition(0.3s)
+    .fas 
+      font-size: .9em !important
 
   .multiSelect
     position: absolute
@@ -180,7 +182,9 @@
 
   .messageAudio
     margin-left: $r
-    height: 50px
+    .voiceMessage 
+      height: 50px
+      margin: 0 0 0 auto;
     .reference
       padding: 0.5em
       font-size: 0.9em;
@@ -296,6 +300,7 @@
       &:hover
         transition: .4s
         background: srgb(--neutral-grad-0)
+        border-radius: 1em 0 0 1em
       .referenceCaption
         width: 100%
         display: flex
@@ -315,7 +320,7 @@
     border-radius: 10px
     position: relative
     margin-top: $r
-    height: 100px
+    height: 120px
     padding-left: 0 !important
 
     .table

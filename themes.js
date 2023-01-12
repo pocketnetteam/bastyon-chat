@@ -69,11 +69,11 @@ var thm = function(){
     };
 
     var createThemeData = function(filedata, theme){
-        var nd = filedata.replace(/\$color-/g, '$' + theme + '-' + 'color-');
-            nd = nd.replace(/theme_template/g, 'theme_' + theme);
+        var nd = filedata.replace(/\$color-/g, '$' + 'dark' + '-' + 'color-');
+            nd = nd.replace(/theme_template/g, 'theme_' +  'dark');
             
             nd = nd.replace(/\n/g, '\n\t');
-            nd = '@at-root #matrix-root[theme="'+theme+'"] \n\t' + nd
+            nd = '@at-root #matrix-root[theme="dark"] \n\t' + nd
 
         return nd
     }
@@ -107,7 +107,7 @@ var thm = function(){
         if (!fs.existsSync(filenameth2)) {
 
             _.each(themes, function(theme){
-                var filename = path.join(dirname, 'theme_' + theme + '.sass');
+                var filename = path.join(dirname, 'theme_' + 'dark' + '.sass');
 
                 if (fs.existsSync(filename)) {
                     fs.unlinkSync(filename);
@@ -132,13 +132,13 @@ var thm = function(){
 
                 _.each(themes, function(theme){
 
-                    if(removetheme[theme]) return
+                    if(removetheme['dark']) return
 
-                    var themedata = createThemeData(data, theme)
+                    var themedata = createThemeData(data, 'dark')
 
                     var dirname = path.dirname(file)
 
-                    var filename = path.join(themesPath(dirname), 'theme_' + theme + '.sass');
+                    var filename = path.join(themesPath(dirname), 'theme_' + 'dark' + '.sass');
 
                     console.log('filename', filename)
 

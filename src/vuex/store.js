@@ -15,7 +15,7 @@ var mex = {
 	theme: function (state, value) {
 
 		if (themes[value]) {
-			state.theme = value
+			state.theme = 'black'
 		}
 	}
 }
@@ -37,7 +37,7 @@ var store = new Vuex.Store({
 		loading: false,
 		online: true,
 		unauthorized: false,
-		theme: 'white',
+		theme: 'black',
 		themes: themes,
 		signedUpUsers: [],
 		pocketnet: '',
@@ -294,7 +294,7 @@ var store = new Vuex.Store({
 		},
 
 		init(state) {
-			mex.theme(state, localStorage.getItem('theme') || 'white')
+			mex.theme(state, 'black')
 
 
 
@@ -561,7 +561,7 @@ var store = new Vuex.Store({
 		},
 
 		theme(state, value) {
-			mex.theme(state, value)
+			mex.theme(state, 'black')
 		},
 
 		SET_POCKETTEAMMESSAGES(state, v) {

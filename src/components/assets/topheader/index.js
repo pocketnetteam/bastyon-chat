@@ -26,6 +26,10 @@ export default {
         pocketnet: state => state.pocketnet,
         minimized: state => state.minimized,
         active : state => state.active,
+        activeuser: function () {
+            return this.core.user.userinfo
+      
+          },
     }),
 
     methods : {
