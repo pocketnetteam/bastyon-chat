@@ -354,11 +354,15 @@ export default {
     },
 
     edited: function () {
-      if (this.content.edited) return true
+      if (this.content.edited) {
+        return true
+      }
 
       if (
         this.origin.event.content['m.relates_to'] &&
-        this.origin.event.content['m.relates_to']['rel_type'] == 'm.replace') return true
+        this.origin.event.content['m.relates_to']['rel_type'] == 'm.replace') {
+          return true
+        }
     },
 
     selectedMessage: function () {

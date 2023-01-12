@@ -336,6 +336,7 @@ export default {
         var ts = this.timeline._timelineSet
         var e = this.event
 
+
         if(!this.reference && e.event.content['m.relates_to'] && e.event.content['m.relates_to'] && e.event.content['m.relates_to']['rel_type'] == "m.reference"){
 
             var id = e.event.content['m.relates_to']['event_id'] 
@@ -351,6 +352,7 @@ export default {
                 })
 
                 if(ev){
+
                   this.reference = e.event.content.reference = ev
 
                   var rt = ts.getRelationsForEvent(this.core.mtrx.clearEventId(ev), 'm.replace', 'm.room.message')
@@ -362,6 +364,9 @@ export default {
                     if (last){
                       ev.event.content.body = last.event.content.body
                       ev.event.content.edited = last.event.event_id
+                      ev.event.content.block = last.event.content.block
+                      ev.event.content.msgtype = last.event.content.msgtype
+                      ev.event.decrypted = last.event.decrypted
                     }
 
                   }
