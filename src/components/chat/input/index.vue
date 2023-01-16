@@ -97,8 +97,6 @@
                 <recordVoice @onRecordingStart="initRecording" @onRecordingStop="stopRecording" :prepareRecording="prepareRecording ? true : false" :isRecording="isRecording" :disabled="microphoneDisabled" @onClear="clear" @canceling="setOpacity"/>
               </div>
 
-
-
               <!--<div v-if="microphoneDisabled" class="disabled">
                 <i class="icon fas fa-microphone-slash" @click="initRecording"></i>
               </div>-->

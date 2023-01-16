@@ -24,7 +24,8 @@ export default {
                     unchecked : 'no',
                     label : 'settings_read'
                 },
- ]
+
+            ]
         }
 
     },
@@ -59,8 +60,7 @@ export default {
 
         set_settings_read : function(value){
             this.$store.commit('dontreadreceipts', !value);
-        },
-
+        },  
 
         set_settings: function(id, e){
             return this['set_settings_' + id](e.value)

@@ -186,7 +186,7 @@ class CallEventHandler {
         // call has the lowest call ID (by string comparison)
         if (existingCall.state === _call.CallState.WaitLocalMedia || existingCall.state === _call.CallState.CreateOffer || existingCall.callId > call.callId) {
           _logger.logger.log("Glare detected: answering incoming call " + call.callId + " and canceling outgoing call " + existingCall.callId);
-          console.log("Glare detected: answering incoming call " + call.callId + " and canceling outgoing call " + existingCall.callId);
+
           existingCall.replacedBy(call);
           call.answer();
         } else {

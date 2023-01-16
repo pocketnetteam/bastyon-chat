@@ -157,6 +157,8 @@ export default {
         this.pause()
       }
       else{
+        
+
         this.play()
       }
     },
@@ -186,7 +188,7 @@ export default {
     },
 
     play(){
-      console.log('play')
+
       if(!this.audiobuffer) return
 
       

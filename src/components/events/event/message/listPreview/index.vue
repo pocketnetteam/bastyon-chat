@@ -48,10 +48,6 @@
       <span v-if="senderName" class="txt sname" >{{ senderName }}&nbsp;</span><span class="txt">{{ $t("caption.sentVoiceMessage") }}</span>
     </div>
 
-    <div v-if="content.call_id" class="previewMessage">
-      <span class="txt">{{$t(event.event.type)}}</span>  <span v-if="senderName && senderName!= 'You' && event.event.type === 'm.call.invite' " class="txt sname" >{{ senderName }}</span>
-    </div>
-
 
     <div v-if="(content.msgtype === 'm.text') && !urlpreview" class="previewMessage">
 

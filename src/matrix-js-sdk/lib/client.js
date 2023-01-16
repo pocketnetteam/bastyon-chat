@@ -5132,35 +5132,34 @@ MatrixClient.prototype._checkTurnServers = async function () {
   const remainingTime = this._turnServersExpiry - Date.now();
 
   if (remainingTime > TURN_CHECK_INTERVAL) {
-    console.log('TURN creds are valid for another')
     _logger.logger.debug("TURN creds are valid for another " + remainingTime + " ms: not fetching new ones.");
 
     credentialsGood = true;
   } else {
     _logger.logger.debug("Fetching new TURN credentials");
-    console.log('Fetching new TURN credentials')
+
     try {
       const res = await this.turnServer();
-      // if (res.uris) { now we have no servers from back
-      if (true) {
-        // _logger.logger.log("Got TURN URIs: " + res.uris + " refresh in " + res.ttl + " secs"); // map the response to a format that can be fed to RTCPeerConnection
-        // console.log("Got TURN URIs: " + res.uris + " refresh in " + res.ttl + " secs");
-        // hardcoded
+
+      if (res.uris) {
+        _logger.logger.log("Got TURN URIs: " + res.uris + " refresh in " + res.ttl + " secs"); // map the response to a format that can be fed to RTCPeerConnection
+
+
         const servers = {
-          urls: "turn:turn.pocketnet.app",
-          username: "stunuser",
-          credential: "q1w2e3r4t5ASD!@#",
+          urls: res.uris,
+          username: res.username,
+          credential: res.password
         };
         this._turnServers = [servers]; // The TTL is in seconds but we work in ms
 
         this._turnServersExpiry = Date.now() + res.ttl * 1000;
         credentialsGood = true;
-        console.log('credentialsGood')
       }
     } catch (err) {
       _logger.logger.error("Failed to get TURN URIs", err); // If we get a 403, there's no point in looping forever.
+
+
       if (err.httpStatus === 403) {
-        console.log('TURN access unavailable for this account: stopping credentials checks')
         _logger.logger.info("TURN access unavailable for this account: stopping credentials checks");
 
         if (this._checkTurnServersIntervalID !== null) global.clearInterval(this._checkTurnServersIntervalID);
