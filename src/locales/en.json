@@ -202,12 +202,24 @@
     "checked" : "Yes",
     "unchecked" : "No",
     "settings_read" : "Send read receipts",
+    "settings_disturb" : "Do not disturb",
     "messagewasburn" : "This message remains only in the memory of your device",
     "messagewillburn" : "The message will be deleted soon",
 
     "micaccessbrowser" : "Access to the microphone is restricted, please check your browser settings.",
     "micaccesscommonproblem" : "Sorry, for some reason it is not possible to record voice messages on the device",
     "micaccesscordova" : "Access to the microphone is restricted, please check your device settings.",
-    "micdevicenotfound" : "Audio recording device not found"
+    "micdevicenotfound" : "Audio recording device not found",
 
+
+    "endedCall" : "Call completed",
+    "incomingCall" : "Incoming call",
+    "outgoingCall" : "Outgoing call",
+    "m.call.invite" : "Incoming call from",
+    "m.call.hangup" : "Call completed",
+    "m.call.reject" : "Call rejected",
+    "m.call.answer" : "Active call",
+    "wait": "Waiting for a response",
+    "ended": "Call completed",
+    "reject" : "Call rejected"
 }

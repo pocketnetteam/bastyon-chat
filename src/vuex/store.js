@@ -43,6 +43,7 @@ var store = new Vuex.Store({
 		pocketnet: '',
 		mobile: '',
 		voiceMessagesEnabled: '',
+		isCallsEnabled: '',
 		currentPlayingVoiceMessage: null,
 		current_user: {},
 		minimized: true,
@@ -71,9 +72,11 @@ var store = new Vuex.Store({
 		pinchat: false,
 		lastroom: null,
 		dontreadreceipts: false,
+		donotdisturb: false,
 		voicerecording : false,
 		deletedrooms: {},
-		pkoindisabled : false
+		pkoindisabled : false,
+		isCallsActive: null,
 		//share : {url : 'https://yandex.ru/'} //null
 	},
 	getters: {
@@ -89,6 +92,13 @@ var store = new Vuex.Store({
 		},
 	},
 	mutations: {
+		SET_CALL(state, isActive) {
+			console.log('set calls', isActive)
+			state.isCallsActive = isActive
+		},
+		CLEAR_CALL(state, ) {
+			state.isCallsActive = null
+		},
 		SET_CURRENT_PLAYING_VOICE_MESSAGE(state, message) {
 			state.currentPlayingVoiceMessage = message
 		},
@@ -279,7 +289,9 @@ var store = new Vuex.Store({
 		setVoiceMessagesEnabled(state, voiceMessagesEnabled) {
 			state.voiceMessagesEnabled = voiceMessagesEnabled;
 		},
-
+		setCallsEnabled(state, isCallsEnabled) {
+			state.isCallsEnabled = isCallsEnabled;
+		},
 		ls(state) {
 			if (typeof localStorage.getItem('pinchat') != 'undefined')
 				state.pinchat = localStorage.getItem('pinchat') ? true : false
