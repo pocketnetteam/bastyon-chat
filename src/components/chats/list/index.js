@@ -6,6 +6,7 @@ import f from "@/application/functions";
 
 export default {
 	name: "list",
+	inject: ['matches'],
 	data: function () {
 
 		return {
@@ -14,8 +15,7 @@ export default {
 			page: 0,
 			revealed: {},
 			lastEventDescription: '',
-			blocked: false,
-			searchText : ''
+			blocked: false
 		}
 
 	},
@@ -46,7 +46,7 @@ export default {
 		},
 
 		active : function(){
-			this.searchText = ''
+			// this.searchText = ''
 		}
 		//$route: 'getdata'
 	},
@@ -102,13 +102,12 @@ export default {
 			}
 
 		},
-
+		
 		chats: function (state) {
 			var self = this
 			var chats = [];
-
+			
 			_.each(state.chats, (chat) => {
-
 				if (this.deletedrooms[chat.roomId]) return
 
 				this.core.mtrx.kit.tetatetchat(this.m_chat)
@@ -124,7 +123,18 @@ export default {
 					return
 
 				} else {
-					chats.push(chat)
+					/*Load messages for every chat*/
+					let rm = this.core.mtrx.client.getRoom(chat.roomId),
+							ts = rm.getLiveTimeline(),
+							tl = new this.core.mtrx.sdk.TimelineWindow(this.core.mtrx.client, ts.getTimelineSet());
+					
+					tl.load().then(() => {
+						return this.getEventsAndEncrypt(rm, tl)
+					}).then((events) => {
+						chat.events = events.filter(f => f.event.decrypted?.msgtype === 'm.text' || f.event.content?.msgtype === 'm.text');
+					}).catch(() => {})
+					
+					chats.push(chat);
 				}
 
 			})
@@ -139,9 +149,7 @@ export default {
 
 			var chats = this.chats;
 
-
-			if (this.searchText){
-
+			if (this.matches?.value){
 				var mc = _.filter(_.map(chats, (c) => {
 
 					var users = this.core.mtrx.chatUsersInfo(c.roomId, 'anotherChatUsers')
@@ -155,9 +163,16 @@ export default {
 
 					if(m_chat && m_chat.getJoinRule() === 'public' && m_chat.currentState.getStateEvents('m.room.name').length > 0){
 						chatname = m_chat.currentState.getStateEvents('m.room.name')[0].getContent().name
-					  }
+					}
+					
+					/*Search by messages*/
+					var messages = c.events.filter(m => {
+						const match = (m.event.decrypted || m.event.content).body.toLowerCase().includes(this.matches?.value);
+						
+						return match && m.event || null;
+					})
 
-					if(!chatname){
+					if(!chatname || messages.length){
 						chatname = m_chat.name
 
 						if(chatname[0] == '#') chatname = ''
@@ -167,8 +182,8 @@ export default {
 
 					var point = 0
 
-					if(sstring.indexOf(this.searchText) > -1){
-						point = this.searchText.length / sstring.length
+					if(sstring.indexOf(this.matches?.value) > -1 || messages.length){
+						point = this.matches?.value.length / sstring.length
 					}
 
 					return {
@@ -183,11 +198,10 @@ export default {
 				mc = _.sortBy(mc, function (cc) {
 					return cc.point
 				}).reverse()
-
+				
 				chats = _.map(mc, (c) => {
 					return c.chat
 				} )
-
 			}
 
 			return chats
@@ -211,11 +225,31 @@ export default {
 
 	}),
 	methods: {
-
-		search(text) {
-			this.searchText = text.toLowerCase()
+		getEventsAndEncrypt: function(chat, timeline){
+			let events = timeline.getEvents()
+			
+			return Promise.all(_.map(events, (e) => {
+				if (e.event.decrypted) return Promise.resolve()
+				if(f.deep(e, 'event.content.msgtype') !== 'm.encrypted') return Promise.resolve()
+				
+				return chat.pcrypto.decryptEvent(e.event).then(d => {
+					e.event.decrypted = d
+					
+					return Promise.resolve()
+				}).catch(e => {
+					
+					e.event.decrypted = {
+						msgtype : 'm.bad.encrypted'
+					}
+					
+					return Promise.resolve()
+				})
+				
+			})).then(() => {
+				return Promise.resolve(events)
+			})
 		},
-
+		
 		invitepnt() {
 			this.core.invitepnt()
 		},

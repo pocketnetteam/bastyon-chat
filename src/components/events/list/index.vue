@@ -49,9 +49,6 @@
         <i class="fas fa-chevron-down"></i>
       </div>
     </transition>
-
- 
-
   </div>
 </template>
 

@@ -14,14 +14,14 @@ export default {
     roomInfo: false,
     aboutUser: false
   },
-
+  inject: ['isChatEncrypted', 'matches'],
   components: {
     chatName,
     chatIcon,
     chatTyping,
     contacts
   },
-
+  
   data: function () {
 
     return {
@@ -151,7 +151,9 @@ export default {
       }, {
         value: 'exclude',
         label: this.$i18n.t("caption.toBePaidBySender")
-      }]
+      }],
+      
+      hoverEncrypt: false
 
     }
 

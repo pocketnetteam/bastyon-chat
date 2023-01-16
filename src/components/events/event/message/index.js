@@ -58,9 +58,11 @@ export default {
 
     return {
       referenceshowed : false,
+      markedText: null
     }
 
   },
+  inject: ['matches'],
   components: {
     actions,
     filePreview,
@@ -200,14 +202,17 @@ export default {
     },
 
     body: function () {
+      let bc = this.origin.event.content
 
-      var bc = this.origin.event.content
-
-      if (this.origin.event.content.msgtype == 'm.encrypted') {
+      if (bc.msgtype === 'm.encrypted') {
         bc = this.decryptEvent
       }
-
-      return bc.pbody || bc.body || ''
+      
+      const content = bc.pbody || bc.body || '';
+      
+      this.markText(content);
+  
+      return content
     },
 
     content: function () {
@@ -217,8 +222,6 @@ export default {
     badenctypted: function () {
       return this.decryptEvent.msgtype == 'm.bad.encrypted'
     },
-
-   
 
     textWithoutLinks: function () {
 

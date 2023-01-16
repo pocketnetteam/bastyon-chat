@@ -13,6 +13,7 @@ export default {
     selectedMessages: [],
     isRemoveSelectedMessages: false,
   },
+  inject: ['matches'],
   components: {},
   data: function () {
     return {
@@ -47,7 +48,7 @@ export default {
           next.message.setTime(0)
           next.message.play();
         }
-      },
+      }
     };
   },
 

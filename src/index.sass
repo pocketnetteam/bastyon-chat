@@ -107,7 +107,13 @@ input
 		background-position: 0% 50%
 
 mark
-    background-color : srgb(--color-bg-selection)!important 
+    background-color : srgb(--color-bg-selection) !important
+
+mark.match
+    transition: background-color .3s
+
+mark.current
+    background-color: rgb(255, 225, 0) !important
 
 button.button
     background: srgb(--color-bg-ac)

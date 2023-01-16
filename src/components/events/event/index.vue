@@ -98,8 +98,6 @@
       left : 0
       top : 0
       padding : $r
-
-
 </style>
 
 <script>
@@ -138,8 +136,6 @@ export default {
       readyToRender : false
     }
   },
-
-
   props: {
     event: Object,
     prevevent : Object,

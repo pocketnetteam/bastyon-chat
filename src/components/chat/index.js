@@ -12,7 +12,7 @@ export default {
     chat: Object,
     u: String
   },
-
+  inject: ['isChatEncrypted'],
   components: {
     list,
     chatInput : () => import('@/components/chat/input/index.vue'),
@@ -26,7 +26,6 @@ export default {
     return {
       roomUserBanned: false,
       roomUserKicked: false,
-      hoverEncrypt: false,
       roomMuted: false,
       loading: false,
       ready: false,
@@ -133,6 +132,13 @@ export default {
       }
 
     },
+    encrypted: {
+      immediate: true,
+      handler: function (state) {
+        if (typeof this.isChatEncrypted.state === 'function')
+          this.isChatEncrypted.state(state)
+      }
+    }
   },
   computed: mapState({
     activeCall: state => state.activeCall,
@@ -192,7 +198,7 @@ export default {
       if (this.chat) {
         var users = this.core.mtrx.anotherChatUsers(this.chat.roomId)
 
-        if (users.length == 1) {
+        if (users.length === 1) {
           return this.core.mtrx.blockeduser(users[0].userId)
         }
       }
@@ -243,7 +249,7 @@ export default {
 
     clearRelationEvent: function () {
 
-      if (this.relationEvent && this.relationEvent.type == 'm.replace' && this.$refs['chatInput']) {
+      if (this.relationEvent && this.relationEvent.type === 'm.replace' && this.$refs['chatInput']) {
         this.$refs['chatInput'].setText('')
       }
 
@@ -384,7 +390,7 @@ export default {
 
     sent: function () {
 
-      if (this.relationEvent && this.relationEvent.type == 'm.reference') {
+      if (this.relationEvent && this.relationEvent.type === 'm.reference') {
         this.relationEvent = null
       }
 

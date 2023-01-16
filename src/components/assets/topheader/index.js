@@ -3,7 +3,6 @@ import { mapState } from 'vuex';
 export default {
     name: 'topheader',
     props: { },
-
     data : function(){
 
         return {

@@ -109,6 +109,7 @@ export default {
     readed: Object,
     my : Boolean
   },
+  inject: ['matches'],
   components: {IncomingMessage},
   data: function () {
     return {
