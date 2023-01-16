@@ -168,11 +168,14 @@ var PcryptoRoom = async function(pcrypto, chat, {ls, lse}){
         var period = 0
         var h = getuserseventshistory()
 
+        
+
         for(var i = h.length - 1; i >= 0; i--){
-            if(h[i].time < time || !time && !period){
+            if((h[i].time > time || !time) && !period){
                 period = i
             }
         }
+
 
         return period
     }
@@ -294,10 +297,12 @@ var PcryptoRoom = async function(pcrypto, chat, {ls, lse}){
                 block = 10
             }
 
-
             var k = period(time) + '-' + block
+
        
             return ls.get(`${lcachekey + pcrypto.user.userinfo.id}-${k}`).then((keys) => {
+
+                //return Promise.reject()
 
                 const keysPrepared = convert.aeskeys.out(keys);
 
@@ -811,6 +816,7 @@ var PcryptoRoom = async function(pcrypto, chat, {ls, lse}){
         return promise.then(event => {
 
             _e = event
+
 
             return self.decryptKey(event)
         }).then(key => {
