@@ -3,6 +3,7 @@
   <div class='main-wrapper' :class="{minimized, active}">
     <vue-page-transition name="fade-in-right" v-if="!mobile">
         <router-view
+         @sendMassMessage="sendMassMessage"
         ></router-view>
     </vue-page-transition>
     <router-view v-else></router-view>=

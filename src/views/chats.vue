@@ -2,7 +2,7 @@
   <div class="page chats" :class="{pocketnet, mobile, minimized, active, newChat}">   
 
     <topheader
-      class="topheader" :share="share" @newchat="newchat" 
+      class="topheader" :share="share" @newchat="newchat" @sendMassMessage="sendMassMessage"
     />
     <maincontent ref="maincontent" :rbackexp="true" > 
       <template v-slot:content>
@@ -13,7 +13,7 @@
 
           <template v-slot:header>{{ $t("caption.newChat") }}</template>
           <template v-slot:body>
-            <chatcreate @completed="chatcreated"/>
+            <chatcreate @completed="chatcreated" @sendMassMessage="sendMassMessage"/>
           </template>
           <template v-slot:footer></template>
 
@@ -94,10 +94,10 @@ export default {
   },
 
   methods : {
-    // sendMassMessage : function(message){
-    //   this.$emit('sendMassMessage', message);
-    //   this.closeNewChat();
-    // },
+    sendMassMessage : function(message){
+      this.$emit('sendMassMessage', message);
+      this.closeNewChat();
+    },
 
     newchat : function(){
       this.newChat = true
