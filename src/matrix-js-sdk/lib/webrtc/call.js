@@ -327,6 +327,7 @@ class MatrixCall extends _events.EventEmitter {
       try {
         myAnswer = await this.peerConn.createAnswer();
       } catch (err) {
+        console.log('create answer',err)
         _logger.logger.debug("Failed to create answer: ", err);
 
         this.terminate(CallParty.Local, CallErrorCode.CreateAnswer, true);
@@ -342,6 +343,7 @@ class MatrixCall extends _events.EventEmitter {
         });
         this.sendAnswer();
       } catch (err) {
+        console.log('connecting', err)
         _logger.logger.debug("Error setting local description!", err);
 
         this.terminate(CallParty.Local, CallErrorCode.SetLocalDescription, true);
@@ -363,7 +365,7 @@ class MatrixCall extends _events.EventEmitter {
     });
     (0, _defineProperty2.default)(this, "onIceGatheringStateChange", event => {
       _logger.logger.debug("ice gathering state changed to " + this.peerConn.iceGatheringState);
-
+      console.log("ice gathering state changed to " + this.peerConn.iceGatheringState);
       if (this.peerConn.iceGatheringState === 'complete' && !this.sentEndOfCandidates) {
         // If we didn't get an empty-string candidate to signal the end of candidates,
         // create one ourselves now gathering has finished.
@@ -384,7 +386,7 @@ class MatrixCall extends _events.EventEmitter {
 
       if (this.callHasEnded()) {
         _logger.logger.debug("Ignoring newly created offer on call ID " + this.callId + " because the call has ended");
-
+        console.log("Ignoring newly created offer on call ID " + this.callId + " because the call has ended");
         return;
       }
 
@@ -392,7 +394,7 @@ class MatrixCall extends _events.EventEmitter {
         await this.peerConn.setLocalDescription(description);
       } catch (err) {
         _logger.logger.debug("Error setting local description!", err);
-
+        console.log("Error setting local description!", err);
         this.terminate(CallParty.Local, CallErrorCode.SetLocalDescription, true);
         return;
       }
@@ -493,15 +495,18 @@ class MatrixCall extends _events.EventEmitter {
       _logger.logger.debug("Call ID " + this.callId + ": ICE connection state changed to: " + this.peerConn.iceConnectionState); // ideally we'd consider the call to be connected when we get media but
       // chrome doesn't implement any of the 'onstarted' events yet
 
+      console.log("Call ID " + this.callId + ": ICE connection state changed to: " + this.peerConn.iceConnectionState);
 
       if (this.peerConn.iceConnectionState == 'connected') {
         this.setState(CallState.Connected);
-      } else if (this.peerConn.iceConnectionState == 'failed') {
+      } else if (this.peerConn.iceConnectionState == 'disconnected') {
+        console.log('failed')
         this.hangup(CallErrorCode.IceFailed, false);
       }
     });
     (0, _defineProperty2.default)(this, "onSignallingStateChanged", () => {
       _logger.logger.debug("call " + this.callId + ": Signalling state changed to: " + this.peerConn.signalingState);
+      console.log("call " + this.callId + ": Signalling state changed to: " + this.peerConn.signalingState);
     });
     (0, _defineProperty2.default)(this, "onTrack", ev => {
       if (ev.streams.length === 0) {
@@ -530,7 +535,12 @@ class MatrixCall extends _events.EventEmitter {
 
       if (ev.track.kind === 'video') {
         if (this.remoteVideoElement) {
-          this.playRemoteVideo();
+          try {
+            this.playRemoteVideo();
+          } catch (e) {
+            console.log('onTrack',e)
+            throw e
+          }
         }
       } else {
         if (this.remoteAudioElement) this.playRemoteAudio();
@@ -598,11 +608,11 @@ class MatrixCall extends _events.EventEmitter {
     this.ourPartyId = this.client.deviceId; // Array of Objects with urls, username, credential keys
 
     this.turnServers = opts.turnServers || [];
-
-    if (this.turnServers.length === 0 && this.client.isFallbackICEServerAllowed()) {
+    if (this.turnServers.length === 0) {
       this.turnServers.push({
         urls: [FALLBACK_ICE_SERVER]
       });
+
     }
 
     for (const server of this.turnServers) {
@@ -764,7 +774,9 @@ class MatrixCall extends _events.EventEmitter {
 
       try {
         await element.play();
+        console.log('local ok')
       } catch (e) {
+        console.log('Failed to play local video element set',e)
         _logger.logger.info("Failed to play local video element", e);
       }
     }
@@ -776,16 +788,24 @@ class MatrixCall extends _events.EventEmitter {
    */
 
 
-  setRemoteVideoElement(element) {
+  async setRemoteVideoElement(element) {
     if (element === this.remoteVideoElement) return;
-    element.autoplay = true; // if we already have an audio element set, use that instead and mute the audio
+    // if we already have an audio element set, use that instead and mute the audio
     // on this video element.
 
     if (this.remoteAudioElement) element.muted = true;
     this.remoteVideoElement = element;
 
-    if (this.remoteStream) {
-      this.playRemoteVideo();
+    if (!this.remoteStream) return
+    this.remoteVideoElement.srcObject = this.remoteStream;
+    // this.remoteVideoElement.muted = true;
+
+
+    try {
+      await this.remoteVideoElement.play();
+    } catch (e) {
+      console.log('Failed to play remote video element set',e)
+      _logger.logger.info("Failed to play remote video element", e)
     }
   }
   /**
@@ -839,6 +859,7 @@ class MatrixCall extends _events.EventEmitter {
 
     if (!haveTurnCreds) {
       _logger.logger.warn("Failed to get TURN credentials! Proceeding with call anyway...");
+      console.log("Failed to get TURN credentials! Proceeding with call anyway...initWithInvite");
     }
 
     this.peerConn = this.createPeerConnection(); // we must set the party ID before await-ing on anything: the call event
@@ -910,9 +931,8 @@ class MatrixCall extends _events.EventEmitter {
     if (this.inviteOrAnswerSent) {
       return;
     }
-
+    console.log(`Answering call ${this.callId} of type ${this.type}`)
     _logger.logger.debug(`Answering call ${this.callId} of type ${this.type}`);
-
     if (!this.localAVStream && !this.waitForLocalAVStream) {
       const constraints = getUserMediaContraints(this.type == CallType.Video ? ConstraintsType.Video : ConstraintsType.Audio);
 
@@ -926,6 +946,7 @@ class MatrixCall extends _events.EventEmitter {
         this.waitForLocalAVStream = false;
         this.gotUserMediaForAnswer(mediaStream);
       } catch (e) {
+        console.log('media failed')
         this.getUserMediaFailed(e);
         return;
       }
@@ -1246,17 +1267,18 @@ class MatrixCall extends _events.EventEmitter {
 
 
   async onAnswerReceived(event) {
+    console.log('answer received',event)
     _logger.logger.debug(`Got answer for call ID ${this.callId} from party ID ${event.getContent().party_id}`);
 
     if (this.callHasEnded()) {
       _logger.logger.debug(`Ignoring answer because call ID ${this.callId} has ended`);
-
+      console.log(`Ignoring answer because call ID ${this.callId} has ended`);
       return;
     }
 
     if (this.opponentPartyId !== undefined) {
       _logger.logger.info(`Ignoring answer from party ID ${event.getContent().party_id}: ` + `we already have an answer/reject from ${this.opponentPartyId}`);
-
+      console.log(`Ignoring answer from party ID ${event.getContent().party_id}: ` + `we already have an answer/reject from ${this.opponentPartyId}`);
       return;
     }
 
@@ -1430,8 +1452,8 @@ class MatrixCall extends _events.EventEmitter {
     _logger.logger.info("playing remote video. stream active? " + this.remoteStream.active);
 
     try {
-      await this.remoteVideoElement.play();
-    } catch (e) {
+      this.remoteVideoElement.play()
+    }   catch(e)  {
       _logger.logger.info("Failed to play remote video element", e);
     }
   }
@@ -1694,7 +1716,6 @@ class MatrixCall extends _events.EventEmitter {
       iceServers: this.turnServers,
       iceCandidatePoolSize: this.client._iceCandidatePoolSize
     }); // 'connectionstatechange' would be better, but firefox doesn't implement that.
-
     pc.addEventListener('iceconnectionstatechange', this.onIceConnectionStateChanged);
     pc.addEventListener('signalingstatechange', this.onSignallingStateChanged);
     pc.addEventListener('icecandidate', this.gotLocalIceCandidate);
@@ -1808,6 +1829,7 @@ function getUserMediaContraints(type) {
             deviceId: videoInput ? {
               ideal: videoInput
             } : undefined,
+            facingMode: ['user', 'environment'],
 
             /* We want 640x360.  Chrome will give it only if we ask exactly,
                FF refuses entirely if we ask exactly, so have to ask for ideal

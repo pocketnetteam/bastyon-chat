@@ -457,10 +457,11 @@ class MTRX {
   }
 
   initEvents() {
-
     let self = this
 
     let userId = this.core.mtrx.client.credentials.userId
+
+
 
     this.client.on("RoomMember.membership", (event, member) => {
 

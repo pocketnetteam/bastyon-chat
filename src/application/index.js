@@ -106,6 +106,66 @@ class Core {
             this.store.commit('wasunhidden', true)*/
     }
 
+    setCalls = function() {
+        console.log('set calls')
+        try {
+            let p = {
+                el : document.querySelector('body'),
+                parameters : {
+                    getUserInfo: async (address) => {
+                        address = f.hexDecode(address.split(':')[0].replace('@',''))
+                        return this.user.usersInfo([address], true, false)
+                    },
+                    getWithLocale: (key) => {
+                        console.log(this)
+                        return this.vm.$i18n.t(key)
+                    }
+                },
+
+
+            }
+
+            if(window.POCKETNETINSTANCE && window.POCKETNETINSTANCE.platform){
+                p = window.POCKETNETINSTANCE.platform.getCallsOptions()
+            }
+
+            if (typeof BastyonCalls) {
+                this.mtrx.bastyonCalls = new BastyonCalls(this.client || client, matrixcs, p.el, p.parameters)
+                this.mtrx.bastyonCalls.on('initcall', () => {
+                    if (this.vm.$store.state.currentPlayingVoiceMessage) {
+                        this.vm.$store.state.currentPlayingVoiceMessage.pause()
+                    }
+
+                    if (window?.POCKETNETINSTANCE?.playingvideo) {
+                        console.log(window.POCKETNETINSTANCE.playingvideo)
+                        window?.POCKETNETINSTANCE?.playingvideo.pause()
+                        if (document.exitFullscreen) {
+                            document.exitFullscreen();
+                        } else if (document.webkitExitFullscreen) {
+                            document.webkitExitFullscreen();
+                        } else if (document.mozCancelFullScreen) {
+                            document.mozCancelFullScreen();
+                        } else if (document.msExitFullscreen) {
+                            document.msExitFullscreen();
+                        }
+                    }
+
+                    if (window?.POCKETNETINSTANCE?.platform) {
+                        console.log('pocketnet available', window?.POCKETNETINSTANCE?.platform)
+                    }
+
+                })
+            }
+
+
+            this.store.commit('SET_CALL', this.mtrx.bastyonCalls ? true : false)
+        } catch (e) {
+            console.log(e)
+            return
+        }
+
+        console.log('Calls ready')
+    }
     canback = function(){
         return this.store.state.gallery ? false : true
     }
@@ -199,6 +259,10 @@ class Core {
 
             if (f.deep(this.user,'userinfo.name'))
                 this.mtrx.client.setDisplayName(f.deep(this.user,'userinfo.name'))
+
+            if (this.vm.$store.state.isCallsEnabled) {
+                this.setCalls()
+            }
 
             return Promise.resolve()
 

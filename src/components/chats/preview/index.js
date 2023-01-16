@@ -133,7 +133,11 @@ export default {
         events = _.sortBy(events, function (e) {
           return e.event.origin_server_ts
         })
-        
+
+        events =_.filter(events, function (e) {
+          return e.event.type !== 'm.call.candidates'
+        })
+
         /*Show matched message instead of last*/
         if (this.matches?.value) {
           const messages = _.filter(this.chat?.events, f => {

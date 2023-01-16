@@ -8,6 +8,7 @@ import imagesLoaded from 'vue-images-loaded'
 import dummypreviews from "@/components/chats/dummypreviews";
 import IncomingMessage from "./incomingMessage/incomingMessage.vue"
 import VoiceMessage from '@/components/events/event/VoiceMessage';
+import Call from "@/components/events/event/Call";
 
 export default {
   name: 'eventsMessage',
@@ -71,6 +72,7 @@ export default {
     dummypreviews,
     IncomingMessage,
     VoiceMessage,
+    Call
   },
   watch : {
     isRemoveSelectedMessages: {
@@ -126,8 +128,7 @@ export default {
     },
 
     readyToRender : function(){
-
-      var r = ( this.content.msgtype === 'm.encrypted' && !this.textWithoutLinks && this.badenctypted ) ||
+      var r = ( this.content.msgtype === 'm.encrypted' && !this.textWithoutLinks && this.badenctypted ) || 
 
         (this.content.membership) ||
 
@@ -135,7 +136,7 @@ export default {
         (this.file) || (this.error) ||
         (this.content.msgtype === 'm.image' && this.imageUrl) ||
         (this.content.msgtype === 'm.audio' && this.audioUrl) ||
-        (this.urlpreview) ||
+        (this.urlpreview) || (this?.content?.call_id) ||
         (this.preview)
 
       return r
@@ -356,11 +357,15 @@ export default {
     },
 
     edited: function () {
-      if (this.content.edited) return true
+      if (this.content.edited) {
+        return true
+      }
 
       if (
         this.origin.event.content['m.relates_to'] &&
-        this.origin.event.content['m.relates_to']['rel_type'] == 'm.replace') return true
+        this.origin.event.content['m.relates_to']['rel_type'] == 'm.replace') {
+          return true
+        }
     },
 
     selectedMessage: function () {

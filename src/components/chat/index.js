@@ -18,7 +18,7 @@ export default {
     chatInput : () => import('@/components/chat/input/index.vue'),
     join,
     attachement,
-    userRoomStatus
+    userRoomStatus,
   },
 
   data: function () {
@@ -141,7 +141,7 @@ export default {
     }
   },
   computed: mapState({
-
+    activeCall: state => state.activeCall,
     pocketnet: state => state.pocketnet,
     minimized: state => state.minimized,
     active: state => state.active,
