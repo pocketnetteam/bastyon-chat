@@ -545,6 +545,7 @@ export default {
       }
       
       document.documentElement.setAttribute('theme', localStorage.getItem('usertheme'));
+      
       if (
         fromMnemonic.addressUser === null &&
         fromMnemonic.privateKey === null
@@ -883,6 +884,15 @@ export default {
   },
 
   mounted() {    
+    if (this.$store.state.isLocalStorageChatAuth) {    
+      setTimeout(() => {
+        this.$router.push('/chats?page=settings')
+        setTimeout(() => {
+          this.$router.push('/chats?page=chats')
+        }, 500);
+      }, 900);
+      
+    }
     this.$store.commit("minimize", true);    
   },
 };
@@ -1162,6 +1172,9 @@ if (module.hot) {
   }
 }
 .rootcontent.fix {
+  .card-content {
+    border-bottom: 0 !important; 
+  }
   .shareEventsWrapper {
     .cnt {
       position: absolute !important;
