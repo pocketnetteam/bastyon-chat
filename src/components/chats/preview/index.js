@@ -132,6 +132,10 @@ export default {
           return e.event.origin_server_ts
         })
 
+        events =_.filter(events, function (e) {
+          return e.event.type !== 'm.call.candidates'
+        })
+
         if (events.length) {
           return events[events.length - 1]
         }

@@ -56,6 +56,7 @@ var store = new Vuex.Store({
 		pocketnet: '',
 		mobile: '',
 		voiceMessagesEnabled: '',
+		isCallsEnabled: '',
 		currentPlayingVoiceMessage: null,
 		current_user: {},
 		minimized: true,
@@ -84,6 +85,7 @@ var store = new Vuex.Store({
 		pinchat: false,
 		lastroom: null,
 		dontreadreceipts: false,
+		donotdisturb: false,
 		voicerecording : false,
 		deletedrooms: {},
 		pkoindisabled : false,
@@ -92,7 +94,8 @@ var store = new Vuex.Store({
 		processMassMailing: false,
 		address: '',
 		massMessageLimitCount: massMessageLimit.count,
-		massMessageLimitDate: massMessageLimit.date
+		massMessageLimitDate: massMessageLimit.date,
+		isCallsActive: null,
 		//share : {url : 'https://yandex.ru/'} //null
 	},
 	getters: {
@@ -118,7 +121,6 @@ var store = new Vuex.Store({
 	},
 	mutations: {
 		SENT_MASS_MESSAGE(state){
-
 			state.massMessageLimitCount++;
 
 			const massMessageLimit = {
@@ -127,8 +129,6 @@ var store = new Vuex.Store({
 			}
 
 			localStorage.setItem('chat_mass_message_limit', JSON.stringify(massMessageLimit));
-
-
 		},
 		SET_MASS_MESSAGE_LIMIT(state){
 			state.massMessageLimitCount = 0;
@@ -139,6 +139,13 @@ var store = new Vuex.Store({
 		},
 		PROCESS_MASS_MAILING(state, boo){
 			state.processMassMailing = boo
+		},
+		SET_CALL(state, isActive) {
+			console.log('set calls', isActive)
+			state.isCallsActive = isActive
+		},
+		CLEAR_CALL(state, ) {
+			state.isCallsActive = null
 		},
 		SET_CURRENT_PLAYING_VOICE_MESSAGE(state, message) {
 			state.currentPlayingVoiceMessage = message
@@ -330,7 +337,9 @@ var store = new Vuex.Store({
 		setVoiceMessagesEnabled(state, voiceMessagesEnabled) {
 			state.voiceMessagesEnabled = voiceMessagesEnabled;
 		},
-
+		setCallsEnabled(state, isCallsEnabled) {
+			state.isCallsEnabled = isCallsEnabled;
+		},
 		ls(state) {
 			if (typeof localStorage.getItem('pinchat') != 'undefined')
 				state.pinchat = localStorage.getItem('pinchat') ? true : false

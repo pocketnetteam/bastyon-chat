@@ -120,10 +120,15 @@ export default {
   },
 
   mounted() {
-
     this.newChat = Boolean(this.$route.query?.type)
+
+    if (this.joinroom){
+      this.$router.push('/publicPreview?id=' + this.joinroom);
+      this.$store.commit('JOINROOM', null)
+    }
     
   }
 
 }
 </script>
+

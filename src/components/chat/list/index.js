@@ -84,10 +84,13 @@ export default {
       var types = {
         'm.room.message': true,
         'p.room.encrypt.message': true,
+        'p.room.': true,
         'm.room.image': true,
         'm.room.audio': true,
         'm.room.file': true,
-        'm.room.member': true,
+        'm.call.invite': true,
+        'm.call.hangup': true,
+        'm.call.reject': true,
         'm.fully_read': true
       }
 
@@ -140,12 +143,13 @@ export default {
     },
     getEvents: function () {
       var events = this.timeline.getEvents()
-
       events = _.filter(events, e => {
 
         var type = e.event.type;
 
-        if (e.localRedactionEvent() || e.getRedactionEvent()) return
+        if (e.localRedactionEvent() || e.getRedactionEvent()){
+          return
+        }
 
         if (e.event.type === 'm.room.power_levels' && Object.keys(e.event.content.users).length === 1) {
           return
@@ -153,7 +157,6 @@ export default {
         if (this.chat.currentState.getMembers().length <= 2 && e.event.type === 'm.room.member' && 'm.room.power_levels') {
           return
         }
-
         return !this.eventsTypes || this.eventsTypes[type]
 
       })
@@ -180,6 +183,9 @@ export default {
       events = events.reverse()
 
       this.$emit('getEvents', events)
+      // events = _.filter(events, function (e) {
+      //   return e.ty
+      // })
 
       return events
 
@@ -284,11 +290,14 @@ export default {
           if (rt) {
             var last = rt.getLastReplacement()
 
+
             if (last) {
+
               e.event.content.body = last.event.content.body
               e.event.content.edited = last.event.event_id
               e.event.content.block = last.event.content.block
               e.event.content.msgtype = last.event.content.msgtype
+              e.event.decrypted = last.event.decrypted
             }
 
           }

@@ -335,11 +335,20 @@ export default {
       if (this.roomMuted) {
         self.core.mtrx.client.deletePushRule('global', 'room', roomId)
         self.roomMuted = false
+
       } else {
         self.core.mtrx.client.setRoomMutePushRule('global', roomId, 'true')
         self.roomMuted = true
-      }
 
+
+      }
+      self.core.mtrx.client.sendStateEvent(
+        roomId,
+        "m.room.calls",
+        { enabled: !self.roomMuted },
+        undefined
+      )
+      console.log(this.m_chat.currentState.getStateEvents("m.room.calls"), !self.roomMuted)
 
     },
 
