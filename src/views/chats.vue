@@ -90,9 +90,113 @@ export default {
   }),
 
   methods : {
-    sendMassMessage : function(message){
-      this.$emit('sendMassMessage', message);
+    // sendMassMessage : function(message){
+    //   this.$emit('sendMassMessage', message);
+    //   this.closeNewChat();
+    // },
+    sendMassMessage(chatMassMessage){
+
+      console.log('sendmassmessage!', chatMassMessage)
+
+      const {message, recipients, total} = chatMassMessage;
+
+      this.$store.commit('PROCESS_MASS_MAILING', true);
+      this.$store.commit('SET_RECIPIENTS_TOTAL', total);
+
+      this.core.user.usersInfo(recipients, true).then(async usersInfo => {                      
+                              
+        const sleep = async () => {
+
+            return new Promise(resolve => {
+
+              setTimeout(() => {
+
+                resolve('slept')
+                return true;
+                
+              }, 200)
+
+            })
+
+        }
+
+        const sent = () => {
+
+          recipients.shift();
+
+          this.$store.commit('SET_RECIPIENTS', recipients)
+
+          localStorage.setItem('chat_mass_message', JSON.stringify(chatMassMessage))        
+        
+        }
+
+        
+        for (const info of usersInfo){
+
+            const id = this.core.mtrx.kit.tetatetid(info, this.core.user.userinfo)
+
+            const matrixId = this.core.user.matrixId(info.id);
+            
+            var initialstate = [{
+              "type": "m.set.encrypted",
+              "state_key": "",
+              "content": {
+                  encrypted: true
+              }
+            }]
+
+
+            const room = this.$store.state.chatsMap[id];
+
+            if (room){
+
+              console.log('room', room);
+
+              await sleep()
+              sent();
+              const result = await this.core.mtrx.testmessage({room: room.roomId, message: message})
+              console.log('result message', result);
+                
+
+            } else {
+
+
+              this.core.mtrx.client.createRoom(
+                  {
+                  room_alias_name: id,
+                  visibility: 'private',
+                  invite: [matrixId],
+                  name: '#' + id,
+                  initial_state: initialstate
+              
+                  }
+              ).then(async(_chat) => {
+
+                  console.log('_chat', _chat);
+                  await sleep()
+
+                  sent()
+                  const result = await this.core.mtrx.testmessage({room: _chat.room_id, message: message})
+
+                  console.log('result message 2', result);
+
+                  
+
+              })
+              
+
+          }
+
+
+
+
+        }
+
+      })
+
+
       this.closeNewChat();
+
     },
     newchat : function(){
       this.newChat = true

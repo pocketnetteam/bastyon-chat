@@ -69,6 +69,8 @@ export default {
 
             const chatMassMessage = JSON.parse(localStorage.getItem('chat_mass_message') || '{}');
 
+            console.log('chatMassMessage', chatMassMessage);
+
             this.$emit('sendMassMessage', chatMassMessage);
         },
         changeCloseByBg : function(){

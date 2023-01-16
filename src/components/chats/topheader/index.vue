@@ -20,14 +20,14 @@
           v-if="recipients.length"
           class="progress-mailing"
         >
-          <div class="mailing-label">
+          <div  class="mailing-label">
             <span>
               Mailing progress
             </span>
             <i  
               v-if="!processMassMailing"
               class="fa fa-play"
-              @click="resumeProcess"
+              @click="resumeProcess()"
             ></i>
           </div>
           <progress 

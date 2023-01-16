@@ -63,6 +63,7 @@ export default {
     sendMassMessage(chatMassMessage){
 
       const {message, recipients, total} = chatMassMessage;
+
       this.$store.commit('PROCESS_MASS_MAILING', true);
       this.$store.commit('SET_RECIPIENTS_TOTAL', total);
 
@@ -114,7 +115,6 @@ export default {
             if (room){
 
               console.log('room', room);
-
               await sleep()
               sent();
               const result = await this.core.mtrx.testmessage({room: room.roomId, message: message})
@@ -123,6 +123,7 @@ export default {
 
             } else {
 
+              sent();
 
               this.core.mtrx.client.createRoom(
                   {
@@ -135,16 +136,12 @@ export default {
                   }
               ).then(async(_chat) => {
 
-                  console.log('_chat', _chat);
-                  await sleep()
+                const result = await this.core.mtrx.testmessage({room: _chat.room_id, message: message})
 
-                  sent()
-                  const result = await this.core.mtrx.testmessage({room: _chat.room_id, message: message})
+                console.log('result message 2', result);
 
-                  console.log('result message 2', result);
-
-                  
-
+              }).catch(err => {
+                console.log('room create mailing err', err);
               })
               
 
