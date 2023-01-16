@@ -29,7 +29,7 @@
           <div class="groupList">
 
             <div class="groupCaption">
-              <span class="label">Selected ({{ selectedlength }})</span>
+              <span class="label"> {{ type === "massmailing" ? "Total recipients (subscribers): ":  "Selected " }} {{ selectedlength }}</span>
               </div>
             </div>
 
