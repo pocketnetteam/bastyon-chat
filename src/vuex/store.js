@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import f from '@/application/functions.js'
+import publicAddresses from '@/publicAddresses.json';
 
 
 Vue.use(Vuex);
@@ -21,6 +22,18 @@ var mex = {
 }
 
 var activetimeout = null
+
+const checkDateLimit = (date) => {
+	return new Date().getTime() - 86400000 > date;
+}
+
+const massMessageLimit = JSON.parse(localStorage.getItem('chat_mass_message_limit') || '{"count": 0, "date": 0}');
+
+if (checkDateLimit(massMessageLimit.date)){
+	massMessageLimit.date = new Date().getTime();
+	massMessageLimit.count = 0;
+}
+
 
 var store = new Vuex.Store({
 	state: {
@@ -77,8 +90,9 @@ var store = new Vuex.Store({
 		recipientsTotal: 0,
 		recipients: [],
 		processMassMailing: false,
-		address: ''
-
+		address: '',
+		massMessageLimitCount: massMessageLimit.count,
+		massMessageLimitDate: massMessageLimit.date
 		//share : {url : 'https://yandex.ru/'} //null
 	},
 	getters: {
@@ -91,10 +105,35 @@ var store = new Vuex.Store({
 
 		getSignedUpUsers: state => {
 			return state.signedUpUsers
+		},
+
+		pro : state => {
+			return publicAddresses.indexOf(state.address) > -1;
+		},
+
+		massMessageAvailable : state => {
+			return state.massMessageLimitCount <= 300;
 		}
 	
 	},
 	mutations: {
+		SENT_MASS_MESSAGE(state){
+
+			state.massMessageLimitCount++;
+
+			const massMessageLimit = {
+				count: state.massMessageLimitCount,
+				date: state.massMessageLimitDate
+			}
+
+			localStorage.setItem('chat_mass_message_limit', JSON.stringify(massMessageLimit));
+
+
+		},
+		SET_MASS_MESSAGE_LIMIT(state){
+			state.massMessageLimitCount = 0;
+			state.state.massMessageLimitDate = new Date().getTime();
+		},
 		SET_ADDRESS(state, address){
 			state.address = address;
 		},

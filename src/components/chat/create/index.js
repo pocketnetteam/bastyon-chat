@@ -2,7 +2,6 @@ import { mapState, mapGetters } from 'vuex';
 import contacts from '@/components/contacts/index.vue'
 import InputField from '@/components/chat/input/InputField/InputField.vue'
 import f from '@/application/functions.js'
-import publicAddresses from './publicAddresses.json';
 
 export default {
     name: 'chatcreate',
@@ -79,13 +78,8 @@ export default {
                 return _.toArray(this.selected).length
             },
 
-            pro : state => {
-                    
-                return publicAddresses.indexOf(state.address) > -1;
-
-            }
-
         }),
+        ...mapGetters(['pro']),
 
         viewTypes(){
 

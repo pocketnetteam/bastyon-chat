@@ -1,4 +1,4 @@
-import { mapState } from 'vuex';
+import { mapState, mapGetters  } from 'vuex';
 
 import contacts from '@/components/contacts/index.vue'
 
@@ -26,6 +26,7 @@ export default {
     created(){
 
         this.$store.commit('SET_CURRENT_ROOM', 'all')
+
          
     },
 
@@ -40,28 +41,33 @@ export default {
     },
 
 
-    computed: mapState({
-        auth : state => state.auth,
-        minimized: state => state.minimized,
-        pocketnet: state => state.pocketnet,
-        active: state => state.active,
-        
-        ...mapState([
-            'share',
-            'closebybg',
-            'recipients',
-            'recipientsTotal',
-            'processMassMailing'
-        ]),
+    computed: {
+        ...mapState({
+            auth : state => state.auth,
+            minimized: state => state.minimized,
+            pocketnet: state => state.pocketnet,
+            mobile: (state) => state.mobile,
+            active: state => state.active,
+            
+            ...mapState([
+                'share',
+                'closebybg',
+                'recipients',
+                'recipientsTotal',
+                'processMassMailing',
+                'massMessageLimitCount'
+            ]),
 
-        window : function(){
-            return window
-        },
+            window : function(){
+                return window
+            },
 
-        recipientsCompleted(){
-            return this.recipientsTotal - this.recipients.length;
-        }
-    }),
+            recipientsCompleted(){
+                return this.recipientsTotal - this.recipients.length;
+            },
+        }),
+        ...mapGetters(['pro', 'massMessageAvailable'])
+    },
 
     methods : {
         

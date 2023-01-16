@@ -1,7 +1,7 @@
 
 import FooterChat from '../layouts/footerChat/index.vue'
 import gallery from '@/components/gallery/index.vue'
-import {mapState} from 'vuex'
+import {mapState, mapGetters} from 'vuex'
 
 export default {
   name: "mainWrapper",
@@ -37,24 +37,28 @@ export default {
 		next()
 	},
 
-  computed: mapState({
-    auth: state => state.auth,
+  computed: {
+    ...mapState({
+      auth: state => state.auth,
+      pocketnet: (state) => state.pocketnet,
 
-    ...mapState([
-      'currentUserChat',
-      'minimized',
-      'gallery',
-      'active',
-      'mobile',
-      'recipientsTotal',
-      'recipients'
-    ]),
+      ...mapState([
+        'currentUserChat',
+        'minimized',
+        'gallery',
+        'active',
+        'mobile',
+        'recipientsTotal',
+        'recipients'
+      ]),
 
-    showFooter : function(){
-      return this.$route.name != 'chat' || this.minimized
-    }
+      showFooter : function(){
+        return this.$route.name != 'chat' || this.minimized
+      },
 
-  }),
+    }),
+    ...mapGetters(['massMessageAvailable'])
+  },
 
   methods: {
     closeGallery : function(){
@@ -84,71 +88,100 @@ export default {
 
         }
 
+        const secondsToHms = (d) => {
+          d = Number(d);
+          var h = Math.floor(d / 3600);
+          var m = Math.floor(d % 3600 / 60);
+          var s = Math.floor(d % 3600 % 60);
+      
+          var hDisplay = h > 0 ? h + (h == 1 ? " hour, " : " hours, ") : "";
+          var mDisplay = m > 0 ? m + (m == 1 ? " minute, " : " minutes, ") : "";
+          var sDisplay = s > 0 ? s + (s == 1 ? " second" : " seconds") : "";
+          return hDisplay + mDisplay + sDisplay; 
+      }
+
         const sent = () => {
 
           recipients.shift();
 
           this.$store.commit('SET_RECIPIENTS', recipients)
 
-          localStorage.setItem('chat_mass_message', JSON.stringify(chatMassMessage))        
+          localStorage.setItem('chat_mass_message', JSON.stringify(chatMassMessage))    
+          
+          this.$store.commit('SENT_MASS_MESSAGE');
+
         
         }
 
-        
+        const limit = 86400 - ((new Date().getTime() - Number(this.$store.state.massMessageLimitDate)) / 1000);
+
+        if (!this.massMessageAvailable && (limit < 0)){
+          this.$store.commit('SET_MASS_MESSAGE_LIMIT');
+        }
+
         for (const info of usersInfo){
 
-            const id = this.core.mtrx.kit.tetatetid(info, this.core.user.userinfo)
-
-            const matrixId = this.core.user.matrixId(info.id);
-            
-            var initialstate = [{
-              "type": "m.set.encrypted",
-              "state_key": "",
-              "content": {
-                  encrypted: true
-              }
-            }]
-
-
-            const room = this.$store.state.chatsMap[id];
-
-            if (room){
-
-              console.log('room', room);
-              await sleep()
-              sent();
-              const result = await this.core.mtrx.testmessage({room: room.roomId, message: message})
-              console.log('result message', result);
-                
-
-            } else {
-
-              sent();
-
-              this.core.mtrx.client.createRoom(
-                  {
-                  room_alias_name: id,
-                  visibility: 'private',
-                  invite: [matrixId],
-                  name: '#' + id,
-                  initial_state: initialstate
-              
-                  }
-              ).then(async(_chat) => {
-
-                const result = await this.core.mtrx.testmessage({room: _chat.room_id, message: message})
-
-                console.log('result message 2', result);
-
-              }).catch(err => {
-                console.log('room create mailing err', err);
-              })
-              
-
+          console.log('this.massMessageAvailable', this.massMessageAvailable);
+          if (!this.massMessageAvailable){
+            this.$store.commit('icon', {
+              icon: 'error',
+              message: "Exceeded daily limit of 300 messages. Please, wait " + secondsToHms(limit)
+            })
+            this.$store.commit('PROCESS_MASS_MAILING', false);
+            break;
+          } else {
+            console.log('limit!!!!!!!')
           }
 
+          const id = this.core.mtrx.kit.tetatetid(info, this.core.user.userinfo)
+
+          const matrixId = this.core.user.matrixId(info.id);
+          
+          var initialstate = [{
+            "type": "m.set.encrypted",
+            "state_key": "",
+            "content": {
+                encrypted: true
+            }
+          }]
 
 
+          const room = this.$store.state.chatsMap[id];
+
+          if (room){
+
+            console.log('room', room);
+            await sleep()
+            sent();
+            const result = await this.core.mtrx.testmessage({room: room.roomId, message: message})
+            console.log('result message', result);
+              
+
+          } else {
+
+            sent();
+
+            this.core.mtrx.client.createRoom(
+                {
+                room_alias_name: id,
+                visibility: 'private',
+                invite: [matrixId],
+                name: '#' + id,
+                initial_state: initialstate
+            
+                }
+            ).then(async(_chat) => {
+
+              const result = await this.core.mtrx.testmessage({room: _chat.room_id, message: message})
+
+              console.log('result message 2', result);
+
+            }).catch(err => {
+              console.log('room create mailing err', err);
+            })
+            
+
+          }
 
         }
 

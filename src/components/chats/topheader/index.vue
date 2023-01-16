@@ -17,7 +17,7 @@
 
       <template v-slot:info>
         <div
-          v-if="recipients.length"
+          v-if="pro && recipients.length"
           class="progress-mailing"
         >
           <div  class="mailing-label">

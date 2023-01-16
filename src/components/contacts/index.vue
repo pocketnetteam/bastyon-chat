@@ -24,7 +24,7 @@
       <div class="namebuttoncreate">
 
 
-      <div class="" v-if="mode === 'Selectmany' && selectedlength">
+      <div class="" v-if="mode === 'Selectmany' && (selectedlength || type === 'massmailing')">
         <div class="work">
           <div class="groupList">
 
