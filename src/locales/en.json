@@ -58,6 +58,7 @@
         "following" : "Following",
         "theme" : "Theme:",
         "contacts" : "Contacts",
+        "other" : "Other",
         "phoneContacts" : "Phone contacts",
         "chooseInviteMedia" : "Please choose how you want to invite:",
         "admin" : "Admin",
@@ -127,7 +128,7 @@
         "You" : "You",
         "chatsearchingempty" : "No chats found for the specified filter",
         "sendmessage" : "Send message"
-        
+
     },
 
     "input" : {
@@ -138,7 +139,7 @@
 
     "message": {
     },
-   
+
     "button" : {
         "starChatButton": "Start chat",
         "decline" : "Decline",

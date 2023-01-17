@@ -58,9 +58,11 @@ export default {
 
     return {
       referenceshowed : false,
+      markedText: null
     }
 
   },
+  inject: ['matches', 'markText'],
   components: {
     actions,
     filePreview,
@@ -105,7 +107,7 @@ export default {
     }
   },
   computed: {
-    showburn : function(){  
+    showburn : function(){
 
       if(new Date() < new Date(2021,11,28)) {
         return ''
@@ -131,13 +133,13 @@ export default {
         (this.content.membership) ||
 
         ((this.content.msgtype === 'm.text' || this.content.msgtype === 'm.encrypted') && this.textWithoutLinks) ||
-        (this.file) || (this.error) || 
+        (this.file) || (this.error) ||
         (this.content.msgtype === 'm.image' && this.imageUrl) ||
         (this.content.msgtype === 'm.audio' && this.audioUrl) ||
         (this.urlpreview) || (this?.content?.call_id) ||
         (this.preview)
 
-      return r 
+      return r
 
     },
     my: function () {
@@ -177,10 +179,10 @@ export default {
 
     showmyicon: function () {
       
-      return this.showmyicontrue || 
+      return this.showmyicontrue ||
         this.content.msgtype === 'm.image' ||
         /*this.content.msgtype === 'm.audio' ||*/
-        this.content.msgtype === 'm.file' || 
+        this.content.msgtype === 'm.file' ||
         this.urlpreview || (!this.$store.state.active && this.$store.state.minimized)
 
 
@@ -200,14 +202,17 @@ export default {
     },
 
     body: function () {
+      let bc = this.origin.event.content
 
-      var bc = this.origin.event.content
-
-      if (this.origin.event.content.msgtype == 'm.encrypted') {
+      if (bc.msgtype === 'm.encrypted') {
         bc = this.decryptEvent
       }
-
-      return bc.pbody || bc.body || ''
+      
+      const content = bc.pbody || bc.body || '';
+      
+      if (bc.msgtype === 'm.text') this.markMatches(content);
+  
+      return content
     },
 
     content: function () {
@@ -217,8 +222,6 @@ export default {
     badenctypted: function () {
       return this.decryptEvent.msgtype == 'm.bad.encrypted'
     },
-
-   
 
     textWithoutLinks: function () {
 
@@ -402,8 +405,8 @@ export default {
       this.$store.commit('icon', {
 				icon: 'info',
 				message: text
-        
-        
+    
+    
 			})
 
     },
@@ -633,6 +636,37 @@ export default {
 
     eventMessage: function (state) {
       state ? this.removeMessage() : this.selectMessage()
+    },
+  
+    scrollTo: function () {
+      const evtWrp = this.$el.parentElement.parentElement,
+            parent = evtWrp.offsetParent
+    
+      /*Scroll eventsflex to message*/
+      if (parent) parent.parentNode.scrollTop = (evtWrp.offsetTop - parent.offsetTop);
+    },
+  
+    markMatches: function (content) {
+      /*Highlight matched text*/
+      if (!this.matches) return
+    
+      this.markedText = this.markText(content)
+    
+      /*Add highlighted parts to search*/
+      this.$nextTick(() => {
+        const localMsg = this.origin._localTimestamp !== this.origin._localTimestamp,
+          matches = Array.from(this.$el.querySelectorAll('mark'))
+      
+        if (localMsg) matches.reverse()
+      
+        matches
+          .forEach((mark, id) => {
+            if (this.markedText) {
+              mark.component = this
+              this.matches[`${ localMsg ? 'prepend' : 'append' }`](mark)
+            }
+          })
+      })
     }
   }
 }

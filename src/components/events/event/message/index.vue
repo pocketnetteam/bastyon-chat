@@ -21,7 +21,7 @@
       <div class="timeWrapper" v-if="(urlpreview || imageUrl || content.msgtype === 'm.image') || (showmeta && (my)) || file || content.call_id">
         
         <i :class="'fas fa-fire burn ' + showburn" v-if="showburn" @click="showwhenburn"></i>
-        
+
         <span>
           {{ format_date(origin._localTimestamp) || "Now" }}
         </span>
@@ -85,10 +85,10 @@
             <i class="fas fa-pen"></i> {{ $t("caption.edited") }}
           </div>
           <div class="msgtext">
-            <IncomingMessage :message="textWithoutLinks"></IncomingMessage>
+            <IncomingMessage :message="textWithoutLinks" :marked-text="markedText"></IncomingMessage>
           </div>
           <div class="sendername" v-if="(!content.from && !my && showmeta) || (showmyicon && !my)">
-            <span><b>{{userinfo.name}}</b></span> 
+            <span><b>{{userinfo.name}}</b></span>
             &middot;
             <span>
               {{ format_date(origin._localTimestamp) || "Now" }}
@@ -118,7 +118,7 @@
           </div>
 
         </div>
-        
+
       </div>
 
       <div class="filePreview" v-if="file">
@@ -138,7 +138,7 @@
           <linepreloader/>
         </div>
       </div>
-      
+
     </div>
 <!--sdfsf-->
     <div class="messagePreview" v-if="preview">
