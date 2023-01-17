@@ -26,6 +26,8 @@
         "add" : "Add",
         "mute" : "Mute",
         "unmute" : "Unmute",
+        "disableCalls" : "Prohibit incoming calls",
+        "enableCalls" : "Allow incoming calls",
         "leave" : "Leave",
         "Info" : "Info",
         "new" : "New",

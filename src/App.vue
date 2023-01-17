@@ -304,10 +304,6 @@ export default {
       type: String,
       default: ''
     },
-    iscallsenabled: {
-      type: String,
-      default: ''
-    },
 
     iscallsenabled: {
       type: String,
