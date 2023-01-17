@@ -271,6 +271,15 @@ export default {
     chats,
     userUnauthorized
   },
+
+  provide() {
+    return {
+      isChatEncrypted: this.isChatEncrypted,
+      matches: this.matches,
+      markText: this.markText
+    }
+  },
+
   props: {
     address: {
       type: String,
@@ -316,7 +325,27 @@ export default {
       type: Boolean,
       default: false
     }
+  },
 
+  data: function () {
+    return {
+      /*Stack for "encrypted" chat icon*/
+      isChatEncrypted: {
+        value: false,
+        state: this.isChatEncryptedState
+      },
+
+      /*Stack for global search*/
+      matches: {
+        value: '',
+        all: [],
+        current: 0,
+        search: this.search,
+        prepend: this.prependMatch,
+        append: this.appendMatch,
+        clear: this.clearMatches
+      }
+    }
   },
 
   watch: {
@@ -529,10 +558,10 @@ export default {
   },
 
   created() {
-    this.pocketnet = true
-    this.mobile = !this.pocketnet
-    this.recording = true
-    this.iscallsenabled = true
+    //this.pocketnet = true
+    //this.mobile = !this.pocketnet
+    //this.recording = true
+    //this.iscallsenabled = true
 
     this.$store.commit('setCallsEnabled', this.iscallsenabled)
     this.$store.commit('setPocketnet', this.pocketnet);

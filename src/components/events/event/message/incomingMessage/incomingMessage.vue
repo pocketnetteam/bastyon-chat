@@ -1,8 +1,8 @@
 <template>
     <label>
-        <label :chunks="chunks" v-for="(chunk, index) in chunks" v-bind:key="index">  
+        <label :chunks="chunks" v-for="(chunk, index) in chunks" v-bind:key="index">
             <label class="likelink" v-if="chunk.id" @click="show(chunk)">@{{ chunk.name }}</label>
-            <label v-else>{{ chunk }}</label>
+            <label v-else v-html="markedText || chunk"/>
         </label>
     </label>
 </template>
@@ -14,7 +14,8 @@ export default {
         message: {
             type: String,
             default: ''
-        }
+        },
+        markedText: String
     },
     data() {
         return {
@@ -46,14 +47,14 @@ export default {
                     }) : r.push(us[i])
 
                 }
-                   
+
             })
 
             return r
 
         }
     },
-    
+
     methods: {
 
         show : function(chunk){
@@ -61,7 +62,7 @@ export default {
             this.core.mtrx.kit.usersInfoById(chunk.id).then(r => {
                 core.mtrx.opencontact(r)
             })
-                
+
         }
     }
 }
@@ -72,7 +73,7 @@ export default {
 label
     display: inline
 
-.likelink 
+.likelink
     text-decoration: underline
     cursor: pointer
 

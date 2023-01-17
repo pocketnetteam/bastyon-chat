@@ -82,3 +82,63 @@
 		height: 29px
 		margin-top: 1em
 
+.encrypted
+	z-index: 2
+	color : srgb(--color-good)
+	padding : $r / 2 $r
+
+	i
+		font-size: 0.8em
+		cursor: pointer
+
+.encryptedInfo
+	cursor: default
+	margin-left: -25px
+	position: absolute
+	top: 50%
+	transform: translateY(-50%)
+	z-index: 9999
+	display: flex
+	justify-content: center
+	align-items: center
+	flex-direction: column
+	#slide
+		border-radius: 8px
+		padding : 0 $r
+		position: absolute
+		left: 0
+		background: $color-bg-clear
+		-webkit-animation: slide 0.1s forwards
+		-webkit-animation-delay: .3s
+		animation: slide 0.1s forwards
+		animation-delay: .3s
+		+shadowSmaller()
+
+	@-webkit-keyframes slide
+		100%
+			left: 0px
+	@keyframes slide
+		100%
+			left: 0px
+
+	button
+		cursor: pointer
+		display: flex
+		align-items: center
+		justify-content: flex-start
+		text-align: left
+		i
+			margin-right: 5px
+
+	.encryptedTxtIcon
+		flex-direction: column
+		align-items: center
+		justify-content: center
+		padding : $r / 2 $r / 2
+		text-align: center
+		span
+			color: srgb(--color-good)
+			font-size: 0.8em
+		i
+			color: srgb(--color-good)
+			display: none

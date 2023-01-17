@@ -4,9 +4,7 @@
     <div class="iconGroup" v-if="isShowGroupIcon">
       <i class="fas fa-user-friends"></i>
     </div>
-    <div class="nameofchat">
-      {{ convertedName }}
-    </div>
+    <div class="nameofchat" v-html="markMatches || convertedName"></div>
   </div>
 
 </template>
@@ -44,6 +42,7 @@ export default {
     preview: Boolean,
     m_chat: {}
   },
+  inject: ['matches', 'markText'],
   data: function () {
     return {
       //convertedName: ''
@@ -86,8 +85,12 @@ export default {
       }
 
       if(this.m_chat.name.indexOf("@") == 0) return this.m_chat.name.replace('@', '')
-      
+
       return names.join(', ')
+    },
+
+    markMatches: function () {
+      return this.markText(this.convertedName, true)
     },
 
     isShowGroupIcon() {
