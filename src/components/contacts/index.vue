@@ -50,15 +50,15 @@
       </div>
 
 
-      <div class="work searchWrapperEA">
+      <!--<div class="work searchWrapperEA">
         <search @search="search" :minimize="minimized"/>
-      </div>
+      </div>-->
 
 
       <div class="work">
-        <div class="titleContacts" v-if="users.contacts.length !== 0">
+        <!--<div class="titleContacts" v-if="users.contacts.length !== 0">
           <span>{{ $t("caption.contacts") }}</span>
-        </div>
+        </div>-->
         <list @toggleUser="toggleUser" @select="select" :mode="mode" :selected="selected" :users="users.contacts" :title="'Contacts'"/>
       </div>
 

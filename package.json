@@ -4,10 +4,9 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "node themes.js && vue-cli-service build --dest C:/inetpub/wwwroot/pocketnet/chat",
-    "build_mac": "node themes.js && vue-cli-service build --dest ~/work/pocketnet/chat",
+    "build": "vue-cli-service build --dest C:/inetpub/wwwroot/pocketnet/chat",
+    "build_mac": "vue-cli-service build --dest ~/work/pocketnet/chat",
     "lint": "vue-cli-service lint",
-    "themes": "node themes.js",
     "buildpocketnet": "npm run build -- --target wc-async --inline-vue --name matrix-element src/App.vue",
     "buildpocketnet_mac": "npm run build_mac -- --target wc-async --inline-vue --name matrix-element src/App.vue",
     "buildpocketnetdev": "npm run build -- --target wc-async --inline-vue --watch --name matrix-element src/App.vue"
