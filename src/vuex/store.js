@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import f from '@/application/functions.js'
-import publicAddresses from '@/publicAddresses.json';
 
 
 Vue.use(Vuex);
@@ -89,6 +88,7 @@ var store = new Vuex.Store({
 		voicerecording : false,
 		deletedrooms: {},
 		pkoindisabled : false,
+		massmailingenabled : false,
 		recipientsTotal: 0,
 		recipients: [],
 		processMassMailing: false,
@@ -111,7 +111,7 @@ var store = new Vuex.Store({
 		},
 
 		pro : state => {
-			return publicAddresses.indexOf(state.address) > -1;
+			return state.massmailingenabled;
 		},
 
 		massMessageAvailable : state => {
@@ -231,6 +231,11 @@ var store = new Vuex.Store({
 
 		pkoindisabled(state, value){
 			state.pkoindisabled = value && value == 'true' ? true : false
+		},
+
+		
+		massmailingenabled(state, value){
+			state.massmailingenabled = value && value == 'true' ? true : false
 		},
 
 		wasunhidden(state, value) {

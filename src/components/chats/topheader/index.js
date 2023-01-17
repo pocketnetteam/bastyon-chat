@@ -42,31 +42,31 @@ export default {
 
 
     computed: {
-        ...mapState({
-            auth : state => state.auth,
-            minimized: state => state.minimized,
-            pocketnet: state => state.pocketnet,
-            mobile: (state) => state.mobile,
-            active: state => state.active,
-            
-            ...mapState([
-                'share',
-                'closebybg',
-                'recipients',
-                'recipientsTotal',
-                'processMassMailing',
-                'massMessageLimitCount'
-            ]),
+           
+        ...mapState([
+            'auth',
+            'minimized',
+            'pocketnet',
+            'active',
+            'mobile',
+            'share',
+            'closebybg',
+            'recipients',
+            'recipientsTotal',
+            'processMassMailing',
+            'massMessageLimitCount',
+            'massmailingenabled'
+        ]),    
 
-            window : function(){
-                return window
-            },
+        ...mapGetters(['massMessageAvailable']),
 
-            recipientsCompleted(){
-                return this.recipientsTotal - this.recipients.length;
-            },
-        }),
-        ...mapGetters(['pro', 'massMessageAvailable'])
+        window : function(){
+            return window
+        },
+        
+        recipientsCompleted(){
+            return this.recipientsTotal - this.recipients.length;
+        },
     },
 
     methods : {

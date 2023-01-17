@@ -38,26 +38,23 @@ export default {
 	},
 
   computed: {
-    ...mapState({
-      auth: state => state.auth,
-      pocketnet: (state) => state.pocketnet,
 
-      ...mapState([
-        'currentUserChat',
-        'minimized',
-        'gallery',
-        'active',
-        'mobile',
-        'recipientsTotal',
-        'recipients'
-      ]),
+    ...mapState([
+      'auth',
+      'pocketnet',
+      'currentUserChat',
+      'minimized',
+      'gallery',
+      'active',
+      'mobile',
+      'recipientsTotal',
+      'recipients'
+    ]),
+    ...mapGetters(['massMessageAvailable']),
 
-      showFooter : function(){
-        return this.$route.name != 'chat' || this.minimized
-      },
-
-    }),
-    ...mapGetters(['massMessageAvailable'])
+    showFooter : function(){
+      return this.$route.name != 'chat' || this.minimized
+    },
   },
 
   methods: {

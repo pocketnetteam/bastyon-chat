@@ -1,4 +1,4 @@
-import {mapActions, mapGetters, mapState} from 'vuex'
+import {mapActions, mapState} from 'vuex'
 import preview from '@/components/contacts/preview/index.vue'
 import ModalWindow from '@/components/utils/ModalWindow.vue'
 

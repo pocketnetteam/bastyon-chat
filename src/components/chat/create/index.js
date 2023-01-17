@@ -1,4 +1,4 @@
-import { mapState, mapGetters } from 'vuex';
+import { mapState } from 'vuex';
 import contacts from '@/components/contacts/index.vue'
 import InputField from '@/components/chat/input/InputField/InputField.vue'
 import f from '@/application/functions.js'
@@ -53,6 +53,8 @@ export default {
         ...mapState({
             auth : state => state.auth,
 
+            massmailingenabled : state => state.massmailingenabled,
+
             cancomplete : function(){
 
                 if(!this.type) return false
@@ -79,13 +81,13 @@ export default {
             },
 
         }),
-        ...mapGetters(['pro']),
+
 
         viewTypes(){
 
             const {massmailing, ...typesWithout} = this.types;
 
-            if (this.pro){
+            if (this.massmailingenabled){
                 return this.types;
             }
 
