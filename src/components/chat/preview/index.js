@@ -3,11 +3,10 @@ import chatName from '@/components/chats/assets/name.vue'
 import chatIcon from '@/components/chats/assets/icon.vue'
 import userView from '@/components/user/view/pnuser/index.vue'
 import {Swiper, SwiperSlide} from 'vue-awesome-swiper'
-import 'swiper/swiper-bundle.css'
+//import 'swiper/swiper-bundle.css'
 //
 import {Carousel, Slide} from 'vue-carousel';
 import f from '@/application/functions.js'
-import _ from "underscore";
 //
 
 export default {
@@ -51,5 +50,11 @@ export default {
       return this.core.mtrx.chatUsersInfo(this.chat.roomId, 'anotherChatUsers')
     },
 
+  },
+
+  methods : {
+    empty : function(user){
+      return _.isEmpty(user)
+    }
   }
 }

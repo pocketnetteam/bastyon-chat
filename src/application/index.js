@@ -7,6 +7,24 @@ import ApiWrapper from "./api.js";
 import Pcrypto from "./pcrypto.js";
 import listeners from './listeners'
 import f from './functions'
+import Media from './media'
+/*
+import pcm from '@/application/utils/pcm.js'
+let Mp3 = require('js-mp3');
+*/
+/*
+var {register} = require('extendable-media-recorder')
+var {connect} = require('extendable-media-recorder-wav-encoder')*/
+
+
+import AudioRecorder from 'audio-recorder-polyfill'
+import mpegEncoder from 'audio-recorder-polyfill/mpeg-encoder'
+
+AudioRecorder.encoder = mpegEncoder
+AudioRecorder.prototype.mimeType = 'audio/mpeg'
+
+
+
 
 class Core {
     constructor(vm, p){
@@ -63,13 +81,18 @@ class Core {
         this.external = {}
         this.hiddenInParent = false
 
+        this.customRecorderConnected = false
+
         this.pcrypto.init(this.user)
+
+        this.media = new Media()
+        this.audioContext = null
 
     }
 
     hideOptimization = function(v){
 
-        this.hideOptimization = v
+        //this.hideOptimization = v
         this.store.commit('hideOptimization', v)
 
     }
@@ -79,10 +102,70 @@ class Core {
         this.store.commit('hiddenInParent', v)
 
 
-        if(!v)
-            this.store.commit('wasunhidden', true)
+        /*if(!v)
+            this.store.commit('wasunhidden', true)*/
     }
 
+    setCalls = function() {
+        console.log('set calls')
+        try {
+            let p = {
+                el : document.querySelector('body'),
+                parameters : {
+                    getUserInfo: async (address) => {
+                        address = f.hexDecode(address.split(':')[0].replace('@',''))
+                        return this.user.usersInfo([address], true, false)
+                    },
+                    getWithLocale: (key) => {
+                        console.log(this)
+                        return this.vm.$i18n.t(key)
+                    }
+                },
+
+
+            }
+
+            if(window.POCKETNETINSTANCE && window.POCKETNETINSTANCE.platform){
+                p = window.POCKETNETINSTANCE.platform.getCallsOptions()
+            }
+
+            if (typeof BastyonCalls) {
+                this.mtrx.bastyonCalls = new BastyonCalls(this.client || client, matrixcs, p.el, p.parameters)
+                this.mtrx.bastyonCalls.on('initcall', () => {
+                    if (this.vm.$store.state.currentPlayingVoiceMessage) {
+                        this.vm.$store.state.currentPlayingVoiceMessage.pause()
+                    }
+
+                    if (window?.POCKETNETINSTANCE?.playingvideo) {
+                        console.log(window.POCKETNETINSTANCE.playingvideo)
+                        window?.POCKETNETINSTANCE?.playingvideo.pause()
+                        if (document.exitFullscreen) {
+                            document.exitFullscreen();
+                        } else if (document.webkitExitFullscreen) {
+                            document.webkitExitFullscreen();
+                        } else if (document.mozCancelFullScreen) {
+                            document.mozCancelFullScreen();
+                        } else if (document.msExitFullscreen) {
+                            document.msExitFullscreen();
+                        }
+                    }
+
+                    if (window?.POCKETNETINSTANCE?.platform) {
+                        console.log('pocketnet available', window?.POCKETNETINSTANCE?.platform)
+                    }
+
+                })
+            }
+
+
+            this.store.commit('SET_CALL', this.mtrx.bastyonCalls ? true : false)
+        } catch (e) {
+            console.log(e)
+            return
+        }
+
+        console.log('Calls ready')
+    }
     canback = function(){
         return this.store.state.gallery ? false : true
     }
@@ -94,7 +177,6 @@ class Core {
 
     logerror = function(type, data){
 
-        console.log("type", type, data)
 
         if (window.POCKETNETINSTANCE){
 
@@ -150,12 +232,16 @@ class Core {
 
         return this.user.checkCredentials().then(state => {
 
-            return this.user.userInfo(true)
+            return this.user.userInfo()
 
         }).then(r => {
 
             if(!r){
                 return Promise.reject('unknown')
+            }
+
+            if(r.deleted){
+                return Promise.reject('deleted')
             }
 
             return this.pcrypto.prepare()
@@ -174,14 +260,19 @@ class Core {
             if (f.deep(this.user,'userinfo.name'))
                 this.mtrx.client.setDisplayName(f.deep(this.user,'userinfo.name'))
 
+            if (this.vm.$store.state.isCallsEnabled) {
+                this.setCalls()
+            }
+
             return Promise.resolve()
 
         }).catch(e => {
 
+            console.log("E", e)
             
             this.loading = false
 
-            if(e == 'unauthorized' || e == 'unknown'){
+            if(e == 'unauthorized' || e == 'unknown' || e == 'deleted'){
                 this.setUnauthorized(e)
             }
 
@@ -335,16 +426,24 @@ class Core {
 
             var roomId = this.mtrx.kit.tetatetid(info[0], this.user.userinfo)
 
-            if(!roomId) return Promise.reject(e)
+
+            if(!roomId) return Promise.reject('roomId')
 
             if (this.store.state.chatsMap[roomId]){
                 /// old chat
-                this.vm.$router.push('/chat?id=' + roomId).catch(e => {})
+
+                this.gotoRoute('/chat?id=' + roomId)
+                /*this.vm.$router.push('/chat?id=' + roomId).catch(e => {
+                    console.error('e', e)
+                })*/
             }
             else
             {
-                this.store.commit('CONTACT', roomId)
-                this.vm.$router.push('/chat?id=' + roomId + '&u=' + f.hexEncode(address)).catch(e => {})
+
+                this.gotoRoute('/contact?id=' + f.hexEncode(address))
+                //this.store.commit('CONTACT', roomId)
+                //this.gotoRoute('/chat?id=' + roomId + '&u=' + f.hexEncode(address))
+
             }
 
             return Promise.resolve()
@@ -476,6 +575,80 @@ class Core {
             
     }
 
+    async convertAudioToBase64(blob) {
+        const reader = new FileReader()
+        reader.readAsDataURL(blob)
+        return new Promise(resolve => {
+            reader.onloadend = () => {
+                resolve(reader.result)
+            }
+        })
+    }
+
+    /*async connectCustomRecorder() {
+
+        if (this.customRecorderConnected) return
+            this.customRecorderConnected = true
+  
+        await register(await connect());
+        
+    }*/
+
+    /*mp3ToWav(base64Audio){
+
+        var mp3ArrayBuffer = f._base64ToArrayBuffer(base64Audio.split(',')[1])
+
+        var decoder = Mp3.newDecoder(mp3ArrayBuffer);
+        var pcmArrayBuffer = decoder.decode();
+
+        var dataURI = new pcm({channels: 1, rate: 8000, depth: 8}).toWav(pcmArrayBuffer).encode();
+
+        return dataURI
+
+    }*/
+
+    initMediaRecorder() {
+
+        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+
+
+            return this.media.get({ audio: true }).then(stream => {
+
+                let mediaRecorder = new AudioRecorder(stream, { audioBitsPerSecond : 32000 })
+               
+                return mediaRecorder
+                
+            }).catch(function (err) {
+                return Promise.reject(err)
+            });
+
+        } else {
+            return Promise.reject()
+        }
+    }
+
+    getAudioContext(){
+
+        if(this.audioContext && this.audioContext.state != 'closed') {
+
+
+            if(this.audioContext.state === "suspended") this.audioContext.resume()
+
+
+
+            return this.audioContext
+        }
+        else{
+        }
+
+        this.audioContext = new (window.AudioContext || window.webkitAudioContext)() || null;
+
+        if(f.isios() && window.unmute){
+            unmute(this.audioContext, false, false);
+        }
+
+        return this.audioContext
+    }
 }
 
 export default Core

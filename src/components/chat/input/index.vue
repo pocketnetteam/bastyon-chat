@@ -1,5 +1,5 @@
 <template>
-  <div id="chatInput">
+  <div id="chatInput" class="noswipepnt">
     <div class="work" v-if="ready">
 
       <div class="inputWrapper" v-if="chat">
@@ -15,16 +15,16 @@
 
 
         <div class="center">
-          <record-progress v-if="voiceEnable && (isRecording || recordViewData.length)" :recordTime="recordTime" :isRecording="isRecording" :rmsData="recordViewData" :opacity="cancelOpacity" @onClear="clear"/>
+          <record-progress v-if="voiceEnable && (isRecording || record)" :recordTime="recordTime" :isRecording="isRecording" :rmsData="recordRmsData" :opacity="cancelOpacity" @onClear="clear"/>
           <InputField
             v-else
             ref="newinput"
 
-            @transaction="sendtransaction"
             @chatMessage="sendinput"
-            @setMetaUrl="emitUrl"
             @emptyInput="emitInputData"
             @FilledInput="HideUploadPic"
+
+
             @base64="pasteImage"
             @focused="focused"
             @tipsearchrequest="tipBySearch"
@@ -35,7 +35,7 @@
             :tipusers="tipusers"
           />
           <div class="left" :class="{extended: voiceEnable}" v-if="upload && chat">
-            <div v-if="!isRecording && !recordViewData.length" class="iconbutton">
+            <div v-if="!isRecording && !record" class="iconbutton">
               <dropdownMenu
                 ref="dropdownMenu"
                 :menuItems="menuItems"
@@ -61,6 +61,8 @@
                     @uploaded="(data) => uploadUploaded(slotProps.item, data)"
                     @uploadedAll="(result) => uploadUploadedAll(slotProps.item, result)"
                     @error="(error) => uploadError(slotProps.item, error)"
+
+                    :onlyimage="slotProps.item.upload.onlyimage"
 
                     :multiple="slotProps.item.upload.multiple"
                     :extensions="slotProps.item.upload.extensions"
@@ -88,16 +90,22 @@
                 </template>
               </dropdownMenu>
             </div>
+
             <template v-if="voiceEnable">
-              <div v-if="(isRecording || !recordRmsData.length) && !microphoneDisabled" class="iconbutton">
-                <recordVoice @onRecordingStart="initRecording" @onRecordingStop="stopRecording" :isRecording="isRecording" @onClear="clear" @canceling="setOpacity"/>
+              
+              <div v-show="(isRecording || !record)" class="iconbutton">
+                <recordVoice @onRecordingStart="initRecording" @onRecordingStop="stopRecording" :prepareRecording="prepareRecording ? true : false" :isRecording="isRecording" :disabled="microphoneDisabled" @onClear="clear" @canceling="setOpacity"/>
               </div>
 
-              <div v-if="microphoneDisabled" class="disabled">
+
+
+              <!--<div v-if="microphoneDisabled" class="disabled">
                 <i class="icon fas fa-microphone-slash" @click="initRecording"></i>
-              </div>
+              </div>-->
             </template>
-            <div v-if="!isRecording && recordViewData.length" class="iconbutton" @click="sendVoiceMessage">
+
+
+            <div v-if="!isRecording && record" class="iconbutton" @click="e => {sendVoiceMessage()}">
               <div>
                 <i class="icon fas fa-paper-plane"></i>
               </div>

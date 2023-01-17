@@ -1,6 +1,5 @@
 
 var createHash = null
-var linkify = null
 
 var f = {}
 
@@ -413,6 +412,8 @@ var stringEq = function (s1, s2) {
 }
 
 var pretry = function (_function, time, totaltime) {
+
+
     return new Promise((resolve, reject) => {
 
         retry(_function, resolve, time, totaltime)
@@ -423,6 +424,8 @@ var pretry = function (_function, time, totaltime) {
 var retry = function (_function, clbk, time, totaltime) {
 
     if (_function()){
+
+        
 
         if (clbk) clbk();
 
@@ -435,7 +438,8 @@ var retry = function (_function, clbk, time, totaltime) {
 
     var interval = setInterval(function () {
 
-        if (_function() || (totaltime && totaltime >= totalTimeCounter)) {
+        if (_function() || (totaltime && totaltime <= totalTimeCounter)) {
+
 
             clearInterval(interval);
 
@@ -601,11 +605,11 @@ var knsite = function (url) {
 
 var getUrl = function (data) {
 
-    if(!linkify){
+    /*if(!linkify){
         linkify = require('linkifyjs');
         linkify.registerCustomProtocol('pocketnet')
         linkify.registerCustomProtocol('bastyon')
-    }
+    }*/
 
     var links = linkify.find(data)
 
@@ -954,6 +958,12 @@ var Base64 = {
 
 }
 
+f.copyArrayBuffer = function(src){
+    var dst = new ArrayBuffer(src.byteLength);
+    new Uint8Array(dst).set(new Uint8Array(src));
+    return dst;
+}
+
 f.readFile = function (file) {
 
     let reader = new FileReader();
@@ -974,7 +984,6 @@ f.readFile = function (file) {
 
 f.fetchLocal = function (url) {
 
-    console.log('fetchLocal', url)
 
     return new Promise(function (resolve, reject) {
         var xhr = new XMLHttpRequest
@@ -983,7 +992,6 @@ f.fetchLocal = function (url) {
 
             var type = xhr.getResponseHeader('content-type')
 
-            console.log('xhr', xhr)
 
             resolve({
                 data: new Blob([xhr.response], { type: type, name: 'file' })
@@ -993,7 +1001,7 @@ f.fetchLocal = function (url) {
         }
 
         xhr.onerror = function (e) {
-            console.error(e)
+            console.error(e, url)
             reject(new TypeError('Local request failed'))
         }
 
@@ -1094,7 +1102,6 @@ f.saveFileCordova = function(file, name, clbk, todownloads){
     if(todownloads){
         window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fileSystem){
 
-            console.log(fileSystem)
 
             onsuccess(fileSystem.root)
         }, onerror)
@@ -1105,8 +1112,21 @@ f.saveFileCordova = function(file, name, clbk, todownloads){
 
 }
 
+function iOS() {
+    return [
+        'iPad Simulator',
+        'iPhone Simulator',
+        'iPod Simulator',
+        'iPad',
+        'iPhone',
+        'iPod'
+    ].includes(navigator.platform)
+    // iPad on iOS 13 detection
+    || (navigator.userAgent.includes("Mac") && "ontouchend" in document)
+}
+
 f.isios = function () {
-    return (window.cordova && window.device && f.deep(window, 'device.platform') == 'iOS') || (navigator || {}).platform && /iPad|iPhone|iPod/.test(navigator.platform || '')
+    return (window.cordova && window.device && deep(window, 'device.platform') == 'iOS') || iOS()
 }
 
 f.now = function (date) {

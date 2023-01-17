@@ -3,6 +3,9 @@
     <div class="roomInfoWrapper noSwipe">
       <div :class="{'chatIconWrapper':'chatIconWrapper'}">
         <chatIcon :slidesPerView="4" :dontuseslides="minimized && !active" :chat="chat" :m_chat="m_chat" :hideunseen="true"/>
+        <div class="chatGroupIcon">
+          <img :src="groupAvatar" alt="" />
+        </div>
       </div>
 
       <chatName :preview="true" :chat="chat" :m_chat="m_chat"
@@ -83,6 +86,7 @@
         </span>
       </button>
 
+
       <button class="button small  rounded badbutton" @click="forgetRoom()" v-if="!tetatet">
         {{ $t("caption.leave") }} <i class="fas fa-sign-out-alt"></i>
       </button>
@@ -120,21 +124,3 @@
 
 <!-- THEMES BEGIN -->
 <!-- THEMES END -->
-
-<style src="../../../../node_modules/vue-simple-accordion/dist/vue-simple-accordion.css"></style>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

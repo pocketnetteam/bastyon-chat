@@ -57792,6 +57792,7 @@ RoomState.prototype.setStateEvents = function (stateEvents) {
 
   this._updateModifiedTime(); // update the core event dict
 
+  console.log("??????")
 
   utils.forEach(stateEvents, function (event) {
     if (event.getRoomId() !== self.roomId) {

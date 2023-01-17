@@ -1,9 +1,6 @@
-import moment from "moment";
-
-var _ = require('underscore');
 //require('ion-sound')
 import f from "./functions";
-const { Howl, Howler } = require('howler');
+//const { Howl, Howler } = require('howler');
 
 class Notifier {
 
@@ -48,6 +45,10 @@ class Notifier {
 		// If cordova is available, use the media plugin to play a sound
 		if (window.Media && window.cordova && window.cordova.file && window.cordova.file.applicationDirectory) {
 
+
+			return 
+
+			
 			var soundSrc = window.cordova.file.applicationDirectory + 'www/sounds/glass.mp3';
 			if (soundSrc.startsWith('file://'))
 				soundSrc = soundSrc.substring(7);
@@ -57,12 +58,15 @@ class Notifier {
 		}
 
 		// Else, try to use the Howler sound plugin
-		else if (Howl) {
-			var notificationSound = new Howl({
+		else if (window.ion) {
+
+			ion.sound.play('glass')
+
+			/*var notificationSound = new Howl({
 				src: ['sounds/glass.mp3'],
 				html5: true
 			});
-			notificationSound.play();
+			notificationSound.play();*/
 		}
 	}
 

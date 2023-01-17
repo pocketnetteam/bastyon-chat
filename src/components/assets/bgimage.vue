@@ -1,7 +1,8 @@
 <template>
-  <div :class="'bgimage ' + (this.imageLoaded ? 'loaded' : '')" :style="'background-image:url('+src+'); background-size: cover; background-position: center center; background-repeat: no-repeat'" v-images-loaded:on.loaded="loaded">
-    
-  </div>
+    <div class="bgimage" :class="{loaded, hasimage : src}" :style="'background-image:url('+imageSrc+'); background-size: cover; background-position: center center; background-repeat: no-repeat'">
+        <slot name="cnt"></slot>
+    </div>
+
 </template>
 
 
@@ -10,7 +11,7 @@
     .bgimage
         width : 100%
         height: 100%
-        opacity: 1
+        opacity: 0
         +transition(0.3s)
 
         &.loaded
@@ -20,29 +21,47 @@
 
 <script>
 
-    import imagesLoaded from 'vue-images-loaded'
-
     export default {
         name: 'bgimage',
         directives: {
-            imagesLoaded
         },
         props: {
             src : String
         },
 
+        watch : {
+            src : {
+                immediate : true,
+                handler : function(){
+                    this.load()
+                }
+            }
+        },
+
         data : function(){
             return {
-                imageLoaded : false
+                loaded : false,
+                imageSrc : ''
             }
         },
 
         methods: {
-            loaded(instance, image){
-                if (image.isLoaded){
-                    this.imageLoaded = true
-                }
+            load : function(){
+                if(this.src){
+
+                    this.imageSrc = this.src.replace('bastyon.com:8092', 'pocketnet.app:8092').replace('test.pocketnet', 'pocketnet')
+
+                    var image = new Image()
+
+                    image.src = this.imageSrc
+                    image.onload = () => {
+                        this.loaded = true
+                    }
+                }   
+                else
+                    this.loaded = true
             }
+          
         }
     }
 

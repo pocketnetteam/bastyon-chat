@@ -106,7 +106,7 @@
         "sent" : "已发送",
         "PKOINto" : " PKOIN to ",
         "response" : "回应",
-        "messagefrom" : "转发的信息",
+        "messagefrom": "轉發的消息來自",
         "edited" : "已编辑",
         "settings" : "设置",
         "unauthorized" : "未经授权",
@@ -149,6 +149,7 @@
         "takePhotoOrVideo" : "发送图像",
         "sendCoins": "发送硬币",
         "edit" : "编辑",
+        "select": "選擇",
         "block" : "阻止",
         "unblock" : "解除封锁",
         "blockUser" : "阻止用户"
@@ -179,5 +180,9 @@
     "unchecked" : "No",
     "settings_read" : "Send read receipts",
     "messagewasburn" : "This message remains only in the memory of your device",
-    "messagewillburn" : "The message will be deleted soon"
+    "messagewillburn" : "The message will be deleted soon",
+    "micaccessbrowser" : "Access to the microphone is restricted, please check your browser settings.",
+    "micaccesscommonproblem" : "Sorry, for some reason it is not possible to record voice messages on the device",
+    "micaccesscordova" : "Access to the microphone is restricted, please check your device settings.",
+    "micdevicenotfound" : "Audio recording device not found"
 }

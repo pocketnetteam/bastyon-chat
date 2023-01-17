@@ -3,7 +3,6 @@ import {mapState} from 'vuex';
 import list from '@/components/chat/list/index.vue'
 import join from '@/components/chat/join/index.vue'
 import attachement from '@/components/chat/attachement/index.vue'
-import _ from 'underscore'
 import f from "@/application/functions";
 import userRoomStatus from "@/components/chat/userRoomStatus/index.vue"
 
@@ -19,7 +18,7 @@ export default {
     chatInput : () => import('@/components/chat/input/index.vue'),
     join,
     attachement,
-    userRoomStatus
+    userRoomStatus,
   },
 
   data: function () {
@@ -41,7 +40,13 @@ export default {
       fsize: {},
       cantchat: false,
       cantchatexc: false,
-      error : null
+      error : null,
+
+      showInput: true,
+      showShareMessages: false,
+
+      selectedMessages: [],
+      isRemoveSelectedMessages: false,
     }
 
   },
@@ -99,8 +104,6 @@ export default {
 
         
         if (this.m_chat && !_.isEmpty(this.m_chat)) {
-
-
           this.core.mtrx.kit.allchatmembers([this.m_chat], false, true).then(r => {
             return this.core.mtrx.kit.prepareChat(this.m_chat)
           }).then(r => {
@@ -132,7 +135,7 @@ export default {
     },
   },
   computed: mapState({
-
+    activeCall: state => state.activeCall,
     pocketnet: state => state.pocketnet,
     minimized: state => state.minimized,
     active: state => state.active,
@@ -214,8 +217,11 @@ export default {
     chatusers: function () {
       if (this.m_chat)
         return this.core.store.state.chatusers[this.m_chat.roomId]
-    }
+    },
 
+    localisationTitles: function () {
+      return this.$i18n.t('button');
+    },
   }),
   methods: {
 
@@ -347,7 +353,7 @@ export default {
       var ns = this.esize.scrollTop || 0
       var fs = this.fsize.scrollTop || 0
 
-      if (ns - 450 > fs) {
+      if (ns - 450 > fs && this.$refs['chatInput']) {
         this.$refs['chatInput'].blurifempty()
       }
 
@@ -439,7 +445,50 @@ export default {
 
     menuIsVisibleHandler: function(isVisible) {
       this.$emit('menuIsVisible', isVisible);
-    }
+    },
+
+    shareDataMessages: function () {
+      let allMessages = [];
+
+      for (let i = 0; i < this.selectedMessages.length; i++) {
+        if (this.selectedMessages[i].messages) {
+          allMessages.push(this.selectedMessages[i].messages[0]);
+        }
+      }
+
+      var pr = Promise.resolve();
+      var _sharing = this.selectedMessages[0];
+      _sharing.messages = allMessages;
+      if (_sharing.download) {
+        pr = this.core.mtrx
+          .getFile(this.chat, this.event)
+          .then((r) => {
+            f.Base64.fromFile(r.file);
+          })
+          .then((r) => {
+            _sharing.files = [r];
+            Promise.resolve();
+          });
+      }
+      pr.then(() => {
+        this.core.share(_sharing);
+      });
+    },
+
+    removeDataMessages: function () {
+      this.isRemoveSelectedMessages = true;
+    },
+
+    cancelDataMessages : function(){
+      this.selectedMessages = [];
+    },
+
+    messagesIsDeleted: function (state) {
+      this.isRemoveSelectedMessages = false;
+      if (state) {
+        this.selectedMessages = [];
+      }
+    },
 
   }
 }

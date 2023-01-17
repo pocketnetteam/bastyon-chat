@@ -8,7 +8,7 @@
         </slot>
       </div>
       <div class="inputWrapper">
-        <input type="file" :multiple="multiple" @change="upload">
+        <input type="file" :multiple="multiple" @change="upload"> 
       </div>
 
     </div>
@@ -52,6 +52,7 @@
 
 import Images from '@/application/utils/images.js'
 
+
 var each = require('async-each');
 
 var images = new Images()
@@ -63,6 +64,8 @@ export default {
 
     dropzone: String,
     multiple: Boolean,
+
+    onlyimage : Boolean,
 
     maxsize: {
       default: 25,
@@ -97,6 +100,7 @@ export default {
 
   },
   methods: {
+    
     read: function (file) {
       var reader = new FileReader();
 
@@ -224,10 +228,23 @@ export default {
     sendAnyFile: function (data) {
       this.$emit('anyFile', data)
     },
+    resizeIfNeed : function(base64, ftype){
+      if (this.images.resize) {
+
+          var type = this.images.resize.type || 'def'
+          
+          return images.resize[type](base64, this.images.resize.width || 1024, this.images.resize.height || 1024, ftype, this.images.resize.quality || 0.85).then(base64 => {
+
+
+            return Promise.resolve(base64)
+          }).catch(e => {
+            return Promise.reject(e)
+          })
+
+        }
+        return Promise.resolve(base64)
+    },
     handleImages: function (data) {
-
-
-        console.log('this.images', this.images, data)
 
       return images.autorotation(data.file, data.base64).then(base64 => {
         data.base64 = base64
@@ -235,7 +252,11 @@ export default {
         return Promise.resolve(data)
       }).then(data => {
 
-        console.log("HANDLEIMAGES")
+        return this.resizeIfNeed(data.base64, data.file.type).then(base64 => {
+          data.base64 = base64
+
+          return Promise.resolve(data)
+        })
 
         if (this.images.resize) {
 
@@ -247,7 +268,6 @@ export default {
 
             return Promise.resolve(data)
           }).catch(e => {
-            console.log("E", e)
             return Promise.reject(e)
           })
 

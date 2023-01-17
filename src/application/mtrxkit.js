@@ -1,4 +1,3 @@
-var _ = require('underscore');
 import f from "@/application/functions";
 
 var cachestorage = {}
@@ -265,6 +264,14 @@ class MTRXKIT {
 
     let hash = f.sha224(mGroupNamId.toString()).toString('hex')
     return {hash: hash, idForInviting: idForInviting}
+  }
+
+  chatIsPublic(chat){
+    var join_rules = chat.currentState.getStateEvents("m.room.join_rules")
+
+    return _.find(join_rules, (v) => {
+        return f.deep(v, 'event.content.join_rule') == 'public'
+    }) ? true : false
   }
 
   

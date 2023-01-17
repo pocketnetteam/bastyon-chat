@@ -5,42 +5,53 @@
             :userinfo="userinfo"
             :readed="readed"
             :preview="preview || false"
+            @readyToRender="setReadyToRender"
             v-if="type === 'member' && !preview"/>
 
-    <message @openGalleryImg="openImage" :chat="chat"
+    <message 
+    
+      @openGalleryImg="openImage" 
+      
+      :chat="chat"
+      :event="event"
+      :prevevent="prevevent"
+      :origin="event"
+      :decryptEvent="decryptEvent"
+      :decryptedInfo="decryptedInfo"
+      :encryptedData="encryptedData"
 
-             :event="event"
-             :prevevent="prevevent"
-             :origin="event"
-             :decryptEvent="decryptEvent"
-             :decryptedInfo="decryptedInfo"
-             :encryptedData="encryptedData"
+      :imgEvent="galleryData" 
+      :userinfo="userinfo"
+      :readed="readed"
+      :preview="preview || false"
+      :withImage="withImage || false"
+      :clientWidth="clientWidth"
+      :encrypted="encrypted"
+      :subtype="subtype"
+      :error="error"
+      :reference="reference"
+      :downloaded="downloaded"
+      :last="last"
+      :showmyicontrue="showmyicontrue"
+      :fromreference="fromreference"
 
-             :imgEvent="galleryData" 
-             :userinfo="userinfo"
-             :readed="readed"
-             :preview="preview || false"
-             :withImage="withImage || false"
-             :clientWidth="clientWidth"
-             :encrypted="encrypted"
-             :subtype="subtype"
-             :error="error"
-             :reference="reference"
-             :downloaded="downloaded"
-             :last="last"
-             :showmyicontrue="showmyicontrue"
-             :fromreference="fromreference"
-
-             ref="cmessage"
-
-             @remove="removeEvent"
-             @download="downloadFile"
-             @decryptagain="decryptAgain"
-             @editing="editing"
-             @reply="reply"
-             @share="share"
-             @menuIsVisible="menuIsVisibleHandler"
-             v-if="type === 'message' || preview" />
+      :multiSelect="multiSelect"
+      :selectedMessages="selectedMessages"
+      :audioBuffer="audioBuffer"
+      @readyToRender="setReadyToRender"
+      @remove="removeEvent"
+      @download="downloadFile"
+      @decryptagain="decryptAgain"
+      @showMultiSelect="$emit('showMultiSelect')"
+      @selectMessage="selectMessage"
+      @removeMessage="removeMessage"
+      :isRemoveSelectedMessages="isRemoveSelectedMessages"
+      @messagesIsDeleted="messagesIsDeleted"
+      @editing="editing"
+      @reply="reply"
+      @share="share"
+      @menuIsVisible="menuIsVisibleHandler"
+      v-if="type === 'message' || preview" />
 
     <common :event="event"
             :userinfo="userinfo"
@@ -122,6 +133,9 @@ export default {
       removed : false,
       downloaded : false,
       readedInterval : null,
+      audioBuffer : null,
+
+      readyToRender : false
     }
   },
 
@@ -140,24 +154,45 @@ export default {
     galleryData: {},
     goToGallery: Function,
     clientWidth: Number,
-    fromreference : Boolean
+    fromreference : Boolean,
+
+    multiSelect: {
+      default: false,
+      type: Boolean,
+    },
+    selectedMessages: {
+      type : Array,
+      default : () => {return []}
+    },
+    isRemoveSelectedMessages: false,
   },
 
   computed: {
-    readyToRender : function(){
-      if(this.$refs["cmessage"]) return this.$refs["cmessage"].readyToRender
+    /*readyToRender : function(){
+      if(this.$refs["cmessage"]) {
+
+
+        if(this.$refs["cmessage"].readyToRender){
+          return true
+        }
+
+      }
 
       return true
-    },
+    },*/
     type: function () {
 
       var t = f.deep(this, 'event.event.type')
-
       if (['m.room.member'].indexOf(t) > -1) return 'member'
       if (['m.room.message'].indexOf(t) > -1) return 'message'
       if (['m.room.name'].indexOf(t) > -1) return 'member'
       if (['m.room.power_levels'].indexOf(t) > -1)return 'member'
       if (['m.room.redaction'].indexOf(t) > -1) return 'message'
+      if (['m.call.candidates'].indexOf(t) > -1) return 'message'
+      if (['m.call.hangup'].indexOf(t) > -1) return 'message'
+      if (['m.call.invite'].indexOf(t) > -1) return 'message'
+      if (['m.call.reject'].indexOf(t) > -1) return 'message'
+      if (['m.call.answer'].indexOf(t) > -1) return 'message'
       if (['m.room.topic'].indexOf(t) > -1) {
         return 'member'
       }
@@ -203,6 +238,7 @@ export default {
 
   mounted: function () {
     this.$emit('mounted')
+
   },
   
   watch : {
@@ -235,9 +271,14 @@ export default {
 
           }, 20, 10000).then(() => {
 
-            if(this.encryptedData){
+            if(this.encryptedData && this.subtype == 'm.image'){
               this.decryptImage()
             }
+
+            if(this.encryptedData && this.subtype == 'm.audio'){
+              this.decryptAudio()
+            }
+            
 
             if(this.subtype == 'm.encrypted'){
               this.decrypt()
@@ -247,12 +288,25 @@ export default {
 
         }
 
+        else{
+          if(this.subtype == 'm.audio'){
+            this.getAudioUnencrypt()
+          }
+        }
+
         
       }
     }
   },
 
   methods: {
+
+    setReadyToRender(){
+      setTimeout(() => {
+        this.readyToRender = true
+      }, 20)
+      
+    },
     manageReadedInterval(){
 
       if(this.preview || !this.my) return
@@ -282,6 +336,7 @@ export default {
         var ts = this.timeline._timelineSet
         var e = this.event
 
+
         if(!this.reference && e.event.content['m.relates_to'] && e.event.content['m.relates_to'] && e.event.content['m.relates_to']['rel_type'] == "m.reference"){
 
             var id = e.event.content['m.relates_to']['event_id'] 
@@ -297,6 +352,7 @@ export default {
                 })
 
                 if(ev){
+
                   this.reference = e.event.content.reference = ev
 
                   var rt = ts.getRelationsForEvent(this.core.mtrx.clearEventId(ev), 'm.replace', 'm.room.message')
@@ -308,6 +364,9 @@ export default {
                     if (last){
                       ev.event.content.body = last.event.content.body
                       ev.event.content.edited = last.event.event_id
+                      ev.event.content.block = last.event.content.block
+                      ev.event.content.msgtype = last.event.content.msgtype
+                      ev.event.decrypted = last.event.decrypted
                     }
 
                   }
@@ -380,9 +439,34 @@ export default {
       }) 
     },
 
-    async decryptImage(){
+    getAudioUnencrypt(){
+      this.core.mtrx.getAudioUnencrypt(this.chat, this.event).then(url => {
 
-      //if(!this.chat.pcrypto) return
+        this.audioBuffer = url
+
+        //this.$set(this.event.event.content, 'audioData', url)
+       
+      }).catch(e => {
+        //console.error(e)
+      })
+    },
+
+    async decryptAudio(){
+
+      this.core.mtrx.getAudio(this.chat, this.event).then(url => {
+
+        this.decryptedInfo = url
+
+      }).catch(e => {
+
+        this.event.event.decryptKey = this.decryptKey = {
+          msgtype : 'm.bad.encrypted'
+        }
+      })
+      
+    },
+
+    async decryptImage(){
 
       this.core.mtrx.getImage(this.chat, this.event).then(url => {
 
@@ -431,7 +515,6 @@ export default {
     },
 
     checkReaded: function () {
-
       if (this.event) {
 
         this.core.mtrx.isReaded(this.event).then(readed => {
@@ -452,7 +535,23 @@ export default {
 
     menuIsVisibleHandler: function(isVisible) {
       this.$emit('menuIsVisible', isVisible);
-    }
+    },
+
+    selectMessage: function (message) {
+      this.$emit('selectMessage', message);
+    },
+
+    removeMessage: function (message) {
+      this.$emit('removeMessage', message);
+    },
+
+    shareManyMessages: function (isShare) {
+      this.$emit('shareManyMessages', isShare);
+    },
+
+    messagesIsDeleted: function (state) {
+      this.$emit('messagesIsDeleted', state);
+    },
   }
 }
 </script>

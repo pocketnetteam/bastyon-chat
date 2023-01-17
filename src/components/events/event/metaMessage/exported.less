@@ -583,6 +583,7 @@
     user-select: none;
     -webkit-tap-highlight-color: transparent;
   }
+
   html.mobile .unselectablemobile {
     -webkit-touch-callout: none;
     -webkit-user-select: none;
@@ -4191,6 +4192,43 @@
   .horizontalLentaWrapper .showmorebywrapper .showmorebywrapper {
     display: none;
   }
+  .carousel {
+    width: 100%;
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: scroll;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+    scroll-snap-type: x mandatory;
+    align-items: center;
+    position: relative;
+  }
+  .carousel::-webkit-scrollbar {
+    display: none!important;
+  }
+  .carousel .carousel_item {
+    width: 100%;
+    min-width: 100%;
+    scroll-snap-align: center;
+  }
+  .carousel_markers {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 1.5em;
+  }
+  .carousel_markers > div {
+    padding: 0.25em;
+  }
+  .carousel_markers > div > div {
+    width: 8px;
+    height: 8px;
+    border-radius: 10px;
+    background: rgb(var(--neutral-grad-2));
+  }
+  .carousel_markers > div.active > div {
+    background: rgb(var(--color-bg-ac));
+  }
   .optimizationTip {
     background: rgb(var(--background-total-theme));
     background-repeat: repeat-x;
@@ -7365,6 +7403,29 @@
     border-radius: 10px;
     overflow: hidden;
   }
+  .share_common .peertube-server-hint {
+    z-index: 1;
+    position: absolute;
+    margin: 10px;
+    padding: 5px;
+    border-radius: 4px;
+    font-family: monospace;
+    font-size: 0.7em;
+    background: #000000bb;
+    color: #fff;
+
+    i.fa {
+      font-size: 0.8em;
+      margin-top: 1px;
+      margin-right: 5px;
+    }
+
+    a {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+    }
+  }
   .share_common .videoWrapper .videoTips {
     position: absolute;
     left: 0;
@@ -7679,6 +7740,12 @@
   .share_common .images .imagesContainer.owlcar .imagesWrapper .image {
     background-size: contain!important;
   }
+  .share_common .images .imagesContainer.carousel {
+    max-width: 400px;
+  }
+  .share_common .images .carousel_markers {
+    max-width: 400px;
+  }
   .share_common .images .videoOpen {
     position: relative;
   }
@@ -7923,6 +7990,14 @@
   }
   .share_common .sharepanel > div.right {
     margin-left: auto;
+  }
+  .share_common .sharepanel .boost {
+    cursor: pointer;
+    color: rgb(var(--color-star-yellow));
+    border-radius: 8px;
+    padding: 4px 10px;
+    background: rgb(var(--background-secondary-theme));
+    box-shadow: 0 5px 7px -5px rgba(var(--color-shadow-base),0.4);
   }
   .share_common .sharepanel > div.right .itemwr > div.iconwr {
     text-align: center;

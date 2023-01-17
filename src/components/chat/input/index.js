@@ -1,1002 +1,1480 @@
 import f from "@/application/functions";
 import InputField from './InputField/InputField.vue'
-
-import _ from "underscore";
-import {mapState} from "vuex";
+import recordVoice from '@/components/assets/recordVoice/index.vue';
+import { mapState } from "vuex";
+import Images from '@/application/utils/images.js'
 
 import contacts from '@/components/contacts/list/index.vue'
 import preview from '@/components/contacts/preview/index.vue'
 import recordProgress from '@/components/assets/recordProgress/index.vue';
 
-import { MediaRecorder } from 'extendable-media-recorder';
+import upload from '@/components/assets/upload/index.vue';
 
+import { cancelable } from 'cancelable-promise';
 export default {
-  name: 'chatInput',
-  props: {
-    chat: Object,
-    u: String,
-    relationEvent: Object
-  },
-
-  components: {InputField, contacts, preview, recordProgress},
-
-  data: function () {
-
-    return {
-      upload: true,
-      test: [],
-      loading: false,
-      text: '',
-      file: {},
-      fileInfo: {},
-      ready: false,
-      creating: false,
-      userId: '',
-      showuserselect: null,
-      anyUrlMeta: String,
-      joinedMembers: [],
-      tipvalue: null,
-      tipuserindex: 0,
-      record: null,
-      recordRmsData: [],
-      isRecording: false,
-      mediaRecorder: null,
-      audioContext: null,
-      audioAnalyser: null,
-      audioDataArray: null,
-      recordTime: 0,
-      interval: null,
-      cancelOpacity: 0,
-      microphoneDisabled: false
-    }
-
-  },
-
-
-  watch: {
-    usersForKeysHash: {
-      //immediate: true,
-      handler: function () {
-      }
-    },
-    tipusers: function () {
-
-      if (!this.tipusers.length) {
-        this.tipuserindex = 0
-      } else {
-        if (this.tipuserindex > this.tipusers.length - 1) {
-          this.tipuserindex = this.tipusers.length - 1
-        }
-      }
-
-
-    }
-  },
-
-
-  computed: {
-    voiceEnable() {
-      return this.$store.state.voiceMessagesEnabled
-    },
-
-    connect: function() {
-      return this.$store.state.contact
-    },
-    menuItems: function () {
-      var menuItems = []
-
-
-      if (!this.relationEvent) {
-        menuItems.push({
-          click: "cameraHandler",
-          title: this.$i18n.t("button.takePhotoOrVideo"),
-          icon: "fas fa-camera",
-
-          upload: {
-            multiple: true,
-            extensions: ['jpg', 'jpeg', 'png', 'webp'],
-            maxsize: 100,
-            images: {
-              resize: {
-                type: 'fit'
-              }
-            }
-          }
-        })
-
-        menuItems.push({
-          click: "fileHandler",
-          title: this.$i18n.t("button.sendFile"),
-          icon: "fas fa-sticky-note",
-
-          upload: {
-            multiple: true,
-            extensions: [],
-            maxsize: 25,
-            images: {
-              resize: {
-                type: 'fit'
-              }
-            }
-          },
-        })
-      }
-
-
-      if (this.transaction) {
-        menuItems.unshift({
-          click: "sendtransactionWrapper",
-          title: this.$i18n.t("button.sendCoins"),
-          icon: "fas fa-wallet"
-        })
-      }
-
-      return menuItems
-    },
-    ...mapState([
-      'chats'
-    ]),
-
-    userlist: function () {
-
-
-      if (!this.chat) return []
-
-      return this.core.mtrx.chatUsersInfo(this.chat.roomId, 'anotherChatUsers')
-
-    },
-
-    transaction: function () {
-      return f.deep(window, 'POCKETNETINSTANCE.platform.ui.wallet.send')
-    },
-
-    uusers: function () {
-      if (this.u) {
-        return _.map(this.u.split(','), (u) => {
-          return u
-        })
-      }
-
-      return []
-    },
-    ausers: function () {
-      if (this.u) {
-        return _.map(this.u.split(','), (u) => {
-          return this.core.user.matrixId(u)
-        })
-      }
-
-      return []
-    },
-    stateChat: function () {
-      var id = this.$route.query.id
-      return this.$store.state.chatsMap[id]
-    },
-    invited: function () {
-
-      if (!this.chat) {
-        if (this.u) return this.ausers
-        return []
-      }
-
-      return _.map(_.filter(this.chat.currentState.getMembers(), function (m, v) {
-        return m.membership === 'invite'
-      }), function (u) {
-        return u.userId
-      })
-    },
-
-    joined: function () {
+	name: 'chatInput',
+	props: {
+		chat: Object,
+		u: String,
+		relationEvent: Object
+	},
+
+	components: { InputField, contacts, preview, recordProgress, recordVoice, upload },
+
+	data: function () {
+
+		return {
+			upload: true,
+			test: [],
+			loading: false,
+			text: '',
+			file: {},
+			fileInfo: {},
+			ready: false,
+			creating: false,
+			userId: '',
+			showuserselect: null,
+			anyUrlMeta: String,
+			joinedMembers: [],
+			tipvalue: null,
+			tipuserindex: 0,
+			record: null,
+			recordRmsData: [],
+			isRecording: false,
+
+			mediaRecorder: null,
+			audioContext: null,
+			audioAnalyser: null,
+
+			recordTime: 0,
+			interval: null,
+			cancelOpacity: 0,
+			microphoneDisabled: false,
+			prepareRecording: false,
+
+			cancelledCordovaMediaRecorder: false
+		}
+
+	},
+
+
+	watch: {
+		usersForKeysHash: {
+			//immediate: true,
+			handler: function () {
+			}
+		},
+		tipusers: function () {
+
+			if (!this.tipusers.length) {
+				this.tipuserindex = 0
+			} else {
+				if (this.tipuserindex > this.tipusers.length - 1) {
+					this.tipuserindex = this.tipusers.length - 1
+				}
+			}
+
+
+		}
+	},
+
+	beforeDestroy() {
+		if (this.audioContext)
+			this.audioContext.close()
+	},
+
+	computed: {
+		voiceEnable() {
+			return this.$store.state.voiceMessagesEnabled
+		},
+
+		connect: function () {
+			return this.$store.state.contact
+		},
+		pkoindisabled : function(){
+			return this.$store.state.pkoindisabled
+		},
+		menuItems: function () {
+			var menuItems = []
+
+
+			if (!this.relationEvent) {
+
+				if (window.POCKETNETINSTANCE && window.POCKETNETINSTANCE.mobile.supportimagegallery()) {
+					menuItems.push({
+						click: "cameraHandlerCustom",
+						title: this.$i18n.t("button.takePhotoOrVideo"),
+						icon: "fas fa-camera",
+
+					})
+				}
+				else {
+					menuItems.push({
+						click: "cameraHandler",
+						title: this.$i18n.t("button.takePhotoOrVideo"),
+						icon: "fas fa-camera",
+
+						upload: {
+							multiple: true,
+							extensions: ['jpg', 'jpeg', 'png', 'webp'],
+							maxsize: 100,
+							images: {
+								resize: {
+									type: 'fit'
+								}
+							}
+						}
+					})
+				}
+
+
+
+				menuItems.push({
+					click: "fileHandler",
+					title: this.$i18n.t("button.sendFile"),
+					icon: "fas fa-sticky-note",
+
+					upload: {
+						multiple: true,
+						extensions: [],
+						maxsize: 25,
+						images: {
+							resize: {
+								type: 'fit'
+							}
+						}
+					},
+				})
+			}
+
+
+			if (this.transaction && !this.pkoindisabled) {
+				menuItems.unshift({
+					click: "sendtransactionWrapper",
+					title: this.$i18n.t("button.sendCoins"),
+					icon: "fas fa-wallet"
+				})
+			}
+
+			return menuItems
+		},
+		...mapState([
+			'chats'
+		]),
+
+		userlist: function () {
 
-      if (!this.chat) return []
-
-      let roomId = this.chat.roomId
-      let self = this
-      let arr = []
-      let members = 0
 
-      this.chat.currentState.getMembers().forEach(function (user) {
-        if (user.membership === 'join') {
-          arr.push(user.userId)
-        }
-      })
-
-      return arr
-    },
+			if (!this.chat) return []
+
+			return this.core.mtrx.chatUsersInfo(this.chat.roomId, 'anotherChatUsers')
+
+		},
+
+		transaction: function () {
+			return f.deep(window, 'POCKETNETINSTANCE.platform.ui.wallet.send')
+		},
 
-    tipusers: function () {
+		uusers: function () {
+			if (this.u) {
+				return _.map(this.u.split(','), (u) => {
+					return u
+				})
+			}
 
-      if (this.tipvalue === null) return []
-      if (this.tipvalue === '') return this.userlist
+			return []
+		},
+		ausers: function () {
+			if (this.u) {
+				return _.map(this.u.split(','), (u) => {
+					return this.core.user.matrixId(u)
+				})
+			}
 
-      var value = this.tipvalue.toLowerCase()
+			return []
+		},
+		stateChat: function () {
+			var id = this.$route.query.id
+			return this.$store.state.chatsMap[id]
+		},
+		invited: function () {
 
-      var u = _.filter(this.userlist, function (u) {
-        return u.name.toLowerCase().indexOf(value) == 0 && u.name.toLowerCase() != value
-      })
+			if (!this.chat) {
+				if (this.u) return this.ausers
+				return []
+			}
 
-      return u
+			return _.map(_.filter(this.chat.currentState.getMembers(), function (m, v) {
+				return m.membership === 'invite'
+			}), function (u) {
+				return u.userId
+			})
+		},
 
-    },
+		joined: function () {
 
-    maintipuser: function () {
-      if (this.tipusers.length) {
-        return this.tipusers[this.tipuserindex || 0]
-      }
+			if (!this.chat) return []
 
-      return null
-    },
+			let roomId = this.chat.roomId
+			let self = this
+			let arr = []
+			let members = 0
 
-    recordViewData() {
-      if (this.recordRmsData.length) {
-        let length = this.recordRmsData.length
-        let step = this.recordRmsData.length / 100
+			this.chat.currentState.getMembers().forEach(function (user) {
+				if (user.membership === 'join') {
+					arr.push(user.userId)
+				}
+			})
 
-        if (length > 100) {
-          let result = []
-          for (let i = 0; i < 100; i++) {
-            result.push(this.recordRmsData[Math.round(i * step)])
-          }
-          return result
-        }
-      }
-      return this.recordRmsData
-    }
-  },
+			return arr
+		},
 
-  created() {
+		tipusers: function () {
 
-  },
+			if (this.tipvalue === null) return []
+			if (this.tipvalue === '') return this.userlist
 
-  ///
+			var value = this.tipvalue.toLowerCase()
 
-  mounted() {
-    this.ready = true
+			var u = _.filter(this.userlist, function (u) {
+				return u.name.toLowerCase().indexOf(value) == 0 && u.name.toLowerCase() != value
+			})
 
+			return u
 
-    if (!this.chat && this.core.mtrx.client) {
-      this.newchat().catch(e => {
-        return Promise.resolve()
-      })
-    }
+		},
 
-  },
+		maintipuser: function () {
+			if (this.tipusers.length) {
+				return this.tipusers[this.tipuserindex || 0]
+			}
 
-  methods: {
-    wait: function () {
-      return this.$f.pretry(() => {
-        return this.core.mtrx.client && this.core.mtrx.access
-      })
-    },
+			return null
+		},
+	},
 
-    browsetip: function (increase) {
+	created() {
 
-      increase ? this.tipuserindex++ : this.tipuserindex--
+	},
 
-      if (this.tipuserindex > this.tipusers.length - 1) {
-        this.tipuserindex = 0
-      }
+	///
 
-      if (this.tipuserindex < 0) {
-        this.tipuserindex = this.tipusers.length - 1
-      }
+	mounted() {
+		this.ready = true
 
-    },
 
-    selectcurrenttip: function () {
-      this.insertuser(this.tipusers[this.tipuserindex || 0])
-    },
+		if (!this.chat && this.core.mtrx.client) {
+			this.newchat().catch(e => {
+				return Promise.resolve()
+			})
+		}
 
-    insertuser: function (user = {}) {
-      var name = user.name || ''
+	},
 
-      this.$refs['newinput'].inserttip(name)
-    },
+	methods: {
 
-    tipBySearch: function (value) {
-      this.tipvalue = value
-    },
+		wait: function () {
+			return this.$f.pretry(() => {
+				return this.core.mtrx.client && this.core.mtrx.access
+			})
+		},
 
-    showuserselected: function (contact, action) {
-      this[action](contact)
-    },
+		browsetip: function (increase) {
 
-    sendtransactionWrapper: function () {
+			increase ? this.tipuserindex++ : this.tipuserindex--
 
-      this.menuIsVisible = false
+			if (this.tipuserindex > this.tipusers.length - 1) {
+				this.tipuserindex = 0
+			}
 
-      var users = _.filter(_.map(this.joined, (j) => {
-        return this.$f.deep(this, '$store.state.users.' + this.$f.getmatrixid(j)) || null
-      }), (r) => {
-        return r && r.source && r.id != this.core.user.userinfo?.id
-      })
+			if (this.tipuserindex < 0) {
+				this.tipuserindex = this.tipusers.length - 1
+			}
 
-      if (!users.length) {
+		},
 
-        return 'users.length'
-      }
+		selectcurrenttip: function () {
+			this.insertuser(this.tipusers[this.tipuserindex || 0])
+		},
 
-      if (users.length > 1) {
+		insertuser: function (user = {}) {
+			var name = user.name || ''
 
-        this.core.store.commit('setmodal', {
-          caption: this.$i18n.t("caption.sendTransactionTo"),
-          type: 'showuserselect',
-          data: {
-            users: users,
-            action: 'sendtransaction',
-            userselected: (c) => {
-              this.showuserselected(c, 'sendtransaction')
-            }
-          }
-        })
+			this.$refs['newinput'].inserttip(name)
+		},
 
-        /*this.showuserselect = {
-          users : users,
-          action : 'sendtransaction'
-        }*/
-      } else {
-        this.sendtransaction(users[0])
-      }
+		tipBySearch: function (value) {
+			this.tipvalue = value
+		},
 
+		showuserselected: function (contact, action) {
+			this[action](contact)
+		},
 
-      this.$refs.dropdownMenu.hidePopup();
 
-    },
+		resizeImage: function (base64) {
 
-    sendtransaction: function (user) {
-      var api = this.transaction
+			var ftype = base64.split(';')[0].split('/')[1];
+			var images = new Images()
 
-      //TODO get address and send transaction
+			return images.resize['fit'](base64, 1024, 1024, ftype, 0.95).then(base64 => {
 
-      api({
-        roomid: this.chat.roomId,
-        address: user.source.address
-      })
+				return Promise.resolve(base64)
+			}).catch(e => {
+				return Promise.reject(e)
+			})
+		},
 
-      /*.then(({txid, from}) => {
+		cameraHandlerCustom: function () {
+			var result = []
 
-        return this.core.mtrx.transaction(this.chat.roomId, txid)
+			this.$refs.dropdownMenu.hidePopup();
 
-      })*/
+			window.POCKETNETINSTANCE.platform.ui.uploadImage({
+				multiple: true,
 
-    },
+				action: ({ base64 }, resolve) => {
+					
 
-    emitInputData: function () {
-      this.$emit('emptyInput')
-      this.upload = true
-    },
+					return this.resizeImage(base64).then(base64 => {
 
-    HideUploadPic() {
-      this.upload = false
-    },
+						return f.Base64.toFile(base64).then(file => {
+							var data = {
+								base64,
+								file
+							}
 
-    emitUrl: function (url) {
-      this.$emit('setMetaUrl', url)
-    },
+							result.push(data)
 
-    newchat() {
+							this.uploadUploaded(null, data)
 
-      if (this.u) {
-        this.$store.state.globalpreloader = true
-        var matrixId = null
-        var myMatrixId = null
-        var chat = null
-        var id = ''
+							resolve()
+						})
 
-        this.creating = true
-        return this.core.user.usersInfo(this.uusers).then(info => {
+					}).catch(e => {
+						console.error(e)
+						resolve()
+					})
 
-          if (this.uusers.length == 1) {
+				},
 
-            var _info = info[0]
+				onSuccess: (imgs) => {
+					this.uploadUploadedAll()
+				}
+			})
+		},
 
-            if (!_info || !_info.keys || _info.keys.length < 12) {
+		sendtransactionWrapper: function () {
 
-              this.$emit('cantchatcrypto')
-              return Promise.reject('ny2')
+			this.menuIsVisible = false
 
-            }
-          }
+			var users = _.filter(_.map(this.joined, (j) => {
+				return this.$f.deep(this, '$store.state.users.' + this.$f.getmatrixid(j)) || null
+			}), (r) => {
+				return r && r.source && r.id != this.core.user.userinfo?.id
+			})
 
-          if (this.core.user.userinfo.keys.length < 12) {
-            this.$emit('cantchatcrypto')
-            return Promise.reject('ny2')
-          }
+			if (!users.length) {
 
+				return 'users.length'
+			}
 
-          //return Promise.reject('ny3')
+			if (users.length > 1) {
 
-          id = this.core.mtrx.kit.tetatetid(info[0], this.core.user.userinfo)
+				this.core.store.commit('setmodal', {
+					caption: this.$i18n.t("caption.sendTransactionTo"),
+					type: 'showuserselect',
+					data: {
+						users: users,
+						action: 'sendtransaction',
+						userselected: (c) => {
+							this.showuserselected(c, 'sendtransaction')
+						}
+					}
+				})
 
-          matrixId = this.core.user.matrixId(info[0].id)
-          myMatrixId = this.core.user.matrixId(this.core.user.userinfo.id)
+				/*this.showuserselect = {
+				  users : users,
+				  action : 'sendtransaction'
+				}*/
+			} else {
+				this.sendtransaction(users[0])
+			}
 
-          var initialstate = [{
-            "type": "m.set.encrypted",
-            "state_key": "",
-            "content": {
-              encrypted: true
-            }
-          }]
 
-          return this.core.mtrx.client.createRoom(
-            {
-              room_alias_name: id,
-              visibility: 'private',
-              invite: [matrixId],
-              name: '#' + id,
-              initial_state: initialstate
+			this.$refs.dropdownMenu.hidePopup();
 
-            }
-          )
+		},
 
-        }).then(_chat => {
+		sendtransaction: function (user) {
+			var api = this.transaction
 
-          chat = _chat
-          this.$store.state.globalpreloader = false
+			//TODO get address and send transaction
 
-          let m_chat = this.core.mtrx.client.getRoom(_chat.room_id)
-          let event = m_chat.currentState.getStateEvents("m.room.power_levels")
+			api({
+				roomid: this.chat.roomId,
+				address: user.source.address
+			})
 
-          return this.core.mtrx.client.setPowerLevel(chat.room_id, matrixId, 100, event[0]).catch(e => {
-          })
+			/*.then(({txid, from}) => {
+	  
+			  return this.core.mtrx.transaction(this.chat.roomId, txid)
+	  
+			})*/
 
-        }).then(r => {
-          this.creating = false
+		},
 
+		emitInputData: function () {
+			this.$emit('emptyInput')
+			this.upload = true
+		},
 
-          if (this.connect && this.connect == id) {
-            this.greetings()
-          }
+		HideUploadPic() {
+			this.upload = false
+		},
 
-          this.$store.commit('CONTACT', false)
+		emitUrl: function (url) {
+			this.$emit('setMetaUrl', url)
+		},
 
-          return Promise.resolve()
+		newchat() {
 
-        }).catch(e => {
+			if (this.u) {
+				this.$store.state.globalpreloader = true
+				var matrixId = null
+				var myMatrixId = null
+				var chat = null
+				var id = ''
 
-          this.creating = false
+				this.creating = true
+				return this.core.user.usersInfo(this.uusers).then(info => {
 
-          this.$store.state.globalpreloader = false
+					if (this.uusers.length == 1) {
 
-          if (e && e.errcode == 'M_ROOM_IN_USE') {
+						var _info = info[0]
 
-            return this.core.mtrx.client.joinRoom('#' + id + ':' + this.core.mtrx.baseUrl.replace("https://", "")).then(() => {
-            }).catch(e => {
+						if (!_info || !_info.keys || _info.keys.length < 12) {
 
-            })
+							this.$emit('cantchatcrypto')
+							return Promise.reject('ny2')
 
-          }
+						}
+					}
 
-          return Promise.reject(e)
+					if (this.core.user.userinfo.keys.length < 12) {
+						this.$emit('cantchatcrypto')
+						return Promise.reject('ny2')
+					}
 
-        })
 
-      } else {
-        return Promise.reject('u')
-      }
+					//return Promise.reject('ny3')
 
-    },
+					id = this.core.mtrx.kit.tetatetid(info[0], this.core.user.userinfo)
 
-    maySendMessage() {
-      return this.chat && this.chat.maySendMessage()
-    },
+					matrixId = this.core.user.matrixId(info[0].id)
+					myMatrixId = this.core.user.matrixId(this.core.user.userinfo.id)
 
-    greetings() {
-      this.send('👋').then(r => {
-        return Promise.resolve(r)
-      })
-    },
+					var initialstate = [{
+						"type": "m.set.encrypted",
+						"state_key": "",
+						"content": {
+							encrypted: true
+						}
+					}]
 
-    sendinput(text) {
+					return this.core.mtrx.client.createRoom(
+						{
+							room_alias_name: id,
+							visibility: 'private',
+							invite: [matrixId],
+							name: '#' + id,
+							initial_state: initialstate
 
-      this.send(text).then(r => {
+						}
+					)
 
-        return Promise.resolve(r)
+				}).then(_chat => {
 
-      })
+					chat = _chat
+					this.$store.state.globalpreloader = false
 
-    },
+					let m_chat = this.core.mtrx.client.getRoom(_chat.room_id)
+					let event = m_chat.currentState.getStateEvents("m.room.power_levels")
 
-    textCutLimit: function (text, limit) {
-      text = text.trim();
-      if (text.length <= limit) return text;
+					return this.core.mtrx.client.setPowerLevel(chat.room_id, matrixId, 100, event[0]).catch(e => {
+					})
 
-      text = text.slice(0, limit);
+				}).then(r => {
+					this.creating = false
 
-      return text.trim() + "...";
-    },
 
-    replaceMentions(text) {
+					if (this.connect && this.connect == id) {
+						this.greetings()
+					}
 
-      _.each(this.userlist, function (user) {
-        text = text.replace(new RegExp('@' + user.name, 'g'), '@' + user.id + ':' + user.name)
-      })
+					this.$store.commit('CONTACT', false)
 
-      return text
-    },
+					return Promise.resolve()
 
-    send(text) {
+				}).catch(e => {
 
-      if (!this.chat) {
-        this.newchat().catch(e => {
-        })
-      }
+					this.creating = false
 
-      this.$emit("sending")
+					this.$store.state.globalpreloader = false
 
+					if (e && e.errcode == 'M_ROOM_IN_USE') {
 
-      if (!this.relationEvent) {
-        this.focus()
-      }
+						return this.core.mtrx.client.joinRoom('#' + id + ':' + this.core.mtrx.baseUrl.replace("https://", "")).then(() => {
+						}).catch(e => {
 
-      return this.$f.pretry(() => {
+						})
 
-        return this.chat && !this.creating
+					}
 
-      }).then((r) => {
+					return Promise.reject(e)
 
-        this.$emit('sent')
+				})
 
-        text = this.replaceMentions(text)
+			} else {
+				return Promise.reject('u')
+			}
 
-        if (this.relationEvent) {
+		},
 
-          if (this.relationEvent.type == 'm.replace' && this.relationEvent.event) {
+		maySendMessage() {
+			return this.chat && this.chat.maySendMessage()
+		},
 
-            return this.core.mtrx.textEvent(this.chat, text).then(r => {
+		greetings() {
+			this.send('👋').then(r => {
+				return Promise.resolve(r)
+			})
+		},
 
-              r['m.relates_to'] = {
-                "rel_type": "m.replace",
-                "event_id": this.core.mtrx.clearEventId(this.relationEvent.event) || f.makeid(),
-              }
+		sendinput(text) {
 
-              var editEvent = r
+			this.send(text).then(r => {
 
-              this.relationEvent.event.event.content.body = r.body
-              this.relationEvent.event.event.content.block = r.block
-              this.relationEvent.event.event.content.msgtype = r.msgtype
+				return Promise.resolve(r)
 
-              delete this.relationEvent.event.event.decryptKey
-              delete this.relationEvent.event.event.decrypted
+			})
 
-              return this.core.mtrx.client.sendEvent(this.chat.roomId, 'm.room.message', editEvent)
+		},
 
-            }).then(r => {
+		textCutLimit: function (text, limit) {
+			text = text.trim();
+			if (text.length <= limit) return text;
 
-              this.core.store.dispatch('FETCH_EVENTS')
+			text = text.slice(0, limit);
 
-              this.$emit('clearRelationEvent')
+			return text.trim() + "...";
+		},
 
-              this.$emit('force')
+		replaceMentions(text) {
 
-              return Promise.resolve()
-            }).catch(e => {
+			_.each(this.userlist, function (user) {
+				text = text.replace(new RegExp('@' + user.name, 'g'), '@' + user.id + ':' + user.name)
+			})
 
+			return text
+		},
 
-              return Promise.reject(e)
-            })
+		send(text) {
 
-          }
+			if (!this.chat) {
+				this.newchat().catch(e => {
+				})
+			}
 
-        }
+			//return this.chat.pcrypto.getOrCreateCommonKey()
 
-        return this.core.mtrx.sendtext(this.chat, text, {relation: this.relationEvent})
+			//return this.chat.pcrypto.sendCommonKey()
 
-      }).catch(e => {
+			//return
 
+			this.$emit("sending")
 
-        this.$emit('sentMessageError', {
-          error: e
-        })
 
-      })
+			if (!this.relationEvent) {
+				this.focus()
+			}
 
-    },
+			return this.$f.pretry(() => {
 
-    pasteImage(data) {
-      this.sendImage({base64: data})
-    },
+				return this.chat && !this.creating
 
-    sendImage: function ({base64, file}) {
+			}).then((r) => {
 
-      var id = f.makeid()
+				this.$emit('sent')
 
-      var meta = {
-        type: "image",
-        id: id,
-        base64: base64,
-      }
+				text = this.replaceMentions(text)
 
-      this.$emit("sendingData", meta)
-      //setTimeout(() => {
-      this.$f.pretry(() => {
+				if (this.relationEvent) {
 
-        return this.chat
+					if (this.relationEvent.type == 'm.replace' && this.relationEvent.event) {
 
-      }).then(() => {
-        if (meta.aborted)
-          return Promise.reject('aborted')
+						return this.core.mtrx.textEvent(this.chat, text).then(r => {
 
-        return this.core.mtrx.sendImage(this.chat, base64, null, meta, {relation: this.relationEvent})
+							r['m.relates_to'] = {
+								"rel_type": "m.replace",
+								"event_id": this.core.mtrx.clearEventId(this.relationEvent.event) || f.makeid(),
+							}
 
-      }).then(r => {
+							var editEvent = r
 
-        this.$emit("sentData", {
-          id: id
-        })
+							this.relationEvent.event.event.content.body = r.body
+							this.relationEvent.event.event.content.block = r.block
+							this.relationEvent.event.event.content.msgtype = r.msgtype
 
-        return Promise.resolve()
+							delete this.relationEvent.event.event.decryptKey
+							delete this.relationEvent.event.event.decrypted
 
-      }).catch(e => {
+							return this.core.mtrx.client.sendEvent(this.chat.roomId, 'm.room.message', editEvent)
 
-        this.$emit('sentError', {
-          id: id,
-          error: e
-        })
+						}).then(r => {
 
-        return Promise.resolve()
+							this.core.store.dispatch('FETCH_EVENTS')
 
-      })
-      //}, 5000)
+							this.$emit('clearRelationEvent')
 
+							this.$emit('force')
 
-    },
+							return Promise.resolve()
+						}).catch(e => {
 
-    canencryptfilesize: function (file) {
+							console.error(e)
+							return Promise.reject(e)
+						})
 
-      var s = 10 * 1024 * 1024
+					}
 
-      if (!this.chat.pcrypto.canBeEncrypt()) {
-        return Promise.resolve(false)
-      }
+				}
 
-      if (file.size > s) {
+				return this.core.mtrx.sendtext(this.chat, text, { relation: this.relationEvent })
 
+			}).catch(e => {
 
-        return this.$dialog.confirm(
-          'Files larger than 10 megabytes are not encrypted. Do you want to send the file unencrypted?', {
-            okText: 'Yes',
-            cancelText: 'No, cancel'
-          })
 
-          .then((dialog) => {
+				this.$emit('sentMessageError', {
+					error: e
+				})
 
-            return Promise.resolve(true)
+			})
 
-          }).catch(e => {
-            return Promise.reject('cancel')
-          })
+		},
 
+		pasteImage(data) {
+			this.sendImage({ base64: data })
+		},
 
-      }
+		sendImage: function ({ base64, file }) {
 
-      return Promise.resolve(false)
-    },
+			var id = f.makeid()
 
-    sendFile: function ({file}) {
+			var meta = {
+				type: "image",
+				id: id,
+				base64: base64,
+			}
 
-      var id = f.makeid()
+			this.$emit("sendingData", meta)
+			//setTimeout(() => {
+			this.$f.pretry(() => {
 
-      var meta = {
-        type: "file",
-        id: id,
-        info: {
-          name: file.name,
-          size: file.size
-        }
-      }
+				return this.chat
 
-      this.$emit("sendingData", meta)
+			}).then(() => {
+				if (meta.aborted)
+					return Promise.reject('aborted')
 
-      this.$f.pretry(() => {
+				return this.core.mtrx.sendImage(this.chat, base64, null, meta, { relation: this.relationEvent })
 
-        return this.chat
+			}).then(r => {
 
-      }).then(() => {
+				this.$emit("sentData", {
+					id: id
+				})
 
-        return this.canencryptfilesize(file)
+				return Promise.resolve()
 
+			}).catch(e => {
 
-      }).then((notenc) => {
+				this.$emit('sentError', {
+					id: id,
+					error: e
+				})
 
-        return this.core.mtrx.sendFile(this.chat, file, meta, {relation: this.relationEvent}, notenc)
+				return Promise.resolve()
 
-      }).then(() => {
+			})
+			//}, 5000)
 
-        this.$emit("sentData", {
-          id: id
-        })
 
-        return Promise.resolve()
+		},
 
-      }).catch(e => {
+		canencryptfilesize: function (file) {
 
-        this.$emit('sentError', {
-          id: id,
-          error: e
-        })
-      })
+			var s = 10 * 1024 * 1024
 
+			if (!this.chat.pcrypto.canBeEncrypt()) {
+				return Promise.resolve(false)
+			}
 
-    },
+			if (file.size > s) {
 
-    focus: function () {
-      if (this.$refs['newinput'])
-        this.$refs['newinput'].focus()
-    },
 
-    focused: function () {
-      this.$emit('focused')
-    },
+				return this.$dialog.confirm(
+					'Files larger than 10 megabytes are not encrypted. Do you want to send the file unencrypted?', {
+					okText: 'Yes',
+					cancelText: 'No, cancel'
+				})
 
-    blur: function () {
-      if (this.$refs['newinput'])
-        this.$refs['newinput'].blur()
-    },
+					.then((dialog) => {
 
-    blurifempty: function () {
-      if (this.$refs['newinput'])
-        this.$refs['newinput'].blurifempty()
-    },
+						return Promise.resolve(true)
 
-    change: function () {
-    },
+					}).catch(e => {
+						return Promise.reject('cancel')
+					})
 
-    setText: function (text) {
-      this.text = text
 
-      if (this.$refs['newinput'])
-        this.$refs['newinput'].setText(text)
-    },
+			}
 
-    keyup: function (evt) {
-      var value = evt.target.value
+			return Promise.resolve(false)
+		},
 
-      if (value === '') {
-        this.$emit('inputClean', false)
-        return
-      } else {
-        this.$emit('inputClean', true)
-      }
+		sendFile: function ({ file }) {
 
-      this.text = value
-      this.anyUrlMeta = f.getUrl(this.text)
+			var id = f.makeid()
 
+			var meta = {
+				type: "file",
+				id: id,
+				info: {
+					name: file.name,
+					size: file.size
+				}
+			}
 
-      if (this.anyUrlMeta !== undefined) {
-        this.$emit('setMetaUrl', this.anyUrlMeta)
-      } else {
-        this.$emit('inputClean', false)
-      }
+			this.$emit("sendingData", meta)
 
-      if (this.chat)
-        this.core.mtrx.client.sendTyping(this.chat.roomId, true, 100)
-    },
+			this.$f.pretry(() => {
 
-    menuItemClick(item, rowObject) {
-      this[item.click](rowObject);
-    },
+				return this.chat
 
-    menuItemLoadedHandler: function (value) {
+			}).then(() => {
 
-      this.menuIsVisible = value
+				return this.canencryptfilesize(file)
 
-      return this.menuIsVisible
-    },
 
-    uploadStart(item, files) {
+			}).then((notenc) => {
 
-    },
+				return this.core.mtrx.sendFile(this.chat, file, meta, { relation: this.relationEvent }, notenc)
 
-    uploadError(item, error) {
-      this.$store.commit('icon', {
-        icon: 'error',
-        message: error.text
-      })
-    },
-    getImg() {
-      return this.imgs = true
-    },
-    uploadSizeError(value) {
-      if (!value) {
-        this.$refs.dropdownMenu.hidePopup();
-      }
-    },
-    uploadUploaded(item, data) {
-      const validImageTypes = ['image/gif', 'image/jpeg', 'image/png', 'image/webp'];
+			}).then(() => {
 
+				this.$emit("sentData", {
+					id: id
+				})
 
-      if (!validImageTypes.includes(data.file.type)) {
-        this.sendFile(data)
-      } else {
-        return this.sendImage(data)
-      }
-    },
-    imageWH(file) {
-      const img = new Image();
-      var imgInfo = {};
+				return Promise.resolve()
 
-      return new Promise((resolve, reject) => {
+			}).catch(e => {
 
-        img.onload = function () {
-          imgInfo.w = this.width
-          imgInfo.h = this.height
-          resolve(imgInfo)
-        }
+				console.error(e)
 
-        img.onerror = function (e) {
-          reject(e)
-        }
+				this.$emit('sentError', {
+					id: id,
+					error: e
+				})
+			})
 
-        img.src = file.base64
-      })
 
-    },
-    uploadUploadedAll(item, result) {
-      this.$store.state.loading = false
-      this.$refs.dropdownMenu.hidePopup();
-    },
+		},
 
-    async initMediaRecorder() {
-      if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-        console.log('getUserMedia supported.');
-        return navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
-          let mediaRecorder = new MediaRecorder(stream, { mimeType: 'audio/wav' })
-          mediaRecorder.stream = stream
-          return mediaRecorder
-        })
-          .catch(function (err) {
-              console.log('The following getUserMedia error occured: ' + err);
-              this.microphoneDisabled = true
-              throw new Error(err)
-            }
-          );
-      } else {
-        console.log('getUserMedia not supported on your browser!');
-        this.microphoneDisabled = true
-        return false
-      }
-    },
-    async initRecording() {
-      try {
-        if (!this.mediaRecorder) {
-          this.mediaRecorder = await this.initMediaRecorder()
-          this.audioContext = new (window.AudioContext || window.webkitAudioContext)()
-          this.audioAnalyser = this.audioContext.createAnalyser()
-          this.audioDataArray = new Uint8Array(this.audioAnalyser.frequencyBinCount)
-          this.mediaRecorder.ondataavailable = async (event) => this.createVoiceMessage(event)
-          this.src = this.audioContext.createMediaStreamSource(this.mediaRecorder.stream)
-          this.src.connect(this.audioAnalyser)
-        }
-        if (this.microphoneDisabled && this.mediaRecorder){
-          this.microphoneDisabled = false
-          return
-        }
-        this.isRecording = true
-      } catch (e) {
-        this.microphoneDisabled = true
-        return this.$dialog.confirm(
-          'Access to the microphone is restricted, please check your browser settings.', {
-            okText: 'Yes',
-          })
-      }
-      this.startRecording()
-    },
+		focus: function () {
+			if (this.$refs['newinput'])
+				this.$refs['newinput'].focus()
+		},
 
-    startRecording() {
-      try {
-        this.cancelOpacity = 0
-        this.recordRmsData = []
-        this.recordTime = 0
-        this.record = null
-        this.mediaRecorder.start()
-        this.interval = setInterval(() => {
-          this.dataArray = new Uint8Array(this.audioAnalyser.frequencyBinCount)
-          this.audioAnalyser.getByteFrequencyData(this.dataArray)
-          this.recordRmsData.push(this.generateRms(this.dataArray))
-          this.recordTime = this.recordTime + 50
-        }, 50)
-      } catch (e) {
-        console.log('startRecord', e)
-      }
+		focused: function () {
+			this.$emit('focused')
+		},
 
-    },
+		blur: function () {
+			if (this.$refs['newinput'])
+				this.$refs['newinput'].blur()
+		},
 
+		blurifempty: function () {
+			if (this.$refs['newinput'])
+				this.$refs['newinput'].blurifempty()
+		},
 
+		change: function () {
+		},
 
+		setText: function (text) {
+			this.text = text
 
-    async createVoiceMessage(event) {
-      const audioUrl = URL.createObjectURL(event.data);
-      const audio = new Audio(audioUrl);
-      const track = this.audioContext.createMediaElementSource(audio)
-      const id = f.makeid()
-      audio.addEventListener('loadedmetadata', () => {
-        const getDuration = () => {
-          audio.removeEventListener('timeupdate', getDuration)
-          audio.currentTime = 0
-          if(audio.duration< 1) {
+			if (this.$refs['newinput'])
+				this.$refs['newinput'].setText(text)
+		},
 
-            this.clear()
-            return
-          }
-          this.record.duration = audio.duration.toPrecision(4)
-        }
+		keyup: function (evt) {
+			var value = evt.target.value
 
-        if (audio.duration === Infinity) {
-          audio.currentTime = 1e101
-          audio.addEventListener('timeupdate', getDuration)
-        }
+			if (value === '') {
+				this.$emit('inputClean', false)
+				return
+			} else {
+				this.$emit('inputClean', true)
+			}
 
-      })
-      this.record = {
-        audio,
-        file: event.data,
-        track,
-        id,
-        isPlaying: false,
-      }
-      this.mediaRecorder.stream.getTracks()[0].stop()
-      this.mediaRecorder = null
-    },
+			this.text = value
+			this.anyUrlMeta = f.getUrl(this.text)
 
-    generateRms(frequencies) {
-      return +Math.sqrt(frequencies.reduce((a, b) => a + b ** 2) / frequencies.length).toPrecision(4)
-    },
 
-    stopRecording() {
-      clearInterval(this.interval)
-      this.isRecording = false
-      if(this.mediaRecorder){
-        this.mediaRecorder.stop()
-      }
-    },
+			if (this.anyUrlMeta !== undefined) {
+				this.$emit('setMetaUrl', this.anyUrlMeta)
+			} else {
+				this.$emit('inputClean', false)
+			}
 
-    async sendVoiceMessage() {
+			if (this.chat)
+				this.core.mtrx.client.sendTyping(this.chat.roomId, true, 100)
+		},
 
-      this.recordRmsData = []
-      const base64 = await this.convertAudioToBase64(this.record.file)
+		menuItemClick(item, rowObject) {
+			this[item.click](rowObject);
+		},
 
-      const id = f.makeid()
+		menuItemLoadedHandler: function (value) {
 
-      const meta = {
-        type: "audio",
-        id: id,
-        base64: base64,
-      }
+			this.menuIsVisible = value
 
-      this.$f.pretry(() => {
+			return this.menuIsVisible
+		},
 
-        return this.chat
+		uploadStart(item, files) {
 
-      }).then(() => {
-        return this.core.mtrx.sendAudio(this.chat, base64, null, meta, {relation: this.relationEvent})
-      }).catch(e => {
-            this.$emit('sentError', {
-              id: id,
-              error: e
-            })
-            return Promise.resolve()
-          })
+		},
 
+		uploadError(item, error) {
+			this.$store.commit('icon', {
+				icon: 'error',
+				message: error.text
+			})
+		},
+		getImg() {
+			return this.imgs = true
+		},
+		uploadSizeError(value) {
+			if (!value) {
+				this.$refs.dropdownMenu.hidePopup();
+			}
+		},
+		uploadUploaded(item, data) {
+			const validImageTypes = ['image/gif', 'image/jpeg', 'image/png', 'image/webp'];
 
-    },
-    clear() {
-      this.record = null
-      this.recordRmsData = []
-    },
-    async convertAudioToBase64(blob) {
-      const reader = new FileReader()
-      reader.readAsDataURL(blob)
-      return new Promise(resolve => {
-        reader.onloadend = () => {
-          resolve(reader.result)
-        }
-      })
-    },
-    setOpacity(opacity) {
-      this.cancelOpacity = opacity
-    }
 
-  },
+			if (!validImageTypes.includes(data.file.type)) {
+				this.sendFile(data)
+			} else {
+				return this.sendImage(data)
+			}
+		},
+		imageWH(file) {
+			const img = new Image();
+			var imgInfo = {};
+
+			return new Promise((resolve, reject) => {
+
+				img.onload = function () {
+					imgInfo.w = this.width
+					imgInfo.h = this.height
+					resolve(imgInfo)
+				}
+
+				img.onerror = function (e) {
+					reject(e)
+				}
+
+				img.src = file.base64
+			})
+
+		},
+		uploadUploadedAll(item, result) {
+			this.$store.state.loading = false
+			this.$refs.dropdownMenu.hidePopup();
+		},
+
+		catchPermissonsError(err) {
+
+			if (err == 'permissions' || (err.toString && err.toString().indexOf('Permission') > -1)) {
+				this.microphoneDisabled = true
+
+				if (window.cordova) {
+					this.$dialog.confirm(
+						this.$i18n.t('micaccesscordova'), {
+						okText: this.$i18n.t("button.ok"),
+					})
+				}
+				else {
+					this.$dialog.confirm(
+						this.$i18n.t('micaccessbrowser'), {
+						okText: this.$i18n.t("button.ok"),
+					})
+				}
+
+				return
+			}
+
+			if ((err.toString && err.toString().indexOf('device not found') > -1)) {
+				this.$dialog.confirm(
+					this.$i18n.t('micdevicenotfound'), {
+					okText: this.$i18n.t("button.ok"),
+				})
+				return
+			}
+
+
+			this.$dialog.confirm(
+				this.$i18n.t('micaccesscommonproblem'), {
+				okText: this.$i18n.t("button.ok"),
+			})
+
+			console.error(err)
+		},
+
+		getFileIosCordova (path) {
+
+			return new Promise((resolve, reject) => {
+				window.resolveLocalFileSystemURL(path, (entry) => {
+
+
+					if(!entry){
+						return reject('noentry')
+					}
+	
+					entry.file((file) => {
+						var reader = new FileReader()
+	
+						reader.onloadend = function() {
+							var blob = new Blob([new Uint8Array(this.result)], {type : file.type})
+
+							entry.remove()
+
+							resolve(blob)
+						}
+
+						reader.onerror = (e) => {
+
+							entry.remove()
+							
+							reject(e)
+						}
+	
+						reader.readAsArrayBuffer(file)
+					})
+				}, (e) => {
+					reject(e)
+				})
+			})
+			
+		},
+
+		initRecordingCordova() {
+
+			this.prepareRecording = cancelable(this.core.media.permissions({ audio: true }).then(() => {
+				this.microphoneDisabled = false
+
+				return Promise.resolve()
+			}).catch(err => {
+
+				console.error(err)
+
+				this.catchPermissonsError(err)
+
+				return Promise.reject(err)
+
+			}))
+
+			this.prepareRecording.then(() => {
+
+				this.microphoneDisabled = false
+
+				var path = 'recording.mp3'
+
+				if(f.isios()) path = 'cdvfile://localhost/temporary/recording.m4a'
+
+				var sec = 0
+
+				this.audioContext = this.core.getAudioContext()
+
+				//var startedTime = (new Date()).getTime() / 1000
+
+				var media = this.cordovaMediaRecorder = new Media(path, () => {
+
+					this.recordTime = 0
+
+					media.release()
+
+					if (this.cancelledCordovaMediaRecorder) {
+
+						this.cancelledCordovaMediaRecorder = false
+						return
+					}
+
+					var fu = null
+
+					/*if(f.isios()){ */
+						
+						fu = this.getFileIosCordova(f.isios() ? path : window.cordova.file.externalDataDirectory + path).then(blob => {
+							return Promise.resolve({
+								data : blob
+							})
+						})
+					
+					/*}
+
+					else{
+						fu = f.fetchLocal(path)
+					}*/
+
+					fu.then(r => {
+						///temp
+						/*if (f.isios())
+							r.duration = (new Date()).getTime() / 1000 - startedTime
+
+						console.log("R", r)
+
+						/*var e = {
+							data : r.data
+						}*/
+
+
+						if (media.duration && media.duration > 0){
+							r.duration = media.duration
+						}
+
+						this.createVoiceMessage(r, true)
+
+						return Promise.resolve()
+
+					}).catch(e => {
+
+						this.clear()
+
+						console.error(e)
+					}).finally(() => {
+						
+					})
+
+				}, (e) => {
+
+					console.error(e)
+
+					this.isRecording = false
+					this.clear()
+
+				});
+
+				var rmsdata = []
+
+				let currentPlaying = this.$store.state.currentPlayingVoiceMessage
+
+				if (currentPlaying) {
+					currentPlaying.pause()
+				}
+
+
+				this.interval = setInterval(() => {
+					// get media amplitude
+
+					if(f.isios()){
+						rmsdata.push(1)
+
+						if (rmsdata.length > 50) rmsdata = _.last(rmsdata, 50)
+	
+						this.recordRmsData = _.clone(rmsdata)
+					}
+					else{
+						this.cordovaMediaRecorder.getCurrentAmplitude(
+							// success callback
+							(amp) => {
+	
+								rmsdata.push(amp * 1000)
+	
+								if (rmsdata.length > 50) rmsdata = _.last(rmsdata, 50)
+	
+								this.recordRmsData = _.clone(rmsdata)
+	
+	
+							},
+							function (e) {
+								console.log("E", e)
+							}
+						);
+					}
+					
+
+
+
+					sec = sec + 50
+
+					if (sec % 1000 === 0) this.recordTime = sec
+
+				}, 50);
+
+				this.isRecording = true
+				this.cancelOpacity = 0
+				this.recordRmsData = []
+				this.recordTime = 0
+				this.record = null
+
+				this.cordovaMediaRecorder.startRecord();
+
+			}).catch((e) => { 
+				console.error(e)
+
+
+			}).finally(() => {
+				this.prepareRecording = null
+			})
+
+		},
+
+		initRecording() {
+
+			if (this.prepareRecording || this.isRecording || this.cordovaMediaRecorder) return
+
+			if (window.cordova) {
+				return this.initRecordingCordova()
+			}
+
+			this.prepareRecording = cancelable(this.core.initMediaRecorder().then((recorder) => {
+
+				this.microphoneDisabled = false
+
+				if (this.prepareRecording) {
+					return Promise.resolve(recorder)
+				}
+				else {
+					recorder.stream.getTracks().forEach((track) => {
+						track.stop();
+					});
+				}
+
+			}).catch(err => {
+
+				this.catchPermissonsError(err)
+				return Promise.reject(err)
+
+			}))
+
+
+			this.prepareRecording.then((recorder) => {
+
+
+				this.mediaRecorder = recorder
+
+				this.audioContext = this.core.getAudioContext()
+				this.audioAnalyser = this.audioContext.createAnalyser()
+
+				//var audioDataArray = new Uint8Array(this.audioAnalyser.frequencyBinCount)
+
+				var src = this.audioContext.createMediaStreamSource(this.mediaRecorder.stream)
+				src.connect(this.audioAnalyser)
+
+				this.startRecording()
+
+			}).catch(() => { }).finally(() => {
+				this.prepareRecording = null
+			})
+
+
+		},
+
+		startRecording() {
+
+			let currentPlaying = this.$store.state.currentPlayingVoiceMessage
+
+			if (currentPlaying) {
+				currentPlaying.pause()
+			}
+
+			this.$store.commit('SET_VOICERECORDING', true)
+
+			this.isRecording = true
+			this.cancelOpacity = 0
+			this.recordRmsData = []
+			this.recordTime = 0
+			this.record = null
+			this.mediaRecorder.start()
+
+			var sec = 0
+			var rmsdata = []
+
+
+			this.interval = setInterval(() => {
+				var dataArray = new Uint8Array(this.audioAnalyser.frequencyBinCount)
+
+				this.audioAnalyser.getByteFrequencyData(dataArray)
+
+
+				rmsdata.push(this.generateRms(dataArray))
+
+				if (rmsdata.length > 50) rmsdata = _.last(rmsdata, 50)
+
+				sec = sec + 50
+
+				this.recordRmsData = _.clone(rmsdata)
+
+				if (sec % 1000 === 0) {
+					this.recordTime = sec
+				}
+
+			}, 50)
+
+		},
+
+
+		checkaudioForSend: function (record, sendnow) {
+
+			if (record.duration < 1) {
+				this.clear()
+			}
+			else {
+				if (sendnow) {
+					this.sendVoiceMessage(record)
+				}
+				else{
+					this.record = record
+				}
+			}
+		},
+
+		getduration(file){
+
+			return new Promise((resolve, reject) => {
+				f.readFile(file).then(arraybuffer => {
+					try{
+						this.audioContext.decodeAudioData(arraybuffer, (buffer) => {
+							resolve(buffer.duration)
+						})
+					}catch(e){
+						reject(e)
+					}
+					
+				}).catch(reject)
+			})
+
+			
+
+		},
+
+		createVoiceMessage(event, sendnow) {
+			var c = () => {
+
+				//this.record = 
+
+				this.checkaudioForSend({
+					file: event.data,
+					id: f.makeid(),
+					duration : event.duration
+				}, sendnow)
+			}
+
+			if(event.duration){
+
+				c()
+			}
+			else{
+				this.getduration(event.data).then(duration => {
+					event.duration = duration
+
+					c()
+				}).catch((e) => {
+					console.error(e)
+
+					this.clear()
+				})
+			}
+
+
+			/*f.readFile(event.data).then(arraybuffer => {
+
+				console.log('arraybuffer', arraybuffer)
+
+				this.audioContext.decodeAudioData(arraybuffer, (buffer) => {
+
+					console.log('this.record', this.record)
+					console.log('this.buffer', buffer)
+					
+
+					this.record = {
+						file: event.data,
+						id: f.makeid()
+					}
+
+					this.record.duration = buffer.duration
+
+					this.checkaudioForSend(sendnow)
+
+				})
+
+			}).catch(e => {
+				console.error('e', e)
+				this.clear()
+				//
+			})*/
+
+		},
+
+		generateRms(frequencies) {
+			return +Math.sqrt(frequencies.reduce((a, b) => a + b ** 2) / frequencies.length).toPrecision(4)
+		},
+
+		stopRecording({ cancel, sendnow }) {
+
+			console.log("STOP RECORDING", this.isRecording)
+
+
+			this.$store.commit('SET_VOICERECORDING', false)
+
+			if (this.prepareRecording) {
+
+				this.prepareRecording.cancel()
+				this.prepareRecording = null
+
+				return
+			}
+
+			this.isRecording = false
+
+			if (this.interval) {
+				clearInterval(this.interval)
+				this.interval = null
+			}
+
+
+			if (this.mediaRecorder) {
+
+				if (cancel) {
+					//this.mediaRecorder.ondataavailable = () => { }
+
+				}
+				else {
+					this.mediaRecorder.addEventListener('dataavailable', (event) => {
+						this.createVoiceMessage(event, sendnow)
+					})//ondataavailable = (event) => this.createVoiceMessage(event, sendnow)
+				}
+
+				this.mediaRecorder.stop()
+
+				this.mediaRecorder.stream.getTracks().forEach((track) => {
+					track.stop();
+				});
+
+				this.mediaRecorder = null
+			}
+
+
+			if (this.cordovaMediaRecorder) {
+
+				if (cancel) {
+					this.cancelledCordovaMediaRecorder = true
+				}
+				else {
+					this.cancelledCordovaMediaRecorder = false
+				}
+
+				this.cordovaMediaRecorder.stopRecord()
+				this.cordovaMediaRecorder = null
+				
+			}
+
+		},
+
+		async sendVoiceMessage(record) {
+
+			if(!record) record = this.record
+
+			if(!record) {
+				this.clear()
+			}
+
+			this.recordRmsData = []
+
+			const base64 = await this.core.convertAudioToBase64(record.file)
+
+			const id = f.makeid()
+
+			const meta = {
+				type: "audio",
+				id: id,
+				base64: base64,
+			}
+
+			this.clear()
+
+			this.$f.pretry(() => {
+				return this.chat
+			}).then(() => {
+				return this.core.mtrx.sendAudio(this.chat, base64, null, meta, { relation: this.relationEvent })
+			}).catch(e => {
+				this.$emit('sentError', {
+					id: id,
+					error: e
+				})
+				return Promise.resolve()
+			})
+
+
+		},
+
+		clear() {
+			this.record = null
+			this.recordRmsData = []
+			this.recordTime = 0
+
+			if (this.interval) {
+				clearInterval(this.interval)
+				this.interval = null
+			}
+
+			if (this.cordovaMediaRecorder) {
+				this.cordovaMediaRecorder = null
+			}
+
+			if (this.mediaRecorder) {
+
+				this.mediaRecorder.stop()
+				this.mediaRecorder.stream.getTracks().forEach((track) => {
+					track.stop();
+				});
+				this.mediaRecorder = null
+			}
+
+			/*if (this.audioContext){
+				this.audioContext.close()
+			}*/
+		},
+
+		/*async convertAudioToBase64(blob) {
+			const reader = new FileReader()
+			reader.readAsDataURL(blob)
+			return new Promise(resolve => {
+				reader.onloadend = () => {
+					resolve(reader.result)
+				}
+			})
+		},*/
+
+		setOpacity(opacity) {
+			this.cancelOpacity = opacity
+		}
+
+	},
 }
