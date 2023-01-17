@@ -45,7 +45,7 @@
         </router-link>
       </template>
 
-      <template v-slot:rightadd>
+      <!--<template v-slot:rightadd>
         <div class="encrypted" v-if="isChatEncrypted.value" @mouseover="e => hoverEncrypt = true">
           <i class="fas fa-lock"></i>
         </div>
@@ -58,7 +58,7 @@
             </div>
           </div>
         </div>
-      </template>
+      </template>-->
 
       <!--<template v-slot:right>
         <div class="icon iconbutton" v-if="m_chat && m_chat.currentState.getMembers().length > 2">

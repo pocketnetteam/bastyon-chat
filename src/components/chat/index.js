@@ -40,6 +40,7 @@ export default {
       cantchat: false,
       cantchatexc: false,
       error : null,
+      hoverEncrypt : false,
 
       showInput: true,
       showShareMessages: false,
