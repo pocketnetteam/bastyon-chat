@@ -20,6 +20,7 @@ export default {
       ind: 0,
       topicTxt: '',
       roomMuted: false,
+      roomCallsDisabled: false,
       publicRoom: {},
       public: false,
       encryptedEvents: [],
@@ -175,8 +176,13 @@ export default {
     },
     events: function () {
       var pushRules = this.core.mtrx.client._pushProcessor.getPushRuleById(this.chat.roomId)
+      var res = this.m_chat.currentState.getStateEvents("m.room.calls")
+
       if (pushRules !== null) {
         this.roomMuted = true
+      }
+      if (!res[res.length-1]?.event?.content?.enabled) {
+        this.roomCallsDisabled = true
       }
       return this.m_chat.timeline || {}
 
@@ -327,7 +333,21 @@ export default {
       })
     },
 
-
+    muteCalls() {
+      let roomId = this.chat.roomId
+      const self = this
+      if (self.roomCallsDisabled) {
+        self.roomCallsDisabled = false
+      } else {
+        self.roomCallsDisabled = true
+      }
+      self.core.mtrx.client.sendStateEvent(
+        roomId,
+        "m.room.calls",
+        { enabled: !self.roomCallsDisabled },
+        undefined
+      )
+    },
     muteRoom() {
       var roomId = this.chat.roomId
       var deviceID = this.core.mtrx.client.deviceId
@@ -342,13 +362,7 @@ export default {
 
 
       }
-      self.core.mtrx.client.sendStateEvent(
-        roomId,
-        "m.room.calls",
-        { enabled: !self.roomMuted },
-        undefined
-      )
-      console.log(this.m_chat.currentState.getStateEvents("m.room.calls"), !self.roomMuted)
+
 
     },
 

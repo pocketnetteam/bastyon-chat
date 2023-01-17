@@ -215,15 +215,18 @@ export default {
 
     totalDonationAmount: function () {
       return (this.feesDirection == 'include') ? this.donationAmount : this.donationAmount + this.calculatedFees;
-    }
+    },
 
+    checkCallsEnabled: function() {
+      let res = this.m_chat.currentState.getStateEvents("m.room.calls")
+      console.log('the user has allowed calls',res[res.length-1]?.event?.content?.enabled)
+      return  res[res.length-1]?.event?.content?.enabled
+    },
   }),
   methods: {
     bcCall: function() {
-      let res = this.m_chat.currentState.getStateEvents("m.room.calls")
-      let isEnable = res[res.length-1]?.event?.content?.enabled ? true : res[res.length-1]?.event?.content?.enabled == undefined ? true : false
-      if (!isEnable && this.m_chat.myUserId !== res[res.length-1]?.event?.sender) {
-        console.log('The user has restricted the possibility of calls', res[res.length-1]?.event?.content?.enabled)
+      if (!this.checkCallsEnabled) {
+        console.log('The user has restricted the possibility of calls')
         return
       }
       let local = document.querySelector('body')
