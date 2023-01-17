@@ -24,12 +24,12 @@
       <div class="namebuttoncreate">
 
 
-      <div class="" v-if="mode === 'Selectmany' && selectedlength">
+      <div class="" v-if="mode === 'Selectmany' && (selectedlength || type === 'massmailing')">
         <div class="work">
           <div class="groupList">
 
             <div class="groupCaption">
-              <span class="label">Selected ({{ selectedlength }})</span>
+              <span class="label"> {{ type === "massmailing" ? "Total recipients (subscribers): ":  "Selected " }} {{ selectedlength }}</span>
               </div>
             </div>
 
@@ -53,11 +53,11 @@
       <div class="work searchWrapperEA">
         <search @search="search" :minimize="minimized"/>
       </div>
-
+      
 
       <div class="work">
         <div class="titleContacts" v-if="users.contacts.length !== 0">
-          <span>{{ $t("caption.contacts") }}</span>
+          <span>{{ $t(type === "massmailing" ? "caption.contactsForMailing" : "caption.contacts") }}</span>
         </div>
         <list @toggleUser="toggleUser" @select="select" :mode="mode" :selected="selected" :users="users.contacts" :title="'Contacts'"/>
       </div>

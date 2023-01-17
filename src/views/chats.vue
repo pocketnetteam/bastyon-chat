@@ -2,10 +2,9 @@
   <div class="page chats" :class="{pocketnet, mobile, minimized, active, newChat}">   
 
     <topheader
-      class="topheader" :share="share" @newchat="newchat"
+      class="topheader" :share="share" @newchat="newchat" @sendMassMessage="sendMassMessage"
     />
     <maincontent ref="maincontent" :rbackexp="true" > 
-
       <template v-slot:content>
         
         <list :share="share" @scrolltop="scrolltop"/>
@@ -14,7 +13,7 @@
 
           <template v-slot:header>{{ $t("caption.newChat") }}</template>
           <template v-slot:body>
-            <chatcreate @completed="chatcreated"/>
+            <chatcreate @completed="chatcreated" @sendMassMessage="sendMassMessage"/>
           </template>
           <template v-slot:footer></template>
 
@@ -58,11 +57,11 @@
 
 import list from '@/components/chats/list/index.vue'
 import topheader from '@/components/chats/topheader/index.vue'
-import { mapState } from 'vuex';
+import { mapGetters, mapState } from 'vuex';
 import contacts from '@/components/contacts/index.vue'
 import chatcreate from '@/components/chat/create/index.vue'
 export default {
-  name: 'pagechats',
+  name: 'pagechats2',
   components: {
 
     list,
@@ -73,7 +72,7 @@ export default {
   },
 
   props : {
-    share : Object
+    share : Object,
   },
 
   data : function(){
@@ -82,16 +81,24 @@ export default {
     }
   },
 
-  computed:  mapState({
+  computed:  {
+    ...mapState({
       pocketnet: state => state.pocketnet,
       minimized: state => state.minimized,
       active: state => state.active,
       mobile : state => state.mobile,
       hiddenInParent : state => state.hiddenInParent,
       joinroom : state => state.joinroom
-  }),
+    }),
+    ...mapGetters(['massMessageAvailable'])
+  },
 
   methods : {
+    sendMassMessage : function(message){
+      this.$emit('sendMassMessage', message);
+      this.closeNewChat();
+    },
+
     newchat : function(){
       this.newChat = true
     },
@@ -113,12 +120,11 @@ export default {
   },
 
   mounted() {
+    this.newChat = Boolean(this.$route.query?.type)
 
     if (this.joinroom){
-
       this.$router.push('/publicPreview?id=' + this.joinroom);
       this.$store.commit('JOINROOM', null)
-
     }
     
   }

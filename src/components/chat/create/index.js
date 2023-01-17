@@ -1,5 +1,7 @@
 import { mapState } from 'vuex';
 import contacts from '@/components/contacts/index.vue'
+import InputField from '@/components/chat/input/InputField/InputField.vue'
+import f from '@/application/functions.js'
 
 export default {
     name: 'chatcreate',
@@ -7,7 +9,8 @@ export default {
     },
 
     components : {
-        contacts
+        contacts,
+        InputField: InputField
     },
 
     data : function(){
@@ -20,6 +23,9 @@ export default {
                 privategroup : {id : 'privategroup', icon : 'fas fa-user-friends', value : 'private'},
 
                 publicgroup : {id : 'publicgroup', icon : 'fas fa-users', value : 'public'},
+
+                massmailing : {id : 'massmailing', icon : 'fas fa-envelope', value : 'mass'},
+
                 
             },
 
@@ -27,7 +33,9 @@ export default {
 
             groupName : '',
 
-            selected : {}
+            massMessage : '',
+
+            selected : {},
 
         }
 
@@ -37,37 +45,93 @@ export default {
 
     },
 
+
     watch: {
         //$route: 'getdata'
     },
-    computed: mapState({
-        auth : state => state.auth,
+    computed: {
+        ...mapState({
+            auth : state => state.auth,
 
-        cancomplete : function(){
+            massmailingenabled : state => state.massmailingenabled,
 
-            if(!this.type) return false
+            cancomplete : function(){
 
-            if (this.type.id == 'privategroup'){
-               return this.selectedLength > 1
+                if(!this.type) return false
+
+                if (this.type.id == 'privategroup'){
+                return this.selectedLength > 1
+                }
+
+                if (this.type.id == 'publicgroup'){
+                    if (this.groupName)
+                        return true
+
+                    return false
+                }
+
+                if (this.type.id == 'massmailing'){
+                    return true;
+                }
+
+            },
+
+            selectedLength : function(){
+                return _.toArray(this.selected).length
+            },
+
+        }),
+
+
+        viewTypes(){
+
+            const {massmailing, ...typesWithout} = this.types;
+
+            if (this.massmailingenabled){
+                return this.types;
             }
 
-            if (this.type.id == 'publicgroup'){
-                if (this.groupName)
-                    return true
-
-                return false
-            }
-
-        },
-
-        selectedLength : function(){
-            return _.toArray(this.selected).length
+            return typesWithout;
         }
 
-    }),
+    },
 
     methods : {
-    
+        typeMassMessage(message){
+            this.massMessage = message;
+        },
+        createChats(){
+
+            if (!Object.values(this.selected).length || !this.massMessage){
+
+                this.$store.commit('icon', {
+                    icon: 'error',
+                    message: 'Please enter a message and choose recipients (subscribers)'
+                })
+
+                return;
+            }
+        
+            this.core.user.usersInfo(Object.values(this.selected), null, null, true).then((user, index) => {
+
+                console.log('user', user);
+
+                if (user && user.length){
+
+                    const recipients = user[0].source.subscribers || [];
+
+                    const chatMassMessage = {message: this.massMessage, recipients: recipients, total: recipients.length};
+
+                    localStorage.setItem('chat_mass_message', JSON.stringify(chatMassMessage))
+
+                    this.$emit('sendMassMessage', chatMassMessage)
+
+                }
+
+            
+            })
+        },
+
 
         unselecttype : function(){
             this.type = null
@@ -90,6 +154,10 @@ export default {
         },
 
         complete(){
+
+            if (this.type.id === 'massmailing'){
+                return this.createChats();
+            }
 
             this.createGroupAction(this.selected).then(chat => {
 
@@ -132,8 +200,9 @@ export default {
 
             const data = this.core.mtrx.kit.groupIdLight(users)
 
-            this.$store.state.globalpreloader = true
-      
+            this.$store.state.globalpreloader = true;      
+
+
             return this.core.mtrx.client.createRoom({
 
               //room_alias_name: '#' + data.hash,
@@ -168,5 +237,13 @@ export default {
             })
       
           },
+
+
     },
+
+    mounted(){
+
+        this.type = this.$route.query?.type || '';
+    }
+
 }

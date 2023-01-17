@@ -18,7 +18,7 @@
 //import topheader from '@/components/chats/topheader.vue'
 
 export default {
-  name: 'pagechats',
+  name: 'pagechats3',
   components: {
 
     //list,

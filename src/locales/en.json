@@ -3,6 +3,7 @@
         "create": "Create",
         "addGroupNamePlaceHolder": "Add Group Name",
         "addPublicChatName": "Add Public Chat Name",
+        "addMassMessageHolder": "Message holder",
         "createPublicChat": "Create public chat",
         "chatTopic": "Topic renamed",
         "publicRoomTitle": "Public Room",
@@ -58,6 +59,7 @@
         "following" : "Following",
         "theme" : "Theme:",
         "contacts" : "Contacts",
+        "contactsForMailing" : "Choose contact with subscribers",
         "phoneContacts" : "Phone contacts",
         "chooseInviteMedia" : "Please choose how you want to invite:",
         "admin" : "Admin",
@@ -168,12 +170,14 @@
     "type" : {
         "publicgroup" : "Create Public group",
         "privategroup" : "Create Private group",
+        "massmailing" : "Mass mailing",
         "one" : "One on one chat"
     },
 
     "typelabel" : {
         "publicgroup" : "Public group creation",
         "privategroup" : "Private group creation",
+        "massmailing" : "Mass mailing creation",
         "one" : "One on one chat creation"
     },
 

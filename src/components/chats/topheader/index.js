@@ -1,4 +1,4 @@
-import { mapState } from 'vuex';
+import { mapState, mapGetters  } from 'vuex';
 
 import contacts from '@/components/contacts/index.vue'
 
@@ -18,7 +18,7 @@ export default {
             loading : false,
             newchatopened : false,
             createGroup: false,
-            contacts: false
+            contacts: false,
         }
 
     },
@@ -26,6 +26,7 @@ export default {
     created(){
 
         this.$store.commit('SET_CURRENT_ROOM', 'all')
+
          
     },
 
@@ -40,23 +41,44 @@ export default {
     },
 
 
-    computed: mapState({
-        auth : state => state.auth,
-        minimized: state => state.minimized,
-        pocketnet: state => state.pocketnet,
-        active: state => state.active,
-        
+    computed: {
+           
         ...mapState([
+            'auth',
+            'minimized',
+            'pocketnet',
+            'active',
+            'mobile',
             'share',
-            'closebybg'
-        ]),
+            'closebybg',
+            'recipients',
+            'recipientsTotal',
+            'processMassMailing',
+            'massMessageLimitCount',
+            'massmailingenabled'
+        ]),    
+
+        ...mapGetters(['massMessageAvailable']),
 
         window : function(){
             return window
-        }
-    }),
+        },
+        
+        recipientsCompleted(){
+            return this.recipientsTotal - this.recipients.length;
+        },
+    },
 
     methods : {
+        
+        resumeProcess : function(){
+
+            const chatMassMessage = JSON.parse(localStorage.getItem('chat_mass_message') || '{}');
+
+            console.log('chatMassMessage', chatMassMessage);
+
+            this.$emit('sendMassMessage', chatMassMessage);
+        },
         changeCloseByBg : function(){
             this.$store.commit('closebybg', !this.closebybg)
         },
@@ -109,4 +131,5 @@ export default {
             this.$emit('newchat')
         }
     },
+
 }

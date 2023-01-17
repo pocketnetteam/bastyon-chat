@@ -10,6 +10,10 @@
     text-overflow: ellipsis
     overflow: hidden
     cursor: pointer
+
+    &.massmailing
+        overflow: auto
+
     .icon
         i
             width: 30px
@@ -22,7 +26,7 @@
     button
         white-space: nowrap
         min-width: 0!important
-    input
+    input, textarea
         width: auto
 
     .completewrapper
@@ -65,3 +69,22 @@
             top : -1px
             z-index: 12
             padding-bottom: $r
+
+.inputWrapper
+    display: flex
+    border-bottom: 1px solid srgb(--neutral-grad-0)
+    margin: 0 $r
+    padding-top: $r 
+    padding-bottom: $r
+
+
+    .center
+        max-height: 110px
+        max-width: 100%
+        border-radius: 30px
+        display: flex
+        justify-content: space-between
+        align-items: center
+        flex-grow: 1
+        border: 1px solid transparent
+        background: srgb(--background-secondary-theme)

@@ -310,6 +310,11 @@ export default {
       default: ''
     },
 
+    massmailingenabled : {
+      type: String,
+      default: ''
+    },
+
     ctheme: String,
 
     fcmtoken: String,
@@ -544,6 +549,8 @@ export default {
     this.$store.commit('setVoiceMessagesEnabled', this.recording);
     this.$store.commit('setCallsEnabled', this.iscallsenabled)
     this.$store.commit('pkoindisabled', this.pkoindisabled)
+    console.log('massmailingenabled', this.address, this.massmailingenabled)
+    this.$store.commit('massmailingenabled', (!this.address && 'true') || String(this.massmailingenabled))
     this.$store.commit('clearall')
 
     this.$store.commit('ls')
@@ -725,6 +732,8 @@ export default {
 
     var user = (this.address && this.privatekey) ? actualUser : testUsers[`${username}`];
 
+    this.$store.commit('SET_ADDRESS', f.hexDecode(user.address))
+
     var listofproxies = f.deep(window, 'window.POCKETNETINSTANCE.options.listofproxies') || [
       {
         host: 'test.pocketnet.app',
@@ -827,7 +836,7 @@ export default {
 
     }, 3000)
 
-    window.matrixchat = core
+    window.matrixchat = core;
 
   }
 }

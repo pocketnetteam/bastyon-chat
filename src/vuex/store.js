@@ -22,6 +22,18 @@ var mex = {
 
 var activetimeout = null
 
+const checkDateLimit = (date) => {
+	return new Date().getTime() - 86400000 > date;
+}
+
+const massMessageLimit = JSON.parse(localStorage.getItem('chat_mass_message_limit') || '{"count": 0, "date": 0}');
+
+if (checkDateLimit(massMessageLimit.date)){
+	massMessageLimit.date = new Date().getTime();
+	massMessageLimit.count = 0;
+}
+
+
 var store = new Vuex.Store({
 	state: {
 		contacts: {},
@@ -76,6 +88,13 @@ var store = new Vuex.Store({
 		voicerecording : false,
 		deletedrooms: {},
 		pkoindisabled : false,
+		massmailingenabled : false,
+		recipientsTotal: 0,
+		recipients: [],
+		processMassMailing: false,
+		address: '',
+		massMessageLimitCount: massMessageLimit.count,
+		massMessageLimitDate: massMessageLimit.date,
 		isCallsActive: null,
 		//share : {url : 'https://yandex.ru/'} //null
 	},
@@ -90,8 +109,37 @@ var store = new Vuex.Store({
 		getSignedUpUsers: state => {
 			return state.signedUpUsers
 		},
+
+		pro : state => {
+			return state.massmailingenabled;
+		},
+
+		massMessageAvailable : state => {
+			return state.massMessageLimitCount <= 300;
+		}
+	
 	},
 	mutations: {
+		SENT_MASS_MESSAGE(state){
+			state.massMessageLimitCount++;
+
+			const massMessageLimit = {
+				count: state.massMessageLimitCount,
+				date: state.massMessageLimitDate
+			}
+
+			localStorage.setItem('chat_mass_message_limit', JSON.stringify(massMessageLimit));
+		},
+		SET_MASS_MESSAGE_LIMIT(state){
+			state.massMessageLimitCount = 0;
+			state.state.massMessageLimitDate = new Date().getTime();
+		},
+		SET_ADDRESS(state, address){
+			state.address = address;
+		},
+		PROCESS_MASS_MAILING(state, boo){
+			state.processMassMailing = boo
+		},
 		SET_CALL(state, isActive) {
 			console.log('set calls', isActive)
 			state.isCallsActive = isActive
@@ -183,6 +231,11 @@ var store = new Vuex.Store({
 
 		pkoindisabled(state, value){
 			state.pkoindisabled = value && value == 'true' ? true : false
+		},
+
+		
+		massmailingenabled(state, value){
+			state.massmailingenabled = value && value == 'true' ? true : false
 		},
 
 		wasunhidden(state, value) {
@@ -524,6 +577,14 @@ var store = new Vuex.Store({
 
 		CLEAR_USERSINFO(state, v) {
 			state.users = {}
+		},
+
+		SET_RECIPIENTS(state, v) {
+			state.recipients = v;
+		},
+
+		SET_RECIPIENTS_TOTAL(state, v) {
+			state.recipientsTotal = v;
 		},
 
 		GALLERY(state, v) {
