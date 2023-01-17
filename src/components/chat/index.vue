@@ -1,7 +1,7 @@
 <template>
   <div id="chat" :class="{'bin' : pocketnet, 'bout' : !pocketnet, minimized, fix : pocketnet, active}">
 
-    <div class="cantchatmessage" v-if="cantchat && !cantchatexc">  
+    <div class="cantchatmessage" v-if="cantchat && !cantchatexc">
       <div class="msg">
        {{ $t("caption." + this.keyproblem) }}
       </div>
@@ -21,8 +21,8 @@
     <div class="chatcontent" v-else>
 
 
-    <list 
-    
+    <list
+
       ref="list"
       :error="error"
       :key="key" :chat="m_chat"
@@ -54,10 +54,10 @@
 
       <div>
 
-      
+
 
         <div class="relationEvent" v-if="relationEvent">
-          
+
             <div class="relationEventPreview">
 
               <div class="relationEventCaption">
@@ -80,7 +80,7 @@
               </div>
             </div>
 
-         
+
         </div>
 
         <chatInput
@@ -128,20 +128,7 @@
 
     </div>
 
-    <div class="encrypted" v-if="encrypted && membership != 'invite'" @mouseover="e => hoverEncrypt = true">
-      <i class="fas fa-lock"></i>
-    </div>
-
-    <div v-if="hoverEncrypt" class="encryptedInfo" @mouseover="e => hoverEncrypt = true" @mouseleave="e => hoverEncrypt = false" @click="e => hoverEncrypt = !hoverEncrypt">
-      <div id="slide">
-        <div class="encryptedTxtIcon">
-          <i class="fas fa-user-shield"></i>
-          <span>{{ $t("caption.encrypted") }}</span>
-        </div>
-      </div>
-    </div>
-
-    <div class="attachements" v-if="attachements.length"> 
+    <div class="attachements" v-if="attachements.length">
       <div class="attachementsWrapper">
         <attachement @cancel="e => abortSending(attachement.id)" v-for="attachement in attachements" :key="attachement.id" :attachement="attachement"/>
       </div>

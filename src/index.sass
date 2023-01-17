@@ -28,7 +28,7 @@ input
 
 
 .loadinggradient
-    background: linear-gradient(-45deg, srgb(--background-secondary-theme), srgb(--background-total-theme), srgb(--background-main)) 
+    background: linear-gradient(-45deg, srgb(--background-secondary-theme), srgb(--background-total-theme), srgb(--background-main))
     background-size: 400% 400%
     animation: gradient 2s ease infinite
 
@@ -107,7 +107,14 @@ input
 		background-position: 0% 50%
 
 mark
-    background-color : srgb(--color-bg-selection)!important 
+    background-color : srgb(--color-bg-selection) !important
+
+mark.match
+    background-color: #C7C8D9 !important
+    transition: background-color .3s
+
+mark.current
+    background-color: #F2994A !important
 
 button.button
     background: srgb(--color-bg-ac)
@@ -214,7 +221,7 @@ button.button
 
 .rootcontent.pip
     .js-player
-        
+
         .vjs-control-bar
             display: none!important
 
@@ -295,7 +302,7 @@ button.button
         background: srgba((--neutral-grad-2), 0.1)
         color : srgb(--neutral-grad-3)
         border-radius: 5px
-    
+
 .rootcontent
     -webkit-font-smoothing: antialiased
     -moz-osx-font-smoothing: grayscale
@@ -303,7 +310,7 @@ button.button
     color : srgb(--text-color)
     font-size: 1.1em
 
-    
+
 
     .dmdv
         width: 1px
@@ -318,7 +325,7 @@ button.button
         -moz-user-select: none
         -ms-user-select: none
         user-select: none
-        
+
     &.mobile
         -webkit-touch-callout: none
         -webkit-user-select: none
@@ -326,12 +333,12 @@ button.button
         -moz-user-select: none
         -ms-user-select: none
         user-select: none
-    
+
     *
         scrollbar-width: none
         &::-webkit-scrollbar
             width: 0!important
-        
+
     .backface
         position: fixed
         left : 100%
@@ -369,7 +376,7 @@ button.button
             z-index: 1000
 
         .likeoffline
-            bottom : 103px    
+            bottom : 103px
 
         &.minimized
             #modal .work,
@@ -406,7 +413,7 @@ button.button
                     bottom : 0
                     right: 0
                     left: 0
-           
+
     .likeoffline,
     .offline
         color : srgb(--neutral-grad-1)
@@ -467,11 +474,11 @@ button.button
 
         .fixedOnPageBottom
             opacity: 0
-            bottom : -3 * $r 
+            bottom : -3 * $r
 
         .fixedOnPageTop
             opacity: 0
-            top : -3 * $r 
+            top : -3 * $r
 
     .content
         padding-top : 66px
@@ -583,7 +590,7 @@ button.button
 
             .txtNew
               color: srgb(--color-good)
-              
+
           .linkPreview
             span
               &:first-letter
@@ -645,7 +652,7 @@ button.button
             padding: 0 $r 10px
 
 
-.collapse 
+.collapse
     max-width: 768px
     margin: 0 auto
     position: relative
@@ -653,10 +660,10 @@ button.button
     padding: 0.5em 0
 
     .iconbutton
-        width: 50px  
+        width: 50px
         margin-left: auto
         color: grey
-        
+
 
         @media (pointer:fine)
             opacity: 0.5
@@ -664,7 +671,7 @@ button.button
                 opacity: 1
 
 
-.collapsed 
+.collapsed
     display: flex
     justify-content: space-between
     padding: 1em 0
@@ -694,7 +701,7 @@ button.button
     object-fit: contain
 
 
-.vue-js-switch 
+.vue-js-switch
     display: inline-block
     position: relative
     vertical-align: middle
@@ -707,9 +714,9 @@ button.button
         position: absolute
         width: 1px
         height: 1px
-  
 
-    .v-switch-label 
+
+    .v-switch-label
         position: absolute
         top: 0
         font-weight: 600
@@ -718,7 +725,7 @@ button.button
 
         &.v-left
             left: 10px
-        
+
 
         &.v-right
             right: 10px

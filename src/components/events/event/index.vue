@@ -1,6 +1,6 @@
 <template>
   <div class="event" :class="{readyToRender, my}" ref="msgElement" v-if="!event.localRedactionEvent() && !event.getRedactionEvent() && !removed">
-  
+
     <member :chat="chat" :event="event"
             :userinfo="userinfo"
             :readed="readed"
@@ -8,10 +8,10 @@
             @readyToRender="setReadyToRender"
             v-if="type === 'member' && !preview"/>
 
-    <message 
-    
-      @openGalleryImg="openImage" 
-      
+    <message
+
+      @openGalleryImg="openImage"
+
       :chat="chat"
       :event="event"
       :prevevent="prevevent"
@@ -20,7 +20,7 @@
       :decryptedInfo="decryptedInfo"
       :encryptedData="encryptedData"
 
-      :imgEvent="galleryData" 
+      :imgEvent="galleryData"
       :userinfo="userinfo"
       :readed="readed"
       :preview="preview || false"
@@ -34,6 +34,7 @@
       :last="last"
       :showmyicontrue="showmyicontrue"
       :fromreference="fromreference"
+      :searchText="searchText"
 
       :multiSelect="multiSelect"
       :selectedMessages="selectedMessages"
@@ -149,12 +150,13 @@ export default {
     last : Boolean,
     chat: Object,
     showmyicontrue: Boolean,
-   
+
     metaUrl: String,
     galleryData: {},
     goToGallery: Function,
     clientWidth: Number,
     fromreference : Boolean,
+    searchText: String,
 
     multiSelect: {
       default: false,
@@ -227,9 +229,9 @@ export default {
     },
 
   },
-  
+
   beforeDestroy : function(){
-    
+
     if(this.readedInterval){
       clearInterval(this.readedInterval)
       this.readedInterval = null
@@ -240,7 +242,7 @@ export default {
     this.$emit('mounted')
 
   },
-  
+
   watch : {
     readed : {
       immediate: true,
@@ -248,7 +250,7 @@ export default {
         this.manageReadedInterval()
       }
     },
-    
+
     last : {
       handler: function () {
         this.manageReadedInterval()
@@ -278,7 +280,7 @@ export default {
             if(this.encryptedData && this.subtype == 'm.audio'){
               this.decryptAudio()
             }
-            
+
 
             if(this.subtype == 'm.encrypted'){
               this.decrypt()
@@ -294,7 +296,7 @@ export default {
           }
         }
 
-        
+
       }
     }
   },
@@ -305,7 +307,7 @@ export default {
       setTimeout(() => {
         this.readyToRender = true
       }, 20)
-      
+
     },
     manageReadedInterval(){
 
@@ -314,7 +316,7 @@ export default {
       if(this.last || this.readed){
 
         if(!this.readedInterval){
-          
+
           this.readedInterval = setInterval(()=>{
             this.checkReaded()
           }, 500)
@@ -327,7 +329,7 @@ export default {
           clearInterval(this.readedInterval)
           this.readedInterval = null
         }
-        
+
       }
     },
     relations(){
@@ -339,8 +341,8 @@ export default {
 
         if(!this.reference && e.event.content['m.relates_to'] && e.event.content['m.relates_to'] && e.event.content['m.relates_to']['rel_type'] == "m.reference"){
 
-            var id = e.event.content['m.relates_to']['event_id'] 
-    
+            var id = e.event.content['m.relates_to']['event_id']
+
             if (id){
 
               this.core.mtrx.client.getEventTimeline(ts, id).then(r => {
@@ -370,18 +372,18 @@ export default {
                     }
 
                   }
-                  
+
                 }
-                  
+
               })
 
             }
           }
 
-     
+
       }
     },
-    
+
     editing(text){
       this.$emit('editing', text)
     },
@@ -413,7 +415,7 @@ export default {
     downloadFile(){
 
       this.downloading = true
-      
+
       this.core.mtrx.downloadFile(this.chat, this.event).catch(e => {
         this.error = e.toString()
 
@@ -436,7 +438,7 @@ export default {
         })
 
 
-      }) 
+      })
     },
 
     getAudioUnencrypt(){
@@ -445,7 +447,7 @@ export default {
         this.audioBuffer = url
 
         //this.$set(this.event.event.content, 'audioData', url)
-       
+
       }).catch(e => {
         //console.error(e)
       })
@@ -463,7 +465,7 @@ export default {
           msgtype : 'm.bad.encrypted'
         }
       })
-      
+
     },
 
     async decryptImage(){
@@ -478,7 +480,7 @@ export default {
           msgtype : 'm.bad.encrypted'
         }
       })
-      
+
     },
 
     async decryptAgain() {
@@ -501,7 +503,7 @@ export default {
 
           this.decryptEvent = de
           this.event.event.decrypted = this.decryptEvent
-          
+
         }
         catch(e){
 
@@ -510,7 +512,7 @@ export default {
           this.event.event.decrypted = this.decryptEvent = {
             msgtype : 'm.bad.encrypted'
           }
-          
+
         }
     },
 

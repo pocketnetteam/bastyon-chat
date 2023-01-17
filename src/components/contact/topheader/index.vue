@@ -3,7 +3,7 @@
 
     <topheader>
       <template v-slot:left>
-        <backButton action="contacts"/>
+        <backButton action="back"/>
       </template>
     
       <template v-slot:info>
