@@ -3,11 +3,13 @@
 var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
+  value: true,
 });
 exports.CallEventHandler = void 0;
 
-var _defineProperty2 = _interopRequireDefault(require("@babel/runtime/helpers/defineProperty"));
+var _defineProperty2 = _interopRequireDefault(
+  require("@babel/runtime/helpers/defineProperty")
+);
 
 var _logger = require("../logger");
 
@@ -43,19 +45,24 @@ class CallEventHandler {
     (0, _defineProperty2.default)(this, "evaluateEventBuffer", () => {
       if (this.client.getSyncState() === "SYNCING") {
         // don't process any events until they are all decrypted
-        if (this.callEventBuffer.some(e => e.isBeingDecrypted())) return;
+        if (this.callEventBuffer.some((e) => e.isBeingDecrypted())) return;
         const ignoreCallIds = new Set(); // inspect the buffer and mark all calls which have been answered
         // or hung up before passing them to the call event handler.
 
         for (const ev of this.callEventBuffer) {
-          if (ev.getType() === _event.EventType.CallAnswer || ev.getType() === _event.EventType.CallHangup) {
+          if (
+            ev.getType() === _event.EventType.CallAnswer ||
+            ev.getType() === _event.EventType.CallHangup
+          ) {
             ignoreCallIds.add(ev.getContent().call_id);
           }
         } // now loop through the buffer chronologically and inject them
 
-
         for (const e of this.callEventBuffer) {
-          if (e.getType() === _event.EventType.CallInvite && ignoreCallIds.has(e.getContent().call_id)) {
+          if (
+            e.getType() === _event.EventType.CallInvite &&
+            ignoreCallIds.has(e.getContent().call_id)
+          ) {
             // This call has previously been answered or hung up: ignore it
             continue;
           }
@@ -70,9 +77,12 @@ class CallEventHandler {
         this.callEventBuffer = [];
       }
     });
-    (0, _defineProperty2.default)(this, "onEvent", event => {
+    (0, _defineProperty2.default)(this, "onEvent", (event) => {
       // any call events or ones that might be once they're decrypted
-      if (event.getType().indexOf("m.call.") === 0 || event.isBeingDecrypted()) {
+      if (
+        event.getType().indexOf("m.call.") === 0 ||
+        event.isBeingDecrypted()
+      ) {
         // queue up for processing once all events from this sync have been
         // processed (see above).
         this.callEventBuffer.push(event);
@@ -137,22 +147,32 @@ class CallEventHandler {
       }
 
       if (call) {
-        _logger.logger.log(`WARN: Already have a MatrixCall with id ${content.call_id} but got an ` + `invite. Clobbering.`);
+        _logger.logger.log(
+          `WARN: Already have a MatrixCall with id ${content.call_id} but got an ` +
+            `invite. Clobbering.`
+        );
       }
 
-      const timeUntilTurnCresExpire = this.client.getTurnServersExpiry() - Date.now();
+      const timeUntilTurnCresExpire =
+        this.client.getTurnServersExpiry() - Date.now();
 
-      _logger.logger.info("Current turn creds expire in " + timeUntilTurnCresExpire + " ms");
+      _logger.logger.info(
+        "Current turn creds expire in " + timeUntilTurnCresExpire + " ms"
+      );
 
       call = (0, _call.createNewMatrixCall)(this.client, event.getRoomId(), {
-        forceTURN: this.client._forceTURN
+        forceTURN: this.client._forceTURN,
       });
 
       if (!call) {
-        _logger.logger.log("Incoming call ID " + content.call_id + " but this client " + "doesn't support WebRTC"); // don't hang up the call: there could be other clients
+        _logger.logger.log(
+          "Incoming call ID " +
+            content.call_id +
+            " but this client " +
+            "doesn't support WebRTC"
+        ); // don't hang up the call: there could be other clients
         // connected that do support WebRTC and declining the
         // the call on their behalf would be really annoying.
-
 
         return;
       }
@@ -167,13 +187,20 @@ class CallEventHandler {
         }
       } // Were we trying to call that user (room)?
 
-
       let existingCall;
 
       for (const thisCall of this.calls.values()) {
-        const isCalling = [_call.CallState.WaitLocalMedia, _call.CallState.CreateOffer, _call.CallState.InviteSent].includes(thisCall.state);
+        const isCalling = [
+          _call.CallState.WaitLocalMedia,
+          _call.CallState.CreateOffer,
+          _call.CallState.InviteSent,
+        ].includes(thisCall.state);
 
-        if (call.roomId === thisCall.roomId && thisCall.direction === _call.CallDirection.Outbound && isCalling) {
+        if (
+          call.roomId === thisCall.roomId &&
+          thisCall.direction === _call.CallDirection.Outbound &&
+          isCalling
+        ) {
           existingCall = thisCall;
           break;
         }
@@ -184,13 +211,32 @@ class CallEventHandler {
         // we've got an invite, pick the incoming call because we know
         // we haven't sent our invite yet otherwise, pick whichever
         // call has the lowest call ID (by string comparison)
-        if (existingCall.state === _call.CallState.WaitLocalMedia || existingCall.state === _call.CallState.CreateOffer || existingCall.callId > call.callId) {
-          _logger.logger.log("Glare detected: answering incoming call " + call.callId + " and canceling outgoing call " + existingCall.callId);
-
+        if (
+          existingCall.state === _call.CallState.WaitLocalMedia ||
+          existingCall.state === _call.CallState.CreateOffer ||
+          existingCall.callId > call.callId
+        ) {
+          _logger.logger.log(
+            "Glare detected: answering incoming call " +
+              call.callId +
+              " and canceling outgoing call " +
+              existingCall.callId
+          );
+          console.log(
+            "Glare detected: answering incoming call " +
+              call.callId +
+              " and canceling outgoing call " +
+              existingCall.callId
+          );
           existingCall.replacedBy(call);
           call.answer();
         } else {
-          _logger.logger.log("Glare detected: rejecting incoming call " + call.callId + " and keeping outgoing call " + existingCall.callId);
+          _logger.logger.log(
+            "Glare detected: rejecting incoming call " +
+              call.callId +
+              " and keeping outgoing call " +
+              existingCall.callId
+          );
 
           call.hangup(_call.CallErrorCode.Replaced, true);
         }
@@ -224,7 +270,11 @@ class CallEventHandler {
       } else {
         call.onRemoteIceCandidatesReceived(event);
       }
-    } else if ([_event.EventType.CallHangup, _event.EventType.CallReject].includes(event.getType())) {
+    } else if (
+      [_event.EventType.CallHangup, _event.EventType.CallReject].includes(
+        event.getType()
+      )
+    ) {
       // Note that we also observe our own hangups here so we can see
       // if we've already rejected a call that would otherwise be valid
       if (!call) {
@@ -269,7 +319,6 @@ class CallEventHandler {
       call.onNegotiateReceived(event);
     }
   }
-
 }
 
 exports.CallEventHandler = CallEventHandler;

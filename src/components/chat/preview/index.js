@@ -1,22 +1,21 @@
-import {mapState} from 'vuex';
-import chatName from '@/components/chats/assets/name.vue'
-import chatIcon from '@/components/chats/assets/icon.vue'
-import userView from '@/components/user/view/pnuser/index.vue'
-import {Swiper, SwiperSlide} from 'vue-awesome-swiper'
-import 'swiper/swiper-bundle.css'
+import { mapState } from "vuex";
+import chatName from "@/components/chats/assets/name.vue";
+import chatIcon from "@/components/chats/assets/icon.vue";
+import userView from "@/components/user/view/pnuser/index.vue";
+import { Swiper, SwiperSlide } from "vue-awesome-swiper";
+//import 'swiper/swiper-bundle.css'
 //
-import {Carousel, Slide} from 'vue-carousel';
-import f from '@/application/functions.js'
-import _ from "underscore";
+import { Carousel, Slide } from "vue-carousel";
+import f from "@/application/functions.js";
 //
 
 export default {
-  name: 'chatPreview',
+  name: "chatPreview",
   props: {
     chat: Object,
     usersinfo: Array,
     room: {},
-    undefinedRoom: false
+    undefinedRoom: false,
   },
 
   components: {
@@ -26,30 +25,32 @@ export default {
     Swiper,
     SwiperSlide,
     Carousel,
-    Slide
+    Slide,
   },
 
   data: function () {
-
     return {
       loading: false,
       swiperOption: {
-        direction: 'horizontal',
+        direction: "horizontal",
         pagination: {
-          el: '.swiper-pagination',
-        }
+          el: ".swiper-pagination",
+        },
       },
-    }
-
+    };
   },
 
   computed: {
+    users: function () {
+      if (!this.chat) return [];
 
-    users : function(){
-      if(!this.chat) return []
-
-      return this.core.mtrx.chatUsersInfo(this.chat.roomId, 'anotherChatUsers')
+      return this.core.mtrx.chatUsersInfo(this.chat.roomId, "anotherChatUsers");
     },
+  },
 
-  }
-}
+  methods: {
+    empty: function (user) {
+      return _.isEmpty(user);
+    },
+  },
+};

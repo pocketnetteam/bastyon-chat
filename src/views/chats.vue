@@ -1,30 +1,22 @@
 <template>
-  <div class="page chats" :class="{pocketnet, mobile, minimized, active, newChat}">   
-
-    <topheader
-      class="topheader" :share="share" @newchat="newchat"
-    />
-    <maincontent ref="maincontent" :rbackexp="true" > 
-
+  <div
+    class="page chats"
+    :class="{ pocketnet, mobile, minimized, active, newChat }"
+  >
+    <topheader class="topheader" :share="share" @newchat="newchat" />
+    <maincontent ref="maincontent" :rbackexp="true">
       <template v-slot:content>
-        
-        <list :share="share" @scrolltop="scrolltop"/>
+        <list :share="share" @scrolltop="scrolltop" />
 
         <modal @close="closeNewChat" v-if="newChat && !hiddenInParent">
-
           <template v-slot:header>{{ $t("caption.newChat") }}</template>
           <template v-slot:body>
-            <chatcreate @completed="chatcreated"/>
+            <chatcreate @completed="chatcreated" />
           </template>
           <template v-slot:footer></template>
-
         </modal>
-
       </template>
-
     </maincontent>
-
-    
   </div>
 </template>
 
@@ -39,7 +31,7 @@
 
 .newChat
   /deep/ #maincontent
-    
+
     .headerSpacer,
     .headerSpacerWrapper
       overflow: visible !important
@@ -51,69 +43,68 @@
   /deep/ #maincontent
     .desktopList
       display: none
-
 </style>
 
 <script>
-
-import list from '@/components/chats/list/index.vue'
-import topheader from '@/components/chats/topheader/index.vue'
-import { mapState } from 'vuex';
-import contacts from '@/components/contacts/index.vue'
-import chatcreate from '@/components/chat/create/index.vue'
+import list from "@/components/chats/list/index.vue";
+import topheader from "@/components/chats/topheader/index.vue";
+import { mapState } from "vuex";
+import contacts from "@/components/contacts/index.vue";
+import chatcreate from "@/components/chat/create/index.vue";
 export default {
-  name: 'pagechats',
+  name: "pagechats",
   components: {
-
     list,
     topheader,
     contacts,
-    chatcreate
-
+    chatcreate,
   },
 
-  props : {
-    share : Object
+  props: {
+    share: Object,
   },
 
-  data : function(){
+  data: function () {
     return {
-      newChat : false
-    }
+      newChat: false,
+    };
   },
 
-  computed:  mapState({
-      pocketnet: state => state.pocketnet,
-      minimized: state => state.minimized,
-      active: state => state.active,
-      mobile : state => state.mobile,
-      hiddenInParent : state => state.hiddenInParent,
+  computed: mapState({
+    pocketnet: (state) => state.pocketnet,
+    minimized: (state) => state.minimized,
+    active: (state) => state.active,
+    mobile: (state) => state.mobile,
+    hiddenInParent: (state) => state.hiddenInParent,
+    joinroom: (state) => state.joinroom,
   }),
 
-  methods : {
-    newchat : function(){
-      this.newChat = true
+  methods: {
+    newchat: function () {
+      this.newChat = true;
     },
-    closeNewChat : function(){
-      this.newChat = false
+    closeNewChat: function () {
+      this.newChat = false;
     },
-    chatcreated : function(chat){
-      this.$router.push({
-        path: 'chat',
-        query: {'id': chat.room_id}
-      }).catch(e => {})
-    },
-
-    scrolltop : function(){
-      this.$refs['maincontent'].scroll(0)
+    chatcreated: function (chat) {
+      this.$router
+        .push({
+          path: "chat",
+          query: { id: chat.room_id },
+        })
+        .catch((e) => {});
     },
 
-    
+    scrolltop: function () {
+      this.$refs["maincontent"].scroll(0);
+    },
   },
 
   mounted() {
-    
-  }
-
-}
+    if (this.joinroom) {
+      this.$router.push("/publicPreview?id=" + this.joinroom);
+      this.$store.commit("JOINROOM", null);
+    }
+  },
+};
 </script>

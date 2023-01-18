@@ -5,16 +5,26 @@ var _interopRequireWildcard = require("@babel/runtime/helpers/interopRequireWild
 var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
+  value: true,
 });
 exports.getDesktopCapturerSources = getDesktopCapturerSources;
 exports.setAudioOutput = setAudioOutput;
 exports.setAudioInput = setAudioInput;
 exports.setVideoInput = setVideoInput;
 exports.createNewMatrixCall = createNewMatrixCall;
-exports.MatrixCall = exports.CallError = exports.CallErrorCode = exports.CallEvent = exports.CallParty = exports.CallDirection = exports.CallType = exports.CallState = void 0;
+exports.MatrixCall =
+  exports.CallError =
+  exports.CallErrorCode =
+  exports.CallEvent =
+  exports.CallParty =
+  exports.CallDirection =
+  exports.CallType =
+  exports.CallState =
+    void 0;
 
-var _defineProperty2 = _interopRequireDefault(require("@babel/runtime/helpers/defineProperty"));
+var _defineProperty2 = _interopRequireDefault(
+  require("@babel/runtime/helpers/defineProperty")
+);
 
 var _logger = require("../logger");
 
@@ -133,7 +143,7 @@ var ConstraintsType;
 const VOIP_PROTO_VERSION = 1;
 /** The fallback ICE server to use for STUN or TURN protocols. */
 
-const FALLBACK_ICE_SERVER = 'stun:turn.matrix.org';
+const FALLBACK_ICE_SERVER = "stun:turn.matrix.org";
 /** The length of time a call can be ringing for. */
 
 const CALL_TIMEOUT_MS = 60000;
@@ -143,9 +153,9 @@ function getDesktopCapturerSources() {
   const options = {
     thumbnailSize: {
       height: 176,
-      width: 312
+      width: 312,
     },
-    types: ["screen", "window"]
+    types: ["screen", "window"],
   };
   return window.electron.getDesktopCapturerSources(options);
 }
@@ -157,7 +167,6 @@ class CallError extends Error {
     (0, _defineProperty2.default)(this, "code", void 0);
     this.code = code;
   }
-
 }
 
 exports.CallError = CallError;
@@ -176,7 +185,6 @@ function genCallID() {
  * @param {Array<Object>} opts.turnServers Optional. A list of TURN servers.
  * @param {MatrixClient} opts.client The Matrix Client instance to send events to.
  */
-
 
 class MatrixCall extends _events.EventEmitter {
   // Fix when client is TSified
@@ -235,246 +243,311 @@ class MatrixCall extends _events.EventEmitter {
     (0, _defineProperty2.default)(this, "makingOffer", void 0);
     (0, _defineProperty2.default)(this, "ignoreOffer", void 0);
     (0, _defineProperty2.default)(this, "remoteCandidateBuffer", new Map());
-    (0, _defineProperty2.default)(this, "gotUserMediaForInvite", async stream => {
-      if (this.successor) {
-        this.successor.gotUserMediaForAnswer(stream);
-        return;
-      }
-
-      if (this.callHasEnded()) {
-        this.stopAllMedia();
-        return;
-      }
-
-      this.localAVStream = stream;
-
-      _logger.logger.info("Got local AV stream with id " + this.localAVStream.id);
-
-      this.setState(CallState.CreateOffer);
-
-      _logger.logger.debug("gotUserMediaForInvite -> " + this.type);
-
-      const videoEl = this.getLocalVideoElement();
-
-      if (videoEl && this.type === CallType.Video) {
-        videoEl.autoplay = true;
-
-        if (this.screenSharingStream) {
-          _logger.logger.debug("Setting screen sharing stream to the local video element");
-
-          videoEl.srcObject = this.screenSharingStream;
-        } else {
-          videoEl.srcObject = stream;
+    (0, _defineProperty2.default)(
+      this,
+      "gotUserMediaForInvite",
+      async (stream) => {
+        if (this.successor) {
+          this.successor.gotUserMediaForAnswer(stream);
+          return;
         }
 
-        videoEl.muted = true;
+        if (this.callHasEnded()) {
+          this.stopAllMedia();
+          return;
+        }
+
+        this.localAVStream = stream;
+
+        _logger.logger.info(
+          "Got local AV stream with id " + this.localAVStream.id
+        );
+
+        this.setState(CallState.CreateOffer);
+
+        _logger.logger.debug("gotUserMediaForInvite -> " + this.type);
+
+        const videoEl = this.getLocalVideoElement();
+
+        if (videoEl && this.type === CallType.Video) {
+          videoEl.autoplay = true;
+
+          if (this.screenSharingStream) {
+            _logger.logger.debug(
+              "Setting screen sharing stream to the local video element"
+            );
+
+            videoEl.srcObject = this.screenSharingStream;
+          } else {
+            videoEl.srcObject = stream;
+          }
+
+          videoEl.muted = true;
+
+          try {
+            await videoEl.play();
+          } catch (e) {
+            _logger.logger.info("Failed to play local video element", e);
+          }
+        } // why do we enable audio (and only audio) tracks here? -- matthew
+
+        setTracksEnabled(stream.getAudioTracks(), true);
+
+        for (const audioTrack of stream.getAudioTracks()) {
+          _logger.logger.info("Adding audio track with id " + audioTrack.id);
+
+          this.peerConn.addTrack(audioTrack, stream);
+        }
+
+        for (const videoTrack of (
+          this.screenSharingStream || stream
+        ).getVideoTracks()) {
+          _logger.logger.info("Adding video track with id " + videoTrack.id);
+
+          this.peerConn.addTrack(videoTrack, stream);
+        } // Now we wait for the negotiationneeded event
+      }
+    );
+    (0, _defineProperty2.default)(
+      this,
+      "gotUserMediaForAnswer",
+      async (stream) => {
+        if (this.callHasEnded()) {
+          return;
+        }
+
+        const localVidEl = this.getLocalVideoElement();
+
+        if (localVidEl && this.type === CallType.Video) {
+          localVidEl.autoplay = true;
+          localVidEl.srcObject = stream;
+          localVidEl.muted = true;
+
+          try {
+            await localVidEl.play();
+          } catch (e) {
+            _logger.logger.info("Failed to play local video element", e);
+          }
+        }
+
+        this.localAVStream = stream;
+
+        _logger.logger.info(
+          "Got local AV stream with id " + this.localAVStream.id
+        );
+
+        setTracksEnabled(stream.getAudioTracks(), true);
+
+        for (const track of stream.getTracks()) {
+          this.peerConn.addTrack(track, stream);
+        }
+
+        this.setState(CallState.CreateAnswer);
+        let myAnswer;
 
         try {
-          await videoEl.play();
-        } catch (e) {
-          _logger.logger.info("Failed to play local video element", e);
+          myAnswer = await this.peerConn.createAnswer();
+        } catch (err) {
+          console.log("create answer", err);
+          _logger.logger.debug("Failed to create answer: ", err);
+
+          this.terminate(CallParty.Local, CallErrorCode.CreateAnswer, true);
+          return;
         }
-      } // why do we enable audio (and only audio) tracks here? -- matthew
-
-
-      setTracksEnabled(stream.getAudioTracks(), true);
-
-      for (const audioTrack of stream.getAudioTracks()) {
-        _logger.logger.info("Adding audio track with id " + audioTrack.id);
-
-        this.peerConn.addTrack(audioTrack, stream);
-      }
-
-      for (const videoTrack of (this.screenSharingStream || stream).getVideoTracks()) {
-        _logger.logger.info("Adding video track with id " + videoTrack.id);
-
-        this.peerConn.addTrack(videoTrack, stream);
-      } // Now we wait for the negotiationneeded event
-
-    });
-    (0, _defineProperty2.default)(this, "gotUserMediaForAnswer", async stream => {
-      if (this.callHasEnded()) {
-        return;
-      }
-
-      const localVidEl = this.getLocalVideoElement();
-
-      if (localVidEl && this.type === CallType.Video) {
-        localVidEl.autoplay = true;
-        localVidEl.srcObject = stream;
-        localVidEl.muted = true;
 
         try {
-          await localVidEl.play();
-        } catch (e) {
-          _logger.logger.info("Failed to play local video element", e);
+          await this.peerConn.setLocalDescription(myAnswer);
+          this.setState(CallState.Connecting); // Allow a short time for initial candidates to be gathered
+
+          await new Promise((resolve) => {
+            setTimeout(resolve, 200);
+          });
+          this.sendAnswer();
+        } catch (err) {
+          console.log("connecting", err);
+          _logger.logger.debug("Error setting local description!", err);
+
+          this.terminate(
+            CallParty.Local,
+            CallErrorCode.SetLocalDescription,
+            true
+          );
+          return;
         }
       }
-
-      this.localAVStream = stream;
-
-      _logger.logger.info("Got local AV stream with id " + this.localAVStream.id);
-
-      setTracksEnabled(stream.getAudioTracks(), true);
-
-      for (const track of stream.getTracks()) {
-        this.peerConn.addTrack(track, stream);
-      }
-
-      this.setState(CallState.CreateAnswer);
-      let myAnswer;
-
-      try {
-        myAnswer = await this.peerConn.createAnswer();
-      } catch (err) {
-        _logger.logger.debug("Failed to create answer: ", err);
-
-        this.terminate(CallParty.Local, CallErrorCode.CreateAnswer, true);
-        return;
-      }
-
-      try {
-        await this.peerConn.setLocalDescription(myAnswer);
-        this.setState(CallState.Connecting); // Allow a short time for initial candidates to be gathered
-
-        await new Promise(resolve => {
-          setTimeout(resolve, 200);
-        });
-        this.sendAnswer();
-      } catch (err) {
-        _logger.logger.debug("Error setting local description!", err);
-
-        this.terminate(CallParty.Local, CallErrorCode.SetLocalDescription, true);
-        return;
-      }
-    });
-    (0, _defineProperty2.default)(this, "gotLocalIceCandidate", event => {
+    );
+    (0, _defineProperty2.default)(this, "gotLocalIceCandidate", (event) => {
       if (event.candidate) {
-        _logger.logger.debug("Call " + this.callId + " got local ICE " + event.candidate.sdpMid + " candidate: " + event.candidate.candidate);
+        _logger.logger.debug(
+          "Call " +
+            this.callId +
+            " got local ICE " +
+            event.candidate.sdpMid +
+            " candidate: " +
+            event.candidate.candidate
+        );
 
         if (this.callHasEnded()) return; // As with the offer, note we need to make a copy of this object, not
         // pass the original: that broke in Chrome ~m43.
 
-        if (event.candidate.candidate !== '' || !this.sentEndOfCandidates) {
+        if (event.candidate.candidate !== "" || !this.sentEndOfCandidates) {
           this.queueCandidate(event.candidate);
-          if (event.candidate.candidate === '') this.sentEndOfCandidates = true;
+          if (event.candidate.candidate === "") this.sentEndOfCandidates = true;
         }
       }
     });
-    (0, _defineProperty2.default)(this, "onIceGatheringStateChange", event => {
-      _logger.logger.debug("ice gathering state changed to " + this.peerConn.iceGatheringState);
-
-      if (this.peerConn.iceGatheringState === 'complete' && !this.sentEndOfCandidates) {
-        // If we didn't get an empty-string candidate to signal the end of candidates,
-        // create one ourselves now gathering has finished.
-        // We cast because the interface lists all the properties as required but we
-        // only want to send 'candidate'
-        // XXX: We probably want to send either sdpMid or sdpMLineIndex, as it's not strictly
-        // correct to have a candidate that lacks both of these. We'd have to figure out what
-        // previous candidates had been sent with and copy them.
-        const c = {
-          candidate: ''
-        };
-        this.queueCandidate(c);
-        this.sentEndOfCandidates = true;
+    (0, _defineProperty2.default)(
+      this,
+      "onIceGatheringStateChange",
+      (event) => {
+        _logger.logger.debug(
+          "ice gathering state changed to " + this.peerConn.iceGatheringState
+        );
+        console.log(
+          "ice gathering state changed to " + this.peerConn.iceGatheringState
+        );
+        if (
+          this.peerConn.iceGatheringState === "complete" &&
+          !this.sentEndOfCandidates
+        ) {
+          // If we didn't get an empty-string candidate to signal the end of candidates,
+          // create one ourselves now gathering has finished.
+          // We cast because the interface lists all the properties as required but we
+          // only want to send 'candidate'
+          // XXX: We probably want to send either sdpMid or sdpMLineIndex, as it's not strictly
+          // correct to have a candidate that lacks both of these. We'd have to figure out what
+          // previous candidates had been sent with and copy them.
+          const c = {
+            candidate: "",
+          };
+          this.queueCandidate(c);
+          this.sentEndOfCandidates = true;
+        }
       }
-    });
-    (0, _defineProperty2.default)(this, "gotLocalOffer", async description => {
-      _logger.logger.debug("Created offer: ", description);
+    );
+    (0, _defineProperty2.default)(
+      this,
+      "gotLocalOffer",
+      async (description) => {
+        _logger.logger.debug("Created offer: ", description);
 
-      if (this.callHasEnded()) {
-        _logger.logger.debug("Ignoring newly created offer on call ID " + this.callId + " because the call has ended");
+        if (this.callHasEnded()) {
+          _logger.logger.debug(
+            "Ignoring newly created offer on call ID " +
+              this.callId +
+              " because the call has ended"
+          );
+          console.log(
+            "Ignoring newly created offer on call ID " +
+              this.callId +
+              " because the call has ended"
+          );
+          return;
+        }
 
-        return;
-      }
+        try {
+          await this.peerConn.setLocalDescription(description);
+        } catch (err) {
+          _logger.logger.debug("Error setting local description!", err);
+          console.log("Error setting local description!", err);
+          this.terminate(
+            CallParty.Local,
+            CallErrorCode.SetLocalDescription,
+            true
+          );
+          return;
+        }
 
-      try {
-        await this.peerConn.setLocalDescription(description);
-      } catch (err) {
-        _logger.logger.debug("Error setting local description!", err);
+        if (this.peerConn.iceGatheringState === "gathering") {
+          // Allow a short time for initial candidates to be gathered
+          await new Promise((resolve) => {
+            setTimeout(resolve, 200);
+          });
+        }
 
-        this.terminate(CallParty.Local, CallErrorCode.SetLocalDescription, true);
-        return;
-      }
-
-      if (this.peerConn.iceGatheringState === 'gathering') {
-        // Allow a short time for initial candidates to be gathered
-        await new Promise(resolve => {
-          setTimeout(resolve, 200);
-        });
-      }
-
-      if (this.callHasEnded()) return;
-      const eventType = this.state === CallState.CreateOffer ? _event.EventType.CallInvite : _event.EventType.CallNegotiate;
-      const content = {
-        lifetime: CALL_TIMEOUT_MS
-      }; // clunky because TypeScript can't folow the types through if we use an expression as the key
-
-      if (this.state === CallState.CreateOffer) {
-        content.offer = this.peerConn.localDescription;
-      } else {
-        content.description = this.peerConn.localDescription;
-      }
-
-      if (this.client._supportsCallTransfer) {
-        content.capabilities = {
-          'm.call.transferee': true
-        };
-      } // Get rid of any candidates waiting to be sent: they'll be included in the local
-      // description we just got and will send in the offer.
-
-
-      _logger.logger.info(`Discarding ${this.candidateSendQueue.length} candidates that will be sent in offer`);
-
-      this.candidateSendQueue = [];
-
-      try {
-        await this.sendVoipEvent(eventType, content);
-      } catch (error) {
-        _logger.logger.error("Failed to send invite", error);
-
-        if (error.event) this.client.cancelPendingEvent(error.event);
-        let code = CallErrorCode.SignallingFailed;
-        let message = "Signalling failed";
+        if (this.callHasEnded()) return;
+        const eventType =
+          this.state === CallState.CreateOffer
+            ? _event.EventType.CallInvite
+            : _event.EventType.CallNegotiate;
+        const content = {
+          lifetime: CALL_TIMEOUT_MS,
+        }; // clunky because TypeScript can't folow the types through if we use an expression as the key
 
         if (this.state === CallState.CreateOffer) {
-          code = CallErrorCode.SendInvite;
-          message = "Failed to send invite";
+          content.offer = this.peerConn.localDescription;
+        } else {
+          content.description = this.peerConn.localDescription;
         }
 
-        if (error.name == 'UnknownDeviceError') {
-          code = CallErrorCode.UnknownDevices;
-          message = "Unknown devices present in the room";
-        }
+        if (this.client._supportsCallTransfer) {
+          content.capabilities = {
+            "m.call.transferee": true,
+          };
+        } // Get rid of any candidates waiting to be sent: they'll be included in the local
+        // description we just got and will send in the offer.
 
-        this.emit(CallEvent.Error, new CallError(code, message, error));
-        this.terminate(CallParty.Local, code, false); // no need to carry on & send the candidate queue, but we also
-        // don't want to rethrow the error
+        _logger.logger.info(
+          `Discarding ${this.candidateSendQueue.length} candidates that will be sent in offer`
+        );
 
-        return;
-      }
+        this.candidateSendQueue = [];
 
-      this.sendCandidateQueue();
+        try {
+          await this.sendVoipEvent(eventType, content);
+        } catch (error) {
+          _logger.logger.error("Failed to send invite", error);
 
-      if (this.state === CallState.CreateOffer) {
-        this.inviteOrAnswerSent = true;
-        this.setState(CallState.InviteSent);
-        this.inviteTimeout = setTimeout(() => {
-          this.inviteTimeout = null;
+          if (error.event) this.client.cancelPendingEvent(error.event);
+          let code = CallErrorCode.SignallingFailed;
+          let message = "Signalling failed";
 
-          if (this.state === CallState.InviteSent) {
-            this.hangup(CallErrorCode.InviteTimeout, false);
+          if (this.state === CallState.CreateOffer) {
+            code = CallErrorCode.SendInvite;
+            message = "Failed to send invite";
           }
-        }, CALL_TIMEOUT_MS);
+
+          if (error.name == "UnknownDeviceError") {
+            code = CallErrorCode.UnknownDevices;
+            message = "Unknown devices present in the room";
+          }
+
+          this.emit(CallEvent.Error, new CallError(code, message, error));
+          this.terminate(CallParty.Local, code, false); // no need to carry on & send the candidate queue, but we also
+          // don't want to rethrow the error
+
+          return;
+        }
+
+        this.sendCandidateQueue();
+
+        if (this.state === CallState.CreateOffer) {
+          this.inviteOrAnswerSent = true;
+          this.setState(CallState.InviteSent);
+          this.inviteTimeout = setTimeout(() => {
+            this.inviteTimeout = null;
+
+            if (this.state === CallState.InviteSent) {
+              this.hangup(CallErrorCode.InviteTimeout, false);
+            }
+          }, CALL_TIMEOUT_MS);
+        }
       }
-    });
-    (0, _defineProperty2.default)(this, "getLocalOfferFailed", err => {
+    );
+    (0, _defineProperty2.default)(this, "getLocalOfferFailed", (err) => {
       _logger.logger.error("Failed to get local offer", err);
 
-      this.emit(CallEvent.Error, new CallError(CallErrorCode.LocalOfferFailed, "Failed to get local offer!", err));
+      this.emit(
+        CallEvent.Error,
+        new CallError(
+          CallErrorCode.LocalOfferFailed,
+          "Failed to get local offer!",
+          err
+        )
+      );
       this.terminate(CallParty.Local, CallErrorCode.LocalOfferFailed, false);
     });
-    (0, _defineProperty2.default)(this, "getUserMediaFailed", err => {
+    (0, _defineProperty2.default)(this, "getUserMediaFailed", (err) => {
       if (this.successor) {
         this.successor.getUserMediaFailed(err);
         return;
@@ -482,7 +555,15 @@ class MatrixCall extends _events.EventEmitter {
 
       _logger.logger.warn("Failed to get user media - ending call", err);
 
-      this.emit(CallEvent.Error, new CallError(CallErrorCode.NoUserMedia, "Couldn't start capturing media! Is your microphone set up and " + "does this app have permission?", err));
+      this.emit(
+        CallEvent.Error,
+        new CallError(
+          CallErrorCode.NoUserMedia,
+          "Couldn't start capturing media! Is your microphone set up and " +
+            "does this app have permission?",
+          err
+        )
+      );
       this.terminate(CallParty.Local, CallErrorCode.NoUserMedia, false);
     });
     (0, _defineProperty2.default)(this, "onIceConnectionStateChanged", () => {
@@ -490,29 +571,53 @@ class MatrixCall extends _events.EventEmitter {
         return; // because ICE can still complete as we're ending the call
       }
 
-      _logger.logger.debug("Call ID " + this.callId + ": ICE connection state changed to: " + this.peerConn.iceConnectionState); // ideally we'd consider the call to be connected when we get media but
+      _logger.logger.debug(
+        "Call ID " +
+          this.callId +
+          ": ICE connection state changed to: " +
+          this.peerConn.iceConnectionState
+      ); // ideally we'd consider the call to be connected when we get media but
       // chrome doesn't implement any of the 'onstarted' events yet
 
+      console.log(
+        "Call ID " +
+          this.callId +
+          ": ICE connection state changed to: " +
+          this.peerConn.iceConnectionState
+      );
 
-      if (this.peerConn.iceConnectionState == 'connected') {
+      if (this.peerConn.iceConnectionState == "connected") {
         this.setState(CallState.Connected);
-      } else if (this.peerConn.iceConnectionState == 'failed') {
+      } else if (this.peerConn.iceConnectionState == "disconnected") {
+        console.log("failed");
         this.hangup(CallErrorCode.IceFailed, false);
       }
     });
     (0, _defineProperty2.default)(this, "onSignallingStateChanged", () => {
-      _logger.logger.debug("call " + this.callId + ": Signalling state changed to: " + this.peerConn.signalingState);
+      _logger.logger.debug(
+        "call " +
+          this.callId +
+          ": Signalling state changed to: " +
+          this.peerConn.signalingState
+      );
+      console.log(
+        "call " +
+          this.callId +
+          ": Signalling state changed to: " +
+          this.peerConn.signalingState
+      );
     });
-    (0, _defineProperty2.default)(this, "onTrack", ev => {
+    (0, _defineProperty2.default)(this, "onTrack", (ev) => {
       if (ev.streams.length === 0) {
         _logger.logger.warn(`Streamless ${ev.track.kind} found: ignoring.`);
 
         return;
       } // If we already have a stream, check this track is from the same one
 
-
       if (this.remoteStream && ev.streams[0].id !== this.remoteStream.id) {
-        _logger.logger.warn(`Ignoring new stream ID ${ev.streams[0].id}: we already have stream ID ${this.remoteStream.id}`);
+        _logger.logger.warn(
+          `Ignoring new stream ID ${ev.streams[0].id}: we already have stream ID ${this.remoteStream.id}`
+        );
 
         return;
       }
@@ -523,14 +628,20 @@ class MatrixCall extends _events.EventEmitter {
       // to make new stream objects when tranciever directionality is changed and the 'active'
       // status of streams change
 
-
       this.remoteStream = ev.streams[0];
 
-      _logger.logger.debug(`Track id ${ev.track.id} of kind ${ev.track.kind} added`);
+      _logger.logger.debug(
+        `Track id ${ev.track.id} of kind ${ev.track.kind} added`
+      );
 
-      if (ev.track.kind === 'video') {
+      if (ev.track.kind === "video") {
         if (this.remoteVideoElement) {
-          this.playRemoteVideo();
+          try {
+            this.playRemoteVideo();
+          } catch (e) {
+            console.log("onTrack", e);
+            throw e;
+          }
         }
       } else {
         if (this.remoteAudioElement) this.playRemoteAudio();
@@ -540,7 +651,9 @@ class MatrixCall extends _events.EventEmitter {
       _logger.logger.info("Negotation is needed!");
 
       if (this.state !== CallState.CreateOffer && this.opponentVersion === 0) {
-        _logger.logger.info("Opponent does not support renegotiation: ignoring negotiationneeded event");
+        _logger.logger.info(
+          "Opponent does not support renegotiation: ignoring negotiationneeded event"
+        );
 
         return;
       }
@@ -557,36 +670,43 @@ class MatrixCall extends _events.EventEmitter {
         this.makingOffer = false;
       }
     });
-    (0, _defineProperty2.default)(this, "onHangupReceived", msg => {
+    (0, _defineProperty2.default)(this, "onHangupReceived", (msg) => {
       _logger.logger.debug("Hangup received for call ID " + this.callId); // party ID must match (our chosen partner hanging up the call) or be undefined (we haven't chosen
       // a partner yet but we're treating the hangup as a reject as per VoIP v0)
 
-
       if (this.partyIdMatches(msg) || this.state === CallState.Ringing) {
         // default reason is user_hangup
-        this.terminate(CallParty.Remote, msg.reason || CallErrorCode.UserHangup, true);
+        this.terminate(
+          CallParty.Remote,
+          msg.reason || CallErrorCode.UserHangup,
+          true
+        );
       } else {
-        _logger.logger.info(`Ignoring message from party ID ${msg.party_id}: our partner is ${this.opponentPartyId}`);
+        _logger.logger.info(
+          `Ignoring message from party ID ${msg.party_id}: our partner is ${this.opponentPartyId}`
+        );
       }
     });
-    (0, _defineProperty2.default)(this, "onRejectReceived", msg => {
+    (0, _defineProperty2.default)(this, "onRejectReceived", (msg) => {
       _logger.logger.debug("Reject received for call ID " + this.callId); // No need to check party_id for reject because if we'd received either
       // an answer or reject, we wouldn't be in state InviteSent
 
-
       const shouldTerminate = // reject events also end the call if it's ringing: it's another of
-      // our devices rejecting the call.
-      [CallState.InviteSent, CallState.Ringing].includes(this.state) || // also if we're in the init state and it's an inbound call, since
-      // this means we just haven't entered the ringing state yet
-      this.state === CallState.Fledgling && this.direction === CallDirection.Inbound;
+        // our devices rejecting the call.
+        [CallState.InviteSent, CallState.Ringing].includes(this.state) || // also if we're in the init state and it's an inbound call, since
+        // this means we just haven't entered the ringing state yet
+        (this.state === CallState.Fledgling &&
+          this.direction === CallDirection.Inbound);
 
       if (shouldTerminate) {
         this.terminate(CallParty.Remote, CallErrorCode.UserHangup, true);
       } else {
-        _logger.logger.debug(`Call is in state: ${this.state}: ignoring reject`);
+        _logger.logger.debug(
+          `Call is in state: ${this.state}: ignoring reject`
+        );
       }
     });
-    (0, _defineProperty2.default)(this, "onAnsweredElsewhere", msg => {
+    (0, _defineProperty2.default)(this, "onAnsweredElsewhere", (msg) => {
       _logger.logger.debug("Call ID " + this.callId + " answered elsewhere");
 
       this.terminate(CallParty.Remote, CallErrorCode.AnsweredElsewhere, true);
@@ -598,10 +718,9 @@ class MatrixCall extends _events.EventEmitter {
     this.ourPartyId = this.client.deviceId; // Array of Objects with urls, username, credential keys
 
     this.turnServers = opts.turnServers || [];
-
-    if (this.turnServers.length === 0 && this.client.isFallbackICEServerAllowed()) {
+    if (this.turnServers.length === 0) {
       this.turnServers.push({
-        urls: [FALLBACK_ICE_SERVER]
+        urls: [FALLBACK_ICE_SERVER],
       });
     }
 
@@ -629,7 +748,6 @@ class MatrixCall extends _events.EventEmitter {
    * @throws If you have not specified a listener for 'error' events.
    */
 
-
   async placeVoiceCall() {
     _logger.logger.debug("placeVoiceCall");
 
@@ -646,7 +764,6 @@ class MatrixCall extends _events.EventEmitter {
    * to render the local camera preview.
    * @throws If you have not specified a listener for 'error' events.
    */
-
 
   async placeVideoCall(remoteVideoElement, localVideoElement) {
     _logger.logger.debug("placeVideoCall");
@@ -669,8 +786,11 @@ class MatrixCall extends _events.EventEmitter {
    * @throws If you have not specified a listener for 'error' events.
    */
 
-
-  async placeScreenSharingCall(remoteVideoElement, localVideoElement, selectDesktopCapturerSource) {
+  async placeScreenSharingCall(
+    remoteVideoElement,
+    localVideoElement,
+    selectDesktopCapturerSource
+  ) {
     _logger.logger.debug("placeScreenSharingCall");
 
     this.checkForErrorListener();
@@ -680,23 +800,35 @@ class MatrixCall extends _events.EventEmitter {
     try {
       var _window$electron;
 
-      const screenshareConstraints = await getScreenshareContraints(selectDesktopCapturerSource);
+      const screenshareConstraints = await getScreenshareContraints(
+        selectDesktopCapturerSource
+      );
 
       if (!screenshareConstraints) {
         this.terminate(CallParty.Local, CallErrorCode.NoUserMedia, false);
         return;
       }
 
-      if ((_window$electron = window.electron) !== null && _window$electron !== void 0 && _window$electron.getDesktopCapturerSources) {
+      if (
+        (_window$electron = window.electron) !== null &&
+        _window$electron !== void 0 &&
+        _window$electron.getDesktopCapturerSources
+      ) {
         // We are using Electron
         _logger.logger.debug("Getting screen stream using getUserMedia()...");
 
-        this.screenSharingStream = await navigator.mediaDevices.getUserMedia(screenshareConstraints);
+        this.screenSharingStream = await navigator.mediaDevices.getUserMedia(
+          screenshareConstraints
+        );
       } else {
         // We are not using Electron
-        _logger.logger.debug("Getting screen stream using getDisplayMedia()...");
+        _logger.logger.debug(
+          "Getting screen stream using getDisplayMedia()..."
+        );
 
-        this.screenSharingStream = await navigator.mediaDevices.getDisplayMedia(screenshareConstraints);
+        this.screenSharingStream = await navigator.mediaDevices.getDisplayMedia(
+          screenshareConstraints
+        );
       }
 
       _logger.logger.debug("Got screen stream, requesting audio stream...");
@@ -704,7 +836,14 @@ class MatrixCall extends _events.EventEmitter {
       const audioConstraints = getUserMediaContraints(ConstraintsType.Audio);
       this.placeCallWithConstraints(audioConstraints);
     } catch (err) {
-      this.emit(CallEvent.Error, new CallError(CallErrorCode.NoUserMedia, "Failed to get screen-sharing stream: ", err));
+      this.emit(
+        CallEvent.Error,
+        new CallError(
+          CallErrorCode.NoUserMedia,
+          "Failed to get screen-sharing stream: ",
+          err
+        )
+      );
       this.terminate(CallParty.Local, CallErrorCode.NoUserMedia, false);
     }
 
@@ -723,7 +862,6 @@ class MatrixCall extends _events.EventEmitter {
    * @return {Element} The dom element
    */
 
-
   getLocalVideoElement() {
     return this.localVideoElement;
   }
@@ -732,7 +870,6 @@ class MatrixCall extends _events.EventEmitter {
    * used for playing back video capable streams.
    * @return {Element} The dom element
    */
-
 
   getRemoteVideoElement() {
     return this.remoteVideoElement;
@@ -743,7 +880,6 @@ class MatrixCall extends _events.EventEmitter {
    * @return {Element} The dom element
    */
 
-
   getRemoteAudioElement() {
     return this.remoteAudioElement;
   }
@@ -752,7 +888,6 @@ class MatrixCall extends _events.EventEmitter {
    * video will be rendered to it immediately.
    * @param {Element} element The <code>&lt;video&gt;</code> DOM element.
    */
-
 
   async setLocalVideoElement(element) {
     this.localVideoElement = element;
@@ -764,7 +899,9 @@ class MatrixCall extends _events.EventEmitter {
 
       try {
         await element.play();
+        console.log("local ok");
       } catch (e) {
+        console.log("Failed to play local video element set", e);
         _logger.logger.info("Failed to play local video element", e);
       }
     }
@@ -775,17 +912,23 @@ class MatrixCall extends _events.EventEmitter {
    * @param {Element} element The <code>&lt;video&gt;</code> DOM element.
    */
 
-
-  setRemoteVideoElement(element) {
+  async setRemoteVideoElement(element) {
     if (element === this.remoteVideoElement) return;
-    element.autoplay = true; // if we already have an audio element set, use that instead and mute the audio
+    // if we already have an audio element set, use that instead and mute the audio
     // on this video element.
 
     if (this.remoteAudioElement) element.muted = true;
     this.remoteVideoElement = element;
 
-    if (this.remoteStream) {
-      this.playRemoteVideo();
+    if (!this.remoteStream) return;
+    this.remoteVideoElement.srcObject = this.remoteStream;
+    // this.remoteVideoElement.muted = true;
+
+    try {
+      await this.remoteVideoElement.play();
+    } catch (e) {
+      console.log("Failed to play remote video element set", e);
+      _logger.logger.info("Failed to play remote video element", e);
     }
   }
   /**
@@ -795,13 +938,11 @@ class MatrixCall extends _events.EventEmitter {
    * @param {Element} element The <code>&lt;video&gt;</code> DOM element.
    */
 
-
   async setRemoteAudioElement(element) {
     if (element === this.remoteAudioElement) return;
     this.remoteAudioElement = element;
     if (this.remoteStream) this.playRemoteAudio();
   } // The typescript definitions have this type as 'any' :(
-
 
   async getCurrentCallStats() {
     if (this.callHasEnded()) {
@@ -829,7 +970,6 @@ class MatrixCall extends _events.EventEmitter {
    * @param {MatrixEvent} event The m.call.invite event
    */
 
-
   async initWithInvite(event) {
     const invite = event.getContent();
     this.direction = CallDirection.Inbound; // make sure we have valid turn creds. Unless something's gone wrong, it should
@@ -838,7 +978,12 @@ class MatrixCall extends _events.EventEmitter {
     const haveTurnCreds = await this.client._checkTurnServers();
 
     if (!haveTurnCreds) {
-      _logger.logger.warn("Failed to get TURN credentials! Proceeding with call anyway...");
+      _logger.logger.warn(
+        "Failed to get TURN credentials! Proceeding with call anyway..."
+      );
+      console.log(
+        "Failed to get TURN credentials! Proceeding with call anyway...initWithInvite"
+      );
     }
 
     this.peerConn = this.createPeerConnection(); // we must set the party ID before await-ing on anything: the call event
@@ -853,21 +998,32 @@ class MatrixCall extends _events.EventEmitter {
     } catch (e) {
       _logger.logger.debug("Failed to set remote description", e);
 
-      this.terminate(CallParty.Local, CallErrorCode.SetRemoteDescription, false);
+      this.terminate(
+        CallParty.Local,
+        CallErrorCode.SetRemoteDescription,
+        false
+      );
       return;
     } // According to previous comments in this file, firefox at some point did not
     // add streams until media started ariving on them. Testing latest firefox
     // (81 at time of writing), this is no longer a problem, so let's do it the correct way.
 
-
     if (!this.remoteStream || this.remoteStream.getTracks().length === 0) {
-      _logger.logger.error("No remote stream or no tracks after setting remote description!");
+      _logger.logger.error(
+        "No remote stream or no tracks after setting remote description!"
+      );
 
-      this.terminate(CallParty.Local, CallErrorCode.SetRemoteDescription, false);
+      this.terminate(
+        CallParty.Local,
+        CallErrorCode.SetRemoteDescription,
+        false
+      );
       return;
     }
 
-    this.type = this.remoteStream.getTracks().some(t => t.kind === 'video') ? CallType.Video : CallType.Voice;
+    this.type = this.remoteStream.getTracks().some((t) => t.kind === "video")
+      ? CallType.Video
+      : CallType.Voice;
     this.setState(CallState.Ringing);
 
     if (event.getLocalAge()) {
@@ -880,7 +1036,7 @@ class MatrixCall extends _events.EventEmitter {
           this.setState(CallState.Ended);
           this.stopAllMedia();
 
-          if (this.peerConn.signalingState != 'closed') {
+          if (this.peerConn.signalingState != "closed") {
             this.peerConn.close();
           }
 
@@ -894,7 +1050,6 @@ class MatrixCall extends _events.EventEmitter {
    * @param {MatrixEvent} event The m.call.hangup event
    */
 
-
   initWithHangup(event) {
     // perverse as it may seem, sometimes we want to instantiate a call with a
     // hangup message (because when getting the state of the room on load, events
@@ -905,16 +1060,18 @@ class MatrixCall extends _events.EventEmitter {
    * Answer a call.
    */
 
-
   async answer() {
     if (this.inviteOrAnswerSent) {
       return;
     }
-
+    console.log(`Answering call ${this.callId} of type ${this.type}`);
     _logger.logger.debug(`Answering call ${this.callId} of type ${this.type}`);
-
     if (!this.localAVStream && !this.waitForLocalAVStream) {
-      const constraints = getUserMediaContraints(this.type == CallType.Video ? ConstraintsType.Video : ConstraintsType.Audio);
+      const constraints = getUserMediaContraints(
+        this.type == CallType.Video
+          ? ConstraintsType.Video
+          : ConstraintsType.Audio
+      );
 
       _logger.logger.log("Getting user media with constraints", constraints);
 
@@ -922,10 +1079,13 @@ class MatrixCall extends _events.EventEmitter {
       this.waitForLocalAVStream = true;
 
       try {
-        const mediaStream = await navigator.mediaDevices.getUserMedia(constraints);
+        const mediaStream = await navigator.mediaDevices.getUserMedia(
+          constraints
+        );
         this.waitForLocalAVStream = false;
         this.gotUserMediaForAnswer(mediaStream);
       } catch (e) {
+        console.log("media failed");
         this.getUserMediaFailed(e);
         return;
       }
@@ -940,7 +1100,6 @@ class MatrixCall extends _events.EventEmitter {
    * MatrixClient.
    * @param {MatrixCall} newCall The new call.
    */
-
 
   replacedBy(newCall) {
     _logger.logger.debug(this.callId + " being replaced by " + newCall.callId);
@@ -974,7 +1133,6 @@ class MatrixCall extends _events.EventEmitter {
    * @param {boolean} suppressEvent True to suppress emitting an event.
    */
 
-
   hangup(reason, suppressEvent) {
     if (this.callHasEnded()) return;
 
@@ -986,7 +1144,7 @@ class MatrixCall extends _events.EventEmitter {
     const content = {}; // Continue to send no reason for user hangups temporarily, until
     // clients understand the user_hangup reason (voip v1)
 
-    if (reason !== CallErrorCode.UserHangup) content['reason'] = reason;
+    if (reason !== CallErrorCode.UserHangup) content["reason"] = reason;
     this.sendVoipEvent(_event.EventType.CallHangup, {});
   }
   /**
@@ -995,14 +1153,15 @@ class MatrixCall extends _events.EventEmitter {
    * event as of MSC2746.
    */
 
-
   reject() {
     if (this.state !== CallState.Ringing) {
       throw Error("Call must be in 'ringing' state to reject!");
     }
 
     if (this.opponentVersion < 1) {
-      _logger.logger.info(`Opponent version is less than 1 (${this.opponentVersion}): sending hangup instead of reject`);
+      _logger.logger.info(
+        `Opponent version is less than 1 (${this.opponentVersion}): sending hangup instead of reject`
+      );
 
       this.hangup(CallErrorCode.UserHangup, true);
       return;
@@ -1018,7 +1177,6 @@ class MatrixCall extends _events.EventEmitter {
    * @param {boolean} muted True to mute the outbound video.
    */
 
-
   setLocalVideoMuted(muted) {
     this.vidMuted = muted;
     this.updateMuteStatus();
@@ -1033,7 +1191,6 @@ class MatrixCall extends _events.EventEmitter {
    * (including if the call is not set up yet).
    */
 
-
   isLocalVideoMuted() {
     return this.vidMuted;
   }
@@ -1041,7 +1198,6 @@ class MatrixCall extends _events.EventEmitter {
    * Set whether the microphone should be muted or not.
    * @param {boolean} muted True to mute the mic.
    */
-
 
   setMicrophoneMuted(muted) {
     this.micMuted = muted;
@@ -1057,7 +1213,6 @@ class MatrixCall extends _events.EventEmitter {
    * is not set up yet).
    */
 
-
   isMicrophoneMuted() {
     return this.micMuted;
   }
@@ -1065,7 +1220,6 @@ class MatrixCall extends _events.EventEmitter {
    * @returns true if we have put the party on the other side of the call on hold
    * (that is, we are signalling to them that we are not listening)
    */
-
 
   isRemoteOnHold() {
     return this.remoteOnHold;
@@ -1079,7 +1233,7 @@ class MatrixCall extends _events.EventEmitter {
     for (const tranceiver of this.peerConn.getTransceivers()) {
       // We set 'inactive' rather than 'sendonly' because we're not planning on
       // playing music etc. to the other side.
-      tranceiver.direction = onHold ? 'inactive' : 'sendrecv';
+      tranceiver.direction = onHold ? "inactive" : "sendrecv";
     }
 
     this.updateMuteStatus();
@@ -1099,7 +1253,6 @@ class MatrixCall extends _events.EventEmitter {
    * @returns true if the other party has put us on hold
    */
 
-
   isLocalOnHold() {
     if (this.state !== CallState.Connected) return false;
     if (this.unholdingRemote) return false;
@@ -1107,7 +1260,9 @@ class MatrixCall extends _events.EventEmitter {
     // (is this the right thing to do?)
 
     for (const tranceiver of this.peerConn.getTransceivers()) {
-      const trackOnHold = ['inactive', 'recvonly'].includes(tranceiver.currentDirection);
+      const trackOnHold = ["inactive", "recvonly"].includes(
+        tranceiver.currentDirection
+      );
       if (!trackOnHold) callOnHold = false;
     }
 
@@ -1118,10 +1273,9 @@ class MatrixCall extends _events.EventEmitter {
    * @param digit The digit (nb. string - '#' and '*' are dtmf too)
    */
 
-
   sendDtmfDigit(digit) {
     for (const sender of this.peerConn.getSenders()) {
-      if (sender.track.kind === 'audio' && sender.dtmf) {
+      if (sender.track.kind === "audio" && sender.dtmf) {
         sender.dtmf.insertDTMF(digit);
         return;
       }
@@ -1141,9 +1295,15 @@ class MatrixCall extends _events.EventEmitter {
     setTracksEnabled(this.localAVStream.getVideoTracks(), !vidShouldBeMuted);
 
     if (this.remoteOnHold) {
-      if (this.remoteAudioElement && this.remoteAudioElement.srcObject === this.remoteStream) {
+      if (
+        this.remoteAudioElement &&
+        this.remoteAudioElement.srcObject === this.remoteStream
+      ) {
         this.remoteAudioElement.muted = true;
-      } else if (this.remoteVideoElement && this.remoteVideoElement.srcObject === this.remoteStream) {
+      } else if (
+        this.remoteVideoElement &&
+        this.remoteVideoElement.srcObject === this.remoteStream
+      ) {
         this.remoteVideoElement.muted = true;
       }
     } else {
@@ -1155,27 +1315,27 @@ class MatrixCall extends _events.EventEmitter {
    * @param {Object} stream
    */
 
-
   async sendAnswer() {
     const answerContent = {
       answer: {
         sdp: this.peerConn.localDescription.sdp,
         // type is now deprecated as of Matrix VoIP v1, but
         // required to still be sent for backwards compat
-        type: this.peerConn.localDescription.type
-      }
+        type: this.peerConn.localDescription.type,
+      },
     };
 
     if (this.client._supportsCallTransfer) {
       answerContent.capabilities = {
-        'm.call.transferee': true
+        "m.call.transferee": true,
       };
     } // We have just taken the local description from the peerconnection which will
     // contain all the local candidates added so far, so we can discard any candidates
     // we had queued up because they'll be in the answer.
 
-
-    _logger.logger.info(`Discarding ${this.candidateSendQueue.length} candidates that will be sent in answer`);
+    _logger.logger.info(
+      `Discarding ${this.candidateSendQueue.length} candidates that will be sent in answer`
+    );
 
     this.candidateSendQueue = [];
 
@@ -1191,7 +1351,7 @@ class MatrixCall extends _events.EventEmitter {
       let code = CallErrorCode.SendAnswer;
       let message = "Failed to send answer";
 
-      if (error.name == 'UnknownDeviceError') {
+      if (error.name == "UnknownDeviceError") {
         code = CallErrorCode.UnknownDevices;
         message = "Unknown devices present in the room";
       }
@@ -1200,7 +1360,6 @@ class MatrixCall extends _events.EventEmitter {
       throw error;
     } // error handler re-throws so this won't happen on error, but
     // we don't want the same error handling on the candidate queue
-
 
     this.sendCandidateQueue();
   }
@@ -1219,11 +1378,14 @@ class MatrixCall extends _events.EventEmitter {
       return;
     }
 
-    const fromPartyId = ev.getContent().version === 0 ? null : ev.getContent().party_id || null;
+    const fromPartyId =
+      ev.getContent().version === 0 ? null : ev.getContent().party_id || null;
 
     if (this.opponentPartyId === undefined) {
       // we haven't picked an opponent yet so save the candidates
-      _logger.logger.info(`Bufferring ${cands.length} candidates until we pick an opponent`);
+      _logger.logger.info(
+        `Bufferring ${cands.length} candidates until we pick an opponent`
+      );
 
       const bufferedCands = this.remoteCandidateBuffer.get(fromPartyId) || [];
       bufferedCands.push(...cands);
@@ -1232,7 +1394,10 @@ class MatrixCall extends _events.EventEmitter {
     }
 
     if (!this.partyIdMatches(ev.getContent())) {
-      _logger.logger.info(`Ignoring candidates from party ID ${ev.getContent().party_id}: ` + `we have chosen party ID ${this.opponentPartyId}`);
+      _logger.logger.info(
+        `Ignoring candidates from party ID ${ev.getContent().party_id}: ` +
+          `we have chosen party ID ${this.opponentPartyId}`
+      );
 
       return;
     }
@@ -1244,19 +1409,31 @@ class MatrixCall extends _events.EventEmitter {
    * @param {Object} msg
    */
 
-
   async onAnswerReceived(event) {
-    _logger.logger.debug(`Got answer for call ID ${this.callId} from party ID ${event.getContent().party_id}`);
+    console.log("answer received", event);
+    _logger.logger.debug(
+      `Got answer for call ID ${this.callId} from party ID ${
+        event.getContent().party_id
+      }`
+    );
 
     if (this.callHasEnded()) {
-      _logger.logger.debug(`Ignoring answer because call ID ${this.callId} has ended`);
-
+      _logger.logger.debug(
+        `Ignoring answer because call ID ${this.callId} has ended`
+      );
+      console.log(`Ignoring answer because call ID ${this.callId} has ended`);
       return;
     }
 
     if (this.opponentPartyId !== undefined) {
-      _logger.logger.info(`Ignoring answer from party ID ${event.getContent().party_id}: ` + `we already have an answer/reject from ${this.opponentPartyId}`);
-
+      _logger.logger.info(
+        `Ignoring answer from party ID ${event.getContent().party_id}: ` +
+          `we already have an answer/reject from ${this.opponentPartyId}`
+      );
+      console.log(
+        `Ignoring answer from party ID ${event.getContent().party_id}: ` +
+          `we already have an answer/reject from ${this.opponentPartyId}`
+      );
       return;
     }
 
@@ -1269,17 +1446,20 @@ class MatrixCall extends _events.EventEmitter {
     } catch (e) {
       _logger.logger.debug("Failed to set remote description", e);
 
-      this.terminate(CallParty.Local, CallErrorCode.SetRemoteDescription, false);
+      this.terminate(
+        CallParty.Local,
+        CallErrorCode.SetRemoteDescription,
+        false
+      );
       return;
     } // If the answer we selected has a party_id, send a select_answer event
     // We do this after setting the remote description since otherwise we'd block
     // call setup on it
 
-
     if (this.opponentPartyId !== null) {
       try {
         await this.sendVoipEvent(_event.EventType.CallSelectAnswer, {
-          selected_party_id: this.opponentPartyId
+          selected_party_id: this.opponentPartyId,
         });
       } catch (err) {
         // This isn't fatal, and will just mean that if another party has raced to answer
@@ -1299,14 +1479,17 @@ class MatrixCall extends _events.EventEmitter {
     const selectedPartyId = event.getContent().selected_party_id;
 
     if (selectedPartyId === undefined || selectedPartyId === null) {
-      _logger.logger.warn("Got nonsensical select_answer with null/undefined selected_party_id: ignoring");
+      _logger.logger.warn(
+        "Got nonsensical select_answer with null/undefined selected_party_id: ignoring"
+      );
 
       return;
     }
 
     if (selectedPartyId !== this.ourPartyId) {
-      _logger.logger.info(`Got select_answer for party ID ${selectedPartyId}: we are party ID ${this.ourPartyId}.`); // The other party has picked somebody else's answer
-
+      _logger.logger.info(
+        `Got select_answer for party ID ${selectedPartyId}: we are party ID ${this.ourPartyId}.`
+      ); // The other party has picked somebody else's answer
 
       this.terminate(CallParty.Remote, CallErrorCode.AnsweredElsewhere, true);
     }
@@ -1323,22 +1506,25 @@ class MatrixCall extends _events.EventEmitter {
     // we pick either the inbound or outbound call, so one side will always be
     // inbound and one outbound
 
-
     const polite = this.direction === CallDirection.Inbound; // Here we follow the perfect negotiation logic from
     // https://developer.mozilla.org/en-US/docs/Web/API/WebRTC_API/Perfect_negotiation
 
-    const offerCollision = description.type === 'offer' && (this.makingOffer || this.peerConn.signalingState != 'stable');
+    const offerCollision =
+      description.type === "offer" &&
+      (this.makingOffer || this.peerConn.signalingState != "stable");
     this.ignoreOffer = !polite && offerCollision;
 
     if (this.ignoreOffer) {
-      _logger.logger.info("Ignoring colliding negotiate event because we're impolite");
+      _logger.logger.info(
+        "Ignoring colliding negotiate event because we're impolite"
+      );
 
       return;
     }
 
     const prevLocalOnHold = this.isLocalOnHold();
 
-    if (description.type === 'answer') {
+    if (description.type === "answer") {
       // whenever we get an answer back, clear the flag we set whilst trying to un-hold
       // the other party: the state of the channels now reflects reality
       this.unholdingRemote = false;
@@ -1347,13 +1533,15 @@ class MatrixCall extends _events.EventEmitter {
     try {
       await this.peerConn.setRemoteDescription(description);
 
-      if (description.type === 'offer') {
+      if (description.type === "offer") {
         // First we sent the direction of the tranciever to what we'd like it to be,
         // irresepective of whether the other side has us on hold - so just whether we
         // want the call to be on hold or not. This is necessary because in a few lines,
         // we'll adjust the direction and unless we do this too, we'll never come off hold.
         for (const tranceiver of this.peerConn.getTransceivers()) {
-          tranceiver.direction = this.isRemoteOnHold() ? 'inactive' : 'sendrecv';
+          tranceiver.direction = this.isRemoteOnHold()
+            ? "inactive"
+            : "sendrecv";
         }
 
         const localDescription = await this.peerConn.createAnswer();
@@ -1366,7 +1554,7 @@ class MatrixCall extends _events.EventEmitter {
         }
 
         this.sendVoipEvent(_event.EventType.CallNegotiate, {
-          description: this.peerConn.localDescription
+          description: this.peerConn.localDescription,
         });
       }
     } catch (err) {
@@ -1400,12 +1588,20 @@ class MatrixCall extends _events.EventEmitter {
         // it fails.
         // It seems reliable if you set the sink ID after setting the srcObject and then set the sink ID
         // back to the default after the call is over
-        _logger.logger.info("Setting audio sink to " + audioOutput + ", was " + this.remoteAudioElement.sinkId);
+        _logger.logger.info(
+          "Setting audio sink to " +
+            audioOutput +
+            ", was " +
+            this.remoteAudioElement.sinkId
+        );
 
         await this.remoteAudioElement.setSinkId(audioOutput);
       }
     } catch (e) {
-      _logger.logger.warn("Couldn't set requested audio output device: using default", e);
+      _logger.logger.warn(
+        "Couldn't set requested audio output device: using default",
+        e
+      );
     }
 
     try {
@@ -1427,10 +1623,12 @@ class MatrixCall extends _events.EventEmitter {
     // load() explicitly, it shouldn't be a problem.
     this.remoteVideoElement.srcObject = this.remoteStream;
 
-    _logger.logger.info("playing remote video. stream active? " + this.remoteStream.active);
+    _logger.logger.info(
+      "playing remote video. stream active? " + this.remoteStream.active
+    );
 
     try {
-      await this.remoteVideoElement.play();
+      this.remoteVideoElement.play();
     } catch (e) {
       _logger.logger.info("Failed to play remote video element", e);
     }
@@ -1448,13 +1646,16 @@ class MatrixCall extends _events.EventEmitter {
    * @return {Promise}
    */
 
-
   sendVoipEvent(eventType, content) {
-    return this.client.sendEvent(this.roomId, eventType, Object.assign({}, content, {
-      version: VOIP_PROTO_VERSION,
-      call_id: this.callId,
-      party_id: this.ourPartyId
-    }));
+    return this.client.sendEvent(
+      this.roomId,
+      eventType,
+      Object.assign({}, content, {
+        version: VOIP_PROTO_VERSION,
+        call_id: this.callId,
+        party_id: this.ourPartyId,
+      })
+    );
   }
 
   queueCandidate(content) {
@@ -1482,7 +1683,6 @@ class MatrixCall extends _events.EventEmitter {
    * Transfers this call to another user
    */
 
-
   async transfer(targetUserId) {
     // Fetch the target user's global profile info: their room avatar / displayname
     // could be different in whatever room we shae with them.
@@ -1493,9 +1693,9 @@ class MatrixCall extends _events.EventEmitter {
       target_user: {
         id: targetUserId,
         display_name: profileInfo.display_name,
-        avatar_url: profileInfo.avatar_url
+        avatar_url: profileInfo.avatar_url,
       },
-      create_call: replacementId
+      create_call: replacementId,
     };
     await this.sendVoipEvent(_event.EventType.CallReplaces, body);
     await this.terminate(CallParty.Local, CallErrorCode.Replaced, true);
@@ -1505,10 +1705,13 @@ class MatrixCall extends _events.EventEmitter {
    * two calls (so the remote parties on each call are connected together).
    */
 
-
   async transferToCall(transferTargetCall) {
-    const targetProfileInfo = await this.client.getProfileInfo(transferTargetCall.getOpponentMember().userId);
-    const transfereeProfileInfo = await this.client.getProfileInfo(this.getOpponentMember().userId);
+    const targetProfileInfo = await this.client.getProfileInfo(
+      transferTargetCall.getOpponentMember().userId
+    );
+    const transfereeProfileInfo = await this.client.getProfileInfo(
+      this.getOpponentMember().userId
+    );
     const newCallId = genCallID();
     const bodyToTransferTarget = {
       // the replacements on each side have their own ID, and it's distinct from the
@@ -1517,23 +1720,30 @@ class MatrixCall extends _events.EventEmitter {
       target_user: {
         id: this.getOpponentMember().userId,
         display_name: transfereeProfileInfo.display_name,
-        avatar_url: transfereeProfileInfo.avatar_url
+        avatar_url: transfereeProfileInfo.avatar_url,
       },
-      await_call: newCallId
+      await_call: newCallId,
     };
-    await transferTargetCall.sendVoipEvent(_event.EventType.CallReplaces, bodyToTransferTarget);
+    await transferTargetCall.sendVoipEvent(
+      _event.EventType.CallReplaces,
+      bodyToTransferTarget
+    );
     const bodyToTransferee = {
       replacement_id: genCallID(),
       target_user: {
         id: transferTargetCall.getOpponentMember().userId,
         display_name: targetProfileInfo.display_name,
-        avatar_url: targetProfileInfo.avatar_url
+        avatar_url: targetProfileInfo.avatar_url,
       },
-      create_call: newCallId
+      create_call: newCallId,
     };
     await this.sendVoipEvent(_event.EventType.CallReplaces, bodyToTransferee);
     await this.terminate(CallParty.Local, CallErrorCode.Replaced, true);
-    await transferTargetCall.terminate(CallParty.Local, CallErrorCode.Replaced, true);
+    await transferTargetCall.terminate(
+      CallParty.Local,
+      CallErrorCode.Replaced,
+      true
+    );
   }
 
   async terminate(hangupParty, hangupReason, shouldEmit) {
@@ -1561,7 +1771,7 @@ class MatrixCall extends _events.EventEmitter {
       try {
         // As per comment in playRemoteAudio, setting the sink ID back to the default
         // once the call is over makes setSinkId work reliably.
-        await this.remoteAudioElement.setSinkId('');
+        await this.remoteAudioElement.setSinkId("");
       } catch (e) {
         _logger.logger.warn("Failed to set sink ID back to default");
       }
@@ -1577,7 +1787,7 @@ class MatrixCall extends _events.EventEmitter {
     this.setState(CallState.Ended);
     this.stopAllMedia();
 
-    if (this.peerConn && this.peerConn.signalingState !== 'closed') {
+    if (this.peerConn && this.peerConn.signalingState !== "closed") {
       this.peerConn.close();
     }
 
@@ -1610,7 +1820,9 @@ class MatrixCall extends _events.EventEmitter {
 
   checkForErrorListener() {
     if (this.listeners("error").length === 0) {
-      throw new Error("You MUST attach an error listener using call.on('error', function() {})");
+      throw new Error(
+        "You MUST attach an error listener using call.on('error', function() {})"
+      );
     }
   }
 
@@ -1623,7 +1835,7 @@ class MatrixCall extends _events.EventEmitter {
     this.candidateSendQueue = [];
     ++this.candidateSendTries;
     const content = {
-      candidates: cands
+      candidates: cands,
     };
 
     _logger.logger.debug("Attempting to send " + cands.length + " candidates");
@@ -1638,7 +1850,12 @@ class MatrixCall extends _events.EventEmitter {
       this.candidateSendQueue.push(...cands);
 
       if (this.candidateSendTries > 5) {
-        _logger.logger.debug("Failed to send candidates on attempt " + this.candidateSendTries + ". Giving up on this call.", error);
+        _logger.logger.debug(
+          "Failed to send candidates on attempt " +
+            this.candidateSendTries +
+            ". Giving up on this call.",
+          error
+        );
 
         const code = CallErrorCode.SignallingFailed;
         const message = "Signalling failed";
@@ -1650,7 +1867,10 @@ class MatrixCall extends _events.EventEmitter {
       const delayMs = 500 * Math.pow(2, this.candidateSendTries);
       ++this.candidateSendTries;
 
-      _logger.logger.debug("Failed to send candidates. Retrying in " + delayMs + "ms", error);
+      _logger.logger.debug(
+        "Failed to send candidates. Retrying in " + delayMs + "ms",
+        error
+      );
 
       setTimeout(() => {
         this.sendCandidateQueue();
@@ -1660,7 +1880,6 @@ class MatrixCall extends _events.EventEmitter {
 
   async placeCallWithConstraints(constraints) {
     _logger.logger.log("Getting user media with constraints", constraints); // XXX Find a better way to do this
-
 
     this.client._callEventHandler.calls.set(this.callId, this);
 
@@ -1672,15 +1891,18 @@ class MatrixCall extends _events.EventEmitter {
     const haveTurnCreds = await this.client._checkTurnServers();
 
     if (!haveTurnCreds) {
-      _logger.logger.warn("Failed to get TURN credentials! Proceeding with call anyway...");
+      _logger.logger.warn(
+        "Failed to get TURN credentials! Proceeding with call anyway..."
+      );
     } // create the peer connection now so it can be gathering candidates while we get user
     // media (assuming a candidate pool size is configured)
-
 
     this.peerConn = this.createPeerConnection();
 
     try {
-      const mediaStream = await navigator.mediaDevices.getUserMedia(constraints);
+      const mediaStream = await navigator.mediaDevices.getUserMedia(
+        constraints
+      );
       this.gotUserMediaForInvite(mediaStream);
     } catch (e) {
       this.getUserMediaFailed(e);
@@ -1690,17 +1912,22 @@ class MatrixCall extends _events.EventEmitter {
 
   createPeerConnection() {
     const pc = new window.RTCPeerConnection({
-      iceTransportPolicy: this.forceTURN ? 'relay' : undefined,
+      iceTransportPolicy: this.forceTURN ? "relay" : undefined,
       iceServers: this.turnServers,
-      iceCandidatePoolSize: this.client._iceCandidatePoolSize
+      iceCandidatePoolSize: this.client._iceCandidatePoolSize,
     }); // 'connectionstatechange' would be better, but firefox doesn't implement that.
-
-    pc.addEventListener('iceconnectionstatechange', this.onIceConnectionStateChanged);
-    pc.addEventListener('signalingstatechange', this.onSignallingStateChanged);
-    pc.addEventListener('icecandidate', this.gotLocalIceCandidate);
-    pc.addEventListener('icegatheringstatechange', this.onIceGatheringStateChange);
-    pc.addEventListener('track', this.onTrack);
-    pc.addEventListener('negotiationneeded', this.onNegotiationNeeded);
+    pc.addEventListener(
+      "iceconnectionstatechange",
+      this.onIceConnectionStateChanged
+    );
+    pc.addEventListener("signalingstatechange", this.onSignallingStateChanged);
+    pc.addEventListener("icecandidate", this.gotLocalIceCandidate);
+    pc.addEventListener(
+      "icegatheringstatechange",
+      this.onIceGatheringStateChange
+    );
+    pc.addEventListener("track", this.onTrack);
+    pc.addEventListener("negotiationneeded", this.onNegotiationNeeded);
     return pc;
   }
 
@@ -1714,12 +1941,13 @@ class MatrixCall extends _events.EventEmitter {
   } // Commits to an opponent for the call
   // ev: An invite or answer event
 
-
   chooseOpponent(ev) {
     // I choo-choo-choose you
     const msg = ev.getContent();
 
-    _logger.logger.debug(`Choosing party ID ${msg.party_id} for call ID ${this.callId}`);
+    _logger.logger.debug(
+      `Choosing party ID ${msg.party_id} for call ID ${this.callId}`
+    );
 
     this.opponentVersion = msg.version;
 
@@ -1742,7 +1970,9 @@ class MatrixCall extends _events.EventEmitter {
     const bufferedCands = this.remoteCandidateBuffer.get(this.opponentPartyId);
 
     if (bufferedCands) {
-      _logger.logger.info(`Adding ${bufferedCands.length} buffered candidates for opponent ${this.opponentPartyId}`);
+      _logger.logger.info(
+        `Adding ${bufferedCands.length} buffered candidates for opponent ${this.opponentPartyId}`
+      );
 
       await this.addIceCandidates(bufferedCands);
     }
@@ -1752,13 +1982,25 @@ class MatrixCall extends _events.EventEmitter {
 
   async addIceCandidates(cands) {
     for (const cand of cands) {
-      if ((cand.sdpMid === null || cand.sdpMid === undefined) && (cand.sdpMLineIndex === null || cand.sdpMLineIndex === undefined)) {
-        _logger.logger.debug("Ignoring remote ICE candidate with no sdpMid or sdpMLineIndex");
+      if (
+        (cand.sdpMid === null || cand.sdpMid === undefined) &&
+        (cand.sdpMLineIndex === null || cand.sdpMLineIndex === undefined)
+      ) {
+        _logger.logger.debug(
+          "Ignoring remote ICE candidate with no sdpMid or sdpMLineIndex"
+        );
 
         continue;
       }
 
-      _logger.logger.debug("Call " + this.callId + " got remote ICE " + cand.sdpMid + " candidate: " + cand.candidate);
+      _logger.logger.debug(
+        "Call " +
+          this.callId +
+          " got remote ICE " +
+          cand.sdpMid +
+          " candidate: " +
+          cand.candidate
+      );
 
       try {
         await this.peerConn.addIceCandidate(cand);
@@ -1769,7 +2011,6 @@ class MatrixCall extends _events.EventEmitter {
       }
     }
   }
-
 }
 
 exports.MatrixCall = MatrixCall;
@@ -1784,58 +2025,74 @@ function getUserMediaContraints(type) {
   const isWebkit = !!navigator.webkitGetUserMedia;
 
   switch (type) {
-    case ConstraintsType.Audio:
-      {
-        return {
-          audio: {
-            deviceId: audioInput ? {
-              ideal: audioInput
-            } : undefined
-          },
-          video: false
-        };
-      }
+    case ConstraintsType.Audio: {
+      return {
+        audio: {
+          deviceId: audioInput
+            ? {
+                ideal: audioInput,
+              }
+            : undefined,
+        },
+        video: false,
+      };
+    }
 
-    case ConstraintsType.Video:
-      {
-        return {
-          audio: {
-            deviceId: audioInput ? {
-              ideal: audioInput
-            } : undefined
-          },
-          video: {
-            deviceId: videoInput ? {
-              ideal: videoInput
-            } : undefined,
+    case ConstraintsType.Video: {
+      return {
+        audio: {
+          deviceId: audioInput
+            ? {
+                ideal: audioInput,
+              }
+            : undefined,
+        },
+        video: {
+          deviceId: videoInput
+            ? {
+                ideal: videoInput,
+              }
+            : undefined,
+          facingMode: ["user", "environment"],
 
-            /* We want 640x360.  Chrome will give it only if we ask exactly,
+          /* We want 640x360.  Chrome will give it only if we ask exactly,
                FF refuses entirely if we ask exactly, so have to ask for ideal
                instead
                XXX: Is this still true?
              */
-            width: isWebkit ? {
-              exact: 640
-            } : {
-              ideal: 640
-            },
-            height: isWebkit ? {
-              exact: 360
-            } : {
-              ideal: 360
-            }
-          }
-        };
-      }
+          width: isWebkit
+            ? {
+                exact: 640,
+              }
+            : {
+                ideal: 640,
+              },
+          height: isWebkit
+            ? {
+                exact: 360,
+              }
+            : {
+                ideal: 360,
+              },
+        },
+      };
+    }
   }
 }
 
 async function getScreenshareContraints(selectDesktopCapturerSource) {
   var _window$electron2;
 
-  if ((_window$electron2 = window.electron) !== null && _window$electron2 !== void 0 && _window$electron2.getDesktopCapturerSources && selectDesktopCapturerSource) {
+  if (
+    (_window$electron2 = window.electron) !== null &&
+    _window$electron2 !== void 0 &&
+    _window$electron2.getDesktopCapturerSources &&
+    selectDesktopCapturerSource
+  ) {
     // We have access to getDesktopCapturerSources()
-    _logger.logger.debug("Electron getDesktopCapturerSources() is available...");
+    _logger.logger.debug(
+      "Electron getDesktopCapturerSources() is available..."
+    );
 
     const selectedSource = await selectDesktopCapturerSource();
     if (!selectedSource) return null;
@@ -1844,9 +2101,9 @@ async function getScreenshareContraints(selectDesktopCapturerSource) {
       video: {
         mandatory: {
           chromeMediaSource: "desktop",
-          chromeMediaSourceId: selectedSource.id
-        }
-      }
+          chromeMediaSourceId: selectedSource.id,
+        },
+      },
     };
   } else {
     // We do not have access to the Electron desktop capturer,
@@ -1855,7 +2112,7 @@ async function getScreenshareContraints(selectDesktopCapturerSource) {
 
     return {
       audio: false,
-      video: true
+      video: true,
     };
   }
 }
@@ -1880,7 +2137,6 @@ function setAudioOutput(deviceId) {
  * undefined treated as unset
  */
 
-
 function setAudioInput(deviceId) {
   audioInput = deviceId;
 }
@@ -1890,7 +2146,6 @@ function setAudioInput(deviceId) {
  * @param {string=} deviceId the identifier for the device
  * undefined treated as unset
  */
-
 
 function setVideoInput(deviceId) {
   videoInput = deviceId;
@@ -1906,10 +2161,9 @@ function setVideoInput(deviceId) {
  * @return {MatrixCall} the call or null if the browser doesn't support calling.
  */
 
-
 function createNewMatrixCall(client, roomId, options) {
   // typeof prevents Node from erroring on an undefined reference
-  if (typeof window === 'undefined' || typeof document === 'undefined') {
+  if (typeof window === "undefined" || typeof document === "undefined") {
     // NB. We don't log here as apps try to create a call object as a test for
     // whether calls are supported, so we shouldn't fill the logs up.
     return null;
@@ -1918,12 +2172,18 @@ function createNewMatrixCall(client, roomId, options) {
   // though the concern is that the browser throwing a SecurityError will brick the
   // client creation process.
 
-
   try {
-    const supported = Boolean(window.RTCPeerConnection || window.RTCSessionDescription || window.RTCIceCandidate || navigator.mediaDevices);
+    const supported = Boolean(
+      window.RTCPeerConnection ||
+        window.RTCSessionDescription ||
+        window.RTCIceCandidate ||
+        navigator.mediaDevices
+    );
 
     if (!supported) {
-      _logger.logger.error("WebRTC is not supported in this browser / environment");
+      _logger.logger.error(
+        "WebRTC is not supported in this browser / environment"
+      );
 
       return null;
     }
@@ -1939,7 +2199,7 @@ function createNewMatrixCall(client, roomId, options) {
     roomId: roomId,
     turnServers: client.getTurnServers(),
     // call level options
-    forceTURN: client._forceTURN || optionsForceTURN
+    forceTURN: client._forceTURN || optionsForceTURN,
   };
   const call = new MatrixCall(opts);
   client.reEmitter.reEmit(call, Object.values(CallEvent));

@@ -1,3 +1,44 @@
+.pocketnet_iframe {
+  /*.video-js{
+        .vjs-volume-horizontal .vjs-volume-level,
+        .vjs-load-progress,
+        .vjs-play-progress{
+            transform-origin : left;
+        }
+
+        #vjs-forward-button, #vjs-rewind-button {
+            visibility: hidden;
+            opacity: 0;
+            transition: all .3s ease-in
+        }
+        .vjs-has-started {
+            #vjs-forward-button, #vjs-rewind-button {
+            visibility: visible;
+            opacity: 1;
+            transition: all .3s ease-in
+            }
+        }
+        .vjs-user-inactive.vjs-playing {
+            .vjs-big-play-button {
+            visibility: hidden !important;
+            opacity: 0;
+            transition: all .3s ease-in
+            }
+            #vjs-forward-button, #vjs-rewind-button {
+            visibility: hidden;
+            opacity: 0;
+            transition: all .3s ease-in
+            }
+        }
+        .vjs-user-active.vjs-playing {
+            .vjs-big-play-button {
+            visibility: visible !important;
+            opacity: 1;
+            transition: all .3s ease-in
+            }
+        }
+    }*/
+}
 .pocketnet_iframe .plyr__volume {
   max-width: 32px;
 }
@@ -8,8 +49,8 @@
   top: 0;
   bottom: 0;
   z-index: 10000;
-  max-height: none!important;
-  max-width: none!important;
+  max-height: none !important;
+  max-width: none !important;
 }
 .pocketnet_iframe .jsPlayerLoading {
   width: auto;
@@ -59,7 +100,10 @@
   display: block;
   background: transparent;
 }
-.pocketnet_iframe .jsPlayerLoading.ytbvimb.loading .jsPlayerLoading .preloader5 {
+.pocketnet_iframe
+  .jsPlayerLoading.ytbvimb.loading
+  .jsPlayerLoading
+  .preloader5 {
   display: block;
 }
 .pocketnet_iframe .jsPlayerLoading.ytbvimb.loading .playerlabel {
@@ -77,44 +121,20 @@
   font-size: 1.5em;
   margin: 0 auto;
 }
-.pocketnet_iframe .video-js .vjs-volume-horizontal .vjs-volume-level,
-.pocketnet_iframe .video-js .vjs-load-progress,
-.pocketnet_iframe .video-js .vjs-play-progress {
-  transform-origin: left;
+.pocketnet_iframe .video-js button:hover {
+  color: #fff;
 }
-.pocketnet_iframe .video-js #vjs-forward-button,
-.pocketnet_iframe .video-js #vjs-rewind-button {
-  visibility: hidden;
-  opacity: 0;
-  transition: all 0.3s ease-in;
-}
-.pocketnet_iframe .video-js .vjs-has-started #vjs-forward-button,
-.pocketnet_iframe .video-js .vjs-has-started #vjs-rewind-button {
-  visibility: visible;
-  opacity: 1;
-  transition: all 0.3s ease-in;
-}
-.pocketnet_iframe .video-js .vjs-user-inactive.vjs-playing .vjs-big-play-button {
-  visibility: hidden !important;
-  opacity: 0;
-  transition: all 0.3s ease-in;
-}
-.pocketnet_iframe .video-js .vjs-user-inactive.vjs-playing #vjs-forward-button,
-.pocketnet_iframe .video-js .vjs-user-inactive.vjs-playing #vjs-rewind-button {
-  visibility: hidden;
-  opacity: 0;
-  transition: all 0.3s ease-in;
-}
-.pocketnet_iframe .video-js .vjs-user-active.vjs-playing .vjs-big-play-button {
-  visibility: visible !important;
-  opacity: 1;
-  transition: all 0.3s ease-in;
-}
-.pocketnet_iframe #lenta .shares .share .metatable > div.metapanel .metapanelitem {
+.pocketnet_iframe
+  #lenta
+  .shares
+  .share
+  .metatable
+  > div.metapanel
+  .metapanelitem {
   display: none;
 }
 .pocketnet_iframe #comments .list .metatable > div.panelWrapper .panel {
-  display: none!important;
+  display: none !important;
 }
 .pocketnet_iframe #comments .list .metatable > div {
   padding-top: 0.25em !important;
@@ -167,17 +187,23 @@
   display: block;
 }
 .pocketnet_iframe #lenta.openapi .loadmore {
-  display: none!important;
+  display: none !important;
 }
 .pocketnet_iframe #transactionview .workd {
   background: 0;
   padding: 0.5em;
 }
+.pocketnet_iframe #transactionview .usericon {
+  line-height: 22px;
+}
+.pocketnet_iframe #transactionview .usericon .letter {
+  font-size: 1em;
+}
 .pocketnet_iframe #lenta .shares .share .showMore {
   display: none;
 }
 .pocketnet_iframe .pocketnet_iframe #channel .channel {
-  background: transparent!important;
+  background: transparent !important;
 }
 .pocketnet_iframe .pocketnet_iframe #channel .emptychannel {
   padding: 2em;
@@ -232,7 +258,7 @@
   opacity: 0.5;
 }
 .pocketnet_iframe #lenta .shares .share {
-  background: transparent!important;
+  background: transparent !important;
 }
 .pocketnet_iframe #lenta .shares .share .shareSave i {
   display: none;
@@ -260,14 +286,27 @@
   max-width: 500px;
   margin: 0 auto;
 }
-.pocketnet_iframe #lenta .shares .share .images .imagesContainer.owlcar .imagesWrapper {
+.pocketnet_iframe
+  #lenta
+  .shares
+  .share
+  .images
+  .imagesContainer.owlcar
+  .imagesWrapper {
   height: 500px;
   float: none;
   width: 100%;
   background: transparent;
 }
-.pocketnet_iframe #lenta .shares .share .images .imagesContainer.owlcar .imagesWrapper .image {
-  background-size: contain!important;
+.pocketnet_iframe
+  #lenta
+  .shares
+  .share
+  .images
+  .imagesContainer.owlcar
+  .imagesWrapper
+  .image {
+  background-size: contain !important;
 }
 .pocketnet_iframe #lenta .shares .share .sharecnt .removeDescription {
   display: none;
@@ -279,7 +318,7 @@
 .pocketnet_iframe #lenta .shares .share .sharecnt.deleted .commentsWrapperHb,
 .pocketnet_iframe #lenta .shares .share .sharecnt.deleted .metapanel,
 .pocketnet_iframe #lenta .shares .share .sharecnt.deleted .sys {
-  display: none!important;
+  display: none !important;
 }
 .pocketnet_iframe #lenta .shares .share .sharecnt.deleted .removeDescription {
   display: block;
@@ -313,8 +352,14 @@
   width: 100%;
   background: transparent;
 }
-.pocketnet_iframe #post .share .images .imagesContainer.owlcar .imagesWrapper .image {
-  background-size: contain!important;
+.pocketnet_iframe
+  #post
+  .share
+  .images
+  .imagesContainer.owlcar
+  .imagesWrapper
+  .image {
+  background-size: contain !important;
 }
 .pocketnet_iframe .owl-dots {
   text-align: center;

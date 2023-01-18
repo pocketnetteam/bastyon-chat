@@ -1,20 +1,24 @@
 <template>
-  <div id="chatList" :class="{'bin' : pocketnet, 'bout' : !pocketnet, minimized, fix : pocketnet, active}">
-
+  <div
+    id="chatList"
+    :class="{
+      bin: pocketnet,
+      bout: !pocketnet,
+      minimized,
+      fix: pocketnet,
+      active,
+    }"
+  >
     <div class="work" ref="work">
-
- 
-
       <div class="timeLineWrapper" ref="events">
-        <events 
+        <events
           @updated="updatedSize"
           @scroll="scrollE"
           @removeEvent="removeEvent"
           @editingEvent="editingEvent"
           @replyEvent="replyEvent"
-          @galleryEventOpen="e => imageGallery(e)"
+          @galleryEventOpen="(e) => imageGallery(e)"
           @menuIsVisible="menuIsVisibleHandler"
-
           ref="eventslist"
           :error="error"
           :timeline="timeline"
@@ -23,11 +27,12 @@
           :loading="lloading"
           v-if="timeline"
           :scrollType="scrollType"
+          :selectedMessages="selectedMessages"
+          :isRemoveSelectedMessages="isRemoveSelectedMessages"
+          @messagesIsDeleted="messagesIsDeleted"
         />
       </div>
-
     </div>
-
   </div>
 </template>
 
@@ -36,24 +41,3 @@
 
 <!-- THEMES BEGIN -->
 <!-- THEMES END -->
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

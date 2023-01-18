@@ -1,44 +1,41 @@
-import _ from "underscore";
-
 export default {
   name: "listPhoneContacts",
 
   props: {
     phoneContacts: Array,
     showTitle: Boolean,
-    type: String
+    type: String,
   },
 
- 
-
   methods: {
-    invitePhoneContact : function(phoneContact){
-      this.$emit('invitePhoneContact', phoneContact);
-    }
+    invitePhoneContact: function (phoneContact) {
+      this.$emit("invitePhoneContact", phoneContact);
+    },
   },
 
   computed: {
-
-    contacts : function(){
+    contacts: function () {
       switch (this.type) {
-
-        case 'email':
+        case "email":
           return _.filter(this.phoneContacts, (phoneContact) => {
-            if(phoneContact.emails && phoneContact.emails.length >= 1) return true
+            if (phoneContact.emails && phoneContact.emails.length >= 1)
+              return true;
           });
           break;
 
-        case 'sms':
+        case "sms":
           return _.filter(this.phoneContacts, (phoneContact) => {
-            if(phoneContact.phoneNumbers && phoneContact.phoneNumbers.length >= 1) return true
+            if (
+              phoneContact.phoneNumbers &&
+              phoneContact.phoneNumbers.length >= 1
+            )
+              return true;
           });
           break;
 
         default:
           return this.phoneContacts;
-
       }
     },
-
   },
-}
+};

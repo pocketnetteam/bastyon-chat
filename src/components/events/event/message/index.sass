@@ -1,5 +1,4 @@
 
-
 .referenceTop
   margin-left: 0.5 * $r
   margin-right: 0.5 * $r
@@ -11,10 +10,42 @@
   &.my
     border-bottom-right-radius: 0
     border-bottom-left-radius: 10px
+    
+.actionsWrapper
+  opacity: 1
+  i.fa-check-circle
+    color: srgb(--color-txt-ac)
+    opacity: 1 !important
+
+  .mnwrapper
+    opacity: 0
+    +transition(0.3s)
+
+  .multiSelect
+    position: absolute
+    top: 50%
+    transform: translateY(-50%)
+    left: 0
+    padding: $r
+
+    width: 100%
+    height: 100%
+    display: flex
+    flex-direction: column
+    justify-content: center
+    &:hover
+      i
+        opacity: 1
+
+@media (pointer:fine)
+  .messageRow:hover
+    .actionsWrapper
+      .mnwrapper
+        opacity: 1
 
 .burn
   &.big
-    color : srgb(--color-bad)
+    color: srgb(--color-bad)
   &.medium
     opacity: 0.8
 
@@ -24,11 +55,11 @@
   overflow: hidden
 
   .abswrapper
-    position : absolute
-    left : 0
-    top : 0
-    bottom : 0
-    right : 0
+    position: absolute
+    left: 0
+    top: 0
+    bottom: 0
+    right: 0
     display: flex
     text-align: center
     align-items: center
@@ -42,11 +73,11 @@
   position: relative
 
   .abswrapper
-    position : absolute
-    left : 0
-    top : 0
-    bottom : 0
-    right : 0
+    position: absolute
+    left: 0
+    top: 0
+    bottom: 0
+    right: 0
     display: flex
     text-align: center
     align-items: center
@@ -57,8 +88,8 @@
 
 .statusWrapper
   padding: $r
-  margin-top : $r
-  border-top : $r solid srgb(--neutral-grad-0)
+  margin-top: $r
+  border-top: $r solid srgb(--neutral-grad-0)
   .my
     font-size: 0.7em
     opacity: 0.5
@@ -70,8 +101,11 @@
   padding-left: $r / 2
   min-height: 34px
 
+  &.aligncenter
+    align-items: center
+
   &.my
-    padding-left : 0
+    padding-left: 0
     padding-right: $r / 2
 
     .messageImg
@@ -89,48 +123,48 @@
       max-width: 87%
 
   &.allscreen
-    flex-wrap : wrap
+    flex-wrap: wrap
 
     /deep/
-      .userpic
-        position: relative
-        &::after
-          border-radius: 50%
-          content: ''
-          position: absolute
-          left : -5px
-          right : -5px
-          top : -5px
-          bottom : -5px
-          border : 5px solid srgb(--neutral-grad-0)
-          z-index: 1
-          +shadowSmaller()
+    .userpic
+      position: relative
+      &::after
+        border-radius: 50%
+        content: ''
+        position: absolute
+        left: -5px
+        right: -5px
+        top: -5px
+        bottom: -5px
+        border: 5px solid srgb(--neutral-grad-0)
+        z-index: 1
+        +shadowSmaller()
 
   .badenctyptedText
     .decryptagain
       font-size: 0.8em
 
   .metaMsg
-    width : 100%
+    width: 100%
 
   .badencrypted
     position: absolute
     background: srgb(--background-main)
-    left : 0
+    left: 0
     right: 0
-    top : 0
-    bottom : 0
-    padding : $r
-
+    top: 0
+    bottom: 0
+    padding: $r
 
   .encryptedDataIcon
     position: absolute
-    color : srgb(--text-on-bg-ac-color)
+    color: srgb(--text-on-bg-ac-color)
     opacity: 0.3
-    padding : 0.5 * $r $r
+    padding: 0.5 * $r $r
     +shadowText()
-    left : 0
-    top : 0
+    left: 0
+    top: 0
+    z-index: 1
 
     i
       font-size: 0.7em
@@ -139,17 +173,20 @@
     position: relative
 
     .encryptedDataIcon
-      color : srgb(--neutral-grad-2)
-      text-shadow: none 
+      color: srgb(--neutral-grad-2)
+      text-shadow: none
       right: 0
-      left : auto
+      left: auto
+
   .messageAudio
-    width: 100%
+    margin-left: $r
+    height: 50px
+
   .messageImg
     width: 85%
     position: relative
-    margin-top : 0.25 * $r
-    
+    margin-top: 0.25 * $r
+
     .img
       display: block
       border-radius: .5em
@@ -188,7 +225,7 @@
 
       .showImage
         display: flex
-      
+
       img
         max-width: 100%
         object-fit: cover
@@ -201,7 +238,7 @@
         background: srgb(--neutral-grad-0)
 
     .metaLink
-  
+
       background: black
       .metaMessageLink
         .metaTitle
@@ -219,22 +256,21 @@
             width: 100%
             height: 100%
 
-
   .filePreview
-    width : 90%
-    border : 1px solid srgb(--neutral-grad-1)
+    width: 90%
+    border: 1px solid srgb(--neutral-grad-1)
     overflow: hidden
     border-radius: 10px
     position: relative
-    margin-top : $r
+    margin-top: $r
     height: 100px
 
     .table
       height: 100%
 
   .linkPreview
-    width : 100%
-    
+    width: 100%
+
   .messagePreview
     width: 100%
     overflow: hidden
@@ -246,30 +282,32 @@
 
   .fromimagesfiles
     order: 5
-    
+
     padding: $r $r / 2
 
-    padding-right : $r
-    .fromCaption
-      font-size: 0.8em
+    padding-right: $r
 
   .actionsWrapper
     order: 4
-    padding-left : $r
+    padding-left: $r
     padding-right: 2.5 * $r
     cursor: pointer
     text-align: right
     margin-left: auto
-    
+    display: flex
+    align-items: center
     i
-      font-size: 0.7em
       opacity: 0.3
+      transition: .4s
+    i.fa-ellipsis-h
+      font-size: 0.7em
+    i:hover
+      opacity: 1
+      transition: .4s
 
-    &:hover
-      i
-        opacity: 1
 
   
+
   .statusWrapper
     order: 5
     padding: $r $r / 2
@@ -285,7 +323,6 @@
     overflow: hidden
     font-size: 0.7em
     span
-      
 
   .timeWrapper
     text-align: left
@@ -303,10 +340,10 @@
     cursor: pointer
 
   &.referenceshowed
- 
+
     .messageText
       background: srgba(--neutral-grad-1, 0.8)!important
-      color : srgb(--color-txt-gray)!important
+      color: srgb(--color-txt-gray)!important
 
     .reference
       padding-bottom: 0!important
@@ -315,13 +352,12 @@
       button
         width: 100%
 
-
   .messageText
     margin-left: 0.5 * $r
     background: srgba(--neutral-grad-1, 0.8)
     color: srgb(--text-color)
     padding: $r 1.5 * $r
-    padding-top : $r
+    padding-top: $r
     border-radius: 2 * $r
     border-bottom-left-radius: 0
     font-weight: 400
@@ -339,10 +375,10 @@
     .from,
     .reference
       opacity: 0.8
-      border-bottom : 1px solid srgb(--text-on-bg-ac-color)
-      padding : $r 0
-      padding-top : 0
-      margin-bottom : $r
+      border-bottom: 1px solid srgb(--text-on-bg-ac-color)
+      padding: $r 0
+      padding-top: 0
+      margin-bottom: $r
       display: flex
 
       .event
@@ -350,7 +386,7 @@
         text-align: left
 
       i
-        width : 30px
+        width: 30px
         text-align: center
         font-size: 0.8em
 
@@ -371,7 +407,6 @@
           .previewMessage
             white-space: nowrap
 
-
     .edited
       font-size: 0.7em
       opacity: 0.5
@@ -380,7 +415,6 @@
     div
       overflow: hidden
       text-overflow: ellipsis
-
 
   .badenctyptedText
     margin-left: $r
@@ -402,10 +436,10 @@
     position: relative
     .sendername
       position: absolute
-      top : 100%
-      margin-top : -5px
+      top: 100%
+      margin-top: -5px
       left: 20px
-      color : srgb(--neutral-grad-3)
+      color: srgb(--neutral-grad-3)
       span
         font-size: 0.7em
 
@@ -415,7 +449,7 @@
 
     .iconWrapper
       margin-left: $r
-      order : 1
+      order: 1
       align-self: flex-start
 
     .fromimagesfiles
@@ -424,9 +458,10 @@
       text-align: left
       margin-right: auto
       margin-left: 0
-      padding-left : 1.5 * $r
-      padding-right : 0.5 *$r
+      padding-left: 1.5 * $r
+      padding-right: 0.5 *$r
       order: -4
+
     .statusWrapper
       order: -3
 
@@ -436,15 +471,21 @@
 
     .messageText
       background: srgb(--color-bg-ac-bright)
-      color : srgb(--text-on-bg-ac-color)
+      color: srgb(--text-on-bg-ac-color)
       text-align: right
       border-radius: 2 * $r
       border-bottom-left-radius: 2 * $r
       border-top-right-radius: 0
-      
+
+    .messageAudio
+      margin-left: 0
+      /deep/
+      .voiceMessage
+        justify-content: flex-end
+
   &.urlpreview
     background: srgb(--background-total-theme)
-    padding : $r
+    padding: $r
     padding-left: 0.5 * $r
     padding-bottom: 2 * $r
 
@@ -466,8 +507,6 @@
       .metaMsg,
       .messageImg
         order: 6
-      .messageAudio
-        order: 6
 
   &.not-preview
     align-items: center
@@ -478,3 +517,9 @@
 
     .messageNoticeWithLink
       color: $color-text-second
+.eventWrapper
+  .fromCaption
+    padding: 5px 0 0 15px
+.fromCaption
+  font-size: 0.7em
+  color: grey
