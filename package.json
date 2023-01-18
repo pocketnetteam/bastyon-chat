@@ -6,11 +6,11 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build --dest C:/inetpub/wwwroot/pocketnet/chat",
     "build_mac": "vue-cli-service build --dest ~/work/pocketnet/chat",
-    "lint": "vue-cli-service lint",
     "buildpocketnet": "npm run build -- --target wc-async --inline-vue --name matrix-element src/App.vue",
     "buildpocketnet_mac": "npm run build_mac -- --target wc-async --inline-vue --name matrix-element src/App.vue",
     "buildpocketnetdev": "npm run build -- --target wc-async --inline-vue --watch --name matrix-element src/App.vue",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "lint-check": "yarn prettier --check './src/**/*.{js,vue}'"
   },
   "dependencies": {
     "another-json": "^0.2.0",
@@ -98,6 +98,6 @@
     "not dead"
   ],
   "lint-staged": {
-    "**/*": "prettier --write --ignore-unknown"
+    "**/*.{js,vue,sass}": "prettier --write --ignore-unknown"
   }
 }
