@@ -6,8 +6,8 @@
     "serve": "vue-cli-service serve",
     "build": "node themes.js && vue-cli-service build --dest C:/inetpub/wwwroot/pocketnet/chat",
     "build_mac": "node themes.js && vue-cli-service build --dest ~/work/pocketnet/chat",
-    "lint": "vue-cli-service lint",
-    "lint:fix": "eslint --fix 'src/**/*.{js,vue}'",
+    "prepare": "husky install",
+    "lint-check": "yarn prettier --check './src/**/*.{js,vue}'",
     "themes": "node themes.js",
     "buildpocketnet": "npm run build -- --target wc-async --inline-vue --name matrix-element src/App.vue",
     "buildpocketnet_mac": "npm run build_mac -- --target wc-async --inline-vue --name matrix-element src/App.vue",
@@ -107,5 +107,9 @@
     "> 1%",
     "last 2 versions",
     "not dead"
-  ]
+  ],
+  "lint-staged": {
+    "**/*.{js,vue}": "prettier --write --ignore-unknown",
+    "*.{js,css,md}": "prettier --write"
+  }
 }
