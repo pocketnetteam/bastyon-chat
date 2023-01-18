@@ -11,9 +11,6 @@
     "buildpocketnet_mac": "npm run build_mac -- --target wc-async --inline-vue --name matrix-element src/App.vue",
     "buildpocketnetdev": "npm run build -- --target wc-async --inline-vue --watch --name matrix-element src/App.vue",
     "prepare": "husky install",
-    "lint-staged": {
-      "**/*.{js,vue}": "prettier --write --ignore-unknown"
-    },
     "lint-check": "yarn prettier --check './src/**/*.{js,vue}'"
   },
   "dependencies": {
@@ -102,7 +99,7 @@
     "not dead"
   ],
   "lint-staged": {
-    "**/*": "prettier --write --ignore-unknown",
+    "**/*.{js,vue}": "prettier --write --ignore-unknown",
     "*.{js,css,md}": "prettier --write"
   }
 }
