@@ -10,7 +10,8 @@
     "buildpocketnet_mac": "npm run build_mac -- --target wc-async --inline-vue --name matrix-element src/App.vue",
     "buildpocketnetdev": "npm run build -- --target wc-async --inline-vue --watch --name matrix-element src/App.vue",
     "prepare": "husky install",
-    "lint-check": "yarn prettier --check './src/**/*.{js,vue}'"
+    "lint-check": "yarn prettier --check './src/**/*.{js,vue}'",
+    "lint-fix": "yarn prettier --write src/*/*"
   },
   "dependencies": {
     "another-json": "^0.2.0",
