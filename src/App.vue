@@ -593,7 +593,7 @@ export default {
   },
 
   created() {
-    //this.pocketnet = true
+    //this.pocketnet = false
     //this.mobile = !this.pocketnet
     //this.recording = true
     //this.iscallsenabled = true

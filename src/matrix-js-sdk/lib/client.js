@@ -3260,12 +3260,22 @@ MatrixClient.prototype.sendImageMessage = function (roomId, url, info, text, cal
     text = "Image";
   }
 
+  var relation = info["m.relates_to"]
+
+  delete info["m.relates_to"]
+
   const content = {
     msgtype: "m.image",
     url: url,
     info: info,
     body: text
   };
+
+  if(relation){
+    content["m.relates_to"] = relation
+  }
+
+
   return this.sendMessage(roomId, content, callback);
 };
 /**
@@ -3289,12 +3299,27 @@ MatrixClient.prototype.sendAudioMessage = function (roomId, url, info, text, cal
     text = "Audio";
   }
 
+  
+
+  var relation = info["m.relates_to"]
+
+  delete info["m.relates_to"]
+
+
   const content = {
     msgtype: "m.audio",
     url: url,
     info: info,
     body: text
   };
+
+  
+
+  if(relation){
+    content["m.relates_to"] = relation
+  }
+
+
   return this.sendMessage(roomId, content, callback);
 };
 /**

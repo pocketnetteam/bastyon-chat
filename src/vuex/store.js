@@ -37,7 +37,7 @@ var store = new Vuex.Store({
 		loading: false,
 		online: true,
 		unauthorized: false,
-		theme: 'white',
+		theme: 'black',
 		themes: themes,
 		signedUpUsers: [],
 		pocketnet: '',
@@ -301,7 +301,7 @@ var store = new Vuex.Store({
 		},
 
 		init(state) {
-			mex.theme(state, localStorage.getItem('theme') || 'white')
+			mex.theme(state, localStorage.getItem('theme') || 'black')
 
 
 
