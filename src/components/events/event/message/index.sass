@@ -180,7 +180,7 @@
 
   .messageAudio
     margin-left: $r
-    height: 50px
+    
 
   .messageImg
     width: 85%
@@ -352,6 +352,44 @@
       button
         width: 100%
 
+  .reference
+    height: 32px
+
+  .from,
+  .reference
+    opacity: 0.8
+    border-bottom: 1px solid srgb(--text-on-bg-ac-color)
+    padding: $r 0
+    padding-top: 0
+    margin-bottom: $r
+    display: flex
+
+    .event
+      max-height: 38px
+      text-align: left
+
+    i
+      width: 30px
+      text-align: center
+      font-size: 0.8em
+
+    .referenceCaption
+      min-width: 28px
+
+    .fromCaption,
+    .referenceCaption
+      font-size: 0.8em
+
+    .sendername
+      white-space: nowrap
+
+    /deep/
+      .messagePreview
+        font-size: 0.9em
+        height: 22px
+        .previewMessage
+          white-space: nowrap
+
   .messageText
     margin-left: 0.5 * $r
     background: srgba(--neutral-grad-1, 0.8)
@@ -371,43 +409,7 @@
       text-align: left
       white-space: pre-wrap
 
-    .reference
-      height: 32px
-
-    .from,
-    .reference
-      opacity: 0.8
-      border-bottom: 1px solid srgb(--text-on-bg-ac-color)
-      padding: $r 0
-      padding-top: 0
-      margin-bottom: $r
-      display: flex
-
-      .event
-        max-height: 38px
-        text-align: left
-
-      i
-        width: 30px
-        text-align: center
-        font-size: 0.8em
-
-      .referenceCaption
-        min-width: 28px
-
-      .fromCaption,
-      .referenceCaption
-        font-size: 0.8em
-
-      .sendername
-        white-space: nowrap
-
-      /deep/
-        .messagePreview
-          font-size: 0.9em
-          height: 22px
-          .previewMessage
-            white-space: nowrap
+    
 
     .edited
       font-size: 0.7em

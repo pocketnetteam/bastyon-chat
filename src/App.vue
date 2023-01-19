@@ -332,6 +332,10 @@ export default {
       type: String,
       default: "",
     },
+    iscallsenabled: {
+      type: String,
+      default: "",
+    },
 
     iscallsenabled: {
       type: String,
@@ -468,6 +472,8 @@ export default {
           this.$router.push("/chats").catch((e) => {});
         }
       }, 500);
+
+      this.clearMatches();
     },
 
     iteraction: function () {
@@ -560,6 +566,40 @@ export default {
           }*/
       ]);
     },
+
+    isChatEncryptedState(state) {
+      this.isChatEncrypted.value = state;
+    },
+
+    prependMatch(item) {
+      this.matches.all = [item].concat(this.matches.all);
+    },
+
+    appendMatch(item) {
+      this.matches.all.push(item);
+    },
+
+    clearMatches() {
+      this.matches.value = "";
+      this.matches.current = 0;
+      this.matches.all.length = 0;
+    },
+
+    search(text) {
+      this.matches.value = text.toLowerCase();
+    },
+
+    markText: function (text, highlight) {
+      return this.matches.value && text.includes(this.matches.value)
+        ? text.replace(new RegExp(`(${this.matches.value})`, "gi"), (match) => {
+            const str = `<mark class="match${
+              highlight ? " current" : ""
+            }">${match}</mark>`;
+            highlight = null;
+            return str;
+          })
+        : null;
+    },
   },
 
   beforeCreate() {
@@ -567,10 +607,10 @@ export default {
   },
 
   created() {
-    // this.pocketnet = true
-    // this.mobile = !this.pocketnet
-    // this.recording = true
-    // this.iscallsenabled = true
+    //this.pocketnet = false
+    //this.mobile = !this.pocketnet
+    //this.recording = true
+    //this.iscallsenabled = true
 
     this.$store.commit("setCallsEnabled", this.iscallsenabled);
     this.$store.commit("setPocketnet", this.pocketnet);

@@ -6,28 +6,36 @@
     display: flex
     justify-content: stretch
     overflow: hidden
-    background: #fff
-    border-radius: 12px
+    background: srgb(--background-secondary-theme)
+    border-radius: 32px
     color : srgb(--neutral-grad-2)
     align-items: center
 
     .inputWrapper
         flex: 1
+        margin-left: 0.5 * $r
 
         input
-            color: #000
-            padding : 1.5 * $r 0
+            color: srgb(--text-color)
+            padding : 0
+            height: 44px
             width : 100%
             font-size: 0.9em
 
         & + .iconWrapper i
-            color: #555770
+            color: srgb(--neutral-grad-4)
 
     .iconWrapper
         display: flex
         align-items: center
         justify-content: center
         text-align: center
+        margin-left: $r
+
+        &.right
+            margin-left: 0
+            margin-right: $r
+
 
         i
             font-size: 0.8em
@@ -38,12 +46,12 @@
     .iconWrapper
         .fa-angle-left
             font-size: 1em
-            color: #00A4FF
+            color: srgb(--color-txt-ac)
             text-indent: -.5px
             transition: color .3s
 
             &:hover
-                color: rgb(85,87,112)
+                color: srgb(--neutral-grad-3)
 
 #search
     padding: 0 1em
@@ -106,7 +114,7 @@
 
 .iconWrapper
     i
-        color: #323232
+        color: srgb(--neutral-grad-4)
         cursor: pointer
 
 .matches
@@ -120,14 +128,14 @@
             user-select: none
 
     i
-        color: #555770
-        background: #F0F2F5
+        color: srgb(--neutral-grad-4)
+        background: srgb(--background-secondary-theme)
         border-radius: 6px
         margin: 0 0 0 8px
         padding: 8px
 
     .current-match
-        color: #8E90A6
+        color: srgb(--neutral-grad-4)
 
     .prev-match,
     .next-match

@@ -5,41 +5,45 @@
 		cursor: not-allowed
 
 .nameWrapper
-  display: flex
-  align-items: center
-  justify-content: center
+	display: flex
+	align-items: center
+	justify-content: center
 .roomMuted
-    margin-left: 3px
-    i
-      font-size: 0.7em
+	margin-left: 3px
+
+	i
+		font-size: 0.7em
 .editButton
-  display: flex
-  justify-content: center
-  align-items: center
+	display: flex
+	justify-content: center
+	align-items: center
 
-  i
-    font-size: 1.5em
+	i
+		font-size: 1.5em
 
 .nameline
-  overflow: hidden
-  white-space: nowrap
-  text-overflow: ellipsis
+	overflow: hidden
+	white-space: nowrap
+	text-overflow: ellipsis
 
 /deep/
-.nameline
-  max-width: 250px
-  overflow: hidden
-  white-space: nowrap
-  text-overflow: ellipsis
+	.nameline
+		max-width: 250px
+		overflow: hidden
+		white-space: nowrap
+		text-overflow: ellipsis
 
 /deep/
-#topheader
-  &.minimized
-    &.fix
-      background: transparent
-      overflow: inherit
+	#topheader
+		&.minimized
+			&.fix
+				background: transparent
+				overflow: inherit
 
-
+/deep/
+	#search
+		padding-left: 0.5 * $r
+		padding-right: 0.5 * $r
 
 .donationModalBody
 	padding: 1em
@@ -84,8 +88,8 @@
 
 .encrypted
 	z-index: 2
-	color : srgb(--color-good)
-	padding : $r / 2 $r
+	color: srgb(--color-good)
+	padding: $r / 2 $r
 
 	i
 		font-size: 0.8em
@@ -104,7 +108,7 @@
 	flex-direction: column
 	#slide
 		border-radius: 8px
-		padding : 0 $r
+		padding: 0 $r
 		position: absolute
 		left: 0
 		background: $color-bg-clear
@@ -116,7 +120,7 @@
 
 	@-webkit-keyframes slide
 		100%
-			left: 0px
+		left: 0px
 	@keyframes slide
 		100%
 			left: 0px
@@ -134,7 +138,7 @@
 		flex-direction: column
 		align-items: center
 		justify-content: center
-		padding : $r / 2 $r / 2
+		padding: $r / 2 $r / 2
 		text-align: center
 		span
 			color: srgb(--color-good)
