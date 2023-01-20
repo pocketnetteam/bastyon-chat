@@ -1,5 +1,5 @@
 <template>
-  <div id="search" :class="{'bin' : pocketnet, 'bout' : !pocketnet, minimized, fix : pocketnet, active, collapsed}">
+  <div id="search" :class="{'bin' : pocketnet, 'bout' : !pocketnet, minimized, fix : pocketnet, active, collapsed, expanded : !collapsed}">
 
       <div class="searchWrapper">
         <div class="iconWrapper">

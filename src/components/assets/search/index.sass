@@ -30,16 +30,11 @@
         align-items: center
         justify-content: center
         text-align: center
-        margin-left: $r
-
-        &.right
-            margin-left: 0
-            margin-right: $r
+        
 
 
         i
             font-size: 0.8em
-            padding: 8px
             width: 100%
 
 .searchWrapper
@@ -47,7 +42,6 @@
         .fa-angle-left
             font-size: 1em
             color: srgb(--color-txt-ac)
-            text-indent: -.5px
             transition: color .3s
 
             &:hover
@@ -55,10 +49,6 @@
 
 #search
     padding: 0 1em
-    position: absolute
-    top: 50%
-    right: 0
-    transform: translateY(-50%)
     width: 100%
 
     &.minimized
@@ -85,11 +75,7 @@
                         font-size: 0.8em
 
     &.collapsed
-        display: unset
         padding: 0
-        right: auto
-        max-width: unset
-        width: auto
 
         .searchWrapper
             background: none
@@ -105,6 +91,17 @@
 
             .iconWrapper
                 width: auto
+
+    &.expanded
+        position: absolute
+        left: 0
+        bottom : 0
+        right: 0
+        padding-bottom: $r
+
+        .searchWrapper
+            .iconWrapper
+                min-width: 44px
 
 .searchWrapperEA #search
     display: block
@@ -130,9 +127,6 @@
     i
         color: srgb(--neutral-grad-4)
         background: srgb(--background-secondary-theme)
-        border-radius: 6px
-        margin: 0 0 0 8px
-        padding: 8px
 
     .current-match
         color: srgb(--neutral-grad-4)
