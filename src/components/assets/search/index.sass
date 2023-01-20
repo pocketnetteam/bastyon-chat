@@ -119,6 +119,7 @@
 
 .matches
     font-size: .8em
+    margin-right: 2 * $r
 
     -webkit-touch-callout: none
     -webkit-user-select: none
@@ -126,6 +127,12 @@
        -moz-user-select: none
         -ms-user-select: none
             user-select: none
+    
+    display: flex
+    align-items: center
+
+    i,span
+        padding: 0.5 * $r 
 
     i
         color: srgb(--neutral-grad-4)
