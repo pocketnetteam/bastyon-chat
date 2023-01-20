@@ -729,15 +729,12 @@ class MTRX {
   }
 
   sendImage(chat, base64, file, meta, { relation, from } = {}) {
-    if (!file)
-      return this.sendImageBase64(chat, base64, meta, { relation, from });
+    if (!file) return this.sendImageBase64(chat, base64, meta);
 
     var i = new images();
     var info = {};
 
     if (!meta) meta = {};
-
-    console.log("relation, from", relation, from);
 
     return i
       .wh(base64)
@@ -764,20 +761,12 @@ class MTRX {
       .then((image) => {
         if (meta.aborted) return Promise.reject("aborted");
 
-        if (relation) {
-          info["m.relates_to"] = {
-            rel_type: relation.type,
-            event_id: this.clearEventId(relation.event),
-          };
-        }
-
         return this.client.sendImageMessage(chat.roomId, image, info, "Image");
       });
   }
 
   sendAudio(chat, base64, file, meta, { relation, from } = {}) {
-    if (!file)
-      return this.sendAudioBase64(chat, base64, meta, { relation, from });
+    if (!file) return this.sendAudioBase64(chat, base64, meta);
 
     let info = {};
 
@@ -802,13 +791,6 @@ class MTRX {
       })
       .then((audio) => {
         if (meta.aborted) return Promise.reject("aborted");
-
-        if (relation) {
-          info["m.relates_to"] = {
-            rel_type: relation.type,
-            event_id: this.clearEventId(relation.event),
-          };
-        }
 
         return this.client.sendAudioMessage(chat.roomId, audio, info, "Audio");
       });

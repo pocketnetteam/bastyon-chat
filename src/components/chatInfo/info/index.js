@@ -165,12 +165,21 @@ export default {
       var pushRules = this.core.mtrx.client._pushProcessor.getPushRuleById(
         this.chat.roomId
       );
-      var res = this.m_chat.currentState.getStateEvents("m.room.calls");
-
+      var isEnabled = this.m_chat.currentState.getStateEvents(
+        "m.room.callsEnabled"
+      );
+      console.log(this.core.user.userinfo);
       if (pushRules !== null) {
         this.roomMuted = true;
       }
-      if (!res[res.length - 1]?.event?.content?.enabled) {
+      if (
+        isEnabled.find(
+          (e) =>
+            (!this.core.mtrx.me(e?.event?.sender))?.event?.content?.enabled &&
+            e?.event?.sender.split(":")[0].replace("@", "") ===
+              e?.event?.state_key
+        )
+      ) {
         this.roomCallsDisabled = true;
       }
       return this.m_chat.timeline || {};
@@ -317,7 +326,7 @@ export default {
         roomId,
         "m.room.callsEnabled",
         { enabled: !self.roomCallsDisabled },
-        undefined
+        this.core.user.userinfo.id
       );
     },
     muteRoom() {

@@ -197,6 +197,7 @@ export default {
       if (["m.call.candidates"].indexOf(t) > -1) return "message";
       if (["m.call.hangup"].indexOf(t) > -1) return "message";
       if (["m.call.invite"].indexOf(t) > -1) return "message";
+      if (["m.room.request_calls_access"].indexOf(t) > -1) return "message";
       if (["m.call.reject"].indexOf(t) > -1) return "message";
       if (["m.call.answer"].indexOf(t) > -1) return "message";
       if (["m.room.topic"].indexOf(t) > -1) {
@@ -327,8 +328,7 @@ export default {
         var ts = this.timeline._timelineSet;
         var e = this.event;
 
-        console.log("e.event.content", e.event.content);
-
+        console.log("e.event.content", e.event.type);
         if (
           !this.reference &&
           e.event.content["m.relates_to"] &&

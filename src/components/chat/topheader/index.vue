@@ -38,7 +38,13 @@
         <div
           v-if="isCallsActive && !isGroup"
           class="call btn iconbutton"
-          :class="!checkCallsEnabled ? 'disabled' : ''"
+          :class="
+            checkCallsEnabled() === 'wait' || wait
+              ? 'wait'
+              : checkCallsEnabled()
+              ? ''
+              : 'disabled'
+          "
           @click="bcCall"
         >
           <i class="fas fa-video"></i>
