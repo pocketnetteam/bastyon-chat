@@ -117,6 +117,7 @@ export default {
         },
       ],
 
+      wait: false,
       loading: false,
       typing: false,
       userinfo: null,
@@ -211,17 +212,51 @@ export default {
         ? this.donationAmount
         : this.donationAmount + this.calculatedFees;
     },
-
-    checkCallsEnabled: function () {
-      let res = this.m_chat.currentState.getStateEvents("m.room.callsEnabled");
-      return res.find((e) => !this.core.mtrx.me(e.sender.userId)).event?.content
-        ?.enabled;
-    },
   }),
   methods: {
+    checkCallsEnabled: function () {
+      let isEnabled = this.m_chat.currentState.getStateEvents(
+        "m.room.callsEnabled"
+      );
+      let hasAccess = this.m_chat.currentState.getStateEvents(
+        "m.room.request_calls_access"
+      );
+
+      if (
+        isEnabled.find(
+          (e) =>
+            !this.core.mtrx.me(e?.event?.sender) &&
+            e?.event?.sender.split(":")[0].replace("@", "") ===
+              e?.event?.state_key
+        )?.event?.content?.enabled
+      ) {
+        console.log("enabled");
+        this.wait = false;
+        return true;
+      }
+      if (
+        hasAccess.find((e) => this.core.mtrx.me(e?.event?.sender))?.event &&
+        hasAccess.find((e) => this.core.mtrx.me(e?.event?.sender))?.event
+          ?.content?.accepted === undefined
+      ) {
+        console.log("wait");
+        return "wait";
+      } else {
+        console.log("nonono");
+        return false;
+      }
+    },
     bcCall: function () {
-      if (!this.checkCallsEnabled) {
+      if (!this.checkCallsEnabled() || this.checkCallsEnabled() === "wait") {
+        this.core.mtrx.client.sendStateEvent(
+          this.chat.roomId,
+          "m.room.callsEnabled",
+          { enabled: true },
+          true
+        );
+        this.wait = true;
         this.requestCallsAccess();
+
         return;
       }
       let local = document.querySelector("body");

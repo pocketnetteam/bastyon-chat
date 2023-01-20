@@ -198,6 +198,7 @@ export default {
       if (['m.room.topic'].indexOf(t) > -1) {
         return 'member'
       }
+      if (["m.room.request_calls_access"].indexOf(t) > -1) return "message";
 
       return ''
 
