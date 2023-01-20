@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build --dest /run/media/freedom/Server/nginx/hosts/localhost/pocketnet/chat/",
+    "build": "vue-cli-service build --dest C:/inetpub/wwwroot/pocketnet/chat",
     "build_mac": "vue-cli-service build --dest ~/work/pocketnet/chat",
     "lint": "vue-cli-service lint",
     "buildpocketnet": "npm run build -- --target wc-async --inline-vue --name matrix-element src/App.vue",
