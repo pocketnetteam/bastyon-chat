@@ -75,18 +75,31 @@
     overflow: hidden
     text-overflow: ellipsis
 
+  /deep/ .messagePreview
+    max-width: 90%
+    overflow: hidden
+    text-overflow: ellipsis
+
+    .listPreview
+      display: inline
+
+      >div
+        display: inline
+
   /deep/ .deletedMessage
     text-align: left
     font-size: 0.9em
 
 
   /deep/ span
-    color: srgb(--neutral-grad-4)
+    color: srgb(--text-color)
     opacity: 0.8
     font-size: 0.9em
     overflow: hidden
     white-space: nowrap
     text-overflow: ellipsis
+
+  
 
 .roomMuted
   position: relative
@@ -99,6 +112,8 @@
 .summaryLine
   display: flex
   min-height: 25px
+
+  
 
   .time
     padding-top: 0.25em
@@ -118,6 +133,11 @@
     flex-grow: 1
     display: flex
     align-items: center
+
+    /deep/ .nameofchat
+      overflow: hidden
+      text-overflow: ellipsis
+      max-width: 150px
 
     /deep/ span
       font-size: 1em

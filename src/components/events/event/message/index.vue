@@ -27,7 +27,7 @@
         </span>
       </div>
 
-      <div class="actionsWrapper" v-if="content.msgtype !== 'm.file' && !content.call_id">
+      <div class="actionsWrapper" v-if="!content.call_id">
         <div v-if="multiSelect" class="multiSelect" @click="eventMessage(selectedMessage)">
           <i v-if="selectedMessage" class="far fa-check-circle"></i>
           <i v-else class="far fa-circle"></i>
@@ -42,6 +42,22 @@
       </div>
 
       <div class="messageImg" v-if="content.msgtype === 'm.image'">
+
+        <div class="reference showreference" @click="showreference" v-if="reference && !preview && !fromreference">
+
+          <eventsEvent
+            v-if="!referenceshowed"
+            :event="reference"
+            :chat="chat"
+            :preview="true"
+          />
+
+          <div class="referenceCaption">
+            <span v-if="!referenceshowed"><i class="fas fa-share"></i></span>
+            <button class="button ghost small" v-else>Hide</button>
+          </div>
+
+        </div>
 
         <div class="" v-if="imageUrl">
 
@@ -65,6 +81,23 @@
         </div>
       </div>
       <div class="messageAudio" v-if="content.msgtype === 'm.audio'">
+
+        <div class="reference showreference" @click="showreference" v-if="reference && !preview && !fromreference">
+
+          <eventsEvent
+            v-if="!referenceshowed"
+            :event="reference"
+            :chat="chat"
+            :preview="true"
+          />
+
+          <div class="referenceCaption">
+            <span v-if="!referenceshowed"><i class="fas fa-share"></i></span>
+            <button class="button ghost small" v-else>Hide</button>
+          </div>
+
+        </div>
+
         <VoiceMessage v-if="audioUrl" :audioBuffer="audioUrl" :decryptedInfo="decryptedInfo" :id="event._localTimestamp || Date.now()"/>
       </div>
 
@@ -122,12 +155,16 @@
       </div>
 
       <div class="filePreview" v-if="file">
+
+        
         <fileMessage :encryptedData="encryptedData" :file="file" :downloaded="downloaded" @download="download"/>
         <div class="encryptedDataIcon" v-if="encryptedData"><i class="fas fa-lock"></i></div>
 
         <div class="badencrypted" v-if="error">
           <span>{{ $t("caption.unabletoDecrypt") }}</span>
         </div>
+
+        
       </div>
 
       <div class="linkPreview" v-if="urlpreview">

@@ -6,51 +6,49 @@
     display: flex
     justify-content: stretch
     overflow: hidden
-    background: #fff
-    border-radius: 12px
+    background: srgb(--background-secondary-theme)
+    border-radius: 32px
     color : srgb(--neutral-grad-2)
     align-items: center
 
     .inputWrapper
         flex: 1
+        margin-left: 0.5 * $r
 
         input
-            color: #000
-            padding : 1.5 * $r 0
+            color: srgb(--text-color)
+            padding : 0
+            height: 44px
             width : 100%
             font-size: 0.9em
 
         & + .iconWrapper i
-            color: #555770
+            color: srgb(--neutral-grad-4)
 
     .iconWrapper
         display: flex
         align-items: center
         justify-content: center
         text-align: center
+        
+
 
         i
             font-size: 0.8em
-            padding: 8px
             width: 100%
 
 .searchWrapper
     .iconWrapper
         .fa-angle-left
             font-size: 1em
-            color: #00A4FF
-            text-indent: -.5px
+            color: srgb(--color-txt-ac)
             transition: color .3s
 
             &:hover
-                color: rgb(85,87,112)
+                color: srgb(--neutral-grad-3)
 
 #search
     padding: 0 1em
-    position: absolute
-    top: 50%
-    right: 0
-    transform: translateY(-50%)
     width: 100%
 
     &.minimized
@@ -77,11 +75,7 @@
                         font-size: 0.8em
 
     &.collapsed
-        display: unset
         padding: 0
-        right: auto
-        max-width: unset
-        width: auto
 
         .searchWrapper
             background: none
@@ -98,6 +92,20 @@
             .iconWrapper
                 width: auto
 
+    &.expanded
+        position: absolute
+        left: 0
+        bottom : 0
+        right: 0
+        padding-bottom: $r
+
+        &.bin
+           padding-bottom: 0.5 * $r 
+
+        .searchWrapper
+            .iconWrapper
+                min-width: 44px
+
 .searchWrapperEA #search
     display: block
     padding: 0 $r / 2
@@ -106,7 +114,7 @@
 
 .iconWrapper
     i
-        color: #323232
+        color: srgb(--neutral-grad-4)
         cursor: pointer
 
 .matches
@@ -120,14 +128,11 @@
             user-select: none
 
     i
-        color: #555770
-        background: #F0F2F5
-        border-radius: 6px
-        margin: 0 0 0 8px
-        padding: 8px
+        color: srgb(--neutral-grad-4)
+        background: srgb(--background-secondary-theme)
 
     .current-match
-        color: #8E90A6
+        color: srgb(--neutral-grad-4)
 
     .prev-match,
     .next-match

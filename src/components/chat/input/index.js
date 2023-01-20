@@ -98,7 +98,6 @@ export default {
 			var menuItems = []
 
 
-			if (!this.relationEvent) {
 
 				if (window.POCKETNETINSTANCE && window.POCKETNETINSTANCE.mobile.supportimagegallery()) {
 					menuItems.push({
@@ -145,7 +144,6 @@ export default {
 						}
 					},
 				})
-			}
 
 
 			if (this.transaction && !this.pkoindisabled) {
@@ -691,6 +689,8 @@ export default {
 
 			}).then(r => {
 
+				this.$emit('clearRelationEvent')
+
 				this.$emit("sentData", {
 					id: id
 				})
@@ -698,6 +698,8 @@ export default {
 				return Promise.resolve()
 
 			}).catch(e => {
+
+				console.error(e)
 
 				this.$emit('sentError', {
 					id: id,
@@ -772,6 +774,8 @@ export default {
 				return this.core.mtrx.sendFile(this.chat, file, meta, { relation: this.relationEvent }, notenc)
 
 			}).then(() => {
+
+				this.$emit('clearRelationEvent')
 
 				this.$emit("sentData", {
 					id: id
@@ -1423,6 +1427,10 @@ export default {
 				return this.chat
 			}).then(() => {
 				return this.core.mtrx.sendAudio(this.chat, base64, null, meta, { relation: this.relationEvent })
+			}).then(() => {
+				this.$emit('clearRelationEvent')
+
+
 			}).catch(e => {
 				this.$emit('sentError', {
 					id: id,

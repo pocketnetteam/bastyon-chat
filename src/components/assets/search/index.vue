@@ -1,5 +1,5 @@
 <template>
-  <div id="search" :class="{'bin' : pocketnet, 'bout' : !pocketnet, minimized, fix : pocketnet, active, collapsed}">
+  <div id="search" :class="{'bin' : pocketnet, 'bout' : !pocketnet, minimized, fix : pocketnet, active, collapsed, expanded : !collapsed}">
 
       <div class="searchWrapper">
         <div class="iconWrapper">
@@ -11,7 +11,7 @@
           <input ref="input" :placeholder="placeholder || this.$i18n.t('caption.search')" @keyup="change" @input="change" :value="searchTxt" @focus="focused" @blur="blured" type="text"/>
         </div>
 
-        <div class="iconWrapper" v-if="searchTxt">
+        <div class="iconWrapper right" v-if="searchTxt">
           <i class="fas fa-times" @click="clear"></i>
         </div>
 

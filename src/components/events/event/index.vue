@@ -338,6 +338,7 @@ export default {
         var ts = this.timeline._timelineSet
         var e = this.event
 
+  console.log('e.event.content', e.event.content)
 
         if(!this.reference && e.event.content['m.relates_to'] && e.event.content['m.relates_to'] && e.event.content['m.relates_to']['rel_type'] == "m.reference"){
 
@@ -356,6 +357,7 @@ export default {
                 if(ev){
 
                   this.reference = e.event.content.reference = ev
+
 
                   var rt = ts.getRelationsForEvent(this.core.mtrx.clearEventId(ev), 'm.replace', 'm.room.message')
 
