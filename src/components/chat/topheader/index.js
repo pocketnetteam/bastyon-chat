@@ -252,7 +252,7 @@ export default {
           this.chat.roomId,
           "m.room.callsEnabled",
           { enabled: true },
-          true
+          this.core.user.userinfo.id
         );
         this.wait = true;
         this.requestCallsAccess();
@@ -274,7 +274,6 @@ export default {
     },
 
     requestCallsAccess() {
-      console.log("Запросить доступ");
       this.core.mtrx.client.sendStateEvent(
         this.m_chat.roomId,
         "m.room.request_calls_access"
