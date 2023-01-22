@@ -19,7 +19,7 @@
     <div v-touch:touchhold="dropDownMenuShow" :class="{referenceshowed, showmeta : showmeta, my,'messageRow': 'messageRow', urlpreview : urlpreview, allscreen : urlpreview || content.msgtype === 'm.image'|| file, aligncenter : content.msgtype === 'm.audio'}" :my="my" v-if="!preview && content.msgtype !== 'm.notice'">
 
       <div class="timeWrapper" v-if="(urlpreview || imageUrl || content.msgtype === 'm.image') || (showmeta && (my)) || file || content.call_id">
-        
+
         <i :class="'fas fa-fire burn ' + showburn" v-if="showburn" @click="showwhenburn"></i>
 
         <span>
@@ -27,8 +27,17 @@
         </span>
       </div>
 
-      <div class="actionsWrapper" v-if="!content.call_id">
-        <div v-if="multiSelect" class="multiSelect" @click="eventMessage(selectedMessage)">
+      <div
+        class="actionsWrapper"
+        v-if="
+          !content.call_id && event.event.type !== 'm.room.request_calls_access'
+        "
+      >
+        <div
+          v-if="multiSelect"
+          class="multiSelect"
+          @click="eventMessage(selectedMessage)"
+        >
           <i v-if="selectedMessage" class="far fa-check-circle"></i>
           <i v-else class="far fa-circle"></i>
         </div>
@@ -104,6 +113,10 @@
       <div class="messageCall" v-if="content.call_id">
         <Call :class="{'my' : my }" :my="my" :event="event"/>
       </div>
+      <Request
+        :event="event"
+        v-if="event.event.type === 'm.room.request_calls_access'"
+      />
 
       <div class="maxcontent" :class="{'my' : my }" v-if="content.msgtype === 'm.encrypted' && !textWithoutLinks && badenctypted">
         <div class="badenctyptedText">
@@ -156,7 +169,7 @@
 
       <div class="filePreview" v-if="file">
 
-        
+
         <fileMessage :encryptedData="encryptedData" :file="file" :downloaded="downloaded" @download="download"/>
         <div class="encryptedDataIcon" v-if="encryptedData"><i class="fas fa-lock"></i></div>
 
@@ -164,7 +177,7 @@
           <span>{{ $t("caption.unabletoDecrypt") }}</span>
         </div>
 
-        
+
       </div>
 
       <div class="linkPreview" v-if="urlpreview">
