@@ -115,6 +115,8 @@ import message from "@/components/events/event/message/index.vue";
 
 import f from "@/application/functions";
 
+var rendered = {}
+
 export default {
 	name: "eventsEvent",
 
@@ -251,6 +253,12 @@ export default {
 		this.$emit("mounted");
 	},
 
+	beforeMount : function(){
+		if((this.event && this.event.event && rendered[this.event.event.event_id]) || (this.event._txnId && rendered[this.event._txnId])){
+			this.readyToRender = true
+		}
+	},
+
 	watch: {
 		readed: {
 			immediate: true,
@@ -304,7 +312,24 @@ export default {
 	methods: {
 		setReadyToRender() {
 			setTimeout(() => {
+
+				console.log('this.event', this.event)
+
+				if(this.readyToRender) return
+
+				if(this.event && this.event.event){
+					rendered[this.event.event.event_id] = true
+				}
+
+				if(this.event && this.event._txnId){
+					rendered[this.event._txnId] = true
+
+				}
+
 				this.readyToRender = true;
+
+
+				rendered
 			}, 20);
 		},
 		manageReadedInterval() {

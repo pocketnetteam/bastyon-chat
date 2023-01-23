@@ -93,10 +93,10 @@ export default {
 	}
 	.options {
 		display: flex;
-		justify-content: space-evenly;
 		width: 100%;
 		max-width: 350px;
 		.btn {
+			
 			background: srgb(--color-bg-ac-bright);
 			color: srgb(--text-on-bg-ac-color);
 			border: 1px solid srgb(--color-bg-ac-bright);
@@ -111,6 +111,7 @@ export default {
 			transition: 0.3s;
 			cursor: pointer;
 			margin: 1em 0 0;
+			margin-right: $r;
 			width: 130px;
 			max-width: 40%;
 			&.ok {

@@ -26,13 +26,69 @@ export default {
 			loading: false,
 
 			users: [],
-			lists: ["contacts", "other", "chats"],
+			lists: [
+				{key : "chats", view : 'room', action : 'navigateToRoom'}, 
+				{key : "contacts", view : 'contact', action : 'navigateToContact'}, 
+				{key : "other", view : 'contact', action : 'navigateToContact'}, 
+				
+				{key : "messages", view : 'roomWithMessage', keepMatches : true, action : 'navigateToRoomFromMsg'}
+			],
 			searchChanged: true,
 		};
 	},
 
 	computed: {
 		...mapState(["contactsMap"]),
+
+		filteredLists : function(){
+			var object = {}
+
+			_.each(this.lists, (section) => {
+				var items = this.getList(section.key)
+
+				if (items.length){
+					object[section.key] = {
+						items,
+						section
+					}
+				}
+			})
+
+			return object
+
+		},
+
+		filteredMessages() {
+			let chats = this.chats;
+
+			if (this.matches?.value) {
+
+				return _.filter(_.map(chats, c => {
+					var messages = _.filter(c.events, (m) => {
+						const match = (m.event.decrypted || m.event.content).body
+							.toLowerCase()
+							.includes(this.matches?.value);
+
+						return (match && m.event) || null;
+					})
+
+					console.log('messages', messages)
+
+					return {
+						chat : c,
+						messages : _.sortBy(messages, (m) => {
+							return -(m.event.origin_server_ts || 1)
+						})
+					}
+				}), (cm) => {
+					return cm.messages.length
+				})
+
+			}
+
+			return []
+
+		},
 
 		filteredChats() {
 			let chats = this.chats;
@@ -64,17 +120,10 @@ export default {
 								?.getContent().name;
 						}
 
-						/*Search by messages*/
-						const messages = (c.events || []).filter((m) => {
-							const match = (m.event.decrypted || m.event.content).body
-								.toLowerCase()
-								.includes(this.matches?.value);
-
-							return (match && m.event) || null;
-						});
+					
 
 						/*Filter chat that not reach search*/
-						if (!chatName || messages.length) {
+						if (!chatName) {
 							chatName = mChat.name;
 
 							if (chatName[0] === "#") chatName = "";
@@ -83,7 +132,7 @@ export default {
 						const uString = (chatName + userNameString).toLowerCase();
 						let point = 0;
 
-						if (uString.includes(this.matches.value) || messages.length) {
+						if (uString.includes(this.matches.value)) {
 							point = this.matches.value.length / uString.length;
 						}
 
@@ -99,7 +148,7 @@ export default {
 				chats = _.map(mc, (c) => c.chat);
 			}
 
-			return chats;
+			return chats
 		},
 
 		filteredContacts() {
@@ -108,7 +157,7 @@ export default {
 				return contact.name
 					.toLowerCase()
 					.includes(this.matches.value.toLowerCase());
-			});
+			})
 		},
 
 		filteredOther() {
@@ -142,64 +191,81 @@ export default {
 			return this.getList(list);
 		},
 
-		itemClick(item) {
-			if (!item.events) {
-				return this.navigateToProfile(item.id, item);
-			}
+		itemClick(item, section = {}) {
 
 			if (this.mode) {
+
 				this.$store.commit("active", true);
 				this.$store.commit("blockactive", { value: true, item: "main" });
 				this.$store.commit("setiteraction", true);
 
-				/*if (
-          !this.share &&
-          this.$store.state.lastroom &&
-          this.$store.state.lastroom.id == item.roomId) {
-          this.$router.push('chat?id=' + this.$store.state.lastroom.id)
-        }*/
-			} else {
+
+				return
+
+			}
+
+			if(!section.keepMatches){
+				this.matches.clear()
+			}
+
+
+			if (section.action == 'navigateToProfile'){
+				return this.navigateToProfile(item.id, item);
+			}
+
+			if (section.action == 'navigateToRoom' || section.action == 'navigateToRoomFromMsg'){
+
+				var chat = item
+
+				if(section.action == 'navigateToRoomFromMsg') chat = item.chat
+				
+
 				if (this.share) {
 					var _share = this.share;
-
+	
 					this.$store.commit("SHARE", null);
-
+	
 					this.$store.commit("icon", {
 						icon: "loading",
 						message: "",
 						manual: true,
 					});
-
-					console.log("_share", _share);
-
+	
+	
 					this.core.mtrx
-						.shareInChat(item.roomId, _share)
+						.shareInChat(chat.roomId, _share)
 						.then((r) => {
 							this.$store.commit("icon", {
 								icon: "success",
 								message: "",
 							});
-
+	
 							this.$router
-								.push(_share.route || "chat?id=" + item.roomId)
+								.push(_share.route || "chat?id=" + chat.roomId)
 								.catch((e) => {});
 						})
 						.catch((e) => {
 							console.error(e);
-
+	
 							this.$store.commit("icon", {
 								icon: "error",
 								message: "",
 							});
-
+	
 							if (_share.route) {
 								this.$router.push(_share.route).catch((e) => {});
 							}
 						});
 				} else {
-					this.$router.push("chat?id=" + item.roomId).catch((e) => {});
+					this.$router.push("chat?id=" + chat.roomId).catch((e) => {});
 				}
+
+				return
 			}
+
+			
+			
+			
 		},
 		navigateToProfile(id, contact) {
 			if (this.mode === "Select") {

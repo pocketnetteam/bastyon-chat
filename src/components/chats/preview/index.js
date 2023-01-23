@@ -9,6 +9,7 @@ export default {
 		chat: Object,
 		dummy: Boolean,
 		search: String,
+		messages : Array
 	},
 	inject: ["matches"],
 
@@ -89,12 +90,17 @@ export default {
 			var e = this.event;
 
 			if (e) {
-				return e.get();
+				return e.get ? e.get() : e;
 			}
 		},
 
 		event: function () {
 			if (this.chat && this.chat.roomId) {
+
+				if(this.messages){
+					return this.messages[0]
+				}
+
 				var members = this.m_chat.currentState.getMembers();
 				var lastCallAccess = this.chatevents
 					.filter((e) => {
@@ -147,7 +153,7 @@ export default {
 				});
 
 				/*Show matched message instead of last*/
-				if (this.matches?.value) {
+				/*if (this.matches?.value) {
 					const messages = _.filter(this.chat?.events, (f) => {
 						return (f.event?.content || f.event?.decrypted).body.includes(
 							this.matches.value
@@ -162,7 +168,7 @@ export default {
 								messages[messages.length - 1].event.event_id
 						)[0];
 					}
-				}
+				}*/
 
 				if (events.length) {
 					return events[events.length - 1];
