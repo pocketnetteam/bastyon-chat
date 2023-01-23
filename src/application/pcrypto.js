@@ -49,8 +49,8 @@ var PcryptoRoom = async function(pcrypto, chat, {ls, lse}){
     
     }
 
-    var lcachekey = 'pcrypto5_' + chat.roomId + '_';
-    var ecachekey = 'e_pcrypto5_';
+    var lcachekey = 'pcrypto6_' + chat.roomId + '_';
+    var ecachekey = 'e_pcrypto6_';
     var cache = {}
 
     
@@ -135,6 +135,8 @@ var PcryptoRoom = async function(pcrypto, chat, {ls, lse}){
 
         var tetatet = pcrypto.core.mtrx.kit.tetatetchat(chat) 
 
+
+
         var history =  _.filter(_.map(chat.currentState.getStateEvents("m.room.member"), function(ue){
             var event = ue.event
 
@@ -168,6 +170,7 @@ var PcryptoRoom = async function(pcrypto, chat, {ls, lse}){
         var period = 0
         var h = getuserseventshistory()
 
+
         for(var i = h.length - 1; i >= 0; i--){
             if((h[i].time < time || !time) && !period){
                 period = i
@@ -182,6 +185,8 @@ var PcryptoRoom = async function(pcrypto, chat, {ls, lse}){
 
         var tetatet = pcrypto.core.mtrx.kit.tetatetchat(chat) 
 
+        users = {}
+
         _.each(history, function(ui){
             if(!users[ui.id]) {
                 users[ui.id] = {
@@ -191,6 +196,8 @@ var PcryptoRoom = async function(pcrypto, chat, {ls, lse}){
             }
 
             var l = users[ui.id].life
+
+
 
             if (ui.membership && (ui.membership == 'join' || (ui.membership == 'invite' && tetatet))){
                 l.push({
@@ -221,6 +228,8 @@ var PcryptoRoom = async function(pcrypto, chat, {ls, lse}){
     }
 
     var getusersbytime = function(time){
+
+
 
 
         return _.filter(users, function(ui){
@@ -288,15 +297,25 @@ var PcryptoRoom = async function(pcrypto, chat, {ls, lse}){
         aeskeysls : function(time, block){
 
             if(!time) time = 0
-            if(!block) block = pcrypto.currentblock.height
+            if(!block) {
 
-            if(!pcrypto.core.mtrx.kit.tetatetchat(chat)) {
-                block = 10
+                if(!pcrypto.core.mtrx.kit.tetatetchat(chat)) {
+                    block = 10
+                }
+                else{
+                    block = pcrypto.currentblock.height
+                }
+                
             }
 
 
+            /*if(!pcrypto.core.mtrx.kit.tetatetchat(chat)) {
+                block = 10
+            }*/
+
+
             var k = period(time) + '-' + block
-       
+
             return ls.get(`${lcachekey + pcrypto.user.userinfo.id}-${k}`).then((keys) => {
 
                 const keysPrepared = convert.aeskeys.out(keys);
@@ -657,6 +676,7 @@ var PcryptoRoom = async function(pcrypto, chat, {ls, lse}){
         var body = JSON.parse(f.Base64.decode(secrets))
         var time = event.origin_server_ts || 1
 
+
         if (sender == me){
 
             _.find(body, function(s, i){
@@ -809,6 +829,7 @@ var PcryptoRoom = async function(pcrypto, chat, {ls, lse}){
         }
 
         return promise.then(event => {
+
 
             _e = event
 
