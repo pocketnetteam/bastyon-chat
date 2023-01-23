@@ -332,6 +332,10 @@ export default {
 			type: String,
 			default: "",
 		},
+		iscallsenabled: {
+			type: String,
+			default: "",
+		},
 
 		iscallsenabled: {
 			type: String,
@@ -603,7 +607,7 @@ export default {
 	},
 
 	created() {
-		//this.pocketnet = false
+		// this.pocketnet = true;
 		//this.mobile = !this.pocketnet
 		//this.recording = true
 		//this.iscallsenabled = true

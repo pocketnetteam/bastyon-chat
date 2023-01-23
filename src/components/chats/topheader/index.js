@@ -6,6 +6,8 @@ export default {
 	name: "chatsTopheader",
 	props: {},
 
+	inject: ["matches"],
+
 	components: {
 		contacts,
 	},
@@ -88,6 +90,7 @@ export default {
 		},
 
 		minimizeall: function () {
+			this.matches.clear();
 			this.$store.commit("minimize", true);
 		},
 

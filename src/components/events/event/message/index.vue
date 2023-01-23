@@ -62,12 +62,7 @@
 				</span>
 			</div>
 
-			<div
-				class="actionsWrapper"
-				v-if="
-					!content.call_id && event.event.type !== 'm.room.request_calls_access'
-				"
-			>
+			<div class="actionsWrapper" v-if="!content.call_id">
 				<div
 					v-if="multiSelect"
 					class="multiSelect"
@@ -163,10 +158,6 @@
 			<div class="messageCall" v-if="content.call_id">
 				<Call :class="{ my: my }" :my="my" :event="event" />
 			</div>
-			<Request
-				:event="event"
-				v-if="event.event.type === 'm.room.request_calls_access'"
-			/>
 
 			<div
 				class="maxcontent"

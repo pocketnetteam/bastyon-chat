@@ -62,13 +62,6 @@
 		</div>
 
 		<div
-			v-if="event.event.type === 'm.room.request_calls_access'"
-			class="previewMessage"
-		>
-			<span class="txt">{{ $t("caption.requestCallAccess") }}</span>
-		</div>
-
-		<div
 			v-if="content.msgtype === 'm.text' && !urlpreview"
 			class="previewMessage"
 		>
@@ -89,7 +82,10 @@
 			<span v-if="senderName && senderName != 'You'" class="txt sname"
 				>{{ senderName }}:&nbsp;</span
 			><span class="txt"
-				><IncomingMessage :message="decryptEvent.body"></IncomingMessage
+				><IncomingMessage
+					:message="decryptEvent.body"
+					:markedText="markMatches"
+				></IncomingMessage
 			></span>
 		</div>
 
