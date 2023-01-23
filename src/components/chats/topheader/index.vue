@@ -18,9 +18,7 @@
 			</template>
 
 			<template v-slot:leftadd>
-				<!--<div class="iconbuttonsmall" :class="{active : !closebybg}" @click="changeCloseByBg" v-if="minimized">
-          <i class="fas fa-map-pin"></i>
-        </div>-->
+				
 			</template>
 
 			<template v-slot:info>
@@ -29,7 +27,7 @@
 			</template>
 
 			<template v-slot:rightadd>
-				<router-link to="settings" v-if="!share && pocketnet">
+				<router-link to="settings" v-if="!share">
 					<div class="iconbuttonsmall">
 						<i class="fas fa-cog"></i>
 					</div>

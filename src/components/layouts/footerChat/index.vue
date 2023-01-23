@@ -11,7 +11,7 @@
 	>
 		<div class="work">
 			<div class="menuItems">
-				<div
+				<!--<div
 					class="menuItem bottom-nav__icon"
 					:class="{ active: activecontacts }"
 					@click="gotona('/contacts')"
@@ -22,7 +22,7 @@
 					<div class="label">
 						{{ $t("caption.contacts") }}
 					</div>
-				</div>
+				</div>-->
 
 				<div
 					class="menuItem bottom-nav__icon"
@@ -40,7 +40,7 @@
 					</div>
 				</div>
 
-				<div
+				<!--<div
 					class="menuItem bottom-nav__icon"
 					v-if="!pocketnet"
 					:class="{ active: activesettings }"
@@ -52,7 +52,7 @@
 					<div class="label">
 						{{ $t("caption.settings") }}
 					</div>
-				</div>
+				</div>-->
 
 				<!--<div class="menuItem bottom-nav__icon" v-if="mobile" @click="movefromchat">
             <div class="icon">

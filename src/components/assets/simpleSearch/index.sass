@@ -1,0 +1,51 @@
+.searchWrapper
+    display: flex
+    overflow: hidden
+    background: srgb(--background-secondary-theme)
+    border-radius: 30px
+    color : srgb(--neutral-grad-2)
+    align-items: center
+
+    .inputWrapper
+        flex-grow: 1
+
+        input
+            padding : 1.5 * $r 2 * $r
+            padding-right: 0
+            width : 100%
+            font-size: 0.9em
+
+    .iconWrapper
+        text-align: center
+        width: 50px
+
+        i
+            font-size: 0.8em
+            
+
+#simpleSearch
+    &.minimized
+        &:not(.active)
+                
+            .searchWrapper
+                
+                border-radius: 0
+                background: transparent
+                padding : 0
+                .inputWrapper
+                    display: none
+
+                .iconWrapper
+                    text-align: center
+                    width: 44px
+                    height: 44px
+                    line-height: 44px
+                    padding : 0
+                    border-radius: 50%
+                    background: srgba(--color-txt-gray-dark, 0.4)
+                    color : srgba(--color-txt-gray-dark, 0.8)
+                    i
+                        font-size: 0.8em
+
+       
+            

@@ -61,14 +61,14 @@
 				</div>
 			</div>
 
-			<!--<div class="work searchWrapperEA">
-        <search @search="search" :minimize="minimized"/>
-      </div>-->
+			<div class="work searchWrapperEA">
+				<simpleSearch @search="search" :minimize="minimized"/>
+			</div>
 
 			<div class="work">
-				<!--<div class="titleContacts" v-if="users.contacts.length !== 0">
-          <span>{{ $t("caption.contacts") }}</span>
-        </div>-->
+				<div class="titleContacts" v-if="users.contacts.length !== 0">
+					<span>{{ $t("caption.contacts") }}</span>
+				</div>
 				<list
 					@toggleUser="toggleUser"
 					@select="select"

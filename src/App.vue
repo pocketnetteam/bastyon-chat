@@ -194,6 +194,7 @@ import backButton from "@/components/assets/backButton/index.vue";
 import topheader from "@/components/assets/topheader/index.vue";
 import maincontent from "@/components/assets/maincontent/index.vue";
 import search from "@/components/assets/search/index.vue";
+import simpleSearch from "@/components/assets/simpleSearch/index.vue";
 
 import linepreloader from "@/components/assets/linepreloader/index.vue";
 
@@ -216,6 +217,7 @@ Vue.component("backButton", backButton);
 Vue.component("topheader", topheader);
 Vue.component("maincontent", maincontent);
 Vue.component("search", search);
+Vue.component("simpleSearch", simpleSearch);
 Vue.component("linepreloader", linepreloader);
 
 Vue.use(VueVirtualScroller);
@@ -607,7 +609,7 @@ export default {
 	},
 
 	created() {
-		// this.pocketnet = true;
+		//this.pocketnet = true;
 		//this.mobile = !this.pocketnet
 		//this.recording = true
 		//this.iscallsenabled = true
