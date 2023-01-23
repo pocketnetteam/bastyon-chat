@@ -62,6 +62,13 @@
 		</div>
 
 		<div
+			v-if="event.event.type === 'm.room.request_calls_access'"
+			class="previewMessage"
+		>
+			<span class="txt">{{ $t("caption.requestCallAccess") }}</span>
+		</div>
+
+		<div
 			v-if="content.msgtype === 'm.text' && !urlpreview"
 			class="previewMessage"
 		>

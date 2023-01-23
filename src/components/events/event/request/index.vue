@@ -1,15 +1,15 @@
 <template>
 	<div class="request">
+		<img src="../img/request.png" class="image" alt="request" />
 		<div class="title">{{ $t("caption.requestCallAccess") }}</div>
 		<div class="description">
-			<i class="fas fa-exclamation-circle"></i>
 			<div>{{ $t("caption.callAccessWarning") }}</div>
 		</div>
 		<div class="options">
-			<button @click="allow" class="btn ok">{{ $t("caption.allow") }}</button>
 			<button @click="prohibit" class="btn bad">
 				{{ $t("caption.prohibit") }}
 			</button>
+			<button @click="allow" class="btn ok">{{ $t("caption.allow") }}</button>
 		</div>
 	</div>
 </template>
@@ -67,18 +67,24 @@ export default {
 	border-radius: 12px;
 	padding: 1em;
 
-	border: solid srgb(--neutral-grad-3) 1px;
+	border: solid srgb(--neutral-grad-1) 1px;
+
+	.image {
+		width: 100%;
+	}
+
 	.title {
-		font-size: 0.9em;
+		font-size: 1.2em;
 		font-weight: 500;
-		text-align: center;
+		text-align: left;
+		margin: 1em 0;
 	}
 	.description {
-		display: flex;
-		flex-direction: column;
-		text-align: center;
-		margin: 1.5em 0;
+		text-align: left;
+		color: rgba(242, 153, 74, 1);
+		margin: 0.6em 0;
 		font-size: 0.8em;
+		width: 100%;
 		i {
 			margin: 5px;
 			color: srgb(--color-star-yellow);
@@ -104,12 +110,20 @@ export default {
 			-webkit-transition: 0.3s;
 			transition: 0.3s;
 			cursor: pointer;
-			margin: 1em 0;
+			margin: 1em 0 0;
 			width: 130px;
 			max-width: 40%;
 			&.ok {
 			}
 			&.bad {
+				background-color: rgba(235, 87, 87, 1);
+				border-color: rgba(235, 87, 87, 1);
+				@media (pointer: fine) {
+					&:hover {
+						background: transparent;
+						color: rgba(235, 87, 87, 1);
+					}
+				}
 			}
 			@media (pointer: fine) {
 				&:hover {

@@ -9,6 +9,7 @@ import dummypreviews from "@/components/chats/dummypreviews";
 import IncomingMessage from "./incomingMessage/incomingMessage.vue";
 import VoiceMessage from "@/components/events/event/VoiceMessage";
 import Call from "@/components/events/event/Call";
+import Request from "@/components/events/event/request";
 
 export default {
 	name: "eventsMessage",
@@ -71,6 +72,7 @@ export default {
 		IncomingMessage,
 		VoiceMessage,
 		Call,
+		Request,
 	},
 	watch: {
 		isRemoveSelectedMessages: {
@@ -143,6 +145,7 @@ export default {
 					this.content.msgtype === "m.encrypted") &&
 					this.textWithoutLinks) ||
 				this.file ||
+				this.event.event.type === "m.room.request_calls_access" ||
 				this.error ||
 				(this.content.msgtype === "m.image" && this.imageUrl) ||
 				(this.content.msgtype === "m.audio" && this.audioUrl) ||

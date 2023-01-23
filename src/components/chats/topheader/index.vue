@@ -17,9 +17,7 @@
 				</div>
 			</template>
 
-			<template v-slot:leftadd>
-				
-			</template>
+			<template v-slot:leftadd> </template>
 
 			<template v-slot:info>
 				<span v-if="!share">{{ $t("caption.chats") }}</span>

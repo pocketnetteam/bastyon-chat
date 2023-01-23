@@ -44,7 +44,7 @@ export default {
 		]),
 
 		showFooter: function () {
-			return /*this.$route.name != "chat" || */this.minimized;
+			return /*this.$route.name != "chat" || */ this.minimized;
 		},
 	}),
 

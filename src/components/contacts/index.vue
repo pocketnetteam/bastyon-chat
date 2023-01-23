@@ -62,7 +62,7 @@
 			</div>
 
 			<div class="work searchWrapperEA">
-				<simpleSearch @search="search" :minimize="minimized"/>
+				<simpleSearch @search="search" :minimize="minimized" />
 			</div>
 
 			<div class="work">
