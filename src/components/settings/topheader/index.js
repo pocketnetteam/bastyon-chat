@@ -1,33 +1,24 @@
-import { mapState } from 'vuex';
+import { mapState } from "vuex";
 
 export default {
-    name: 'settingsTopheader',
-    props: {
-    },
+	name: "settingsTopheader",
+	props: {},
 
-    data : function(){
+	data: function () {
+		return {
+			loading: false,
+		};
+	},
 
-        return {
-            loading : false
-        }
+	created: () => {},
 
-    },
+	watch: {
+		//$route: 'getdata'
+	},
 
-    created : () => {
+	computed: mapState({
+		auth: (state) => state.auth,
+	}),
 
-    },
-
-    watch: {
-        //$route: 'getdata'
-    },
-
-   
-
-    computed: mapState({
-        auth : state => state.auth,
-    }),
-
-    methods : {
-        
-    },
-}
+	methods: {},
+};

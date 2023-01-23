@@ -1,5 +1,5 @@
 <template>
-  <div id="rx-menu"></div>
+	<div id="rx-menu"></div>
 </template>
 
 <script src="./index.js"></script>
@@ -7,24 +7,3 @@
 
 <!-- THEMES BEGIN -->
 <!-- THEMES END -->
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

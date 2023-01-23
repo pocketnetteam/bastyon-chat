@@ -1,44 +1,34 @@
-import { mapState } from 'vuex';
+import { mapState } from "vuex";
 
 var bwl = {
-    black : 'black',
-    white : 'white',
-    classic : 'white'
-
-}
+	black: "black",
+	white: "white",
+	classic: "white",
+};
 
 export default {
-    name: 'wai-logotype',
-    props: {
-    },
+	name: "wai-logotype",
+	props: {},
 
-    data : function(){
+	data: function () {
+		return {
+			loading: false,
+		};
+	},
 
-        return {
-            loading : false
-        }
+	created: () => {},
 
-    },
+	watch: {
+		//$route: 'getdata'
+	},
 
-    created : () => {
+	computed: mapState({
+		auth: (state) => state.auth,
 
-    },
+		themeL: function (state) {
+			return bwl[state.theme] || "white";
+		},
+	}),
 
-    watch: {
-        //$route: 'getdata'
-    },
-
-   
-
-    computed: mapState({
-        auth : state => state.auth,
-
-        themeL : function(state){
-            return bwl[state.theme] || 'white'
-        }
-    }),
-
-    methods : {
-        
-    },
-}
+	methods: {},
+};

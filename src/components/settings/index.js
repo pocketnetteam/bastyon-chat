@@ -1,73 +1,66 @@
-import { mapState } from 'vuex';
+import { mapState } from "vuex";
 
 export default {
-    name: 'settings',
-    props: {},
+	name: "settings",
+	props: {},
 
-    data: function() {
+	data: function () {
+		return {
+			loading: false,
 
-        return {
-            loading: false,
+			settings: [
+				{
+					id: "pin",
+					checked: "yes",
+					unchecked: "no",
+					label: "settings_pin",
+				},
 
-            settings : [
+				{
+					id: "read",
+					checked: "yes",
+					unchecked: "no",
+					label: "settings_read",
+				},
+			],
+		};
+	},
 
-                {
-                    id : 'pin',
-                    checked : 'yes',
-                    unchecked : 'no',
-                    label : 'settings_pin'
-                },
+	created: () => {},
 
-                {
-                    id : 'read',
-                    checked : 'yes',
-                    unchecked : 'no',
-                    label : 'settings_read'
-                },
- ]
-        }
+	watch: {
+		//$route: 'getdata'
+	},
+	computed: mapState({
+		auth: (state) => state.auth,
+		themes: (state) => state.themes,
+		theme: (state) => state.theme,
 
-    },
+		settings_pin: (state) => state.pinchat,
+		settings_read: (state) => !state.dontreadreceipts,
+		pocketnet: (state) => state.pocketnet,
+	}),
 
-    created: () => {
+	methods: {
+		setTheme: function (evt) {
+			var theme = evt.target.value;
+			this.$store.commit("theme", { value: theme, root: this.$root.$el });
+		},
 
-    },
+		set_settings_pin: function (value) {
+			this.$store.commit("pinchat", value);
+		},
 
-    watch: {
-        //$route: 'getdata'
-    },
-    computed: mapState({
-        auth: state => state.auth,
-        themes: state => state.themes,
-        theme: state => state.theme,
+		set_settings_read: function (value) {
+			this.$store.commit("dontreadreceipts", !value);
+		},
 
-        settings_pin : state => state.pinchat,
-        settings_read : state => !state.dontreadreceipts,
-        pocketnet : state => state.pocketnet
+		set_settings: function (id, e) {
+			return this["set_settings_" + id](e.value);
+		},
 
-    }),
-
-    methods: {
-        setTheme: function(evt) {
-            var theme = evt.target.value
-            this.$store.commit('theme', { value: theme, root: this.$root.$el });
-        },
-
-        set_settings_pin : function(value){
-            this.$store.commit('pinchat', value);
-        },  
-
-        set_settings_read : function(value){
-            this.$store.commit('dontreadreceipts', !value);
-        },
-
-
-        set_settings: function(id, e){
-            return this['set_settings_' + id](e.value)
-        },
-
-        get_settings : function(id){
-            return this['settings_' + id]
-        },
-    },
-}
+		get_settings: function (id) {
+			return this["settings_" + id];
+		},
+	},
+};

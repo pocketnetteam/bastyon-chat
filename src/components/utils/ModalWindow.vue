@@ -1,24 +1,23 @@
 <template>
-    <div class="mod-wrapper">
-        <div class="modal-window">
-            <span class="message">{{ message }}</span>
-            <button class="btn" @click="close">OK</button>
-        </div>
-    </div>
+	<div class="mod-wrapper">
+		<div class="modal-window">
+			<span class="message">{{ message }}</span>
+			<button class="btn" @click="close">OK</button>
+		</div>
+	</div>
 </template>
 
 <script>
-
 export default {
-    name: 'ModalWindow',
-    props: ['message'],
+	name: "ModalWindow",
+	props: ["message"],
 
-    methods: {
-        close() {
-            this.$emit('Close')
-        }
-    }
-}
+	methods: {
+		close() {
+			this.$emit("Close");
+		},
+	},
+};
 </script>
 
 <style lang="sass" scoped>
@@ -43,7 +42,7 @@ export default {
     max-width: 300px
     margin : 0 auto
     border-radius: 5px
-    
+
     .btn
         width: 85%
         padding: 10px 5px

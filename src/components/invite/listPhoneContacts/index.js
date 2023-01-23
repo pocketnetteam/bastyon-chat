@@ -1,43 +1,41 @@
-
 export default {
-  name: "listPhoneContacts",
+	name: "listPhoneContacts",
 
-  props: {
-    phoneContacts: Array,
-    showTitle: Boolean,
-    type: String
-  },
+	props: {
+		phoneContacts: Array,
+		showTitle: Boolean,
+		type: String,
+	},
 
- 
+	methods: {
+		invitePhoneContact: function (phoneContact) {
+			this.$emit("invitePhoneContact", phoneContact);
+		},
+	},
 
-  methods: {
-    invitePhoneContact : function(phoneContact){
-      this.$emit('invitePhoneContact', phoneContact);
-    }
-  },
+	computed: {
+		contacts: function () {
+			switch (this.type) {
+				case "email":
+					return _.filter(this.phoneContacts, (phoneContact) => {
+						if (phoneContact.emails && phoneContact.emails.length >= 1)
+							return true;
+					});
+					break;
 
-  computed: {
+				case "sms":
+					return _.filter(this.phoneContacts, (phoneContact) => {
+						if (
+							phoneContact.phoneNumbers &&
+							phoneContact.phoneNumbers.length >= 1
+						)
+							return true;
+					});
+					break;
 
-    contacts : function(){
-      switch (this.type) {
-
-        case 'email':
-          return _.filter(this.phoneContacts, (phoneContact) => {
-            if(phoneContact.emails && phoneContact.emails.length >= 1) return true
-          });
-          break;
-
-        case 'sms':
-          return _.filter(this.phoneContacts, (phoneContact) => {
-            if(phoneContact.phoneNumbers && phoneContact.phoneNumbers.length >= 1) return true
-          });
-          break;
-
-        default:
-          return this.phoneContacts;
-
-      }
-    },
-
-  },
-}
+				default:
+					return this.phoneContacts;
+			}
+		},
+	},
+};

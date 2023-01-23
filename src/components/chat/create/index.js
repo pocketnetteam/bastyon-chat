@@ -1,172 +1,153 @@
-import { mapState } from 'vuex';
-import contacts from '@/components/contacts/index.vue'
+import { mapState } from "vuex";
+import contacts from "@/components/contacts/index.vue";
 
 export default {
-    name: 'chatcreate',
-    props: {
-    },
+	name: "chatcreate",
+	props: {},
 
-    components : {
-        contacts
-    },
+	components: {
+		contacts,
+	},
 
-    data : function(){
+	data: function () {
+		return {
+			loading: false,
 
-        return {
-            loading : false,
+			types: {
+				privategroup: {
+					id: "privategroup",
+					icon: "fas fa-user-friends",
+					value: "private",
+				},
 
-            types : {
-           
-                privategroup : {id : 'privategroup', icon : 'fas fa-user-friends', value : 'private'},
+				publicgroup: {
+					id: "publicgroup",
+					icon: "fas fa-users",
+					value: "public",
+				},
+			},
 
-                publicgroup : {id : 'publicgroup', icon : 'fas fa-users', value : 'public'},
-                
-            },
+			type: null,
 
-            type : null,
+			groupName: "",
 
-            groupName : '',
+			selected: {},
+		};
+	},
 
-            selected : {}
+	created: () => {},
 
-        }
+	watch: {
+		//$route: 'getdata'
+	},
+	computed: mapState({
+		auth: (state) => state.auth,
 
-    },
+		cancomplete: function () {
+			if (!this.type) return false;
 
-    created : () => {
+			if (this.type.id == "privategroup") {
+				return this.selectedLength > 1;
+			}
 
-    },
+			if (this.type.id == "publicgroup") {
+				if (this.groupName) return true;
 
-    watch: {
-        //$route: 'getdata'
-    },
-    computed: mapState({
-        auth : state => state.auth,
+				return false;
+			}
+		},
 
-        cancomplete : function(){
+		selectedLength: function () {
+			return _.toArray(this.selected).length;
+		},
+	}),
 
-            if(!this.type) return false
+	methods: {
+		unselecttype: function () {
+			this.type = null;
+			this.selected = {};
+		},
 
-            if (this.type.id == 'privategroup'){
-               return this.selectedLength > 1
-            }
+		selecttype: function (id) {
+			this.type = this.types[id];
+			this.selected = {};
+		},
+		selectedUsers: function (u) {
+			this.selected = u;
+		},
+		selectoneuser: function (u) {
+			var tetatetid = this.core.mtrx.kit.tetatetid(u, this.core.user.userinfo);
 
-            if (this.type.id == 'publicgroup'){
-                if (this.groupName)
-                    return true
+			this.$router.push("chat?id=" + tetatetid + "&u=" + u.id).catch((e) => {});
+		},
 
-                return false
-            }
+		complete() {
+			this.createGroupAction(this.selected)
+				.then((chat) => {
+					this.$emit("completed", chat);
 
-        },
+					this.$store.commit("icon", {
+						icon: "success",
+						message: "",
+					});
+				})
+				.catch((e) => {
+					var text = "An unexpected error occurred";
 
-        selectedLength : function(){
-            return _.toArray(this.selected).length
-        }
+					if (e == "cantcomplete")
+						text = "Please enter a group name and add chat members";
 
-    }),
+					this.$store.commit("icon", {
+						icon: "error",
+						message: text,
+					});
+				});
+		},
 
-    methods : {
-    
+		createGroupAction(users) {
+			if (!this.cancomplete) {
+				return Promise.reject("cantcomplete");
+			}
 
-        unselecttype : function(){
-            this.type = null
-            this.selected = {}
-        },
+			if (!this.type) {
+				return Promise.reject("type");
+			}
 
-        selecttype : function(id){
-            this.type = this.types[id]
-            this.selected = {}
-        },
-        selectedUsers : function(u){
-            this.selected = u
-        },
-        selectoneuser : function(u){
+			if (_.isEmpty(users)) {
+				return Promise.reject("users");
+			}
 
-            var tetatetid = this.core.mtrx.kit.tetatetid(u, this.core.user.userinfo)
+			const data = this.core.mtrx.kit.groupIdLight(users);
 
-            this.$router.push('chat?id=' + tetatetid + '&u=' + u.id).catch(e => {})
-            
-        },
+			this.$store.state.globalpreloader = true;
 
-        complete(){
+			return this.core.mtrx.client
+				.createRoom({
+					//room_alias_name: '#' + data.hash,
+					visibility: this.type.value, // this.selectedValue === 'Private' ? 'private' : 'public',
+					invite: data.idForInviting,
+					name: "@" + (this.groupName ? this.groupName : "New Room"),
 
-            this.createGroupAction(this.selected).then(chat => {
+					initial_state: [
+						{
+							type: "m.room.guest_access",
+							state_key: "",
+							content: {
+								guest_access: "can_join",
+							},
+						},
+					],
+				})
+				.then((chat) => {
+					this.$store.state.globalpreloader = false;
 
-                this.$emit('completed', chat)
+					return chat;
+				})
+				.catch((e) => {
+					this.$store.state.globalpreloader = false;
 
-                this.$store.commit('icon', {
-                    icon: 'success',
-                    message: "",
-                })
-
-               
-
-            }).catch(e => {
-
-                var text = 'An unexpected error occurred'
-
-                if (e == 'cantcomplete') text = 'Please enter a group name and add chat members'
-
-                this.$store.commit('icon', {
-                    icon: 'error',
-                    message: text
-                })
-            })
-
-        },
-
-        createGroupAction(users) {
-
-            if(!this.cancomplete){
-                return Promise.reject('cantcomplete')
-            }
-
-            if(!this.type){
-                return Promise.reject('type')
-            }
-
-            if(_.isEmpty(users)){
-                return Promise.reject('users')
-            }
-
-            const data = this.core.mtrx.kit.groupIdLight(users)
-
-            this.$store.state.globalpreloader = true
-      
-            return this.core.mtrx.client.createRoom({
-
-              //room_alias_name: '#' + data.hash,
-              visibility: this.type.value, // this.selectedValue === 'Private' ? 'private' : 'public',
-              invite: data.idForInviting,
-              name: '@' + (this.groupName ? this.groupName : "New Room"),
-
-              initial_state: [
-      
-                {
-                  "type": "m.room.guest_access",
-                  "state_key": "",
-                  "content": {
-                    "guest_access": "can_join"
-                  }
-                },
-              ]
-      
-            }).then(chat => {
-      
-              this.$store.state.globalpreloader = false
-
-              return chat
-
-              
-      
-            }).catch(e => {
-      
-              this.$store.state.globalpreloader = false
-
-              return Promise.reject(e)
-            })
-      
-          },
-    },
-}
+					return Promise.reject(e);
+				});
+		},
+	},
+};

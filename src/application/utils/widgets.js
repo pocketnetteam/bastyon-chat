@@ -1,160 +1,176 @@
+var PNWIDGETS = function () {
+	var self = this;
 
-var PNWIDGETS = function(){
-    var self = this
+	self.renders = {
+		iframe: function (seed, action, id, p) {
+			var domain = window.pocketnetdomain || "pocketnet.app";
 
-    self.renders = {
-        iframe : function(seed, action, id, p){
+			return (
+				'<iframe width="100%" src="https://' +
+				domain +
+				"/openapi.html?action=" +
+				action +
+				"&id=" +
+				id +
+				"&embeddingSettigns=" +
+				p +
+				'" id="pocketnet_iframe_' +
+				seed +
+				'" scrolling="no" style="border: none;" frameborder="0" marginheight="0" marginwidth="0" loading="lazy" allowfullscreen allowautoplay></iframe>'
+			);
+		},
+	};
 
-            var domain = window.pocketnetdomain || 'pocketnet.app'
-            
-            return '<iframe width="100%" src="https://'+domain+'/openapi.html?action='+action+'&id='+id+'&embeddingSettigns='+p+'" id="pocketnet_iframe_'+seed+'" scrolling="no" style="border: none;" frameborder="0" marginheight="0" marginwidth="0" loading="lazy" allowfullscreen allowautoplay></iframe>'
-        }
-    }
+	self.make = function (
+		seed,
+		action,
+		id,
+		p,
+		fast,
+		__el,
+		resized,
+		additional,
+		_clbk
+	) {
+		if (!additional) additional = {};
 
-    self.make = function(seed, action, id, p, fast, __el, resized, additional, _clbk){
+		var elem = document.getElementById("pocketnet_" + seed);
 
-        if(!additional) additional = {}
+		if (window.POCKETNETINSTANCE && fast) {
+			elem = $(__el).find("#pocketnet_" + seed);
 
-        var elem = document.getElementById('pocketnet_' + seed);
+			var app = window.POCKETNETINSTANCE;
 
- 
-        if (window.POCKETNETINSTANCE && fast){
+			var embeddingSettigns = {
+				id: makeid(),
+			};
 
-            elem = $(__el).find('#pocketnet_' + seed)
+			try {
+				embeddingSettigns = JSON.parse(hexDecode(p || "7B7D"));
+			} catch (e) {}
 
-            var app = window.POCKETNETINSTANCE
+			embeddingSettigns.openapi = true;
 
-            var embeddingSettigns = {
-                id : makeid()
-            }
-            
-            try{
-                embeddingSettigns = JSON.parse(hexDecode(p || "7B7D"))
-            }catch(e){}
+			embeddingSettigns = _.extend(embeddingSettigns, additional);
 
-            embeddingSettigns.openapi = true
+			elem.addClass("openapipnet");
 
-            embeddingSettigns = _.extend(embeddingSettigns, additional)
+			app.platform.papi[action](id, elem, _clbk, embeddingSettigns, additional);
 
+			if (action == "transaction") return false;
 
-            elem.addClass('openapipnet')
+			if (app.curation()) return false;
 
-            app.platform.papi[action](id, elem, _clbk, embeddingSettigns, additional)
+			return true;
+		} else {
+			elem.innerHTML = self.renders.iframe(seed, action, id, p, additional);
 
-            if(action == 'transaction') return false
+			if (typeof iFrameResize != "undefined")
+				var iframe = iFrameResize(
+					{
+						onResized: function () {
+							//window.requestAnimationFrame(function(){
+							if (resized) resized();
 
-            if(app.curation()) return false
+							//s})
+						},
+						onBeforeResized: function () {
+							if (resized) resized(true);
+						},
+					},
+					"#pocketnet_iframe_" + seed
+				);
+		}
+	};
 
-            return true
-        }
-        else{
-            elem.innerHTML = self.renders.iframe(seed, action, id, p, additional)
+	self.url = function (url) {
+		var parsed_url = new URL(url);
 
-            if(typeof iFrameResize != 'undefined')
-                var iframe = iFrameResize({
+		var postid =
+			parsed_url.searchParams.get("s") || parsed_url.searchParams.get("v");
 
-                    onResized : function(){
-                        //window.requestAnimationFrame(function(){
-                            if (resized)
-                                resized()
+		var action = parsed_url.searchParams.get("commentid")
+			? "comment"
+			: postid
+			? "lenta"
+			: "channel";
 
-                        //s})
-                    },
-                    onBeforeResized : function(){
-                        
-                        if (resized)
-                            resized(true)
-                    
-                        
-                    }
+		var id =
+			action === "channel" ? parsed_url.pathname.replace("/", "") : postid;
 
-                },'#pocketnet_iframe_' + seed)
+		if (id == "author" && action === "channel")
+			id = parsed_url.searchParams.get("address");
 
-        }
+		var connect = parsed_url.searchParams.get("connect");
+		var publicroom = parsed_url.searchParams.get("publicroom");
 
-        
-    }
+		var additional = {
+			commentPs: {
+				commentid: parsed_url.searchParams.get("commentid"),
+				parentid: parsed_url.searchParams.get("parentid"),
+			},
+		};
 
+		if (connect) {
+			action = "connect";
+			id = connect;
+		}
 
-    self.url = function(url){
+		if (publicroom) {
+			action = "publicroom";
+			id = publicroom;
+		}
 
-        var parsed_url = new URL(url)
+		var p =
+			"7b22626c61636b223a66616c73652c22636f6d6d656e7473223a226e6f222c22726566223a2250503538325634375038764376586a645633696e77594e677853635a437554577371227d";
 
-        var postid = parsed_url.searchParams.get('s') || parsed_url.searchParams.get('v')
+		var txid = parsed_url.searchParams.get("stx");
 
-        var action = parsed_url.searchParams.get('commentid') ? 'comment' 
-                                                    : postid ? 'lenta' : 'channel'
+		if (txid) {
+			///pocketnet://i?stx=txid
 
-        var id = action === 'channel' ? parsed_url.pathname.replace('/', '') : postid
+			id = txid;
+			action = "transaction";
+		}
 
-        if(id == 'author' && action === 'channel' ) id = parsed_url.searchParams.get('address')
+		return {
+			action: action,
+			id: id,
+			p: p,
+			additional,
+		};
+	};
 
-        var connect = parsed_url.searchParams.get('connect')
-        var publicroom = parsed_url.searchParams.get('publicroom')
+	self.makefromurl = function (el, url, resized, additional, _clbk) {
+		var seed = Math.floor(Math.random() * 100000);
 
-        var additional = {
-            
-            commentPs : {
-                commentid : parsed_url.searchParams.get('commentid'),
-                parentid : parsed_url.searchParams.get('parentid'),
-            }
-        }
+		var h = '<div id="pocketnet_' + seed + '">';
+		h += "</div>";
 
-        if (connect) {
-            action = 'connect'
-            id = connect
-        }
+		el.innerHTML = h;
 
-        if (publicroom) {
-            action = 'publicroom'
-            id = publicroom
-        }
+		var ps = self.url(url);
 
-        var p = '7b22626c61636b223a66616c73652c22636f6d6d656e7473223a226e6f222c22726566223a2250503538325634375038764376586a645633696e77594e677853635a437554577371227d'
+		ps.additional || (ps.additional = {});
 
-        var txid = parsed_url.searchParams.get('stx')
+		ps.additional = _.extend(ps.additional, additional || {});
 
-        if (txid) {
+		return self.make(
+			seed,
+			ps.action,
+			ps.id,
+			ps.p,
+			true,
+			el,
+			resized,
+			ps.additional,
+			_clbk
+		);
+	};
 
-            ///pocketnet://i?stx=txid
+	return self;
+};
 
-            id = txid
-            action = 'transaction'
-        }
-        
+window.PNWIDGETS = PNWIDGETS;
 
-        return {
-            action : action,
-            id : id,
-            p : p,
-            additional
-        }
-
-    }
-
-    self.makefromurl = function(el, url, resized, additional, _clbk){
-
-
-        var seed = Math.floor(Math.random() * 100000)
-
-        var h = '<div id="pocketnet_'+seed+'">'
-            h += '</div>'
-
-        el.innerHTML = h
-
-        var ps = self.url(url)
-
-        ps.additional || (ps.additional = {})
-
-        ps.additional = _.extend(ps.additional, additional || {})
-
-        return self.make(seed, ps.action, ps.id, ps.p, true, el, resized, ps.additional, _clbk)
-
-    }
-
-    return self
-} 
-
-window.PNWIDGETS = PNWIDGETS
-
-export default PNWIDGETS
+export default PNWIDGETS;

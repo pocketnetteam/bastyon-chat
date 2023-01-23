@@ -1,285 +1,285 @@
 <template>
-  <div class="upload">
-    <div class="uploadWrapper">
+	<div class="upload">
+		<div class="uploadWrapper">
+			<div class="contentWrapper">
+				<slot name="content">
+					<i class="fas fa-plus"></i>
+				</slot>
+			</div>
+			<div class="inputWrapper">
+				<input type="file" :multiple="multiple" @change="upload" />
+			</div>
+		</div>
 
-      <div class="contentWrapper">
-        <slot name="content">
-          <i class="fas fa-plus"></i>
-        </slot>
-      </div>
-      <div class="inputWrapper">
-        <input type="file" :multiple="multiple" @change="upload"> 
-      </div>
-
-    </div>
-
-    <div class="dropzone" :class="{dropzone : dropzone}" v-if="dropzone" ref="dropzone">
-      <slot name="dropzone">
-        <i class="fas fa-plus"></i> {{ $t("caption.dragAndDropAFile") }}
-      </slot>
-    </div>
-  </div>
+		<div
+			class="dropzone"
+			:class="{ dropzone: dropzone }"
+			v-if="dropzone"
+			ref="dropzone"
+		>
+			<slot name="dropzone">
+				<i class="fas fa-plus"></i> {{ $t("caption.dragAndDropAFile") }}
+			</slot>
+		</div>
+	</div>
 </template>
-
 
 <style scoped lang="sass">
 
-  .upload
-    width: 100%
+.upload
+  width: 100%
 
-  .uploadWrapper
-    position: relative
+.uploadWrapper
+  position: relative
 
-    .inputWrapper
+  .inputWrapper
+    position: absolute
+    left: 0
+    right: 0
+    top: 0
+    bottom: 0
+    opacity: 0
+
+    input
       position: absolute
       left: 0
       right: 0
       top: 0
       bottom: 0
       opacity: 0
-
-      input
-        position: absolute
-        left: 0
-        right: 0
-        top: 0
-        bottom: 0
-        opacity: 0
-
 </style>
 
 <script>
+import Images from "@/application/utils/images.js";
 
-import Images from '@/application/utils/images.js'
+var each = require("async-each");
 
-
-var each = require('async-each');
-
-var images = new Images()
+var images = new Images();
 
 export default {
-  name: 'upload',
-  directives: {},
-  props: {
+	name: "upload",
+	directives: {},
+	props: {
+		dropzone: String,
+		multiple: Boolean,
 
-    dropzone: String,
-    multiple: Boolean,
+		onlyimage: Boolean,
 
-    onlyimage : Boolean,
+		maxsize: {
+			default: 25,
+			type: Number,
+		},
 
-    maxsize: {
-      default: 25,
-      type: Number
-    },
+		extensions: {
+			type: Array,
+			default: () => [],
+		},
+		images: {
+			type: Object,
+			default: () => {},
+		},
+	},
 
-    extensions: {
-      type: Array,
-      default: () => []
-    },
-    images: {
-      type: Object,
-      default: () => {
-      }
-    }
+	data: function () {
+		return {
+			loading: false,
+		};
+	},
 
-  },
+	computed: {
+		maxSize() {
+			return this.maxsize * 1024 * 1024;
+		},
+	},
 
-  data: function () {
-    return {
-      loading: false
-    }
-  },
+	created: () => {},
+	methods: {
+		read: function (file) {
+			var reader = new FileReader();
 
-  computed: {
-    maxSize() {
-      return this.maxsize * 1024 * 1024
-    }
-  },
+			return new Promise((resolve, reject) => {
+				reader.onloadend = function (e) {
+					resolve({
+						base64: e.target.result,
+						file: file,
+					});
+				};
+				reader.readAsDataURL(file);
+			});
+		},
+		upload: function (event) {
+			event.stopPropagation();
+			event.preventDefault();
 
-  created: () => {
+			var files =
+				event.dataTransfer?.files || event.target?.files || event.files || [];
+			var result = {};
 
-  },
-  methods: {
-    
-    read: function (file) {
-      var reader = new FileReader();
+			this.loading = true;
 
-      return new Promise((resolve, reject) => {
-        reader.onloadend = function (e) {
+			this.$emit("start", files);
 
-          resolve({
-            base64: e.target.result,
-            file: file
-          })
+			var ha = this;
 
-        }
-        reader.readAsDataURL(file);
-      })
+			each(
+				_.toArray(files),
+				(file, next) => {
+					var error = this.check(file);
 
+					if (error) {
+						ha.$emit("error", {
+							error: error,
+							file: file,
+							text: this.errorText(error, file),
+						});
 
-    },
-    upload: function (event) {
-      event.stopPropagation();
-      event.preventDefault();
+						next(new Error(error));
 
-      var files = event.dataTransfer?.files || event.target?.files || event.files || [];
-      var result = {}
+						return;
+					}
 
-      this.loading = true
+					this.read(file)
+						.then((data) => {
+							result[data.file.name] = data;
 
-      this.$emit('start', files)
+							return this.handle(data);
+						})
+						.then((data) => {
+							ha.$emit("uploaded", data);
+							next();
+						})
+						.catch((e) => {
+							ha.$emit("error", {
+								error: e,
+								file: file,
+								text: this.errorText(e, file),
+							});
 
-      var ha = this
+							next(new Error(error));
+						});
+				},
+				(err) => {
+					this.loading = false;
+					ha.$emit("uploadedAll", result);
+				}
+			);
+		},
 
-      each(_.toArray(files), (file, next) => {
+		errorText: function (error, file) {
+			if (error === "filesize") {
+				return (
+					"File Size Error: (" +
+					file.name +
+					"). The File can't be more than " +
+					this.maxsize +
+					" mbytes"
+				);
+			}
 
-        var error = this.check(file)
+			if (error === "fileext") {
+				return "File Extension Error:" + file.name;
+			}
+		},
 
-        if (error) {
-          
-          ha.$emit('error', {
-            error: error,
-            file: file,
-            text: this.errorText(error, file)
-          })
+		check: function (file) {
+			if (!this.checkSize(file)) {
+				return "filesize";
+			}
 
-          next(new Error(error))
+			if (!this.checkExtension(file)) {
+				return "fileext";
+			}
+		},
+		checkSize: function (file) {
+			return file.size <= this.maxSize;
+		},
+		getExtension: function (file) {
+			var name = file.name.split(".");
+			var ext = name[name.length - 1].toLowerCase();
 
-          return
-        }
+			return ext;
+		},
+		checkExtension: function (file) {
+			if (this.extensions.length) {
+				if (_.indexOf(this.extensions, this.getExtension(file)) == -1)
+					return false;
+			}
 
-        this.read(file).then(data => {
+			return true;
+		},
+		handle: function (data) {
+			if (
+				data.file.type === "image/jpeg" ||
+				data.file.type === "image/png" ||
+				data.file.type === "image/webp"
+			) {
+				return this.handleImages(data);
+			}
 
-          result[data.file.name] = data
+			return Promise.resolve(data);
+		},
+		sendAnyFile: function (data) {
+			this.$emit("anyFile", data);
+		},
+		resizeIfNeed: function (base64, ftype) {
+			if (this.images.resize) {
+				var type = this.images.resize.type || "def";
 
-          return this.handle(data)
+				return images.resize[type](
+					base64,
+					this.images.resize.width || 1024,
+					this.images.resize.height || 1024,
+					ftype,
+					this.images.resize.quality || 0.85
+				)
+					.then((base64) => {
+						return Promise.resolve(base64);
+					})
+					.catch((e) => {
+						return Promise.reject(e);
+					});
+			}
+			return Promise.resolve(base64);
+		},
+		handleImages: function (data) {
+			return images
+				.autorotation(data.file, data.base64)
+				.then((base64) => {
+					data.base64 = base64;
 
-        }).then(data => {
+					return Promise.resolve(data);
+				})
+				.then((data) => {
+					return this.resizeIfNeed(data.base64, data.file.type).then(
+						(base64) => {
+							data.base64 = base64;
 
-          ha.$emit('uploaded', data)
-          next()
+							return Promise.resolve(data);
+						}
+					);
 
-        }).catch(e => {
+					if (this.images.resize) {
+						var type = this.images.resize.type || "def";
 
-          ha.$emit('error', {
-            error: e,
-            file: file,
-            text: this.errorText(e, file)
-          })
+						return images.resize[type](
+							data.base64,
+							this.images.resize.width || 1024,
+							this.images.resize.height || 1024,
+							data.file.type,
+							this.images.resize.quality || 0.85
+						)
+							.then((base64) => {
+								data.base64 = base64;
 
-          next(new Error(error))
-
-        })
-
-      }, (err) => {
-
-        this.loading = false
-        ha.$emit('uploadedAll', result)
-
-      })
-
-    },
-
-    errorText: function (error, file) {
-      if (error === 'filesize') {
-        return "File Size Error: (" + file.name + "). The File can't be more than "+this.maxsize+" mbytes"
-      }
-
-      if (error === 'fileext') {
-        return "File Extension Error:" + file.name
-      }
-    },
-
-    check: function (file) {
-      if (!this.checkSize(file)) {
-        return 'filesize'
-      }
-
-      if (!this.checkExtension(file)) {
-        return 'fileext'
-      }
-
-    },
-    checkSize: function (file) {
-      return file.size <= this.maxSize
-    },
-    getExtension: function (file) {
-      var name = file.name.split('.');
-      var ext = name[name.length - 1].toLowerCase();
-
-      return ext;
-    },
-    checkExtension: function (file) {
-
-      if (this.extensions.length) {
-        if (_.indexOf(this.extensions, this.getExtension(file)) == -1) return false
-      }
-
-      return true;
-    },
-    handle: function (data) {
-
-      if (data.file.type === 'image/jpeg' || data.file.type === 'image/png' || data.file.type === 'image/webp') {
-        return this.handleImages(data)
-      }
-      
-      return Promise.resolve(data)
-    },
-    sendAnyFile: function (data) {
-      this.$emit('anyFile', data)
-    },
-    resizeIfNeed : function(base64, ftype){
-      if (this.images.resize) {
-
-          var type = this.images.resize.type || 'def'
-          
-          return images.resize[type](base64, this.images.resize.width || 1024, this.images.resize.height || 1024, ftype, this.images.resize.quality || 0.85).then(base64 => {
-
-
-            return Promise.resolve(base64)
-          }).catch(e => {
-            return Promise.reject(e)
-          })
-
-        }
-        return Promise.resolve(base64)
-    },
-    handleImages: function (data) {
-
-      return images.autorotation(data.file, data.base64).then(base64 => {
-        data.base64 = base64
-
-        return Promise.resolve(data)
-      }).then(data => {
-
-        return this.resizeIfNeed(data.base64, data.file.type).then(base64 => {
-          data.base64 = base64
-
-          return Promise.resolve(data)
-        })
-
-        if (this.images.resize) {
-
-          var type = this.images.resize.type || 'def'
-          
-          return images.resize[type](data.base64, this.images.resize.width || 1024, this.images.resize.height || 1024, data.file.type, this.images.resize.quality || 0.85).then(base64 => {
-
-            data.base64 = base64
-
-            return Promise.resolve(data)
-          }).catch(e => {
-            return Promise.reject(e)
-          })
-
-        }
-        return Promise.resolve(data)
-      })
-
-
-    }
-
-  }
-}
-
+								return Promise.resolve(data);
+							})
+							.catch((e) => {
+								return Promise.reject(e);
+							});
+					}
+					return Promise.resolve(data);
+				});
+		},
+	},
+};
 </script>
-
