@@ -96,44 +96,25 @@ export default {
 		menuItems: function () {
 			var menuItems = [];
 
-			if (!this.relationEvent) {
-				if (
-					window.POCKETNETINSTANCE &&
-					window.POCKETNETINSTANCE.mobile.supportimagegallery()
-				) {
-					menuItems.push({
-						click: "cameraHandlerCustom",
-						title: this.$i18n.t("button.takePhotoOrVideo"),
-						icon: "fas fa-camera",
-					});
-				} else {
-					menuItems.push({
-						click: "cameraHandler",
-						title: this.$i18n.t("button.takePhotoOrVideo"),
-						icon: "fas fa-camera",
-
-						upload: {
-							multiple: true,
-							extensions: ["jpg", "jpeg", "png", "webp"],
-							maxsize: 100,
-							images: {
-								resize: {
-									type: "fit",
-								},
-							},
-						},
-					});
-				}
-
+			if (
+				window.POCKETNETINSTANCE &&
+				window.POCKETNETINSTANCE.mobile.supportimagegallery()
+			) {
 				menuItems.push({
-					click: "fileHandler",
-					title: this.$i18n.t("button.sendFile"),
-					icon: "fas fa-sticky-note",
+					click: "cameraHandlerCustom",
+					title: this.$i18n.t("button.takePhotoOrVideo"),
+					icon: "fas fa-camera",
+				});
+			} else {
+				menuItems.push({
+					click: "cameraHandler",
+					title: this.$i18n.t("button.takePhotoOrVideo"),
+					icon: "fas fa-camera",
 
 					upload: {
 						multiple: true,
-						extensions: [],
-						maxsize: 25,
+						extensions: ["jpg", "jpeg", "png", "webp"],
+						maxsize: 100,
 						images: {
 							resize: {
 								type: "fit",
@@ -142,6 +123,23 @@ export default {
 					},
 				});
 			}
+
+			menuItems.push({
+				click: "fileHandler",
+				title: this.$i18n.t("button.sendFile"),
+				icon: "fas fa-sticky-note",
+
+				upload: {
+					multiple: true,
+					extensions: [],
+					maxsize: 25,
+					images: {
+						resize: {
+							type: "fit",
+						},
+					},
+				},
+			});
 
 			if (this.transaction && !this.pkoindisabled) {
 				menuItems.unshift({
@@ -665,6 +663,8 @@ export default {
 					});
 				})
 				.then((r) => {
+					this.$emit("clearRelationEvent");
+
 					this.$emit("sentData", {
 						id: id,
 					});
@@ -672,6 +672,8 @@ export default {
 					return Promise.resolve();
 				})
 				.catch((e) => {
+					console.error(e);
+
 					this.$emit("sentError", {
 						id: id,
 						error: e,
@@ -741,6 +743,8 @@ export default {
 					);
 				})
 				.then(() => {
+					this.$emit("clearRelationEvent");
+
 					this.$emit("sentData", {
 						id: id,
 					});
@@ -1353,6 +1357,9 @@ export default {
 					return this.core.mtrx.sendAudio(this.chat, base64, null, meta, {
 						relation: this.relationEvent,
 					});
+				})
+				.then(() => {
+					this.$emit("clearRelationEvent");
 				})
 				.catch((e) => {
 					this.$emit("sentError", {

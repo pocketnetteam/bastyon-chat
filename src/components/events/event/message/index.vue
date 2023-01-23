@@ -64,7 +64,9 @@
 
 			<div
 				class="actionsWrapper"
-				v-if="content.msgtype !== 'm.file' && !content.call_id"
+				v-if="
+					!content.call_id && event.event.type !== 'm.room.request_calls_access'
+				"
 			>
 				<div
 					v-if="multiSelect"
@@ -88,6 +90,24 @@
 			</div>
 
 			<div class="messageImg" v-if="content.msgtype === 'm.image'">
+				<div
+					class="reference showreference"
+					@click="showreference"
+					v-if="reference && !preview && !fromreference"
+				>
+					<eventsEvent
+						v-if="!referenceshowed"
+						:event="reference"
+						:chat="chat"
+						:preview="true"
+					/>
+
+					<div class="referenceCaption">
+						<span v-if="!referenceshowed"><i class="fas fa-share"></i></span>
+						<button class="button ghost small" v-else>Hide</button>
+					</div>
+				</div>
+
 				<div class="" v-if="imageUrl">
 					<div class="encryptedDataIcon" v-if="encryptedData">
 						<i class="fas fa-lock"></i>
@@ -114,6 +134,24 @@
 				</div>
 			</div>
 			<div class="messageAudio" v-if="content.msgtype === 'm.audio'">
+				<div
+					class="reference showreference"
+					@click="showreference"
+					v-if="reference && !preview && !fromreference"
+				>
+					<eventsEvent
+						v-if="!referenceshowed"
+						:event="reference"
+						:chat="chat"
+						:preview="true"
+					/>
+
+					<div class="referenceCaption">
+						<span v-if="!referenceshowed"><i class="fas fa-share"></i></span>
+						<button class="button ghost small" v-else>Hide</button>
+					</div>
+				</div>
+
 				<VoiceMessage
 					v-if="audioUrl"
 					:audioBuffer="audioUrl"
@@ -125,6 +163,10 @@
 			<div class="messageCall" v-if="content.call_id">
 				<Call :class="{ my: my }" :my="my" :event="event" />
 			</div>
+			<Request
+				:event="event"
+				v-if="event.event.type === 'm.room.request_calls_access'"
+			/>
 
 			<div
 				class="maxcontent"

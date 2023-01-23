@@ -46,8 +46,8 @@ var PcryptoRoom = async function (pcrypto, chat, { ls, lse }) {
 		users = {};
 	};
 
-	var lcachekey = "pcrypto5_" + chat.roomId + "_";
-	var ecachekey = "e_pcrypto5_";
+	var lcachekey = "pcrypto6_" + chat.roomId + "_";
+	var ecachekey = "e_pcrypto6_";
 	var cache = {};
 
 	self.preparedUsers = function (time) {
@@ -176,6 +176,8 @@ var PcryptoRoom = async function (pcrypto, chat, { ls, lse }) {
 
 		var tetatet = pcrypto.core.mtrx.kit.tetatetchat(chat);
 
+		users = {};
+
 		_.each(history, function (ui) {
 			if (!users[ui.id]) {
 				users[ui.id] = {
@@ -271,11 +273,17 @@ var PcryptoRoom = async function (pcrypto, chat, { ls, lse }) {
 	var eaac = {
 		aeskeysls: function (time, block) {
 			if (!time) time = 0;
-			if (!block) block = pcrypto.currentblock.height;
-
-			if (!pcrypto.core.mtrx.kit.tetatetchat(chat)) {
-				block = 10;
+			if (!block) {
+				if (!pcrypto.core.mtrx.kit.tetatetchat(chat)) {
+					block = 10;
+				} else {
+					block = pcrypto.currentblock.height;
+				}
 			}
+
+			/*if(!pcrypto.core.mtrx.kit.tetatetchat(chat)) {
+                block = 10
+            }*/
 
 			var k = period(time) + "-" + block;
 

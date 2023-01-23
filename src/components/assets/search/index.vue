@@ -8,6 +8,7 @@
 			fix: pocketnet,
 			active,
 			collapsed,
+			expanded: !collapsed,
 		}"
 	>
 		<div class="searchWrapper">
@@ -33,7 +34,7 @@
 				/>
 			</div>
 
-			<div class="iconWrapper" v-if="searchTxt">
+			<div class="iconWrapper right" v-if="searchTxt">
 				<i class="fas fa-times" @click="clear"></i>
 			</div>
 

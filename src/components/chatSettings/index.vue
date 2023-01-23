@@ -34,7 +34,7 @@
 					type="text"
 					v-model="topicTxt"
 					placeholder="Description"
-					maxlength="74"
+					maxlength="1000"
 				></textarea>
 			</div>
 			<button class="button small rounded inSettings" @click="saveEdited()">

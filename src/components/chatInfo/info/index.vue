@@ -106,6 +106,15 @@
 				</span>
 			</button>
 
+			<button class="button small black rounded" @click="muteCalls">
+				<span v-if="!roomCallsDisabled">
+					{{ $t("caption.disableCalls") }} <i class="fas fa-video-slash"></i>
+				</span>
+				<span v-if="roomCallsDisabled">
+					{{ $t("caption.enableCalls") }} <i class="fas fa-video"></i>
+				</span>
+			</button>
+
 			<button
 				class="button small rounded badbutton"
 				@click="forgetRoom()"

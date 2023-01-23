@@ -82,6 +82,7 @@ export default {
 				"m.room.audio": true,
 				"m.room.file": true,
 				"m.call.invite": true,
+				"m.room.request_calls_access": true,
 				"m.call.hangup": true,
 				"m.call.reject": true,
 				"m.fully_read": true,
@@ -134,11 +135,33 @@ export default {
 		},
 		getEvents: function () {
 			var events = this.timeline.getEvents();
+
+			var lastCallAccess = events
+				.filter((e) => {
+					return e.event.type === "m.room.request_calls_access";
+				})
+				.pop();
+
 			events = _.filter(events, (e) => {
 				var type = e.event.type;
 
 				if (e.localRedactionEvent() || e.getRedactionEvent()) {
 					return;
+				}
+				if (e.event.type === "m.room.request_calls_access") {
+					if (e.event.event_id === lastCallAccess.event.event_id) {
+						if (e.event.content.accepted !== undefined) {
+							return false;
+						} else {
+							if (this.core.mtrx.me(e.event.sender)) {
+								return false;
+							} else {
+								return true;
+							}
+						}
+					} else {
+						return false;
+					}
 				}
 
 				if (

@@ -96,7 +96,11 @@ export default {
 		event: function () {
 			if (this.chat && this.chat.roomId) {
 				var members = this.m_chat.currentState.getMembers();
-
+				var lastCallAccess = this.chatevents
+					.filter((e) => {
+						return e.event.type === "m.room.request_calls_access";
+					})
+					.pop();
 				var events = _.filter(this.chatevents, (e) => {
 					if (
 						members.length <= 2 &&
@@ -108,6 +112,24 @@ export default {
 					}
 					if (e.event.type === "m.room.redaction") {
 						return false;
+					}
+					if (e.event.type === "m.room.callsEnabled") {
+						return false;
+					}
+					if (e.event.type === "m.room.request_calls_access") {
+						if (e.event.event_id === lastCallAccess.event.event_id) {
+							if (e.event.content.accepted !== undefined) {
+								return false;
+							} else {
+								if (this.core.mtrx.me(e.event.sender)) {
+									return false;
+								} else {
+									return true;
+								}
+							}
+						} else {
+							return false;
+						}
 					}
 
 					return !(

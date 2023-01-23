@@ -331,6 +331,7 @@ export default {
 	contain: strict;
 	width: 230px;
 	height: 100%;
+	height: 50px;
 
 	&_wrapper {
 		display: flex;

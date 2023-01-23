@@ -117,6 +117,7 @@ export default {
 				},
 			],
 
+			wait: false,
 			loading: false,
 			typing: false,
 			userinfo: null,
@@ -213,21 +214,49 @@ export default {
 		},
 	}),
 	methods: {
-		bcCall: function () {
-			let res = this.m_chat.currentState.getStateEvents("m.room.calls");
-			let isEnable = res[res.length - 1]?.event?.content?.enabled
-				? true
-				: res[res.length - 1]?.event?.content?.enabled == undefined
-				? true
-				: false;
+		checkCallsEnabled: function () {
+			let isEnabled = this.m_chat.currentState.getStateEvents(
+				"m.room.callsEnabled"
+			);
+			let hasAccess = this.m_chat.currentState.getStateEvents(
+				"m.room.request_calls_access"
+			);
+
 			if (
-				!isEnable &&
-				this.m_chat.myUserId !== res[res.length - 1]?.event?.sender
+				isEnabled.find(
+					(e) =>
+						!this.core.mtrx.me(e?.event?.sender) &&
+						e?.event?.sender.split(":")[0].replace("@", "") ===
+							e?.event?.state_key
+				)?.event?.content?.enabled
 			) {
-				console.log(
-					"The user has restricted the possibility of calls",
-					res[res.length - 1]?.event?.content?.enabled
+				console.log("enabled");
+				this.wait = false;
+				return true;
+			}
+			if (
+				hasAccess.find((e) => this.core.mtrx.me(e?.event?.sender))?.event &&
+				hasAccess.find((e) => this.core.mtrx.me(e?.event?.sender))?.event
+					?.content?.accepted === undefined
+			) {
+				console.log("wait");
+				return "wait";
+			} else {
+				console.log("nonono");
+				return false;
+			}
+		},
+		bcCall: function () {
+			if (!this.checkCallsEnabled() || this.checkCallsEnabled() === "wait") {
+				this.core.mtrx.client.sendStateEvent(
+					this.chat.roomId,
+					"m.room.callsEnabled",
+					{ enabled: true },
+					this.core.user.userinfo.id
 				);
+				this.wait = true;
+				this.requestCallsAccess();
+
 				return;
 			}
 			let local = document.querySelector("body");
@@ -242,6 +271,13 @@ export default {
 				console.log("ошибка при создании звонка", e);
 				return;
 			}
+		},
+
+		requestCallsAccess() {
+			this.core.mtrx.client.sendStateEvent(
+				this.m_chat.roomId,
+				"m.room.request_calls_access"
+			);
 		},
 
 		navigateToProfile(id) {

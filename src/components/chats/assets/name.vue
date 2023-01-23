@@ -13,11 +13,11 @@
 .nameline
   display: flex
   align-items: flex-end
-  justify-content: center
 
 .iconGroup
   font-size: 0.4em
   width: 16px
+  min-width: 16px
   text-align: center
   height: 16px
   line-height: 16px
