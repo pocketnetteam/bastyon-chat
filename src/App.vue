@@ -854,7 +854,7 @@ export default {
       }*/
     ];
 
-    /*
+		/*
 
     ////////// new server
 
@@ -896,7 +896,7 @@ export default {
 
     */
 
-    /*this.$store.commit('icon', {
+		/*this.$store.commit('icon', {
           icon : 'success',
           message : "Downloaded"
         })*/

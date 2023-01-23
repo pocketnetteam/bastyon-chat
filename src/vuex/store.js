@@ -1,26 +1,24 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
-import f from '@/application/functions.js'
-
+import Vue from "vue";
+import Vuex from "vuex";
+import f from "@/application/functions.js";
 
 Vue.use(Vuex);
 
 var themes = {
 	white: "White",
 	black: "Dark",
-	classic: "Classic"
-}
+	classic: "Classic",
+};
 
 var mex = {
 	theme: function (state, value) {
-
 		if (themes[value]) {
-			state.theme = value
+			state.theme = value;
 		}
-	}
-}
+	},
+};
 
-var activetimeout = null
+var activetimeout = null;
 
 var store = new Vuex.Store({
 	state: {
@@ -37,13 +35,13 @@ var store = new Vuex.Store({
 		loading: false,
 		online: true,
 		unauthorized: false,
-		theme: 'black',
+		theme: "black",
 		themes: themes,
 		signedUpUsers: [],
-		pocketnet: '',
-		mobile: '',
-		voiceMessagesEnabled: '',
-		isCallsEnabled: '',
+		pocketnet: "",
+		mobile: "",
+		voiceMessagesEnabled: "",
+		isCallsEnabled: "",
 		currentPlayingVoiceMessage: null,
 		current_user: {},
 		minimized: true,
@@ -73,73 +71,72 @@ var store = new Vuex.Store({
 		lastroom: null,
 		dontreadreceipts: false,
 		donotdisturb: false,
-		voicerecording : false,
+		voicerecording: false,
 		deletedrooms: {},
-		pkoindisabled : false,
+		pkoindisabled: false,
 		isCallsActive: null,
 		//share : {url : 'https://yandex.ru/'} //null
 	},
 	getters: {
-		getUser: state => {
-			return state.user
+		getUser: (state) => {
+			return state.user;
 		},
-		getConnection: state => {
-			return state.localMatrixStore
+		getConnection: (state) => {
+			return state.localMatrixStore;
 		},
 
-		getSignedUpUsers: state => {
-			return state.signedUpUsers
+		getSignedUpUsers: (state) => {
+			return state.signedUpUsers;
 		},
 	},
 	mutations: {
 		SET_CALL(state, isActive) {
-			console.log('set calls', isActive)
-			state.isCallsActive = isActive
+			console.log("set calls", isActive);
+			state.isCallsActive = isActive;
 		},
-		CLEAR_CALL(state, ) {
-			state.isCallsActive = null
+		CLEAR_CALL(state) {
+			state.isCallsActive = null;
 		},
 		SET_CURRENT_PLAYING_VOICE_MESSAGE(state, message) {
-			state.currentPlayingVoiceMessage = message
+			state.currentPlayingVoiceMessage = message;
 		},
 		setUser(state, userData) {
-			state.current_user = userData || {}
+			state.current_user = userData || {};
 		},
 
 		clearall(state) {
-
-			state.contacts = {}
-			state.contactsFromMatrix = {}
-			state.contactsMap = {}
-			state.chats = []
-			state.prechats = []
-			state.chatsMap = {}
-			state.events = {}
-			state.users = {}
-			state.typing = {}
-			state.icon = null
-			state.loading = false
-			state.online = true
-			state.unauthorized = false
-			state.signedUpUsers = []
+			state.contacts = {};
+			state.contactsFromMatrix = {};
+			state.contactsMap = {};
+			state.chats = [];
+			state.prechats = [];
+			state.chatsMap = {};
+			state.events = {};
+			state.users = {};
+			state.typing = {};
+			state.icon = null;
+			state.loading = false;
+			state.online = true;
+			state.unauthorized = false;
+			state.signedUpUsers = [];
 			/*state.pocketnet = ''*/
-			state.current_user = {}
-			state.minimized = false
-			state.active = false
-			state.activeBlock = {}
-			state.globalpreloader = false
-			state.allnotifications = 0
-			state.pocketteammessages = []
-			state.readedteammessages = {}
-			state.chatsready = false
-			state.autohide = false
-			state.gallery = null
-			state.modalShowed = null
-			state.menu = null
-			state.pinchat = false
-			state.dontreadreceipts = false
-			state.lastroom = null
-			state.voicerecording = false
+			state.current_user = {};
+			state.minimized = false;
+			state.active = false;
+			state.activeBlock = {};
+			state.globalpreloader = false;
+			state.allnotifications = 0;
+			state.pocketteammessages = [];
+			state.readedteammessages = {};
+			state.chatsready = false;
+			state.autohide = false;
+			state.gallery = null;
+			state.modalShowed = null;
+			state.menu = null;
+			state.pinchat = false;
+			state.dontreadreceipts = false;
+			state.lastroom = null;
+			state.voicerecording = false;
 
 			// state.share = null
 
@@ -147,132 +144,123 @@ var store = new Vuex.Store({
 				state.active = false;
 				state.iteraction = false;
 				state.minimized = false;
-				return
-			} else state.minimized = true
+				return;
+			} else state.minimized = true;
 
 			if (activetimeout) {
-				clearTimeout(activetimeout)
-				activetimeout = null
+				clearTimeout(activetimeout);
+				activetimeout = null;
 			}
-
 		},
 
 		blockactive(state, a) {
-			if (a.value)
-				Vue.set(state.activeBlock, a.item, a.value)
-			else
-				Vue.delete(state.activeBlock, a.item, a.value)
-
+			if (a.value) Vue.set(state.activeBlock, a.item, a.value);
+			else Vue.delete(state.activeBlock, a.item, a.value);
 		},
 
 		globalpreloader: function (state, value) {
-			state.globalpreloader = value
+			state.globalpreloader = value;
 		},
 
 		icon(state, value) {
+			state.icon = value;
 
-			state.icon = value
-
-			var mv = f.deep(window, 'window.POCKETNETINSTANCE.mobile.vibration')
+			var mv = f.deep(window, "window.POCKETNETINSTANCE.mobile.vibration");
 
 			if (mv) {
-				mv.small()
+				mv.small();
 			}
-
 		},
 
-		pkoindisabled(state, value){
-			state.pkoindisabled = value && value == 'true' ? true : false
+		pkoindisabled(state, value) {
+			state.pkoindisabled = value && value == "true" ? true : false;
 		},
 
 		wasunhidden(state, value) {
-			state.wasunhidden = true
+			state.wasunhidden = true;
 		},
 
 		hiddenInParent(state, value) {
-			state.hiddenInParent = value
+			state.hiddenInParent = value;
 		},
 
 		hideOptimization(state, value) {
-			state.hideOptimization = value
+			state.hideOptimization = value;
 		},
 
 		pinchat(state, value) {
-			state.pinchat = value
-			localStorage['pinchat'] = value ? true : ''
+			state.pinchat = value;
+			localStorage["pinchat"] = value ? true : "";
 		},
 
 		dontreadreceipts(state, value) {
-			state.dontreadreceipts = value
+			state.dontreadreceipts = value;
 
-			localStorage['dontreadreceipts'] = value ? true : ''
+			localStorage["dontreadreceipts"] = value ? true : "";
 		},
 
 		SET_LAST_ROOM(state, value) {
-
-			if (!value) state.lastroom = null
-
+			if (!value) state.lastroom = null;
 			else
 				state.lastroom = {
 					id: value,
-					time: new Date()
-				}
-
+					time: new Date(),
+				};
 		},
 
 		active(state, value) {
-
 			if (state.mobile) {
 				state.active = false;
 				state.iteraction = false;
-				return
+				return;
 			}
 
 			var time = 50;
 
-			if (!value) time = 1000
+			if (!value) time = 1000;
 
-			activetimeout = f.slowMade(() => {
+			activetimeout = f.slowMade(
+				() => {
+					if (!value) {
+						if (!_.isEmpty(state.activeBlock)) {
+							return;
+						}
 
-				if (!value) {
-					if (!_.isEmpty(state.activeBlock)) {
-						return
+						state.iteraction = false;
 					}
 
-					state.iteraction = false
-				}
+					state.active = value;
 
-				state.active = value
-
-				if (!state.active) {
-					state.share = null
-					delete state.activeBlock.share
-				}
-
-			}, activetimeout, time)
+					if (!state.active) {
+						state.share = null;
+						delete state.activeBlock.share;
+					}
+				},
+				activetimeout,
+				time
+			);
 		},
 
 		setiteraction(state, value) {
-			state.iteraction = value
+			state.iteraction = value;
 		},
 
 		maximize(state, route) {
-			state.minimized = false
+			state.minimized = false;
 		},
 
 		minimize(state, v) {
-
 			if (state.mobile) {
 				state.minimized = false;
-				return
+				return;
 			}
 
 			if (state.minimized) {
-				state.activeBlock = {}
-				state.active = false
+				state.activeBlock = {};
+				state.active = false;
 			}
 
-			state.minimized = true
+			state.minimized = true;
 		},
 
 		setmodal(state, v) {
@@ -293,64 +281,67 @@ var store = new Vuex.Store({
 			state.isCallsEnabled = isCallsEnabled;
 		},
 		ls(state) {
-			if (typeof localStorage.getItem('pinchat') != 'undefined')
-				state.pinchat = localStorage.getItem('pinchat') ? true : false
+			if (typeof localStorage.getItem("pinchat") != "undefined")
+				state.pinchat = localStorage.getItem("pinchat") ? true : false;
 
-			if (typeof localStorage.getItem('dontreadreceipts') != 'undefined')
-				state.dontreadreceipts = localStorage.getItem('dontreadreceipts') ? true : false
+			if (typeof localStorage.getItem("dontreadreceipts") != "undefined")
+				state.dontreadreceipts = localStorage.getItem("dontreadreceipts")
+					? true
+					: false;
 		},
 
 		init(state) {
-			mex.theme(state, localStorage.getItem('theme') || 'black')
-
-
-
+			mex.theme(state, localStorage.getItem("theme") || "black");
 		},
 
 		ALL_NOTIFICATIONS_COUNT(state, rooms) {
+			var n = new Date();
 
-			var n = new Date()
+			var count = _.filter(rooms, (room) => {
+				if (room._selfMembership === "invite") {
+					var users = store._vm.core.mtrx.anotherChatUsers(room);
 
-			var count = _.filter(rooms, room => {
-
-				if (room._selfMembership === 'invite') {
-					var users = store._vm.core.mtrx.anotherChatUsers(room)
-
-					if (users.length == 1 && store._vm.core.mtrx.blockeduser(users[0].userId)) {
-						return false
+					if (
+						users.length == 1 &&
+						store._vm.core.mtrx.blockeduser(users[0].userId)
+					) {
+						return false;
 					}
 
-					if (f.date.addseconds(new Date(room.summary.lastModified), 86400) > n) return true
+					if (f.date.addseconds(new Date(room.summary.lastModified), 86400) > n)
+						return true;
 				}
-			})
+			});
 
-			state.allnotifications = _.reduce(rooms, (s, chat) => {
-
-				return s + (chat.getUnreadNotificationCount() || 0)
-
-			}, 0) + count.length
-
+			state.allnotifications =
+				_.reduce(
+					rooms,
+					(s, chat) => {
+						return s + (chat.getUnreadNotificationCount() || 0);
+					},
+					0
+				) + count.length;
 
 			if (state.chats.length <= 3) {
 				// Count notifications from pocketnet team room
 				var pocketMessages = _.filter(state.pocketteammessages, function (m) {
 					return !state.readedteammessages[m.id];
 				}).length;
-				state.allnotifications += pocketMessages
+				state.allnotifications += pocketMessages;
 			}
 
-
-			var external = f.deep(store, '_vm.core.external.clbks.ALL_NOTIFICATIONS_COUNT') || {}
+			var external =
+				f.deep(store, "_vm.core.external.clbks.ALL_NOTIFICATIONS_COUNT") || {};
 
 			_.each(external, function (e) {
-				e(state.allnotifications)
-			})
+				e(state.allnotifications);
+			});
 
-			return state.allnotifications
+			return state.allnotifications;
 		},
 
 		SET_CHATS_READY(state, v) {
-			state.chatsready = v
+			state.chatsready = v;
 		},
 
 		SET_PRECHATS_TO_STORE(state, chats) {
@@ -358,229 +349,210 @@ var store = new Vuex.Store({
 		},
 
 		SET_CHAT_TO_FORCE(state, id) {
-
-
-			Vue.set(state.force, id, true)
-
+			Vue.set(state.force, id, true);
 		},
 
 		SET_CHATS_TO_STORE(state, chats) {
-
 			state.chats = chats;
 
-			var chatsMap = {}
+			var chatsMap = {};
 
 			_.each(chats, (chat) => {
-
-				var aid = chat.info.title.replace("#", '')
+				var aid = chat.info.title.replace("#", "");
 
 				if (!state.chatsMap[chat.roomId] || state.force[chat.roomId]) {
-					Vue.set(state.chatsMap, chat.roomId, chat)
+					Vue.set(state.chatsMap, chat.roomId, chat);
 				}
 
 				if (!state.chatsMap[aid] || state.force[chat.roomId]) {
-					Vue.set(state.chatsMap, aid, chat)
+					Vue.set(state.chatsMap, aid, chat);
 				}
 
-				chatsMap[chat.roomId] = chat
-				chatsMap[chat.info.title.replace("#", '')] = chat
+				chatsMap[chat.roomId] = chat;
+				chatsMap[chat.info.title.replace("#", "")] = chat;
 
-				Vue.delete(state.force, chat.roomId)
-
-			})
+				Vue.delete(state.force, chat.roomId);
+			});
 
 			_.each(state.chatsMap, function (c, id) {
-				if (!chatsMap[id]) Vue.delete(state.chatsMap, id)
-			})
+				if (!chatsMap[id]) Vue.delete(state.chatsMap, id);
+			});
 
 			//state.chatsMap = chatsMap;
-
 		},
 		SET_EVENTS_TO_STORE(state, events) {
 			//state.events = events
-			
-			_.each(events, function(ev, k){
-				var timeline = []
 
-				_.each(ev.timeline, function(__e){
-					var e = __e.event
+			_.each(events, function (ev, k) {
+				var timeline = [];
+
+				_.each(ev.timeline, function (__e) {
+					var e = __e.event;
 
 					var _e = {
-
-						event : {
-							content : _.clone(e.content),
+						event: {
+							content: _.clone(e.content),
 							event_id: e.event_id,
 							origin_server_ts: e.origin_server_ts,
 							room_id: e.room_id,
 							sender: e.sender,
 							state_key: e.state_key,
-							type: e.type
+							type: e.type,
 						},
 
-						get : () => __e
-						
-					}
+						get: () => __e,
+					};
 
-					timeline.push(_e)
-				})
+					timeline.push(_e);
+				});
 
-
-				Vue.set(state.events, k, {timeline})
+				Vue.set(state.events, k, { timeline });
 			});
-
 		},
 
 		SET_TYPING_TO_STORE(state, data) {
-			state.typing[data.room] || (state.typing[data.room] = {})
-			state.typing[data.room][data.name] = data.typing
+			state.typing[data.room] || (state.typing[data.room] = {});
+			state.typing[data.room][data.name] = data.typing;
 
 			function allTrue(data) {
-				for (var o in data)
-					if (!data[o]) return false;
+				for (var o in data) if (!data[o]) return false;
 
 				return true;
 			}
 
-			allTrue(data.typing)
-
+			allTrue(data.typing);
 		},
 		DELETE_ROOM(state, roomid) {
-
-			Vue.set(state.deletedrooms, roomid, true)
-
-
-
+			Vue.set(state.deletedrooms, roomid, true);
 		},
 		SET_CONTACTS(state, v) {
-			var mp = {}
+			var mp = {};
 
 			_.each(v, function (c) {
-				mp[c.id] = c
-			})
+				mp[c.id] = c;
+			});
 
-			state.contacts = mp
+			state.contacts = mp;
 
-			store.commit('SET_CONTACTS_MAP')
+			store.commit("SET_CONTACTS_MAP");
 		},
 
 		SET_CHATS_USERS(state, v) {
-
 			_.each(v || {}, function (u, i) {
 				if (!state.chatusers[i] || !_.isEqual(state.chatusers[i], u)) {
-					Vue.set(state.chatusers, i, u)
+					Vue.set(state.chatusers, i, u);
 				}
-
-			})
-
+			});
 
 			//state.chatusers = v || {}
 		},
 
 		SET_CONTACTS_FROM_MATRIX(state, v) {
-			var mp = {}
+			var mp = {};
 
 			_.each(v, function (c) {
-				if (f.getmatrixid(c.id) != (store._vm.core.user.userinfo && store._vm.core.user.userinfo.id)) mp[c.id] = c
-			})
+				if (
+					f.getmatrixid(c.id) !=
+					(store._vm.core.user.userinfo && store._vm.core.user.userinfo.id)
+				)
+					mp[c.id] = c;
+			});
 
-			state.contactsFromMatrix = mp
+			state.contactsFromMatrix = mp;
 
-			store.commit('SET_CONTACTS_MAP')
+			store.commit("SET_CONTACTS_MAP");
 		},
 
 		SET_CONTACTS_MAP(state) {
-
-			var contactsMap = {}
+			var contactsMap = {};
 
 			_.each(state.contacts, function (contact) {
-				contactsMap[contact.id] = contact
-
-			})
+				contactsMap[contact.id] = contact;
+			});
 
 			_.each(state.contactsFromMatrix, function (contact) {
-				contactsMap[contact.id] = contact
-			})
+				contactsMap[contact.id] = contact;
+			});
 
 			state.contactsMap = contactsMap;
 		},
 
 		SET_UNAUTHORIZED(state, v) {
-			state.unauthorized = v
+			state.unauthorized = v;
 		},
 
 		SET_USERINFO(state, v) {
+			if (!v.info) return;
 
-			if (!v.info) return
-
-			if (v.reload || !state.users[v.info.id]) Vue.set(state.users, v.info.id, v.info)
-
-
+			if (v.reload || !state.users[v.info.id])
+				Vue.set(state.users, v.info.id, v.info);
 		},
 
 		SET_CURRENT_ROOM(state, v) {
-
-			state.currentRoom = v
+			state.currentRoom = v;
 		},
 
 		CLEAR_USERSINFO(state, v) {
-			state.users = {}
+			state.users = {};
 		},
 
 		GALLERY(state, v) {
+			state.gallery = v || null;
 
-			state.gallery = v || null
+			var fu = null;
 
-			var fu = null
-
-			if(v){
-				fu = f.deep(window, 'window.POCKETNETINSTANCE.mobile.statusbar.gallerybackground')
-			}
-			else{
-				fu = f.deep(window, 'window.POCKETNETINSTANCE.mobile.statusbar.background')
-
+			if (v) {
+				fu = f.deep(
+					window,
+					"window.POCKETNETINSTANCE.mobile.statusbar.gallerybackground"
+				);
+			} else {
+				fu = f.deep(
+					window,
+					"window.POCKETNETINSTANCE.mobile.statusbar.background"
+				);
 			}
 
 			if (fu) {
-				fu()
+				fu();
 			}
-
 		},
 
 		SHARE(state, v) {
-			state.share = v || null
+			state.share = v || null;
 
 			if (!state.mobile) {
-				state.activeBlock.share = true
+				state.activeBlock.share = true;
 				state.active = true;
 			}
 		},
 
 		CONNECT(state, v) {
-			state.connect = v
+			state.connect = v;
 		},
 
 		JOINROOM(state, v) {
-			state.joinroom = v
+			state.joinroom = v;
 		},
 
 		CONTACT(state, v) {
-			state.contact = v || null
+			state.contact = v || null;
 		},
 
 		theme(state, value) {
-			mex.theme(state, value)
+			mex.theme(state, value);
 		},
 
 		SET_POCKETTEAMMESSAGES(state, v) {
 			state.pocketteammessages = v;
 			// Check local storage
-			var readedMessagesStr = localStorage.getItem('readedpocketteammessages');
+			var readedMessagesStr = localStorage.getItem("readedpocketteammessages");
 			if (readedMessagesStr) {
 				try {
 					var readedMessages = JSON.parse(readedMessagesStr);
 					state.readedteammessages = readedMessages;
 				} catch (e) {
-					localStorage.removeItem('readedpocketteammessages');
+					localStorage.removeItem("readedpocketteammessages");
 					state.readedteammessages = {};
 				}
 			}
@@ -594,184 +566,182 @@ var store = new Vuex.Store({
 				});
 				state.readedteammessages = readedMessages;
 				// Update local storage
-				localStorage.setItem('readedpocketteammessages', JSON.stringify(readedMessages));
+				localStorage.setItem(
+					"readedpocketteammessages",
+					JSON.stringify(readedMessages)
+				);
 			}
 		},
 
 		SET_MENU(state, v) {
-			state.menu = v
-
+			state.menu = v;
 		},
 
-		SET_VOICERECORDING(state, v){
-			state.voicerecording = v
-		}
-
+		SET_VOICERECORDING(state, v) {
+			state.voicerecording = v;
+		},
 	},
 	actions: {
-		SET_CHAT_MEMBERS({ commit }, chat) {
-
-		},
+		SET_CHAT_MEMBERS({ commit }, chat) {},
 		TYPING_EVENT({ commit }, member) {
-			let room = member.roomId
-			let name = member.name
-			let data = { room, name, typing: member.typing }
-			commit('SET_TYPING_TO_STORE', data)
+			let room = member.roomId;
+			let name = member.name;
+			let data = { room, name, typing: member.typing };
+			commit("SET_TYPING_TO_STORE", data);
 		},
-		CHAT_MEMBERS({ commit }) {
-
-		},
+		CHAT_MEMBERS({ commit }) {},
 		SHOW_GALLERY_FROMEVENTS({ commit, dispatch }, { events, event }) {
-
-			var images = [], index = 0
+			var images = [],
+				index = 0;
 
 			var encrypted = function (event) {
-				return f.deep(event, 'event.content.info.secrets') ? true : false
-			}
+				return f.deep(event, "event.content.info.secrets") ? true : false;
+			};
 
-			_.each(events, event => {
-
-				if (event.event.content.msgtype === 'm.image') {
-
-					var url = event.event.content.url
+			_.each(events, (event) => {
+				if (event.event.content.msgtype === "m.image") {
+					var url = event.event.content.url;
 
 					if (encrypted(event)) {
-						url = event.event.decryptedImage
+						url = event.event.decryptedImage;
 					}
 
 					images.push({
 						src: url,
 						w: event.event.content.info.w || 500,
 						h: event.event.content.info.h || 500,
-						eventId: event.event.event_id
-					})
-
+						eventId: event.event.event_id,
+					});
 				}
-
-			})
+			});
 
 			images = _.filter(images, function (i) {
-				return i.src
-			})
+				return i.src;
+			});
 
-			index = images.map(function (e) {
-				return e.eventId
-			}).indexOf(event.event.event_id)
+			index = images
+				.map(function (e) {
+					return e.eventId;
+				})
+				.indexOf(event.event.event_id);
 
-			dispatch('SHOW_GALLERY', { images, index })
-
+			dispatch("SHOW_GALLERY", { images, index });
 		},
 		SHOW_GALLERY({ commit }, { images, index }) {
+			if (!index) index = 0;
 
-			if (!index) index = 0
-
-			if (!images) images = []
+			if (!images) images = [];
 
 			if (images.length) {
-
-				commit('GALLERY', {
+				commit("GALLERY", {
 					images: images,
-					index: index
-				})
-
+					index: index,
+				});
 			} else {
-				commit('GALLERY', null)
+				commit("GALLERY", null);
 			}
-
 		},
 
 		RELOAD_CHAT_USERS({ commit }, m_chats) {
-			return store._vm.core.mtrx.kit.usersInfoForChats(m_chats, true).then(i => {
-				commit('SET_CHATS_USERS', store._vm.core.mtrx.kit.usersFromChats(m_chats))
-				return Promise.resolve()
-			}).catch(e => {
-				return Promise.resolve()
-			})
+			return store._vm.core.mtrx.kit
+				.usersInfoForChats(m_chats, true)
+				.then((i) => {
+					commit(
+						"SET_CHATS_USERS",
+						store._vm.core.mtrx.kit.usersFromChats(m_chats)
+					);
+					return Promise.resolve();
+				})
+				.catch((e) => {
+					return Promise.resolve();
+				});
 		},
 
 		FETCH_CHATS({ commit }) {
+			var m_chats = f.deep(store._vm, "core.mtrx.store.rooms") || {};
 
-			var m_chats = f.deep(store._vm, 'core.mtrx.store.rooms') || {}
-
-			var id = store._vm.core.user.myMatrixId()
+			var id = store._vm.core.user.myMatrixId();
 
 			var chats = _.map(m_chats, function (r) {
 				if (r.getLastActiveTimestamp() === -9007199254740991) {
-
 					if (r.getMember(id)) {
-						r.summary.lastModified = r.getMember(id).events.member.event.origin_server_ts
+						r.summary.lastModified =
+							r.getMember(id).events.member.event.origin_server_ts;
 					}
-
 				} else {
-					r.summary.lastModified = r.getLastActiveTimestamp()
+					r.summary.lastModified = r.getLastActiveTimestamp();
 				}
-				return r.summary
-			})
+				return r.summary;
+			});
 
-			commit('SET_PRECHATS_TO_STORE', chats)
+			commit("SET_PRECHATS_TO_STORE", chats);
 
-			return store._vm.core.mtrx.kit.allchatmembers(m_chats).then(r => {
+			return store._vm.core.mtrx.kit.allchatmembers(m_chats).then((r) => {
+				commit("SET_CHATS_TO_STORE", chats);
+				commit(
+					"SET_CHATS_USERS",
+					store._vm.core.mtrx.kit.usersFromChats(m_chats)
+				);
 
-				commit('SET_CHATS_TO_STORE', chats)
-				commit('SET_CHATS_USERS', store._vm.core.mtrx.kit.usersFromChats(m_chats))
+				return store._vm.core.mtrx.kit.fillContacts(m_chats);
+			});
 
-				return store._vm.core.mtrx.kit.fillContacts(m_chats)
+			return Promise.resolve();
 
-			})
+			return store._vm.core.mtrx.kit
+				.usersInfoForChats(m_chats)
+				.then((i) => {
+					commit(
+						"SET_CHATS_USERS",
+						store._vm.core.mtrx.kit.usersFromChats(m_chats)
+					);
+					commit(
+						"SET_CONTACTS_FROM_MATRIX",
+						_.filter(i, (m) => {
+							return (
+								m.id !==
+								(store._vm.core.user.userinfo &&
+									store._vm.core.user.userinfo.id)
+							);
+						})
+					);
 
-
-
-			return Promise.resolve()
-
-			return store._vm.core.mtrx.kit.usersInfoForChats(m_chats).then(i => {
-
-				commit('SET_CHATS_USERS', store._vm.core.mtrx.kit.usersFromChats(m_chats))
-				commit('SET_CONTACTS_FROM_MATRIX', _.filter(i, (m) => {
-					return m.id !== (store._vm.core.user.userinfo && store._vm.core.user.userinfo.id)
-				}))
-
-				return Promise.resolve()
-
-			}).catch(e => {
-				return Promise.resolve()
-			})
-
+					return Promise.resolve();
+				})
+				.catch((e) => {
+					return Promise.resolve();
+				});
 		},
 
-
 		FETCH_EVENTS({ commit }) {
+			var m_chats = f.deep(store._vm, "core.mtrx.store.rooms") || {};
 
-			var m_chats = f.deep(store._vm, 'core.mtrx.store.rooms') || {}
-
-			var events = {}
+			var events = {};
 
 			_.each(m_chats, function (chat) {
+				events[chat.roomId] = {};
 
-				events[chat.roomId] = {}
+				var timeline = [].concat(
+					chat.timeline,
+					chat.currentState.getStateEvents("m.room.member")
+				);
 
-				var timeline = [].concat(chat.timeline, chat.currentState.getStateEvents('m.room.member'))
-
-				events[chat.roomId].timeline = timeline
-
-			})
+				events[chat.roomId].timeline = timeline;
+			});
 
 			_.each(events, function (e) {
-
 				e.timeline = _.sortBy(e.timeline, function (event) {
-					return event.getDate()
-				})
+					return event.getDate();
+				});
+			});
 
-			})
-
-			commit('SET_EVENTS_TO_STORE', events)
+			commit("SET_EVENTS_TO_STORE", events);
 
 			//store._vm.core.mtrx.kit.usersInfoForChatsStore(m_chats).then(i => {
 
 			//})
-
 		},
-	}
-})
-
+	},
+});
 
 export default store;

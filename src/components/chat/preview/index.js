@@ -1,60 +1,56 @@
-import {mapState} from 'vuex';
-import chatName from '@/components/chats/assets/name.vue'
-import chatIcon from '@/components/chats/assets/icon.vue'
-import userView from '@/components/user/view/pnuser/index.vue'
-import {Swiper, SwiperSlide} from 'vue-awesome-swiper'
+import { mapState } from "vuex";
+import chatName from "@/components/chats/assets/name.vue";
+import chatIcon from "@/components/chats/assets/icon.vue";
+import userView from "@/components/user/view/pnuser/index.vue";
+import { Swiper, SwiperSlide } from "vue-awesome-swiper";
 //import 'swiper/swiper-bundle.css'
 //
-import {Carousel, Slide} from 'vue-carousel';
-import f from '@/application/functions.js'
+import { Carousel, Slide } from "vue-carousel";
+import f from "@/application/functions.js";
 //
 
 export default {
-  name: 'chatPreview',
-  props: {
-    chat: Object,
-    usersinfo: Array,
-    room: {},
-    undefinedRoom: false
-  },
+	name: "chatPreview",
+	props: {
+		chat: Object,
+		usersinfo: Array,
+		room: {},
+		undefinedRoom: false,
+	},
 
-  components: {
-    userView,
-    chatName,
-    chatIcon,
-    Swiper,
-    SwiperSlide,
-    Carousel,
-    Slide
-  },
+	components: {
+		userView,
+		chatName,
+		chatIcon,
+		Swiper,
+		SwiperSlide,
+		Carousel,
+		Slide,
+	},
 
-  data: function () {
+	data: function () {
+		return {
+			loading: false,
+			swiperOption: {
+				direction: "horizontal",
+				pagination: {
+					el: ".swiper-pagination",
+				},
+			},
+		};
+	},
 
-    return {
-      loading: false,
-      swiperOption: {
-        direction: 'horizontal',
-        pagination: {
-          el: '.swiper-pagination',
-        }
-      },
-    }
+	computed: {
+		users: function () {
+			if (!this.chat) return [];
 
-  },
+			return this.core.mtrx.chatUsersInfo(this.chat.roomId, "anotherChatUsers");
+		},
+	},
 
-  computed: {
-
-    users : function(){
-      if(!this.chat) return []
-
-      return this.core.mtrx.chatUsersInfo(this.chat.roomId, 'anotherChatUsers')
-    },
-
-  },
-
-  methods : {
-    empty : function(user){
-      return _.isEmpty(user)
-    }
-  }
-}
+	methods: {
+		empty: function (user) {
+			return _.isEmpty(user);
+		},
+	},
+};

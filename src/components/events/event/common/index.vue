@@ -1,5 +1,5 @@
 <template>
-<div class="eventsCommon"></div>
+	<div class="eventsCommon"></div>
 </template>
 
 <script src="./index.js"></script>

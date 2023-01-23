@@ -1,9 +1,9 @@
 <template>
-  <div class="button-outter-div button small black">
-    <button class="button small" v-on:click="click">
-      {{ caption }}
-    </button>
-  </div>
+	<div class="button-outter-div button small black">
+		<button class="button small" v-on:click="click">
+			{{ caption }}
+		</button>
+	</div>
 </template>
 
 <script src="./index.js"></script>
@@ -11,24 +11,3 @@
 
 <!-- THEMES BEGIN -->
 <!-- THEMES END -->
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

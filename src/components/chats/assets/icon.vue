@@ -1,22 +1,22 @@
 <template>
-  <div class="chatIcon" :class="{ unknowngroupusers }">
-    <div v-if="groupAvatar" class="chatGroupIcon">
-      <img :src="groupAvatar" alt="" />
-    </div>
-    <userspic
-      :slidesPerView="slidesPerView"
-      :users="usersinfo"
-      :status="status"
-      :unseen="unseen"
-      :key="allnotifications"
-      :single="singleAvatar"
-      :class="{ opacity: groupAvatar }"
-    />
+	<div class="chatIcon" :class="{ unknowngroupusers }">
+		<div v-if="groupAvatar" class="chatGroupIcon">
+			<img :src="groupAvatar" alt="" />
+		</div>
+		<userspic
+			:slidesPerView="slidesPerView"
+			:users="usersinfo"
+			:status="status"
+			:unseen="unseen"
+			:key="allnotifications"
+			:single="singleAvatar"
+			:class="{ opacity: groupAvatar }"
+		/>
 
-    <div class="unknowngroupusersicon" v-if="unknowngroupusers">
-      <i class="fas fa-question"></i>
-    </div>
-  </div>
+		<div class="unknowngroupusersicon" v-if="unknowngroupusers">
+			<i class="fas fa-question"></i>
+		</div>
+	</div>
 </template>
 
 <style scoped lang="sass">
@@ -59,114 +59,112 @@
 import f from "@/application/functions";
 
 export default {
-  name: "chatIcon",
-  data: function () {
-    return {
-      single: [],
-    };
-  },
-  props: {
-    chat: {},
-    m_chat: {},
-    slidesPerView: Number,
-    hideunseen: Boolean,
-    dontuseslides: Boolean,
-  },
-  computed: {
-    allnotifications: function () {
-      return this.$store.state.allnotifications || "0";
-    },
+	name: "chatIcon",
+	data: function () {
+		return {
+			single: [],
+		};
+	},
+	props: {
+		chat: {},
+		m_chat: {},
+		slidesPerView: Number,
+		hideunseen: Boolean,
+		dontuseslides: Boolean,
+	},
+	computed: {
+		allnotifications: function () {
+			return this.$store.state.allnotifications || "0";
+		},
 
-    unseen: function () {
-      if (this.hideunseen) return 0;
+		unseen: function () {
+			if (this.hideunseen) return 0;
 
-      if (this.blockedCheck) return 0;
+			if (this.blockedCheck) return 0;
 
-      if (this.m_chat._selfMembership === "invite") {
-        if (
-          f.date.addseconds(
-            moment.utc(this.m_chat.summary.lastModified).toDate(),
-            86400
-          ) > new Date()
-        )
-          return 1;
-      }
+			if (this.m_chat._selfMembership === "invite") {
+				if (
+					f.date.addseconds(
+						moment.utc(this.m_chat.summary.lastModified).toDate(),
+						86400
+					) > new Date()
+				)
+					return 1;
+			}
 
-      this.allnotifications;
+			this.allnotifications;
 
-      return this.m_chat.getUnreadNotificationCount();
-    },
-    users: function () {
-      if (!this.chat) return [];
+			return this.m_chat.getUnreadNotificationCount();
+		},
+		users: function () {
+			if (!this.chat) return [];
 
-      var u = this.core.mtrx.anotherChatUsers(this.chat.roomId);
+			var u = this.core.mtrx.anotherChatUsers(this.chat.roomId);
 
-      if (this.dontuseslides) {
-        u = _.first(u, 4);
-      }
+			if (this.dontuseslides) {
+				u = _.first(u, 4);
+			}
 
-      return u;
-    },
-    singleAvatar: function () {
-      if (!this.chat && !this.m_chat) return {};
-      if (
-        this.m_chat.getJoinRule() === "public" &&
-        this.m_chat.currentState.getMembers().length === 1
-      ) {
-        var member = this.m_chat.currentState.getMembers()[0];
-        var data = this.$store.state.users[f.getmatrixid(member.userId)];
-        if (data) {
-          data.status = member.membership;
-          data.image = data.source.i;
-          return data;
-        }
-      }
-      return {};
-    },
-    blockedCheck: function () {
-      var users = this.core.mtrx.anotherChatUsers(this.m_chat.roomId);
+			return u;
+		},
+		singleAvatar: function () {
+			if (!this.chat && !this.m_chat) return {};
+			if (
+				this.m_chat.getJoinRule() === "public" &&
+				this.m_chat.currentState.getMembers().length === 1
+			) {
+				var member = this.m_chat.currentState.getMembers()[0];
+				var data = this.$store.state.users[f.getmatrixid(member.userId)];
+				if (data) {
+					data.status = member.membership;
+					data.image = data.source.i;
+					return data;
+				}
+			}
+			return {};
+		},
+		blockedCheck: function () {
+			var users = this.core.mtrx.anotherChatUsers(this.m_chat.roomId);
 
-      if (users.length == 1) {
-        return this.core.mtrx.blockeduser(users[0].userId);
-      }
-    },
-    usersinfo: function () {
-      var u = this.core.mtrx.chatUsersInfo(
-        this.chat.roomId,
-        "anotherChatUsers"
-      );
+			if (users.length == 1) {
+				return this.core.mtrx.blockeduser(users[0].userId);
+			}
+		},
+		usersinfo: function () {
+			var u = this.core.mtrx.chatUsersInfo(
+				this.chat.roomId,
+				"anotherChatUsers"
+			);
 
+			if (this.dontuseslides) {
+				u = _.first(u, 4);
+			}
 
-      if (this.dontuseslides) {
-        u = _.first(u, 4);
-      }
+			return u;
+		},
 
-      return u;
+		status: function () {
+			var us = {};
 
-    },
+			_.each(this.users, (u) => {
+				us[u.userId] = this.core.mtrx.blockeduser(u.userId)
+					? "blocked"
+					: u.membership;
+			});
 
-    status: function () {
-      var us = {};
+			return us;
+		},
 
-      _.each(this.users, (u) => {
-        us[u.userId] = this.core.mtrx.blockeduser(u.userId)
-          ? "blocked"
-          : u.membership;
-      });
+		unknowngroupusers: function () {
+			return this.core.mtrx.kit.unknowngroupusers(this.m_chat);
+		},
 
-      return us;
-    },
-
-    unknowngroupusers: function () {
-      return this.core.mtrx.kit.unknowngroupusers(this.m_chat);
-    },
-
-    groupAvatar: function () {
-      const avatar =
-        this.m_chat.currentState.getStateEvents("m.room.avatar")[0]?.event
-          .content.avatarUrl;
-      return avatar !== "" ? avatar : "";
-    },
-  },
+		groupAvatar: function () {
+			const avatar =
+				this.m_chat.currentState.getStateEvents("m.room.avatar")[0]?.event
+					.content.avatarUrl;
+			return avatar !== "" ? avatar : "";
+		},
+	},
 };
 </script>

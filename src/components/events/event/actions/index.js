@@ -1,23 +1,21 @@
-import {mapState} from 'vuex';
+import { mapState } from "vuex";
 
 export default {
-  name: 'msgActions',
-  props: {
-    position: String
-  },
+	name: "msgActions",
+	props: {
+		position: String,
+	},
 
-  data: function () {
+	data: function () {
+		return {
+			loading: false,
+			actionMessage: false,
+		};
+	},
 
-    return {
-      loading: false,
-      actionMessage: false
-    }
+	computed: mapState({
+		auth: (state) => state.auth,
+	}),
 
-  },
-
-  computed: mapState({
-    auth: state => state.auth,
-  }),
-
-  methods: {},
-}
+	methods: {},
+};

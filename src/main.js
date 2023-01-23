@@ -1,9 +1,9 @@
-import Vue from 'vue'
+import Vue from "vue";
 
-import App from '@/App.vue'
+import App from "@/App.vue";
 
-require('babel-polyfill')
+require("babel-polyfill");
 
 new Vue({
-    render: h => h(App),
-}).$mount('#matrix-root')
+	render: (h) => h(App),
+}).$mount("#matrix-root");

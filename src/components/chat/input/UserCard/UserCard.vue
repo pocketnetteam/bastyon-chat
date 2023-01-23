@@ -1,36 +1,35 @@
 <template>
-    <div class="card">
-        <img class="picture" :src="image" alt="">
-        <label class="name"> {{ name }} </label>
-    </div>     
+	<div class="card">
+		<img class="picture" :src="image" alt="" />
+		<label class="name"> {{ name }} </label>
+	</div>
 </template>
 
 <script>
 export default {
-    name: 'UserCard',
-    props: { 
-        image: {
-            type: String,
-            default: ''
-        },
-        name: {
-            type: String,
-            default: ''
-        }
-    }
-
-}
+	name: "UserCard",
+	props: {
+		image: {
+			type: String,
+			default: "",
+		},
+		name: {
+			type: String,
+			default: "",
+		},
+	},
+};
 </script>
 
 <style lang="sass" scoped>
 
-.card 
+.card
     display: flex
     height: 50px
     align-items: center
     padding-left: 8px
 
-.card:hover 
+.card:hover
     background-color: srgba(--neutral-grad-2, 0.08)
 
 .picture
@@ -38,7 +37,7 @@ export default {
     height: 30px
     border-radius: 50%
 
-.name 
+.name
     margin-left: 10px
     font-weight: 500
 </style>

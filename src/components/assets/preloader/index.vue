@@ -1,23 +1,25 @@
 <template>
-  <div id="preloader" :platform="platform" :class="{'bin' : pocketnet, 'bout' : !pocketnet, minimized, fix : pocketnet, active}">
-
- 
-
-    <div class="variant ">
-
-      <div class="iospreloadercenter">
-
-        <div class="spinner-eff spinner-eff-3">
-          <div class="circle circle-1"></div>
-          <div class="circle circle-2"></div>
-          <div class="circle circle-3"></div>
-        </div>
-
-      </div>
-    </div>
-
-    
-  </div>
+	<div
+		id="preloader"
+		:platform="platform"
+		:class="{
+			bin: pocketnet,
+			bout: !pocketnet,
+			minimized,
+			fix: pocketnet,
+			active,
+		}"
+	>
+		<div class="variant">
+			<div class="iospreloadercenter">
+				<div class="spinner-eff spinner-eff-3">
+					<div class="circle circle-1"></div>
+					<div class="circle circle-2"></div>
+					<div class="circle circle-3"></div>
+				</div>
+			</div>
+		</div>
+	</div>
 </template>
 
 <script src="./index.js"></script>
@@ -26,38 +28,3 @@
 
 <!-- THEMES BEGIN -->
 <!-- THEMES END -->
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

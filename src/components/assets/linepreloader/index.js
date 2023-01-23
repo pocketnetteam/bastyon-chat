@@ -1,7 +1,6 @@
-import { mapState } from 'vuex';
+import { mapState } from "vuex";
 
 export default {
-    name: 'linepreloader',
-    props: {
-    },
-}
+	name: "linepreloader",
+	props: {},
+};
