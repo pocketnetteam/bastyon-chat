@@ -250,8 +250,8 @@ export default {
 			if (!this.checkCallsEnabled()) {
 				this.$dialog
 					.confirm(this.$t("caption.request"), {
-						okText: "Yes",
-						cancelText: "No, cancel",
+						okText: this.$t("yes"),
+						cancelText: this.$t("cancel"),
 					})
 
 					.then(() => {
