@@ -1,39 +1,31 @@
-import {mapState} from 'vuex'
+import { mapState } from "vuex";
 
 export default {
-  name: "headerChat",
+	name: "headerChat",
 
-  data: function () {
+	data: function () {
+		return {
+			loading: false,
+		};
+	},
 
-    return {
-      loading: false
-    }
+	created: () => {},
 
-  },
+	watch: {
+		//$route: 'getdata'
+	},
 
-  created: () => {
+	computed: mapState({
+		auth: (state) => state.auth,
+		...mapState(["currentUserChat"]),
+		isCoreRoute() {
+			return this.$route.path === "/";
+		},
+	}),
 
-  },
-
-  watch: {
-    //$route: 'getdata'
-  },
-
-  
-
-  computed: mapState({
-    auth: state => state.auth,
-     ...mapState([
-        'currentUserChat'
-      ]),
-      isCoreRoute() {
-        return this.$route.path === '/';
-      }
-  }),
-
-  methods: {
-     routeBack() {
-        this.$router.go(-1);
-      }
-  },
-}
+	methods: {
+		routeBack() {
+			this.$router.go(-1);
+		},
+	},
+};

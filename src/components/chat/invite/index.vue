@@ -1,24 +1,23 @@
 <template>
-  <div id="chatinvite" :class="{ minimized, active}">
-    <div class="selectedtype">
+	<div id="chatinvite" :class="{ minimized, active }">
+		<div class="selectedtype">
+			<div class="completewrapper">
+				<button
+					@click="complete()"
+					class="button small rounded"
+					:class="{ orange: cancomplete, ghost: !cancomplete }"
+				>
+					Invite
+				</button>
+			</div>
+		</div>
 
-      <div class="completewrapper">
-        <button @click="complete()" class="button small rounded" :class="{orange : cancomplete, ghost : !cancomplete}">
-          Invite
-        </button>
-      </div>
-      
-    </div>
-
-    <div class="creationbody">
-
-        <div class="contactswrapper">
-          <contacts :mode="'Selectmany'" @selectedUsers="selectedUsers"/>
-        </div>
-        
-    </div>
-
-  </div>
+		<div class="creationbody">
+			<div class="contactswrapper">
+				<contacts :mode="'Selectmany'" @selectedUsers="selectedUsers" />
+			</div>
+		</div>
+	</div>
 </template>
 
 <script src="./index.js"></script>
@@ -26,24 +25,3 @@
 
 <!-- THEMES BEGIN -->
 <!-- THEMES END -->
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

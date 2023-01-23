@@ -1,62 +1,56 @@
-
-import FooterChat from '../layouts/footerChat/index.vue'
-import gallery from '@/components/gallery/index.vue'
-import {mapState} from 'vuex'
+import FooterChat from "../layouts/footerChat/index.vue";
+import gallery from "@/components/gallery/index.vue";
+import { mapState } from "vuex";
 
 export default {
-  name: "mainWrapper",
-  components: {
-    FooterChat,
-    gallery
-  },
-  data: function () {
-
-    return {
-      prevRoute: null,
-      loading: false
-    }
-
-  },
-
-  created: () => {
-
-  },
-
-  watch: {
-    //$route: 'getdata'
-  },
-
-  beforeRouteEnter(to, from, next) {
-    next(vm => {
-      vm.prevRoute = from
-    })
-  },
-
-  beforeRouteLeave(to, from, next) {
-		this.$store.commit('setmodal', null)
-		next()
+	name: "mainWrapper",
+	components: {
+		FooterChat,
+		gallery,
+	},
+	data: function () {
+		return {
+			prevRoute: null,
+			loading: false,
+		};
 	},
 
-  computed: mapState({
-    auth: state => state.auth,
+	created: () => {},
 
-    ...mapState([
-      'currentUserChat',
-      'minimized',
-      'gallery',
-      'active',
-      'mobile'
-    ]),
+	watch: {
+		//$route: 'getdata'
+	},
 
-    showFooter : function(){
-      return this.$route.name != 'chat' || this.minimized
-    },
+	beforeRouteEnter(to, from, next) {
+		next((vm) => {
+			vm.prevRoute = from;
+		});
+	},
 
-  }),
+	beforeRouteLeave(to, from, next) {
+		this.$store.commit("setmodal", null);
+		next();
+	},
 
-  methods: {
-    closeGallery : function(){
-      this.$store.commit('GALLERY', null)
-    }
-  },
-}
+	computed: mapState({
+		auth: (state) => state.auth,
+
+		...mapState([
+			"currentUserChat",
+			"minimized",
+			"gallery",
+			"active",
+			"mobile",
+		]),
+
+		showFooter: function () {
+			return /*this.$route.name != "chat" || */ this.minimized;
+		},
+	}),
+
+	methods: {
+		closeGallery: function () {
+			this.$store.commit("GALLERY", null);
+		},
+	},
+};

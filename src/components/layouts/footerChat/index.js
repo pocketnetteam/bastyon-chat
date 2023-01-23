@@ -1,62 +1,55 @@
-import { mapState} from 'vuex'
+import { mapState } from "vuex";
 export default {
-    name: "footerChat",
+	name: "footerChat",
 
-  data: function () {
+	data: function () {
+		return {
+			loading: false,
+		};
+	},
 
-    return {
-      loading: false
-    }
+	created: () => {},
 
-  },
+	watch: {
+		//$route: 'getdata'
+	},
 
-  created: () => {
+	computed: mapState({
+		pocketnet: (state) => state.pocketnet,
+		minimized: (state) => state.minimized,
+		active: (state) => state.active,
+		auth: (state) => state.auth,
+		notificationCount: (state) => state.allnotifications,
 
-  },
+		current: function () {
+			return this.$route.name;
+		},
 
-  watch: {
-    //$route: 'getdata'
-  },
+		activesettings: function () {
+			return this.current == "settings";
+		},
 
-  
+		activecontacts: function () {
+			return this.current == "contact" || this.current == "contacts";
+		},
 
-  computed: mapState({
-    pocketnet: state => state.pocketnet,
-    minimized: state => state.minimized,
-    active: state => state.active,
-    auth: state => state.auth,
-    notificationCount : state => state.allnotifications,
+		activechats: function () {
+			return this.current == "chat" || this.current == "chats";
+		},
 
-    current : function(){
-      return this.$route.name
-    },
+		mobile: function () {
+			return this.$store.state.mobile;
+		},
+	}),
+	methods: {
+		gotona(r) {
+			this.$router.push(r).catch((e) => {});
+			this.$store.commit("active", true);
+			this.$store.commit("setiteraction", true);
+		},
 
-    activesettings : function(){
-      return this.current == 'settings'
-    },
-
-    activecontacts : function(){
-      return this.current == 'contact' || this.current == 'contacts'
-    },
-
-    activechats : function(){
-      return this.current == 'chat' || this.current == 'chats'
-    },
-
-    mobile : function(){
-      return this.$store.state.mobile
-    }
-    
-  }),
-  methods : {
-    gotona(r){
-      this.$router.push(r).catch(e => {})
-      this.$store.commit('active', true)
-      this.$store.commit('setiteraction', true)
-    },
-
-    movefromchat : function(){
-      if(this.core.backtoapp) this.core.backtoapp()
-    }
-  }
-}
+		movefromchat: function () {
+			if (this.core.backtoapp) this.core.backtoapp();
+		},
+	},
+};
