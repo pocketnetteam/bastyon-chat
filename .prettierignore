@@ -2,4 +2,25 @@
 build
 coverage
 
+# Ignore some specific file extensions
+**/*.min.*
+**/*.md
+**/*.png
+**/*.svg
+**/*.png
+
+# Ignore other files
+index.d.ts
+public/js/lib/pocketnet/btc17.js
+public/js/lib/pocketnet/buffer.js
+src/styles/peerTube.css
+src/emojionearea.js
+
+# Ignore some folders
 **/node_modules
+src/fontawesome
+src/editedplugins
+src/matrix-js-sdk
+public/css
+public/js/vendor
+dist

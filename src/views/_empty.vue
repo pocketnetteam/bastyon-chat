@@ -1,41 +1,27 @@
 <template>
-  <div class="page chats">   
-
-    <!--<topheader/>
+	<div class="page chats">
+		<!--<topheader/>
     <list/>-->
-    
-  </div>
+	</div>
 </template>
 
-<style scoped lang="sass">
-
-
-</style>
+<style scoped lang="sass"></style>
 
 <script>
-
 //import list from '@/components/chats/list.vue'
 //import topheader from '@/components/chats/topheader.vue'
 
 export default {
-  name: 'pagechats',
-  components: {
+	name: "pagechats",
+	components: {
+		//list,
+		//topheader
+	},
 
-    //list,
-    //topheader
-    
-  },
+	computed: {},
 
-  computed:{
-   
-  },
+	methods: {},
 
-  methods : {
-   
-  },
-
-  mounted() {
-    
-  }
-}
+	mounted() {},
+};
 </script>

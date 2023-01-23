@@ -1,112 +1,98 @@
-import { mapState } from 'vuex';
+import { mapState } from "vuex";
 
-import contacts from '@/components/contacts/index.vue'
-
+import contacts from "@/components/contacts/index.vue";
 
 export default {
-    name: 'chatsTopheader',
-    props: {
-    },
+	name: "chatsTopheader",
+	props: {},
 
-    components : {
-        contacts
-    },
+	components: {
+		contacts,
+	},
 
-    data : function(){
+	data: function () {
+		return {
+			loading: false,
+			newchatopened: false,
+			createGroup: false,
+			contacts: false,
+		};
+	},
 
-        return {
-            loading : false,
-            newchatopened : false,
-            createGroup: false,
-            contacts: false
-        }
+	created() {
+		this.$store.commit("SET_CURRENT_ROOM", "all");
+	},
 
-    },
+	destroyed() {
+		this.$store.commit("SET_CURRENT_ROOM", false);
+	},
 
-    created(){
+	watch: {
+		//$route: 'getdata'
+	},
 
-        this.$store.commit('SET_CURRENT_ROOM', 'all')
-         
-    },
+	computed: mapState({
+		auth: (state) => state.auth,
+		minimized: (state) => state.minimized,
+		pocketnet: (state) => state.pocketnet,
+		active: (state) => state.active,
 
-    destroyed(){
+		...mapState(["share", "closebybg"]),
 
-        this.$store.commit('SET_CURRENT_ROOM', false)
-         
-    },
+		window: function () {
+			return window;
+		},
+	}),
 
-    watch: {
-        //$route: 'getdata'
-    },
+	methods: {
+		changeCloseByBg: function () {
+			this.$store.commit("closebybg", !this.closebybg);
+		},
+		gotoapp: function () {
+			if (this.core.backtoapp) this.core.backtoapp();
+		},
+		cordovashare: function () {
+			var share = this.share;
 
+			var options = {
+				//subject : "Message"
+			};
 
-    computed: mapState({
-        auth : state => state.auth,
-        minimized: state => state.minimized,
-        pocketnet: state => state.pocketnet,
-        active: state => state.active,
-        
-        ...mapState([
-            'share',
-            'closebybg'
-        ]),
+			if (share.messages) options.message = share.messages.join(". ");
 
-        window : function(){
-            return window
-        }
-    }),
+			if (share.images || share.files) {
+				options.files = [].concat(share.images, share.files);
 
-    methods : {
-        changeCloseByBg : function(){
-            this.$store.commit('closebybg', !this.closebybg)
-        },
-        gotoapp : function(){
-            if (this.core.backtoapp)
-                this.core.backtoapp()
-        },  
-        cordovashare : function(){
+				options.files = _.filter(options.files, function (f) {
+					return f;
+				});
+			}
 
-            var share = this.share
+			if (window.plugins && window.plugins.socialsharing) {
+				window.plugins.socialsharing.shareWithOptions(options);
+			}
 
-            var options = {
-                //subject : "Message"
-            }
+			this.cancelShare();
+		},
+		cancelShare: function () {
+			if (this.share) {
+				if (this.share.route) {
+					this.$router.push(this.share.route).catch((e) => {});
+				}
+			}
 
-            if(share.messages) options.message = share.messages.join('. ')
+			this.$store.commit("SHARE", null);
+		},
+		newchatmenu: function () {
+			this.newchatopened = !this.newchatopened;
+		},
 
-            if(share.images || share.files) {
-                options.files = [].concat(share.images, share.files) 
+		minimizeall: function () {
+			this.$store.commit("minimize", true);
+		},
 
-                options.files = _.filter(options.files, function(f){return f})
-            }
-
-            if (window.plugins && window.plugins.socialsharing){
-                window.plugins.socialsharing.shareWithOptions(options);
-            }
-            
-            this.cancelShare()
-        },
-        cancelShare : function(){
-
-            if(this.share){
-                if (this.share.route){
-                    this.$router.push(this.share.route).catch(e => {})
-                }
-            }
-
-            this.$store.commit('SHARE', null)
-        },
-        newchatmenu : function(){
-            this.newchatopened = !this.newchatopened
-        },
-
-       
-        minimizeall : function(){
-            this.$store.commit('minimize', true);
-        },
-
-        newchat : function(){
-            this.$emit('newchat')
-        }
-    },
-}
+		newchat: function () {
+			this.$emit("newchat");
+		},
+	},
+};
