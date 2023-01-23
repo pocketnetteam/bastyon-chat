@@ -76,16 +76,15 @@ export default {
 	.title {
 		font-size: 1.2em;
 		font-weight: 500;
-		text-align: center;
+		text-align: left;
 		margin: 1em 0;
 	}
 	.description {
-		display: flex;
-		flex-direction: column;
-		text-align: center;
+		text-align: left;
 		color: rgba(242, 153, 74, 1);
 		margin: 0.6em 0;
 		font-size: 0.8em;
+		width: 100%;
 		i {
 			margin: 5px;
 			color: srgb(--color-star-yellow);

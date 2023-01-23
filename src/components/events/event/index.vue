@@ -194,6 +194,7 @@ export default {
 			if (["m.room.name"].indexOf(t) > -1) return "member";
 			if (["m.room.power_levels"].indexOf(t) > -1) return "member";
 			if (["m.room.redaction"].indexOf(t) > -1) return "message";
+			if (["m.room.request_calls_access"].indexOf(t) > -1) return "message";
 			if (["m.call.candidates"].indexOf(t) > -1) return "message";
 			if (["m.call.hangup"].indexOf(t) > -1) return "message";
 			if (["m.call.invite"].indexOf(t) > -1) return "message";
