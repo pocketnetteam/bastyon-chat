@@ -1,27 +1,38 @@
 <template>
 	<div class="chatswrapper">
 		<section
-			v-for="section in lists"
-			v-if="getList(section).length"
+			v-for="{ items, section } in filteredLists"
+			v-if="items.length"
 			class="chats"
 		>
 			<!--Title-->
 			<div class="section-title">
-				<span>{{ $t(`caption.${section}`) }}</span>
+				<span>{{ $t(`caption.${section.key}`) }}</span>
 			</div>
 
 			<!--Item-->
 			<div
-				v-for="item in loadList(section)"
+				v-for="item in items"
 				:key="item.roomId || item.id"
 				class="card-content"
-				@click="itemClick(item)"
+				@click="itemClick(item, section)"
 			>
 				<!--Render room-->
-				<previewRoom v-if="item.roomId" :chat="item" class="room" />
+				<previewRoom v-if="section.view == 'room'" :chat="item" class="room" />
+				<previewRoom
+					v-if="section.view == 'roomWithMessage'"
+					:chat="item.chat"
+					:messages="item.messages"
+					class="room"
+				/>
 
 				<!--Render contact-->
-				<previewContact v-else :contact="item" :mode="mode" class="contact" />
+				<previewContact
+					v-if="section.view == 'contact'"
+					:contact="item"
+					:mode="mode"
+					class="contact"
+				/>
 			</div>
 		</section>
 	</div>

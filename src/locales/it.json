@@ -126,7 +126,8 @@
 		"open": "Apri",
 		"You": "Tu",
 		"chatsearchingempty": "No chats found for the specified filter",
-		"sendmessage": "Send message"
+		"sendmessage": "Send message",
+		"messages" : "Messages"
 	},
 
 	"input": {
