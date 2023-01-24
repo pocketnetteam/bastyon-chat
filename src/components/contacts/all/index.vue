@@ -1,7 +1,7 @@
 <template>
 	<div class="chatswrapper">
 		<section
-			v-for="{items, section} in filteredLists"
+			v-for="{ items, section } in filteredLists"
 			v-if="items.length"
 			class="chats"
 		>
@@ -19,10 +19,20 @@
 			>
 				<!--Render room-->
 				<previewRoom v-if="section.view == 'room'" :chat="item" class="room" />
-				<previewRoom v-if="section.view == 'roomWithMessage'" :chat="item.chat" :messages="item.messages" class="room" />
+				<previewRoom
+					v-if="section.view == 'roomWithMessage'"
+					:chat="item.chat"
+					:messages="item.messages"
+					class="room"
+				/>
 
 				<!--Render contact-->
-				<previewContact v-if="section.view == 'contact'" :contact="item" :mode="mode" class="contact" />
+				<previewContact
+					v-if="section.view == 'contact'"
+					:contact="item"
+					:mode="mode"
+					class="contact"
+				/>
 			</div>
 		</section>
 	</div>
