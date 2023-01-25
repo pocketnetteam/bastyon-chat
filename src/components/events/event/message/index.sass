@@ -103,9 +103,20 @@
   &.aligncenter
     align-items: center
 
+  /deep/
+    .call
+      border-bottom-left-radius: 0
+      margin-left: 0.5 * $r
+
   &.my
     padding-left: 0
     padding-right: $r / 2
+
+    /deep/
+      .call
+        
+        border-top-right-radius: 0
+        border-bottom-left-radius: 1em
 
     .messageImg
       .imgMsg
