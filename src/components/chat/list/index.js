@@ -16,7 +16,6 @@ export default {
 				return [];
 			},
 		},
-		isRemoveSelectedMessages: false,
 	},
 
 	components: {
@@ -548,8 +547,6 @@ export default {
 			this.$emit("menuIsVisible", isVisible);
 		},
 
-		messagesIsDeleted: function (state) {
-			this.$emit("messagesIsDeleted", state);
-		},
+	
 	},
 };

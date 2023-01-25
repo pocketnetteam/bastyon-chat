@@ -3,10 +3,10 @@
 	"version": "0.1.0",
 	"private": true,
 	"scripts": {
-		"serve": "vue-cli-service serve",
+		"serve": "set NODE_OPTIONS=--openssl-legacy-provider && vue-cli-service serve",
 		"build": "vue-cli-service build --dest C:/inetpub/wwwroot/pocketnet/chat",
 		"build_mac": "vue-cli-service build --dest ~/work/pocketnet/chat",
-		"buildpocketnet": "npm run build -- --target wc-async --inline-vue --name matrix-element src/App.vue",
+		"buildpocketnet": "set NODE_OPTIONS=--openssl-legacy-provider && npm run build -- --target wc-async --inline-vue --name matrix-element src/App.vue",
 		"buildpocketnet_mac": "npm run build_mac -- --target wc-async --inline-vue --name matrix-element src/App.vue",
 		"buildpocketnetdev": "npm run build -- --target wc-async --inline-vue --watch --name matrix-element src/App.vue",
 		"prepare": "husky install",

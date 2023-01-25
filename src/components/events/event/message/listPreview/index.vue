@@ -243,10 +243,10 @@ export default {
 		},
 
 		markMatches: function () {
-			return this.markText(
+			return this.markText ? this.markText(
 				(this.event.event.decrypted || this.event.event.content)?.body,
 				true
-			);
+			) : (this.event.event.decrypted || this.event.event.content)?.body;
 		},
 	},
 };

@@ -201,7 +201,7 @@ class MTRX {
 		localStorage.accessToken = userData.access_token;
 		var store = new sdk.IndexedDBStore({
 			indexedDB: window.indexedDB,
-			dbName: "matrix-js-sdk:" + this.credentials.username,
+			dbName: "matrix-js-sdk-v2:" + this.credentials.username,
 		});
 		await store.startup();
 
@@ -941,6 +941,15 @@ class MTRX {
 	}
 
 	shareInChat(id, share) {
+
+		if (share.multiple){
+
+			return f.processArray(share.multiple, (share) => {
+				return this.shareInChat(id, share)
+			})
+
+		}
+
 		var m_chat = this.client.getRoom(id);
 
 		//// share.openwithItems []
@@ -959,6 +968,28 @@ class MTRX {
 					{ from: share.from }
 				);
 
+				promises.push(promise);
+			});
+
+			_.each(share.download, ({event, chat}) => {
+
+				console.log('chat, event', chat, event)
+
+				var promise = this.core.mtrx.kit.prepareChat(chat).then(() => {
+
+					return this.core.mtrx.getFile(chat, event)
+
+				}).then((r) => {
+
+					console.log("RESULT", r)
+
+					return r.file
+				})
+				.then((r) => {
+					return this.sendFile(m_chat, r, {}, { from: share.from })
+				})
+
+				///this.sendFile(m_chat, file, {}, { from: share.from })
 				promises.push(promise);
 			});
 

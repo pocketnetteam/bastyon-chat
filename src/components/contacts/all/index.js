@@ -28,8 +28,8 @@ export default {
 			users: [],
 			lists: [
 				{ key: "chats", view: "room", action: "navigateToRoom" },
-				{ key: "contacts", view: "contact", action: "navigateToContact" },
-				{ key: "other", view: "contact", action: "navigateToContact" },
+				{ key: "contacts", view: "contact", action: "navigateToProfile" },
+				{ key: "other", view: "contact", action: "navigateToProfile" },
 
 				{
 					key: "messages",
@@ -75,8 +75,6 @@ export default {
 
 							return (match && m.event) || null;
 						});
-
-						console.log("messages", messages);
 
 						return {
 							chat: c,
@@ -202,9 +200,7 @@ export default {
 				return;
 			}
 
-			if (!section.keepMatches) {
-				this.matches.clear();
-			}
+			
 
 			if (section.action == "navigateToProfile") {
 				return this.navigateToProfile(item.id, item);
@@ -258,6 +254,10 @@ export default {
 				}
 
 				return;
+			}
+
+			if (!section.keepMatches) {
+				this.matches.clear();
 			}
 		},
 		navigateToProfile(id, contact) {

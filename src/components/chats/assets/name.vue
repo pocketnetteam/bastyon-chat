@@ -90,7 +90,10 @@ export default {
 		},
 
 		markMatches: function () {
-			return this.markText(this.convertedName, true);
+
+
+
+			return this.markText ? this.markText(this.convertedName, true) : this.convertedName;
 		},
 
 		isShowGroupIcon() {

@@ -32,6 +32,7 @@
 				:key="key"
 				:chat="m_chat"
 				@editingEvent="editingEvent"
+				@shareEvent="shareEvent"
 				@replyEvent="replyEvent"
 				@eventImage="(e) => galleryImage(e)"
 				@scroll="scroll"
@@ -39,8 +40,6 @@
 				v-if="m_chat && membership === 'join' && ready"
 				@getEvents="events"
 				:selectedMessages="selectedMessages"
-				:isRemoveSelectedMessages="isRemoveSelectedMessages"
-				@messagesIsDeleted="messagesIsDeleted"
 			/>
 
 			<div v-if="m_chat && membership === 'invite'" class="joinwrapper">
