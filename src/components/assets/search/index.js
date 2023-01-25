@@ -95,10 +95,9 @@ export default {
 		clear: function (event) {
 			this.searchTxt = "";
 
-			if (typeof this.matches?.clear === "function") {	
+			if (typeof this.matches?.clear === "function") {
 				this.matches?.clear();
-				this.toggle()
-
+				this.toggle();
 			}
 		},
 

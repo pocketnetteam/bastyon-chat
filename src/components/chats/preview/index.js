@@ -9,7 +9,7 @@ export default {
 		chat: Object,
 		dummy: Boolean,
 		search: String,
-		messages : Array
+		messages: Array,
 	},
 	inject: ["matches"],
 
@@ -96,9 +96,8 @@ export default {
 
 		event: function () {
 			if (this.chat && this.chat.roomId) {
-
-				if(this.messages){
-					return this.messages[0]
+				if (this.messages) {
+					return this.messages[0];
 				}
 
 				var members = this.m_chat.currentState.getMembers();

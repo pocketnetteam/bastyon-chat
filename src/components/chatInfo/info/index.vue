@@ -106,7 +106,11 @@
 				</span>
 			</button>
 
-			<button v-if="tetatet" class="button small black rounded" @click="muteCalls">
+			<button
+				v-if="tetatet"
+				class="button small black rounded"
+				@click="muteCalls"
+			>
 				<span v-if="!roomCallsDisabled">
 					{{ $t("caption.disableCalls") }} <i class="fas fa-video-slash"></i>
 				</span>
