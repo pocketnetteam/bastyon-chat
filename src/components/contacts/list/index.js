@@ -1,74 +1,59 @@
-import {mapActions, mapGetters, mapState} from 'vuex'
-import preview from '@/components/contacts/preview/index.vue'
-import ModalWindow from '@/components/utils/ModalWindow.vue'
-
+import { mapActions, mapGetters, mapState } from "vuex";
+import preview from "@/components/contacts/preview/index.vue";
+import ModalWindow from "@/components/utils/ModalWindow.vue";
 
 export default {
-  name: "contactsList",
-  data: function () {
+	name: "contactsList",
+	data: function () {
+		return {
+			loading: false,
+		};
+	},
+	components: {
+		preview,
+		ModalWindow,
+	},
 
-    return {
-      loading: false,
-    }
+	props: {
+		mode: {
+			default: "",
+			type: String,
+		},
+		users: Array,
+		selected: Object,
+		title: String,
+	},
 
-  },
-  components: {
-    preview,
-    ModalWindow
-  },
+	watch: {
+		//$route: 'getdata'
+	},
 
-  props: {
-    mode: {
-      default: '',
-      type: String
-    },
-    users: Array,
-    selected : Object,
-    title: String,
-  },
- 
-  watch: {
-    //$route: 'getdata'
-  },
+	computed: mapState({
+		auth: (state) => state.auth,
+		minimized: (state) => state.minimized,
 
- 
+		...mapActions(["PREPARE_USERDATA"]),
 
-  computed: mapState({
-    auth: state => state.auth,
-    minimized : state => state.minimized,
+		...mapState(["contactsMap", "signedUpUsers"]),
+	}),
 
-    ...mapActions([
-      'PREPARE_USERDATA'
-    ]),
+	methods: {
+		select(contact) {
+			this.$emit("select", contact);
+		},
 
-    ...mapState([
-      'contactsMap',
-      'signedUpUsers',
-    ]),
+		navigateToProfile(id, contact) {
+			if (this.mode == "Select") {
+				this.select(contact);
+			} else {
+				this.$router.push({ path: `/contact?id=${id}` }).catch((e) => {});
+			}
+		},
 
-  }),
+		toggleUser(contact) {
+			this.$emit("toggleUser", contact.id);
+		},
+	},
 
-  methods: {
-    select(contact) {
-      this.$emit('select', contact)
-    },
-
-    navigateToProfile(id, contact) {
-
-      if(this.mode == "Select"){
-        this.select(contact)
-      }
-      else{
-        this.$router.push({path: `/contact?id=${id}`}).catch(e => {})
-      }
-    },
-
-    toggleUser(contact){
-      this.$emit('toggleUser', contact.id)
-    }
-
-  },
-
-  mounted() {
-  }
-}
+	mounted() {},
+};

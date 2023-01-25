@@ -1472,6 +1472,7 @@ class MatrixCall extends _events.EventEmitter {
 
 
   sendVoipEvent(eventType, content) {
+    console.log(eventType)
     return this.client.sendEvent(this.roomId, eventType, Object.assign({}, content, {
       version: VOIP_PROTO_VERSION,
       call_id: this.callId,

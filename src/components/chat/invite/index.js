@@ -1,101 +1,90 @@
-import { mapState } from 'vuex';
-import contacts from '@/components/contacts/index.vue'
+import { mapState } from "vuex";
+import contacts from "@/components/contacts/index.vue";
 
 export default {
-    name: 'chatinvite',
-    props: {
-        chatRoomId : String
-    },
+	name: "chatinvite",
+	props: {
+		chatRoomId: String,
+	},
 
-    components : {
-        contacts
-    },
+	components: {
+		contacts,
+	},
 
-    data : function(){
+	data: function () {
+		return {
+			loading: false,
+			selected: {},
+		};
+	},
 
-        return {
-            loading : false,
-            selected : {}
+	created: () => {},
 
-        }
+	watch: {
+		//$route: 'getdata'
+	},
+	computed: mapState({
+		auth: (state) => state.auth,
 
-    },
+		cancomplete: function () {
+			return this.selectedLength;
+		},
 
-    created : () => {
+		selectedLength: function () {
+			return _.toArray(this.selected).length;
+		},
 
-    },
+		active: (state) => state.active,
+		minimized: (state) => state.minimized,
+	}),
 
-    watch: {
-        //$route: 'getdata'
-    },
-    computed: mapState({
-        auth : state => state.auth,
+	methods: {
+		selectedUsers: function (u) {
+			this.selected = u;
+		},
 
-        cancomplete : function(){
-            return this.selectedLength
-        },
+		complete() {
+			this.inviteUserAction(this.selected)
+				.then(() => {
+					this.$emit("completed");
 
-        selectedLength : function(){
-            return _.toArray(this.selected).length
-        },
+					this.$store.commit("icon", {
+						icon: "success",
+						message: "",
+					});
+				})
+				.catch((e) => {
+					console.error(e);
 
-        active: state => state.active,
-        minimized: state => state.minimized,
+					var text = "An unexpected error occurred";
 
-    }),
+					if (e == "cancomplete") text = "Please select at least one contact";
 
-    methods : {
-    
-        selectedUsers : function(u){
-            this.selected = u
-        },
-     
-        complete(){
+					this.$store.commit("icon", {
+						icon: "error",
+						message: text,
+					});
+				});
+		},
 
-            this.inviteUserAction(this.selected).then(() => {
+		inviteUserAction(users) {
+			if (!this.chatRoomId) {
+				return Promise.reject("chatRoomId");
+			}
 
-                this.$emit('completed')
+			if (!this.cancomplete) return Promise.reject("cancomplete");
 
-                this.$store.commit('icon', {
-                    icon: 'success',
-                    message: "",
-                })
+			var roomID = this.chatRoomId;
 
-            }).catch(e => {
-                console.error(e)
+			return Promise.all(
+				_.map(users, (id) => {
+					var matrixID = "@" + `${id}` + ":" + this.core.domain;
 
-                var text = 'An unexpected error occurred'
-
-                if (e == 'cancomplete') text = 'Please select at least one contact'
-
-                this.$store.commit('icon', {
-                    icon: 'error',
-                    message: text
-                })
-            })
-
-        },
-
-        inviteUserAction(users) {
-
-            if(!this.chatRoomId){
-                return Promise.reject('chatRoomId')
-            }
-
-            if(!this.cancomplete) return Promise.reject('cancomplete')
-
-            var roomID = this.chatRoomId
-      
-            return Promise.all(_.map(users, (id) => {
-
-              var matrixID = '@' + `${id}` + ':' + this.core.domain
-
-              return this.core.mtrx.client.invite(roomID, matrixID)
-
-            })).then(r => {
-                return Promise.resolve()
-            })
-      
-          }
-    },
-}
+					return this.core.mtrx.client.invite(roomID, matrixID);
+				})
+			).then((r) => {
+				return Promise.resolve();
+			});
+		},
+	},
+};

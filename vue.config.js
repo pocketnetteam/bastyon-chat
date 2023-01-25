@@ -1,5 +1,5 @@
 var prependcssvars = `@import "@/styles/variables/common.sass"; @import "@/styles/mixins/common.sass";`;
-const path = require('path');
+const path = require("path");
 module.exports = {
 	devServer: {
 		open: process.platform === "darwin",
@@ -21,15 +21,12 @@ module.exports = {
 	},
 
 	runtimeCompiler: true,
-	"transpileDependencies": [
-		"rxjs-interop",
-		"standardized-audio-context"
-	],
+	transpileDependencies: ["rxjs-interop", "standardized-audio-context"],
 
 	pluginOptions: {
 		webpackBundleAnalyzer: {
 			openAnalyzer: false,
-			analyzerMode: "disabled"
+			analyzerMode: "disabled",
 		},
 	},
 
@@ -37,22 +34,24 @@ module.exports = {
 		resolve: {
 			extensions: [".js", ".ts"],
 			alias: {
-				"standardized-audio-context": path.resolve('node_modules/standardized-audio-context/build/es5/bundle.js'),
-			}
+				"standardized-audio-context": path.resolve(
+					"node_modules/standardized-audio-context/build/es5/bundle.js"
+				),
+			},
 		},
 		output: {
 			pathinfo: false,
 		},
-
-		
-		
 
 		module: {
 			rules: [
 				{
 					loader: "babel-loader",
 					test: "/.(js)$/",
-					include: [path.resolve('node_modules/rxjs-interop'), path.resolve('node_modules/standardized-audio-context')]
+					include: [
+						path.resolve("node_modules/rxjs-interop"),
+						path.resolve("node_modules/standardized-audio-context"),
+					],
 				},
 				{
 					test: /\.(ts|tsx)?$/,

@@ -1,12 +1,10 @@
 <template>
-
-  <div class="nameline">
-    <div class="iconGroup" v-if="isShowGroupIcon">
-      <i class="fas fa-user-friends"></i>
-    </div>
-    <div class="nameofchat" v-html="markMatches || convertedName"></div>
-  </div>
-
+	<div class="nameline">
+		<div class="iconGroup" v-if="isShowGroupIcon">
+			<i class="fas fa-user-friends"></i>
+		</div>
+		<div class="nameofchat" v-html="markMatches || convertedName"></div>
+	</div>
 </template>
 
 <style scoped lang="sass">
@@ -15,11 +13,11 @@
 .nameline
   display: flex
   align-items: flex-end
-  justify-content: center
 
 .iconGroup
   font-size: 0.4em
   width: 16px
+  min-width: 16px
   text-align: center
   height: 16px
   line-height: 16px
@@ -32,73 +30,74 @@
 </style>
 
 <script>
-
-
 export default {
-  name: 'chatName',
+	name: "chatName",
 
-  props: {
-    chat: Object,
-    preview: Boolean,
-    m_chat: {}
-  },
-  inject: ['matches', 'markText'],
-  data: function () {
-    return {
-      //convertedName: ''
-    }
-  },
-  computed: {
+	props: {
+		chat: Object,
+		preview: Boolean,
+		m_chat: {},
+	},
+	inject: ["matches", "markText"],
+	data: function () {
+		return {
+			//convertedName: ''
+		};
+	},
+	computed: {
+		users: function () {
+			if (!this.chat) return [];
 
-    users : function(){
-      if(!this.chat) return []
+			return this.core.mtrx.anotherChatUsers(this.chat.roomId);
+		},
 
-      return this.core.mtrx.anotherChatUsers(this.chat.roomId)
-    },
+		convertedName: function () {
+			if (
+				this.m_chat &&
+				this.m_chat.getJoinRule() === "public" &&
+				this.m_chat.currentState.getStateEvents("m.room.name").length > 0
+			) {
+				return this.m_chat.currentState
+					.getStateEvents("m.room.name")[0]
+					.getContent().name;
+			}
+			var users = _.filter(this.users, (user) => {
+				return user.userId != this.core.user.userinfo.id;
+			});
 
-    convertedName : function(){
-      if(this.m_chat && this.m_chat.getJoinRule() === 'public' && this.m_chat.currentState.getStateEvents('m.room.name').length > 0){
+			var names = _.filter(
+				_.map(users, (user) => {
+					if (this.$store.state.users[user.userId])
+						return this.$store.state.users[user.userId].name;
+				}),
+				function (name) {
+					return name;
+				}
+			);
 
-        return this.m_chat.currentState.getStateEvents('m.room.name')[0].getContent().name
-      }
-      var users = _.filter(this.users, (user) => {
-        return user.userId != this.core.user.userinfo.id
-      })
+			if (!names.length) {
+				if (this.core.mtrx.chatUsers(this.chat.roomId).length) {
+					return "Empty chat: " + this.chat.roomId;
+				}
 
-      var names = _.filter(_.map(users, (user) => {
+				return "-";
+			}
 
-        if(this.$store.state.users[user.userId]) return this.$store.state.users[user.userId].name
+			if (this.m_chat.name.indexOf("@") == 0)
+				return this.m_chat.name.replace("@", "");
 
-      }), function(name) {
-        return name
-      })
+			return names.join(", ");
+		},
 
-      if(!names.length) {
+		markMatches: function () {
+			return this.markText(this.convertedName, true);
+		},
 
-        if(this.core.mtrx.chatUsers(this.chat.roomId).length){
+		isShowGroupIcon() {
+			return this.m_chat.name.slice(0, 1) === "@";
+		},
+	},
 
-          return 'Empty chat: ' + this.chat.roomId
-        }
-
-        return '-'
-
-      }
-
-      if(this.m_chat.name.indexOf("@") == 0) return this.m_chat.name.replace('@', '')
-
-      return names.join(', ')
-    },
-
-    markMatches: function () {
-      return this.markText(this.convertedName, true)
-    },
-
-    isShowGroupIcon() {
-      return this.m_chat.name.slice(0, 1) === '@';
-    },
-  },
-
-  mounted: function () {
-  },
-}
+	mounted: function () {},
+};
 </script>

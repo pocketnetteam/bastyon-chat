@@ -1,7 +1,7 @@
 <template>
-  <div class="caption">
-      {{ caption.toUpperCase() }}
-  </div>
+	<div class="caption">
+		{{ caption.toUpperCase() }}
+	</div>
 </template>
 
 <script src="./index.js"></script>
@@ -9,24 +9,3 @@
 
 <!-- THEMES BEGIN -->
 <!-- THEMES END -->
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

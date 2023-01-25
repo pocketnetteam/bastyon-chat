@@ -1,459 +1,416 @@
 <template>
-  <div class="voiceMessage" :class="{playing:isPlaying}">
-    <div class="voiceMessage_wrapper">
-      <button class="voiceMessage_toggle" :class="{encrypted}" @touchend="audioToggle" @click="audioToggleClick">
-        <i :class="isPlaying ? 'fas fa-pause': 'fas fa-play'"></i>
-      </button>
-      <div class="voiceMessage_graph">
-        <canvas ref="canvas" width="100" height="50" @mousedown="goTo"></canvas>
-      </div>
-      <div class="voiceMessage_options">
-        <span v-if="!error">{{ getDurationString }}</span>
-        
-        <i v-if="error" class="fas fa-exclamation-circle"></i>
-      </div>
+	<div class="voiceMessage" :class="{ playing: isPlaying }">
+		<div class="voiceMessage_wrapper">
+			<button
+				class="voiceMessage_toggle"
+				:class="{ encrypted }"
+				@touchend="audioToggle"
+				@click="audioToggleClick"
+			>
+				<i :class="isPlaying ? 'fas fa-pause' : 'fas fa-play'"></i>
+			</button>
+			<div class="voiceMessage_graph">
+				<canvas ref="canvas" width="100" height="50" @mousedown="goTo"></canvas>
+			</div>
+			<div class="voiceMessage_options">
+				<span v-if="!error">{{ getDurationString }}</span>
 
-      <div class="encsign" v-if="encrypted && !error"><i class="fas fa-lock"></i></div>
+				<i v-if="error" class="fas fa-exclamation-circle"></i>
+			</div>
 
-    </div>
-  </div>
+			<div class="encsign" v-if="encrypted && !error">
+				<i class="fas fa-lock"></i>
+			</div>
+		</div>
+	</div>
 </template>
 
 <script>
-import f from '@/application/functions'
-import { mapState } from 'vuex';
+import f from "@/application/functions";
+import { mapState } from "vuex";
 export default {
-  name: "VoiceMessage",
-  props: {
-    decryptedInfo : Object,
-    audioBuffer: {
-      type: String | null,
-      required: true
-    },
-    id: {
-      type: Number
-    }
-  },
-  data() {
-    return {
-      voiceMessage: null,
-      isPlaying: false,
-      interval: null,
-      audioContext : null,
-      audio : null,
-      duration : null,
-      currentTime : null,
-      signal : null,
-      audiobuffer : null,
-      error : null,
-    }
-  },
-  inject: ['addToQueue', 'playNext'],
+	name: "VoiceMessage",
+	props: {
+		decryptedInfo: Object,
+		audioBuffer: {
+			type: String | null,
+			required: true,
+		},
+		id: {
+			type: Number,
+		},
+	},
+	data() {
+		return {
+			voiceMessage: null,
+			isPlaying: false,
+			interval: null,
+			audioContext: null,
+			audio: null,
+			duration: null,
+			currentTime: null,
+			signal: null,
+			audiobuffer: null,
+			error: null,
+		};
+	},
+	inject: ["addToQueue", "playNext"],
 
-  mounted() {
-    this.initVoiceMessage()
-  },
-  beforeDestroy() {
+	mounted() {
+		this.initVoiceMessage();
+	},
+	beforeDestroy() {
+		if (this.isPlaying) {
+			this.pause();
+		}
 
-    if (this.isPlaying) {
-      this.pause()
-    }
+		if (this.interval) {
+			clearInterval(this.interval);
+			this.interval = null;
+		}
 
-    if(this.interval){
-      clearInterval(this.interval)
-      this.interval = null
-    }
-      
-    //if(this.audioContext) this.audioContext.close()
-
-  },
-  watch : {
-    isPlaying : function(v){
-      if(!this.isPlaying){
-        
-
-        
-        
-      }
-      else{
-
-        
-
-      }
-    }
-  },
-  computed: {
-
-    encrypted(){
-      return this.decryptedInfo ? true : false
-    },
+		//if(this.audioContext) this.audioContext.close()
+	},
+	watch: {
+		isPlaying: function (v) {
+			if (!this.isPlaying) {
+			} else {
+			}
+		},
+	},
+	computed: {
+		encrypted() {
+			return this.decryptedInfo ? true : false;
+		},
 
 		...mapState({
-			mobile: state => state.mobile,
+			mobile: (state) => state.mobile,
 		}),
 
-    getDurationString() {
-
-      if (this.duration) {
-
-        let sec, min
-        
-        if (this.currentTime) {
-          sec = Math.floor(this.currentTime)
-          min = Math.floor(this.currentTime / 60)
-          return `${min}:${sec < 10 ? '0' + sec : sec}`
-        }
-
-        min = Math.floor(this.duration / 60)
-
-        sec = Math.floor(this.duration - min * 60)
-        
-
-        return `${min}:${sec < 10 ? '0' + sec : sec}`
-
-      }
-
-      return '0:00'
-    },
-    percentPlayed() {
-      return this.currentTime / this.duration
-    },
-
-    localBuffer(){
-      return f.copyArrayBuffer(this.audioBuffer)
-    }
-  },
-  methods: {
-    goTo(e) {
-
-      if(!this.$refs.canvas) return
-
-      var dr = e.offsetX / this.$refs.canvas.width * this.duration;
-      
-      
-
-      if(!this.isPlaying) { 
-        this.setTime(dr)
-        this.play()
-      }
-      else{
-        this.pause()
-        
-        setTimeout(() => {
-          this.setTime(dr)
-          this.play()
-        }, 20)
-        
-      }
-
-    },
-    audioToggleClick(){
-      if(this.mobile) return 
-
-      this.audioToggle()
-    },
-    audioToggle() {
-      if(this.isPlaying){
-        this.pause()
-      }
-      else{
-        this.play()
-      }
-    },
+		getDurationString() {
+			if (this.duration) {
+				let sec, min;
+
+				if (this.currentTime) {
+					sec = Math.floor(this.currentTime);
+					min = Math.floor(this.currentTime / 60);
+					return `${min}:${sec < 10 ? "0" + sec : sec}`;
+				}
+
+				min = Math.floor(this.duration / 60);
+
+				sec = Math.floor(this.duration - min * 60);
+
+				return `${min}:${sec < 10 ? "0" + sec : sec}`;
+			}
+
+			return "0:00";
+		},
+		percentPlayed() {
+			return this.currentTime / this.duration;
+		},
+
+		localBuffer() {
+			return f.copyArrayBuffer(this.audioBuffer);
+		},
+	},
+	methods: {
+		goTo(e) {
+			if (!this.$refs.canvas) return;
+
+			var dr = (e.offsetX / this.$refs.canvas.width) * this.duration;
 
-    pause(){
+			if (!this.isPlaying) {
+				this.setTime(dr);
+				this.play();
+			} else {
+				this.pause();
+
+				setTimeout(() => {
+					this.setTime(dr);
+					this.play();
+				}, 20);
+			}
+		},
+		audioToggleClick() {
+			if (this.mobile) return;
 
-      if(this.audio) {
-        this.audio.stop()
-        this.audio.disconnect()
-      }
+			this.audioToggle();
+		},
+		audioToggle() {
+			if (this.isPlaying) {
+				this.pause();
+			} else {
+				this.play();
+			}
+		},
 
-      
-      this.isPlaying = false
+		pause() {
+			if (this.audio) {
+				this.audio.stop();
+				this.audio.disconnect();
+			}
 
-      this.draw()
+			this.isPlaying = false;
 
-      let currentPlaying = this.$store.state.currentPlayingVoiceMessage
-        
-      if (currentPlaying && currentPlaying.id == this.id) {
-        this.$store.commit('SET_CURRENT_PLAYING_VOICE_MESSAGE', null)
-      }
-
-      if(this.interval){
-        clearInterval(this.interval)
-        this.interval = null
-      }
-    },
+			this.draw();
 
-    play(){
-      console.log('play')
-      if(!this.audiobuffer) return
+			let currentPlaying = this.$store.state.currentPlayingVoiceMessage;
+
+			if (currentPlaying && currentPlaying.id == this.id) {
+				this.$store.commit("SET_CURRENT_PLAYING_VOICE_MESSAGE", null);
+			}
 
-      
-      if(this.error){
+			if (this.interval) {
+				clearInterval(this.interval);
+				this.interval = null;
+			}
+		},
 
-        this.playNext(this.id)
-        
-        return
-      }
+		play() {
+			console.log("play");
+			if (!this.audiobuffer) return;
 
-      this.audioContext = this.core.getAudioContext()
+			if (this.error) {
+				this.playNext(this.id);
 
-      
+				return;
+			}
 
-      this.isPlaying = true
+			this.audioContext = this.core.getAudioContext();
 
-      this.audio = this.initAudioNode()
+			this.isPlaying = true;
 
+			this.audio = this.initAudioNode();
 
-      if(this.currentTime >= this.duration){
-        this.setTime(0)
-      }
-      
-      if (this.audio.start) {
-        this.audio.start(0, this.currentTime);
-      } else if (this.audio.play) {
-        this.audio.play(0, this.currentTime);
-      } else if (this.audio.noteOn) {
-        this.audio.noteOn(0, this.currentTime);
-      }
+			if (this.currentTime >= this.duration) {
+				this.setTime(0);
+			}
 
-      let currentPlaying = this.$store.state.currentPlayingVoiceMessage
-        
-      if (currentPlaying && currentPlaying.id !== this.id) {
-          currentPlaying.pause()
-      }
-      
-      this.$store.commit('SET_CURRENT_PLAYING_VOICE_MESSAGE', this)
+			if (this.audio.start) {
+				this.audio.start(0, this.currentTime);
+			} else if (this.audio.play) {
+				this.audio.play(0, this.currentTime);
+			} else if (this.audio.noteOn) {
+				this.audio.noteOn(0, this.currentTime);
+			}
 
-      if(this.interval){
-        clearInterval(this.interval)
-      }
+			let currentPlaying = this.$store.state.currentPlayingVoiceMessage;
 
-      var t = 50
+			if (currentPlaying && currentPlaying.id !== this.id) {
+				currentPlaying.pause();
+			}
 
-      this.interval = setInterval(() => {
+			this.$store.commit("SET_CURRENT_PLAYING_VOICE_MESSAGE", this);
 
-        var time = this.currentTime + t / 1000
+			if (this.interval) {
+				clearInterval(this.interval);
+			}
 
-        if(this.duration - t / 1000 < time) time = this.duration
+			var t = 50;
 
-        if(this.currentTime > this.duration){
-          this.pause()
-        }
+			this.interval = setInterval(() => {
+				var time = this.currentTime + t / 1000;
 
-        this.draw()
-        this.setTime(time)
+				if (this.duration - t / 1000 < time) time = this.duration;
 
-      }, t);
+				if (this.currentTime > this.duration) {
+					this.pause();
+				}
 
-    },
+				this.draw();
+				this.setTime(time);
+			}, t);
+		},
 
+		draw() {
+			const canvas = this.$refs.canvas;
 
-    draw() {
+			if (!this.signal) return;
+			if (!canvas) return;
 
-      const canvas = this.$refs.canvas
+			const data = this.signal;
 
-      if(!this.signal) return
-      if(!canvas) return
+			var w = canvas.width;
+			var h = canvas.height;
+			var l = data.length;
+			var perc = this.percentPlayed;
 
-      const data = this.signal
+			const ctx = canvas.getContext("2d");
+			ctx.clearRect(0, 0, w, h);
 
-      var w = canvas.width
-      var h = canvas.height
-      var l = data.length
-      var perc = this.percentPlayed
-      
-      const ctx = canvas.getContext("2d")
-      ctx.clearRect(0, 0, w, h)
-      
-      var r = 0
-      var c = Math.floor (l / 20)
+			var r = 0;
+			var c = Math.floor(l / 20);
 
-      for (let i = 0; i < l; i = i + c) {
-        let x = Math.floor(i / l * w);
-        let L = Math.abs(data[i] * h) + 1;
+			for (let i = 0; i < l; i = i + c) {
+				let x = Math.floor((i / l) * w);
+				let L = Math.abs(data[i] * h) + 1;
 
-        
-        if (i / l <= perc) {
-          ctx.fillStyle = '#00a4ff'
-        } else {
-          ctx.fillStyle = '#8bddfb'
-        }
+				if (i / l <= perc) {
+					ctx.fillStyle = "#00a4ff";
+				} else {
+					ctx.fillStyle = "#8bddfb";
+				}
 
-        ctx.fillRect(x, h / 2 - L / 2, 2, L);
-        r++
+				ctx.fillRect(x, h / 2 - L / 2, 2, L);
+				r++;
+			}
+		},
 
-      }
+		initAudioNode() {
+			let audioNode = null;
 
-    },
+			audioNode = this.audioContext.createBufferSource();
+			audioNode.buffer = this.audiobuffer;
+			audioNode.connect(this.audioContext.destination);
 
-    
+			///let unmuteHandle = unmute(context, allowBackgroundPlayback, forceIOSBehavior);
 
-    initAudioNode(){
+			audioNode.onended = () => {
+				this.audio = null;
 
-      let audioNode = null
+				if (this.isPlaying) {
+					setTimeout(() => {
+						this.playNext(this.id);
+					}, 300);
+				} else {
+				}
 
-      audioNode = this.audioContext.createBufferSource();
-      audioNode.buffer = this.audiobuffer
-      audioNode.connect(this.audioContext.destination);
+				if (this.duration - 100 < this.currentTime) this.setTime(0);
 
-      ///let unmuteHandle = unmute(context, allowBackgroundPlayback, forceIOSBehavior);
+				this.pause();
+			};
 
-      audioNode.onended = () => {
+			return audioNode;
+		},
 
-        this.audio = null
+		setTime(time = 0) {
+			this.currentTime = time;
+		},
 
-        if(this.isPlaying){
-          setTimeout(() => {
-            this.playNext(this.id)
-          }, 300)
-        }
-        else{
-          
-        }
+		async initVoiceMessage() {
+			try {
+				this.audioContext = this.core.getAudioContext(); //new (window.AudioContext || window.webkitAudioContext)() || null;
+			} catch (e) {
+				this.error = e;
+			}
 
-        if(this.duration - 100 < this.currentTime) this.setTime(0)
+			if (this.error) return;
 
-        this.pause()
-        
-      }
+			this.addToQueue(this, this.id);
 
-      return audioNode
-    
-    },
+			this.duration = 0;
+			this.setTime(0);
 
-    setTime(time = 0){
-      this.currentTime = time
-    },
+			//const data = f._base64ToArrayBuffer(this.base64Audio.split(',')[1])
 
-    async initVoiceMessage() {
-      
-      try {
-        this.audioContext = this.core.getAudioContext() //new (window.AudioContext || window.webkitAudioContext)() || null;
-      } catch (e) {
-        this.error = e
-      }
+			try {
+				await this.audioContext.decodeAudioData(this.localBuffer, (buffer) => {
+					this.audiobuffer = buffer;
 
-      if(this.error) return
+					this.duration = buffer.duration;
+					this.setTime(0);
 
-      this.addToQueue(this, this.id)
-      
-      this.duration = 0
-      this.setTime(0)
+					this.signal = buffer.getChannelData(0);
 
-      //const data = f._base64ToArrayBuffer(this.base64Audio.split(',')[1])
-
-      try {
-        await this.audioContext.decodeAudioData(this.localBuffer, (buffer) => {
-
-          this.audiobuffer = buffer
-
-          this.duration = buffer.duration
-          this.setTime(0)
-
-          this.signal = buffer.getChannelData(0)
-
-          this.draw()
-        })
-      } catch (e) {
-        this.error = e
-        //console.error(e)
-      }
-
-    }
-  }
-}
+					this.draw();
+				});
+			} catch (e) {
+				this.error = e;
+				//console.error(e)
+			}
+		},
+	},
+};
 </script>
 
 <style scoped lang="scss">
 .voiceMessage {
-  -webkit-tap-highlight-color: transparent;
-  display: flex;
-  contain: strict;
-  width: 230px;
-  height: 100%;
-  
+	-webkit-tap-highlight-color: transparent;
+	display: flex;
+	contain: strict;
+	width: 230px;
+	height: 100%;
+	height: 50px;
 
-  &_wrapper {
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    overflow: hidden;
-    min-width: 10em;
-    padding: 0 0.5em;
-    padding-right: 1em;
-    border-radius: 2em;
-    background: srgb(--background-secondary-theme);
-  }
+	&_wrapper {
+		display: flex;
+		justify-content: flex-end;
+		align-items: center;
+		overflow: hidden;
+		min-width: 10em;
+		padding: 0 0.5em;
+		padding-right: 1em;
+		border-radius: 2em;
+		background: srgb(--background-secondary-theme);
+	}
 
-  &_toggle {
-    cursor: pointer;
-    height: 33px;
-    width: 33px;
-    margin-right: 0.5em;
-    border-radius: 50%;
-    background: srgb(--neutral-grad-1);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: srgb(--color-bg-ac);
+	&_toggle {
+		cursor: pointer;
+		height: 33px;
+		width: 33px;
+		margin-right: 0.5em;
+		border-radius: 50%;
+		background: srgb(--neutral-grad-1);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		color: srgb(--color-bg-ac);
 
-    i {
-      font-size: 0.5em;
-    }
-  }
+		i {
+			font-size: 0.5em;
+		}
+	}
 
-  &_graph {
-    position: relative;
-    cursor: pointer;
-  }
+	&_graph {
+		position: relative;
+		cursor: pointer;
+	}
 
-  &_options {
-    display: flex;
-    justify-content: center;
-    margin-left: 10px;
-    padding: 2px 10px;
-    min-width: 40px;
-    background: srgb(--neutral-grad-1);
-    border-radius: 10px;
+	&_options {
+		display: flex;
+		justify-content: center;
+		margin-left: 10px;
+		padding: 2px 10px;
+		min-width: 40px;
+		background: srgb(--neutral-grad-1);
+		border-radius: 10px;
 
-    span{
-      font-size: 0.8em;
-      color : srgb(--neutral-grad-3);
-    }
-  }
+		span {
+			font-size: 0.8em;
+			color: srgb(--neutral-grad-3);
+		}
+	}
 
-  &.playing{
-    .voiceMessage_options {
-      span{
-        font-size: 0.8em;
-        color : srgb(--color-bg-ac-bright);
-      }
-    }
-  }
+	&.playing {
+		.voiceMessage_options {
+			span {
+				font-size: 0.8em;
+				color: srgb(--color-bg-ac-bright);
+			}
+		}
+	}
 
-  .fa-exclamation-circle{
-    font-size: 0.7em;
-    color : srgb(--color-bad);
-    padding : 0.5em;
-  }
+	.fa-exclamation-circle {
+		font-size: 0.7em;
+		color: srgb(--color-bad);
+		padding: 0.5em;
+	}
 
-  .encsign{
-    position: absolute;
-    right: 0;
-    top : 0;
-    bottom: 0;
-    display: flex;
-    align-items: center;
-    padding-right: 0.35em;
+	.encsign {
+		position: absolute;
+		right: 0;
+		top: 0;
+		bottom: 0;
+		display: flex;
+		align-items: center;
+		padding-right: 0.35em;
 
-    i{
-      font-size: 0.5em;
-      color: srgb(--neutral-grad-2);
-      opacity: 0.6;
-      
-    }
-  }
+		i {
+			font-size: 0.5em;
+			color: srgb(--neutral-grad-2);
+			opacity: 0.6;
+		}
+	}
 }
 </style>

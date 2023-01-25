@@ -1,78 +1,71 @@
 import f from "../functions.js";
 class User {
-    constructor(core, p){
-        if(!p) p = {}
+	constructor(core, p) {
+		if (!p) p = {};
 
-        this.core = core
-        this.state = 0
-        this.keysupdatetimeout = null
-        this.userinfo = {
-            image : '',
-            name : '',
-            id : '',
-            keys : []
-        }
+		this.core = core;
+		this.state = 0;
+		this.keysupdatetimeout = null;
+		this.userinfo = {
+			image: "",
+			name: "",
+			id: "",
+			keys: [],
+		};
 
-        this.private = []
-        
-    }
+		this.private = [];
+	}
 
-    destroy (){
-        if(this.keysupdatetimeout){
-            clearTimeout(this.keysupdatetimeout)
-        }
+	destroy() {
+		if (this.keysupdatetimeout) {
+			clearTimeout(this.keysupdatetimeout);
+		}
 
-        this.keysupdatetimeout = null
-        this.state = 0
+		this.keysupdatetimeout = null;
+		this.state = 0;
 
-        this.userinfo = {
-            image : '',
-            name : '',
-            id : '',
-            keys : []
-        }
+		this.userinfo = {
+			image: "",
+			name: "",
+			id: "",
+			keys: [],
+		};
 
-        this.private = []
+		this.private = [];
+	}
 
-    }
+	setCredentials(credentials) {
+		if (credentials) this.credentials = credentials;
+	}
 
-    setCredentials (credentials){
-        if (credentials)
-            this.credentials = credentials
-    }
+	setUsersInfo(usersinfo, reload) {
+		_.each(usersinfo || [], (v) => {
+			this.core.store.commit("SET_USERINFO", {
+				info: v,
+				reload: reload,
+			});
+		});
+	}
 
-    setUsersInfo (usersinfo, reload){
-        _.each(usersinfo || [], v => {
+	setContacts(usersinfo) {
+		//this.core.store.commit('SET_CONTACTS', usersinfo)
+	}
 
-            this.core.store.commit('SET_USERINFO', {
-                info : v,
-                reload : reload
-            })
-        })
-    }
+	myMatrixId() {
+		return this.matrixId(this.userinfo.id);
+	}
 
-    setContacts (usersinfo){
-        
-        //this.core.store.commit('SET_CONTACTS', usersinfo)
-        
-    }
+	matrixId(id, domain) {
+		id || (id = "");
 
-    myMatrixId(){
-       return this.matrixId(this.userinfo.id)
-    }
+		if (id.indexOf("@") == 0) return id;
 
-    matrixId(id, domain){
-        
-        id || (id = '')
+		return "@" + id + ":" + (domain || this.core.domain);
+	}
 
-        if(id.indexOf("@") == 0) return id
-
-        return '@' + id + ':' + (domain || this.core.domain)
-    }
-
-    fromMatrixId(matrixid){
-        return f.getmatrixid(matrixid)
-    }
+	fromMatrixId(matrixid) {
+		return f.getmatrixid(matrixid);
+	}
 }
 
-export default User
+export default User;

@@ -1,420 +1,367 @@
-import f from './functions'
-import Axios from './axios'
-var { error } = require('./error')
+import f from "./functions";
+import Axios from "./axios";
+var { error } = require("./error");
 
 import ChatStorage from "./chatstorage";
 
 var ApiWrapper = function (core) {
-
 	var self = this;
 	var a = new Axios();
 
-	var cache = {}
-	var loading = {}
-	var storages = {}
+	var cache = {};
+	var loading = {};
+	var storages = {};
 
 	var apis = {
-		pocketnet : null
-	}
+		pocketnet: null,
+	};
 
-	var ep = function(){
-		return Promise.resolve()
-	}
+	var ep = function () {
+		return Promise.resolve();
+	};
 
-	var getstorage = function(p){
+	var getstorage = function (p) {
+		if (!storages[p.storage]) {
+			return ChatStorage(p.storage, p.version || 1, p.time).then((storage) => {
+				storages[p.storage] = storage;
 
-		if(!storages[p.storage]){
-			return ChatStorage(p.storage, p.version || 1, p.time).then(storage => {
-
-				storages[p.storage] = storage
-
-				return Promise.resolve(storage)
-			})
+				return Promise.resolve(storage);
+			});
 		}
 
-		return Promise.resolve(storages[p.storage])
-	}
+		return Promise.resolve(storages[p.storage]);
+	};
 
-	
 	var scasheAct = function (ids, key, resultsKey, reload, storageparameters) {
+		if (!_.isArray(ids)) ids = [ids];
 
-		if (!_.isArray(ids)) ids = [ids]
+		var waitLoading = {};
 
-		var waitLoading = {}
+		if (!resultsKey) resultsKey = key;
 
-		if(!resultsKey) 
-			resultsKey = key
-
-		if(!cache[key]) {
-			cache[key] = {}
+		if (!cache[key]) {
+			cache[key] = {};
 		}
 
-		if(!loading[key]) {
-			loading[key] = {}
+		if (!loading[key]) {
+			loading[key] = {};
 		}
 
-		return (storageparameters ? getstorage(storageparameters) : ep()).then(storage => {
-
-			if (storage){
-
-				return Promise.all(_.map(ids, (id) => {
-
-					if (cache[key][id]){
-						return Promise.resolve()
-					}
-
-					return storage.get(id).then((stored) => {
-						cache[key][stored[resultsKey]] = stored
-
-						return Promise.resolve()
-					}).catch(e => {
-						return Promise.resolve()
-					})
-
-				}))
-
-			}
-
-			return Promise.resolve()
-
-			
-		}).then(r => {
-
-			var idtoloadPrev = _.uniq(_.filter(ids, function (id) {
-				return reload || !cache[key][id] || cache[key][id].nocache
-			}))
-	
-			var idtoload = _.filter(idtoloadPrev, function (id) {
-	
-				if(!loading[key][id]) {
-					loading[key][id] = true
-					return true
-				}
-	
-				waitLoading[id] = true
-			})
-	
-			var handleResults = function (result, _ids) {
-
-				return (storageparameters ? getstorage(storageparameters) : ep()).then(storage => {
-					
-					if(storage){
-						return Promise.all(_.map(result, (row) => {
-
-							if(!row[resultsKey]){
-								return Promise.resolve()
-							}
-
-							return storage.set(row[resultsKey], row)
-
-						}))
-					}
-
-					return Promise.resolve()
-					
-				}).then(() => {
-
-					_.each(result, function (row) {
-
-						if (row[resultsKey]) {
-							cache[key][row[resultsKey]] = row
-						}
-	
-					})
-		
-					_.each(_ids, function(id){
-						delete loading[key][id]
-						delete waitLoading[id]
-		
-						if(!cache[key][id])
-							cache[key][id] = 'error'
-					})
-		
-					var nresult = {};
-		
-					return f.pretry(() => {
-		
-						_.each(ids, function (id) {
-		
+		return (storageparameters ? getstorage(storageparameters) : ep())
+			.then((storage) => {
+				if (storage) {
+					return Promise.all(
+						_.map(ids, (id) => {
 							if (cache[key][id]) {
-		
-								if (cache[key][id] != 'error')
-		
-									nresult[id] = (cache[key][id])
-		
-								delete loading[key][id]
-								delete waitLoading[id]
+								return Promise.resolve();
 							}
-		
+
+							return storage
+								.get(id)
+								.then((stored) => {
+									cache[key][stored[resultsKey]] = stored;
+
+									return Promise.resolve();
+								})
+								.catch((e) => {
+									return Promise.resolve();
+								});
 						})
-		
-						return _.toArray(waitLoading).length == 0
-		
-					}).then(() => {
-						return Promise.resolve(nresult)
-					})
+					);
+				}
 
-				})
-	
-				
-	
-			}
-	
-			return Promise.resolve({
-				id: idtoload,
-				handle: handleResults
+				return Promise.resolve();
 			})
-		})
+			.then((r) => {
+				var idtoloadPrev = _.uniq(
+					_.filter(ids, function (id) {
+						return reload || !cache[key][id] || cache[key][id].nocache;
+					})
+				);
 
+				var idtoload = _.filter(idtoloadPrev, function (id) {
+					if (!loading[key][id]) {
+						loading[key][id] = true;
+						return true;
+					}
 
-		
-		
-	}
+					waitLoading[id] = true;
+				});
+
+				var handleResults = function (result, _ids) {
+					return (storageparameters ? getstorage(storageparameters) : ep())
+						.then((storage) => {
+							if (storage) {
+								return Promise.all(
+									_.map(result, (row) => {
+										if (!row[resultsKey]) {
+											return Promise.resolve();
+										}
+
+										return storage.set(row[resultsKey], row);
+									})
+								);
+							}
+
+							return Promise.resolve();
+						})
+						.then(() => {
+							_.each(result, function (row) {
+								if (row[resultsKey]) {
+									cache[key][row[resultsKey]] = row;
+								}
+							});
+
+							_.each(_ids, function (id) {
+								delete loading[key][id];
+								delete waitLoading[id];
+
+								if (!cache[key][id]) cache[key][id] = "error";
+							});
+
+							var nresult = {};
+
+							return f
+								.pretry(() => {
+									_.each(ids, function (id) {
+										if (cache[key][id]) {
+											if (cache[key][id] != "error")
+												nresult[id] = cache[key][id];
+
+											delete loading[key][id];
+											delete waitLoading[id];
+										}
+									});
+
+									return _.toArray(waitLoading).length == 0;
+								})
+								.then(() => {
+									return Promise.resolve(nresult);
+								});
+						});
+				};
+
+				return Promise.resolve({
+					id: idtoload,
+					handle: handleResults,
+				});
+			});
+	};
 
 	var waitonline = function () {
-
 		if (!core || !core.waitonline) {
-			return Promise.resolve()
+			return Promise.resolve();
 		}
 
-		return core.waitonline()
-
-	}
+		return core.waitonline();
+	};
 
 	var crequest = function (ids, key, rkey, reload, storageparameters) {
-
-		return scasheAct(ids, key, rkey, reload, storageparameters).then(sh => {
-
+		return scasheAct(ids, key, rkey, reload, storageparameters).then((sh) => {
 			if (!sh.id.length) {
-				return sh.handle([])
+				return sh.handle([]);
 			}
-	
-			return Promise.reject(sh)
 
-		})
-
-		
-	}
+			return Promise.reject(sh);
+		});
+	};
 
 	var request = function (data, to) {
-
 		return waitonline().then(() => {
+			data || (data = {});
 
-			data || (data = {})
-
-			return a.axios({
-				to,
-				data,
-			}).then(r => {
-
-				return Promise.resolve(r)
-
-			})
-				.catch(e => {
-
-					if (e == 'noresponse') {
-
+			return a
+				.axios({
+					to,
+					data,
+				})
+				.then((r) => {
+					return Promise.resolve(r);
+				})
+				.catch((e) => {
+					if (e == "noresponse") {
 						return new Promise((resolve, reject) => {
-
 							setTimeout(function () {
-								request(data, to).then(r => {
-
-
-									return resolve(r)
-
-								}).catch(e => {
-
-									return reject(e)
-
-								})
-
-							}, 3000)
-						})
-
+								request(data, to)
+									.then((r) => {
+										return resolve(r);
+									})
+									.catch((e) => {
+										return reject(e);
+									});
+							}, 3000);
+						});
 					}
 
-					return Promise.reject(e)
-
-				})
-
-
-		})
-
-
-	}
+					return Promise.reject(e);
+				});
+		});
+	};
 
 	self.clearCache = function (key) {
-
 		if (!key) {
-			cache = {}
+			cache = {};
 		} else {
-			delete cache[key]
+			delete cache[key];
 		}
-	}
+	};
 
 	self.pocketnet = {
-
 		common: (data, method) => {
+			if (!data) data = {};
 
-			if(!data) data = {}
+			if (!apis.pocketnet)
+				apis.pocketnet = f.deep(window, "POCKETNETINSTANCE.api");
 
-			if(!apis.pocketnet)
-				apis.pocketnet = f.deep(window, 'POCKETNETINSTANCE.api')
-				
-			if(!apis.pocketnet && typeof Api != 'undefined'){
-				apis.pocketnet = new Api(core)
-			}	
-				
-			if (apis.pocketnet) {
-
-				return apis.pocketnet.initIf().then(() => {
-					return apis.pocketnet.wait.ready('use', 3000)
-					
-				}).then(r => {
-					return apis.pocketnet.rpc(method, data.parameters)
-				}).catch(e => {
-
-					return {
-						error : e
-					}
-
-					
-				})
-				
+			if (!apis.pocketnet && typeof Api != "undefined") {
+				apis.pocketnet = new Api(core);
 			}
 
-			data.method = method
-			data.node = '185.148.147.15'
-			data.parameters = f.hexEncode(JSON.stringify(data.parameters || ""))
+			if (apis.pocketnet) {
+				return apis.pocketnet
+					.initIf()
+					.then(() => {
+						return apis.pocketnet.wait.ready("use", 3000);
+					})
+					.then((r) => {
+						return apis.pocketnet.rpc(method, data.parameters);
+					})
+					.catch((e) => {
+						return {
+							error: e,
+						};
+					});
+			}
 
-			return request(data, servers.pocketnet + '/rpc-' + (method || "common"))
+			data.method = method;
+			data.node = "185.148.147.15";
+			data.parameters = f.hexEncode(JSON.stringify(data.parameters || ""));
 
+			return request(data, servers.pocketnet + "/rpc-" + (method || "common"));
 		},
-		
+
 		userState: (addresses) => {
+			if (!_.isArray(addresses)) addresses = [addresses];
 
-			if (!_.isArray(addresses)) addresses = [addresses]
+			var parameters = [addresses.join(",")];
 
-			var parameters = [addresses.join(',')];
-
-			return self.pocketnet.common({ parameters }, 'getuserstate')
+			return self.pocketnet.common({ parameters }, "getuserstate");
 		},
 
 		userStateMe: (address) => {
+			var cacheresult = f.deep(
+				window,
+				"POCKETNETINSTANCE.platform.sdk.ustate.storage." + address
+			);
 
-			var cacheresult = f.deep(window, 'POCKETNETINSTANCE.platform.sdk.ustate.storage.' + address)
-
-			if(cacheresult){
-				return Promise.resolve(cacheresult)
+			if (cacheresult) {
+				return Promise.resolve(cacheresult);
 			}
 
-			return self.pocketnet.userState(address)
+			return self.pocketnet.userState(address);
 		},
 
 		userInfoCached: (addresses, reload) => {
+			var rescached = [];
 
-			var rescached = []
-
-			if(!reload){
-
-				rescached = _.filter(_.map(addresses, (address) => {
-					return  f.deep(window, 'POCKETNETINSTANCE.platform.sdk.userscl.storage.' + address) || null
-				}), (u) => {return u})
+			if (!reload) {
+				rescached = _.filter(
+					_.map(addresses, (address) => {
+						return (
+							f.deep(
+								window,
+								"POCKETNETINSTANCE.platform.sdk.userscl.storage." + address
+							) || null
+						);
+					}),
+					(u) => {
+						return u;
+					}
+				);
 
 				addresses = _.filter(addresses, (a) => {
 					return !_.find(rescached, (r) => {
-						return r.address == a
-					})
-				})
+						return r.address == a;
+					});
+				});
 			}
 
-			return self.pocketnet.userInfo(addresses, reload).then(rs => {
-
-				
-				rs = _.toArray(rs)
+			return self.pocketnet.userInfo(addresses, reload).then((rs) => {
+				rs = _.toArray(rs);
 
 				_.each(rescached, (c) => {
-					rs.push(c)
-				})
+					rs.push(c);
+				});
 
-
-				return Promise.resolve(rs)
-			})
-
+				return Promise.resolve(rs);
+			});
 		},
 
 		search: (text) => {
+			var parameters = [text, "users"];
 
-			var parameters = [text, 'users'];
-
-			return self.pocketnet.common({ parameters }, 'searchusers').then(data => {
-				return Promise.resolve(data || [])
-			})
+			return self.pocketnet
+				.common({ parameters }, "searchusers")
+				.then((data) => {
+					return Promise.resolve(data || []);
+				});
 		},
 
 		userInfo: (addresses, reload) => {
-
-			if(!addresses.length){
-				return Promise.resolve([])
+			if (!addresses.length) {
+				return Promise.resolve([]);
 			}
 
-			return crequest(addresses, 'pocketnet_userInfo', 'address', reload, {
-				storage : 'userInfo',
-				time : 60 * 60 * 24 
-			}).catch(sh => {
-
-				if(!sh || !sh.id) {
-					return Promise.reject(sh)
+			return crequest(addresses, "pocketnet_userInfo", "address", reload, {
+				storage: "userInfo",
+				time: 60 * 60 * 24,
+			}).catch((sh) => {
+				if (!sh || !sh.id) {
+					return Promise.reject(sh);
 				}
 
-				var parameters = [sh.id, '1'];
+				var parameters = [sh.id, "1"];
 
-				return self.pocketnet.common({ parameters }, 'getuserprofile').then(results => {
-
-					return sh.handle(results, sh.id)
-
-				})
-			})
+				return self.pocketnet
+					.common({ parameters }, "getuserprofile")
+					.then((results) => {
+						return sh.handle(results, sh.id);
+					});
+			});
 		},
 
 		postInfo: (params) => {
+			var parameters = [[params.parameters]];
 
-			var parameters = [[params.parameters]]
-
-			return self.pocketnet.common({ parameters }, 'getrawtransactionwithmessagebyid').then(results => {
-
-				return Promise.resolve(results)
-
-			})
+			return self.pocketnet
+				.common({ parameters }, "getrawtransactionwithmessagebyid")
+				.then((results) => {
+					return Promise.resolve(results);
+				});
 		},
 
 		pocketNetProfileAddress: (profile_name) => {
+			var parameters = [[profile_name.parameters]];
 
-			var parameters = [[profile_name.parameters]]
-
-			return self.pocketnet.common({ parameters }, 'getuseraddress').then(results => {
-
-				return Promise.resolve(results)
-
-			})
+			return self.pocketnet
+				.common({ parameters }, "getuseraddress")
+				.then((results) => {
+					return Promise.resolve(results);
+				});
 		},
 
 		pocketNetProfileInfo: (profile_address) => {
+			var parameters = [[profile_address.parameters]];
 
-			var parameters = [[profile_address.parameters]]
-
-			return self.pocketnet.common({ parameters }, 'getuserprofile').then(results => {
-
-				return Promise.resolve(results)
-
-			})
+			return self.pocketnet
+				.common({ parameters }, "getuserprofile")
+				.then((results) => {
+					return Promise.resolve(results);
+				});
 		},
-
-
-	}
+	};
 
 	return self;
-}
+};
 
-export default ApiWrapper
-
+export default ApiWrapper;
