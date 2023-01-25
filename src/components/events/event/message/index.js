@@ -127,7 +127,7 @@ export default {
 			return "";
 		},
 		willburn: function () {
-			var d = moment(this.origin._localTimestamp).add(
+			var d = moment(this.origin.localTimestamp).add(
 				this.core.options.burn.w,
 				this.core.options.burn.v
 			);
@@ -175,13 +175,13 @@ export default {
 
 			var t = 10 * 60000;
 
-			if (moment().diff(this.origin._localTimestamp, "days") != 0) {
+			if (moment().diff(this.origin.localTimestamp, "days") != 0) {
 				t = 60 * 1000 * 60 * 24;
 			}
 
 			if (
 				prevuser != this.userinfo.id ||
-				this.prevevent._localTimestamp + t < this.origin._localTimestamp
+				this.prevevent.localTimestamp + t < this.origin.localTimestamp
 			) {
 				return true;
 			}
@@ -667,7 +667,7 @@ export default {
 			/*Add highlighted parts to search*/
 			this.$nextTick(() => {
 				const localMsg =
-						this.origin._localTimestamp !== this.origin._localTimestamp,
+						this.origin.localTimestamp !== this.origin.localTimestamp,
 					matches = Array.from(this.$el.querySelectorAll("mark"));
 
 				if (localMsg) matches.reverse();

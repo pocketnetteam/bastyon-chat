@@ -201,9 +201,11 @@ class MTRX {
 		localStorage.accessToken = userData.access_token;
 		var store = new sdk.IndexedDBStore({
 			indexedDB: window.indexedDB,
-			dbName: "matrix-js-sdk:" + this.credentials.username,
+			dbName: "matrix-js-sdk-v3:" + this.credentials.username,
 		});
 		await store.startup();
+
+		console.log('userData', userData)
 
 		Object.assign(userClientData, {
 			userId: userData.user_id,
@@ -211,8 +213,7 @@ class MTRX {
 			unstableClientRelationAggregation: true,
 			timelineSupport: true,
 			store: store,
-
-			// deviceId: userData.device_id,
+			deviceId: userData.device_id,
 		});
 
 		if (this.customrequest) userClientData.request = this.request;

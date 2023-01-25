@@ -254,9 +254,12 @@ export default {
 	},
 
 	beforeMount: function () {
+
+		console.log('this.event', this.event)
+
 		if (
 			(this.event && this.event.event && rendered[this.event.event.event_id]) ||
-			(this.event._txnId && rendered[this.event._txnId])
+			(this.event.txnId && rendered[this.event.txnId])
 		) {
 			this.readyToRender = true;
 		}
@@ -315,7 +318,6 @@ export default {
 	methods: {
 		setReadyToRender() {
 			setTimeout(() => {
-				console.log("this.event", this.event);
 
 				if (this.readyToRender) return;
 
@@ -323,8 +325,8 @@ export default {
 					rendered[this.event.event.event_id] = true;
 				}
 
-				if (this.event && this.event._txnId) {
-					rendered[this.event._txnId] = true;
+				if (this.event && this.event.txnId) {
+					rendered[this.event.txnId] = true;
 				}
 
 				this.readyToRender = true;
