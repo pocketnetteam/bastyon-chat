@@ -315,8 +315,6 @@ export default {
 	methods: {
 		setReadyToRender() {
 			setTimeout(() => {
-				console.log("this.event", this.event);
-
 				if (this.readyToRender) return;
 
 				if (this.event && this.event.event) {

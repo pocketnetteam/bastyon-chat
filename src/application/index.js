@@ -120,7 +120,8 @@ class Core {
 					p.el,
 					p.parameters
 				);
-				this.mtrx.bastyonCalls.on("initcall", () => {
+				this.mtrx.bastyonCalls.on("initcall", (call) => {
+					console.log("---catch init call", call);
 					if (this.vm.$store.state.currentPlayingVoiceMessage) {
 						this.vm.$store.state.currentPlayingVoiceMessage.pause();
 					}
@@ -145,6 +146,15 @@ class Core {
 							window?.POCKETNETINSTANCE?.platform
 						);
 					}
+				});
+				this.mtrx.bastyonCalls.on("error", (err) => {
+					console.log("---catch error", err);
+				});
+				this.mtrx.bastyonCalls.on("connected", (call) => {
+					console.log("---catch connected", call);
+				});
+				this.mtrx.bastyonCalls.on("ended", (call) => {
+					console.log("---catch ended", call);
 				});
 			}
 
