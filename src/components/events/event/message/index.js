@@ -655,7 +655,7 @@ export default {
 
 		markMatches: function (content) {
 			/*Highlight matched text*/
-			if (!this.matches) return;
+			if (!this.matches || !this.markText) return;
 
 			this.markedText = this.markText(content);
 
