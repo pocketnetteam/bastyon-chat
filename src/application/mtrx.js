@@ -729,12 +729,15 @@ class MTRX {
 	}
 
 	sendImage(chat, base64, file, meta, { relation, from } = {}) {
-		if (!file) return this.sendImageBase64(chat, base64, meta);
+		if (!file)
+			return this.sendImageBase64(chat, base64, meta, { relation, from });
 
 		var i = new images();
 		var info = {};
 
 		if (!meta) meta = {};
+
+		console.log("relation, from", relation, from);
 
 		return i
 			.wh(base64)
@@ -761,12 +764,20 @@ class MTRX {
 			.then((image) => {
 				if (meta.aborted) return Promise.reject("aborted");
 
+				if (relation) {
+					info["m.relates_to"] = {
+						rel_type: relation.type,
+						event_id: this.clearEventId(relation.event),
+					};
+				}
+
 				return this.client.sendImageMessage(chat.roomId, image, info, "Image");
 			});
 	}
 
 	sendAudio(chat, base64, file, meta, { relation, from } = {}) {
-		if (!file) return this.sendAudioBase64(chat, base64, meta);
+		if (!file)
+			return this.sendAudioBase64(chat, base64, meta, { relation, from });
 
 		let info = {};
 
@@ -791,6 +802,13 @@ class MTRX {
 			})
 			.then((audio) => {
 				if (meta.aborted) return Promise.reject("aborted");
+
+				if (relation) {
+					info["m.relates_to"] = {
+						rel_type: relation.type,
+						event_id: this.clearEventId(relation.event),
+					};
+				}
 
 				return this.client.sendAudioMessage(chat.roomId, audio, info, "Audio");
 			});
@@ -923,6 +941,15 @@ class MTRX {
 	}
 
 	shareInChat(id, share) {
+
+		if (share.multiple){
+
+			return f.processArray(share.multiple, (share) => {
+				return this.shareInChat(id, share)
+			})
+
+		}
+
 		var m_chat = this.client.getRoom(id);
 
 		//// share.openwithItems []
@@ -941,6 +968,28 @@ class MTRX {
 					{ from: share.from }
 				);
 
+				promises.push(promise);
+			});
+
+			_.each(share.download, ({event, chat}) => {
+
+				console.log('chat, event', chat, event)
+
+				var promise = this.core.mtrx.kit.prepareChat(chat).then(() => {
+
+					return this.core.mtrx.getFile(chat, event)
+
+				}).then((r) => {
+
+					console.log("RESULT", r)
+
+					return r.file
+				})
+				.then((r) => {
+					return this.sendFile(m_chat, r, {}, { from: share.from })
+				})
+
+				///this.sendFile(m_chat, file, {}, { from: share.from })
 				promises.push(promise);
 			});
 

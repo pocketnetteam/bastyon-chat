@@ -117,6 +117,8 @@ export default {
 
 						this.encrypted = this.m_chat.pcrypto.canBeEncrypt();
 					});
+
+
 				}
 			},
 		},
@@ -126,6 +128,19 @@ export default {
 				if (this.chat) {
 					this.$store.commit("SET_CURRENT_ROOM", this.chat.roomId);
 				} else this.$store.commit("SET_CURRENT_ROOM", false);
+
+
+				if (this.chat && this.chat.roomId) {
+					
+					let pushRules = this.core.mtrx.client._pushProcessor.getPushRuleById(
+						this.chat.roomId
+					);
+
+					if (pushRules !== null) {
+						this.roomMuted = true;
+					}
+
+				}
 			},
 		},
 	},
@@ -150,9 +165,9 @@ export default {
 			return `https://bastyon.com/welcome?publicroom=${this.chat.roomId}`;
 
 			/*if(this.chat.info.title === '@New Room'){
-        return `https://bastyon.com/welcome?publicroom=${this.chat.roomId}`
-      }
-      return `https://bastyon.com/welcome?publicroom=${this.chat.info.title.replace(/ /g, '_')}`*/
+		return `https://bastyon.com/welcome?publicroom=${this.chat.roomId}`
+	  }
+	  return `https://bastyon.com/welcome?publicroom=${this.chat.info.title.replace(/ /g, '_')}`*/
 		},
 		me: function () {
 			return (
@@ -177,7 +192,7 @@ export default {
 					(e) =>
 						(!this.core.mtrx.me(e?.event?.sender))?.event?.content?.enabled &&
 						e?.event?.sender.split(":")[0].replace("@", "") ===
-							e?.event?.state_key
+						e?.event?.state_key
 				)
 			) {
 				this.roomCallsDisabled = true;
@@ -349,7 +364,7 @@ export default {
 				return;
 			}
 
-			this.core.mtrx.blockUser(users[0].userId).catch((e) => {});
+			this.core.mtrx.blockUser(users[0].userId).catch((e) => { });
 		},
 
 		unblock() {
@@ -359,7 +374,7 @@ export default {
 				return;
 			}
 
-			this.core.mtrx.unblockUser(users[0].userId).catch((e) => {});
+			this.core.mtrx.unblockUser(users[0].userId).catch((e) => { });
 		},
 
 		eventsList() {
@@ -398,7 +413,7 @@ export default {
 							.then((r) => {
 								this.$store.commit("DELETE_ROOM", this.chat.roomId);
 
-								this.$router.push({ path: "/chats" }).catch((e) => {});
+								this.$router.push({ path: "/chats" }).catch((e) => { });
 							});
 					});
 				});
@@ -435,7 +450,7 @@ export default {
 								this.m_chat.roomId,
 								f.getMatrixIdFull(user.userId, this.core.domain)
 							)
-							.then((r) => {});
+							.then((r) => { });
 					});
 			} else {
 				this.core.mtrx.client
@@ -444,7 +459,7 @@ export default {
 						f.getMatrixIdFull(user.userId, this.core.domain),
 						"admin ban"
 					)
-					.then((r) => {});
+					.then((r) => { });
 			}
 		},
 		kickUser(user) {
@@ -454,7 +469,7 @@ export default {
 					f.getMatrixIdFull(user.userId, this.core.domain),
 					"admin kicked"
 				)
-				.then(this.$nextTick(function () {}));
+				.then(this.$nextTick(function () { }));
 		},
 		makeAdmin(user) {
 			var level = 50;
@@ -485,7 +500,7 @@ export default {
 			this.inputActive = true;
 		},
 
-		editRoomName() {},
+		editRoomName() { },
 
 		showPhotoSwipe(index) {
 			this.isOpen = true;

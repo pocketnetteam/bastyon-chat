@@ -53,7 +53,7 @@ export default {
 	},
 
 	watch: {
-		events: function () {},
+		events: function () { },
 
 		selectedMessages: {
 			immediate: true,
@@ -122,18 +122,21 @@ export default {
 	},
 	updated: function () {
 		/*if(this.countshow === 0) {
-      this.scrollToReadMessages();
-    }
-    this.countshow = 1;*/
+	  this.scrollToReadMessages();
+	}
+	this.countshow = 1;*/
 	},
 	methods: {
 		scrollToReadMessages: function () {
 			/*if(this.notificationCount > 0) {
-        const elem = document.getElementById("eventWrapper_" + (this.notificationCount + 1));
+		const elem = document.getElementById("eventWrapper_" + (this.notificationCount + 1));
 
-        if(elem)
-          elem.scrollIntoView()
-      }*/
+		if(elem)
+		  elem.scrollIntoView()
+	  }*/
+		},
+		shareEvent: function ({ event }) {
+			this.$emit("shareEvent", { event });
 		},
 		showerror: function () {
 			// stringifyiedError
@@ -143,7 +146,7 @@ export default {
 					okText: "Ok",
 					backdropClose: true,
 				})
-				.catch((e) => {});
+				.catch((e) => { });
 		},
 
 		dupdated: _.debounce(function () {
@@ -157,11 +160,11 @@ export default {
 		ddscroll: function (e) {
 			/*var _ls = this.$refs['container'].scrollTop
 
-            if (Math.abs(_ls - this.ls) > 500 && this.c * _ls < this.c * this.ls){
-            }
-            else{
-                this.ls = _ls
-            }*/
+			if (Math.abs(_ls - this.ls) > 500 && this.c * _ls < this.c * this.ls){
+			}
+			else{
+				this.ls = _ls
+			}*/
 
 			this.dscroll();
 		},

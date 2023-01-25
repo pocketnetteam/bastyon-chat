@@ -1,7 +1,6 @@
 <template functional>
 	<div class="userpic">
 		<div class="userpicSquareWrapper">
-			<div class="userpicSquareInnerWrapper">
 				<div class="userpicSquareInnerWrapper" :class="props.status">
 					<bgimage v-if="props.userinfo.image" :src="props.userinfo.image" />
 
@@ -26,7 +25,6 @@
 						<i v-if="props.status == 'invite'" class="fas fa-user-plus"></i>
 					</div>
 				</div>
-			</div>
 		</div>
 	</div>
 </template>

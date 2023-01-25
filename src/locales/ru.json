@@ -31,6 +31,9 @@
 		"enableCalls": "Разрешить входящие звонки",
 		"allow": "Разрешить",
 		"prohibit": "Отклонить",
+		"wait": "Ожидание подтверждения",
+		"disabled": "Пользователь не дал вам разрешения нас звонки",
+		"request": "Вы действительно хотите запросить разрешение на звонки?",
 		"requestCallAccess": "Пользователь запрашивает разрешение на звонки",
 		"callAccessWarning": "Принимайте запросы ТОЛЬКО от доверенных людей.",
 		"leave": "Покинуть",
@@ -65,7 +68,7 @@
 		"following": "Подписан",
 		"theme": "Тема:",
 		"contacts": "Контакты",
-        "other": "Глобальный поиск Бастиона",
+		"other": "Глобальный поиск Bastyon",
 		"phoneContacts": "Телефонные контакты",
 		"chooseInviteMedia": "Пожалуйста, выберите, способ приглашения",
 		"admin": "Админ",
@@ -127,14 +130,15 @@
 		"emptyContactList": "Ваша книга контактов пуста",
 		"joinApp": "Присоединяйтесь ко мне в защищенном чате.",
 		"hasInvitedToJoin": "Это зашифрованный чат, который не привязывается к номеру телефона.",
-		"messagefrom": "Пересланное сообщение от",
+		"messagefrom": "Пересланное сообщение",
 		"usernotgen": "User did not generate their encryption keys yet. You will be able to chat them when their keys are generated.",
 		"younotgen": "Please wait a minute, Your encryption keys are being generated...",
 		"messageRead": "Сообщение прочитано",
 		"open": "Открыть",
 		"You": "Вы",
 		"chatsearchingempty": "Чатов по данному фильтру не найдено",
-		"sendmessage": "Отправить сообщение"
+		"sendmessage": "Отправить сообщение",
+		"messages" : "Сообщения"
 	},
 
 	"input": {

@@ -45,9 +45,10 @@
         .eventsflex
           transform: initial
           padding: 1em 0
+          overscroll-behavior: auto
+            
           .ewr
-            display: grid
-            grid-template-columns: repeat(3, 1fr)
+            display: flex
             padding: 0 1em
             row-gap: 5px
             column-gap: 5px
@@ -62,6 +63,12 @@
                 .eventsMessage
                   .messageRow
                     padding: 0
+                    .messageAudio,
+                    .voiceMessage
+                      width : 100%
+                      .voiceMessage_wrapper
+                        justify-content: space-between
+                        flex-grow: 2
                     .fromimagesfiles
                       display: none
                     .iconWrapper

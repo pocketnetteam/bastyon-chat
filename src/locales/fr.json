@@ -57,7 +57,7 @@
 		"following": "Abonnements:",
 		"theme": "Thème:",
 		"contacts": "Contacts",
-        "other": "Recherche globale Bastyon",
+    "other": "Recherche globale Bastyon",
 		"phoneContacts": "Contacts téléphone",
 		"chooseInviteMedia": "Veuillez choisir comment inviter:",
 		"admin": "Administrateur",
@@ -108,7 +108,7 @@
 		"sent": "a envoyé",
 		"PKOINto": " PKOIN à ",
 		"response": "Réponse",
-		"messagefrom": "Transférer message de",
+		"messagefrom": "Transférer message",
 		"edited": "Edité",
 		"settings": "Paramètres",
 		"unauthorized": "Non autorisé",
@@ -123,7 +123,8 @@
 		"usernotgen": "User did not generate their encryption keys yet. You will be able to chat them when their keys are generated.",
 		"younotgen": "Please wait a minute, Your encryption keys are being generated...",
 		"chatsearchingempty": "No chats found for the specified filter",
-		"sendmessage": "Send message"
+		"sendmessage": "Send message",
+		"messages" : "Messages"
 	},
 
 	"input": {

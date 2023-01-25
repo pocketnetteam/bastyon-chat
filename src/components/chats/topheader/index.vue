@@ -17,24 +17,20 @@
         </div>
       </template>
 
-      <template v-slot:leftadd>
-        <!--<div class="iconbuttonsmall" :class="{active : !closebybg}" @click="changeCloseByBg" v-if="minimized">
-          <i class="fas fa-map-pin"></i>
-        </div>-->
-      </template>
+			<template v-slot:leftadd> </template>
 
       <template v-slot:info>
         <span v-if="!share">{{ $t("caption.chats") }}</span>
         <span v-if="share">{{ $t("caption.shareWith") }}</span>
       </template>
 
-      <template v-slot:rightadd>
-        <router-link to="settings" v-if="!share && pocketnet">
-          <div class="iconbuttonsmall">
-            <i class="fas fa-cog"></i>
-          </div>
-        </router-link>
-      </template>
+			<template v-slot:rightadd>
+				<router-link to="settings" v-if="!share">
+					<div class="iconbuttonsmall">
+						<i class="fas fa-cog"></i>
+					</div>
+				</router-link>
+			</template>
 
       <template v-slot:right>
         <div

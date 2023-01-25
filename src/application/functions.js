@@ -1883,6 +1883,18 @@ f.setCaretPosition = function (ctrl, start, end) {
 	}
 };
 
+f.processArray = function(array, fn) {
+	var results = [];
+	return array.reduce(function(p, item) {
+		return p.then(function() {
+			return fn(item).then(function(data) {
+				results.push(data);
+				return results;
+			});
+		});
+	}, Promise.resolve());
+ }
+
 f.ObjDiff = ObjDiff;
 f._arrayBufferToBase64 = _arrayBufferToBase64;
 f._base64ToArrayBuffer = _base64ToArrayBuffer;

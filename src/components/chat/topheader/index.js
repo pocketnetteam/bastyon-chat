@@ -247,16 +247,26 @@ export default {
 			}
 		},
 		bcCall: function () {
-			if (!this.checkCallsEnabled() || this.checkCallsEnabled() === "wait") {
-				this.core.mtrx.client.sendStateEvent(
-					this.chat.roomId,
-					"m.room.callsEnabled",
-					{ enabled: true },
-					this.core.user.userinfo.id
-				);
-				this.wait = true;
-				this.requestCallsAccess();
+			if (!this.checkCallsEnabled()) {
+				this.$dialog
+					.confirm(this.$t("caption.request"), {
+						okText: this.$t("yes"),
+						cancelText: this.$t("cancel"),
+					})
 
+					.then(() => {
+						this.core.mtrx.client.sendStateEvent(
+							this.chat.roomId,
+							"m.room.callsEnabled",
+							{ enabled: true },
+							this.core.user.userinfo.id
+						);
+						this.wait = true;
+						this.requestCallsAccess();
+					});
+
+				return;
+			} else if (this.checkCallsEnabled() === "wait") {
 				return;
 			}
 			let local = document.querySelector("body");

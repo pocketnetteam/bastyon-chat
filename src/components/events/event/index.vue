@@ -83,6 +83,7 @@
   font-size: 0.8em
   text-align: center
   opacity: 0.6
+  padding : 2 * $r
 
 .event
   opacity: 0
@@ -114,6 +115,8 @@ import member from "@/components/events/event/member/index.vue";
 import message from "@/components/events/event/message/index.vue";
 
 import f from "@/application/functions";
+
+var rendered = {};
 
 export default {
 	name: "eventsEvent",
@@ -194,16 +197,15 @@ export default {
 			if (["m.room.name"].indexOf(t) > -1) return "member";
 			if (["m.room.power_levels"].indexOf(t) > -1) return "member";
 			if (["m.room.redaction"].indexOf(t) > -1) return "message";
+			if (["m.room.request_calls_access"].indexOf(t) > -1) return "message";
 			if (["m.call.candidates"].indexOf(t) > -1) return "message";
 			if (["m.call.hangup"].indexOf(t) > -1) return "message";
 			if (["m.call.invite"].indexOf(t) > -1) return "message";
-			if (["m.room.request_calls_access"].indexOf(t) > -1) return "message";
 			if (["m.call.reject"].indexOf(t) > -1) return "message";
 			if (["m.call.answer"].indexOf(t) > -1) return "message";
 			if (["m.room.topic"].indexOf(t) > -1) {
 				return "member";
 			}
-			if (["m.room.request_calls_access"].indexOf(t) > -1) return "message";
 
 			return "";
 		},
@@ -250,6 +252,15 @@ export default {
 
 	mounted: function () {
 		this.$emit("mounted");
+	},
+
+	beforeMount: function () {
+		if (
+			(this.event && this.event.event && rendered[this.event.event.event_id]) ||
+			(this.event._txnId && rendered[this.event._txnId])
+		) {
+			this.readyToRender = true;
+		}
 	},
 
 	watch: {
@@ -305,7 +316,20 @@ export default {
 	methods: {
 		setReadyToRender() {
 			setTimeout(() => {
+
+				if (this.readyToRender) return;
+
+				if (this.event && this.event.event) {
+					rendered[this.event.event.event_id] = true;
+				}
+
+				if (this.event && this.event._txnId) {
+					rendered[this.event._txnId] = true;
+				}
+
 				this.readyToRender = true;
+
+				rendered;
 			}, 20);
 		},
 		manageReadedInterval() {
@@ -329,7 +353,6 @@ export default {
 				var ts = this.timeline._timelineSet;
 				var e = this.event;
 
-				console.log("e.event.content", e.event.type);
 				if (
 					!this.reference &&
 					e.event.content["m.relates_to"] &&
@@ -381,23 +404,8 @@ export default {
 			this.$emit("reply");
 		},
 
-		share(_sharing) {
-			var pr = Promise.resolve();
-
-			if (_sharing.download) {
-				pr = this.core.mtrx
-					.getFile(this.chat, this.event)
-					.then((r) => {
-						return f.Base64.fromFile(r.file);
-					})
-					.then((r) => {
-						_sharing.files = [r];
-						return Promise.resolve();
-					});
-			}
-			return pr.then(() => {
-				return this.core.share(_sharing);
-			});
+		share(sharing) {
+			return this.core.share(sharing)
 		},
 
 		downloadFile() {

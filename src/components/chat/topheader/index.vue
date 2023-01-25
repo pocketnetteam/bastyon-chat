@@ -45,6 +45,13 @@
 							? ''
 							: 'disabled'
 					"
+					:title="
+						checkCallsEnabled() === 'wait' || wait
+							? $t('caption.wait')
+							: checkCallsEnabled()
+							? ''
+							: $t('caption.disabled')
+					"
 					@click="bcCall"
 				>
 					<i class="fas fa-video"></i>
