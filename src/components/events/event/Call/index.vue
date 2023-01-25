@@ -59,28 +59,29 @@ export default {
 	display: flex;
 	align-items: center;
 	width: 180px;
-	height: 48px;
-	padding: 4px 24px 4px 4px;
-	border-radius: 12px;
-	margin: 0 10px;
+	height: 6 * $r;
+	padding: 0.5 * $r;
+	border-radius: 2 * $r;
 	background-color: srgba(--neutral-grad-1, 0.8);
 
 	&.bad {
 		.call {
 			&-icon {
-				color: rgba(235, 87, 87, 1);
+				color: srgb(--color-bad);
 			}
 		}
 	}
 	&.my {
 		background-color: srgb(--color-bg-ac-bright);
 		color: srgb(--text-on-bg-ac-color);
+		
 		&.bad {
-			background-color: rgba(235, 87, 87, 1);
+			background-color: srgb(--color-bad);
 		}
+
 		.call {
 			&-icon {
-				background: rgba(0, 0, 0, 0.2);
+				background: rgba(255,255, 255, 0.2);
 				color: srgb(--text-on-bg-ac-color);
 			}
 		}
@@ -89,11 +90,10 @@ export default {
 		display: flex;
 		justify-content: center;
 		align-items: center;
-		width: 40px;
-		height: 40px;
+		width: 5 * $r;
+		height: 5 * $r;
 		background: rgba(0, 0, 0, 0.06);
-		border-radius: 12px;
-		margin-right: 8px;
+		border-radius: 1.66 * $r;
 		color: srgb(--color-bg-ac-bright);
 
 		&.ended {
@@ -106,9 +106,10 @@ export default {
 		}
 	}
 	&-info {
+		flex-grow: 2;
+		text-align: center;
 		font-weight: 600;
-		font-size: 14px;
-		line-height: 16px;
+		font-size: 0.8em;
 		display: flex;
 		flex-direction: column;
 		&_title {
