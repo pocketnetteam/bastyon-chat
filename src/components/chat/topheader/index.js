@@ -180,7 +180,7 @@ export default {
 
 		m_chat: function () {
 			if (this.chat && this.chat.roomId) {
-				let pushRules = this.core.mtrx.client._pushProcessor.getPushRuleById(
+				let pushRules = this.core.mtrx.client.pushProcessor.getPushRuleById(
 					this.chat.roomId
 				);
 				if (pushRules !== null) {
@@ -327,7 +327,7 @@ export default {
 				var roomId = this.chat.roomId;
 				var deviceID = this.core.mtrx.client.deviceId;
 				let self = this;
-				let pushRules = this.core.mtrx.client._pushProcessor.getPushRuleById(
+				let pushRules = this.core.mtrx.client.pushProcessor.getPushRuleById(
 					this.chat.roomId
 				);
 				if (pushRules !== null) {

@@ -58,7 +58,7 @@ export default {
 		m_chat: function () {
 			if (!this.core.mtrx.client || !this.chat) return null;
 
-			let pushRules = this.core.mtrx.client._pushProcessor.getPushRuleById(
+			let pushRules = this.core.mtrx.client.pushProcessor.getPushRuleById(
 				this.chat.roomId
 			);
 

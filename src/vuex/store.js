@@ -91,7 +91,6 @@ var store = new Vuex.Store({
 	},
 	mutations: {
 		SET_CALL(state, isActive) {
-			console.log("set calls", isActive);
 			state.isCallsActive = isActive;
 		},
 		CLEAR_CALL(state) {
@@ -358,6 +357,7 @@ var store = new Vuex.Store({
 			var chatsMap = {};
 
 			_.each(chats, (chat) => {
+
 				var aid = chat.info.title.replace("#", "");
 
 				if (!state.chatsMap[chat.roomId] || state.force[chat.roomId]) {
@@ -449,6 +449,7 @@ var store = new Vuex.Store({
 
 		SET_CONTACTS_FROM_MATRIX(state, v) {
 			var mp = {};
+
 
 			_.each(v, function (c) {
 				if (
@@ -671,6 +672,11 @@ var store = new Vuex.Store({
 				} else {
 					r.summary.lastModified = r.getLastActiveTimestamp();
 				}
+
+				r.summary.info = {
+					title : r.name
+
+				}
 				return r.summary;
 			});
 
@@ -683,34 +689,11 @@ var store = new Vuex.Store({
 					store._vm.core.mtrx.kit.usersFromChats(m_chats)
 				);
 
+				console.log("FILLL CONTACTS")
+
 				return store._vm.core.mtrx.kit.fillContacts(m_chats);
-			});
+			})
 
-			return Promise.resolve();
-
-			return store._vm.core.mtrx.kit
-				.usersInfoForChats(m_chats)
-				.then((i) => {
-					commit(
-						"SET_CHATS_USERS",
-						store._vm.core.mtrx.kit.usersFromChats(m_chats)
-					);
-					commit(
-						"SET_CONTACTS_FROM_MATRIX",
-						_.filter(i, (m) => {
-							return (
-								m.id !==
-								(store._vm.core.user.userinfo &&
-									store._vm.core.user.userinfo.id)
-							);
-						})
-					);
-
-					return Promise.resolve();
-				})
-				.catch((e) => {
-					return Promise.resolve();
-				});
 		},
 
 		FETCH_EVENTS({ commit }) {

@@ -287,12 +287,12 @@ export default {
 		},
 
 		relations: function (events) {
-			var ts = this.timeline._timelineSet;
+			var ts = this.timeline.timelineSet;
 
 			_.each(events, (e) => {
 				try {
 					//if(!e.event.content.edited){
-					var rt = ts.getRelationsForEvent(
+					var rt = ts.relations.getChildEventsForEvent(
 						e.event.event_id,
 						"m.replace",
 						"m.room.message"

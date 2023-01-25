@@ -313,8 +313,6 @@ export default {
 		setReadyToRender() {
 			setTimeout(() => {
 
-				console.log('this.event', this.event)
-
 				if(this.readyToRender) return
 
 				if(this.event && this.event.event){
@@ -350,10 +348,9 @@ export default {
 		},
 		relations() {
 			if (this.timeline) {
-				var ts = this.timeline._timelineSet;
+				var ts = this.timeline.timelineSet;
 				var e = this.event;
 
-				console.log("e.event.content", e.event.content);
 
 				if (
 					!this.reference &&
@@ -374,7 +371,7 @@ export default {
 							if (ev) {
 								this.reference = e.event.content.reference = ev;
 
-								var rt = ts.getRelationsForEvent(
+								var rt = ts.relations.getChildEventsForEvent(
 									this.core.mtrx.clearEventId(ev),
 									"m.replace",
 									"m.room.message"

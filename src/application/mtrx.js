@@ -1,4 +1,4 @@
-const sdk = require("@/matrix-js-sdk");
+const sdk = require("matrix-js-sdk");
 
 import MTRXKIT from "./mtrxkit";
 import f from "./functions";
@@ -574,7 +574,8 @@ class MTRX {
 		return this.client
 			.uploadContent(file)
 			.then((src) => {
-				return Promise.resolve(this.core.mtrx.client.mxcUrlToHttp(src));
+
+				return Promise.resolve(this.core.mtrx.client.mxcUrlToHttp(src.content_uri));
 			})
 			.then((url) => {
 				if (save) {
@@ -601,7 +602,7 @@ class MTRX {
   }*/
 
 	originalEvent(id, timeline) {
-		var rtr = timeline._timelineSet.getRelationsForEvent(
+		var rtr = timeline.timelineSet.relations.getChildEventsForEvent(
 			e.event.event_id,
 			"m.reference",
 			"m.room.message"
@@ -737,8 +738,6 @@ class MTRX {
 
 		if (!meta) meta = {};
 
-		console.log("relation, from", relation, from);
-
 		return i
 			.wh(base64)
 			.then((_info) => {
@@ -764,14 +763,27 @@ class MTRX {
 			.then((image) => {
 				if (meta.aborted) return Promise.reject("aborted");
 
+				
+
+				var content = {
+					msgtype: 'm.image',
+					url: image,
+					
+					body: "Image",
+
+					info
+				}
+
 				if (relation) {
-					info["m.relates_to"] = {
+					content["m.relates_to"] = {
 						rel_type: relation.type,
 						event_id: this.clearEventId(relation.event),
 					};
 				}
 
-				return this.client.sendImageMessage(chat.roomId, image, info, "Image");
+				return this.client.sendMessage(chat.roomId, content);
+
+				//return this.client.sendImageMessage(chat.roomId, image, info, "Image");
 			});
 	}
 
@@ -803,12 +815,21 @@ class MTRX {
 			.then((audio) => {
 				if (meta.aborted) return Promise.reject("aborted");
 
+				var content = {
+					msgtype: 'm.audio',
+					url: audio,
+					body: "Audio",
+					info
+				}
+
 				if (relation) {
-					info["m.relates_to"] = {
+					content["m.relates_to"] = {
 						rel_type: relation.type,
 						event_id: this.clearEventId(relation.event),
 					};
 				}
+
+				return this.client.sendMessage(chat.roomId, content);
 
 				return this.client.sendAudioMessage(chat.roomId, audio, info, "Audio");
 			});
@@ -863,6 +884,8 @@ class MTRX {
 	}
 
 	async getAudioUnencrypt(chat, event) {
+
+
 		if (event.event.content.audioData) {
 			return Promise.resolve(event.event.content.audioData);
 		}

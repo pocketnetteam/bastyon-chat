@@ -162,7 +162,7 @@ export default {
 			);
 		},
 		events: function () {
-			var pushRules = this.core.mtrx.client._pushProcessor.getPushRuleById(
+			var pushRules = this.core.mtrx.client.pushProcessor.getPushRuleById(
 				this.chat.roomId
 			);
 			var isEnabled = this.m_chat.currentState.getStateEvents(

@@ -1006,6 +1006,7 @@ var PcryptoFile = function () {
 	self.decryptFile = function (file, secret, p) {
 		return readFile(file)
 			.then((r) => {
+
 				return self.decrypt(r, secret, p);
 			})
 			.then((decrypted) => {

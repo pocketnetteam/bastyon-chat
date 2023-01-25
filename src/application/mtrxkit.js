@@ -44,7 +44,7 @@ class MTRXKIT {
 	unknowngroupusers(m_chat) {
 		return (
 			m_chat &&
-			m_chat._selfMembership === "invite" &&
+			m_chat.selfMembership === "invite" &&
 			!m_chat.summary.members &&
 			!this.tetatetchat(this.m_chat)
 		);
@@ -54,6 +54,8 @@ class MTRXKIT {
 		var users = {};
 
 		_.each(m_chats, (chat) => {
+			
+
 			users[chat.roomId] = _.map(
 				_.uniq(
 					[].concat(
@@ -85,10 +87,20 @@ class MTRXKIT {
 
 	fillContacts(m_chats) {
 		m_chats = _.filter(m_chats, (ch) => {
-			return ch._selfMembership == "join" && ch.name.length == 57;
+
+			console.log('ch.name.length', ch.selfMembership)
+
+			return ch.selfMembership == "join" && ch.name.length == 57;
 		});
 
 		return this.usersInfoForChatsStore(m_chats).then((i) => {
+
+			console.log("usersInfoForChatsStore", i, _.filter(i, (m) => {
+				return (
+					!this.core.user.userinfo || m.id !== this.core.user.userinfo.id
+				);
+			}))
+
 			this.core.store.commit(
 				"SET_CONTACTS_FROM_MATRIX",
 				_.filter(i, (m) => {
@@ -103,6 +115,9 @@ class MTRXKIT {
 	usersInfoForChatsStore(m_chats, reload) {
 		return this.usersInfoForChats(m_chats, reload)
 			.then((i) => {
+
+				console.log("USERS FOR CHATS", i)
+
 				this.core.store.commit("SET_CHATS_USERS", this.usersFromChats(m_chats));
 
 				return Promise.resolve(i);
@@ -119,7 +134,7 @@ class MTRXKIT {
 		if (withinvite) {
 			var promises = _.map(m_chats, (chat) => {
 				if (
-					chat._selfMembership === "invite" &&
+					chat.selfMembership === "invite" &&
 					(!chat.summary.members || reload) &&
 					!chat.summary.membersloading
 				) {
@@ -141,7 +156,7 @@ class MTRXKIT {
 							});
 
 							if (
-								chat._selfMembership === "invite" &&
+								chat.selfMembership === "invite" &&
 								this.core.user.userinfo
 							) {
 								if (
@@ -195,6 +210,9 @@ class MTRXKIT {
 		/// TODO FILTER CONTACTS
 
 		return this.allchatmembers(m_chats, reload).then((members) => {
+
+			console.log('members', members)
+
 			return this.usersInfo(members, reload);
 		});
 	}
