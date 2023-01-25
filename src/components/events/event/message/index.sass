@@ -18,7 +18,7 @@
     opacity: 1 !important
 
   .mnwrapper
-    +transition(0.3s)
+    +transitionopt(0.3s, 'opacity')
 
   .multiSelect
     position: absolute
@@ -291,11 +291,17 @@
       white-space: normal
 
   .fromimagesfiles
-    order: 5
-
-    padding: $r $r / 2
-
+    display: flex
+    order: 3
+    padding: 0
+    line-height: 33px
     padding-right: $r
+
+    .fromCaption
+      white-space: nowrap
+      max-width: 240px
+      overflow: hidden
+      text-overflow: ellipsis
 
   .actionsWrapper
     order: 4
@@ -306,14 +312,18 @@
     margin-left: auto
     display: flex
     align-items: center
+    line-height: 33px
+
     i
       opacity: 0.3
-      transition: .4s
+      +transitionopt(0.3s, opacity)
+
     i.fa-ellipsis-h
       font-size: 0.7em
+
     i:hover
       opacity: 1
-      transition: .4s
+      +transitionopt(0.3s, opacity)
 
 
 
@@ -365,6 +375,7 @@
   .reference
     height: 32px
 
+
   .from,
   .reference
     opacity: 0.8
@@ -386,7 +397,6 @@
     .referenceCaption
       min-width: 28px
 
-    .fromCaption,
     .referenceCaption
       font-size: 0.8em
 
@@ -466,7 +476,7 @@
       align-self: flex-start
 
     .fromimagesfiles
-      order: -5
+      order: -3
     .actionsWrapper
       text-align: left
       margin-right: auto
@@ -531,9 +541,16 @@
 
     .messageNoticeWithLink
       color: $color-text-second
+
+
 .eventWrapper
   .fromCaption
-    padding: 5px 0 0 15px
-.fromCaption
-  font-size: 0.7em
-  color: grey
+    font-size: 0.8em
+    
+.fromimagesfiles
+  .fromCaption  
+    text-align: center
+    i
+      width: 30px
+      text-align: center
+      font-size: 0.8em

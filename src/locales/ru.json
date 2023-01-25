@@ -129,7 +129,7 @@
 		"emptyContactList": "Ваша книга контактов пуста",
 		"joinApp": "Присоединяйтесь ко мне в защищенном чате.",
 		"hasInvitedToJoin": "Это зашифрованный чат, который не привязывается к номеру телефона.",
-		"messagefrom": "Пересланное сообщение от",
+		"messagefrom": "Пересланное сообщение",
 		"usernotgen": "User did not generate their encryption keys yet. You will be able to chat them when their keys are generated.",
 		"younotgen": "Please wait a minute, Your encryption keys are being generated...",
 		"messageRead": "Сообщение прочитано",

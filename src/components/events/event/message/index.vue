@@ -12,20 +12,7 @@
 				:fromreference="true"
 			/>
 		</div>
-		<div
-			class="fromimagesfiles"
-			v-if="
-				(content.from || imageFrom) &&
-				(file ||
-					(content.msgtype === 'm.image' && imageUrl) ||
-					(content.msgtype === 'm.audio' && audioUrl))
-			"
-		>
-			<div class="fromCaption">
-				<i class="fas fa-share-alt"></i>
-				<span>{{ $t("caption.messagefrom") }} {{ userinfo.name }}</span>
-			</div>
-		</div>
+		
 		<div
 			v-touch:touchhold="dropDownMenuShow"
 			:class="{
@@ -232,7 +219,7 @@
 					<div class="from" v-if="content.from">
 						<div class="fromCaption">
 							<i class="fas fa-share-alt"></i>
-							<span>{{ $t("caption.messagefrom") }} {{ userinfo.name }}</span>
+							<span>{{ userinfo.name }}: {{ $t("caption.messagefrom").toLowerCase() }}</span>
 						</div>
 					</div>
 				</div>
@@ -266,6 +253,21 @@
 				</div>
 				<div v-else>
 					<linepreloader />
+				</div>
+			</div>
+
+			<div
+				class="fromimagesfiles"
+				v-if="
+					(content.from || imageFrom) &&
+					(file ||
+						(content.msgtype === 'm.image' && imageUrl) ||
+						(content.msgtype === 'm.audio' && audioUrl))
+				"
+			>	
+				<div class="fromCaption">
+					<i class="fas fa-share-alt"></i>
+					<span>{{ userinfo.name }}: {{ $t("caption.messagefrom").toLowerCase() }} </span>
 				</div>
 			</div>
 		</div>

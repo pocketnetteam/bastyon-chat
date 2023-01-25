@@ -83,6 +83,7 @@
   font-size: 0.8em
   text-align: center
   opacity: 0.6
+  padding : 2 * $r
 
 .event
   opacity: 0
@@ -315,7 +316,6 @@ export default {
 	methods: {
 		setReadyToRender() {
 			setTimeout(() => {
-				console.log("this.event", this.event);
 
 				if (this.readyToRender) return;
 
@@ -352,8 +352,6 @@ export default {
 			if (this.timeline) {
 				var ts = this.timeline._timelineSet;
 				var e = this.event;
-
-				console.log("e.event.content", e.event.content);
 
 				if (
 					!this.reference &&
@@ -406,23 +404,8 @@ export default {
 			this.$emit("reply");
 		},
 
-		share(_sharing) {
-			var pr = Promise.resolve();
-
-			if (_sharing.download) {
-				pr = this.core.mtrx
-					.getFile(this.chat, this.event)
-					.then((r) => {
-						return f.Base64.fromFile(r.file);
-					})
-					.then((r) => {
-						_sharing.files = [r];
-						return Promise.resolve();
-					});
-			}
-			return pr.then(() => {
-				return this.core.share(_sharing);
-			});
+		share(sharing) {
+			return this.core.share(sharing)
 		},
 
 		downloadFile() {
