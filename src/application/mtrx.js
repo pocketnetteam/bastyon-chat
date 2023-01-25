@@ -1,4 +1,4 @@
-const sdk = require("matrix-js-sdk-bastyon/lib/index.js");
+const sdk = require("matrix-js-sdk-bastyon/lib/browser-index.js");
 
 import MTRXKIT from "./mtrxkit";
 import f from "./functions";
