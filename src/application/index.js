@@ -210,6 +210,9 @@ class Core {
 		}
 
 		this.vm.$destroy();
+
+		if (this.mtrx.bastyonCalls)
+			this.mtrx.bastyonCalls.destroy()
 	};
 
 	init = function () {
