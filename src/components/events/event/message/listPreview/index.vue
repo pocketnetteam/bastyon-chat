@@ -57,7 +57,7 @@
 					event.event.type === 'm.call.invite'
 				"
 				class="txt sname"
-				>{{ senderName }}</span
+				> {{ senderName }}</span
 			>
 		</div>
 

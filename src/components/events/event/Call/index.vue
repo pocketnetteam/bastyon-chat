@@ -117,7 +117,7 @@ export default {
 		}
 	}
 	&-info {
-		margin-right: $r;
+		margin-left: $r;
 		flex-grow: 2;
 		text-align: left;
 		font-weight: 600;
