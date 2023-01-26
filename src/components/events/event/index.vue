@@ -412,27 +412,29 @@ export default {
 			this.downloading = true;
 
 			this.core.mtrx
-				.downloadFile(this.chat, this.event)
-				.catch((e) => {
-					this.error = e.toString();
-
-					return Promise.resolve(e);
-				})
-				.then((r) => {
-					this.downloading = false;
+				.downloadFile(this.chat, this.event).then((r) => {
+					
 					this.downloaded = true;
 
 					this.$store.commit("icon", {
 						icon: "success",
 						message: "Downloaded",
 					});
+
 				})
 				.catch((e) => {
+					this.error = e.toString();
+
 					this.$store.commit("icon", {
 						icon: "error",
 						message: "Downloading Failed",
 					});
-				});
+
+					return Promise.resolve(e);
+				}).finally(() => {
+					this.downloading = false;
+					
+				})
 		},
 
 		getAudioUnencrypt() {
