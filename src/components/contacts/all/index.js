@@ -147,14 +147,13 @@ export default {
 
 				mc = _.sortBy(mc, (cc) => cc.point).reverse();
 				chats = mc
-					.filter((c) => {
-						/*Exclude tetatet chats when contacts found*/
+					/*.filter((c) => {
 						
 						return !_.filter(this.contacts, (u) =>
 							c.chat.tetatet &&
 							Object.keys(c.chat.currentState.members || {}).find((f) => f.includes(u.id))
 						).length;
-					})
+					})*/
 					.map((c) => c.chat.summary);
 			}
 
@@ -215,7 +214,7 @@ export default {
 			
 
 			if (section.action == "navigateToProfile") {
-				return this.navigateToProfile(item.id, item);
+				this.navigateToProfile(item.id, item);
 			}
 
 			if (
@@ -265,12 +264,12 @@ export default {
 					this.$router.push("chat?id=" + chat.roomId).catch((e) => {});
 				}
 
-				return;
+				;
 			}
-
 			if (!section.keepMatches) {
 				this.matches.clear();
 			}
+			
 		},
 		navigateToProfile(id, contact) {
 			if (this.mode === "Select") {
