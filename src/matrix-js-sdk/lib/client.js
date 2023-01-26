@@ -5733,7 +5733,7 @@ MatrixClient.prototype._checkTurnServers = async function () {
     _logger.logger.debug("Fetching new TURN credentials");
     console.log("Fetching new TURN credentials");
     try {
-      const res = await this.turnServer();
+      // const res = await this.turnServer();
       // if (res.uris) { now we have no servers from back
       if (true) {
         // _logger.logger.log("Got TURN URIs: " + res.uris + " refresh in " + res.ttl + " secs"); // map the response to a format that can be fed to RTCPeerConnection
@@ -5748,7 +5748,6 @@ MatrixClient.prototype._checkTurnServers = async function () {
 
         this._turnServersExpiry = Date.now() + res.ttl * 1000;
         credentialsGood = true;
-        console.log("credentialsGood");
       }
     } catch (err) {
       _logger.logger.error("Failed to get TURN URIs", err); // If we get a 403, there's no point in looping forever.
