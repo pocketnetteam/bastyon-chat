@@ -26,6 +26,7 @@ export default {
 			loading: false,
 
 			users: [],
+			contacts: [],
 			lists: [
 				{ key: "chats", view: "room", action: "navigateToRoom" },
 				{ key: "contacts", view: "contact", action: "navigateToProfile" },
@@ -137,7 +138,7 @@ export default {
 						}
 
 						return {
-							chat: mChat.summary,
+							chat: mChat,
 							point,
 						};
 					}),
@@ -145,7 +146,16 @@ export default {
 				);
 
 				mc = _.sortBy(mc, (cc) => cc.point).reverse();
-				chats = _.map(mc, (c) => c.chat);
+				chats = mc
+					.filter((c) => {
+						/*Exclude tetatet chats when contacts found*/
+						
+						return !_.filter(this.contacts, (u) =>
+							c.chat.tetatet &&
+							Object.keys(c.chat.currentState.members || {}).find((f) => f.includes(u.id))
+						).length;
+					})
+					.map((c) => c.chat.summary);
 			}
 
 			return chats;
@@ -153,11 +163,13 @@ export default {
 
 		filteredContacts() {
 			/*Add my contacts*/
-			return _.filter(this.contactsMap, (contact) => {
+			this.contacts = _.filter(this.contactsMap, (contact) => {
 				return contact.name
 					.toLowerCase()
 					.includes(this.matches.value.toLowerCase());
 			});
+			
+			return this.contacts;
 		},
 
 		filteredOther() {
