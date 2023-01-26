@@ -106,6 +106,8 @@ class Core {
 						console.log(this);
 						return this.vm.$i18n.t(key);
 					},
+
+
 				},
 			};
 
@@ -120,7 +122,8 @@ class Core {
 					p.el,
 					p.parameters
 				);
-				this.mtrx.bastyonCalls.on("initcall", () => {
+				this.mtrx.bastyonCalls.on("initcall", (call) => {
+					console.log("---catch init call", call);
 					if (this.vm.$store.state.currentPlayingVoiceMessage) {
 						this.vm.$store.state.currentPlayingVoiceMessage.pause();
 					}
@@ -138,13 +141,30 @@ class Core {
 							document.msExitFullscreen();
 						}
 					}
-
-					if (window?.POCKETNETINSTANCE?.platform) {
-						console.log(
-							"pocketnet available",
-							window?.POCKETNETINSTANCE?.platform
-						);
+					if (p?.parameters?.onInitCall){
+						p.parameters.onInitCall(call)
 					}
+				});
+				this.mtrx.bastyonCalls.on("error", (err) => {
+					console.log("---catch error", err);
+					if (p?.parameters?.onError) {
+						p.parameters.onError(err)
+					}
+
+				});
+				this.mtrx.bastyonCalls.on("connected", (call) => {
+					console.log("---catch connected", call);
+					if (p?.parameters?.onConnected) {
+						p.parameters.onConnected(call)
+					}
+
+				});
+				this.mtrx.bastyonCalls.on("ended", (call) => {
+					console.log("---catch ended", call);
+					if (p?.parameters?.onEnded) {
+						p.parameters.onEnded(call)
+					}
+
 				});
 			}
 
