@@ -113,7 +113,9 @@ class Notifier {
 		var external = f.deep(this, "core.external.clbks.NOTIFICATION") || {};
 		var ctype = "";
 
-		var t = f.deep(event, "event.type");
+		var t = f.deep(event, "event.type") || '';
+
+		if (t.indexOf('m.call') > -1) return
 
 		if (["m.room.member"].indexOf(t) > -1) ctype = "invite";
 		if (["m.room.message"].indexOf(t) > -1) ctype = "message";

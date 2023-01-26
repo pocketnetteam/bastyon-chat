@@ -2,8 +2,8 @@
 	<div
 		class="call"
 		:class="{
-			bad:
-				this.getDescription() === 'ended' || this.getDescription() === 'reject',
+			ended : this.getDescription() === 'ended',
+			bad: this.getDescription() === 'reject',
 		}"
 	>
 		<div
@@ -79,6 +79,17 @@ export default {
 			background-color: srgb(--color-bad);
 		}
 
+		&.ended{
+			background-color: srgba(--neutral-grad-1, 0.8);
+			color : srgb(--text-color);
+
+			.call {
+				&-icon {
+					color: srgb(--color-bg-ac-bright);
+				}
+			}
+		}
+
 		.call {
 			&-icon {
 				background: rgba(255,255, 255, 0.2);
@@ -107,7 +118,7 @@ export default {
 	}
 	&-info {
 		flex-grow: 2;
-		text-align: center;
+		text-align: left;
 		font-weight: 600;
 		font-size: 0.8em;
 		display: flex;

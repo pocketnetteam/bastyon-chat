@@ -145,7 +145,7 @@ SyncApi.prototype.createRoom = function (roomId) {
     timelineSupport,
     unstableClientRelationAggregation
   });
-  client.reEmitter.reEmit(room, ["Room.name", "Room.avatar", "Room.timeline", "Room.redaction", "Room.redactionCancelled", "Room.receipt", "Room.tags", "Room.timelineReset", "Room.localEchoUpdated", "Room.accountData", "Room.myMembership", "Room.replaceEvent"]);
+  client.reEmitter.reEmit(room, ["Room.name", "Room.avatar", "Room.request_calls_access", "Room.timeline", "Room.redaction", "Room.redactionCancelled", "Room.receipt", "Room.tags", "Room.timelineReset", "Room.localEchoUpdated", "Room.accountData", "Room.myMembership", "Room.replaceEvent"]);
 
   this._registerStateListeners(room);
 
