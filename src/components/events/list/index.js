@@ -235,6 +235,20 @@ export default {
 			}
 		},
 
+		scrollToEvent(e) {
+			if (this.$refs[e.event.event_id]){
+				var r_element = this.$refs[e.event.event_id][0]
+				this.scrollToNew(r_element.offsetTop - this.lscroll.clientHeight / 2 + r_element.clientHeight / 2)
+				
+				r_element.classList.add('attention')
+
+				setTimeout(() => {
+					r_element.classList.remove('attention')
+				}, 1000)
+			}
+			//this.scrollToNew(120);
+		},
+
 		menuIsVisibleHandler: function (isVisible) {
 			this.menuOpen = isVisible;
 			this.$emit("menuIsVisible", isVisible);
@@ -272,6 +286,11 @@ export default {
 
 		messagesIsDeleted(state) {
 			this.$emit("messagesIsDeleted", state);
+		},
+
+		toreference(reference) {
+
+			this.$emit("toreference", reference);
 		},
 	},
 };

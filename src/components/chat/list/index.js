@@ -336,7 +336,17 @@ export default {
 			this.loading = true;
 			this.firstPaginate = true;
 
-			var timeline = this.chat.getLiveTimeline();
+			console.log('this.chat', this.chat)
+
+			//this.chat.getTimelineForEvent('$FXUvcjIqcvDu0meLTnz-8plloZoNHLIYEb6WGQMWO3s')
+			
+			
+			console.log('timeline', timeline)
+			
+			//this.chat.getTimelineForEvent('$FXUvcjIqcvDu0meLTnz-8plloZoNHLIYEb6WGQMWO3s')
+			
+			
+			//this.chat.getLiveTimeline();
 
 			var ts;
 
@@ -344,6 +354,9 @@ export default {
 				this.scrollType = "custom";
 				ts = await this.mediaTimelineSet();
 			} else {
+
+				var timeline = this.chat.getLiveTimeline();
+
 				ts = timeline.getTimelineSet();
 			}
 
@@ -371,11 +384,45 @@ export default {
 						this.loading = false;
 					});
 			}, 30);
+
+			/*setTimeout(() => {
+				this.paginateToEvent('$FXUvcjIqcvDu0meLTnz-8plloZoNHLIYEb6WGQMWO3s').then(event => {
+					console.log("TOEVENT", event)
+				})
+			}, 1000)*/
+		},
+
+		paginateToEvent: function(event_id){
+			var event = _.find(this.events, (e) => {
+				return e.event.event_id == event_id
+			})
+
+			if (event){
+				return Promise.resolve(event)
+			}
+
+			else{
+				var promise = this.paginate('b')
+
+				if (promise){
+					promise.then(() => {
+						return this.paginateToEvent(event_id)
+					}).catch(e => {
+						if(!event) return Promise.resolve(null)
+					})
+				}
+
+				else{
+					if(!event) return Promise.resolve(null)
+				}
+			}
 		},
 
 		autoPaginate: function (direction) {
 			if (this.needLoad(direction)) {
-				this.paginate(direction);
+				var pr = this.paginate(direction)
+
+				if (pr) pr.catch(e => {})
 			}
 		},
 
@@ -388,12 +435,15 @@ export default {
 
 					let count = /*this.firstPaginate ? 24 : */ 20;
 
-					this.timeline
+					var error = null
+
+					return this.timeline
 						.paginate(direction, count)
 						.then((e) => {
 							return Promise.resolve();
 						})
 						.catch((e) => {
+							error = e
 							return Promise.resolve();
 						})
 						.then((r) => {
@@ -407,7 +457,11 @@ export default {
 							// this.readAll();
 
 							this["p_" + direction] = false;
-						});
+						}).then(() => {
+							if(e) return Promise.reject(e)
+						})
+
+					
 				} else {
 					this.readAll();
 				}
@@ -546,6 +600,22 @@ export default {
 		menuIsVisibleHandler: function (isVisible) {
 			this.$emit("menuIsVisible", isVisible);
 		},
+
+		scrollToEvent: function(reference){
+
+			this.$store.state.globalpreloader = true;
+
+			this.paginateToEvent(reference.event.event_id).then(event => {
+
+				if (event){
+					this.$refs.eventslist.scrollToEvent(event)
+				}
+			}).finally(() => {
+				this.$store.state.globalpreloader = false;
+
+			})
+			//console.log('reference.event.event_id', reference.event.event_id)
+		}
 
 	
 	},

@@ -328,7 +328,7 @@ export default {
 	-webkit-tap-highlight-color: transparent;
 	display: flex;
 	contain: strict;
-	width: 230px;
+	width: 220px;
 	height: 100%;
 	height: 50px;
 

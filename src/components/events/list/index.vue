@@ -17,7 +17,7 @@
 			:class="{ mobile, ios, menuOpen }"
 		>
 			<div class="ewr">
-				<div class="errorWrapper" v-if="stringifyiedError">
+				<div class="errorWrapper" v-if="stringifyiedError" >
 					<div class="error">
 						<div>{{ $t("sendingerror") }}</div>
 						<div class="btnwrp">
@@ -32,6 +32,8 @@
 					class="eventWrapper"
 					v-for="(event, i) in events"
 					:key="event.event.event_id"
+					:event="event.event.event_id"
+					:ref="event.event.event_id"
 				>
 					<eventsEvent
 						:event="event"
@@ -53,6 +55,7 @@
 						@menuIsVisible="menuIsVisibleHandler"
 						:isRemoveSelectedMessages="isRemoveSelectedMessages"
 						@messagesIsDeleted="messagesIsDeleted"
+						@toreference="toreference"
 					/>
 				</div>
 			</div>

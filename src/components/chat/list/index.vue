@@ -19,6 +19,7 @@
 					@replyEvent="replyEvent"
 					@galleryEventOpen="(e) => imageGallery(e)"
 					@menuIsVisible="menuIsVisibleHandler"
+					@toreference="scrollToEvent"
 					ref="eventslist"
 					:error="error"
 					:timeline="timeline"

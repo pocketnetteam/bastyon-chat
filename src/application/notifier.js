@@ -89,18 +89,21 @@ class Notifier {
 	}
 
 	decrypt(event, chat) {
-		return this.core.mtrx.kit
-			.prepareChat(chat)
-			.then((r) => {
-				if (event.event.decrypted) {
-					return Promise.resolve();
-				}
 
-				return chat.pcrypto.decryptEvent(event.event);
-			})
-			.catch((e) => {
+		
+
+		return this.core.mtrx.kit.allchatmembers([chat], false, true).then(() => {
+			return this.core.mtrx.kit.prepareChat(chat)
+		}).then((r) => {
+			if (event.event.decrypted) {
 				return Promise.resolve();
-			});
+			}
+
+			return chat.pcrypto.decryptEvent(event.event);
+		})
+		.catch((e) => {
+			return Promise.resolve();
+		});
 	}
 
 	message(event, user, chat) {

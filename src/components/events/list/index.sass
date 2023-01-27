@@ -3,6 +3,10 @@
     .event
       padding : 0.5 * $r 0
 
+.eventWrapper
+  +transitionopt(0.3s, background)
+  &.attention
+    background: srgba(--neutral-grad-0, 0.5)
 
 .list-enter-active, .list-leave-active
   transition: all 1s

@@ -621,7 +621,13 @@ export default {
 		},
 
 		showreference: function () {
-			this.referenceshowed = !this.referenceshowed;
+
+			console.log('showreference', this.reference)
+
+			this.$emit('toreference', this.reference)
+
+
+			//this.referenceshowed = !this.referenceshowed;
 		},
 
 		selectMessage: function () {

@@ -57,6 +57,7 @@
 			@reply="reply"
 			@share="share"
 			@menuIsVisible="menuIsVisibleHandler"
+			@toreference="toreference"
 			v-if="type === 'message' || preview"
 		/>
 
@@ -538,6 +539,11 @@ export default {
 		messagesIsDeleted: function (state) {
 			this.$emit("messagesIsDeleted", state);
 		},
+
+		toreference : function(reference){
+			this.$emit("toreference", reference);
+
+		}
 	},
 };
 </script>
