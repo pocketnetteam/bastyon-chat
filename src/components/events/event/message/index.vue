@@ -113,15 +113,13 @@
 					v-if="reference && !preview && !fromreference"
 				>
 					<eventsEvent
-						v-if="!referenceshowed"
 						:event="reference"
 						:chat="chat"
 						:preview="true"
 					/>
 
 					<div class="referenceCaption">
-						<span v-if="!referenceshowed"><i class="fas fa-share"></i></span>
-						<button class="button ghost small" v-else>Hide</button>
+						<span><i class="fas fa-share"></i></span>
 					</div>
 				</div>
 
