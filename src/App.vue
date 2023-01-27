@@ -137,9 +137,9 @@ import MainWrapper from "./components/main/index.vue";
 import userUnauthorized from "./components/user/unauthorized/index.vue";
 import store from "@/vuex/store";
 import router from "@/router/router";
-import modal from "@/components/assets/modal/index.vue";
+import modal from "@/components/assets/modal2/index.vue";
 import pmenu from "@/components/assets/pmenu/index.vue";
-
+import swipable from "@/components/assets/swipable/index.vue"; 
 import VuePageTransition from "@/editedplugins/vue-page-transition/src/index.js";
 import TextareaAutosize from "vue-textarea-autosize";
 import VueI18n from "vue-i18n";
@@ -199,12 +199,12 @@ import simpleSearch from "@/components/assets/simpleSearch/index.vue";
 import linepreloader from "@/components/assets/linepreloader/index.vue";
 
 import chats from "@/views/chats.vue";
-
+import vuescroll from 'vue-scroll'
 ////////
-
+Vue.use(vuescroll)
 Vue.component("pmenu", pmenu);
 Vue.component("modal", modal);
-
+Vue.component("swipable", swipable);
 Vue.component("preloader", preloader);
 Vue.component("date", date);
 Vue.component("userpic", userpic);
