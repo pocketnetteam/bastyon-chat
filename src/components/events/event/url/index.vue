@@ -1,6 +1,6 @@
 <template>
 	<div id="url" class="urlMessage">
-		<div class="urlwrapper" v-if="urltype != 'impty' && !error">
+		<div class="urlwrapper" v-if="urltype != 'empty' && !error">
 			<metaMessage
 				v-if="!loading"
 				ref="metamessage"
@@ -49,7 +49,7 @@ export default {
 	data: function () {
 		return {
 			meta: {},
-			loading: true,
+			loading: false,
 			error: false,
 			groups: {
 				p: ["pocketnet.app", "bastyon.com"],
@@ -111,7 +111,7 @@ export default {
 		},
 	}),
 
-	mounted: function () {
+	beforeMount: function () {
 		if (this.urltype == "custom") {
 			this.geturl();
 		} else {
@@ -124,18 +124,31 @@ export default {
 			this.$emit("updatedSize", before);
 		},
 		geturl: function () {
-			this.loading = true;
+			//this.loading = true;
 
 			this.core.mtrx.client
 				.getUrlPreview(this.clearurl, 0)
 				.then((response) => {
-					this.loading = false;
+
+					var cl = {}
+
+					_.each(response, (r, i) => {
+						if(r) cl[i] = r
+					})
+
+					if(_.isEmpty(cl)){
+						return Promise.reject('empty')
+					}
+
 					this.meta = response;
+
 				})
 				.catch((error) => {
-					this.meta = {};
+					this.meta = null;
+					this.error = error
+				}).finally(() => {
 					this.loading = false;
-				});
+				})
 		},
 	},
 };

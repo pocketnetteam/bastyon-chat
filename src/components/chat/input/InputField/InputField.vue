@@ -214,7 +214,7 @@ export default {
 				this.$refs.textarea.style.height = 1 + "px";
 				this.$refs.textarea.style.height =
 					this.$refs.textarea.scrollHeight + "px";
-				this.display_emoji = false;
+				//this.display_emoji = false;
 			}
 		},
 

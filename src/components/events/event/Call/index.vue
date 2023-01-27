@@ -58,7 +58,7 @@ export default {
 .call {
 	display: flex;
 	align-items: center;
-	width: 180px;
+	width: 190px;
 	height: 6 * $r;
 	padding: 0.5 * $r;
 	border-radius: 2 * $r;

@@ -622,10 +622,7 @@ export default {
 
 		showreference: function () {
 
-			console.log('showreference', this.reference)
-
 			this.$emit('toreference', this.reference)
-
 
 			//this.referenceshowed = !this.referenceshowed;
 		},

@@ -6,7 +6,11 @@
 .eventWrapper
   +transitionopt(0.3s, background)
   &.attention
-    background: srgba(--neutral-grad-0, 0.5)
+    background: srgb(--neutral-grad-0)
+
+    /deep/
+      .allscreen
+        background: srgb(--neutral-grad-0)
 
 .list-enter-active, .list-leave-active
   transition: all 1s

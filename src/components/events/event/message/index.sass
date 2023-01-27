@@ -134,6 +134,7 @@
 
   &.allscreen
     flex-wrap: wrap
+    +transitionopt(0.3s, background)
 
     /deep/
     .userpic
@@ -521,7 +522,6 @@
     background: srgb(--background-total-theme)
     padding: $r
     padding-left: 0.5 * $r
-    padding-bottom: 2 * $r
 
     .actionsWrapper
       padding-right: $r
