@@ -35,7 +35,7 @@ var store = new Vuex.Store({
 		loading: false,
 		online: true,
 		unauthorized: false,
-		theme: "black",
+		theme: "white",
 		themes: themes,
 		signedUpUsers: [],
 		pocketnet: "",
