@@ -1,15 +1,18 @@
 <template>
 	<label>
-		<label :chunks="chunks" v-for="(chunk, index) in chunks" v-bind:key="index">
+		<label v-for="(chunk, index) in chunks" v-bind:key="index">
 			<label class="likelink" v-if="chunk.id" @click="show(chunk)"
 				>@{{ chunk.name }}</label
 			>
-			<label v-else v-html="markedText || chunk" />
+			<label v-else v-html="echotext(chunk)"></label>
 		</label>
 	</label>
 </template>
 
 <script>
+
+import f from "@/application/functions";
+
 export default {
 	name: "IncomingMessage",
 	props: {
@@ -26,7 +29,9 @@ export default {
 		};
 	},
 	computed: {
+		
 		chunks: function () {
+
 			if (this.message.indexOf("@") == -1) return [this.message];
 
 			var c = this.message.split(this.userCalled);
@@ -54,6 +59,18 @@ export default {
 	},
 
 	methods: {
+
+		echotext : function(chunk){
+
+			var text = f.superXSS(chunk)
+
+			if (typeof joypixels != 'undefined'){
+				text = joypixels.toImage(text)
+			}
+
+			return text
+		},
+
 		show: function (chunk) {
 			this.core.mtrx.kit.usersInfoById(chunk.id).then((r) => {
 				core.mtrx.opencontact(r);

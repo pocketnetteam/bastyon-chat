@@ -72,7 +72,7 @@
 							>
 								<eventsEvent
 									:event="relationEvent.event"
-									:chat="chat"
+									:chat="m_chat"
 									:preview="true"
 								/>
 							</div>

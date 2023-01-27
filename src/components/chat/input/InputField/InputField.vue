@@ -28,16 +28,15 @@
 						:style="{
 							width: '325px',
 							position: 'absolute',
-							bottom: '32px',
-							right: '-60px',
+							bottom: '48px',
+							right: '0px',
+							left : '0px',
 							fontSize: '0.8em',
 							fontFamily: 'Segoe UI',
 						}"
 						:exclude="exclude"
 						:showPreview="false"
 						:showSearch="false"
-						:native="true"
-						set="emojione"
 						v-click-outside="close_emoji_picker"
 					/>
 				</transition>
@@ -203,6 +202,7 @@ export default {
 			if (event.target.localName !== "i") {
 				if (event.target.localName !== "matrix-element") {
 					this.display_emoji = false;
+					return false
 				}
 			}
 		},
@@ -490,7 +490,6 @@ export default {
     flex-direction: column
     justify-content: center
     align-items: flex-start
-    position: relative
     width: 100%
 
   .right

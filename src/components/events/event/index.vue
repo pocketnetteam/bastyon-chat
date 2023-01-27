@@ -288,6 +288,7 @@ export default {
 				if (this.encryptedData || this.subtype == "m.encrypted") {
 					f.pretry(
 						() => {
+							console.log(this.chat.pcrypto, "here")
 							return this.chat.pcrypto;
 						},
 						20,

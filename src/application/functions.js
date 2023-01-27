@@ -1564,6 +1564,21 @@ f.fetchLocal = function (url) {
 	});
 };
 
+f.superXSS = function(str, p){
+
+	var l = str.length;
+
+	var nstr = filterXSS(str, p)
+
+	if(!nstr.length || l == nstr.length){
+		return nstr
+	}
+	else{
+		return f.superXSS(nstr, p)
+	}
+
+}
+
 f.saveFileCordova = function (file, name, clbk, todownloads) {
 	var storageLocation = "";
 

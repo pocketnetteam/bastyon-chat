@@ -302,6 +302,9 @@ export default {
 		},
 
 		replyEvent: function ({ event }) {
+
+			console.log('cha', this.chat)
+
 			this.relationEvent = {
 				type: "m.reference",
 				event: event,
