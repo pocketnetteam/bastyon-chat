@@ -405,7 +405,7 @@ export default {
 				var promise = this.paginate('b')
 
 				if (promise){
-					promise.then(() => {
+					return promise.then(() => {
 						return this.paginateToEvent(event_id)
 					}).catch(e => {
 						if(!event) return Promise.resolve(null)
@@ -614,7 +614,6 @@ export default {
 				this.$store.state.globalpreloader = false;
 
 			})
-			//console.log('reference.event.event_id', reference.event.event_id)
 		}
 
 	
