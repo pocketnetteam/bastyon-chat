@@ -84,6 +84,7 @@ export default {
 
 label
     display: inline
+	cursor: pointer
 
 .likelink
     text-decoration: underline
