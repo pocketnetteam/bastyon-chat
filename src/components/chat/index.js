@@ -40,7 +40,7 @@ export default {
 			cantchatexc: false,
 			error: null,
 			hoverEncrypt: false,
-
+			encrypting : false,
 			showInput: true,
 			showShareMessages: false,
 
@@ -215,6 +215,14 @@ export default {
 				clearInterval(this.intrv);
 				this.intrv = null;
 			}
+		},
+
+		clbkencrypt : function () {
+			this.encrypting = true
+		},
+
+		clbkencrypted : function () {
+			this.encrypting = false
 		},
 
 		checkcrypto: function () {

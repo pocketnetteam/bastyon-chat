@@ -98,6 +98,8 @@
 						@clearRelationEvent="clearRelationEvent"
 						@focused="focused"
 						@cantchatcrypto="cantchatcrypto"
+						@encrypt="clbkencrypt"
+						@encrypted="clbkencrypted"
 						:u="u"
 						:chat="m_chat"
 						:usersinfo="usersinfo"
@@ -138,7 +140,8 @@
 				v-if="encrypted && membership != 'invite'"
 				@mouseover="(e) => (hoverEncrypt = true)"
 			>
-				<i class="fas fa-lock"></i>
+				<i v-if="!encrypting" class="fas fa-lock"></i>
+				<i v-else class="fas fa-spinner fa-spin"></i>
 			</div>
 
 			<div

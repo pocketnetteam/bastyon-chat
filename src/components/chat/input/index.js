@@ -559,6 +559,17 @@ export default {
 			return text;
 		},
 
+		clbkEncrypt(){
+			console.log("ECN")
+			this.$emit('encrypt')
+		},
+
+		clbkEncrypted(){
+			console.log("ECN2")
+			this.$emit('encrypted')
+
+		},
+
 		send(text) {
 			if (!this.chat) {
 				this.newchat().catch((e) => {});
@@ -591,7 +602,10 @@ export default {
 							this.relationEvent.event
 						) {
 							return this.core.mtrx
-								.textEvent(this.chat, text)
+								.textEvent(this.chat, text, {
+									encryptEvent : this.clbkEncrypt,
+									encryptedEvent : this.clbkEncrypted
+								})
 								.then((r) => {
 									r["m.relates_to"] = {
 										rel_type: "m.replace",
@@ -633,6 +647,9 @@ export default {
 
 					return this.core.mtrx.sendtext(this.chat, text, {
 						relation: this.relationEvent,
+					}, {
+						encryptEvent : this.clbkEncrypt,
+						encryptedEvent : this.clbkEncrypted
 					});
 				})
 				.catch((e) => {

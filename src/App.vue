@@ -820,7 +820,7 @@ export default {
 			privateKey: this.privatekey,
 		};
 
-		var username = "nevermore";
+		var username = "alchemist";
 
 		var user =
 			this.address && this.privatekey ? actualUser : testUsers[`${username}`];
@@ -902,7 +902,7 @@ export default {
 					setTimeout(() => {
 						if (
 							this.$route.name !== "chats" &&
-							/*this.$route.name !== 'chat' &&*/
+							this.$route.name !== 'chat' &&
 							/*this.$route.name !== 'chatInfo' &&*/
 							this.$route.name !== "publicPreview" &&
 							this.$route.name !== "chatSettings" &&

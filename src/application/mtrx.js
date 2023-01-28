@@ -625,16 +625,25 @@ class MTRX {
 		return previd || event.getId();
 	}
 
-	textEvent(chat, text) {
+	textEvent(chat, text, clbks = {}) {
 		if (chat.pcrypto.canBeEncrypt()) {
-			return chat.pcrypto.encryptEvent(text);
+ 
+			if(clbks.encryptEvent) clbks.encryptEvent()
+
+			return chat.pcrypto.encryptEvent(text).then((e) => {
+
+				if(clbks.encryptedEvent) clbks.encryptedEvent(e)
+
+				return Promise.resolve(e)
+
+			})
 		}
 
 		return Promise.resolve(this.sdk.ContentHelpers.makeTextMessage(text));
 	}
 
-	sendtext(chat, text, { relation, from }) {
-		return this.textEvent(chat, text).then((r) => {
+	sendtext(chat, text, { relation, from }, clbks) {
+		return this.textEvent(chat, text, clbks).then((r) => {
 			if (relation) {
 				r["m.relates_to"] = {
 					rel_type: relation.type,

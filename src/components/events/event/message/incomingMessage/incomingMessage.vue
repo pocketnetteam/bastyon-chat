@@ -81,12 +81,11 @@ export default {
 </script>
 
 <style lang="sass" scoped>
+	label
+		cursor: pointer
+		display: inline
 
-label
-    display: inline
-	cursor: pointer
-
-.likelink
-    text-decoration: underline
-    cursor: pointer
+	.likelink
+		text-decoration: underline
+		cursor: pointer
 </style>
