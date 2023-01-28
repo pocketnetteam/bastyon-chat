@@ -52,6 +52,7 @@
 					<i v-else class="far fa-circle"></i>
 				</div>
 				<div class="mnwrapper" v-else>
+
 					<i @click="setmenu" class="fas fa-ellipsis-h"></i>
 				</div>
 			</div>

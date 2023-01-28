@@ -93,7 +93,8 @@ export default {
 		pkoindisabled: function () {
 			return this.$store.state.pkoindisabled;
 		},
-		menuItems: function () {
+
+		menu: function () {
 			var menuItems = [];
 
 			if (
@@ -101,14 +102,13 @@ export default {
 				window.POCKETNETINSTANCE.mobile.supportimagegallery()
 			) {
 				menuItems.push({
-					click: "cameraHandlerCustom",
-					title: this.$i18n.t("button.takePhotoOrVideo"),
+					action: this.cameraHandlerCustom,
+					text: "button.takePhotoOrVideo",
 					icon: "fas fa-camera",
 				});
 			} else {
 				menuItems.push({
-					click: "cameraHandler",
-					title: this.$i18n.t("button.takePhotoOrVideo"),
+					text: "button.takePhotoOrVideo",
 					icon: "fas fa-camera",
 
 					upload: {
@@ -120,13 +120,17 @@ export default {
 								type: "fit",
 							},
 						},
+
+						start : this.uploadStart,
+						error : this.uploadError,
+						uploaded : this.uploadUploaded,
+						uploadedAll : this.uploadUploadedAll
 					},
 				});
 			}
 
 			menuItems.push({
-				click: "fileHandler",
-				title: this.$i18n.t("button.sendFile"),
+				text: "button.sendFile",
 				icon: "fas fa-sticky-note",
 
 				upload: {
@@ -138,19 +142,25 @@ export default {
 							type: "fit",
 						},
 					},
+
+					start : this.uploadStart,
+					error : this.uploadError,
+					uploaded : this.uploadUploaded,
+					uploadedAll : this.uploadUploadedAll
 				},
 			});
 
 			if (this.transaction && !this.pkoindisabled) {
 				menuItems.unshift({
-					click: "sendtransactionWrapper",
-					title: this.$i18n.t("button.sendCoins"),
+					action: this.sendtransactionWrapper,
+					text: "button.sendCoins",
 					icon: "fas fa-wallet",
 				});
 			}
 
 			return menuItems;
 		},
+
 		...mapState(["chats"]),
 
 		userlist: function () {
@@ -310,8 +320,6 @@ export default {
 		cameraHandlerCustom: function () {
 			var result = [];
 
-			this.$refs.dropdownMenu.hidePopup();
-
 			window.POCKETNETINSTANCE.platform.ui.uploadImage({
 				multiple: true,
 
@@ -344,7 +352,6 @@ export default {
 		},
 
 		sendtransactionWrapper: function () {
-			this.menuIsVisible = false;
 
 			var users = _.filter(
 				_.map(this.joined, (j) => {
@@ -385,7 +392,6 @@ export default {
 				this.sendtransaction(users[0]);
 			}
 
-			this.$refs.dropdownMenu.hidePopup();
 		},
 
 		sendtransaction: function (user) {
@@ -808,16 +814,6 @@ export default {
 				this.core.mtrx.client.sendTyping(this.chat.roomId, true, 100);
 		},
 
-		menuItemClick(item, rowObject) {
-			this[item.click](rowObject);
-		},
-
-		menuItemLoadedHandler: function (value) {
-			this.menuIsVisible = value;
-
-			return this.menuIsVisible;
-		},
-
 		uploadStart(item, files) {},
 
 		uploadError(item, error) {
@@ -831,7 +827,6 @@ export default {
 		},
 		uploadSizeError(value) {
 			if (!value) {
-				this.$refs.dropdownMenu.hidePopup();
 			}
 		},
 		uploadUploaded(item, data) {
@@ -868,7 +863,6 @@ export default {
 		},
 		uploadUploadedAll(item, result) {
 			this.$store.state.loading = false;
-			this.$refs.dropdownMenu.hidePopup();
 		},
 
 		catchPermissonsError(err) {
@@ -1409,6 +1403,12 @@ export default {
 
 		setOpacity(opacity) {
 			this.cancelOpacity = opacity;
+		},
+
+		showinputmenu : function(){
+			this.core.menu({
+				items: this.menu,
+			});
 		},
 	},
 };

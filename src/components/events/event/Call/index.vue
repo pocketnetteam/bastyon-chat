@@ -92,7 +92,6 @@ export default {
 
 		.call {
 			&-icon {
-				background: rgba(255,255, 255, 0.2);
 				color: srgb(--text-on-bg-ac-color);
 			}
 		}

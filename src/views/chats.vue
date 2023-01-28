@@ -7,14 +7,15 @@
 		<maincontent ref="maincontent" :rbackexp="true">
 			<template v-slot:content>
 				<list :share="share" @scrolltop="scrolltop" />
-
-				<modal @close="closeNewChat" v-if="newChat && !hiddenInParent">
-					<template v-slot:header>{{ $t("caption.newChat") }}</template>
-					<template v-slot:body>
-						<chatcreate @completed="chatcreated" />
-					</template>
-					<template v-slot:footer></template>
-				</modal>
+				<transition name="fademodal">
+					<modal @close="closeNewChat" v-if="newChat && !hiddenInParent">
+						<template v-slot:header>{{ $t("caption.newChat") }}</template>
+						<template v-slot:body>
+							<chatcreate @completed="chatcreated" />
+						</template>
+						<template v-slot:footer></template>
+					</modal>
+				</transition>
 			</template>
 		</maincontent>
 	</div>

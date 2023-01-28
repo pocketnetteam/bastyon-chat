@@ -298,6 +298,81 @@ export default {
 			}
 		},
 
+		menu: function() {
+
+			var type = f.deep(this.origin, "event.type") || '';
+
+			var menu = [];
+
+			if (type.indexOf('m.call') == -1) {
+
+				menu.push({
+					action: this.menureply,
+					text: "button.reply",
+					icon: "fas fa-reply",
+				})
+
+				menu.push({
+					action: this.menushowMultiSelect,
+					text: "button.select",
+					icon: "fas fa-check-circle",
+				})
+
+			}
+
+
+
+			if (type.indexOf('m.call') == -1) {
+				menu.push({
+					action: this.menushare,
+					text: "button.share",
+					icon: "fas fa-share-alt",
+				});
+			}
+
+			if (this.my) {
+				menu.push({
+					action: this.menudelete,
+					text: "button.delete",
+					icon: "far fa-trash-alt",
+				});
+			}
+
+
+
+			if (type == "m.room.message") {
+				menu.unshift({
+					action: this.menucopy,
+					text: "button.copy",
+					icon: "far fa-copy",
+				});
+
+				if (this.my && this.canediting)
+					menu.unshift({
+						action: this.menuedit,
+						text: "button.edit",
+						icon: "far fa-edit",
+					});
+			}
+
+			return menu;
+
+            return [
+                {
+                    text: 'labels.scenarioManager',
+                    icon: 'fas fa-tasks',
+                    action: this.scenarioManager
+                },
+            
+                {
+                    text: 'labels.scoreConverter',
+                    icon: 'fas fa-star',
+                    action: this.scoreConverter
+                },
+            
+            ]
+        },
+
 		menuItems: function () {
 
 			var type = f.deep(this.origin, "event.type") || '';
@@ -438,8 +513,7 @@ export default {
 
 		setmenu: function () {
 			this.core.menu({
-				items: this.menuItems,
-				handler: this.menuItemClickHandler,
+				items: this.menu,
 				item: {},
 			});
 		},

@@ -66,6 +66,7 @@ var store = new Vuex.Store({
 		hiddenInParent: false,
 		hideOptimization: false,
 		modalShowed: null,
+		modals: [],
 		menu: null,
 		pinchat: false,
 		lastroom: null,
@@ -494,6 +495,24 @@ var store = new Vuex.Store({
 
 		CLEAR_USERSINFO(state, v) {
 			state.users = {};
+		},
+
+		OPEN_MODAL(state, modal) {
+
+			if(modal.one && _.find(state.modals, (m) => {
+				return m.id == modal.id
+			})) return
+
+			state.modals.push(modal);
+
+		
+		},
+
+		CLOSE_MODAL(state, id) {
+			state.modals = _.filter(state.modals, function (m) {
+				return m.id != id
+			})
+
 		},
 
 		GALLERY(state, v) {

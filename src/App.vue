@@ -137,7 +137,7 @@ import MainWrapper from "./components/main/index.vue";
 import userUnauthorized from "./components/user/unauthorized/index.vue";
 import store from "@/vuex/store";
 import router from "@/router/router";
-import modal from "@/components/assets/modal2/index.vue";
+import modal from "@/components/assets/modal/index.vue";
 import pmenu from "@/components/assets/pmenu/index.vue";
 import swipable from "@/components/assets/swipable/index.vue"; 
 import VuePageTransition from "@/editedplugins/vue-page-transition/src/index.js";
@@ -152,10 +152,18 @@ import VuejsDialog from "vuejs-dialog";
 Vue.use(VuejsDialog);
 
 import ToggleButton from "vue-js-toggle-button";
-
 import eventsEvent from "@/components/events/event/index.vue";
+import list from "@/components/assets/list/index.vue";
+import listmenu from "@/components/assets/listmenu/index.vue";
+import listmenuwithupload from "@/components/assets/listmenuwithupload/index.vue";
+
+
 
 Vue.component("eventsEvent", eventsEvent);
+Vue.component("listmenu", listmenu);
+Vue.component("listmenuwithupload", listmenuwithupload);
+Vue.component("list", list);
+
 ////////
 
 Vue.use(Message);
@@ -164,7 +172,6 @@ Vue.use(VuePageTransition);
 Vue.use(VueI18n);
 Vue.use(Vue2TouchEvents);
 Vue.use(ToggleButton);
-
 ////////
 
 import "vuejs-dialog/dist/vuejs-dialog.min.css";
@@ -477,19 +484,7 @@ export default {
 		iteraction: function () {
 			this.$store.commit("setiteraction", true);
 		},
-		importInitialScripts() {
-			/*if (scriptsadded) return
-        scriptsadded = true
 
-      let src = document.createElement('script')
-      src.setAttribute('src', './js/vendor/emojionearea.js')
-      document.head.appendChild(src);
-
-      let link = document.createElement('link')
-      link.setAttribute('src', './js/vendor/emojionearea.css')
-      link.setAttribute('rel', 'stylesheet')
-      document.head.appendChild(link);*/
-		},
 		// Set a new pusher (if possible) using the token passed as parameter
 		setPusher(fcmtoken) {
 			// Try to get a saved token
@@ -620,7 +615,6 @@ export default {
 
 		this.$store.commit("ls");
 
-		this.importInitialScripts();
 
 		this.generateTeamroomMessages();
 		setTimeout(() => {
