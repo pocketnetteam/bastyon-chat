@@ -266,19 +266,7 @@ export default {
 					return pr.catch((e) => {
 						return Promise.resolve();
 					});
-
-					/*return this.chat.pcrypto.decryptEvent(e.event).then(d => {
-          e.event.decrypted = d
-
-          return Promise.resolve()
-        }).catch(e => {
-
-          e.event.decrypted = {
-            msgtype : 'm.bad.encrypted'
-          }
-
-          return Promise.resolve()
-        })*/
+					
 				})
 			).then(() => {
 				return Promise.resolve(events);
