@@ -430,6 +430,9 @@ class MTRX {
 		});
 
 		this.client.on("Room.timeline", (message, member) => {
+
+			console.log("HERERERER!!!!")
+
 			if (!this.chatsready) return;
 
 			if (!message.event.content) return;

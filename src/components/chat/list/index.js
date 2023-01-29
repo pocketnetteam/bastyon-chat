@@ -40,6 +40,7 @@ export default {
 			updateInterval: null,
 			events: [],
 			firstPaginate: true,
+			readPromise : null
 		};
 	},
 
@@ -517,6 +518,53 @@ export default {
 					return r;
 				});
 		},
+		debouncedReadAll : _.debounce(function(){
+			if (!this.chat) return;
+			if (this.readPromise) return
+
+			var i = this.chat.timeline.length - 1;
+			var event = null;
+
+			console.log('debouncedReadAll')
+
+			while (i >= 0 && !event) {
+				var e = this.chat.timeline[i];
+
+				var type = (e.event.type || "")
+
+				console.log("E", e)
+
+				
+
+				if (!this.core.mtrx.me(e.sender.userId)) {
+					event = e;
+				}
+				else{
+					if (type.indexOf('m.call') > -1){
+						if(type.indexOf('candidates') > -1 ) {
+							console.log('type', type)
+							return
+						}
+					}
+				}
+
+				i--;
+			}
+
+			console.log("event", event)
+
+			if (event) {
+				this.readPromise = this.core.mtrx.client
+					.setRoomReadMarkers(this.chat.currentState.roomId, e.eventId, e, {
+						hidden: !this.settings_read ? true : false,
+					})
+					.then((r) => {
+						return r;
+					}).finally(() => {
+						this.readPromise = null
+					});
+			}
+		}, 500),
 		readAll: function () {
 			if (
 				document.hasFocus() &&
@@ -526,32 +574,7 @@ export default {
 				this.chat.getJoinedMemberCount() > 0 &&
 				this.chat.getUnreadNotificationCount() !== 0
 			)
-				setTimeout(() => {
-					if (!this.chat) return;
-
-					var i = this.chat.timeline.length - 1;
-					var event = null;
-
-					while (i >= 0 && !event) {
-						var e = this.chat.timeline[i];
-
-						if (!this.core.mtrx.me(e.sender.userId)) {
-							event = e;
-						}
-
-						i--;
-					}
-
-					if (e) {
-						this.core.mtrx.client
-							.setRoomReadMarkers(this.chat.currentState.roomId, e.eventId, e, {
-								hidden: !this.settings_read ? true : false,
-							})
-							.then((r) => {
-								return r;
-							});
-					}
-				}, 1000);
+				this.debouncedReadAll()
 		},
 
 		//////////////

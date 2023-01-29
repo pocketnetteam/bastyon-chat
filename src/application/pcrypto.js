@@ -56,6 +56,8 @@ var PcryptoRoom = async function (pcrypto, chat, { ls, lse }) {
 
 	self.preparedUsers = function (time, v) {
 
+		console.log('preparedUsers', v)
+
 		if(!v || v <= 1){
 			return _.filter(getusersinfobytime(time), function (ui) {
 				return ui.keys && ui.keys.length >= m;
@@ -74,6 +76,9 @@ var PcryptoRoom = async function (pcrypto, chat, { ls, lse }) {
 	};
 
 	self.preparedUsersById = function (ids, v) {
+
+		console.log('preparedUsersById', v)
+
 
 		var ui = []
 
