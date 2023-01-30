@@ -31,6 +31,8 @@ var PcryptoRoom = async function (pcrypto, chat, { ls, lse }) {
 
 	var users = {};
 	var m = 12;
+
+	var lsspromises = {}
 	
 
 	var usersinfo = {};
@@ -337,31 +339,39 @@ var PcryptoRoom = async function (pcrypto, chat, { ls, lse }) {
             }*/
 
 			var k =  ((users ? 'ul+' + orderedIdsHash(users) : period(time)) + "-" + block) + '-' + (v || self.version);
-			
+			var ek = `${lcachekey + pcrypto.user.userinfo.id}-${k}`
 
-			return ls
-				.get(`${lcachekey + pcrypto.user.userinfo.id}-${k}`)
-				.then((keys) => {
-					const keysPrepared = convert.aeskeys.out(keys);
+			if (users)
+				console.log("-CALC" + k, orderedIdsHash(users), users, block)
 
-					return { keys: keysPrepared, k };
-				})
-				.catch(async (e) => {
+			if(!lsspromises[ek]) 
 
-					
+				lsspromises[ek] = ls.get(ek)
+					.then((keys) => {
+						const keysPrepared = convert.aeskeys.out(keys);
 
-					const keysPrepared = eaac.aeskeys(time, block, users, v || self.version);
+						return { keys: keysPrepared, k };
+					})
+					.catch(async (e) => {
 
-					if (self.preparedUsers(time).length > 1) {
-						const itemId = `${lcachekey + pcrypto.user.userinfo.id}-${k}`;
+						console.error('e', e)
 
-						await ls
-							.set(itemId, convert.aeskeys.inp(keysPrepared))
-							.catch(() => {});
-					}
+						const keysPrepared = eaac.aeskeys(time, block, users, v || self.version);
 
-					return { keys: keysPrepared, k };
-				});
+						if (self.preparedUsers(time).length > 1) {
+							const itemId = ek;
+
+							await ls
+								.set(itemId, convert.aeskeys.inp(keysPrepared))
+								.catch(() => {});
+						}
+
+						return { keys: keysPrepared, k };
+					}).finally(() => {
+						delete lsspromises[ek]
+					});
+
+			return lsspromises[ek]
 		},
 		aeskeys: function (time, block, users, v) {
 			if (!time) time = 0;
