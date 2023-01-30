@@ -52,7 +52,6 @@
 						@reply="(e) => replyEvent({ event })"
 						@mounted="emounted"
 						@menuIsVisible="menuIsVisibleHandler"
-						@messagesIsDeleted="messagesIsDeleted"
 						@toreference="toreference"
 					/>
 				</div>

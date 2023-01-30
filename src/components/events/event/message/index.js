@@ -57,6 +57,7 @@ export default {
 		return {
 			referenceshowed: false,
 			markedText: null,
+			hasurlerror : null
 		};
 	},
 	inject: ["matches", "markText"],
@@ -213,6 +214,8 @@ export default {
 
 		textWithoutLinks: function () {
 			var trimmed = this.$f.trim(this.body);
+
+			if(this.hasurlerror) return trimmed
 
 			if (
 				!this.urlpreview ||
@@ -703,6 +706,12 @@ export default {
 			/*Scroll eventsflex to message*/
 			if (parent)
 				parent.parentNode.scrollTop = evtWrp.offsetTop - parent.offsetTop;
+		},
+
+		urlerror : function(e){
+			this.hasurlerror = e
+
+			console.log("Errrrrrrrrrrrrrrrrrrrrrrrrrr", e)
 		},
 
 		markMatches: function (content) {

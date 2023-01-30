@@ -283,10 +283,6 @@ export default {
 			}
 		},
 
-		messagesIsDeleted(state) {
-			this.$emit("messagesIsDeleted", state);
-		},
-
 		toreference(reference) {
 
 			this.$emit("toreference", reference);

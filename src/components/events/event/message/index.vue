@@ -231,6 +231,7 @@
 						:urllink="urlpreview"
 						:preview="true"
 						@updatedSize="updatedSize"
+						@error="urlerror"
 						v-if="!origin.localRedactionEvent() && !origin.getRedactionEvent()"
 					/>
 				</div>
