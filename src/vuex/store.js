@@ -76,6 +76,7 @@ var store = new Vuex.Store({
 		deletedrooms: {},
 		pkoindisabled: false,
 		isCallsActive: null,
+		readreciepts : {},
 		//share : {url : 'https://yandex.ru/'} //null
 	},
 	getters: {
@@ -137,6 +138,7 @@ var store = new Vuex.Store({
 			state.dontreadreceipts = false;
 			state.lastroom = null;
 			state.voicerecording = false;
+			state.readreciepts = {}
 
 			// state.share = null
 
@@ -380,7 +382,16 @@ var store = new Vuex.Store({
 
 			//state.chatsMap = chatsMap;
 		},
-	
+		SET_READ_TO_STORE(state, readreciepts) {
+			_.each(readreciepts, (r, chatid) => {
+
+				if((!state.readreciepts[chatid] && !r) || (!state.readreciepts[chatid] && r) || (state.readreciepts[chatid].ts != r.ts)) {
+					Vue.set(state.readreciepts, chatid, r);
+				}
+
+			})
+
+		},
 
 		SET_EVENTS_TO_STORE(state, events) {
 			//state.events = events
@@ -720,7 +731,7 @@ var store = new Vuex.Store({
 			var m_chats = f.deep(store._vm, "core.mtrx.store.rooms") || {};
 
 			var events = {};
-
+			var readreciepts = {}
 
 			_.each(m_chats, function (chat) {
 				events[chat.roomId] = {};
@@ -777,7 +788,40 @@ var store = new Vuex.Store({
 				timeline = _.sortBy(timeline, function (event) {
 					return -event.event.origin_server_ts
 				});
+
 				
+
+				var lastread = null
+				
+				_.find(timeline, (event) => {
+					var reciepts = chat.getReceiptsForEvent(event)
+
+					var lastreadr2 = _.find(reciepts, (reciept) => {
+						var m = store._vm.core.mtrx.me(reciept.userId);
+
+						return reciept.type == "m.read" && !m;
+					})
+					
+
+					if (lastreadr2){
+						lastread = lastreadr2
+						return true
+					}
+				})
+
+				if (lastread){
+					readreciepts[chat.roomId] = {
+						ts : lastread.data.ts,
+						ev : _.find(timeline, (event) => {
+							return event.event.origin_server_ts < lastread.data.ts
+						})
+					}
+
+					
+				}
+				else{
+					readreciepts[chat.roomId] = null
+				}
 
 				var e = timeline[0]
 
@@ -807,6 +851,7 @@ var store = new Vuex.Store({
 			});
 
 			commit("SET_EVENTS_TO_STORE", events);
+			commit("SET_READ_TO_STORE", readreciepts);
 
 		},
 	},

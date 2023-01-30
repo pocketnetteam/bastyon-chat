@@ -20,7 +20,7 @@ export default {
 		event: Object,
 		preview: Boolean,
 		userinfo: Object,
-		readed: Object,
+		readed: Boolean,
 		downloaded: Boolean,
 		baseImg: {
 			type: String,

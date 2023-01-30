@@ -131,7 +131,6 @@ export default {
 
 	data: function () {
 		return {
-			readed: null,
 			decryptEvent: {},
 			decryptedInfo: null,
 			decryptReady: "",
@@ -141,7 +140,6 @@ export default {
 			reference: null,
 			removed: false,
 			downloaded: false,
-			readedInterval: null,
 			audioBuffer: null,
 
 			readyToRender: false,
@@ -211,6 +209,16 @@ export default {
 			return "";
 		},
 
+		readed: function(){
+
+			var reciept = this.$store.state.readreciepts[this.chat.roomId]
+
+			if(!reciept) return false
+
+			return (this.event.event.origin_server_ts < reciept.ts && reciept.ev?.event.event_id == this.event.event.event_id)
+
+		},
+
 		subtype: function () {
 			return f.deep(this, "event.event.content.msgtype");
 		},
@@ -223,13 +231,13 @@ export default {
 		},
 
 		userinfo: function () {
-			return (
-				this.$f.deep(
-					this,
-					"$store.state.users." + this.$f.getmatrixid(this.event.getSender())
-				) || {}
-			);
+
+			return this.$store.state.users[this.$f.getmatrixid(this.event.getSender())] || {}
+
+		
 		},
+
+		///readreciepts
 
 		encrypted: function () {
 			if (this.chat && this.chat.roomId) {
@@ -245,10 +253,10 @@ export default {
 	},
 
 	beforeDestroy: function () {
-		if (this.readedInterval) {
+		/*if (this.readedInterval) {
 			clearInterval(this.readedInterval);
 			this.readedInterval = null;
-		}
+		}*/
 	},
 
 	mounted: function () {
@@ -282,7 +290,7 @@ export default {
 			handler: function () {
 				this.decryptEvent = {};
 
-				this.checkReaded();
+				//this.checkReaded();
 				this.relations();
 
 				if (this.encryptedData || this.subtype == "m.encrypted") {
@@ -334,7 +342,7 @@ export default {
 			}, 20);
 		},
 		manageReadedInterval() {
-			if (this.preview || !this.my) return;
+			/*if (this.preview || !this.my) return;
 
 			if (this.last || this.readed) {
 				if (!this.readedInterval) {
@@ -347,7 +355,7 @@ export default {
 					clearInterval(this.readedInterval);
 					this.readedInterval = null;
 				}
-			}
+			}*/
 		},
 		relations() {
 			if (this.timeline) {
@@ -503,11 +511,11 @@ export default {
 			}
 		},
 
-		checkReaded: function () {
+		/*checkReaded: function () {
 			if (this.event) {
 				this.readed = this.core.mtrx.isReaded(this.event) || null
 			}
-		},
+		},*/
 		openImage: function () {
 			this.$emit("openImageEvent", this.event);
 		},

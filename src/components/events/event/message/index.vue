@@ -273,7 +273,6 @@
 			<div class="my">
 				<i class="fas fa-check-double"></i>
 				<span>{{ $t("caption.messageRead") }}</span>
-				<!--<date v-if="readed.data" :date="readed.data.ts"/>-->
 			</div>
 		</div>
 	</div>

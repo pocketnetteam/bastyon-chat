@@ -152,7 +152,7 @@ export default {
 		decryptEvent: {},
 		notificationPreview: false,
 		userinfo: Object,
-		readed: Object,
+		readed: Boolean,
 		my: Boolean,
 	},
 	inject: ["matches", "markText"],
