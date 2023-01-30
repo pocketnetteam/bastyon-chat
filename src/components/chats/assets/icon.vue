@@ -105,7 +105,7 @@ export default {
 				u = _.first(u, 4);
 			}
 
-			return u;
+			return _.first(_.shuffle(u), 49);
 		},
 		singleAvatar: function () {
 			if (!this.chat && !this.m_chat) return {};
@@ -140,7 +140,7 @@ export default {
 				u = _.first(u, 4);
 			}
 
-			return u;
+			return _.first(_.shuffle(u), 49);
 		},
 
 		status: function () {

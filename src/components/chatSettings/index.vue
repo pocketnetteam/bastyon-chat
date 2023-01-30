@@ -77,14 +77,14 @@
 	width: 50%;
 	height: 100%;
 	z-index: 200;
-	opacity: 0.7;
+	opacity: 0.9;
 	display: flex;
 	align-items: center;
 	flex-direction: column;
 	justify-content: center;
 	i {
 		transform: scale(2);
-		color: rgb(0, 164, 255);
+		color: srgb(--color-bg-ac)
 	}
 }
 .chatIconFile {

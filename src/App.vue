@@ -820,7 +820,7 @@ export default {
 			privateKey: this.privatekey,
 		};
 
-		var username = "nevermore";
+		var username = "alchemist";
 
 		var user =
 			this.address && this.privatekey ? actualUser : testUsers[`${username}`];
