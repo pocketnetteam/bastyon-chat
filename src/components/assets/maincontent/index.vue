@@ -3,7 +3,6 @@
 		id="maincontent"
 		@mouseenter="mouseenter"
 		@mouseleave="mouseleave"
-		class="fixedOnPageTop"
 		:class="{
 			bin: pocketnet,
 			bout: !pocketnet,

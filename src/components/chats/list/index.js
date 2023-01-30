@@ -122,31 +122,9 @@ export default {
 				) {
 					return;
 				} else {
-					/*Load messages for every chat*/
-					let rm = this.core.mtrx.client.getRoom(chat.roomId),
-						ts = rm.getLiveTimeline(),
-						tl = new this.core.mtrx.sdk.TimelineWindow(
-							this.core.mtrx.client,
-							ts.getTimelineSet()
-						);
-
-					tl.load()
-						.then(() => {
-							return this.getEventsAndDecrypt(rm, tl);
-						})
-						.then((events) => {
-							chat.events = events.filter(
-								(f) =>
-									f.event.decrypted?.msgtype === "m.text" ||
-									f.event.content?.msgtype === "m.text"
-							);
-						})
-						.catch(() => {});
-
 					chats.push(chat);
 				}
 			});
-
 			return _.sortBy(chats, function (o) {
 				return o.lastModified;
 			}).reverse();

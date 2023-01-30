@@ -306,19 +306,14 @@ class MTRX {
 	}
 
 	reciepts(event) {
-		var room = null;
 
-		return f
-			.pretry(() => {
-				var rooms = this.core.mtrx.store.rooms;
+		var room = (this.core.mtrx.store.rooms || {})[event.getRoomId()];
 
-				room = rooms[event.getRoomId()];
 
-				return room;
-			})
-			.then(() => {
-				return room.getReceiptsForEvent(event);
-			});
+		if (room){
+			return room.getReceiptsForEvent(event)
+		}
+
 	}
 
 	storeFileLocal(url, file) {
@@ -402,15 +397,14 @@ class MTRX {
 	}
 
 	isReaded(event, me) {
-		return this.reciepts(event).then((reciepts) => {
-			return Promise.resolve(
-				_.find(reciepts, (reciept) => {
-					var m = this.me(reciept.userId);
 
-					return reciept.type == "m.read" && ((me && m) || (!m && !me));
-				})
-			);
-		});
+		var reciepts = this.reciepts(event)
+
+		return _.find(reciepts, (reciept) => {
+			var m = this.me(reciept.userId);
+
+			return reciept.type == "m.read" && ((me && m) || (!m && !me));
+		})
 	}
 
 	initEvents() {
@@ -430,8 +424,6 @@ class MTRX {
 		});
 
 		this.client.on("Room.timeline", (message, member) => {
-
-			console.log("HERERERER!!!!")
 
 			if (!this.chatsready) return;
 
@@ -749,8 +741,6 @@ class MTRX {
 
 		if (!meta) meta = {};
 
-		console.log("relation, from", relation, from);
-
 		return i
 			.wh(base64)
 			.then((_info) => {
@@ -985,15 +975,11 @@ class MTRX {
 
 			_.each(share.download, ({event, chat}) => {
 
-				console.log('chat, event', chat, event)
-
 				var promise = this.core.mtrx.kit.prepareChat(chat).then(() => {
 
 					return this.core.mtrx.getFile(chat, event)
 
 				}).then((r) => {
-
-					console.log("RESULT", r)
 
 					return r.file
 				})

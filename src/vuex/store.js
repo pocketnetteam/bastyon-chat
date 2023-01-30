@@ -92,7 +92,6 @@ var store = new Vuex.Store({
 	},
 	mutations: {
 		SET_CALL(state, isActive) {
-			console.log("set calls", isActive);
 			state.isCallsActive = isActive;
 		},
 		CLEAR_CALL(state) {
@@ -381,6 +380,8 @@ var store = new Vuex.Store({
 
 			//state.chatsMap = chatsMap;
 		},
+	
+
 		SET_EVENTS_TO_STORE(state, events) {
 			//state.events = events
 
@@ -406,6 +407,11 @@ var store = new Vuex.Store({
 
 					timeline.push(_e);
 				});
+
+				if(timeline.length && state.events[k] && state.events[k].timeline && state.events[k].timeline[0] && 
+					(state.events[k].timeline[0].event.event_id == timeline[0].event.event_id)) {
+						return
+					}
 
 				Vue.set(state.events, k, { timeline });
 			});
@@ -690,6 +696,9 @@ var store = new Vuex.Store({
 				} else {
 					r.summary.lastModified = r.getLastActiveTimestamp();
 				}
+
+				r.summary.key = r.summary.roomId + ':' + r.summary.lastModified
+
 				return r.summary;
 			});
 
@@ -705,31 +714,6 @@ var store = new Vuex.Store({
 				return store._vm.core.mtrx.kit.fillContacts(m_chats);
 			});
 
-			return Promise.resolve();
-
-			return store._vm.core.mtrx.kit
-				.usersInfoForChats(m_chats)
-				.then((i) => {
-					commit(
-						"SET_CHATS_USERS",
-						store._vm.core.mtrx.kit.usersFromChats(m_chats)
-					);
-					commit(
-						"SET_CONTACTS_FROM_MATRIX",
-						_.filter(i, (m) => {
-							return (
-								m.id !==
-								(store._vm.core.user.userinfo &&
-									store._vm.core.user.userinfo.id)
-							);
-						})
-					);
-
-					return Promise.resolve();
-				})
-				.catch((e) => {
-					return Promise.resolve();
-				});
 		},
 
 		FETCH_EVENTS({ commit }) {
@@ -737,28 +721,93 @@ var store = new Vuex.Store({
 
 			var events = {};
 
+
 			_.each(m_chats, function (chat) {
 				events[chat.roomId] = {};
 
-				var timeline = [].concat(
+				var timeline = _.first([].concat(
 					chat.timeline,
 					chat.currentState.getStateEvents("m.room.member")
-				);
+				).reverse(), 100);
 
-				events[chat.roomId].timeline = timeline;
-			});
+				//console.log(chat.summary.info.title, chat.timeline)
 
-			_.each(events, function (e) {
-				e.timeline = _.sortBy(e.timeline, function (event) {
-					return event.getDate();
+				var members = chat.currentState.getMembers();
+
+				var ts = chat.getLiveTimeline()._eventTimelineSet;
+
+				timeline = _.filter(timeline, (e, i) => {
+					if (
+						members.length <= 2 &&
+						(e.event.type === "m.room.power_levels" ||
+							(e.event.type === "m.room.member" &&
+								e.event.content.membership !== "invite"))
+					) {
+						return false;
+					}
+					if (e.event.type === "m.room.redaction") {
+						return false;
+					}
+					if (e.event.type === "m.room.callsEnabled") {
+						return false;
+					}
+
+					if (e.event.type === "m.call.candidates") {
+						return false;
+					}
+
+					if (e.event.type === "m.room.request_calls_access") {
+						if (e.event.content.accepted !== undefined) {
+							return false;
+						} else {
+							if (store._vm.core.mtrx.me(e.event.sender)) {
+								return false;
+							} else {
+								return true;
+							}
+						}
+					}
+
+					return !(
+						e.event.content["m.relates_to"] &&
+						e.event.content["m.relates_to"]["rel_type"] === "m.replace"
+					);
+				})
+
+				timeline = _.sortBy(timeline, function (event) {
+					return -event.event.origin_server_ts
 				});
+				
+
+				var e = timeline[0]
+
+				if (e){
+
+					var rt = ts.getRelationsForEvent(
+						e.event.event_id,
+						"m.replace",
+						"m.room.message"
+					);
+	
+					if (rt) {
+						var last = rt.getLastReplacement();
+	
+						if (last) {
+							e = last
+						}
+					}
+
+
+					events[chat.roomId].timeline = [e];
+				}
+				else{
+					events[chat.roomId].timeline = []
+				}
+
 			});
 
 			commit("SET_EVENTS_TO_STORE", events);
 
-			//store._vm.core.mtrx.kit.usersInfoForChatsStore(m_chats).then(i => {
-
-			//})
 		},
 	},
 });

@@ -56,8 +56,6 @@ var PcryptoRoom = async function (pcrypto, chat, { ls, lse }) {
 
 	self.preparedUsers = function (time, v) {
 
-		console.log('preparedUsers', v)
-
 		if(!v || v <= 1){
 			return _.filter(getusersinfobytime(time), function (ui) {
 				return ui.keys && ui.keys.length >= m;
@@ -76,9 +74,6 @@ var PcryptoRoom = async function (pcrypto, chat, { ls, lse }) {
 	};
 
 	self.preparedUsersById = function (ids, v) {
-
-		console.log('preparedUsersById', v)
-
 
 		var ui = []
 
@@ -493,8 +488,6 @@ var PcryptoRoom = async function (pcrypto, chat, { ls, lse }) {
 
 	self.decrypt = async function (userid, { encrypted, nonce }, time, block, users, v) {
 
-		console.log('userid, { encrypted, nonce }, time, block, users, v', userid, { encrypted, nonce }, time, block, users, v)
-
 		let { keys, k } = await eaac.aeskeysls(time, block, users, v);
 
 		var error = null;
@@ -691,8 +684,6 @@ var PcryptoRoom = async function (pcrypto, chat, { ls, lse }) {
 				f.deep(event, "content.pbody.secrets.version") || 1
 		}
 
-		console.log('secrets, block, v', secrets, block, v)
-		console.log("FROM EVENT", event)
 
 		if (!secrets) throw new Error("secrets");
 		if (!block) throw new Error("block");
@@ -799,8 +790,6 @@ var PcryptoRoom = async function (pcrypto, chat, { ls, lse }) {
 			.createMyCommonKey()
 			.then((result) => {
 				//return Promise.reject("HI")
-
-				console.log("result", result)
 
 				return pcrypto.core.mtrx.client.sendStateEvent(
 					chat.roomId,

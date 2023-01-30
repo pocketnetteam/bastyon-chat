@@ -505,9 +505,7 @@ export default {
 
 		checkReaded: function () {
 			if (this.event) {
-				this.core.mtrx.isReaded(this.event).then((readed) => {
-					this.readed = readed || null;
-				});
+				this.readed = this.core.mtrx.isReaded(this.event) || null
 			}
 		},
 		openImage: function () {

@@ -443,8 +443,6 @@ export default {
 
 							this.firstPaginate = false;
 
-							// this.readAll();
-
 							this["p_" + direction] = false;
 						}).then(() => {
 							if(e) return Promise.reject(e)
@@ -519,6 +517,7 @@ export default {
 				});
 		},
 		debouncedReadAll : _.debounce(function(){
+
 			if (!this.chat) return;
 			if (this.readPromise) return
 
@@ -532,31 +531,40 @@ export default {
 
 				var type = (e.event.type || "")
 
-				console.log("E", e)
-
-				
+				if (type.indexOf('m.call') > -1){
+					if(type.indexOf('candidates') > -1 ) {
+						return
+					}
+				}
 
 				if (!this.core.mtrx.me(e.sender.userId)) {
-					event = e;
+
+					if(!this.core.mtrx.isReaded(e)){
+						event = e;
+					}
+					
 				}
 				else{
-					if (type.indexOf('m.call') > -1){
-						if(type.indexOf('candidates') > -1 ) {
-							console.log('type', type)
-							return
-						}
-					}
+					
 				}
 
 				i--;
 			}
 
-			console.log("event", event)
-
 			if (event) {
+
+				if (event.readError){
+					return
+				}
+
+				var eid = event.event.event_id
+
 				this.readPromise = this.core.mtrx.client
-					.setRoomReadMarkers(this.chat.currentState.roomId, e.eventId, e, {
+					.setRoomReadMarkers(this.chat.currentState.roomId, eid, undefined, {
 						hidden: !this.settings_read ? true : false,
+					}).catch(e => {
+						console.error(e)
+						event.readError = e	
 					})
 					.then((r) => {
 						return r;
@@ -564,7 +572,7 @@ export default {
 						this.readPromise = null
 					});
 			}
-		}, 500),
+		}, 100),
 		readAll: function () {
 			if (
 				document.hasFocus() &&
@@ -573,8 +581,10 @@ export default {
 				this.chat &&
 				this.chat.getJoinedMemberCount() > 0 &&
 				this.chat.getUnreadNotificationCount() !== 0
-			)
+			){
 				this.debouncedReadAll()
+			}
+				
 		},
 
 		//////////////

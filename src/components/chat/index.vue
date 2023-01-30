@@ -136,7 +136,7 @@
 			</div>
 
 			<div
-				class="encrypted"
+				class="encrypted fixedOnPageTop"
 				v-if="encrypted && membership != 'invite'"
 				@mouseover="(e) => (hoverEncrypt = true)"
 			>
@@ -146,7 +146,7 @@
 
 			<div
 				v-if="hoverEncrypt"
-				class="encryptedInfo"
+				class="encryptedInfo fixedOnPageTop"
 				@mouseover="(e) => (hoverEncrypt = true)"
 				@mouseleave="(e) => (hoverEncrypt = false)"
 				@click="(e) => (hoverEncrypt = !hoverEncrypt)"
