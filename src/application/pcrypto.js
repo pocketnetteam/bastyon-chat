@@ -337,6 +337,7 @@ var PcryptoRoom = async function (pcrypto, chat, { ls, lse }) {
             }*/
 
 			var k =  ((users ? 'ul+' + orderedIdsHash(users) : period(time)) + "-" + block) + '-' + (v || self.version);
+			
 
 			return ls
 				.get(`${lcachekey + pcrypto.user.userinfo.id}-${k}`)
@@ -346,6 +347,9 @@ var PcryptoRoom = async function (pcrypto, chat, { ls, lse }) {
 					return { keys: keysPrepared, k };
 				})
 				.catch(async (e) => {
+
+					
+
 					const keysPrepared = eaac.aeskeys(time, block, users, v || self.version);
 
 					if (self.preparedUsers(time).length > 1) {
@@ -781,7 +785,7 @@ var PcryptoRoom = async function (pcrypto, chat, { ls, lse }) {
 
 	var orderedIdsHash = function(ids){
 		return f.md5(_.sortBy(ids, (id) => {
-			return Number(id.replace(/[^0-9]/g))
+			return Number(id.replace(/[^0-9]/g, ''))
 		}).join(''))
 	}
 
