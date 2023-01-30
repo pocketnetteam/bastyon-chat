@@ -178,23 +178,23 @@ class Notifier {
 
 		if (!iftime) return;
 
-		this.core.mtrx.isReaded(event, true).then((r) => {
-			if (r) return;
+		var r = this.core.mtrx.isReaded(event, true)
+		
+		if (r) return;
 
-			if (
-				!this.core.mtrx.me(event.getSender()) &&
-				event.getSender() &&
-				event.getSender() !== this.core.mtrx.client.credentials.userId
-			) {
-				this.core.user
-					.usersInfo([f.getmatrixid(event.getSender())])
-					.then((info) => {
-						if (info && info[0]) {
-							this.message(event, info[0], chat);
-						}
-					});
-			}
-		});
+		if (
+			!this.core.mtrx.me(event.getSender()) &&
+			event.getSender() &&
+			event.getSender() !== this.core.mtrx.client.credentials.userId
+		) {
+			this.core.user
+				.usersInfo([f.getmatrixid(event.getSender())])
+				.then((info) => {
+					if (info && info[0]) {
+						this.message(event, info[0], chat);
+					}
+				});
+		}
 	}
 
 	show = function (info, click) {
