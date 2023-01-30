@@ -207,7 +207,7 @@ export default {
 
 		readed: function(){
 
-			var reciept = this.$store.state.readreciepts[this.chat.roomId]
+			var reciept = this.$store?.state.readreciepts[this.chat.roomId]
 
 			if(!reciept) return false
 
@@ -228,7 +228,7 @@ export default {
 
 		userinfo: function () {
 
-			return this.$store.state.users[this.$f.getmatrixid(this.event.getSender())] || {}
+			return this.$store?.state.users[this.$f.getmatrixid(this.event.getSender())] || {}
 
 		
 		},
