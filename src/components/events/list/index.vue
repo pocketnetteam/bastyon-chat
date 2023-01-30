@@ -41,7 +41,6 @@
 						:galleryData="events"
 						:chat="chat"
 						:timeline="timeline"
-						:last="i == 0"
 						:multiSelect="multiSelect"
 						:selectedMessages="selectedMessages"
 						@showMultiSelect="showMultiSelect"

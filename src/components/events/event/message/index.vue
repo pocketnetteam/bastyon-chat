@@ -266,6 +266,7 @@
 			/>
 		</div>
 
+
 		<div
 			class="statusWrapper"
 			v-if="my && readed && !preview && !fromreference"
@@ -275,6 +276,7 @@
 				<span>{{ $t("caption.messageRead") }}</span>
 			</div>
 		</div>
+
 	</div>
 </template>
 

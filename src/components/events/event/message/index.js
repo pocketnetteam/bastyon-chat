@@ -37,7 +37,6 @@ export default {
 		error: String,
 		withImage: Boolean,
 		reference: Object,
-		last: Boolean,
 		showmyicontrue: false,
 		fromreference: Boolean,
 		multiSelect: {

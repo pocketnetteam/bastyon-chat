@@ -37,7 +37,6 @@
 			:error="error"
 			:reference="reference"
 			:downloaded="downloaded"
-			:last="last"
 			:showmyicontrue="showmyicontrue"
 			:fromreference="fromreference"
 			:searchText="searchText"
@@ -273,18 +272,7 @@ export default {
 	},
 
 	watch: {
-		readed: {
-			immediate: true,
-			handler: function () {
-				this.manageReadedInterval();
-			},
-		},
-
-		last: {
-			handler: function () {
-				this.manageReadedInterval();
-			},
-		},
+		
 		event: {
 			immediate: true,
 			handler: function () {
@@ -341,22 +329,7 @@ export default {
 				rendered;
 			}, 20);
 		},
-		manageReadedInterval() {
-			/*if (this.preview || !this.my) return;
-
-			if (this.last || this.readed) {
-				if (!this.readedInterval) {
-					this.readedInterval = setInterval(() => {
-						this.checkReaded();
-					}, 500);
-				}
-			} else {
-				if (this.readedInterval) {
-					clearInterval(this.readedInterval);
-					this.readedInterval = null;
-				}
-			}*/
-		},
+	
 		relations() {
 			if (this.timeline) {
 				var ts = this.timeline._timelineSet;
