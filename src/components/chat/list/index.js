@@ -524,9 +524,11 @@ export default {
 			var i = this.chat.timeline.length - 1;
 			var event = null;
 
-			console.log('debouncedReadAll')
+			console.log('debouncedReadAll', this.chat.timeline)
 
-			while (i >= 0 && !event) {
+			event = this.chat.timeline[i]
+
+			/*while (i >= 0 && !event) {
 				var e = this.chat.timeline[i];
 
 				var type = (e.event.type || "")
@@ -536,6 +538,8 @@ export default {
 						return
 					}
 				}
+
+				if(e.readed) return
 
 				if (!this.core.mtrx.me(e.sender.userId)) {
 
@@ -549,7 +553,9 @@ export default {
 				}
 
 				i--;
-			}
+			}*/
+
+			console.log('event', event)
 
 			if (event) {
 
@@ -560,15 +566,16 @@ export default {
 				var eid = event.event.event_id
 
 				this.readPromise = this.core.mtrx.client
-					.setRoomReadMarkers(this.chat.currentState.roomId, eid, undefined, {
+					.setRoomReadMarkers(this.chat.currentState.roomId, eid, event, {
 						hidden: !this.settings_read ? true : false,
+					}).then((r) => {
+						event.readed = true
+						return r;
 					}).catch(e => {
 						console.error(e)
 						event.readError = e	
 					})
-					.then((r) => {
-						return r;
-					}).finally(() => {
+					.finally(() => {
 						this.readPromise = null
 					});
 			}
