@@ -52,7 +52,6 @@
 						@reply="(e) => replyEvent({ event })"
 						@mounted="emounted"
 						@menuIsVisible="menuIsVisibleHandler"
-						:isRemoveSelectedMessages="isRemoveSelectedMessages"
 						@messagesIsDeleted="messagesIsDeleted"
 						@toreference="toreference"
 					/>

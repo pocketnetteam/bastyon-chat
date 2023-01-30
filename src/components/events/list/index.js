@@ -11,7 +11,6 @@ export default {
 		scrollType: "",
 		error: [Object, Error, String],
 		selectedMessages: [],
-		isRemoveSelectedMessages: false,
 	},
 	inject: ["matches"],
 	components: {},

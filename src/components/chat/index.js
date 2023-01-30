@@ -483,6 +483,7 @@ export default {
 			});
 
 
+
 			Promise.all(_.map(this.selectedMessages, (message) => {
 
 				return this.core.mtrx.client.redactEvent(
@@ -495,6 +496,7 @@ export default {
 				);
 
 			})).then(r => {
+
 				this.$store.commit("icon", {
 					icon: "success",
 					message: "",
@@ -505,10 +507,14 @@ export default {
 			}).catch(e => {
 
 				console.error(e)
+
+				this.selectedMessages = [];
+
 				this.$store.commit("icon", {
 					icon: "error",
 					message: "",
 				});
+
 			}).finally(() => {
 				this.force()
 			})

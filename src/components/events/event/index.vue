@@ -50,8 +50,6 @@
 			@showMultiSelect="$emit('showMultiSelect')"
 			@selectMessage="selectMessage"
 			@removeMessage="removeMessage"
-			:isRemoveSelectedMessages="isRemoveSelectedMessages"
-			@messagesIsDeleted="messagesIsDeleted"
 			@editing="editing"
 			@reply="reply"
 			@share="share"
@@ -172,7 +170,6 @@ export default {
 				return [];
 			},
 		},
-		isRemoveSelectedMessages: false,
 	},
 
 	computed: {
@@ -515,9 +512,6 @@ export default {
 			this.$emit("shareManyMessages", isShare);
 		},
 
-		messagesIsDeleted: function (state) {
-			this.$emit("messagesIsDeleted", state);
-		},
 
 		toreference : function(reference){
 			this.$emit("toreference", reference);

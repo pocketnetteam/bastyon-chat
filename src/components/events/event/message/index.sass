@@ -26,6 +26,7 @@
 		transform: translateY(-50%)
 		left: 0
 		padding: $r
+		z-index: 1
 
 		width: 100%
 		height: 100%
@@ -106,6 +107,7 @@
 	align-items: flex-end
 	padding-left: $r / 2
 	min-height: 34px
+	position: relative
 
 	&.aligncenter
 		align-items: center
@@ -204,12 +206,16 @@
 
 
 		.reference
-			margin-right: $r
-			max-width: 100px
+			margin-right: 0
+			max-width: 30px
 			margin-bottom: 0
 
+			i
+				line-height: 28px
+
 			.event
-				max-width: 70px
+				display: none
+				max-width: 20px
 		
 
 	.messageImg

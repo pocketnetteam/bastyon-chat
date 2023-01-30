@@ -47,7 +47,6 @@ export default {
 			default: [],
 			type: Array,
 		},
-		isRemoveSelectedMessages: false,
 		audioBuffer: null,
 	},
 	directives: {
@@ -74,30 +73,7 @@ export default {
 		Request,
 	},
 	watch: {
-		isRemoveSelectedMessages: {
-			immediate: true,
-			handler: function () {
-				if (this.isRemoveSelectedMessages) {
-					for (let i = 0; i < this.selectedMessages.length; i++) {
-						if (
-							this.selectedMessages[i].message_id === this.origin.event.event_id
-						) {
-							this.$emit("remove");
-
-							return this.core.mtrx.client.redactEvent(
-								this.chat.roomId,
-								this.origin.event.event_id,
-								null,
-								{
-									reason: "messagedeleting",
-								}
-							);
-						}
-					}
-					this.$emit("messagesIsDeleted", true);
-				}
-			},
-		},
+		
 		readyToRender: {
 			immediate: true,
 			handler: function () {
