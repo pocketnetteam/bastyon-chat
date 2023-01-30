@@ -70,7 +70,11 @@ export default {
 				return _.filter(
 					_.map(chats, (c) => {
 						var messages = _.filter(c.events, (m) => {
-							const match = (m.event.decrypted || m.event.content).body
+							if (m.event.decrypted?.msgtype !== "m.text" || m.event.content?.msgtype !== "m.text") {
+								return;
+							}
+							
+							const match = (m.event.decrypted || m.event.content)?.body
 								.toLowerCase()
 								.includes(this.matches?.value);
 

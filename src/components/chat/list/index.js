@@ -39,6 +39,7 @@ export default {
 			updateTimeout: null,
 			updateInterval: null,
 			events: [],
+			paginateEvents: false,
 			firstPaginate: true,
 		};
 	},
@@ -116,6 +117,7 @@ export default {
 		}
 
 		clearInterval(this.updateInterval);
+		this.paginateEvents.stop();
 	},
 
 	methods: {
@@ -354,25 +356,28 @@ export default {
 
 			setTimeout(() => {
 				this.timeline
-					.load(/*null, (this.wh() || 600)*/)
+					.load(null, (this.wh() || 600))
 					.then((r) => {
 						return this.getEventsAndEncrypt();
 					})
 					.then((events) => {
 						this.events = events;
-
-						this.loading = false;
-
-						setTimeout(() => {
-							this.autoPaginateAll();
-						}, 300);
+						
+						this.paginateEvents = this.core.mtrx.kit.paginateAllEvents({
+							chat: this.chat,
+							timeline: this.timeline,
+							count: 100,
+							tick: (e) => {
+								this.events = this.events.concat(e.slice(this.events.length));
+							}
+						});
 					})
 					.catch((e) => {
 						this.loading = false;
 					});
 			}, 30);
 		},
-
+		
 		autoPaginate: function (direction) {
 			if (this.needLoad(direction)) {
 				this.paginate(direction);
@@ -426,7 +431,7 @@ export default {
 		needLoad: function (direction) {
 			var r = false;
 
-			var scrollHeight = this.esize.scrollHeight || 0;
+			/*var scrollHeight = this.esize.scrollHeight || 0;
 			var scrollTop = this.esize.scrollTop || 0;
 			var clientHeight = Math.max(this.esize.clientHeight || 0, 800);
 
@@ -436,7 +441,7 @@ export default {
 				if (scrollHeight - scrollTop < clientHeight + safespace) r = true;
 			} else {
 				if (scrollTop < clientHeight) r = true;
-			}
+			}*/
 
 			return r;
 		},

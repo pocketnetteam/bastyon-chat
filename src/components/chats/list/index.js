@@ -16,6 +16,7 @@ export default {
 			revealed: {},
 			lastEventDescription: "",
 			blocked: false,
+			eventsLoaded: []
 		};
 	},
 	components: {
@@ -51,6 +52,8 @@ export default {
 	beforeDestroy() {
 		window.removeEventListener("keydown", this.onKeyDown);
 		window.removeEventListener("keyup", this.onKeyUp);
+		
+		_.each(this.eventsLoaded, e => e.stop());
 	},
 
 	computed: mapState({
@@ -129,16 +132,38 @@ export default {
 							this.core.mtrx.client,
 							ts.getTimelineSet()
 						);
+					
+					// console.log(rm, ts, tl)
 
 					tl.load()
 						.then(() => {
 							return this.getEventsAndDecrypt(rm, tl);
 						})
 						.then((events) => {
+							// console.log(events)
 							chat.events = events.filter(
 								(f) =>
 									f.event.decrypted?.msgtype === "m.text" ||
 									f.event.content?.msgtype === "m.text"
+							);
+							
+							this.eventsLoaded.push(
+								this.core.mtrx.kit.paginateAllEvents({
+									chat: rm,
+									timeline: tl,
+									count: 10,
+									tick: (e) => {
+										chat.events = chat.events.concat(
+											e.slice(chat.events.length).filter(
+												(f) =>
+													f.event.decrypted?.msgtype === "m.text" ||
+													f.event.content?.msgtype === "m.text"
+											)
+										);
+										
+										console.log(`rmId: ${ rm.summary.roomId }, next: ${ !!e?.length }, new events: ${ e?.length || 0 }`);
+									}
+								})
 							);
 						})
 						.catch(() => {});
