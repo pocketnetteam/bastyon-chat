@@ -385,7 +385,7 @@ var store = new Vuex.Store({
 		SET_READ_TO_STORE(state, readreciepts) {
 			_.each(readreciepts, (r, chatid) => {
 
-				if((!state.readreciepts[chatid] && !r) || (!state.readreciepts[chatid] && r) || (state.readreciepts[chatid].ts != r.ts)) {
+				if((!state.readreciepts[chatid] && !r) || (!state.readreciepts[chatid] && r) || (state.readreciepts[chatid] && r && state.readreciepts[chatid].ts != r.ts)) {
 					Vue.set(state.readreciepts, chatid, r);
 				}
 
