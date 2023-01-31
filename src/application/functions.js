@@ -1908,10 +1908,10 @@ f.processArray = function(array, fn) {
 			});
 		});
 	}, Promise.resolve());
- }
+}
 
 
- f.bw = function (s) {
+f.bw = function (s) {
     return s.split(/[ \t\v\r\n\f,.]+/)
 }
 
