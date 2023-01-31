@@ -167,7 +167,8 @@ export default {
 		},
 		
 		search() {
-			if (!this.matches.value) return;
+			if (this.matches.value?.length < 2) return;
+			if (!this.searchEvents?.length) return this.prepareSearch();
 			
 			const matches = _.filter(this.searchEvents, f => {
 				const
@@ -427,8 +428,6 @@ export default {
 						this.events = events;
 
 						this.loading = false;
-						
-						this.prepareSearch();
 
 						setTimeout(() => {
 							this.autoPaginateAll();
