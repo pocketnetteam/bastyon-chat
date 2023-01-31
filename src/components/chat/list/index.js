@@ -240,7 +240,14 @@ export default {
 							});
 						}
 
+						
+					} else {
+						if (subtype == "m.audio") {
+							pr = this.core.mtrx.getAudioUnencrypt(this.chat, e);
+						}
+
 						if (subtype == "m.encrypted") {
+
 							pr = this.chat.pcrypto
 								.decryptEvent(e.event)
 								.then((d) => {
@@ -255,10 +262,6 @@ export default {
 
 									return Promise.resolve();
 								});
-						}
-					} else {
-						if (subtype == "m.audio") {
-							pr = this.core.mtrx.getAudioUnencrypt(this.chat, e);
 						}
 					}
 

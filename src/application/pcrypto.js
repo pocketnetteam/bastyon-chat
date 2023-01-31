@@ -341,10 +341,12 @@ var PcryptoRoom = async function (pcrypto, chat, { ls, lse }) {
 			var k =  ((users ? 'ul+' + orderedIdsHash(users) : period(time)) + "-" + block) + '-' + (v || self.version);
 			var ek = `${lcachekey + pcrypto.user.userinfo.id}-${k}`
 
-			if (users)
-				console.log("-CALC" + k, orderedIdsHash(users), users, block)
+			
 
-			if(!lsspromises[ek]) 
+			if(!lsspromises[ek]) {
+
+				if (users)
+					console.log("-CALC" + k, orderedIdsHash(users), users, block)
 
 				lsspromises[ek] = ls.get(ek)
 					.then((keys) => {
@@ -353,8 +355,6 @@ var PcryptoRoom = async function (pcrypto, chat, { ls, lse }) {
 						return { keys: keysPrepared, k };
 					})
 					.catch(async (e) => {
-
-						console.error('e', e)
 
 						const keysPrepared = eaac.aeskeys(time, block, users, v || self.version);
 
@@ -370,6 +370,9 @@ var PcryptoRoom = async function (pcrypto, chat, { ls, lse }) {
 					}).finally(() => {
 						delete lsspromises[ek]
 					});
+			}
+
+				
 
 			return lsspromises[ek]
 		},
