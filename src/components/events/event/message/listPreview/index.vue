@@ -143,6 +143,7 @@
 </template>
 <script>
 import f from "@/application/functions";
+import { mapState } from 'vuex'
 import IncomingMessage from "../incomingMessage/incomingMessage.vue";
 
 export default {
@@ -155,7 +156,6 @@ export default {
 		readed: Boolean,
 		my: Boolean,
 	},
-	inject: ["matches", "markText"],
 	components: { IncomingMessage },
 	data: function () {
 		return {
@@ -241,6 +241,8 @@ export default {
 				}
 			}
 		},
+
+    ...mapState(['matches']),
 
 		markMatches: function () {
 			return this.markText ? this.markText(

@@ -25,6 +25,8 @@ export default {
 	data: function () {
 		return {
 			encryptedEvents: [],
+			searchEvents: [],
+			searchControl: null,
 			loading: false,
 			scrolling: false,
 			scrollingTo: 0,
@@ -63,6 +65,17 @@ export default {
 			//   this.readAll();
 			// }
 		},
+		
+		'matches.value': function () {
+			this.search();
+		},
+		
+		'matches.pos': function (index) {
+			console.log(this.matches.all[index])
+			this.scrollToEvent(
+				this.matches.all[index]
+			);
+		}
 	},
 	computed: mapState({
 		lloading: function () {
@@ -106,6 +119,8 @@ export default {
 		bin: function (state) {
 			return state.pocketnet;
 		},
+		
+		matches: (state) => state.matches,
 	}),
 
 	created() {
@@ -117,9 +132,57 @@ export default {
 		}
 
 		clearInterval(this.updateInterval);
+		this.searchControl.stop();
 	},
 
 	methods: {
+		onlyText(e) {
+			return _.filter(e, f => {
+				return (f.event.decrypted || f.event.content)?.msgtype === 'm.text';
+			});
+		},
+		
+		prepareSearch() {
+			/*Recursively load all events*/
+			const
+				tl = this.chat.getLiveTimeline(),
+				ts = tl.getTimelineSet(),
+				timeline = new this.core.mtrx.sdk.TimelineWindow(
+					this.core.mtrx.client,
+					ts
+				);
+			
+			this.searchControl = this.core.mtrx.kit.paginateAllEvents({
+				chat: this.chat,
+				timeline: timeline,
+				count: 50,
+				offset: true,
+				tick: (e) => {
+					if (e) {
+						this.searchEvents = this.searchEvents.concat(this.onlyText(e));
+						this.search();
+					}
+				}
+			});
+		},
+		
+		search() {
+			if (!this.matches.value) return;
+			
+			const matches = _.filter(this.searchEvents, f => {
+				const
+					match = (f.event?.decrypted || f.event.content)?.body
+						.toLowerCase()
+						.includes(this.matches?.value);
+				
+				// console.log(`text: ${ f.event.decrypted.body }, search: ${ this.matches?.value } match: ${ match }`);
+				
+				return match;
+			});
+			
+			this.matches.set(matches);
+		},
+		
 		editingEvent: function ({ event, text }) {
 			this.$emit("editingEvent", { event, text });
 		},
@@ -364,6 +427,8 @@ export default {
 						this.events = events;
 
 						this.loading = false;
+						
+						this.prepareSearch();
 
 						setTimeout(() => {
 							this.autoPaginateAll();
@@ -549,7 +614,7 @@ export default {
 					
 				}
 				else{
-					
+				
 				}
 
 				i--;
@@ -573,7 +638,7 @@ export default {
 						return r;
 					}).catch(e => {
 						console.error(e)
-						event.readError = e	
+						event.readError = e
 					})
 					.finally(() => {
 						this.readPromise = null
@@ -591,7 +656,7 @@ export default {
 			){
 				this.debouncedReadAll()
 			}
-				
+			
 		},
 
 		//////////////

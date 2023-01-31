@@ -133,13 +133,14 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import MainWrapper from "./components/main/index.vue";
 import userUnauthorized from "./components/user/unauthorized/index.vue";
 import store from "@/vuex/store";
 import router from "@/router/router";
 import modal from "@/components/assets/modal/index.vue";
 import pmenu from "@/components/assets/pmenu/index.vue";
-import swipable from "@/components/assets/swipable/index.vue"; 
+import swipable from "@/components/assets/swipable/index.vue";
 import VuePageTransition from "@/editedplugins/vue-page-transition/src/index.js";
 import TextareaAutosize from "vue-textarea-autosize";
 import VueI18n from "vue-i18n";
@@ -311,9 +312,7 @@ export default {
 
 	provide() {
 		return {
-			isChatEncrypted: this.isChatEncrypted,
-			matches: this.matches,
-			markText: this.markText,
+			isChatEncrypted: this.isChatEncrypted
 		};
 	},
 
@@ -370,18 +369,7 @@ export default {
 			isChatEncrypted: {
 				value: false,
 				state: this.isChatEncryptedState,
-			},
-
-			/*Stack for global search*/
-			matches: {
-				value: "",
-				all: [],
-				current: 0,
-				search: this.search,
-				prepend: this.prependMatch,
-				append: this.appendMatch,
-				clear: this.clearMatches,
-			},
+			}
 		};
 	},
 
@@ -458,6 +446,8 @@ export default {
 		unselect: function () {
 			return this.$store.state.voicerecording;
 		},
+
+    ...mapState(['matches'])
 	},
 
 	methods: {
@@ -478,7 +468,7 @@ export default {
 				}
 			}, 500);
 
-			this.clearMatches();
+			this.matches.clear();
 		},
 
 		iteraction: function () {
@@ -562,37 +552,7 @@ export default {
 
 		isChatEncryptedState(state) {
 			this.isChatEncrypted.value = state;
-		},
-
-		prependMatch(item) {
-			this.matches.all = [item].concat(this.matches.all);
-		},
-
-		appendMatch(item) {
-			this.matches.all.push(item);
-		},
-
-		clearMatches() {
-			this.matches.value = "";
-			this.matches.current = 0;
-			this.matches.all.length = 0;
-		},
-
-		search(text) {
-			this.matches.value = text.toLowerCase();
-		},
-
-		markText: function (text, highlight) {
-			return this.matches.value && text.includes(this.matches.value)
-				? text.replace(new RegExp(`(${this.matches.value})`, "gi"), (match) => {
-						const str = `<mark class="match${
-							highlight ? " current" : ""
-						}">${match}</mark>`;
-						highlight = null;
-						return str;
-				  })
-				: null;
-		},
+		}
 	},
 
 	beforeCreate() {

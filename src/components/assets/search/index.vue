@@ -14,7 +14,7 @@
 		<div class="searchWrapper">
 			<div class="iconWrapper">
 
-				
+
 				<i
 					v-if="!chat || (!searchTxt && (collapsed === null || collapsed))"
 					class="fas fa-search"
@@ -42,7 +42,7 @@
 
 			<div class="matches" v-if="chat && matches.all.length && !collapsed">
 				<span class="current-match"
-					>{{ matches.current + 1 }}/{{ matches.all.length }}</span
+					>{{ matches.pos + 1 }}/{{ matches.all.length }}</span
 				>
 				<i class="prev-match fas fa-chevron-down" @click="prevMatch"></i>
 				<i class="next-match fas fa-chevron-up" @click="nextMatch"></i>

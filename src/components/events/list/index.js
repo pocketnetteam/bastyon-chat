@@ -12,7 +12,6 @@ export default {
 		error: [Object, Error, String],
 		selectedMessages: [],
 	},
-	inject: ["matches"],
 	components: {},
 	data: function () {
 		return {
@@ -93,6 +92,7 @@ export default {
 			},
 			minimized: (state) => state.minimized,
 			notificationCount: (state) => state.allnotifications,
+			matches: (state) => state.matches
 		}),
 
 		eventsByPages: function () {

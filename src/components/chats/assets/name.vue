@@ -30,6 +30,8 @@
 </style>
 
 <script>
+import { mapState } from 'vuex'
+
 export default {
 	name: "chatName",
 
@@ -38,13 +40,14 @@ export default {
 		preview: Boolean,
 		m_chat: {},
 	},
-	inject: ["matches", "markText"],
 	data: function () {
 		return {
 			//convertedName: ''
 		};
 	},
 	computed: {
+    ...mapState(['matches']),
+
 		users: function () {
 			if (!this.chat) return [];
 

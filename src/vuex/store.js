@@ -77,6 +77,21 @@ var store = new Vuex.Store({
 		pkoindisabled: false,
 		isCallsActive: null,
 		readreciepts : {},
+		
+		/*Stack for global search*/
+		matches: {
+			value: "",
+			all: [],
+			pos: 0,
+			setPos: (value) => store.commit('SET_POSITION', value),
+			set: (items) => store.commit('SET_MATCHES', items),
+			prepend: (item) => store.commit('PREPEND_MATCH', item),
+			append: (item) => store.commit('APPEND_MATCH', item),
+			clear: () => store.commit('CLEAR_MATCHES'),
+			search: (text) => store.commit('SEARCH_MATCHES', text),
+			markText: (text, highlight) => store.commit('MARK_TEXT', text, highlight)
+		},
+		
 		//share : {url : 'https://yandex.ru/'} //null
 	},
 	getters: {
@@ -419,7 +434,7 @@ var store = new Vuex.Store({
 					timeline.push(_e);
 				});
 
-				if(timeline.length && state.events[k] && state.events[k].timeline && state.events[k].timeline[0] && 
+				if(timeline.length && state.events[k] && state.events[k].timeline && state.events[k].timeline[0] &&
 					(state.events[k].timeline[0].event.event_id == timeline[0].event.event_id)) {
 						return
 					}
@@ -616,6 +631,48 @@ var store = new Vuex.Store({
 		SET_VOICERECORDING(state, v) {
 			state.voicerecording = v;
 		},
+		
+		SET_POSITION(state, value) {
+			state.matches.pos = value;
+			return state.matches.pos;
+		},
+		
+		SET_MATCHES(state, items) {
+			state.matches.all = items;
+			return state.matches.all;
+		},
+		
+		PREPEND_MATCH(state, item) {
+			state.matches.all = [item].concat(state.matches.all);
+			return state.matches.all;
+		},
+		
+		APPEND_MATCH(state, item) {
+			state.matches.all.push(item);
+			return state.matches.all;
+		},
+		
+		CLEAR_MATCHES(state) {
+			state.matches.value = "";
+			state.matches.pos = 0;
+		},
+		
+		SEARCH_MATCHES(state, text) {
+			state.matches.all = [];
+			state.matches.value = text.toLowerCase();
+		},
+		
+		MARK_TEXT: function (state, text, highlight) {
+			return state.matches.value && text.includes(state.matches.value)
+				? text.replace(new RegExp(`(${state.matches.value})`, "gi"), (match) => {
+					const str = `<mark class="match${
+						highlight ? " current" : ""
+					}">${match}</mark>`;
+					highlight = null;
+					return str;
+				})
+				: null;
+		}
 	},
 	actions: {
 		SET_CHAT_MEMBERS({ commit }, chat) {},

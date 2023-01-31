@@ -10,13 +10,12 @@ export default {
 			default: null,
 		},
 	},
-	inject: ["matches"],
 	data: function () {
 		return {
 			loading: false,
 			isTyping: false,
 			searchTxt: this.matches?.value || "",
-			collapsed: this.minimize,
+			collapsed: this.minimize
 		};
 	},
 
@@ -34,7 +33,8 @@ export default {
 		searchTxt: {
 			handler: _.debounce(function () {
 				/*Clear previous results*/
-				if (typeof this.matches?.clear === "function") this.matches?.clear();
+				if (typeof this.matches?.clear === "function")
+					this.matches?.clear();
 
 				/*Emit search text in root*/
 				if (typeof this.matches?.search === "function")
@@ -42,6 +42,7 @@ export default {
 
 				/*Recalculate matches*/
 				this.calcMatches();
+				console.log(this.matches)
 			}, 500),
 		},
 
@@ -58,6 +59,7 @@ export default {
 		active: function (state) {
 			return state.active || !this.minimize;
 		},
+		matches: (state) => state.matches
 	}),
 
 	methods: {
@@ -94,6 +96,7 @@ export default {
 
 		clear: function (event) {
 			this.searchTxt = "";
+			this.matches.setPos(0);
 
 			if (typeof this.matches?.clear === "function") {
 				this.matches?.clear();
@@ -114,33 +117,31 @@ export default {
 		},
 
 		calcMatches: function () {
-			/*Recalc counter*/
-			if (this.matches.current > this.matches.all.length - 1) {
-				this.matches.current = 0;
-			} else if (this.matches.current < 0) {
-				this.matches.current = this.matches.all.length - 1;
+			/*Recalculate matches counter*/
+			if (this.matches.pos > this.matches.all.length - 1) {
+				this.matches.setPos(0);
+			} else if (this.matches.pos < 0) {
+				this.matches.setPos(this.matches.all.length - 1);
 			}
 
 			/*Highlight current match*/
 			this.matches.all.forEach((match, i) => {
-				match.classList.remove("current");
+				// match.classList.remove("current");
 
-				if (i === this.matches.current) {
-					match.classList.add("current");
-
-					/*Scroll view to match*/
-					if (typeof match?.component.scrollTo === "function")
-						match?.component.scrollTo();
+				if (i === this.matches.pos) {
+					// match.classList.add("current");
 				}
 			});
 		},
 
 		prevMatch: function () {
-			this.calcMatches(--this.matches.current);
+			this.matches.setPos(--this.matches.pos);
+			this.calcMatches();
 		},
 
 		nextMatch: function () {
-			this.calcMatches(++this.matches.current);
+			this.matches.setPos(++this.matches.pos);
+			this.calcMatches();
 		},
-	},
+	}
 };
