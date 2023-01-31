@@ -464,6 +464,7 @@ export default {
 					return promise.then(() => {
 						return this.paginateToEvent(event_id)
 					}).catch(e => {
+						console.error('EROR', e)
 						if(!event) return Promise.resolve(null)
 					})
 				}
@@ -511,7 +512,7 @@ export default {
 							this.firstPaginate = false;
 
 							this["p_" + direction] = false;
-						}).then(() => {
+						}).catch(() => {
 							if(e) return Promise.reject(e)
 						})
 
@@ -703,7 +704,10 @@ export default {
 			this.paginateToEvent(reference.event.event_id).then(event => {
 
 				if (event){
-					this.$refs.eventslist.scrollToEvent(event)
+					setTimeout(() => {
+						this.$refs.eventslist.scrollToEvent(event)
+					}, 300)
+					
 				}
 			}).finally(() => {
 				this.$store.state.globalpreloader = false;
