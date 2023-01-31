@@ -1,12 +1,12 @@
 <template>
-	<label>
-		<label v-for="(chunk, index) in chunks" v-bind:key="index">
+	<div class="msgtext">
+		<template v-for="(chunk, index) in chunks">
 			<label class="likelink" v-if="chunk.id" @click="show(chunk)"
 				>@{{ chunk.name }}</label
 			>
 			<label v-else v-html="echotext(chunk)"></label>
-		</label>
-	</label>
+		</template>
+	</div>
 </template>
 
 <script>
@@ -54,7 +54,9 @@ export default {
 				}
 			});
 
-			return r;
+			return _.filter(r, (r) => {
+				return r
+			});
 		},
 	},
 
