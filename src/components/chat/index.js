@@ -121,7 +121,6 @@ export default {
 		},
 	},
 	computed: mapState({
-		activeCall: (state) => state.activeCall,
 		pocketnet: (state) => state.pocketnet,
 		minimized: (state) => state.minimized,
 		active: (state) => state.active,

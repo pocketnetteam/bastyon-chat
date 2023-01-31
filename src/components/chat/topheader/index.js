@@ -178,6 +178,12 @@ export default {
 
 		isCallsActive: (state) => state.isCallsActive,
 
+		lastEnabled: function() {
+			let chat = this.core.mtrx.client.getRoom(this.chat.roomId)
+			let res = chat.timeline.filter(i => i.event.type === 'm.room.callsEnabled').pop().event.content.enabled
+			return res
+		},
+
 		m_chat: function () {
 			if (this.chat && this.chat.roomId) {
 				let pushRules = this.core.mtrx.client._pushProcessor.getPushRuleById(
@@ -242,7 +248,7 @@ export default {
 				console.log("wait");
 				return "wait";
 			} else {
-				console.log("nonono");
+				console.log("rejected");
 				return false;
 			}
 		},
@@ -278,7 +284,7 @@ export default {
 
 				console.log('matrixCall', matrixCall)
 
-				if (matrixCall) this.$store.dispatch("CALL", matrixCall);
+				// if (matrixCall) this.$store.dispatch("CALL", matrixCall);
 			}).catch(e => {
 				console.log("error", e);
 			})
