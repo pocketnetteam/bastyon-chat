@@ -74,12 +74,11 @@
 		>
 			<span v-if="senderName && senderName != 'You'" class="txt sname"
 				>{{ senderName }}:&nbsp;</span
-			><span class="txt"
-				><IncomingMessage
-					:message="content.body"
-					:markedText="markMatches"
-				></IncomingMessage
-			></span>
+			><IncomingMessage
+				:message="content.body"
+				:markedText="markMatches"
+			></IncomingMessage
+			>
 		</div>
 
 		<div
@@ -88,12 +87,11 @@
 		>
 			<span v-if="senderName && senderName != 'You'" class="txt sname"
 				>{{ senderName }}:&nbsp;</span
-			><span class="txt"
-				><IncomingMessage
-					:message="decryptEvent.body"
-					:markedText="markMatches"
-				></IncomingMessage
-			></span>
+			><IncomingMessage
+				:message="decryptEvent.body"
+				:markedText="markMatches"
+			></IncomingMessage
+			>
 		</div>
 
 		<div v-if="content.membership === 'invite'" class="invitedEvent">

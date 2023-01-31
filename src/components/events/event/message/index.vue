@@ -32,7 +32,7 @@
 					@click="showwhenburn"
 				></i>
 
-				<span>
+				<span v-else>
 					{{ format_date(origin._localTimestamp) || "Now" }}
 				</span>
 			</div>
@@ -51,10 +51,7 @@
 					<i v-if="selectedMessage" class="far fa-check-circle"></i>
 					<i v-else class="far fa-circle"></i>
 				</div>
-				<div class="mnwrapper" v-else>
-
-					<i @click="setmenu" class="fas fa-ellipsis-h"></i>
-				</div>
+					<i @click="setmenu" v-else class="fas fa-ellipsis-h setmenu"></i>
 			</div>
 
 			<div
@@ -165,18 +162,16 @@
 					<div class="edited" v-if="edited">
 						<i class="fas fa-pen"></i> {{ $t("caption.edited") }}
 					</div>
-					<div class="msgtext">
-						<IncomingMessage
-							:message="textWithoutLinks"
-							:marked-text="markedText"
-						></IncomingMessage>
-					</div>
+					<IncomingMessage
+						:message="textWithoutLinks"
+						:marked-text="markedText"
+					></IncomingMessage>
 					<div
 						class="sendername"
 						v-if="(!content.from && !my && showmeta) || (showmyicon && !my)"
 					>
-						<span
-							><b>{{ userinfo.name }}</b></span
+						<span class="b"
+							>{{ userinfo.name }}</span
 						>
 						&middot;
 						<span>
@@ -225,7 +220,7 @@
 			</div>
 
 			<div class="linkPreview" v-if="urlpreview">
-				<div class="pr" v-if="!sending">
+				<template v-if="!sending">
 					<url
 						:url="urlpreview"
 						:urllink="urlpreview"
@@ -234,7 +229,7 @@
 						@error="urlerror"
 						v-if="!origin.localRedactionEvent() && !origin.getRedactionEvent()"
 					/>
-				</div>
+				</template>
 				<div v-else>
 					<linepreloader />
 				</div>
