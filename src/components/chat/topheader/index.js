@@ -221,7 +221,6 @@ export default {
 	}),
 	methods: {
 		checkCallsEnabled: function () {
-
 			let isEnabled = this.m_chat.currentState.getStateEvents(
 				"m.room.callsEnabled"
 			);
