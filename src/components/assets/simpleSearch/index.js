@@ -8,6 +8,7 @@ export default {
 			type: Boolean,
 			default: false,
 		},
+		back : Boolean
 	},
 
 	data: function () {
@@ -48,6 +49,10 @@ export default {
 
 		clickicon: function () {
 			this.$refs["input"].focus();
+		},
+
+		goback: function(){
+			this.$emit("search", text);
 		},
 
 		blured: function () {

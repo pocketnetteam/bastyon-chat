@@ -179,6 +179,7 @@ export default {
 		},
 
 		file: function () {
+			console.log(this.event)
 			if (this.content.msgtype === "m.file") {
 				return this.body;
 			}

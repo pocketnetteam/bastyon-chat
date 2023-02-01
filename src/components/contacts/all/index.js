@@ -11,10 +11,9 @@ export default {
 		previewContact,
 	},
 
-	inject: ["matches"],
-
 	props: {
 		chats: Array,
+		search : String,
 		mode: {
 			default: "",
 			type: String,
@@ -24,7 +23,8 @@ export default {
 	data: function () {
 		return {
 			loading: false,
-
+			loadedUsers : {},
+			loadedingUsers : {},
 			users: [],
 			contacts: [],
 			lists: [
@@ -39,6 +39,7 @@ export default {
 					action: "navigateToRoomFromMsg",
 				},
 			],
+			processresult : null,
 			searchChanged: true,
 		};
 	},
@@ -65,38 +66,37 @@ export default {
 
 		filteredMessages() {
 			let chats = this.chats;
+			var expandedResults = []
 
-			if (this.matches?.value) {
-				return _.filter(
-					_.map(chats, (c) => {
-						var messages = _.filter(c.events, (m) => {
-							const match = (m.event.decrypted || m.event.content).body
-								.toLowerCase()
-								.includes(this.matches?.value);
+			if (this.search && this.processresult) {
 
-							return (match && m.event) || null;
-						});
+				_.each(this.processresult.results, (results, roomId) => {
+					var chat = _.find(chats, (chat) => {
+						return chat.roomId == roomId
+					})
 
-						return {
-							chat: c,
-							messages: _.sortBy(messages, (m) => {
-								return -(m.event.origin_server_ts || 1);
-							}),
-						};
-					}),
-					(cm) => {
-						return cm.messages.length;
+					if(chat){
+						_.each(results, (e) => {
+							expandedResults.push({
+								chat,
+								messages : [e]
+							})
+						})
 					}
-				);
+					
+					
+				})
+
 			}
 
-			return [];
+			return expandedResults
+
 		},
 
 		filteredChats() {
 			let chats = this.chats;
 
-			if (this.matches?.value) {
+			if (this.search) {
 				let mc = _.filter(
 					_.map(chats, (c) => {
 						const users = this.core.mtrx.chatUsersInfo(
@@ -133,8 +133,8 @@ export default {
 						const uString = (chatName + userNameString).toLowerCase();
 						let point = 0;
 
-						if (uString.includes(this.matches.value)) {
-							point = this.matches.value.length / uString.length;
+						if (uString.includes(this.search)) {
+							point = this.search.length / uString.length;
 						}
 
 						return {
@@ -165,7 +165,7 @@ export default {
 			this.contacts = _.filter(this.contactsMap, (contact) => {
 				return contact.name
 					.toLowerCase()
-					.includes(this.matches.value.toLowerCase());
+					.includes(this.search.toLowerCase());
 			});
 			
 			return this.contacts;
@@ -173,19 +173,13 @@ export default {
 
 		filteredOther() {
 			/*Add bastyon contacts*/
-			if (this.matches.value.length > 3 && this.searchChanged) {
-				this.core.user.searchContacts(this.matches.value).then((users) => {
-					this.users = _.filter(users || [], (u) => {
-						/*Exclude myself and users from contacts*/
-						return (
-							u.id !== this.core.user.userinfo.id &&
-							!_.filter(this.contactsMap, (f) => f.id === u.id).length
-						);
-					});
-				});
-
-				this.searchChanged = false;
-			}
+			this.users = _.filter(this.loadedUsers[this.search] || [], (u) => {
+				/*Exclude myself and users from contacts*/
+				return (
+					u.id !== this.core.user.userinfo.id &&
+					!_.filter(this.contactsMap, (f) => f.id === u.id).length
+				);
+			});
 
 			return this.users;
 		},
@@ -218,12 +212,9 @@ export default {
 			}
 
 			if (
-				section.action == "navigateToRoom" ||
-				section.action == "navigateToRoomFromMsg"
+				section.action == "navigateToRoom"
 			) {
 				var chat = item;
-
-				if (section.action == "navigateToRoomFromMsg") chat = item.chat;
 
 				if (this.share) {
 					var _share = this.share;
@@ -262,12 +253,17 @@ export default {
 						});
 				} else {
 					this.$router.push("chat?id=" + chat.roomId).catch((e) => {});
-				}
-
-				;
+				};
 			}
+
+			if (section.action == "navigateToRoomFromMsg") {
+				chat = item.chat;
+				var e = item.messages[0]
+				this.$router.push("chat?id=" + chat.roomId + '&process=' + this.processresult.id + '&search=' + this.processresult.text + '+toevent=' + e.event.event_id).catch((e) => {});
+			}
+
 			if (!section.keepMatches) {
-				this.matches.clear();
+				this.$emit('clearsearch')
 			}
 			
 		},
@@ -278,12 +274,79 @@ export default {
 				this.$router.push({ path: `/contact?id=${id}` }).catch((e) => {});
 			}
 		},
+
+		initSearchProcess(){
+			console.log('this.search', this.search)
+			if (this.search.length > 2){
+
+				if (this.process){
+					console.log('this.process', this.process)
+					this.process.updateText(this.search)
+					return 
+				}
+
+				this.process = this.core.mtrx.searchEngine.execute(this.search, this.chats, ({results}) => {
+
+					var evscount = _.reduce(results, (m, r, i) => {
+						return m + r.length
+					}, 0)
+
+					if (evscount > 25) return true
+
+				}, {
+					all : (result) => {
+						this.processresult = result
+					}
+				})
+
+				this.process.execute()
+
+				console.log('this.process', this.process)
+			}
+
+			else{
+				if(this.process) this.process.stop()
+
+				this.processresult = null
+			}
+		},
+
+		loadNewUsers(){
+
+			try{
+
+				if (this.search.length > 3) {
+
+					this.loadedingUsers[this.search] = this.core.user.searchContacts(this.search).then((users) => {
+
+						this.$set(this.loadedUsers, this.search, users)
+
+					}).catch((e) => {
+						console.error(e)
+					}).finally(() => {
+						delete this.loadedingUsers[this.search]
+					})
+
+				}
+
+			}catch(e){
+				console.error(e)
+			}
+
+			
+		}
 	},
 
 	watch: {
-		"matches.value": function () {
-			this.searchChanged = true;
-			this.users = [];
-		},
+		search : {
+			immediate : true,
+			handler : function(){
+				this.loadNewUsers()
+
+				if(!this.share)
+					this.initSearchProcess()
+			}
+		}
+		
 	},
 };

@@ -12,7 +12,7 @@
 	>
 		<div v-if="!unauthorized">
 			<div class="searchWrapperEA" v-if="!minimized || active">
-				<search />
+				<simpleSearch @search="searchall"/>
 			</div>
 
 			<teamroom
@@ -25,10 +25,10 @@
 			</div>
 
 			<div class="Swipes" v-else>
-					<div class="desktopList">
+				<div class="desktopList">
 					<!--v-if="showchatslist"-->
 
-					<div class="chatswrapper" v-if="!matches.value">
+					<div class="chatswrapper" v-if="!globalsearch">
 						<!--<transition-group name="list">
 							<div
 								v-for="item in chats"
@@ -60,7 +60,7 @@
 							</template>
 						</RecycleScroller>
 					</div>
-					<AllContacts v-else :chats="chats" />
+					<AllContacts v-else :chats="chats" :search="globalsearch" @clearsearch="() => searchall('')" />
 				</div>
 			</div>
 		</div>

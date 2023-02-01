@@ -296,6 +296,10 @@ var store = new Vuex.Store({
 			mex.theme(state, localStorage.getItem("theme") || "black");
 		},
 
+		SEARCH_BY_MESSAGES(state, process){
+
+		},
+
 		ALL_NOTIFICATIONS_COUNT(state, rooms) {
 			var n = new Date();
 

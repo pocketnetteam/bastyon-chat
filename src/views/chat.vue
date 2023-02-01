@@ -6,6 +6,8 @@
 			v-show="!hideHeader || !ios"
 			:u="u"
 			:chat="chat"
+			:search="search"
+			:process="process"
 			@addMember="addMemberModal"
 		/>
 
@@ -16,10 +18,12 @@
 					@newchat="newchat"
 					:u="u"
 					:chat="chat"
+					:toevent="toevent"
 					:key="k"
 					@removeBrokenRoom="creatorLeft"
 					@getEvents="eventsRoom"
 					@menuIsVisible="menuIsVisibleHandler"
+					@toeventscrolled="toeventscrolled"
 				/>
 			</template>
 		</maincontent>
@@ -86,6 +90,8 @@ export default {
 			openInviteModal: false,
 			brokenRoom: false,
 			hideHeader: false,
+			hastoeventscrolled : false,
+			hasprocesscleared : false
 		};
 	},
 
@@ -102,6 +108,19 @@ export default {
 		k() {
 			return this.u + this.$route.query.id;
 		},
+
+		process(){
+			return this.hasprocesscleared ? null : this.$route.query.process;
+		},
+
+		search(){
+			return this.$route.query.search;
+		},
+
+		toevent(){
+			return this.hastoeventscrolled ? null : this.$route.query.toevent;
+		},
+
 		ios() {
 			return f.isios();
 		},
@@ -120,6 +139,12 @@ export default {
 		}, 2000);
 	},
 	methods: {
+		processcleared(){
+			this.hasprocesscleared = true
+		},
+		toeventscrolled(){
+			this.hastoeventscrolled = true
+		},
 		creatorLeft(val) {
 			this.brokenRoom = val;
 		},

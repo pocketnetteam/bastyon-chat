@@ -10,6 +10,9 @@
 		}"
 	>
 		<div class="searchWrapper">
+			<div class="iconWrapper" v-if="back && searchTxt" @click="goback">
+				<i class="fas fa-chevron-left"></i>
+			</div>
 			<div class="inputWrapper">
 				<input
 					ref="input"

@@ -448,7 +448,7 @@ export default {
 							this.firstPaginate = false;
 
 							this["p_" + direction] = false;
-						}).catch(() => {
+						}).catch((e) => {
 							if(e) return Promise.reject(e)
 						})
 

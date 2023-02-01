@@ -16,6 +16,7 @@ export default {
 			revealed: {},
 			lastEventDescription: "",
 			blocked: false,
+			globalsearch : ''
 		};
 	},
 	components: {
@@ -351,6 +352,13 @@ export default {
 		itemToggle(item) {
 			this[item] = this[item] ? null : 2;
 		},
+
+		searchall : function(text){
+			this.globalsearch = (text || "").toLowerCase()
+
+			console.log('searchall', text, this.globalsearch)
+
+		}
 	},
 	mounted() {
 		// ideally should be in some global handler/store
