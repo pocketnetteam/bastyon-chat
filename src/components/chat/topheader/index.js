@@ -171,7 +171,7 @@ export default {
 		callsEnabled: (state) => state.isCallsEnabled,
 
 		isGroup: function () {
-			return this.m_chat.name.slice(0, 1) === "@";
+			return this.m_chat?.name.slice(0, 1) === "@";
 		},
 
 		auth: (state) => state.auth,
