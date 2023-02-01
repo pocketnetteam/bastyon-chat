@@ -750,9 +750,9 @@ var store = new Vuex.Store({
 				timeline = _.filter(timeline, (e, i) => {
 					if (
 						members.length <= 2 &&
-						(e.event.type === "m.room.power_levels" ||
+						(e.event.type === "m.room.power_levels" /*||
 							(e.event.type === "m.room.member" &&
-								e.event.content.membership !== "invite"))
+								e.event.content.membership !== "invite")*/)
 					) {
 						return false;
 					}
@@ -789,7 +789,6 @@ var store = new Vuex.Store({
 					return -event.event.origin_server_ts
 				});
 
-				
 
 				var lastread = null
 				

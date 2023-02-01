@@ -138,7 +138,8 @@
 		"You": "Вы",
 		"chatsearchingempty": "Чатов по данному фильтру не найдено",
 		"sendmessage": "Отправить сообщение",
-		"messages" : "Сообщения"
+		"messages" : "Сообщения",
+		"you" : "Вы"
 	},
 
 	"input": {

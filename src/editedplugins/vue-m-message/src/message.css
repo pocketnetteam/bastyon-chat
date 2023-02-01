@@ -96,7 +96,7 @@
 }
 .m-message-content .listPreview .invitedEvent span {
   display: block;
-  font-size: .8em;
+  font-size: 0.8em;
 }
 .m-message-content .listPreview .invitedEvent .txt {
   color: #707070;
@@ -129,6 +129,11 @@
   justify-content: flex-start;
   align-items: center;
   width: 100%;
+}
+.m-message-content .listPreview .previewMessage label {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .m-message-content .listPreview .previewMessage span {
   display: block;
