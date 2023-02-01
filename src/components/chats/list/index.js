@@ -14,7 +14,7 @@ export default {
 			page: 0,
 			revealed: {},
 			lastEventDescription: "",
-			blocked: false,
+			blocked: false
 		};
 	},
 	components: {

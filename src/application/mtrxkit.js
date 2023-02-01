@@ -288,7 +288,7 @@ class MTRXKIT {
 	 * Getting all events recursively
 	 *
 	 * @param args {Object}
-	 * @param args.chat {Room} - Chat room
+	 * @param args.room {Room} - Chat room
 	 * @param args.timeline {TimelineWindow} - Room timeline
 	 * @param [args.direction] {Number} - Pagination direction. Look at {@link paginateEvents}
 	 * @param [args.count] {Number} - Count of events to get. Look at {@link paginateEvents}
@@ -301,7 +301,7 @@ class MTRXKIT {
 	 */
 	paginateAllEvents(args) {
 		args = Object.assign({
-			chat: null,
+			room: null,
 			timeline: null,
 			direction: 'b',
 			count: 20,
@@ -317,6 +317,8 @@ class MTRXKIT {
 		const
 			params = {
 				args: args,
+				isPaused: () => isPaused,
+				isLoading: () => loading,
 				stop: () => {
 					isPaused = loading = null;
 					console.log('It\'s over');
@@ -382,7 +384,7 @@ class MTRXKIT {
 	 * Preload timeline events
 	 *
 	 * @param args {Object}
-	 * @param args.chat {Room} - Chat room
+	 * @param args.room {Room} - Chat room
 	 * @param args.timeline {TimelineWindow} - Room timeline
 	 * @param [args.direction] {Number} - Pagination direction
 	 * @param [args.count] {Number} - Count of events to get
@@ -391,7 +393,7 @@ class MTRXKIT {
 	 */
 	paginateEvents(args) {
 		args = Object.assign({
-			chat: null,
+			room: null,
 			timeline: null,
 			direction: 'b',
 			count: 20
@@ -419,14 +421,14 @@ class MTRXKIT {
 	 * Get events and decrypt
 	 *
 	 * @param args {Object}
-	 * @param args.chat {Room} - Chat room
+	 * @param args.room {Room} - Chat room
 	 * @param args.timeline {TimelineWindow} - Room timeline
 	 *
 	 * @return {*|Promise}
 	 */
 	getEventsAndDecrypt(args) {
 		args = Object.assign({
-			chat: null,
+			room: null,
 			timeline: null
 		}, args);
 		
@@ -434,7 +436,7 @@ class MTRXKIT {
 		
 		return Promise.all(
 			_.map(events, (e) => {
-				if (!args.chat.pcrypto) return Promise.resolve();
+				if (!args.room.pcrypto) return Promise.resolve();
 				
 				if (e.event.decrypted) return Promise.resolve();
 				
@@ -452,7 +454,7 @@ class MTRXKIT {
 					}
 					
 					if (subtype === "m.audio") {
-						pr = this.core.mtrx.getAudio(args.chat, e).catch((error) => {
+						pr = this.core.mtrx.getAudio(args.room, e).catch((error) => {
 							console.error(error);
 							
 							e.event.decrypted = {
@@ -462,11 +464,11 @@ class MTRXKIT {
 					}
 				} else {
 					if (subtype === "m.audio") {
-						pr = this.core.mtrx.getAudioUnencrypt(args.chat, e);
+						pr = this.core.mtrx.getAudioUnencrypt(args.room, e);
 					}
 					
 					if (subtype === "m.encrypted") {
-						pr = args.chat.pcrypto
+						pr = args.room.pcrypto
 							.decryptEvent(e.event)
 							.then((d) => {
 								e.event.decrypted = d;
@@ -498,7 +500,7 @@ class MTRXKIT {
 	 * Get events from timeline
 	 *
 	 * @param args {Object}
-	 * @param args.chat {Room} - Chat room
+	 * @param args.room {Room} - Chat room
 	 * @param args.timeline {TimelineWindow} - Room timeline
 	 * @param [args.offset] {Boolean} - Prevent override of parsed events
 	 * @param [args.eventsTypes] {{'m.call.invite': boolean, 'm.fully_read': boolean, 'm.room.file': boolean, 'p.room.encrypt.message': boolean, 'm.call.hangup': boolean, 'p.room.': boolean, 'm.room.image': boolean, 'm.room.audio': boolean, 'm.room.message': boolean, 'm.call.reject': boolean, 'm.room.request_calls_access': boolean}} - Event types
@@ -508,7 +510,7 @@ class MTRXKIT {
 	 */
 	getEvents(args) {
 		args = Object.assign({
-			chat: null,
+			room: null,
 			timeline: null,
 			offset: false,
 			eventsTypes: null
@@ -529,14 +531,14 @@ class MTRXKIT {
 			'm.fully_read': true,
 		}, args.eventsTypes || {});
 		
-		/*Get events from chat*/
+		/*Get events from room*/
 		let
 			events = args.timeline.getEvents(),
 			lastCallAccess = events
 				.filter((e) => e.event.type === "m.room.request_calls_access")
 				.pop();
 		
-		if (_.toArray((args.chat && args.chat.currentState.members) || {}).length > 2) {
+		if (_.toArray((args.room && args.room.currentState.members) || {}).length > 2) {
 			args.eventsTypes["m.room.member"] = true;
 			args.eventsTypes["m.room.power_levels"] = true;
 		}
@@ -572,7 +574,7 @@ class MTRXKIT {
 			}
 			
 			if (
-				args.chat.currentState.getMembers().length <= 2 &&
+				args.room.currentState.getMembers().length <= 2 &&
 				e.event.type === "m.room.member" &&
 				"m.room.power_levels"
 			) {

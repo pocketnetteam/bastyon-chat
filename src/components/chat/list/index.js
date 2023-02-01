@@ -71,7 +71,6 @@ export default {
 		},
 		
 		'matches.pos': function (index) {
-			console.log(this.matches.all[index])
 			this.scrollToEvent(
 				this.matches.all[index]
 			);
@@ -132,16 +131,10 @@ export default {
 		}
 
 		clearInterval(this.updateInterval);
-		this.searchControl.stop();
+		this.searchControl?.stop();
 	},
 
 	methods: {
-		onlyText(e) {
-			return _.filter(e, f => {
-				return (f.event.decrypted || f.event.content)?.msgtype === 'm.text';
-			});
-		},
-		
 		prepareSearch() {
 			/*Recursively load all events*/
 			const
@@ -150,38 +143,50 @@ export default {
 				timeline = new this.core.mtrx.sdk.TimelineWindow(
 					this.core.mtrx.client,
 					ts
-				);
+				),
+				onlyText = (e) => {
+					return _.filter(e, f => {
+						return (f.event.decrypted || f.event.content)?.msgtype === 'm.text';
+					});
+				};
 			
 			this.searchControl = this.core.mtrx.kit.paginateAllEvents({
-				chat: this.chat,
+				room: this.chat,
 				timeline: timeline,
 				count: 50,
 				offset: true,
 				tick: (e) => {
 					if (e) {
-						this.searchEvents = this.searchEvents.concat(this.onlyText(e));
-						this.search();
+						this.searchEvents = this.searchEvents.concat(onlyText(e));
 					}
+					
+					this.search();
 				}
 			});
 		},
 		
 		search() {
-			if (this.matches.value?.length < 2) return;
-			if (!this.searchEvents?.length) return this.prepareSearch();
+			if (!this.searchEvents?.length) {
+				return this.prepareSearch();
+			}
+			
+			if (this.matches.value?.length < 2) {
+				this.searchControl.pause();
+			} else if (this.searchControl.isPaused()) {
+				this.searchControl.resume();
+			}
 			
 			const matches = _.filter(this.searchEvents, f => {
-				const
-					match = (f.event?.decrypted || f.event.content)?.body
-						.toLowerCase()
-						.includes(this.matches?.value);
-				
-				// console.log(`text: ${ f.event.decrypted.body }, search: ${ this.matches?.value } match: ${ match }`);
-				
-				return match;
+				return (f.event?.decrypted || f.event.content)?.body
+								.toLowerCase()
+								.includes(this.matches?.value);
 			});
 			
 			this.matches.set(matches);
+			
+			this.scrollToEvent(
+				this.matches.all[this.matches.pos]
+			);
 		},
 		
 		editingEvent: function ({ event, text }) {
