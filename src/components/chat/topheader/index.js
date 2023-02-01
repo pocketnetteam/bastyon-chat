@@ -181,7 +181,6 @@ export default {
 		lastEnabled: function() {
 			let chat = this.core.mtrx.client.getRoom(this.chat.roomId)
 
-			console.log('chat.timeline', chat.timeline)
 
 			let res = chat.timeline.filter(i => i.event.type === 'm.room.callsEnabled').pop()?.event.content.enabled
 			return res
