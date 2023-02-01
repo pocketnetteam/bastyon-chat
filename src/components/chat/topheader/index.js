@@ -180,7 +180,7 @@ export default {
 
 		lastEnabled: function() {
 			let chat = this.core.mtrx.client.getRoom(this.chat.roomId)
-			let res = chat.timeline.filter(i => i.event.type === 'm.room.callsEnabled').pop().event.content.enabled
+			let res = chat.timeline.filter(i => i.event.type === 'm.room.callsEnabled').pop()?.event.content.enabled
 			return res
 		},
 
@@ -221,13 +221,13 @@ export default {
 	}),
 	methods: {
 		checkCallsEnabled: function () {
+
 			let isEnabled = this.m_chat.currentState.getStateEvents(
 				"m.room.callsEnabled"
 			);
 			let hasAccess = this.m_chat.currentState.getStateEvents(
 				"m.room.request_calls_access"
 			);
-
 			if (
 				isEnabled.find(
 					(e) =>
@@ -236,7 +236,6 @@ export default {
 							e?.event?.state_key
 				)?.event?.content?.enabled
 			) {
-				console.log("enabled");
 				this.wait = false;
 				return true;
 			}
@@ -245,10 +244,9 @@ export default {
 				hasAccess.find((e) => this.core.mtrx.me(e?.event?.sender))?.event
 					?.content?.accepted === undefined
 			) {
-				console.log("wait");
 				return "wait";
 			} else {
-				console.log("rejected");
+				this.wait = false;
 				return false;
 			}
 		},
