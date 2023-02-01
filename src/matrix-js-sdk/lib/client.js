@@ -5739,12 +5739,23 @@ MatrixClient.prototype._checkTurnServers = async function () {
         // _logger.logger.log("Got TURN URIs: " + res.uris + " refresh in " + res.ttl + " secs"); // map the response to a format that can be fed to RTCPeerConnection
         // console.log("Got TURN URIs: " + res.uris + " refresh in " + res.ttl + " secs");
         // hardcoded
-        const servers = {
-          urls: "turn:turn.pocketnet.app",
-          username: "stunuser",
-          credential: "q1w2e3r4t5ASD!@#",
-        };
-        this._turnServers = [servers]; // The TTL is in seconds but we work in ms
+        const servers = [{
+            urls: "turn:turn.pocketnet.app",
+            username: "stunuser",
+            credential: "q1w2e3r4t5ASD!@#",
+          }, 
+          {
+            urls: 'turn:numb.viagenie.ca',
+            credential: 'muazkh',
+            username: 'webrtc@live.com'
+          },
+          {
+            urls: 'turn:turn.anyfirewall.com:443?transport=tcp',
+            credential: 'webrtc',
+            username: 'webrtc'
+          }
+        ];
+        this._turnServers = servers; // The TTL is in seconds but we work in ms
 
         this._turnServersExpiry = Date.now() + res.ttl * 1000;
         credentialsGood = true;
