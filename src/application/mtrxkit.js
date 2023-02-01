@@ -283,6 +283,358 @@ class MTRXKIT {
 			? true
 			: false;
 	}
+	
+	/**
+	 * Getting all events recursively
+	 *
+	 * @param args {Object}
+	 * @param args.chat {Room} - Chat room
+	 * @param args.timeline {TimelineWindow} - Room timeline
+	 * @param [args.direction] {Number} - Pagination direction. Look at {@link paginateEvents}
+	 * @param [args.count] {Number} - Count of events to get. Look at {@link paginateEvents}
+	 * @param [args.offset] {Boolean} - Prevent override of parsed events. Look at {@link getEvents}
+	 * @param [args.eventsTypes] {Object} - Event types. Look at {@link getEvents}
+	 * @param [args.eventsCount] {Number} - Count of events already parsed. Look at {@link getEvents}
+	 * @param [args.tick] {Function} - Iteration callback
+	 *
+	 * @return {Object}
+	 */
+	paginateAllEvents(args) {
+		args = Object.assign({
+			chat: null,
+			timeline: null,
+			direction: 'b',
+			count: 20,
+			offset: false,
+			eventsTypes: null,
+			tick: () => {}
+		}, args);
+		
+		let
+			isPaused = false,
+			loading = false;
+		
+		const
+			params = {
+				args: args,
+				stop: () => {
+					isPaused = loading = null;
+					console.log('It\'s over');
+				},
+				pause: () => {
+					isPaused = true;
+					console.log('Paused')
+				},
+				resume: () => {
+					isPaused = false;
+					params.interval();
+					console.log('Resumed')
+				}
+			};
+		
+			/*Loads timeline first time*/
+			params.prepare = () => {
+				if (!args.timeline._eventCount) {
+					loading = true;
+					
+					args.timeline.load()
+						.then(() => {
+							return this.getEventsAndDecrypt(args);
+						})
+						.then(params.callback);
+				} else {
+					params.interval();
+				}
+				
+				return params;
+			};
+			
+			/*Iterate get events until end*/
+			params.interval = () => {
+				args.eventsCount = args.timeline._eventCount;
+				
+				if (!isPaused && !loading) {
+					loading = true;
+					
+					this.paginateEvents(args)
+						.then(params.callback);
+				}
+			};
+			
+			/*Callback for iteration*/
+			params.callback = (e) => {
+				loading = false;
+				
+				if (e?.length) {
+					if (typeof args.tick === 'function') args.tick(e);
+					if (!isPaused) params.interval();
+				} else {
+					params.stop();
+				}
+				
+				// console.log(`next: ${ !!e?.length }, new events: ${ e?.length || 0 }`);
+			}
+		
+		return params.prepare();
+	}
+	
+	/**
+	 * Preload timeline events
+	 *
+	 * @param args {Object}
+	 * @param args.chat {Room} - Chat room
+	 * @param args.timeline {TimelineWindow} - Room timeline
+	 * @param [args.direction] {Number} - Pagination direction
+	 * @param [args.count] {Number} - Count of events to get
+	 *
+	 * @return {*|Promise}
+	 */
+	paginateEvents(args) {
+		args = Object.assign({
+			chat: null,
+			timeline: null,
+			direction: 'b',
+			count: 20
+		}, args);
+		
+		if (args.timeline.canPaginate(args.direction)) {
+			return args.timeline
+				.paginate(args.direction, args.count)
+				.then(() => {
+					return Promise.resolve();
+				})
+				.catch(() => {
+					return Promise.resolve();
+				})
+				.then(() => {
+					return this.getEventsAndDecrypt(args);
+				})
+				.then((events) => events);
+		} else {
+			return Promise.resolve();
+		}
+	}
+	
+	/**
+	 * Get events and decrypt
+	 *
+	 * @param args {Object}
+	 * @param args.chat {Room} - Chat room
+	 * @param args.timeline {TimelineWindow} - Room timeline
+	 *
+	 * @return {*|Promise}
+	 */
+	getEventsAndDecrypt(args) {
+		args = Object.assign({
+			chat: null,
+			timeline: null
+		}, args);
+		
+		let events = this.getEvents(args);
+		
+		return Promise.all(
+			_.map(events, (e) => {
+				if (!args.chat.pcrypto) return Promise.resolve();
+				
+				if (e.event.decrypted) return Promise.resolve();
+				
+				let
+					pr = null,
+					subtype = f.deep(e, "event.content.msgtype"),
+					
+					einfo =
+						f.deep(e, "event.content.info.secrets") ||
+						f.deep(e, "event.content.pbody.secrets");
+				
+				if (einfo) {
+					if (subtype === "m.image") {
+						//
+					}
+					
+					if (subtype === "m.audio") {
+						pr = this.core.mtrx.getAudio(args.chat, e).catch((error) => {
+							console.error(error);
+							
+							e.event.decrypted = {
+								msgtype: "m.bad.encrypted",
+							};
+						});
+					}
+				} else {
+					if (subtype === "m.audio") {
+						pr = this.core.mtrx.getAudioUnencrypt(args.chat, e);
+					}
+					
+					if (subtype === "m.encrypted") {
+						pr = args.chat.pcrypto
+							.decryptEvent(e.event)
+							.then((d) => {
+								e.event.decrypted = d;
+								
+								return Promise.resolve();
+							})
+							.catch((e) => {
+								e.event.decrypted = {
+									msgtype: "m.bad.encrypted",
+								};
+								
+								return Promise.resolve();
+							});
+					}
+				}
+				
+				if (!pr) return Promise.resolve();
+				
+				return pr.catch((e) => {
+					return Promise.resolve();
+				});
+			})
+		).then(() => {
+			return Promise.resolve(events);
+		});
+	}
+	
+	/**
+	 * Get events from timeline
+	 *
+	 * @param args {Object}
+	 * @param args.chat {Room} - Chat room
+	 * @param args.timeline {TimelineWindow} - Room timeline
+	 * @param [args.offset] {Boolean} - Prevent override of parsed events
+	 * @param [args.eventsTypes] {{'m.call.invite': boolean, 'm.fully_read': boolean, 'm.room.file': boolean, 'p.room.encrypt.message': boolean, 'm.call.hangup': boolean, 'p.room.': boolean, 'm.room.image': boolean, 'm.room.audio': boolean, 'm.room.message': boolean, 'm.call.reject': boolean, 'm.room.request_calls_access': boolean}} - Event types
+	 * @param [args.eventsCount] {Number} - Count of events already parsed. Look at {@link paginateAllEvents}
+	 *
+	 * @return {Array}
+	 */
+	getEvents(args) {
+		args = Object.assign({
+			chat: null,
+			timeline: null,
+			offset: false,
+			eventsTypes: null
+		}, args);
+		
+		/*Define events types*/
+		args.eventsTypes = Object.assign({
+			'm.room.message': true,
+			'p.room.encrypt.message': true,
+			'p.room.': true,
+			'm.room.image': true,
+			'm.room.audio': true,
+			'm.room.file': true,
+			'm.call.invite': true,
+			'm.room.request_calls_access': true,
+			'm.call.hangup': true,
+			'm.call.reject': true,
+			'm.fully_read': true,
+		}, args.eventsTypes || {});
+		
+		/*Get events from chat*/
+		let
+			events = args.timeline.getEvents(),
+			lastCallAccess = events
+				.filter((e) => e.event.type === "m.room.request_calls_access")
+				.pop();
+		
+		if (_.toArray((args.chat && args.chat.currentState.members) || {}).length > 2) {
+			args.eventsTypes["m.room.member"] = true;
+			args.eventsTypes["m.room.power_levels"] = true;
+		}
+		
+		events = _.filter(events, (e) => {
+			let type = e.event.type;
+			
+			if (e.localRedactionEvent() || e.getRedactionEvent()) {
+				return;
+			}
+			
+			if (e.event.type === "m.room.request_calls_access") {
+				if (e.event.event_id === lastCallAccess.event.event_id) {
+					if (e.event.content.accepted !== undefined) {
+						return false;
+					} else {
+						if (this.core.mtrx.me(e.event.sender)) {
+							return false;
+						} else {
+							return true;
+						}
+					}
+				} else {
+					return false;
+				}
+			}
+			
+			if (
+				e.event.type === "m.room.power_levels" &&
+				Object.keys(e.event.content.users).length === 1
+			) {
+				return;
+			}
+			
+			if (
+				args.chat.currentState.getMembers().length <= 2 &&
+				e.event.type === "m.room.member" &&
+				"m.room.power_levels"
+			) {
+				return;
+			}
+			
+			return !args.eventsTypes || args.eventsTypes[type];
+		}).reverse();
+		
+		this.relations(args.timeline, events);
+		
+		events = _.sortBy(events, function (e) {
+			return e.replacingEventDate() || e.getDate() || Infinity;
+		}).reverse();
+		
+		events = _.uniq(events, (e) => {
+			return this.core.mtrx.clearEventId(e) || f.makeid();
+		});
+		
+		events = _.sortBy(events, function (e) {
+			return e.getDate() || Infinity;
+		});
+		
+		events = events.reverse();
+		
+		return events.slice(args.offset ? args.eventsCount : 0);
+	}
+	
+	/**
+	 * Get events relations
+	 *
+	 * @param timeline {TimelineWindow}
+	 * @param events {Array}
+	 * @return void
+	 */
+	relations(timeline, events) {
+		let ts = timeline._timelineSet;
+		
+		_.each(events, (e) => {
+			try {
+				let rt = ts.getRelationsForEvent(
+					e.event.event_id,
+					"m.replace",
+					"m.room.message"
+				);
+				
+				if (rt) {
+					let last = rt.getLastReplacement();
+					
+					if (last) {
+						e.event.content.body = last.event.content.body;
+						e.event.content.edited = last.event.event_id;
+						e.event.content.block = last.event.content.block;
+						e.event.content.msgtype = last.event.content.msgtype;
+						e.event.decrypted = last.event.decrypted;
+					}
+				}
+			} catch (e) {
+				console.error(e);
+			}
+		});
+	}
 }
 
 export default MTRXKIT;

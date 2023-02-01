@@ -7,7 +7,6 @@ import f from "@/application/functions";
 
 export default {
 	name: "list",
-	inject: ["matches"],
 	data: function () {
 		return {
 			loading: false,
@@ -80,6 +79,7 @@ export default {
 			"deletedrooms",
 			"hideOptimization",
 			"wasunhidden",
+			"matches"
 		]),
 
 		showchatslist: function () {

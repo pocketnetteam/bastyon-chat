@@ -6,8 +6,6 @@ export default {
 	name: "chatsTopheader",
 	props: {},
 
-	inject: ["matches"],
-
 	components: {
 		contacts,
 	},
@@ -39,7 +37,7 @@ export default {
 		pocketnet: (state) => state.pocketnet,
 		active: (state) => state.active,
 
-		...mapState(["share", "closebybg"]),
+		...mapState(["share", "closebybg", "matches"]),
 
 		window: function () {
 			return window;

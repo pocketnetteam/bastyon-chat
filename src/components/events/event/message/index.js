@@ -6,6 +6,7 @@ import f from "@/application/functions";
 import url from "@/components/events/event/url/index.vue";
 import imagesLoaded from "vue-images-loaded";
 import dummypreviews from "@/components/chats/dummypreviews";
+import { mapState } from 'vuex'
 import IncomingMessage from "./incomingMessage/incomingMessage.vue";
 import VoiceMessage from "@/components/events/event/VoiceMessage";
 import Call from "@/components/events/event/Call";
@@ -60,7 +61,6 @@ export default {
 			hasurlerror : null
 		};
 	},
-	inject: ["matches", "markText"],
 	components: {
 		actions,
 		filePreview,
@@ -448,6 +448,8 @@ export default {
 			);
 			return elem[0]?.message_id === this.origin.event.event_id ? true : false;
 		},
+		
+		...mapState(['matches']),
 	},
 
 	mounted() { },
@@ -514,7 +516,7 @@ export default {
 				}
 
 			}
-				
+			
 
 			if (this.file) {
 				sharing.download = [{

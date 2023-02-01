@@ -11,7 +11,6 @@ export default {
 		search: String,
 		messages: Array,
 	},
-	inject: ["matches"],
 
 	components: {
 		chatName,
@@ -114,7 +113,7 @@ export default {
 			}
 		},
 
-		...mapState(["minimized", "active", "events"]),
+		...mapState(["minimized", "active", "events", "matches"]),
 	}),
 
 	methods: {},

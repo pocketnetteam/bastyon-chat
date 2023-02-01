@@ -11,8 +11,6 @@ export default {
 		previewContact,
 	},
 
-	inject: ["matches"],
-
 	props: {
 		chats: Array,
 		mode: {
@@ -44,7 +42,10 @@ export default {
 	},
 
 	computed: {
-		...mapState(["contactsMap"]),
+		...mapState([
+			"contactsMap",
+			"matches"
+		]),
 
 		filteredLists: function () {
 			var object = {};
@@ -286,4 +287,8 @@ export default {
 			this.users = [];
 		},
 	},
+	
+	mounted() {
+		console.log(this.matches)
+	}
 };
