@@ -14,7 +14,7 @@ export default {
 		roomInfo: false,
 		aboutUser: false,
 	},
-	inject: ["isChatEncrypted"],
+	inject: ["isChatEncrypted", "matches"],
 	components: {
 		chatName,
 		chatIcon,
@@ -171,7 +171,7 @@ export default {
 		callsEnabled: (state) => state.isCallsEnabled,
 
 		isGroup: function () {
-			return this.m_chat?.name.slice(0, 1) === "@";
+			return this.m_chat.name.slice(0, 1) === "@";
 		},
 
 		auth: (state) => state.auth,
@@ -180,9 +180,6 @@ export default {
 
 		lastEnabled: function() {
 			let chat = this.core.mtrx.client.getRoom(this.chat.roomId)
-
-			console.log('chat.timeline', chat.timeline)
-
 			let res = chat.timeline.filter(i => i.event.type === 'm.room.callsEnabled').pop()?.event.content.enabled
 			return res
 		},
@@ -221,8 +218,6 @@ export default {
 				? this.donationAmount
 				: this.donationAmount + this.calculatedFees;
 		},
-		
-		...mapState(['matches']),
 	}),
 	methods: {
 		checkCallsEnabled: function () {
@@ -232,7 +227,6 @@ export default {
 			let hasAccess = this.m_chat.currentState.getStateEvents(
 				"m.room.request_calls_access"
 			);
-
 			if (
 				isEnabled.find(
 					(e) =>
@@ -241,7 +235,6 @@ export default {
 							e?.event?.state_key
 				)?.event?.content?.enabled
 			) {
-				console.log("enabled");
 				this.wait = false;
 				return true;
 			}
@@ -250,10 +243,9 @@ export default {
 				hasAccess.find((e) => this.core.mtrx.me(e?.event?.sender))?.event
 					?.content?.accepted === undefined
 			) {
-				console.log("wait");
 				return "wait";
 			} else {
-				console.log("rejected");
+				this.wait = false;
 				return false;
 			}
 		},
