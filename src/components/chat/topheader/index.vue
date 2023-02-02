@@ -7,7 +7,10 @@
 			</template>
 
 			<template v-slot:leftadd>
-				<search chat="true" :minimize="!matches.value" />
+				<div class="iconbuttonsmall" @click="tosearch">
+					<i class="fas fa-search"></i>
+				</div>
+				<!--<search chat="true" :minimize="!matches.value" />-->
 			</template>
 
 			<template v-slot:info>
@@ -56,7 +59,7 @@
 					@click="bcCall"
 				>
 					<i class="fas fa-video"></i>
-          {{lastEnabled? '': ''}}
+          			{{lastEnabled? '': ''}}
 				</div>
 			</template>
 
@@ -65,6 +68,33 @@
 					<div class="iconbutton"><i class="fas fa-ellipsis-h"></i></div>
 				</router-link>
 			</template>
+		</topheader>
+
+		<topheader v-if="chat && searchactive" classstyle="noiconsButWithL">
+			<template v-slot:left>
+				<backButton @back="backfromsearch"/>
+			</template>
+
+			<template v-slot:info>
+				<simpleSearch :value="search" :controlKeys="true" @search="searching" ref="search" @controlKey="searchControlKey">
+					<template v-slot:default v-if="searchresults && searchresults.length">
+
+						<div class="matches">
+							<span class="current-match"
+								>{{ searchresults.length - (focusedeventIndex) }}/{{ searchresults.length }}</span
+							>
+							<i class="prev-match fas fa-chevron-up" @click="tobottomsearch"></i>
+							<i class="next-match fas fa-chevron-down" @click="toupsearch"></i>
+						</div>
+
+						<div class="iconWrapper" v-if="search" @click="() => {searching('')}">
+							<i class="fas fa-times"></i>
+						</div>
+
+					</template>
+				</simpleSearch>
+			</template>
+			
 		</topheader>
 
 	</div>

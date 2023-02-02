@@ -1926,7 +1926,7 @@ f.stringComparison = function (s1, s2, p = 0.5) {
 
             return f.wordComparison(w, ww) > p
         })
-    }) / w1.length > p ? true : false
+    }).length > 0 ? true : false
 
 }
 
@@ -1944,7 +1944,7 @@ f.wordComparison = function (s1, s2) {
 
 
 
-        return ps.toLowerCase().replace(/[^a-z0-9&]*/g, '');
+        return ps.toLowerCase().replace(/[^\p{L}\p{N}\p{Z}]/gu, '')
     }
 
     var makeTr = function (w) {
@@ -1996,7 +1996,7 @@ f.wordComparison = function (s1, s2) {
 
 f.clientsearch = function (value, arr, exe) {
     var txt = value
-    var ctxt = txt.toLowerCase().replace(/[^a-z0-9]/g, '')
+    var ctxt = txt.toLowerCase().replace(/[^\p{L}\p{N}\p{Z}]/gu, '')
 
     return _.filter(arr, function (obj) {
 
@@ -2013,9 +2013,9 @@ f.clientsearch = function (value, arr, exe) {
 
         var stext = txtf
 
-        var ctext = stext.toLowerCase().replace(/[^a-z0-9]/g, '')
-
-        if (ctext.indexOf(ctxt) > -1 || f.stringComparison(txt, stext)) return true
+        var ctext = stext.toLowerCase().replace(/[^\p{L}\p{N}\p{Z}]/gu, '')
+		
+        if ((ctext && ctext.indexOf(ctxt) > -1) || f.stringComparison(txt, stext)) return true
     })
 }
 

@@ -12,7 +12,7 @@
 	>
 		<div v-if="!unauthorized">
 			<div class="searchWrapperEA" v-if="!minimized || active">
-				<simpleSearch @search="searchall"/>
+				<simpleSearch :value="globalsearch" @search="searchall"/>
 			</div>
 
 			<teamroom
@@ -60,7 +60,9 @@
 							</template>
 						</RecycleScroller>
 					</div>
-					<AllContacts v-else :chats="chats" :search="globalsearch" @clearsearch="() => searchall('')" />
+					<div v-else class="searchresults">
+						<AllContacts :chats="chats" :search="globalsearch" @clearsearch="() => searchall('')" />
+					</div>
 				</div>
 			</div>
 		</div>

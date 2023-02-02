@@ -31,6 +31,7 @@
 				:error="error"
 				:key="key"
 				:chat="m_chat"
+				:searchresults="searchresults"
 				@editingEvent="editingEvent"
 				@shareEvent="shareEvent"
 				@replyEvent="replyEvent"

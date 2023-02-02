@@ -33,8 +33,18 @@ export default {
 			type: String,
 			default: () => {},
 		},
+
+		processid : ''
 	},
-	created: () => {},
+
+	beforeMount: function() {
+
+		if (this.processid){
+			var p = this.core.mtrx.searchEngine.getprocess(this.processid)
+
+			if (p && p.text) this.globalsearch = p.text
+		}
+	},
 
 	watch: {
 		topchatid: function () {

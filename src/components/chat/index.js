@@ -11,6 +11,9 @@ export default {
 	props: {
 		chat: Object,
 		u: String,
+		search : String,
+		searchresults : Array
+
 	},
 	inject: ["isChatEncrypted"],
 	components: {
@@ -43,7 +46,6 @@ export default {
 			encrypting : false,
 			showInput: true,
 			showShareMessages: false,
-
 			selectedMessages: [],
 		};
 	},
@@ -64,6 +66,7 @@ export default {
 	},
 
 	watch: {
+		
 		needcreatekey: function () {
 			if (this.needcreatekey) {
 				if (!this.intrv) {
@@ -209,6 +212,7 @@ export default {
 		},
 	}),
 	methods: {
+		
 		clearintrv: function () {
 			if (this.intrv) {
 				clearInterval(this.intrv);
@@ -526,6 +530,16 @@ export default {
 			this.selectedMessages = [];
 		},
 
+
+		scrollToEvent : function(event){
+
+			f.pretry(() => {
+				return this.$refs["list"]
+			}).then(() => {
+				this.$refs["list"].scrollToEvent(event);
+			})
+			
+		}
 		
 	},
 };

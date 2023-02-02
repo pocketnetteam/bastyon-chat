@@ -2,7 +2,9 @@ import { mapState } from "vuex";
 
 export default {
 	name: "topheader",
-	props: {},
+	props: {
+		classstyle : ""
+	},
 	data: function () {
 		return {
 			loading: false,

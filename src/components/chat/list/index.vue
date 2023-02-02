@@ -29,6 +29,7 @@
 					v-if="timeline"
 					:scrollType="scrollType"
 					:selectedMessages="selectedMessages"
+					:searchresults="searchresults"
 				/>
 			</div>
 		</div>

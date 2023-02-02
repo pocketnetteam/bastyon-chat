@@ -12,6 +12,9 @@ var Process = function(text, chats, parent /* SearchEngine */){
     self.id = f.makeid()
     self.text = text
     self.clbks = {}
+    self.hash = f.md5(_.map(chats, (c) => {
+        return c.roomId
+    }).join(''))
 
     var process = null
 
@@ -38,10 +41,8 @@ var Process = function(text, chats, parent /* SearchEngine */){
 
     var stepInChats = function(){
 
-        console.log("chats", chats)
 
         return f.processArray(chats, (e) => {
-            console.log("CHAT", e)
             //if(processStopped()) return Promise.reject('stopped')
 
             return stepInChat(e).then(() => {
@@ -49,7 +50,9 @@ var Process = function(text, chats, parent /* SearchEngine */){
                 if(processStopped()) return Promise.reject('stopped')
 
             }).catch(e => {
+
                 console.error(e)
+                
                 if(e == 'stopped'){
                     return Promise.reject(e)
                 }
@@ -60,8 +63,6 @@ var Process = function(text, chats, parent /* SearchEngine */){
     }
 
     var stepInChat = function(chat){
-
-        console.log("CHAT", chat)
 
         var mChat = parent.mtrx.client.getRoom(chat.roomId)
 
@@ -122,7 +123,7 @@ var Process = function(text, chats, parent /* SearchEngine */){
             if(processStopped()) return Promise.reject('stopped')
 
             if(!first){
-                if(this.timeline.canPaginate('b')){
+                if(tl.line.canPaginate('b')){
                     tl.finished = true
 
                     return Promise.reject('finished')
@@ -199,11 +200,13 @@ var Process = function(text, chats, parent /* SearchEngine */){
 
             var curresults = searchInEvents(curevents)
 
-            console.log("TEXT2", curresults)
-
             if(!results[chat.roomId]) results[chat.roomId] = []
 
             results[chat.roomId] = results[chat.roomId].concat(curresults)
+
+            results[chat.roomId] = _.sortBy(results[chat.roomId], (e) => {
+                return e.replacingEventDate() || e.getDate() || Infinity
+            }).reverse()
 
             if(!processStopped()) emit()
 
@@ -230,8 +233,6 @@ var Process = function(text, chats, parent /* SearchEngine */){
                 
             }
 
-            console.log("TEXT", (((e.event.decrypted || e.event.content) || {}).body || "").toLowerCase())
-
             return (((e.event.decrypted || e.event.content) || {}).body || "").toLowerCase()
         })
     }
@@ -249,6 +250,8 @@ var Process = function(text, chats, parent /* SearchEngine */){
 
         if(process) return process
 
+        emit()
+
         process = stepInChats().finally(() => {
             process = null
         })
@@ -265,6 +268,8 @@ var Process = function(text, chats, parent /* SearchEngine */){
             results[id] = searchInEvents(es)
         })
 
+        console.log('results', results)
+
         emit()
     }
 
@@ -279,18 +284,21 @@ var SearchEngine = function (mtrx) {
 
         text = text.toLowerCase()
 
+        var hash = f.md5(_.map(chats, (c) => {
+            return c.roomId
+        }).join(''))
+
         var lpr = _.find(processes, (process) => {
-            return process.text == text
+            return process.text == text && process.hash == hash
         })
 
         if (lpr) {
             lpr.stopcase = stopcase
+            lpr.clbks = clbks
             return lpr
         }
 
         var process = new Process(text, chats, self)
-
-        console.log('clbks', clbks)
 
         process.clbks = clbks
 
@@ -306,6 +314,10 @@ var SearchEngine = function (mtrx) {
         processes[process.id] = process
 
         return process
+    }
+
+    self.getprocess = function(id){
+        return processes[id]
     }
 
     self.destroy = function(){

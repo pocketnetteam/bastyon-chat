@@ -44,6 +44,10 @@ export default {
 		};
 	},
 
+	beforeDestroy : function(){
+		if(this.process) this.process.stop()
+	},
+
 	computed: {
 		...mapState(["contactsMap"]),
 
@@ -259,7 +263,7 @@ export default {
 			if (section.action == "navigateToRoomFromMsg") {
 				chat = item.chat;
 				var e = item.messages[0]
-				this.$router.push("chat?id=" + chat.roomId + '&process=' + this.processresult.id + '&search=' + this.processresult.text + '+toevent=' + e.event.event_id).catch((e) => {});
+				this.$router.push("chat?id=" + chat.roomId + '&process=' + this.processresult.id + '&search=' + this.processresult.text + '&toevent=' + e.event.event_id).catch((e) => {});
 			}
 
 			if (!section.keepMatches) {
@@ -276,14 +280,16 @@ export default {
 		},
 
 		initSearchProcess(){
-			console.log('this.search', this.search)
+			console.log("HERE", this.search)
 			if (this.search.length > 2){
 
 				if (this.process){
-					console.log('this.process', this.process)
+					console.log("????????")
 					this.process.updateText(this.search)
 					return 
 				}
+
+				this.processresult = null
 
 				this.process = this.core.mtrx.searchEngine.execute(this.search, this.chats, ({results}) => {
 
@@ -299,9 +305,10 @@ export default {
 					}
 				})
 
-				this.process.execute()
+				this.process.execute().catch(e => {
+					console.error(e)
+				})
 
-				console.log('this.process', this.process)
 			}
 
 			else{
@@ -342,6 +349,8 @@ export default {
 			immediate : true,
 			handler : function(){
 				this.loadNewUsers()
+
+				console.log('?????')
 
 				if(!this.share)
 					this.initSearchProcess()

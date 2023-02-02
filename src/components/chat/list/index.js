@@ -16,6 +16,7 @@ export default {
 				return [];
 			},
 		},
+		searchresults : null
 	},
 
 	components: {
@@ -120,6 +121,7 @@ export default {
 	},
 
 	methods: {
+		
 		editingEvent: function ({ event, text }) {
 			this.$emit("editingEvent", { event, text });
 		},
@@ -635,9 +637,20 @@ export default {
 
 		scrollToEvent: function(reference){
 
-			this.$store.state.globalpreloader = true;
+			console.log('scrollToEvent', reference.event.event_id)
 
-			this.paginateToEvent(reference.event.event_id).then(event => {
+			
+
+			f.pretry(() => {
+				return (!this.loading && this.timeline && !this["p_b"])
+			}).then(() => {
+
+				this.$store.state.globalpreloader = true;
+				
+				return this.paginateToEvent(reference.event.event_id)
+			}).then(event => {
+
+				console.log('event', event)
 
 				if (event){
 					setTimeout(() => {
@@ -645,6 +658,8 @@ export default {
 					}, 300)
 					
 				}
+			}).catch(e => {
+				console.error(e)
 			}).finally(() => {
 				this.$store.state.globalpreloader = false;
 

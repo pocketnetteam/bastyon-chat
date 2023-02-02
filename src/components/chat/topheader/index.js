@@ -13,8 +13,12 @@ export default {
 		u: String,
 		roomInfo: false,
 		aboutUser: false,
+		search : String,
+		process : String,
+		searchresults : null,
+		focusedevent : null
 	},
-	inject: ["isChatEncrypted", "matches"],
+	inject: ["matches"],
 	components: {
 		chatName,
 		chatIcon,
@@ -124,6 +128,7 @@ export default {
 			aboutUserShow: false,
 			roomBanned: false,
 			roomMuted: false,
+			searchactive : false,
 
 			// --- Variables for the donation part ---
 			// Boolean when the donation modal is open
@@ -165,9 +170,31 @@ export default {
 
 	mounted: function () {
 		this.getuserinfo();
+
+		if (this.search) {
+			this.searchactive = true
+		}
 	},
 
 	computed: mapState({
+		focusedeventIndex: function(){
+			if(!this.searchresults || !this.focusedevent){
+				return null
+			}
+
+			var i = -1
+			
+			_.find(this.searchresults, (e, index) => {
+				if(e.event.event_id == this.focusedevent.event.event_id) {
+					i = index
+					return true
+				}
+			}) 
+
+			//if (i < 1) i = 1
+
+			return i
+		},
 		callsEnabled: (state) => state.isCallsEnabled,
 
 		isGroup: function () {
@@ -220,6 +247,54 @@ export default {
 		},
 	}),
 	methods: {
+		searchControlKey : function(key){
+			if(key == 'up') this.tobottomsearch()
+			if(key == 'down') this.toupsearch()
+
+		},
+		toupsearch : function(){
+
+			if(!this.searchresults) return 
+
+			var i = this.focusedeventIndex
+
+			if (i <= this.searchresults.length - 2){
+				this.$emit('tosearchevent', this.searchresults[this.focusedeventIndex + 1])
+			}
+
+		},
+		tobottomsearch : function(){
+
+			if(!this.searchresults && this.searchresults.length) return 
+
+			var i = this.focusedeventIndex
+			if (i > 0) this.$emit('tosearchevent', this.searchresults[this.focusedeventIndex - 1])
+		},
+		backfromsearch : function(){
+			if (this.process){
+				this.$router.push("chats?process=" + this.process).catch((e) => {});
+			}
+			else{
+				this.searchactive = false
+				this.searching('')
+			}
+		},
+
+		tosearch : function(){
+			this.searchactive = true
+
+			setTimeout(() => {
+				if(this.$refs.search) this.$refs.search.focus()
+			}, 100)
+		},
+
+		searching : function(str){
+			this.$emit('searching', str)
+
+			if(!str){
+				this.searchactive = false
+			}
+		},
 		checkCallsEnabled: function () {
 			let isEnabled = this.m_chat.currentState.getStateEvents(
 				"m.room.callsEnabled"
