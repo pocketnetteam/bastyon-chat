@@ -24,8 +24,10 @@ export default {
 			loading: false,
 
 			users: [],
+			contacts: [],
 			lists: [
 				{ key: "chats", view: "room", action: "navigateToRoom" },
+				{ key: "contacts", view: "contact", action: "navigateToProfile" },
 				{ key: "other", view: "contact", action: "navigateToProfile" },
 
 				{
@@ -37,7 +39,7 @@ export default {
 			],
 			
 			searchChanged: true,
-			searchEvents: {}
+			searchHandlers: {}
 		};
 	},
 
@@ -64,13 +66,11 @@ export default {
 			return object;
 		},
 
-		async filteredMessages() {
+		filteredMessages() {
 			let chats = this.chats;
 
 			if (this.matches?.value) {
-				console.log(this.matches.all, this.chats)
-				
-				return _.filter(
+				/*return _.filter(
 					_.map(chats, (c) => {
 						var messages = _.filter(c.events, (m) => {
 							const match = (m.event.decrypted || m.event.content).body
@@ -90,7 +90,7 @@ export default {
 					(cm) => {
 						return cm.messages.length;
 					}
-				);
+				);*/
 			}
 
 			return [];
@@ -153,6 +153,17 @@ export default {
 			}
 
 			return chats;
+		},
+
+		filteredContacts() {
+			/*Add my contacts*/
+			this.contacts = _.filter(this.contactsMap, (contact) => {
+				return contact.name
+					.toLowerCase()
+					.includes(this.matches.value.toLowerCase());
+			});
+			
+			return this.contacts;
 		},
 
 		filteredOther() {
@@ -264,77 +275,86 @@ export default {
 		},
 		
 		prepareSearch() {
-			_.each(this.chats, (chat) => {
+			_.each(this.chats, (chat, i) => {
+				if (i !== 11) return;
 				const room = this.core.mtrx.client.getRoom(chat.roomId);
+				console.log(room)
+				return;
 				
 				if (!chat.prepareSearch) {
-					this.searchEvents[chat.roomId] = [];
-					chat.prepareSearch = () => {
-						/*Recursively load all events*/
-						const
-							tl = room.getLiveTimeline(),
-							ts = tl.getTimelineSet(),
-							timeline = new this.core.mtrx.sdk.TimelineWindow(
-								this.core.mtrx.client,
-								ts
-							),
-							onlyText = (e) => {
-								return _.filter(e, f => {
-									return (f.event.decrypted || f.event.content)?.msgtype === 'm.text';
-								});
-							};
-						
-						chat.searchControl = this.core.mtrx.kit.paginateAllEvents({
-							room: room,
-							timeline: timeline,
-							count: 20,
-							offset: true,
-							tick: (e) => {
-								if (e) {
-									this.searchEvents[chat.roomId] = this.searchEvents[chat.roomId].concat(onlyText(e));
-									console.log(e)
+					this.searchHandlers[chat.roomId] = {
+						events: [],
+						prepareSearch: () => {
+							/*Recursively load all events*/
+							const
+								tl = room.getLiveTimeline(),
+								ts = tl.getTimelineSet(),
+								timeline = new this.core.mtrx.sdk.TimelineWindow(
+									this.core.mtrx.client,
+									ts
+								),
+								onlyText = (e) => {
+									return _.filter(e, f => {
+										return (f.event.decrypted || f.event.content)?.msgtype === 'm.text';
+									});
+								};
+							
+							this.searchHandlers[chat.roomId].searchControl = this.core.mtrx.kit.paginateAllEvents({
+								room: room,
+								timeline: timeline,
+								count: 10,
+								offset: true,
+								tick: (e) => {
+									if (e) {
+										this.searchHandlers[chat.roomId].events = this.searchHandlers[chat.roomId].events.concat(onlyText(e));
+									}
+									
+									this.searchHandlers[chat.roomId].search();
 								}
-								
-								chat.search();
-							}
-						});
-					}
-					
-					chat.search = () => {
-						const searchEvents = this.searchEvents[chat.roomId];
-						
-						if (!searchEvents?.length) {
-							return chat.prepareSearch();
-						}
-						
-						if (this.matches.value?.length < 2) {
-							chat.searchControl.pause();
-						} else if (chat.searchControl.isPaused()) {
-							chat.searchControl.resume();
-						}
-						
-						const matches = _.filter(searchEvents, f => {
-							return (f.event?.decrypted || f.event.content)?.body
-								.toLowerCase()
-								.includes(this.matches?.value);
-						});
-						
-						if (matches.length) {
-							chat.searchControl.pause();
-							this.matches.append({
-								chat: chat,
-								match: matches[0] || null
 							});
+						},
+						
+						search: () => {
+							const handler = this.searchHandlers[chat.roomId];
+							
+							if (!handler?.events.length) {
+								return handler.prepareSearch();
+							}
+							
+							if (this.matches.value?.length < 2) {
+								handler.searchControl?.pause();
+							} else if (handler.searchControl?.isPaused()) {
+								handler.searchControl?.resume();
+							}
+							
+							const matches = _.filter(handler.events, f => {
+								return (f.event?.decrypted || f.event.content)?.body
+									.toLowerCase()
+									.includes(this.matches?.value);
+							});
+							
+							if (matches.length) {
+								console.log(matches)
+								handler.searchControl?.pause();
+								this.matches.append({
+									chat: chat,
+									match: matches[0] || null
+								});
+							}
 						}
 					}
 				}
 			});
+		},
+		
+		search() {
+			_.each(this.chats, (chat) => this.searchHandlers[chat.roomId]?.search());
 		}
 	},
 
 	watch: {
 		"matches.value": function () {
-			_.each(this.chats, (chat) => chat.search());
+			this.search();
 			this.searchChanged = true;
 			this.users = [];
 		},
@@ -342,5 +362,6 @@ export default {
 	
 	mounted() {
 		this.prepareSearch();
+		if (this.matches.value) this.search();
 	}
 };

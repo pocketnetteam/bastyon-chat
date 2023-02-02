@@ -339,7 +339,7 @@ class MTRXKIT {
 				if (!args.timeline._eventCount) {
 					loading = true;
 					
-					args.timeline.load()
+					args.timeline.load(null, args.count)
 						.then(() => {
 							return this.getEventsAndDecrypt(args);
 						})
