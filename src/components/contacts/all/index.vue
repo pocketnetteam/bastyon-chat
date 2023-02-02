@@ -35,6 +35,14 @@
 				/>
 			</div>
 		</section>
+
+		<div class="preloaderWrapperLine" v-if="loadedingUsers[search] || processing">
+			<linepreloader />
+		</div>
+
+		<div class="empty" v-if="filteredListsEmpty && !(loadedingUsers[search] || processing)">
+			<span>{{$t(`caption.queryNoResults`)}}: {{search}}</span>
+		</div>
 	</div>
 </template>
 

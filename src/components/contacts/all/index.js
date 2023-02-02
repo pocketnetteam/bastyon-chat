@@ -41,6 +41,7 @@ export default {
 			],
 			processresult : null,
 			searchChanged: true,
+			processing : false
 		};
 	},
 
@@ -50,6 +51,12 @@ export default {
 
 	computed: {
 		...mapState(["contactsMap"]),
+
+		filteredListsEmpty : function(){
+			return _.reduce(this.filteredLists, (m, i) => {
+				return m + i.items.length
+			}, 0) == 0 ? true : false
+		},
 
 		filteredLists: function () {
 			var object = {};
@@ -280,11 +287,9 @@ export default {
 		},
 
 		initSearchProcess(){
-			console.log("HERE", this.search)
 			if (this.search.length > 2){
 
 				if (this.process){
-					console.log("????????")
 					this.process.updateText(this.search)
 					return 
 				}
@@ -305,8 +310,18 @@ export default {
 					}
 				})
 
-				this.process.execute().catch(e => {
+				console.log("PROCESS START")
+
+				this.processing = true
+				this.process.execute().then(() => {
+
+				}).catch(e => {
 					console.error(e)
+				}).finally(() => {
+
+					console.log("PROCESS FINISHED")
+
+					this.processing = false
 				})
 
 			}
@@ -323,6 +338,7 @@ export default {
 			try{
 
 				if (this.search.length > 3) {
+					
 
 					this.loadedingUsers[this.search] = this.core.user.searchContacts(this.search).then((users) => {
 
@@ -331,7 +347,7 @@ export default {
 					}).catch((e) => {
 						console.error(e)
 					}).finally(() => {
-						delete this.loadedingUsers[this.search]
+						this.$delete(this.loadedingUsers, this.search)
 					})
 
 				}
