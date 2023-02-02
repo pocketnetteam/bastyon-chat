@@ -53,9 +53,13 @@ export default {
 			}
 		},
 
-		active: function () {
-			// this.searchText = ''
-		},
+		minimized: {
+			immediate : true,
+			handler : function () {
+				console.log('////')
+				this.globalsearch = ''
+			}
+		}
 		//$route: 'getdata'
 	},
 

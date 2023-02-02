@@ -88,6 +88,10 @@ class Core {
 		this.hiddenInParent = v;
 		this.store.commit("hiddenInParent", v);
 
+
+		if (v)
+			this.mtrx.searchEngine.stopall()
+
 		/*if(!v)
             this.store.commit('wasunhidden', true)*/
 	};

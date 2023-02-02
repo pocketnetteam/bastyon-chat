@@ -310,16 +310,12 @@ export default {
 					}
 				})
 
-				console.log("PROCESS START")
-
 				this.processing = true
 				this.process.execute().then(() => {
 
 				}).catch(e => {
 					console.error(e)
 				}).finally(() => {
-
-					console.log("PROCESS FINISHED")
 
 					this.processing = false
 				})
@@ -337,10 +333,11 @@ export default {
 
 			try{
 
-				if (this.search.length > 3) {
-					
+				var txt = (this.search || "").replace(/[^a-z0-9]/g,'')
 
-					this.loadedingUsers[this.search] = this.core.user.searchContacts(this.search).then((users) => {
+				if (txt.length > 3) {
+
+					this.loadedingUsers[this.search] = this.core.user.searchContacts(txt).then((users) => {
 
 						this.$set(this.loadedUsers, this.search, users)
 

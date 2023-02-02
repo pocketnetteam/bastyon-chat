@@ -6,8 +6,10 @@ var Process = function(text, chats, parent /* SearchEngine */){
 
     var timelines = {}
     var events = {}
+    var allevents = {}
     var results = {}
     var stopped = false
+    var started = 0
 
     self.id = f.makeid()
     self.text = text
@@ -24,6 +26,7 @@ var Process = function(text, chats, parent /* SearchEngine */){
         events = {}
         results = {}
         self.clbks = {}
+        allevents = {}
     }
 
     self.stop = function(){
@@ -32,11 +35,13 @@ var Process = function(text, chats, parent /* SearchEngine */){
 
     var processStopped = function(){
 
+        if(performance.now() - started > 45000) return true
+
         var canexecute = _.find(timelines, (tl) => {
             return !tl.error && !tl.finished
         }) || false
 
-        return !canexecute || stopped || self.stopcase ? self.stopcase({timelines, events, results}) : false
+        return !canexecute || stopped || (self.stopcase ? self.stopcase({timelines, events, results}) : false)
     }
 
     var stepInChats = function(){
@@ -59,6 +64,13 @@ var Process = function(text, chats, parent /* SearchEngine */){
 
                 return Promise.resolve()
             })
+
+
+        }).then(() => {
+
+            if(processStopped()) return Promise.reject('stopped')
+
+            return stepInChats()
         })
     }
 
@@ -93,7 +105,7 @@ var Process = function(text, chats, parent /* SearchEngine */){
 
         return new Promise((resolve, reject) => {
 
-            if(tl.loaded){
+            if (tl.loaded){
                 return resolve(null)
             }
 
@@ -108,6 +120,7 @@ var Process = function(text, chats, parent /* SearchEngine */){
 
             }).catch(error => {
                 tl.error = error
+                console.error(error)
                 return Promise.reject(error)
             }).finally(() => {
                 delete tl.loadingPromise
@@ -118,18 +131,24 @@ var Process = function(text, chats, parent /* SearchEngine */){
             return tl.loadingPromise.then().then(() => {
                 resolve(true)
             }).catch(reject)
+
         }).then((first) => {
 
             if(processStopped()) return Promise.reject('stopped')
 
+
             if(!first){
-                if(tl.line.canPaginate('b')){
+
+                console.log("tl.line.canPaginate('b')", tl.line.canPaginate('b'), chat.roomId, tl.line._eventCount)
+
+                if(!tl.line.canPaginate('b')){
                     tl.finished = true
 
                     return Promise.reject('finished')
                 }
                 else{
-                    return tl.line.paginate('b', 20)
+                    
+                    return tl.line.paginate('b', 80)
                 }
             }
 
@@ -138,17 +157,43 @@ var Process = function(text, chats, parent /* SearchEngine */){
 
             if(processStopped()) return Promise.reject('stopped')
 
-            var curevents = _.filter(tl.line.getEvents(), (e) => {
+            var curallevents = tl.line.getEvents()
+
+            var diff = _.filter(curallevents, (e) => {
+                return !_.find(allevents[chat.roomId], (e2) => {
+                    return e.event.event_id == e2.event.event_id
+                })
+            })
+
+            console.log('diff.length', diff.length)
+
+            if (!curallevents.length || (allevents[chat.roomId] && !diff.length)){
+                tl.finished = true
+
+                return Promise.reject('finished')
+            }
+
+            allevents[chat.roomId] = curallevents
+
+            var curevents = _.filter(curallevents, (e) => {
                 return e.event.type == 'm.room.message'
             })
 
             if(!events[chat.roomId]) events[chat.roomId] = []
 
+            console.log('curevents.length 1', curevents.length)
+
             curevents = _.filter(curevents, (e) => {
                 return !_.find(events[chat.roomId], (e2) => {
-                    return e.event.event_id != e2.event.event_id
+                    return e.event.event_id == e2.event.event_id
                 })
             })
+            console.log('curevents.length 2', curevents.length)
+
+
+            
+
+            
 
             events[chat.roomId] = events[chat.roomId].concat(curevents)
 
@@ -252,7 +297,11 @@ var Process = function(text, chats, parent /* SearchEngine */){
 
         emit()
 
-        process = stepInChats().finally(() => {
+        started = performance.now()
+
+        process = stepInChats().catch(e => {
+            console.error(e)
+        }).finally(() => {
             process = null
         })
 
@@ -318,6 +367,13 @@ var SearchEngine = function (mtrx) {
 
     self.getprocess = function(id){
         return processes[id]
+    }
+
+    self.stopall = function(){
+        console.log('stopall')
+        _.each(processes, (process) => {
+            process.stop()
+        })
     }
 
     self.destroy = function(){
