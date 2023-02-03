@@ -1,7 +1,7 @@
 <template>
 	<div
 		class="event"
-    :class="{ readyToRender, my }"
+		:class="{ readyToRender, my }"
 		ref="msgElement"
 		v-if="
 			isVisible && !event.localRedactionEvent() && !event.getRedactionEvent() && !removed
@@ -145,7 +145,7 @@ export default {
 
 	props: {
 		event: Object,
-    eventIndex: Number,
+		eventIndex: Number,
 		prevevent: Object,
 		preview: Boolean,
 		withImage: Boolean,
@@ -172,7 +172,7 @@ export default {
 			},
 		},
 
-    isVisible: Boolean
+		isVisible: Boolean
 	},
 
 	computed: {
@@ -259,7 +259,7 @@ export default {
 	},
 
 	mounted: function () {
-    this.$emit("mounted", this.eventIndex, this.$el);
+		this.$emit("mounted", this.eventIndex, this.$el);
 	},
 
 	beforeMount: function () {
