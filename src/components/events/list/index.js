@@ -317,7 +317,7 @@ export default {
 					};
 				
 				this.intersection = new IntersectionObserver(callback, {
-					root: document.querySelector('.eventsflex'),
+					root: this.$refs.container,
 					rootMargin: '0px',
 					threshold: 0.01
 				});
