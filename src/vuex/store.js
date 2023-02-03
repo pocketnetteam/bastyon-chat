@@ -277,6 +277,8 @@ var store = new Vuex.Store({
 				state.active = false;
 			}
 
+			console.log("??????????????????")
+
 			state.minimized = true;
 		},
 
@@ -309,6 +311,10 @@ var store = new Vuex.Store({
 
 		init(state) {
 			mex.theme(state, localStorage.getItem("theme") || "black");
+		},
+
+		SEARCH_BY_MESSAGES(state, process){
+
 		},
 
 		ALL_NOTIFICATIONS_COUNT(state, rooms) {

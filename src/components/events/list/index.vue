@@ -30,6 +30,7 @@
 
 				<div
 					class="eventWrapper"
+					:class="{fromsearch : eventinsearchresult(event)}"
 					v-for="(event, i) in events"
 					:key="event.event.event_id"
 					:event="event.event.event_id"
@@ -55,6 +56,8 @@
 						@mounted="emounted"
 						@menuIsVisible="menuIsVisibleHandler"
 						@toreference="toreference"
+
+						
 					/>
 				</div>
 			</div>

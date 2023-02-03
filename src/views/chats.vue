@@ -6,7 +6,7 @@
 		<topheader class="topheader" :share="share" @newchat="newchat" />
 		<maincontent ref="maincontent" :rbackexp="true">
 			<template v-slot:content>
-				<list :share="share" @scrolltop="scrolltop" />
+				<list :share="share" @scrolltop="scrolltop" :processid="processid"/>
 				<transition name="fademodal">
 					<modal @close="closeNewChat" v-if="newChat && !hiddenInParent">
 						<template v-slot:header>{{ $t("caption.newChat") }}</template>
@@ -78,6 +78,10 @@ export default {
 		mobile: (state) => state.mobile,
 		hiddenInParent: (state) => state.hiddenInParent,
 		joinroom: (state) => state.joinroom,
+
+		processid(){
+			return this.$route.query.process;
+		},
 	}),
 
 	methods: {

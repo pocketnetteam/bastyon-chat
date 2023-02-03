@@ -345,8 +345,6 @@ var PcryptoRoom = async function (pcrypto, chat, { ls, lse }) {
 
 			if(!lsspromises[ek]) {
 
-				if (users)
-					console.log("-CALC" + k, orderedIdsHash(users), users, block)
 
 				lsspromises[ek] = ls.get(ek)
 					.then((keys) => {
@@ -479,7 +477,6 @@ var PcryptoRoom = async function (pcrypto, chat, { ls, lse }) {
 
 		aeskeys: function (time, block, usersIds, v) {
 
-			console.log("CALCULATION", time, block, usersIds, v)
 
 			var us = eaa.userspublics(time, block, usersIds, v);
 			var c = eaa.current(time, block, usersIds, v);

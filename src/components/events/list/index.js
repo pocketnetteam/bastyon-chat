@@ -9,6 +9,7 @@ export default {
 		chat: Object,
 		loading: Boolean,
 		scrollType: "",
+		searchresults : null,
 		error: [Object, Error, String],
 		selectedMessages: [],
 	},
@@ -136,6 +137,16 @@ export default {
 	this.countshow = 1;*/
 	},
 	methods: {
+		eventinsearchresult : function(event){
+
+			if(this.searchresults){
+				return _.find(this.searchresults, (e) => {
+					return e.event.event_id == event.event.event_id
+				})
+			}
+
+			return false
+		},
 		scrollToReadMessages: function () {
 			/*if(this.notificationCount > 0) {
 		const elem = document.getElementById("eventWrapper_" + (this.notificationCount + 1));

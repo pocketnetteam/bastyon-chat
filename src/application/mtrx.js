@@ -8,6 +8,7 @@ import FingerprintJS from "@fingerprintjs/fingerprintjs";
 import qs from "qs";
 import fileSaver from "file-saver";
 import ChatStorage from "./chatstorage";
+import SearchEngine from "./searchEngine";
 
 var axios = require("axios");
 
@@ -31,6 +32,8 @@ class MTRX {
 		this.customrequest = true;
 
 		this.devicekey = "m8_device";
+
+		this.searchEngine = new SearchEngine(this)
 	}
 
 	async setCredentials() {
@@ -509,6 +512,9 @@ class MTRX {
 	}
 
 	destroy() {
+
+		this.searchEngine.destroy()
+		
 		if (this.client) {
 			// Before client is stopped, delete the pusher if needed
 			if (window.cordova) {
@@ -521,6 +527,8 @@ class MTRX {
 		this.chatsready = false;
 		this.ready = false;
 		this.error = false;
+
+		
 	}
 
 	// Try to delete the current pusher if needed

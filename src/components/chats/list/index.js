@@ -15,6 +15,7 @@ export default {
 			revealed: {},
 			lastEventDescription: "",
 			blocked: false,
+			globalsearch : ''
 		};
 	},
 	components: {
@@ -31,8 +32,18 @@ export default {
 			type: String,
 			default: () => {},
 		},
+
+		processid : ''
 	},
-	created: () => {},
+
+	beforeMount: function() {
+
+		if (this.processid){
+			var p = this.core.mtrx.searchEngine.getprocess(this.processid)
+
+			if (p && p.text) this.globalsearch = p.text
+		}
+	},
 
 	watch: {
 		topchatid: function () {
@@ -41,9 +52,13 @@ export default {
 			}
 		},
 
-		active: function () {
-			// this.searchText = ''
-		},
+		minimized: {
+			immediate : true,
+			handler : function () {
+				console.log('////')
+				this.globalsearch = ''
+			}
+		}
 		//$route: 'getdata'
 	},
 
@@ -351,6 +366,13 @@ export default {
 		itemToggle(item) {
 			this[item] = this[item] ? null : 2;
 		},
+
+		searchall : function(text){
+			this.globalsearch = (text || "").toLowerCase()
+
+			console.log('searchall', text, this.globalsearch)
+
+		}
 	},
 	mounted() {
 		// ideally should be in some global handler/store
