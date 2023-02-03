@@ -37,12 +37,14 @@
 				>
 					<eventsEvent
 						:event="event"
+            :eventIndex="i"
 						:prevevent="events[i + 1]"
 						:galleryData="events"
 						:chat="chat"
 						:timeline="timeline"
 						:multiSelect="multiSelect"
 						:selectedMessages="selectedMessages"
+            :isVisible="event.isVisible !== false"
 						@showMultiSelect="showMultiSelect"
 						@selectMessage="selectMessage"
 						@removeMessage="removeMessage"

@@ -14,7 +14,7 @@ export default {
 		roomInfo: false,
 		aboutUser: false,
 	},
-	inject: ["isChatEncrypted", "matches"],
+	inject: ["isChatEncrypted"],
 	components: {
 		chatName,
 		chatIcon,
@@ -218,6 +218,8 @@ export default {
 				? this.donationAmount
 				: this.donationAmount + this.calculatedFees;
 		},
+		
+		matches: (state) => state.matches
 	}),
 	methods: {
 		checkCallsEnabled: function () {

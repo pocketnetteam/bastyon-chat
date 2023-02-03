@@ -1,7 +1,7 @@
-<template>
+<template v-if="isVisible">
 	<div
 		class="event"
-		:class="{ readyToRender, my }"
+		:class="{ readyToRender, my, unloaded: !isVisible }"
 		ref="msgElement"
 		v-if="
 			!event.localRedactionEvent() && !event.getRedactionEvent() && !removed
@@ -145,6 +145,7 @@ export default {
 
 	props: {
 		event: Object,
+    eventIndex: Number,
 		prevevent: Object,
 		preview: Boolean,
 		withImage: Boolean,
@@ -170,6 +171,8 @@ export default {
 				return [];
 			},
 		},
+
+    isVisible: Boolean
 	},
 
 	computed: {
@@ -230,7 +233,7 @@ export default {
 
 			return this.$store?.state.users[this.$f.getmatrixid(this.event.getSender())] || {}
 
-		
+
 		},
 
 		///readreciepts
@@ -245,7 +248,7 @@ export default {
 
 		my: function () {
 			return this.userinfo.id === this.core.user.userinfo?.id;
-		},
+		}
 	},
 
 	beforeDestroy: function () {
@@ -256,7 +259,7 @@ export default {
 	},
 
 	mounted: function () {
-		this.$emit("mounted");
+		this.$emit("mounted", this.eventIndex, this.$el);
 	},
 
 	beforeMount: function () {
@@ -269,7 +272,7 @@ export default {
 	},
 
 	watch: {
-		
+
 		event: {
 			immediate: true,
 			handler: function () {
@@ -305,6 +308,12 @@ export default {
 				}
 			},
 		},
+
+    readyToRender(val) {
+      if (val) {
+        this.$el.parentNode.style = `--min-height: ${ this.$el.offsetHeight }px`;
+      }
+    }
 	},
 
 	methods: {
@@ -326,7 +335,7 @@ export default {
 				rendered;
 			}, 20);
 		},
-	
+
 		relations() {
 			if (this.timeline) {
 				var ts = this.timeline._timelineSet;
@@ -392,7 +401,7 @@ export default {
 
 			this.core.mtrx
 				.downloadFile(this.chat, this.event).then((r) => {
-					
+
 					this.downloaded = true;
 
 					this.$store.commit("icon", {
@@ -412,7 +421,7 @@ export default {
 					return Promise.resolve(e);
 				}).finally(() => {
 					this.downloading = false;
-					
+
 				})
 		},
 

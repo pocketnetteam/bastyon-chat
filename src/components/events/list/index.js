@@ -24,6 +24,7 @@ export default {
 			voiceMessageQueue: [],
 			countshow: 0,
 			multiSelect: false,
+			intersection: null
 		};
 	},
 	provide() {
@@ -51,7 +52,16 @@ export default {
 	},
 
 	watch: {
-		events: function () { },
+		events: function (events) {
+			/*const wrp = document.querySelectorAll('.eventWrapper');
+			
+			events.forEach((event, i) => {
+				if (wrp[i]) {
+					wrp[i].index = i;
+					this.intersect(wrp[i]);
+				}
+			});*/
+		},
 
 		selectedMessages: {
 			immediate: true,
@@ -71,7 +81,7 @@ export default {
 			) {
 				this.scrollToNew();
 			}
-		},
+		}
 	},
 	computed: {
 		sortedVoiceMessageQueue() {
@@ -168,10 +178,13 @@ export default {
 			this.dscroll();
 		},
 
-		emounted: function () {
+		emounted: function (eventIndex, el) {
 			this.$nextTick(function () {
 				this.scrollCorrection();
 				this.dupdated();
+				
+				el.parentNode.eventIndex = eventIndex;
+				this.intersect(el.parentNode);
 			});
 		},
 		scroll: function () {
@@ -287,5 +300,46 @@ export default {
 
 			this.$emit("toreference", reference);
 		},
+		
+		intersectionObserver() {
+			if (
+				typeof IntersectionObserver !== 'undefined' &&
+				!this.intersection
+			) {
+				const
+					callback = (entries) => {
+						entries.forEach(entry => {
+							const
+								el = entry.target/*,
+								isVisible =	(entry.boundingClientRect?.top + entry.boundingClientRect?.height) >= entry.rootBounds?.top &&
+														(entry.boundingClientRect?.bottom - entry.boundingClientRect?.height) <= entry.rootBounds?.bottom*/;
+							
+							/*if (
+								!entry.isIntersecting && el.children[0]
+							) {
+								el.style.height = `${el.children[0]?.offsetHeight}px`
+							}*/
+							
+							this.events[el.eventIndex].isVisible = entry.isIntersecting;
+							
+							// console.log(el, entry)
+						});
+					};
+				
+				this.intersection = new IntersectionObserver(callback, {
+					root: document.querySelector('.eventsflex'),
+					rootMargin: '0px',
+					threshold: 0.01
+				});
+			}
+		},
+		
+		intersect(el) {
+			if (el) this.intersection.observe(el);
+		}
 	},
+	
+	mounted() {
+		this.intersectionObserver();
+	}
 };
