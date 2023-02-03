@@ -309,20 +309,8 @@ export default {
 				const
 					callback = (entries) => {
 						entries.forEach(entry => {
-							const
-								el = entry.target/*,
-								isVisible =	(entry.boundingClientRect?.top + entry.boundingClientRect?.height) >= entry.rootBounds?.top &&
-														(entry.boundingClientRect?.bottom - entry.boundingClientRect?.height) <= entry.rootBounds?.bottom*/;
-							
-							/*if (
-								!entry.isIntersecting && el.children[0]
-							) {
-								el.style.height = `${el.children[0]?.offsetHeight}px`
-							}*/
-							
+							const el = entry.target;
 							this.events[el.eventIndex].isVisible = entry.isIntersecting;
-							
-							// console.log(el, entry)
 						});
 					};
 				
