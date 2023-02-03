@@ -261,6 +261,10 @@ export default {
 			if (i <= this.searchresults.length - 2){
 				this.$emit('tosearchevent', this.searchresults[this.focusedeventIndex + 1])
 			}
+			else{
+				this.$emit('tosearchevent', this.searchresults[0])
+
+			}
 
 		},
 		tobottomsearch : function(){
@@ -269,6 +273,7 @@ export default {
 
 			var i = this.focusedeventIndex
 			if (i > 0) this.$emit('tosearchevent', this.searchresults[this.focusedeventIndex - 1])
+			else this.$emit('tosearchevent', this.searchresults[this.searchresults.length - 1])
 		},
 		backfromsearch : function(){
 			if (this.process){

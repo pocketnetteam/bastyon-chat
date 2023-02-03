@@ -18,6 +18,7 @@ export default {
 			default: "",
 			type: String,
 		},
+		
 	},
 
 	data: function () {
@@ -50,7 +51,7 @@ export default {
 	},
 
 	computed: {
-		...mapState(["contactsMap"]),
+		...mapState(["contactsMap", "share"]),
 
 		filteredListsEmpty : function(){
 			return _.reduce(this.filteredLists, (m, i) => {
@@ -172,6 +173,8 @@ export default {
 		},
 
 		filteredContacts() {
+
+			if(this.share) return []
 			/*Add my contacts*/
 			this.contacts = _.filter(this.contactsMap, (contact) => {
 				return contact.name
@@ -238,6 +241,8 @@ export default {
 						manual: true,
 					});
 
+					console.log("_share", _share)
+
 					this.core.mtrx
 						.shareInChat(chat.roomId, _share)
 						.then((r) => {
@@ -287,6 +292,9 @@ export default {
 		},
 
 		initSearchProcess(){
+
+			if (this.share) return
+
 			if (this.search.length > 2){
 
 				if (this.process){
@@ -330,6 +338,8 @@ export default {
 		},
 
 		loadNewUsers(){
+
+			if(this.share) return
 
 			try{
 

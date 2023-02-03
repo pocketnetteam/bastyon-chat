@@ -341,11 +341,11 @@ export default {
 
 		toggleUser: function (id) {
 			if (!this.selected[id]) {
-				if (this.selectedlength >= 11) {
+				if (this.selectedlength >= 10) {
 					this.$store.commit("icon", {
 						icon: "warning",
 						message:
-							"At the moment, you can add no more than 12 users to the chat",
+							"At the moment, you can add no more than 10 users to the chat",
 					});
 
 					return;

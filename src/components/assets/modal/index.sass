@@ -105,7 +105,10 @@
 
         .modal-body
             padding: 2 * $r
-            padding-bottom: 10 * $r
+            padding-bottom: calc(var(--keyboardheight, 0))
+
+            >div
+                padding-bottom: 4 * $r
 
     &.withoutheader
         .modal-header

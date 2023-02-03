@@ -41,7 +41,7 @@ var store = new Vuex.Store({
 		pocketnet: "",
 		mobile: "",
 		voiceMessagesEnabled: "",
-		isCallsEnabled: "",
+		isCallsEnabled: false,
 		currentPlayingVoiceMessage: null,
 		current_user: {},
 		minimized: true,
@@ -282,7 +282,7 @@ var store = new Vuex.Store({
 			state.voiceMessagesEnabled = voiceMessagesEnabled;
 		},
 		setCallsEnabled(state, isCallsEnabled) {
-			state.isCallsEnabled = isCallsEnabled;
+			state.isCallsEnabled = isCallsEnabled == 'true' ? true : false;
 		},
 		ls(state) {
 			if (typeof localStorage.getItem("pinchat") != "undefined")

@@ -637,10 +637,6 @@ export default {
 
 		scrollToEvent: function(reference){
 
-			console.log('scrollToEvent', reference.event.event_id)
-
-			
-
 			f.pretry(() => {
 				return (!this.loading && this.timeline && !this["p_b"])
 			}).then(() => {

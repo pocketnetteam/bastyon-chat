@@ -83,8 +83,8 @@
 							<span class="current-match"
 								>{{ searchresults.length - (focusedeventIndex) }}/{{ searchresults.length }}</span
 							>
-							<i class="prev-match fas fa-chevron-down" @click="tobottomsearch"></i>
-							<i class="next-match fas fa-chevron-up" @click="toupsearch"></i>
+							<i class="prev-match fas fa-chevron-up" @click="tobottomsearch"></i>
+							<i class="next-match fas fa-chevron-down" @click="toupsearch"></i>
 						</div>
 
 						<div class="iconWrapper" v-if="search" @click="() => {searching('')}">
