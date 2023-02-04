@@ -45,7 +45,7 @@
 						:timeline="timeline"
 						:multiSelect="multiSelect"
 						:selectedMessages="selectedMessages"
-						:isVisible="event.isVisible !== false"
+						:isVisible="visibility[i] !== false"
 						@showMultiSelect="showMultiSelect"
 						@selectMessage="selectMessage"
 						@removeMessage="removeMessage"

@@ -26,7 +26,8 @@ export default {
 			voiceMessageQueue: [],
 			countshow: 0,
 			multiSelect: false,
-			intersection: null
+			intersection: null,
+			visibility : {}
 		};
 	},
 	provide() {
@@ -312,13 +313,15 @@ export default {
 					callback = (entries) => {
 						entries.forEach(entry => {
 							const el = entry.target;
-							this.events[el.eventIndex].isVisible = entry.isIntersecting;
+							this.$set(this.visibility, el.eventIndex, entry.isIntersecting)
+							//this.visibily[this.events[el.eventIndex]] = entry.isIntersecting;
+							//this.events[el.eventIndex].isVisible = entry.isIntersecting;
 						});
 					};
 				
 				this.intersection = new IntersectionObserver(callback, {
 					root: this.$refs.container,
-					rootMargin: '0px',
+					rootMargin: '1000px',
 					threshold: 0.01
 				});
 			}
