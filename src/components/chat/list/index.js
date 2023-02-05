@@ -152,7 +152,7 @@ export default {
 				}
 				if (e.event.type === "m.room.request_calls_access") {
 					if (e.event.event_id === lastCallAccess.event.event_id) {
-						if (e.event.content.accepted !== undefined) {
+						if (e.event.content.accepted !== null) {
 							return false;
 						} else {
 							if (this.core.mtrx.me(e.event.sender)) {

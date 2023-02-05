@@ -43,23 +43,22 @@
 					v-if="isCallsActive && !isGroup"
 					class="call btn iconbutton"
 					:class="
-						checkCallsEnabled() === 'wait' || wait
+						checkCallsEnabled === 'wait' || wait
 							? 'wait'
-							: checkCallsEnabled()
+							: checkCallsEnabled
 							? ''
 							: 'disabled'
 					"
 					:title="
-						checkCallsEnabled() === 'wait' || wait
+						checkCallsEnabled === 'wait' || wait
 							? $t('caption.wait')
-							: checkCallsEnabled()
+							: checkCallsEnabled
 							? ''
 							: $t('caption.disabled')
 					"
 					@click="bcCall"
 				>
 					<i class="fas fa-video"></i>
-          			{{lastEnabled? '': ''}}
 				</div>
 			</template>
 
