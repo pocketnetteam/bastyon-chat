@@ -197,6 +197,23 @@ export default {
 		},
 		callsEnabled: (state) => state.isCallsEnabled,
 
+		checkCallsEnabled: function () {
+			if (
+				this.$store.state.ChatStatuses[this.m_chat.roomId]?.enabled
+			) {
+				this.wait = false;
+				return true;
+			}else if (
+				this.$store.state.ChatStatuses[this.m_chat.roomId]?.isWaiting
+			) {
+				return "wait";
+			} else {
+				this.wait = false;
+				return false;
+			}
+		},
+
+
 		isGroup: function () {
 			return this.m_chat?.name.slice(0, 1) === "@";
 		},
@@ -204,12 +221,6 @@ export default {
 		auth: (state) => state.auth,
 
 		isCallsActive: (state) => state.isCallsActive,
-
-		lastEnabled: function() {
-			let chat = this.core.mtrx.client.getRoom(this.chat.roomId)
-			let res = chat.timeline.filter(i => i.event.type === 'm.room.callsEnabled').pop()?.event.content.enabled
-			return res
-		},
 
 		m_chat: function () {
 			if (this.chat && this.chat.roomId) {
@@ -300,37 +311,9 @@ export default {
 				this.searchactive = false
 			}
 		},
-		checkCallsEnabled: function () {
-			let isEnabled = this.m_chat.currentState.getStateEvents(
-				"m.room.callsEnabled"
-			);
-			let hasAccess = this.m_chat.currentState.getStateEvents(
-				"m.room.request_calls_access"
-			);
-			if (
-				isEnabled.find(
-					(e) =>
-						!this.core.mtrx.me(e?.event?.sender) &&
-						e?.event?.sender.split(":")[0].replace("@", "") ===
-							e?.event?.state_key
-				)?.event?.content?.enabled
-			) {
-				this.wait = false;
-				return true;
-			}
-			if (
-				hasAccess.find((e) => this.core.mtrx.me(e?.event?.sender))?.event &&
-				hasAccess.find((e) => this.core.mtrx.me(e?.event?.sender))?.event
-					?.content?.accepted === undefined
-			) {
-				return "wait";
-			} else {
-				this.wait = false;
-				return false;
-			}
-		},
+
 		bcCall: function () {
-			if (!this.checkCallsEnabled()) {
+			if (!this.checkCallsEnabled) {
 				this.$dialog
 					.confirm(this.$t("caption.request"), {
 						okText: this.$t("yes"),
@@ -349,7 +332,7 @@ export default {
 					});
 
 				return;
-			} else if (this.checkCallsEnabled() === "wait") {
+			} else if (this.checkCallsEnabled === "wait") {
 				return;
 			}
 			let local = document.querySelector("body");
@@ -371,7 +354,8 @@ export default {
 		requestCallsAccess() {
 			this.core.mtrx.client.sendStateEvent(
 				this.m_chat.roomId,
-				"m.room.request_calls_access"
+				"m.room.request_calls_access",
+				{ accepted: null }
 			);
 		},
 
