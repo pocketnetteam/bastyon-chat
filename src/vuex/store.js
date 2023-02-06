@@ -77,6 +77,7 @@ var store = new Vuex.Store({
 		pkoindisabled: false,
 		isCallsActive: null,
 		readreciepts : {},
+		ChatStatuses : {}
 		//share : {url : 'https://yandex.ru/'} //null
 	},
 	getters: {
@@ -92,6 +93,10 @@ var store = new Vuex.Store({
 		},
 	},
 	mutations: {
+
+		SET_CHAT_STATUSES(state, payload) {
+			state.ChatStatuses = {...state.ChatStatuses , [payload.roomId]: {...state.ChatStatuses[payload.roomId],...payload}}
+		},
 		SET_CALL(state, isActive) {
 			state.isCallsActive = isActive;
 		},
@@ -774,7 +779,7 @@ var store = new Vuex.Store({
 					}
 
 					if (e.event.type === "m.room.request_calls_access") {
-						if (e.event.content.accepted !== undefined) {
+						if (e.event.content.accepted !== null) {
 							return false;
 						} else {
 							if (store._vm.core.mtrx.me(e.event.sender)) {
@@ -851,6 +856,49 @@ var store = new Vuex.Store({
 				}
 				else{
 					events[chat.roomId].timeline = []
+				}
+
+
+				let isCallsEnabled = chat.currentState.getStateEvents(
+					"m.room.callsEnabled"
+				);
+
+
+				let ev = chat.currentState.getStateEvents(
+					"m.room.request_calls_access"
+				).find((e) => store._vm.core.mtrx.me(e?.event?.sender))
+
+				if (ev) {
+					if (ev?.event?.content?.accepted === null) {
+						commit("SET_CHAT_STATUSES", {
+							roomId: chat.roomId,
+							isWaiting: true
+						})
+					} else {
+						commit("SET_CHAT_STATUSES", {
+							roomId: chat.roomId,
+							isWaiting: false
+						})
+					}
+				} else {
+						commit("SET_CHAT_STATUSES", {
+							roomId: chat.roomId,
+							isWaiting: false
+						})
+				}
+
+
+				if (isCallsEnabled.length) {
+					commit("SET_CHAT_STATUSES", {
+						roomId: chat.roomId,
+						enabled: isCallsEnabled.find(
+							(e) =>
+								!store._vm.core.mtrx.me(e?.event?.sender) &&
+								e?.event?.sender.split(":")[0].replace("@", "") ===
+								e?.event?.state_key
+						)?.event?.content?.enabled,
+
+					})
 				}
 
 			});
