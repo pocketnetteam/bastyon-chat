@@ -15,7 +15,6 @@ export default {
 		searchresults : Array
 
 	},
-	inject: ["isChatEncrypted"],
 	components: {
 		list,
 		chatInput: () => import("@/components/chat/input/index.vue"),
@@ -53,6 +52,9 @@ export default {
 	created() { },
 
 	mounted() {
+
+		console.log("CHAT MOUNTED", this)
+
 		this.getuserinfo();
 		this.$store.commit("active", true);
 		this.$store.commit("blockactive", { value: true, item: "chat" });
@@ -114,14 +116,7 @@ export default {
 					this.$store.commit("SET_LAST_ROOM", this.chat.roomId);
 				} else this.$store.commit("SET_CURRENT_ROOM", false);
 			},
-		},
-		encrypted: {
-			immediate: true,
-			handler: function (state) {
-				if (typeof this.isChatEncrypted.state === "function")
-					this.isChatEncrypted.state(state);
-			},
-		},
+		}
 	},
 	computed: mapState({
 		pocketnet: (state) => state.pocketnet,

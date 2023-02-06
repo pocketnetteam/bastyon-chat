@@ -6,6 +6,7 @@ import Pcrypto from "./pcrypto.js";
 import listeners from "./listeners";
 import f from "./functions";
 import Media from "./media";
+import Exporter from "./exporter";
 /*
 import pcm from '@/application/utils/pcm.js'
 let Mp3 = require('js-mp3');
@@ -77,6 +78,7 @@ class Core {
 
 		this.media = new Media();
 		this.audioContext = null;
+		this.exporter = new Exporter(this)
 	}
 
 	hideOptimization = function (v) {
@@ -367,6 +369,10 @@ class Core {
 			.then(() => {
 				return Promise.resolve();
 			});
+	};
+
+	renderChatToElement = function(element, roomid){
+		return this.exporter.chat(element, roomid)
 	};
 
 	joinRoom(roomid) {
