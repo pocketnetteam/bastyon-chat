@@ -1,3 +1,4 @@
+import _ from 'underscore'
 import { mapState } from "vuex";
 import f from "@/application/functions";
 
@@ -312,10 +313,10 @@ export default {
 				const
 					callback = (entries) => {
 						entries.forEach(entry => {
-							const el = entry.target;
-							this.$set(this.visibility, el.eventIndex, entry.isIntersecting)
-							//this.visibily[this.events[el.eventIndex]] = entry.isIntersecting;
-							//this.events[el.eventIndex].isVisible = entry.isIntersecting;
+							_.debounce(() => {
+								const el = entry.target;
+								this.$set(this.visibility, el.eventIndex, entry.isIntersecting);
+							}, 200);
 						});
 					};
 				

@@ -309,10 +309,10 @@ export default {
 			},
 		},
 
-		readyToRender(val) {
-			if (val) {
-				this.$el.parentNode.style = `--min-height: ${ this.$el.offsetHeight }px`;
-			}
+		readyToRender() {
+			this.$nextTick(() => {
+        this.$el.parentNode.style = `--min-height: ${ this.$el.offsetHeight || this.$el.parentNode.offsetHeight }px`;
+      });
 		}
 	},
 
