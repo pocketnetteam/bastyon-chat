@@ -488,6 +488,10 @@ export default {
 				this.setmenu();
 			}, 200);
 		},
+		
+		dropDownContext: function (e) {
+			if (!e?.ctrlKey) e.preventDefault();
+		},
 
 		setmenu: function () {
 			this.core.menu({
@@ -514,7 +518,7 @@ export default {
 				}
 
 			}
-				
+			
 
 			if (this.file) {
 				sharing.download = [{

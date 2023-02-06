@@ -1,9 +1,10 @@
 <template>
 	<div class="eventsMessage">
-	
-		
+
+
 		<div
 			v-touch:touchhold="dropDownMenuShow"
+			@contextmenu="dropDownContext"
 			:class="{
 				showmeta: showmeta,
 				my,
@@ -243,7 +244,7 @@
 						(content.msgtype === 'm.image' && imageUrl) ||
 						(content.msgtype === 'm.audio' && audioUrl))
 				"
-			>	
+			>
 				<div class="fromCaption">
 					<i class="fas fa-share-alt"></i>
 					<span>{{ userinfo.name }}: {{ $t("caption.messagefrom").toLowerCase() }} </span>
