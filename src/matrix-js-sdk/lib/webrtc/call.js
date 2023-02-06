@@ -365,7 +365,6 @@ class MatrixCall extends _events.EventEmitter {
     });
     (0, _defineProperty2.default)(this, "onIceGatheringStateChange", event => {
       _logger.logger.debug("ice gathering state changed to " + this.peerConn.iceGatheringState);
-      console.log("ice gathering state changed to " + this.peerConn.iceGatheringState);
       if (this.peerConn.iceGatheringState === 'complete' && !this.sentEndOfCandidates) {
         // If we didn't get an empty-string candidate to signal the end of candidates,
         // create one ourselves now gathering has finished.
@@ -500,6 +499,9 @@ class MatrixCall extends _events.EventEmitter {
       if (this.peerConn.iceConnectionState == 'connected') {
         this.setState(CallState.Connected);
       } else if (this.peerConn.iceConnectionState == 'disconnected') {
+        console.log('disconnected')
+        this.hangup(CallErrorCode.IceFailed, false);
+      } else if (this.peerConn.iceConnectionState == 'failed') {
         console.log('failed')
         this.hangup(CallErrorCode.IceFailed, false);
       }
@@ -1764,7 +1766,7 @@ class MatrixCall extends _events.EventEmitter {
     const bufferedCands = this.remoteCandidateBuffer.get(this.opponentPartyId);
 
     if (bufferedCands) {
-      _logger.logger.info(`Adding ${bufferedCands.length} buffered candidates for opponent ${this.opponentPartyId}`);
+      console.log(`Adding ${bufferedCands.length} buffered candidates for opponent ${this.opponentPartyId}`);
 
       await this.addIceCandidates(bufferedCands);
     }
@@ -1781,6 +1783,7 @@ class MatrixCall extends _events.EventEmitter {
       }
 
       _logger.logger.debug("Call " + this.callId + " got remote ICE " + cand.sdpMid + " candidate: " + cand.candidate);
+      console.log(' got remote ICE candidate',cand)
 
       try {
         await this.peerConn.addIceCandidate(cand);
