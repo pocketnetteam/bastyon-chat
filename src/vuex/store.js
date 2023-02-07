@@ -287,7 +287,7 @@ var store = new Vuex.Store({
 			state.voiceMessagesEnabled = voiceMessagesEnabled;
 		},
 		setCallsEnabled(state, isCallsEnabled) {
-			state.isCallsEnabled = isCallsEnabled == 'true' ? true : false;
+			state.isCallsEnabled = isCallsEnabled
 		},
 		ls(state) {
 			if (typeof localStorage.getItem("pinchat") != "undefined")

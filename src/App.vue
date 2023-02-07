@@ -603,7 +603,7 @@ export default {
 		// this.pocketnet = false;
 		// this.mobile = !this.pocketnet;
 		// this.recording = true;
-		// this.iscallsenabled = 'true';
+		// this.iscallsenabled = true;
 
 		this.$store.commit("setCallsEnabled", this.iscallsenabled);
 		this.$store.commit("setPocketnet", this.pocketnet);

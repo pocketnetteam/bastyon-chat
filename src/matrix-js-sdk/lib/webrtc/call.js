@@ -353,7 +353,7 @@ class MatrixCall extends _events.EventEmitter {
     (0, _defineProperty2.default)(this, "gotLocalIceCandidate", event => {
       if (event.candidate) {
         _logger.logger.debug("Call " + this.callId + " got local ICE " + event.candidate.sdpMid + " candidate: " + event.candidate.candidate);
-
+        console.debug('Got local ice', event.candidate)
         if (this.callHasEnded()) return; // As with the offer, note we need to make a copy of this object, not
         // pass the original: that broke in Chrome ~m43.
 
@@ -365,7 +365,6 @@ class MatrixCall extends _events.EventEmitter {
     });
     (0, _defineProperty2.default)(this, "onIceGatheringStateChange", event => {
       _logger.logger.debug("ice gathering state changed to " + this.peerConn.iceGatheringState);
-      console.log("ice gathering state changed to " + this.peerConn.iceGatheringState);
       if (this.peerConn.iceGatheringState === 'complete' && !this.sentEndOfCandidates) {
         // If we didn't get an empty-string candidate to signal the end of candidates,
         // create one ourselves now gathering has finished.
@@ -500,6 +499,9 @@ class MatrixCall extends _events.EventEmitter {
       if (this.peerConn.iceConnectionState == 'connected') {
         this.setState(CallState.Connected);
       } else if (this.peerConn.iceConnectionState == 'disconnected') {
+        console.log('disconnected')
+        this.hangup(CallErrorCode.IceFailed, false);
+      } else if (this.peerConn.iceConnectionState == 'failed') {
         console.log('failed')
         this.hangup(CallErrorCode.IceFailed, false);
       }
@@ -1472,7 +1474,6 @@ class MatrixCall extends _events.EventEmitter {
 
 
   sendVoipEvent(eventType, content) {
-    console.log(eventType)
     return this.client.sendEvent(this.roomId, eventType, Object.assign({}, content, {
       version: VOIP_PROTO_VERSION,
       call_id: this.callId,
@@ -1481,6 +1482,7 @@ class MatrixCall extends _events.EventEmitter {
   }
 
   queueCandidate(content) {
+    console.log('push to queue',content)
     // Sends candidates with are sent in a special way because we try to amalgamate
     // them into one message
     this.candidateSendQueue.push(content); // Don't send the ICE candidates yet if the call is in the ringing state: this
@@ -1493,7 +1495,7 @@ class MatrixCall extends _events.EventEmitter {
     if (this.state === CallState.Ringing || !this.inviteOrAnswerSent) return; // MSC2746 reccomends these values (can be quite long when calling because the
     // callee will need a while to answer the call)
 
-    const delay = this.direction === CallDirection.Inbound ? 500 : 2000;
+    const delay = this.direction === CallDirection.Inbound ? 500 : 500;
 
     if (this.candidateSendTries === 0) {
       setTimeout(() => {
@@ -1650,9 +1652,10 @@ class MatrixCall extends _events.EventEmitter {
     };
 
     _logger.logger.debug("Attempting to send " + cands.length + " candidates");
-
+    console.log('send cand', content)
     try {
       await this.sendVoipEvent(_event.EventType.CallCandidates, content);
+      console.log('send', content)
     } catch (error) {
       // don't retry this event: we'll send another one later as we might
       // have more candidates by then.
@@ -1764,7 +1767,7 @@ class MatrixCall extends _events.EventEmitter {
     const bufferedCands = this.remoteCandidateBuffer.get(this.opponentPartyId);
 
     if (bufferedCands) {
-      _logger.logger.info(`Adding ${bufferedCands.length} buffered candidates for opponent ${this.opponentPartyId}`);
+      console.log(`Adding ${bufferedCands.length} buffered candidates for opponent ${this.opponentPartyId}`);
 
       await this.addIceCandidates(bufferedCands);
     }
@@ -1781,6 +1784,7 @@ class MatrixCall extends _events.EventEmitter {
       }
 
       _logger.logger.debug("Call " + this.callId + " got remote ICE " + cand.sdpMid + " candidate: " + cand.candidate);
+      console.log(' got remote ICE candidate',cand)
 
       try {
         await this.peerConn.addIceCandidate(cand);
