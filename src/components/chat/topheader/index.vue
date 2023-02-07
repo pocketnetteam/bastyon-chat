@@ -38,7 +38,7 @@
 				</router-link>
 			</template>
 
-			<template v-slot:rightadd v-if="callsEnabled">
+			<template v-slot:rightadd v-if="callsEnabled && m_chat">
 				<div
 					v-if="isCallsActive && !isGroup"
 					class="call btn iconbutton"

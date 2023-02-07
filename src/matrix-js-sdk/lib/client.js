@@ -5739,25 +5739,39 @@ MatrixClient.prototype._checkTurnServers = async function () {
         // _logger.logger.log("Got TURN URIs: " + res.uris + " refresh in " + res.ttl + " secs"); // map the response to a format that can be fed to RTCPeerConnection
         // console.log("Got TURN URIs: " + res.uris + " refresh in " + res.ttl + " secs");
         // hardcoded
-        const servers = [{
+        const servers = [
+          {
+            urls: "stun:turn.pocketnet.app",
+            username: "stunuser",
+            credential: "q1w2e3r4t5ASD!@#",
+          },
+          {
             urls: "turn:turn.pocketnet.app",
             username: "stunuser",
             credential: "q1w2e3r4t5ASD!@#",
-          }, 
-          {
-            urls: 'turn:numb.viagenie.ca',
-            credential: 'muazkh',
-            username: 'webrtc@live.com'
           },
           {
-            urls: 'turn:turn.anyfirewall.com:443?transport=tcp',
-            credential: 'webrtc',
-            username: 'webrtc'
-          }
+            urls: "stun:relay.metered.ca:80",
+          },
+          {
+            urls: "turn:relay.metered.ca:80",
+            username: "e5f52bc6e44926ef487cc182",
+            credential: "h86wDhfLkKRXiDDo",
+          },
+          {
+            urls: "turn:relay.metered.ca:443",
+            username: "e5f52bc6e44926ef487cc182",
+            credential: "h86wDhfLkKRXiDDo",
+          },
+          {
+            urls: "turn:relay.metered.ca:443?transport=tcp",
+            username: "e5f52bc6e44926ef487cc182",
+            credential: "h86wDhfLkKRXiDDo",
+          },
         ];
         this._turnServers = servers; // The TTL is in seconds but we work in ms
 
-        this._turnServersExpiry = Date.now() + res.ttl * 1000;
+        this._turnServersExpiry = Date.now() + 600 * 1000;
         credentialsGood = true;
       }
     } catch (err) {
