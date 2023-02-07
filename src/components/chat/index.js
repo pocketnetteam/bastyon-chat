@@ -12,8 +12,8 @@ export default {
 		chat: Object,
 		u: String,
 		search : String,
-		searchresults : Array
-
+		searchresults : Array,
+		style : ''
 	},
 	components: {
 		list,

@@ -1,6 +1,6 @@
 <template>
 	<div id="chatExported">
-		<chat :chat="chat"/>
+		<chat :chat="chat" :style="style"/>
 	</div>
 </template>
 
@@ -16,7 +16,8 @@ export default {
 	
 	data : function(){
 		return {
-			chat : null
+			chat : null,
+			style : null
 		}
 	},
 	components : {

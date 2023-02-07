@@ -39,7 +39,7 @@ class Exporter {
 		this.core = core;
         this.instances = {}
 	}
-    chat(el, roomId){
+    chat(el, roomId, p){
 
         
         var chat = this.core.vm.$store.state.chatsMap[roomId];
@@ -47,7 +47,7 @@ class Exporter {
         if (chat){
 
             const instance = new chatConstructor({
-                data: {chat},
+                data: {chat, ...p},
             })
 
             instance.$options.shadowRoot = el.ownerDocument.body
