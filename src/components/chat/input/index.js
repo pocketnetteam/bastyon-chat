@@ -27,6 +27,8 @@ export default {
 		recordVoice,
 		upload,
 	},
+	
+	inject: ['streamMode'],
 
 	data: function () {
 		return {

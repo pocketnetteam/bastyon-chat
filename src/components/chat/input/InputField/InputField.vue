@@ -20,7 +20,7 @@
 					@paste="paste_image"
 					:placeholder="$t('caption.sendmessage')"
 				></textarea>
-				<transition name="fade" mode="out-in" v-if="!mobile && emojiIndex">
+				<transition name="fade" mode="out-in" v-if="!streamMode && !mobile && emojiIndex">
 					<picker
 						:data="emojiIndex"
 						v-show="display_emoji"
@@ -46,7 +46,7 @@
 		<div
 			class="iconbutton emojipicker"
 			@click="toggle_emoji_picker()"
-			v-if="!mobile"
+			v-if="!streamMode && !mobile"
 		>
 			<div class="leftdummy">
 				<div class="idummy">
@@ -87,6 +87,8 @@ export default {
 	directives: {
 		clickOutside: vClickOutside.directive,
 	},
+
+  inject: ['streamMode'],
 
 	watch: {
 		text: {
@@ -138,7 +140,7 @@ export default {
 
 		/*emojiIndex: function () {
 
-		 
+
 
 			return window.emojiIndex
 

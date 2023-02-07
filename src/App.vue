@@ -139,7 +139,7 @@ import store from "@/vuex/store";
 import router from "@/router/router";
 import modal from "@/components/assets/modal/index.vue";
 import pmenu from "@/components/assets/pmenu/index.vue";
-import swipable from "@/components/assets/swipable/index.vue"; 
+import swipable from "@/components/assets/swipable/index.vue";
 import VuePageTransition from "@/editedplugins/vue-page-transition/src/index.js";
 import TextareaAutosize from "vue-textarea-autosize";
 import VueI18n from "vue-i18n";
@@ -314,6 +314,7 @@ export default {
 			isChatEncrypted: this.isChatEncrypted,
 			matches: this.matches,
 			markText: this.markText,
+      streamMode: this.streamMode
 		};
 	},
 
@@ -415,6 +416,10 @@ export default {
 	},
 
 	computed: {
+    streamMode: function () {
+      return this.style === 'stream';
+    },
+
 		statetheme: function () {
 			return this.$store.state.theme;
 		},

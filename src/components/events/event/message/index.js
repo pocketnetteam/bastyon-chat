@@ -60,7 +60,7 @@ export default {
 			hasurlerror : null
 		};
 	},
-	inject: ["matches", "markText"],
+	inject: ["matches", "markText", "streamMode"],
 	components: {
 		actions,
 		filePreview,
@@ -484,12 +484,15 @@ export default {
 		},
 
 		dropDownMenuShow: function () {
+			if (this.streamMode) return;
+			
 			setTimeout(() => {
 				this.setmenu();
 			}, 200);
 		},
 		
 		dropDownContext: function (e) {
+			if (this.streamMode) return e.preventDefault;
 			if (!e?.ctrlKey) e.preventDefault();
 		},
 

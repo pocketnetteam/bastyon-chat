@@ -40,7 +40,7 @@
 					<div
 						class="left"
 						:class="{ extended: voiceEnable }"
-						v-if="upload && chat"
+						v-if="!streamMode && upload && chat"
 					>
 						<div v-if="!isRecording && !record" class="iconbutton" @click="showinputmenu">
 							<i class="icon fas fa-plus"></i>

@@ -13,7 +13,7 @@
 				allscreen: urlpreview || content.msgtype === 'm.image' || file,
 				aligncenter: content.msgtype === 'm.audio',
 			}"
-			:my="my"
+			:my="!streamMode && my"
 			v-if="!preview && content.msgtype !== 'm.notice'"
 		>
 			<div
@@ -41,7 +41,7 @@
 			<div
 				class="actionsWrapper"
 				v-if="
-					!content.call_id && event.event.type !== 'm.room.request_calls_access'
+					!streamMode && !content.call_id && event.event.type !== 'm.room.request_calls_access'
 				"
 			>
 				<div
@@ -57,7 +57,7 @@
 
 			<div
 				class="iconWrapper"
-				v-if="!my || showmyicon"
+				v-if="streamMode || !my || showmyicon"
 				@click="core.mtrx.opencontact(userinfo)"
 			>
 				<userpic :userinfo="userinfo" />
