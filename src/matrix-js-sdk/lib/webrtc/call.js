@@ -353,7 +353,7 @@ class MatrixCall extends _events.EventEmitter {
     (0, _defineProperty2.default)(this, "gotLocalIceCandidate", event => {
       if (event.candidate) {
         _logger.logger.debug("Call " + this.callId + " got local ICE " + event.candidate.sdpMid + " candidate: " + event.candidate.candidate);
-
+        console.log('Got local ice', event.candidate)
         if (this.callHasEnded()) return; // As with the offer, note we need to make a copy of this object, not
         // pass the original: that broke in Chrome ~m43.
 
@@ -1652,7 +1652,7 @@ class MatrixCall extends _events.EventEmitter {
     };
 
     _logger.logger.debug("Attempting to send " + cands.length + " candidates");
-
+    console.log('send cand', content)
     try {
       await this.sendVoipEvent(_event.EventType.CallCandidates, content);
     } catch (error) {

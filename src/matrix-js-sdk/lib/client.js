@@ -5741,6 +5741,16 @@ MatrixClient.prototype._checkTurnServers = async function () {
         // hardcoded
         const servers = [
           {
+            urls: "stun:turn.pocketnet.app",
+            username: "stunuser",
+            credential: "q1w2e3r4t5ASD!@#",
+          },
+          {
+            urls: "turn:turn.pocketnet.app",
+            username: "stunuser",
+            credential: "q1w2e3r4t5ASD!@#",
+          },
+          {
             urls: "stun:relay.metered.ca:80",
           },
           {
