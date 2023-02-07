@@ -353,7 +353,7 @@ class MatrixCall extends _events.EventEmitter {
     (0, _defineProperty2.default)(this, "gotLocalIceCandidate", event => {
       if (event.candidate) {
         _logger.logger.debug("Call " + this.callId + " got local ICE " + event.candidate.sdpMid + " candidate: " + event.candidate.candidate);
-        console.log('Got local ice', event.candidate)
+        console.debug('Got local ice', event.candidate)
         if (this.callHasEnded()) return; // As with the offer, note we need to make a copy of this object, not
         // pass the original: that broke in Chrome ~m43.
 
@@ -1474,7 +1474,6 @@ class MatrixCall extends _events.EventEmitter {
 
 
   sendVoipEvent(eventType, content) {
-    console.log(eventType)
     return this.client.sendEvent(this.roomId, eventType, Object.assign({}, content, {
       version: VOIP_PROTO_VERSION,
       call_id: this.callId,
@@ -1483,6 +1482,7 @@ class MatrixCall extends _events.EventEmitter {
   }
 
   queueCandidate(content) {
+    console.log('push to queue',content)
     // Sends candidates with are sent in a special way because we try to amalgamate
     // them into one message
     this.candidateSendQueue.push(content); // Don't send the ICE candidates yet if the call is in the ringing state: this
@@ -1495,7 +1495,7 @@ class MatrixCall extends _events.EventEmitter {
     if (this.state === CallState.Ringing || !this.inviteOrAnswerSent) return; // MSC2746 reccomends these values (can be quite long when calling because the
     // callee will need a while to answer the call)
 
-    const delay = this.direction === CallDirection.Inbound ? 500 : 2000;
+    const delay = this.direction === CallDirection.Inbound ? 500 : 500;
 
     if (this.candidateSendTries === 0) {
       setTimeout(() => {
@@ -1655,6 +1655,7 @@ class MatrixCall extends _events.EventEmitter {
     console.log('send cand', content)
     try {
       await this.sendVoipEvent(_event.EventType.CallCandidates, content);
+      console.log('send', content)
     } catch (error) {
       // don't retry this event: we'll send another one later as we might
       // have more candidates by then.
