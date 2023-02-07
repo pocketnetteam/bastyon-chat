@@ -1,10 +1,15 @@
 <template>
-	<div id="chatExported">
+	<div id="chatExported" :class="style || ''">
 		<chat :chat="chat" :style="style"/>
 	</div>
 </template>
 
-<style scoped lang="sass"></style>
+<style scoped lang="sass">
+.stream
+	/deep/
+		
+</style>
+
 
 <script>
 import { mapState } from "vuex";
