@@ -25,6 +25,8 @@ export default {
 	},
 	
 	inject: ['streamMode'],
+	
+	inject: ['streamMode'],
 
 	data: function () {
 		return {
@@ -64,6 +66,10 @@ export default {
 	},
 
 	destroyed() {
+		if (!this.streamMode) {
+			this.$store.commit("blockactive", { value: false, item: "chat" });
+			this.$store.commit("SET_CURRENT_ROOM", false);
+		}
 		if (!this.streamMode) {
 			this.$store.commit("blockactive", { value: false, item: "chat" });
 			this.$store.commit("SET_CURRENT_ROOM", false);
@@ -127,6 +133,9 @@ export default {
 		pocketnet: (state) => state.pocketnet,
 		minimized: (state) => state.minimized,
 		auth: (state) => state.auth,
+		active: function(state) {
+			return this.streamMode || state.active;
+		},
 		active: function(state) {
 			return this.streamMode || state.active;
 		},
