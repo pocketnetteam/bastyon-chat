@@ -412,7 +412,7 @@ export default {
 		},
 
 		urlpreview: function () {
-			if (!this.preview && this.content.msgtype !== "m.file") {
+			if (!this.streamMode && !this.preview && this.content.msgtype !== "m.file") {
 				var url = f.getUrl(this.body);
 
 				if (url) {
