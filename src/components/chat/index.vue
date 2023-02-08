@@ -138,7 +138,7 @@
 
 			<div
 				class="encrypted fixedOnPageTop"
-				v-if="encrypted && membership != 'invite'"
+				v-if="!streamMode && encrypted && membership != 'invite'"
 				@mouseover="(e) => (hoverEncrypt = true)"
 			>
 				<i v-if="!encrypting" class="fas fa-lock"></i>
