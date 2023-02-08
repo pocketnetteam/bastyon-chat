@@ -88,7 +88,7 @@ export default {
 		clickOutside: vClickOutside.directive,
 	},
 
-  inject: ['streamMode'],
+	inject: ['streamMode'],
 
 	watch: {
 		text: {
@@ -532,6 +532,8 @@ export default {
 		align-items: center
 
 .chat-input
+	background: transparent
+	border: 0
 	width: 100%
 	max-height: 100px
 	// min-height: 26px

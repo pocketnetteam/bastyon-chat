@@ -4,7 +4,6 @@
 
 		<div
 			v-touch:touchhold="dropDownMenuShow"
-			@contextmenu="dropDownContext"
 			:class="{
 				showmeta: showmeta,
 				my,

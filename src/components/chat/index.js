@@ -22,6 +22,8 @@ export default {
 		attachement,
 		userRoomStatus,
 	},
+	
+	inject: ['streamMode'],
 
 	data: function () {
 		return {
@@ -56,13 +58,17 @@ export default {
 		console.log("CHAT MOUNTED", this)
 
 		this.getuserinfo();
-		this.$store.commit("active", true);
-		this.$store.commit("blockactive", { value: true, item: "chat" });
+		if (!this.streamMode) {
+			this.$store.commit("active", true);
+			this.$store.commit("blockactive", { value: true, item: "chat" });
+		}
 	},
 
 	destroyed() {
-		this.$store.commit("blockactive", { value: false, item: "chat" });
-		this.$store.commit("SET_CURRENT_ROOM", false);
+		if (!this.streamMode) {
+			this.$store.commit("blockactive", { value: false, item: "chat" });
+			this.$store.commit("SET_CURRENT_ROOM", false);
+		}
 
 		this.clearintrv();
 	},
@@ -121,8 +127,10 @@ export default {
 	computed: mapState({
 		pocketnet: (state) => state.pocketnet,
 		minimized: (state) => state.minimized,
-		active: (state) => state.active,
 		auth: (state) => state.auth,
+		active: function(state) {
+			return this.streamMode || state.active;
+		},
 		m_chat: function () {
 			if (this.chat && this.chat.roomId) {
 				let pushRules = this.core.mtrx.client._pushProcessor.getPushRuleById(

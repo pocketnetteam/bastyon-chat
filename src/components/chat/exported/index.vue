@@ -5,9 +5,7 @@
 </template>
 
 <style scoped lang="sass">
-.stream
-	/deep/
-		
+.stream /deep/
 </style>
 
 
@@ -18,7 +16,7 @@ import chat from '../index.vue'
 
 export default {
 	name: "chatExported",
-	
+
 	data : function(){
 		return {
 			chat : null,
@@ -28,8 +26,16 @@ export default {
 	components : {
 		chat
 	},
+	provide() {
+		return {
+			streamMode: this.streamMode
+		}
+	},
 	computed: mapState({
 		auth: (state) => state.auth,
+		streamMode: function () {
+			return this.style === 'stream';
+		}
 	}),
 
 	methods: {},

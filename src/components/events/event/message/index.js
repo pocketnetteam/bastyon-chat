@@ -483,17 +483,12 @@ export default {
 			this.$emit("updatedSize", before);
 		},
 
-		dropDownMenuShow: function () {
-			if (this.streamMode) return;
+		dropDownMenuShow: function (e) {
+			if (e?.button === 2) return e.preventDefault();
 			
 			setTimeout(() => {
 				this.setmenu();
 			}, 200);
-		},
-		
-		dropDownContext: function (e) {
-			if (this.streamMode) return e.preventDefault;
-			if (!e?.ctrlKey) e.preventDefault();
 		},
 
 		setmenu: function () {

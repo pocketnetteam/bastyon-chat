@@ -548,20 +548,20 @@ export default {
 				//<li class="mt">${this.$i18n.t('teamMessages.1-list4')}</li>
 
 				/*,
-          {
-            id: 2,
-            text: `
-              <h4>${this.$i18n.t('teamMessages.2-title')}</h4>
-              <span>${this.$i18n.t('teamMessages.2-message1')}</span>
-              <ul>
-                <li>${this.$i18n.t('teamMessages.2-list1')}</li>
-                <li class="mt">${this.$i18n.t('teamMessages.2-list2')}</li>
-                <li class="mt">${this.$i18n.t('teamMessages.2-list3')}</li>
-              </ul>
-              <span>${this.$i18n.t('teamMessages.2-message2')}</span>
-            `,
-            previewText: this.$i18n.t('teamMessages.2-title')
-          }*/
+					{
+						id: 2,
+						text: `
+							<h4>${this.$i18n.t('teamMessages.2-title')}</h4>
+							<span>${this.$i18n.t('teamMessages.2-message1')}</span>
+							<ul>
+								<li>${this.$i18n.t('teamMessages.2-list1')}</li>
+								<li class="mt">${this.$i18n.t('teamMessages.2-list2')}</li>
+								<li class="mt">${this.$i18n.t('teamMessages.2-list3')}</li>
+							</ul>
+							<span>${this.$i18n.t('teamMessages.2-message2')}</span>
+						`,
+						previewText: this.$i18n.t('teamMessages.2-title')
+					}*/
 			]);
 		},
 
@@ -595,7 +595,7 @@ export default {
 						}">${match}</mark>`;
 						highlight = null;
 						return str;
-				  })
+					})
 				: null;
 		},
 	},
@@ -839,26 +839,26 @@ export default {
 				wss: 8099,
 			},
 			/*{
-          host : 'pocketnet.app',
-          port : 8899,
-          wss : 8099
-      },
-      {
-          host : '1.pocketnet.app',
-          port : 8899,
-          wss : 8099
-      }*/
+					host : 'pocketnet.app',
+					port : 8899,
+					wss : 8099
+			},
+			{
+					host : '1.pocketnet.app',
+					port : 8899,
+					wss : 8099
+			}*/
 		];
 
 		/*
 
-    ////////// new server
+		////////// new server
 
 
-    var sarr = ['vamily.ru', 'pnt.com','bst.app', 'sd.ci']
+		var sarr = ['vamily.ru', 'pnt.com','bst.app', 'sd.ci']
 
 
-    */
+		*/
 
 		var domain =
 			f.deep(window, "window.POCKETNETINSTANCE.options.matrix") ||
@@ -881,21 +881,21 @@ export default {
 
 		/*
 
-    this.$dialog.confirm(
-            'question', {
-               okText: 'ok',
-                cancelText : 'cancel'
-            })
+		this.$dialog.confirm(
+						'question', {
+							 okText: 'ok',
+								cancelText : 'cancel'
+						})
 
-            .then((dialog) => {
-            })
+						.then((dialog) => {
+						})
 
-    */
+		*/
 
 		/*this.$store.commit('icon', {
-          icon : 'success',
-          message : "Downloaded"
-        })*/
+					icon : 'success',
+					message : "Downloaded"
+				})*/
 
 		core
 			.initWithUser(user)
