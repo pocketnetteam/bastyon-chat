@@ -32,6 +32,7 @@
 				:key="key"
 				:chat="m_chat"
 				:searchresults="searchresults"
+				:filterType="streamMode ? 'text' : ''"
 				@editingEvent="editingEvent"
 				@shareEvent="shareEvent"
 				@replyEvent="replyEvent"

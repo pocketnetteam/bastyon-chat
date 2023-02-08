@@ -309,20 +309,25 @@ export default {
 				}
 			});
 		},
-		mediaTimelineSet: async function () {
+		customTimelineSet: async function (name, set) {
+			if (!name) return;
+			
 			var filter = new this.core.mtrx.sdk.Filter(client.getUserId());
 
-			filter.setDefinition({
-				room: {
-					timeline: {
-						contains_url: true,
-						types: ["m.room.message"],
+			if (typeof set === 'function') set(filter);
+			else {
+				filter.setDefinition({
+					room: {
+						timeline: {
+							contains_url: this.filterType === "images",
+							types: ["m.room.message"],
+						},
 					},
-				},
-			});
+				});
+			}
 
 			filter.filterId = await this.core.mtrx.client.getOrCreateFilter(
-				"FILTER_FILES_" + this.core.mtrx.client.credentials.userId,
+				`FILTER_${ name }_` + this.core.mtrx.client.credentials.userId,
 				filter
 			);
 
@@ -348,7 +353,18 @@ export default {
 
 			if (this.filterType === "images") {
 				this.scrollType = "custom";
-				ts = await this.mediaTimelineSet();
+				ts = await this.customTimelineSet('FILES');
+			} else if (this.filterType === "text") {
+				ts = await this.customTimelineSet('TEXT', (filter) => {
+					filter.setDefinition({
+						room: {
+							timeline: {
+								contains_url: false,
+								types: ["m.room.message"],
+							},
+						},
+					});
+				});
 			} else {
 
 				var timeline = this.chat.getLiveTimeline();
@@ -557,7 +573,7 @@ export default {
 					
 				}
 				else{
-					
+				
 				}
 
 				i--;
@@ -581,7 +597,7 @@ export default {
 						return r;
 					}).catch(e => {
 						console.error(e)
-						event.readError = e	
+						event.readError = e
 					})
 					.finally(() => {
 						this.readPromise = null
@@ -599,7 +615,7 @@ export default {
 			){
 				this.debouncedReadAll()
 			}
-				
+			
 		},
 
 		//////////////
