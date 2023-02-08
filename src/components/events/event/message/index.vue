@@ -265,7 +265,7 @@
 
 		<div
 			class="statusWrapper"
-			v-if="my && readed && !preview && !fromreference"
+			v-if="!streamMode && my && readed && !preview && !fromreference"
 		>
 			<div class="my">
 				<i class="fas fa-check-double"></i>
