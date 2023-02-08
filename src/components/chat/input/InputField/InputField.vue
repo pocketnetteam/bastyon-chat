@@ -244,7 +244,7 @@ export default {
 			this.savetextinstorage();
 		},
 		paste_image(event) {
-			this.get_base64(event);
+			if (!this.streamMode) this.get_base64(event);
 		},
 		get_base64(event) {
 			this.pasted_data = event.clipboardData.items;
