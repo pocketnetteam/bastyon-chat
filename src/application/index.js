@@ -371,8 +371,8 @@ class Core {
 			});
 	};
 
-	renderChatToElement = function(element, roomid){
-		return this.exporter.chat(element, roomid)
+	renderChatToElement = function(element, roomid, p){
+		return this.exporter.chat(element, roomid, p)
 	};
 
 	joinRoom(roomid) {
