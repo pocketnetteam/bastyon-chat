@@ -616,7 +616,7 @@ export default {
 
 				var eid = event.event.event_id
 
-				this.readPromise = this.core.mtrx.client
+				this.readPromise = this.streamMode || this.core.mtrx.client
 					.setRoomReadMarkers(this.chat.currentState.roomId, eid, event/*, {
 						hidden: !this.settings_read ? true : false,
 					}*/).then((r) => {
