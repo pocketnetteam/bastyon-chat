@@ -624,8 +624,7 @@ export default {
 						return r;
 					}).catch(e => {
 						console.error(e)
-						console.log(event)
-						event.readError = e	
+						event.readError = e
 					})
 					.finally(() => {
 						this.readPromise = null
