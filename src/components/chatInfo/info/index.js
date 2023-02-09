@@ -332,10 +332,13 @@ export default {
 		muteCalls() {
 			let roomId = this.chat.roomId;
 			const self = this;
-			if (self.roomCallsDisabled) {
-				self.roomCallsDisabled = false;
-			} else {
-				self.roomCallsDisabled = true;
+			self.roomCallsDisabled = !self.roomCallsDisabled
+			if (!self.roomCallsDisabled) {
+				self.core.mtrx.client.sendStateEvent(
+				  roomId,
+				  "m.room.request_calls_access",
+				  { accepted: true }
+				);
 			}
 			self.core.mtrx.client.sendStateEvent(
 				roomId,

@@ -1652,15 +1652,14 @@ class MatrixCall extends _events.EventEmitter {
     };
 
     _logger.logger.debug("Attempting to send " + cands.length + " candidates");
-    console.log('send cand', content)
+    console.log('sendCandidateQueue', content)
     try {
       await this.sendVoipEvent(_event.EventType.CallCandidates, content);
-      console.log('send', content)
     } catch (error) {
       // don't retry this event: we'll send another one later as we might
       // have more candidates by then.
       if (error.event) this.client.cancelPendingEvent(error.event); // put all the candidates we failed to send back in the queue
-
+      console.log('Send cand error', erroe)
       this.candidateSendQueue.push(...cands);
 
       if (this.candidateSendTries > 5) {
