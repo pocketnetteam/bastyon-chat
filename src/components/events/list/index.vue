@@ -38,12 +38,14 @@
 				>
 					<eventsEvent
 						:event="event"
+						:eventIndex="i"
 						:prevevent="events[i + 1]"
 						:galleryData="events"
 						:chat="chat"
 						:timeline="timeline"
 						:multiSelect="multiSelect"
 						:selectedMessages="selectedMessages"
+						:isVisible="visibility[i] !== false"
 						@showMultiSelect="showMultiSelect"
 						@selectMessage="selectMessage"
 						@removeMessage="removeMessage"
@@ -55,7 +57,7 @@
 						@menuIsVisible="menuIsVisibleHandler"
 						@toreference="toreference"
 
-						
+
 					/>
 				</div>
 			</div>

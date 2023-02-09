@@ -4,7 +4,7 @@
 		:class="{ readyToRender, my }"
 		ref="msgElement"
 		v-if="
-			!event.localRedactionEvent() && !event.getRedactionEvent() && !removed
+			isVisible && !event.localRedactionEvent() && !event.getRedactionEvent() && !removed
 		"
 	>
 		<member
@@ -71,39 +71,39 @@
 		</div>
 	</div>
 
-	<div v-else class="deletedMessage">
+	<div v-else-if="isVisible" class="deletedMessage">
 		<i class="fas fa-eraser"></i> {{ $t("caption.messageDeleted") }}
 	</div>
 </template>
 
 <style scoped lang="sass">
 .deletedMessage
-  font-size: 0.8em
-  text-align: center
-  opacity: 0.6
-  padding : 2 * $r
+	font-size: 0.8em
+	text-align: center
+	opacity: 0.6
+	padding : 2 * $r
 
 .event
-  opacity: 0
-  +transition(0.3s)
+	opacity: 0
+	+transition(0.3s)
 
-  &.readyToRender
-    opacity: 1
+	&.readyToRender
+		opacity: 1
 
-  .loading
-    position: relative
-    left : 0
-    top : 0
-    padding : $r
-    width : 100%
-    height : 100%
-    text-align: center
+	.loading
+		position: relative
+		left : 0
+		top : 0
+		padding : $r
+		width : 100%
+		height : 100%
+		text-align: center
 
-  .deletedMessage
-    position: relative
-    left : 0
-    top : 0
-    padding : $r
+	.deletedMessage
+		position: relative
+		left : 0
+		top : 0
+		padding : $r
 </style>
 
 <script>
@@ -145,6 +145,7 @@ export default {
 
 	props: {
 		event: Object,
+		eventIndex: Number,
 		prevevent: Object,
 		preview: Boolean,
 		withImage: Boolean,
@@ -170,21 +171,23 @@ export default {
 				return [];
 			},
 		},
+
+		isVisible: Boolean
 	},
 
 	computed: {
 		/*readyToRender : function(){
-      if(this.$refs["cmessage"]) {
+			if(this.$refs["cmessage"]) {
 
 
-        if(this.$refs["cmessage"].readyToRender){
-          return true
-        }
+				if(this.$refs["cmessage"].readyToRender){
+					return true
+				}
 
-      }
+			}
 
-      return true
-    },*/
+			return true
+		},*/
 		type: function () {
 			var t = f.deep(this, "event.event.type");
 			if (["m.room.member"].indexOf(t) > -1) return "member";
@@ -230,7 +233,7 @@ export default {
 
 			return this.$store?.state.users[this.$f.getmatrixid(this.event.getSender())] || {}
 
-		
+
 		},
 
 		///readreciepts
@@ -256,7 +259,7 @@ export default {
 	},
 
 	mounted: function () {
-		this.$emit("mounted");
+		this.$emit("mounted", this.eventIndex, this.$el);
 	},
 
 	beforeMount: function () {
@@ -269,7 +272,7 @@ export default {
 	},
 
 	watch: {
-		
+
 		event: {
 			immediate: true,
 			handler: function () {
@@ -305,6 +308,12 @@ export default {
 				}
 			},
 		},
+
+		readyToRender() {
+			this.$nextTick(() => {
+        this.$el.parentNode.style = `--min-height: ${ this.$el.offsetHeight || this.$el.parentNode.offsetHeight }px`;
+      });
+		}
 	},
 
 	methods: {
@@ -326,7 +335,7 @@ export default {
 				rendered;
 			}, 20);
 		},
-	
+
 		relations() {
 			if (this.timeline) {
 				var ts = this.timeline._timelineSet;
@@ -392,7 +401,7 @@ export default {
 
 			this.core.mtrx
 				.downloadFile(this.chat, this.event).then((r) => {
-					
+
 					this.downloaded = true;
 
 					this.$store.commit("icon", {
@@ -412,7 +421,7 @@ export default {
 					return Promise.resolve(e);
 				}).finally(() => {
 					this.downloading = false;
-					
+
 				})
 		},
 
