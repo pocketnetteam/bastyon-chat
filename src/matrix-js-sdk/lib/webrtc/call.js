@@ -271,6 +271,8 @@ class MatrixCall extends _events.EventEmitter {
 
         try {
           await videoEl.play();
+          videoEl.muted = true;
+          console.log('local vid muted',videoEl.muted)
         } catch (e) {
           _logger.logger.info("Failed to play local video element", e);
         }
@@ -306,6 +308,8 @@ class MatrixCall extends _events.EventEmitter {
 
         try {
           await localVidEl.play();
+          localVidEl.muted = true;
+          console.log('local vid muted',videoEl.muted)
         } catch (e) {
           _logger.logger.info("Failed to play local video element", e);
         }
@@ -339,7 +343,7 @@ class MatrixCall extends _events.EventEmitter {
         this.setState(CallState.Connecting); // Allow a short time for initial candidates to be gathered
 
         await new Promise(resolve => {
-          setTimeout(resolve, 200);
+          setTimeout(resolve, 1500);
         });
         this.sendAnswer();
       } catch (err) {
@@ -402,6 +406,12 @@ class MatrixCall extends _events.EventEmitter {
         // Allow a short time for initial candidates to be gathered
         await new Promise(resolve => {
           setTimeout(resolve, 200);
+        });
+      }
+      if (this.peerConn.iceGatheringState === 'new') {
+        // Allow a short time for initial candidates to be gathered
+        await new Promise(resolve => {
+          setTimeout(resolve, 1500);
         });
       }
 
