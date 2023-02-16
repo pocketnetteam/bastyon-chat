@@ -267,7 +267,7 @@ MatrixHttpApi.prototype = {
       // a progress notification
 
 
-      xhr.timeout_timer = callbacks.setTimeout(timeout_fn, 30000);
+      xhr.timeout_timer = callbacks.setTimeout(timeout_fn, 10 * 30000);
 
       xhr.onreadystatechange = function () {
         let resp;

@@ -1426,6 +1426,7 @@ class MatrixCall extends _events.EventEmitter {
   async playRemoteAudio() {
     if (this.remoteVideoElement) this.remoteVideoElement.muted = true;
     this.remoteAudioElement.muted = false;
+    this.remoteAudioElement.volume = 1
     this.remoteAudioElement.srcObject = this.remoteStream; // if audioOutput is non-default:
 
     try {
@@ -1464,7 +1465,10 @@ class MatrixCall extends _events.EventEmitter {
     _logger.logger.info("playing remote video. stream active? " + this.remoteStream.active);
 
     try {
+      this.remoteVideoElement.volume = 1
+      this.remoteVideoElement.muted = false
       this.remoteVideoElement.play()
+      
     }   catch(e)  {
       _logger.logger.info("Failed to play remote video element", e);
     }
