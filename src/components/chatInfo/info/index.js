@@ -441,8 +441,13 @@ export default {
 
 		///////////////
 		banUser(user) {
+
+			var promise = null
+
+			this.$store.state.globalpreloader = true;
+
 			if (user.membership === "ban") {
-				this.core.mtrx.client
+				promise = this.core.mtrx.client
 					.unban(
 						this.m_chat.roomId,
 						f.getMatrixIdFull(user.userId, this.core.domain)
@@ -456,7 +461,7 @@ export default {
 							.then((r) => { });
 					});
 			} else {
-				this.core.mtrx.client
+				promise = this.core.mtrx.client
 					.ban(
 						this.m_chat.roomId,
 						f.getMatrixIdFull(user.userId, this.core.domain),
@@ -464,18 +469,27 @@ export default {
 					)
 					.then((r) => { });
 			}
+
+			promise.finally(() => {
+				this.$store.state.globalpreloader = false;
+			})
 		},
 		kickUser(user) {
-			this.core.mtrx.client
-				.kick(
-					this.m_chat.roomId,
-					f.getMatrixIdFull(user.userId, this.core.domain),
-					"admin kicked"
-				)
-				.then(this.$nextTick(function () { }));
+
+			this.$store.state.globalpreloader = true;
+
+			this.core.mtrx.client.kick(
+				this.m_chat.roomId,
+				f.getMatrixIdFull(user.userId, this.core.domain),
+				"admin kicked"
+			)
+			.then(this.$nextTick(function () { })).finally(() => {
+				this.$store.state.globalpreloader = false;
+			});
 		},
 		makeAdmin(user) {
 			var level = 50;
+
 			if (user.powerLevel === 50) {
 				level = 0;
 			}
@@ -483,16 +497,17 @@ export default {
 				"m.room.power_levels"
 			);
 
-			this.core.mtrx.client
-				.setPowerLevel(
-					this.m_chat.roomId,
-					f.getMatrixIdFull(user.userId, this.core.domain),
-					level,
-					event[0]
-				)
-				.then((r) => {
-					// console.log(event[0].event.content.users, "event")
-				});
+			this.$store.state.globalpreloader = true;
+
+			this.core.mtrx.client.setPowerLevel(
+				this.m_chat.roomId,
+				f.getMatrixIdFull(user.userId, this.core.domain),
+				level,
+				event[0]
+			)
+			.finally((r) => {
+				this.$store.state.globalpreloader = false;
+			});
 		},
 
 		/////////////////

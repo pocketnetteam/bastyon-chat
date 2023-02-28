@@ -1439,6 +1439,8 @@ class MatrixCall extends _events.EventEmitter {
 
         await this.remoteAudioElement.setSinkId(audioOutput);
       }
+
+      
     } catch (e) {
       _logger.logger.warn("Couldn't set requested audio output device: using default", e);
     }
