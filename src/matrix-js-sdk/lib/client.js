@@ -451,20 +451,21 @@ function MatrixClient(opts) {
 
     event.setPushActions(actions); // Might as well while we're here
 
+
+
     const room = this.getRoom(event.getRoomId());
     if (!room) return;
     const currentCount = room.getUnreadNotificationCount("highlight"); // Ensure the unread counts are kept up to date if the event is encrypted
     // We also want to make sure that the notification count goes up if we already
     // have encrypted events to avoid other code from resetting 'highlight' to zero.
-
     const oldHighlight =
       oldActions && oldActions.tweaks ? !!oldActions.tweaks.highlight : false;
     const newHighlight =
       actions && actions.tweaks ? !!actions.tweaks.highlight : false;
-
     if (oldHighlight !== newHighlight || currentCount > 0) {
       // TODO: Handle mentions received while the client is offline
       // See also https://github.com/vector-im/element-web/issues/9069
+
       if (!room.hasUserReadEvent(this.getUserId(), event.getId())) {
         let newCount = currentCount;
         if (newHighlight && !oldHighlight) newCount++;
