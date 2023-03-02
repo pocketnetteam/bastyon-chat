@@ -955,7 +955,10 @@ class MatrixCall extends _events.EventEmitter {
         const mediaStream = await navigator.mediaDevices.getUserMedia(constraints);
         this.waitForLocalAVStream = false;
         this.gotUserMediaForAnswer(mediaStream);
-        console.log('streams',mediaStream.getTracks())
+
+        mediaStream.getTracks().forEach((tra) => {
+          console.log(tra.getCapabilities())
+        })
       } catch (e) {
         console.log('media failed')
         this.getUserMediaFailed(e);
@@ -1821,7 +1824,19 @@ function setTracksEnabled(tracks, enabled) {
 
 function getUserMediaContraints(type) {
   const isWebkit = !!navigator.webkitGetUserMedia;
+  let supported = navigator.mediaDevices.getSupportedConstraints()
 
+  let included = {
+    audio: {
+      noiseSuppression: supported.noiseSuppression,
+      echoCancellation: supported.echoCancellation
+    },
+    video: {
+      facingMode: supported.facingMode ? 'user' : 'environment',
+    }
+
+
+  }
   switch (type) {
     case ConstraintsType.Audio:
       {
@@ -1841,13 +1856,13 @@ function getUserMediaContraints(type) {
           audio: {
             deviceId: audioInput ? {
               ideal: audioInput
-            } : undefined
+            } : undefined,
+            ...included.audio
           },
           video: {
             deviceId: videoInput ? {
               ideal: videoInput
             } : undefined,
-            facingMode: ['user', 'environment'],
 
             /* We want 640x360.  Chrome will give it only if we ask exactly,
                FF refuses entirely if we ask exactly, so have to ask for ideal
@@ -1863,7 +1878,8 @@ function getUserMediaContraints(type) {
               exact: 360
             } : {
               ideal: 360
-            }
+            },
+            ...included.video
           }
         };
       }
