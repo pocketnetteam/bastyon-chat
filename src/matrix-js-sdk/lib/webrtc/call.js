@@ -955,6 +955,7 @@ class MatrixCall extends _events.EventEmitter {
         const mediaStream = await navigator.mediaDevices.getUserMedia(constraints);
         this.waitForLocalAVStream = false;
         this.gotUserMediaForAnswer(mediaStream);
+        console.log('streams',mediaStream.getTracks())
       } catch (e) {
         console.log('media failed')
         this.getUserMediaFailed(e);
