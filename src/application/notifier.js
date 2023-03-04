@@ -167,8 +167,7 @@ class Notifier {
 	event(event, chat) {
 		let pushAction = this.core.mtrx.client.getPushActionsForEvent(event);
 
-		if (!pushAction.notify) return;
-
+		if (!pushAction.notify && event.event.type !=="m.room.request_calls_access") return;
 		//let timeFromNow = moment(moment.utc(event.event.origin_server_ts).toDate()).local().fromNow()
 
 		var date = moment(moment.utc(event.event.origin_server_ts).toDate())

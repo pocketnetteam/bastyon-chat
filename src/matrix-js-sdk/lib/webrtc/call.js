@@ -1831,7 +1831,6 @@ function getUserMediaContraints(type) {
       facingMode: supported.facingMode ? 'user' : 'environment',
     }
 
-
   }
   switch (type) {
     case ConstraintsType.Audio:
