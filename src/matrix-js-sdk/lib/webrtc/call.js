@@ -357,7 +357,6 @@ class MatrixCall extends _events.EventEmitter {
     (0, _defineProperty2.default)(this, "gotLocalIceCandidate", event => {
       if (event.candidate) {
         _logger.logger.debug("Call " + this.callId + " got local ICE " + event.candidate.sdpMid + " candidate: " + event.candidate.candidate);
-        console.debug('Got local ice', event.candidate)
         if (this.callHasEnded()) return; // As with the offer, note we need to make a copy of this object, not
         // pass the original: that broke in Chrome ~m43.
 
@@ -504,7 +503,6 @@ class MatrixCall extends _events.EventEmitter {
       _logger.logger.debug("Call ID " + this.callId + ": ICE connection state changed to: " + this.peerConn.iceConnectionState); // ideally we'd consider the call to be connected when we get media but
       // chrome doesn't implement any of the 'onstarted' events yet
 
-      console.log("Call ID " + this.callId + ": ICE connection state changed to: " + this.peerConn.iceConnectionState);
 
       if (this.peerConn.iceConnectionState == 'connected') {
         this.setState(CallState.Connected);
@@ -957,6 +955,10 @@ class MatrixCall extends _events.EventEmitter {
         const mediaStream = await navigator.mediaDevices.getUserMedia(constraints);
         this.waitForLocalAVStream = false;
         this.gotUserMediaForAnswer(mediaStream);
+
+        mediaStream.getTracks().forEach((tra) => {
+          console.log(tra.getCapabilities())
+        })
       } catch (e) {
         console.log('media failed')
         this.getUserMediaFailed(e);
@@ -1629,6 +1631,7 @@ class MatrixCall extends _events.EventEmitter {
 
   stopAllMedia() {
     _logger.logger.debug(`stopAllMedia (stream=${this.localAVStream})`);
+    console.log('local stream', this.localAVStream)
 
     if (this.localAVStream) {
       for (const track of this.localAVStream.getTracks()) {
@@ -1668,7 +1671,6 @@ class MatrixCall extends _events.EventEmitter {
     };
 
     _logger.logger.debug("Attempting to send " + cands.length + " candidates");
-    console.log('sendCandidateQueue', content)
     try {
       await this.sendVoipEvent(_event.EventType.CallCandidates, content);
     } catch (error) {
@@ -1799,7 +1801,6 @@ class MatrixCall extends _events.EventEmitter {
       }
 
       _logger.logger.debug("Call " + this.callId + " got remote ICE " + cand.sdpMid + " candidate: " + cand.candidate);
-      console.log(' got remote ICE candidate',cand)
 
       try {
         await this.peerConn.addIceCandidate(cand);
@@ -1823,7 +1824,19 @@ function setTracksEnabled(tracks, enabled) {
 
 function getUserMediaContraints(type) {
   const isWebkit = !!navigator.webkitGetUserMedia;
+  let supported = navigator.mediaDevices.getSupportedConstraints()
 
+  let included = {
+    audio: {
+      noiseSuppression: supported.noiseSuppression,
+      echoCancellation: supported.echoCancellation
+    },
+    video: {
+      facingMode: supported.facingMode ? 'user' : 'environment',
+    }
+
+
+  }
   switch (type) {
     case ConstraintsType.Audio:
       {
@@ -1843,13 +1856,13 @@ function getUserMediaContraints(type) {
           audio: {
             deviceId: audioInput ? {
               ideal: audioInput
-            } : undefined
+            } : undefined,
+            ...included.audio
           },
           video: {
             deviceId: videoInput ? {
               ideal: videoInput
             } : undefined,
-            facingMode: ['user', 'environment'],
 
             /* We want 640x360.  Chrome will give it only if we ask exactly,
                FF refuses entirely if we ask exactly, so have to ask for ideal
@@ -1865,7 +1878,8 @@ function getUserMediaContraints(type) {
               exact: 360
             } : {
               ideal: 360
-            }
+            },
+            ...included.video
           }
         };
       }
