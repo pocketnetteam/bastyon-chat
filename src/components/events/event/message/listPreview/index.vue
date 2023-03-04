@@ -65,7 +65,7 @@
 			v-if="event.event.type === 'm.room.request_calls_access'"
 			class="previewMessage"
 		>
-			<span class="txt">{{ $t("caption.requestCallAccess") }}</span>
+			<span class="txt">{{ core.vm.$i18n.t("caption.requestCallAccess")}}</span>
 		</div>
 
 		<div

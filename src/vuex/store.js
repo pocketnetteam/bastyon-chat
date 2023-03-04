@@ -758,6 +758,14 @@ var store = new Vuex.Store({
 
 				var ts = chat.getLiveTimeline()._eventTimelineSet;
 
+				let isCallsEnabled = chat.currentState.getStateEvents(
+					"m.room.callsEnabled"
+				);
+
+				let ev = chat.currentState.getStateEvents(
+					"m.room.request_calls_access"
+				).find((e) => store._vm.core.mtrx.me(e?.event?.sender))
+
 				timeline = _.filter(timeline, (e, i) => {
 					if (
 						members.length <= 2 &&
@@ -785,6 +793,9 @@ var store = new Vuex.Store({
 							if (store._vm.core.mtrx.me(e.event.sender)) {
 								return false;
 							} else {
+								if (ev) {
+									return false;
+								}
 								return true;
 							}
 						}
@@ -858,15 +869,6 @@ var store = new Vuex.Store({
 					events[chat.roomId].timeline = []
 				}
 
-
-				let isCallsEnabled = chat.currentState.getStateEvents(
-					"m.room.callsEnabled"
-				);
-
-
-				let ev = chat.currentState.getStateEvents(
-					"m.room.request_calls_access"
-				).find((e) => store._vm.core.mtrx.me(e?.event?.sender))
 
 				if (ev) {
 					if (ev?.event?.content?.accepted === null) {
