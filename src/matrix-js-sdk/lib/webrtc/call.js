@@ -25,7 +25,6 @@ var utils = _interopRequireWildcard(require("../utils"));
 var _event = require("../@types/event");
 
 var _randomstring = require("../randomstring");
-const {include} = require("underscore");
 
 /*
 Copyright 2015, 2016 OpenMarket Ltd
@@ -1728,7 +1727,7 @@ class MatrixCall extends _events.EventEmitter {
       const mediaStream = await navigator.mediaDevices.getUserMedia(constraints);
       console.log('init with devices',mediaStream.getTracks())
       navigator.mediaDevices.enumerateDevices().then(dev => {
-        console.log('devs',dev.filter(i => i.kind.includes('audio')))
+        console.log('audio devices',dev.filter(i => i.kind.includes('audio')))
       })
       this.gotUserMediaForInvite(mediaStream);
     } catch (e) {
