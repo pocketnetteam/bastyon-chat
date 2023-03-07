@@ -943,7 +943,7 @@ if (module.hot) {
 <style src="./editedplugins/vue-m-message/dist/index.css"></style>
 <style lang="sass" src="./index.sass"></style>
 <style>
-@import "https://use.fontawesome.com/releases/v5.2.0/css/all.css";
+@import "@/../../public/css/fontawesome-5.2.0.css";
 @import "@/../../public/css/main.css";
 @import "@/../../public/css/normalize.css";
 @import "@/../../public/css/emoji-mart.css";
