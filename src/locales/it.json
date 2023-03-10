@@ -129,7 +129,8 @@
 		"chatsearchingempty": "No chats found for the specified filter",
 		"sendmessage": "Send message",
 		"messages" : "Messages",
-		"you" : "You"
+		"you" : "You",
+		"sentfile" : "sent file:"
 	},
 
 	"input": {

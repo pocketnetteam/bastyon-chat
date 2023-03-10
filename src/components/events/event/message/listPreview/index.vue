@@ -14,7 +14,7 @@
 
 		<div v-if="content.msgtype === 'm.file'" class="previewMessage">
 			<span class="sname txt" v-if="senderName">{{ senderName == 'You' ? $t("caption.you") : senderName }}&nbsp;</span>
-			<span class="txt"> sent file: {{ JSON.parse(content.body).name }} </span>
+			<span class="txt"> {{ $t("caption.sentfile") }} {{ JSON.parse(content.body).name }} </span>
 		</div>
 
 		<div v-if="content.msgtype === 'm.bad.encrypted'" class="previewMessage">
@@ -32,19 +32,19 @@
 			v-if="event.event.type === 'm.room.power_levels'"
 			class="previewMessage"
 		>
-			<span v-if="senderName" class="txt sname">{{ senderName == 'You' ? $t("caption.you") : senderName }}&nbsp;</span>
+			<span v-if="senderName" class="txt sname">{{ senderName == 'You' ? $t("caption.you") : senderName }}:&nbsp;</span>
 			<span class="txt">
 				{{ powerLevels }}
 			</span>
 		</div>
 
 		<div v-if="content.msgtype === 'm.image'" class="previewMessage">
-			<span v-if="senderName" class="txt sname">{{ senderName == 'You' ? $t("caption.you") : senderName }}&nbsp;</span
+			<span v-if="senderName" class="txt sname">{{ senderName == 'You' ? $t("caption.you") : senderName }}:&nbsp;</span
 			><span class="txt">{{ $t("caption.sentImage") }}</span>
 		</div>
 
 		<div v-if="content.msgtype === 'm.audio'" class="previewMessage">
-			<span v-if="senderName" class="txt sname">{{ senderName == 'You' ? $t("caption.you") : senderName}}&nbsp;</span
+			<span v-if="senderName" class="txt sname">{{ senderName == 'You' ? $t("caption.you") : senderName}}:&nbsp;</span
 			><span class="txt">{{ $t("caption.sentVoiceMessage") }}</span>
 		</div>
 

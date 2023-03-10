@@ -122,7 +122,8 @@
 		"contactsempty": "Todavía no tienes contactos, encuéntralos en la búsqueda",
 		"chatsearchingempty": "No chats found for the specified filter",
 		"sendmessage": "Send message",
-		"you" : "You"
+		"you" : "You",
+		"sentfile" : "sent file:"
 	},
 
 	"input": {
