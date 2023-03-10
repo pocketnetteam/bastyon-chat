@@ -278,6 +278,10 @@ class MatrixCall extends _events.EventEmitter {
         }
       } // why do we enable audio (and only audio) tracks here? -- matthew
 
+      console.log('check peer gotUserMediaForInvite', this.peerConn)
+      stream.getAudioTracks().forEach((st) => {
+        console.log('audio track',st)
+      })
 
       setTracksEnabled(stream.getAudioTracks(), true);
 
@@ -320,8 +324,9 @@ class MatrixCall extends _events.EventEmitter {
       _logger.logger.info("Got local AV stream with id " + this.localAVStream.id);
 
       setTracksEnabled(stream.getAudioTracks(), true);
-
+      console.log('check peer gotUserMediaForAnswer', this.peerConn)
       for (const track of stream.getTracks()) {
+        console.log('track', track)
         this.peerConn.addTrack(track, stream);
       }
 
@@ -955,10 +960,6 @@ class MatrixCall extends _events.EventEmitter {
         const mediaStream = await navigator.mediaDevices.getUserMedia(constraints);
         this.waitForLocalAVStream = false;
         this.gotUserMediaForAnswer(mediaStream);
-
-        mediaStream.getTracks().forEach((tra) => {
-          console.log(tra.getCapabilities())
-        })
       } catch (e) {
         console.log('media failed')
         this.getUserMediaFailed(e);
@@ -1724,6 +1725,10 @@ class MatrixCall extends _events.EventEmitter {
 
     try {
       const mediaStream = await navigator.mediaDevices.getUserMedia(constraints);
+      console.log('init with devices',mediaStream.getTracks())
+      navigator.mediaDevices.enumerateDevices().then(dev => {
+        console.log('audio devices',dev.filter(i => i.kind.includes('audio')))
+      })
       this.gotUserMediaForInvite(mediaStream);
     } catch (e) {
       this.getUserMediaFailed(e);
@@ -1817,13 +1822,15 @@ class MatrixCall extends _events.EventEmitter {
 exports.MatrixCall = MatrixCall;
 
 function setTracksEnabled(tracks, enabled) {
+
   for (let i = 0; i < tracks.length; i++) {
+
     tracks[i].enabled = enabled;
   }
 }
 
 function getUserMediaContraints(type) {
-  const isWebkit = !!navigator.webkitGetUserMedia;
+  // const isWebkit = !!navigator.webkitGetUserMedia;
   let supported = navigator.mediaDevices.getSupportedConstraints()
 
   let included = {
@@ -1834,7 +1841,6 @@ function getUserMediaContraints(type) {
     video: {
       facingMode: supported.facingMode ? 'user' : 'environment',
     }
-
 
   }
   switch (type) {
@@ -1869,16 +1875,16 @@ function getUserMediaContraints(type) {
                instead
                XXX: Is this still true?
              */
-            width: isWebkit ? {
-              exact: 640
-            } : {
-              ideal: 640
-            },
-            height: isWebkit ? {
-              exact: 360
-            } : {
-              ideal: 360
-            },
+            // width: isWebkit ? {
+            //   exact: 640
+            // } : {
+            //   ideal: 640
+            // },
+            // height: isWebkit ? {
+            //   exact: 360
+            // } : {
+            //   ideal: 360
+            // },
             ...included.video
           }
         };

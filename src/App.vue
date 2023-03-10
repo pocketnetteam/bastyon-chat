@@ -362,6 +362,11 @@ export default {
 			type: Boolean,
 			default: false,
 		},
+
+    cssrules: {
+      type: Array,
+      default: []
+    }
 	},
 
 	data: function () {
@@ -457,7 +462,7 @@ export default {
 
 		unselect: function () {
 			return this.$store.state.voicerecording;
-		},
+		}
 	},
 
 	methods: {
@@ -922,6 +927,22 @@ export default {
 				this.$store.commit("active", false);
 		}, 3000);
 
+    (() => {
+      try {
+        return JSON.parse(this.cssrules || "[]");
+      } catch {
+        return [];
+      }
+    })().forEach(rule => {
+      this.$nextTick(() => {
+        const link = document.createElement("link");
+              link.setAttribute("rel", "stylesheet");
+              link.setAttribute("href", rule);
+
+        this.$root.$el.append(link);
+      });
+    });
+
 		window.matrixchat = core;
 	},
 };
@@ -943,7 +964,6 @@ if (module.hot) {
 <style src="./editedplugins/vue-m-message/dist/index.css"></style>
 <style lang="sass" src="./index.sass"></style>
 <style>
-@import "https://use.fontawesome.com/releases/v5.2.0/css/all.css";
 @import "@/../../public/css/main.css";
 @import "@/../../public/css/normalize.css";
 @import "@/../../public/css/emoji-mart.css";
