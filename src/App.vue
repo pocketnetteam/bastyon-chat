@@ -616,7 +616,7 @@ export default {
 	},
 
 	created() {
-		// this.pocketnet = false;
+		this.pocketnet = true;
 		// this.mobile = !this.pocketnet;
 		// this.recording = true;
 		// this.iscallsenabled = true;
@@ -835,7 +835,7 @@ export default {
 			privateKey: this.privatekey,
 		};
 
-		var username = "nevermore";
+		var username = Object.keys(testUsers)[5];
 
 		var user =
 			this.address && this.privatekey ? actualUser : testUsers[`${username}`];
@@ -844,21 +844,21 @@ export default {
 			window,
 			"window.POCKETNETINSTANCE.options.listofproxies"
 		) || [
-			{
-				host: "test.pocketnet.app",
-				port: 8899,
-				wss: 8099,
-			},
-			/*{
-					host : 'pocketnet.app',
-					port : 8899,
-					wss : 8099
-			},
-			{
-					host : '1.pocketnet.app',
-					port : 8899,
-					wss : 8099
-			}*/
+      /*{
+        host: "test.pocketnet.app",
+        port: 8899,
+        wss: 809
+      },
+      /*{
+          host : 'pocketnet.app',
+          port : 8899,
+          wss : 8099
+      },*/
+      {
+          host : '1.pocketnet.app',
+          port : 8899,
+          wss : 8099
+      }
 		];
 
 		/*
@@ -884,7 +884,7 @@ export default {
 			listofproxies: listofproxies,
 
 			servers: {
-				pocketnet: "https://pocketnet.app:8888",
+				pocketnet: "https://test.pocketnet.app:8888",
 			},
 		});
 

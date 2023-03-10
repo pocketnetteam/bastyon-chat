@@ -14,9 +14,15 @@
 					</div>
 				</div>
 
-<!--        <div class="left" v-if="streamMode">
-          P
-        </div>-->
+        <div
+          class="left"
+          :class="{ 'donation': streamMode }"
+          v-if="streamMode"
+        >
+          <button class="iconbutton donate">
+            <i class="icon donate">Donate</i>
+          </button>
+        </div>
 
 				<div class="center">
 					<record-progress

@@ -51,14 +51,14 @@ export default {
     }
   },
 
-  render () {
+  mounted () {
     /*Get video meta (&stream state)*/
     window.POCKETNETINSTANCE?.platform?.sdk?.videos?.info(this.videoUrl)
       .then(() => window.parseVideo(this.videoUrl))
       .then(meta => {
           if (meta?.type === "peertube") {
             this.videoMeta = Object.assign(this.videoMeta, window.peertubeglobalcache[meta.id]);
-            console.log('META', this.videoMeta);
+            console.log('META', this.videoMeta, this);
           }
       });
   },

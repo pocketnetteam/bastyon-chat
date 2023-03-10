@@ -377,7 +377,7 @@ export default {
 		},
 		
 		sender: function () {
-			return this.chat.getMember(this.event.event?.user_id);
+			return this.chat.getMember(this.event?.sender?.userId || this.event?.event?.sender || this.event.event?.user_id);
 		},
 		
 		isMenuAllowed: function () {

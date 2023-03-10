@@ -50,6 +50,11 @@ class Exporter {
 						instance.$options.shadowRoot = el.ownerDocument.body;
 						
 						instance.$mount(el);
+						
+						instance.destroy = () => {
+							instance.$destroy();
+							instance.$el.parentNode.removeChild(instance.$el);
+						}
 
 						return Promise.resolve(instance);
 				} else {

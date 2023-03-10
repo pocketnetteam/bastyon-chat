@@ -13,25 +13,6 @@
                 border-radius: unset
                 color: unset
 
-        .roomMember
-            border-bottom: 0
-            padding: $r 0 $r $r
-
-            .leftWrapper
-                .avatarNameWrapper
-                    height: 33px
-                    width: 33px
-
-            .menuwrapper
-                display: block !important
-
-            .dropDownIcon i
-                opacity: .3
-                transition: opacity .3s
-
-                &:hover
-                    opacity: 1
-
 
         .chats
             border-bottom: 1px solid #F3F3F2
@@ -39,6 +20,25 @@
 
             .caption
                 font-size: 1em !important
+
+            .roomMember
+                border-bottom: 0
+                padding: $r 0 $r $r
+
+                .leftWrapper
+                    .avatarNameWrapper
+                        height: 33px
+                        width: 33px
+
+                .menuwrapper
+                    display: block !important
+
+                .dropDownIcon i
+                    opacity: .3
+                    transition: opacity .3s
+
+                    &:hover
+                        opacity: 1
 
 .section-title
     color: srgb(--text-color)
@@ -56,7 +56,7 @@
         font-weight: 700
 
     i.icon
-        color: rgb(142, 144, 166)
+        color: rgb(0, 164, 255)
         display: inline-block
         padding: 0 $r 0 0
         text-align: center
@@ -69,7 +69,7 @@
         color: rgb(64, 166, 159)
 
     &.section-banned i.icon
-        color: rgb(87, 89, 102)
+        color: rgb(142, 144, 166)
 
     .toggle
         font-size: 1em

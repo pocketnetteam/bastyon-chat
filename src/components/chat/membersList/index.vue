@@ -21,7 +21,7 @@
             'fa-video': title === 'administrators',
             'fa-user-shield': title === 'moderators',
             'fa-user-friends': title === 'participants',
-            'fa-user-times': title === 'banned'
+            'fa-user-slash': title === 'banned'
           }"
         ></i>
 				<span>{{ ucFirst($t(`caption.${ title }`)) }}</span>
