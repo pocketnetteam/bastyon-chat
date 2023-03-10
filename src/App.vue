@@ -849,7 +849,7 @@ export default {
 			privateKey: this.privatekey,
 		};
 
-		var username = Object.keys(testUsers)[5];
+		var username = "nevermore";
 
 		var user =
 			this.address && this.privatekey ? actualUser : testUsers[`${username}`];
@@ -898,7 +898,7 @@ export default {
 			listofproxies: listofproxies,
 
 			servers: {
-				pocketnet: "https://test.pocketnet.app:8888",
+				pocketnet: "https://pocketnet.app:8888",
 			},
 		});
 
