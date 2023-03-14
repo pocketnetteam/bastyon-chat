@@ -369,7 +369,7 @@ export default {
 		},
 
     cssrules: {
-      type: Array,
+      type: String,
       default: []
     }
 	},
@@ -845,19 +845,19 @@ export default {
 			"window.POCKETNETINSTANCE.options.listofproxies"
 		) || [
       /*{
-        host: "test.pocketnet.app",
-        port: 8899,
+				host: "test.pocketnet.app",
+				port: 8899,
         wss: 809
       },
       /*{
-          host : 'pocketnet.app',
-          port : 8899,
-          wss : 8099
+					host : 'pocketnet.app',
+					port : 8899,
+					wss : 8099
       },*/
-      {
-          host : '1.pocketnet.app',
-          port : 8899,
-          wss : 8099
+			{
+					host : '1.pocketnet.app',
+					port : 8899,
+					wss : 8099
       }
 		];
 
