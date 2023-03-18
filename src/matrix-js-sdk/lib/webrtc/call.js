@@ -271,11 +271,17 @@ class MatrixCall extends _events.EventEmitter {
 
         try {
           await videoEl.play();
+          videoEl.muted = true;
+          console.log('local vid muted',videoEl.muted)
         } catch (e) {
           _logger.logger.info("Failed to play local video element", e);
         }
       } // why do we enable audio (and only audio) tracks here? -- matthew
 
+      console.log('check peer gotUserMediaForInvite', this.peerConn)
+      stream.getAudioTracks().forEach((st) => {
+        console.log('audio track',st)
+      })
 
       setTracksEnabled(stream.getAudioTracks(), true);
 
@@ -306,6 +312,8 @@ class MatrixCall extends _events.EventEmitter {
 
         try {
           await localVidEl.play();
+          localVidEl.muted = true;
+          console.log('local vid muted',videoEl.muted)
         } catch (e) {
           _logger.logger.info("Failed to play local video element", e);
         }
@@ -316,8 +324,9 @@ class MatrixCall extends _events.EventEmitter {
       _logger.logger.info("Got local AV stream with id " + this.localAVStream.id);
 
       setTracksEnabled(stream.getAudioTracks(), true);
-
+      console.log('check peer gotUserMediaForAnswer', this.peerConn)
       for (const track of stream.getTracks()) {
+        console.log('track', track)
         this.peerConn.addTrack(track, stream);
       }
 
@@ -339,7 +348,7 @@ class MatrixCall extends _events.EventEmitter {
         this.setState(CallState.Connecting); // Allow a short time for initial candidates to be gathered
 
         await new Promise(resolve => {
-          setTimeout(resolve, 200);
+          setTimeout(resolve, 1500);
         });
         this.sendAnswer();
       } catch (err) {
@@ -353,7 +362,6 @@ class MatrixCall extends _events.EventEmitter {
     (0, _defineProperty2.default)(this, "gotLocalIceCandidate", event => {
       if (event.candidate) {
         _logger.logger.debug("Call " + this.callId + " got local ICE " + event.candidate.sdpMid + " candidate: " + event.candidate.candidate);
-        console.debug('Got local ice', event.candidate)
         if (this.callHasEnded()) return; // As with the offer, note we need to make a copy of this object, not
         // pass the original: that broke in Chrome ~m43.
 
@@ -402,6 +410,12 @@ class MatrixCall extends _events.EventEmitter {
         // Allow a short time for initial candidates to be gathered
         await new Promise(resolve => {
           setTimeout(resolve, 200);
+        });
+      }
+      if (this.peerConn.iceGatheringState === 'new') {
+        // Allow a short time for initial candidates to be gathered
+        await new Promise(resolve => {
+          setTimeout(resolve, 1500);
         });
       }
 
@@ -494,7 +508,6 @@ class MatrixCall extends _events.EventEmitter {
       _logger.logger.debug("Call ID " + this.callId + ": ICE connection state changed to: " + this.peerConn.iceConnectionState); // ideally we'd consider the call to be connected when we get media but
       // chrome doesn't implement any of the 'onstarted' events yet
 
-      console.log("Call ID " + this.callId + ": ICE connection state changed to: " + this.peerConn.iceConnectionState);
 
       if (this.peerConn.iceConnectionState == 'connected') {
         this.setState(CallState.Connected);
@@ -1416,6 +1429,7 @@ class MatrixCall extends _events.EventEmitter {
   async playRemoteAudio() {
     if (this.remoteVideoElement) this.remoteVideoElement.muted = true;
     this.remoteAudioElement.muted = false;
+    this.remoteAudioElement.volume = 1
     this.remoteAudioElement.srcObject = this.remoteStream; // if audioOutput is non-default:
 
     try {
@@ -1428,6 +1442,8 @@ class MatrixCall extends _events.EventEmitter {
 
         await this.remoteAudioElement.setSinkId(audioOutput);
       }
+
+      
     } catch (e) {
       _logger.logger.warn("Couldn't set requested audio output device: using default", e);
     }
@@ -1454,7 +1470,10 @@ class MatrixCall extends _events.EventEmitter {
     _logger.logger.info("playing remote video. stream active? " + this.remoteStream.active);
 
     try {
+      this.remoteVideoElement.volume = 1
+      this.remoteVideoElement.muted = false
       this.remoteVideoElement.play()
+      
     }   catch(e)  {
       _logger.logger.info("Failed to play remote video element", e);
     }
@@ -1613,6 +1632,7 @@ class MatrixCall extends _events.EventEmitter {
 
   stopAllMedia() {
     _logger.logger.debug(`stopAllMedia (stream=${this.localAVStream})`);
+    console.log('local stream', this.localAVStream)
 
     if (this.localAVStream) {
       for (const track of this.localAVStream.getTracks()) {
@@ -1652,7 +1672,6 @@ class MatrixCall extends _events.EventEmitter {
     };
 
     _logger.logger.debug("Attempting to send " + cands.length + " candidates");
-    console.log('sendCandidateQueue', content)
     try {
       await this.sendVoipEvent(_event.EventType.CallCandidates, content);
     } catch (error) {
@@ -1706,6 +1725,10 @@ class MatrixCall extends _events.EventEmitter {
 
     try {
       const mediaStream = await navigator.mediaDevices.getUserMedia(constraints);
+      console.log('init with devices',mediaStream.getTracks())
+      navigator.mediaDevices.enumerateDevices().then(dev => {
+        console.log('audio devices',dev.filter(i => i.kind.includes('audio')))
+      })
       this.gotUserMediaForInvite(mediaStream);
     } catch (e) {
       this.getUserMediaFailed(e);
@@ -1783,7 +1806,6 @@ class MatrixCall extends _events.EventEmitter {
       }
 
       _logger.logger.debug("Call " + this.callId + " got remote ICE " + cand.sdpMid + " candidate: " + cand.candidate);
-      console.log(' got remote ICE candidate',cand)
 
       try {
         await this.peerConn.addIceCandidate(cand);
@@ -1800,14 +1822,27 @@ class MatrixCall extends _events.EventEmitter {
 exports.MatrixCall = MatrixCall;
 
 function setTracksEnabled(tracks, enabled) {
+
   for (let i = 0; i < tracks.length; i++) {
+
     tracks[i].enabled = enabled;
   }
 }
 
 function getUserMediaContraints(type) {
-  const isWebkit = !!navigator.webkitGetUserMedia;
+  // const isWebkit = !!navigator.webkitGetUserMedia;
+  let supported = navigator.mediaDevices.getSupportedConstraints()
 
+  let included = {
+    audio: {
+      noiseSuppression: supported.noiseSuppression,
+      echoCancellation: supported.echoCancellation
+    },
+    video: {
+      facingMode: supported.facingMode ? 'user' : 'environment',
+    }
+
+  }
   switch (type) {
     case ConstraintsType.Audio:
       {
@@ -1827,29 +1862,30 @@ function getUserMediaContraints(type) {
           audio: {
             deviceId: audioInput ? {
               ideal: audioInput
-            } : undefined
+            } : undefined,
+            ...included.audio
           },
           video: {
             deviceId: videoInput ? {
               ideal: videoInput
             } : undefined,
-            facingMode: ['user', 'environment'],
 
             /* We want 640x360.  Chrome will give it only if we ask exactly,
                FF refuses entirely if we ask exactly, so have to ask for ideal
                instead
                XXX: Is this still true?
              */
-            width: isWebkit ? {
-              exact: 640
-            } : {
-              ideal: 640
-            },
-            height: isWebkit ? {
-              exact: 360
-            } : {
-              ideal: 360
-            }
+            // width: isWebkit ? {
+            //   exact: 640
+            // } : {
+            //   ideal: 640
+            // },
+            // height: isWebkit ? {
+            //   exact: 360
+            // } : {
+            //   ideal: 360
+            // },
+            ...included.video
           }
         };
       }

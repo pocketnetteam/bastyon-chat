@@ -172,7 +172,7 @@ export default {
 		},
 
 		transaction: function () {
-			return f.deep(window, "POCKETNETINSTANCE.platform.ui.wallet.send");
+			return f.deep(window, "POCKETNETINSTANCE.platform.ui.wallet.donate");
 		},
 
 		uusers: function () {
@@ -403,7 +403,7 @@ export default {
 
 			api({
 				roomid: this.chat.roomId,
-				address: user.source.address,
+				receiver: user.source.address,
 			});
 
 			/*.then(({txid, from}) => {

@@ -74,27 +74,34 @@ export default {
 			return r;
 		},
 		menu: function (user) {
+
+
+			/*menu.push({
+				action: this.menureply,
+				text: "button.reply",
+				icon: "fas fa-reply",
+			})*/
+
 			var items = {
 				setAdmin: {
-					click: "setAdmin",
-					title: this.$i18n.t("caption.makeModerator"),
+					action: () => this.setAdmin(user),
+					text: this.$i18n.t("caption.makeModerator"),
 					icon: "fas fa-user-shield",
 				},
 				kick: {
-					click: "kick",
-					title: this.$i18n.t("caption.kick"),
+					action: () => this.kick(user),
+					text: this.$i18n.t("caption.kick"),
 					icon: "fas fa-user-times",
 				},
 				ban: {
-					click: "ban",
-					title: this.$i18n.t("caption.ban"),
+					action: () => this.ban(user),
+					text: user.membership === "ban" ? this.$i18n.t("caption.removeBan") : this.$i18n.t("caption.ban"),
 					icon: "fas fa-user-times",
 				},
 			};
+
 			var menu = [];
-			if (user.membership === "ban") {
-				items.ban.title = this.$i18n.t("caption.removeBan");
-			}
+
 			if (
 				user.powerLevel === 0 &&
 				this.me.powerLevel >= 50 &&
@@ -115,10 +122,24 @@ export default {
 				this.core.user.userinfo.id !== user.id &&
 				this.me.powerLevel === 100
 			) {
-				items.setAdmin.title = this.$i18n.t("caption.cancelModeration");
+				items.setAdmin.text = this.$i18n.t("caption.cancelModeration");
 				menu = [items.setAdmin, items.ban];
 			}
+
 			return menu;
+		},
+
+		dropDownMenuShow: function (user) {
+			setTimeout(() => {
+				this.setmenu(user);
+			}, 200);
+		},
+
+		setmenu: function (user) {
+			this.core.menu({
+				items: this.menu(user),
+				item: {},
+			});
 		},
 
 		navigateToProfile(id) {
@@ -141,21 +162,23 @@ export default {
 				});
 			return this[item.click](rowObject.user);
 		},
-		menusetAdmin(rowObject) {
-			this.$emit("admin", rowObject.user);
-			return Promise.resolve();
-		},
-		menukick(rowObject) {
-			this.$emit("kick", rowObject.user);
-			return Promise.resolve();
-		},
-		menuban(rowObject) {
-			this.$emit("ban", rowObject.user);
-			return Promise.resolve();
-		},
-		setAdmin: function (user) {
-			this.$emit("setAdmin", user.id);
 
+		setAdmin(user) {
+			this.$emit("admin", user);
+			return Promise.resolve();
+		},
+		kick(user) {
+			this.$emit("kick", user);
+			return Promise.resolve();
+		},
+		ban(user) {
+			this.$emit("ban", user);
+			return Promise.resolve();
+		},
+
+
+		/*setAdmin: function (user) {
+			this.$emit("setAdmin", user.id);
 			return Promise.resolve();
 		},
 
@@ -168,6 +191,6 @@ export default {
 		kick: function (user) {
 			this.$emit("adminKick", user.id);
 			return Promise.resolve();
-		},
+		},*/
 	},
 };

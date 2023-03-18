@@ -121,7 +121,8 @@
 		"contactsempty": "您还没有联系人，请在搜索中找到他们",
 		"sendmessage": "Send message",
 		"messages" : "Messages",
-		"you" : "You"
+		"you" : "You",
+		"sentfile" : "sent file:"
 	},
 
 	"input": {
