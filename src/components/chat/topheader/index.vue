@@ -38,28 +38,27 @@
 				</router-link>
 			</template>
 
-			<template v-slot:rightadd v-if="callsEnabled">
+			<template v-slot:rightadd v-if="callsEnabled && m_chat">
 				<div
 					v-if="isCallsActive && !isGroup"
 					class="call btn iconbutton"
 					:class="
-						checkCallsEnabled() === 'wait' || wait
+						checkCallsEnabled === 'wait' || wait
 							? 'wait'
-							: checkCallsEnabled()
+							: checkCallsEnabled
 							? ''
 							: 'disabled'
 					"
 					:title="
-						checkCallsEnabled() === 'wait' || wait
+						checkCallsEnabled === 'wait' || wait
 							? $t('caption.wait')
-							: checkCallsEnabled()
+							: checkCallsEnabled
 							? ''
 							: $t('caption.disabled')
 					"
 					@click="bcCall"
 				>
 					<i class="fas fa-video"></i>
-          			{{lastEnabled? '': ''}}
 				</div>
 			</template>
 
@@ -83,8 +82,8 @@
 							<span class="current-match"
 								>{{ searchresults.length - (focusedeventIndex) }}/{{ searchresults.length }}</span
 							>
-							<i class="prev-match fas fa-chevron-down" @click="tobottomsearch"></i>
-							<i class="next-match fas fa-chevron-up" @click="toupsearch"></i>
+							<i class="prev-match fas fa-chevron-up" @click="tobottomsearch"></i>
+							<i class="next-match fas fa-chevron-down" @click="toupsearch"></i>
 						</div>
 
 						<div class="iconWrapper" v-if="search" @click="() => {searching('')}">

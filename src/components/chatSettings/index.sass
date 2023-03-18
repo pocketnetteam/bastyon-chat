@@ -1,86 +1,107 @@
 .inSettings
-  margin: 30px auto
-  display: block
+	margin: 30px auto
+	display: block
 .chatIconWrapper
-  width : 120px
-  margin : 0 auto
+	width : 120px
+	margin : 0 auto
 .linkPlace
-  margin-top: 30px
-  padding: $r 0
-  cursor: pointer
-  border-top: 1px solid srgb(--background-main)
-  span
-    font-size: 1em
-    display: block
-    text-align: left
-    max-width: 400px
-    overflow: hidden
-    white-space: nowrap
-    text-overflow: ellipsis
-  .shareLink
-    &:hover
-      color: srgb(--color-txt-ac)
+	margin-top: 30px
+	padding: $r 0
+	cursor: pointer
+	border-top: 1px solid srgb(--background-main)
+	span
+		font-size: 1em
+		display: block
+		text-align: left
+		max-width: 400px
+		overflow: hidden
+		white-space: nowrap
+		text-overflow: ellipsis
+	.shareLink
+		&:hover
+			color: srgb(--color-txt-ac)
 
 .chatSettingAbout
-  padding: 2 * $r 0
-  .chatNameEdit
-    margin-top: 2 * $r
+	padding: 2 * $r 0
+	.chatNameEdit
+		margin-top: 2 * $r
 
-    input
-      padding: 2 * $r
-      display: block
-      width: 100%
-      border-bottom: 1px solid srgb(--neutral-grad-1)
-      border-top: 1px solid srgb(--neutral-grad-1)
-      &:focus
-       border-bottom: 1px solid srgb(--neutral-grad-1)
-       border-top: 1px solid srgb(--neutral-grad-1)
+		input
+			padding: 2 * $r
+			display: block
+			width: 100%
+			border-bottom: 1px solid srgb(--neutral-grad-1)
+			border-top: 1px solid srgb(--neutral-grad-1)
+			&:focus
+			 border-bottom: 1px solid srgb(--neutral-grad-1)
+			 border-top: 1px solid srgb(--neutral-grad-1)
 
-  .chatDescription
-    textarea
-      font-size: 0.9em
-      display: block
-      width: 100%
-      resize: none
-      padding: 2 * $r
-
+	.chatDescription
+		textarea
+			font-size: 0.9em
+			display: block
+			width: 100%
+			resize: none
+			padding: 2 * $r
+	
 .chatIconWrapper
-  width : 90%
-  margin : 0 auto
-  padding : $r 0
-  /deep/ .swiperWrapperFlex .imageSwiper
-    width: 100px
-    height: 100px
-    line-height: 100px
+	width : 200px
+	height: 200px
+	margin : 0 auto
+	.chatIcon
+		width: 100%
+		height: 100%
+		overflow: hidden
+		position: absolute
 
-  /deep/
-    .swiperWrapperFlex
-      padding-bottom: 2 * $r
 
-    .threeAvatars,
-    .fourAvatars,
-    .twoAvatars
-      width: 50%
-      padding-bottom: 50%
-      +shadowSmaller()
-      background: srgba(--background-total-theme, 0.3)
+	.upload
+		height: 100%
+	/deep/
+		.uploadWrapper
+			height: 100%
+		.inputWrapper
+			z-index: 201
 
-    .oneuser
-      width: 50%
-      margin: 0 auto
 
-    .bgimage
-      +shadowSmaller()
+
+	/deep/ .swiperWrapperFlex .imageSwiper
+		width: 100px
+		height: 100px
+		line-height: 100px
+
+		
+
+	/deep/
+		.swiperWrapperFlex
+			padding-bottom: 2 * $r
+
+		.threeAvatars,
+		.fourAvatars,
+		.twoAvatars
+			width: 100%
+			padding-bottom: 100%
+			+shadowSmaller()
+			background: srgba(--background-total-theme, 0.3)
+
+		.oneuser
+			width: 100%
+			margin: 0 auto
+
+		
+
+		.bgimage
+			+shadowSmaller()
 
 .minimized:not(.active)
 
-  .chatDescription,
-  .chatNameEdit
-    display: none
-  /deep/
-    .chatIconWrapper
-        width: 52px
-        margin: 0
-        
+	.chatDescription,
+	.chatNameEdit
+		display: none
+	/deep/
+		.chatIconWrapper
+				width: 52px
+				margin: 0
+				
 
-        
+				

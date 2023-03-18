@@ -9,9 +9,7 @@
 					:m_chat="m_chat"
 					:hideunseen="true"
 				/>
-				<div class="chatGroupIcon" v-if="groupAvatar">
-					<img :src="groupAvatar" alt="" />
-				</div>
+			
 			</div>
 
 			<chatName

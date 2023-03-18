@@ -250,8 +250,8 @@ var Process = function(text, chats, parent /* SearchEngine */){
             results[chat.roomId] = results[chat.roomId].concat(curresults)
 
             results[chat.roomId] = _.sortBy(results[chat.roomId], (e) => {
-                return e.replacingEventDate() || e.getDate() || Infinity
-            }).reverse()
+                return (e.replacingEventDate() || e.getDate() || Infinity)
+            })
 
             if(!processStopped()) emit()
 

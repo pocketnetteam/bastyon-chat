@@ -177,25 +177,25 @@ export default {
 			);
 		},
 		events: function () {
+
 			var pushRules = this.core.mtrx.client._pushProcessor.getPushRuleById(
 				this.chat.roomId
 			);
-			var isEnabled = this.m_chat.currentState.getStateEvents(
+			let isEnabled = this.m_chat.currentState.getStateEvents(
 				"m.room.callsEnabled"
-			);
-			console.log(this.core.user.userinfo);
+			).find(
+				(e) =>
+					!(!this.core.mtrx.me(e?.event?.sender)) &&
+					e?.event?.sender.split(":")[0].replace("@", "") ===
+					e?.event?.state_key
+			)
 			if (pushRules !== null) {
 				this.roomMuted = true;
 			}
 			if (
-				isEnabled.find(
-					(e) =>
-						(!this.core.mtrx.me(e?.event?.sender))?.event?.content?.enabled &&
-						e?.event?.sender.split(":")[0].replace("@", "") ===
-						e?.event?.state_key
-				)
+				isEnabled
 			) {
-				this.roomCallsDisabled = true;
+				this.roomCallsDisabled = !isEnabled.event.content.enabled;
 			}
 			return this.m_chat.timeline || {};
 		},
@@ -332,10 +332,13 @@ export default {
 		muteCalls() {
 			let roomId = this.chat.roomId;
 			const self = this;
-			if (self.roomCallsDisabled) {
-				self.roomCallsDisabled = false;
-			} else {
-				self.roomCallsDisabled = true;
+			self.roomCallsDisabled = !self.roomCallsDisabled
+			if (!self.roomCallsDisabled) {
+				self.core.mtrx.client.sendStateEvent(
+				  roomId,
+				  "m.room.request_calls_access",
+				  { accepted: true }
+				);
 			}
 			self.core.mtrx.client.sendStateEvent(
 				roomId,

@@ -1,9 +1,10 @@
 <template>
 	<div class="chatIcon" :class="{ unknowngroupusers }">
 		<div v-if="groupAvatar" class="chatGroupIcon">
-			<img :src="groupAvatar" alt="" />
+			<userpic :image="groupAvatar"/>
 		</div>
 		<userspic
+			v-else
 			:slidesPerView="slidesPerView"
 			:users="usersinfo"
 			:status="status"
@@ -21,38 +22,40 @@
 
 <style scoped lang="sass">
 .opacity
-  opacity: 0
+	opacity: 0
 .chatIcon
-  width: 100%
-  position: relative
+	width: 100%
+	position: relative
 
 .unknowngroupusersicon
-  position: absolute
-  left: 0
-  top: 0
-  bottom: 0
-  right: 0
-  font-size: 0.7em
-  display: flex
-  justify-content: center
-  align-items: center
-  color: #fff
-  text-shadow: 0px 0px 2px rgba(0, 11, 58, 0.714), 0 0 3px rgba(0, 8, 43, 0.519)
+	position: absolute
+	left: 0
+	top: 0
+	bottom: 0
+	right: 0
+	font-size: 0.7em
+	display: flex
+	justify-content: center
+	align-items: center
+	color: #fff
+	text-shadow: 0px 0px 2px rgba(0, 11, 58, 0.714), 0 0 3px rgba(0, 8, 43, 0.519)
 
 .unknowngroupusers
-  /deep/
-  .bgimage
-    transform: scale(0.7)
-
+	/deep/
+	.bgimage
+		transform: scale(0.7)
+.chatGroupIcon
+	width: 100%
+	height: 100%
 .chatGroupIcon img
-  width: 100%
-  height: 100%
-  border-radius: 50%
-  object-fit: cover
-  object-position: 50% 50%
-  position: absolute
-  top: 0
-  z-index: 100
+	width: 100%
+	height: 100%
+	border-radius: 50%
+	object-fit: cover
+	object-position: 50% 50%
+	position: absolute
+	top: 0
+	z-index: 100
 </style>
 
 <script>

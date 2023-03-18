@@ -2014,8 +2014,10 @@ f.clientsearch = function (value, arr, exe) {
         var stext = txtf
 
         var ctext = stext.toLowerCase().replace(/[^\p{L}\p{N}\p{Z}]/gu, '')
+
+		console.log('ctext && ctext.indexOf(ctxt)', ctext && ctext.indexOf(ctxt))
 		
-        if ((ctext && ctext.indexOf(ctxt) > -1) || f.stringComparison(txt, stext)) return true
+        if ((ctext && ctext.indexOf(ctxt) > -1) || f.stringComparison(txt, stext, 0.9)) return true
     })
 }
 
