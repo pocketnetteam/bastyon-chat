@@ -22,6 +22,7 @@
 				<div class="buttons chat-filter">
 					<button
 						v-for="{ name, filter } in chatFilter"
+						:key="name"
 						class="button"
 						:class="{ active: filterType === filter }"
 						@click="filterMessages($event, filter)"
