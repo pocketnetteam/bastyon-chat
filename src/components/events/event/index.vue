@@ -140,6 +140,7 @@ export default {
 			audioBuffer: null,
 
 			readyToRender: false,
+      users: []
 		};
 	},
 
@@ -229,8 +230,16 @@ export default {
 		userinfo: function () {
 
 			return this.$store?.state.users[this.$f.getmatrixid(this.event.getSender())] || {}
+      /*const id = this.$f.getmatrixid(this.event.getSender());
 
-		
+      return this.$store?.state.users[id] || (() => {
+				if (!this.users[id]) {
+					this.$set(this.users, id, this.chat.getMember(id));
+				}
+
+				return this.users[id];
+			})();*/
+
 		},
 
 		///readreciepts

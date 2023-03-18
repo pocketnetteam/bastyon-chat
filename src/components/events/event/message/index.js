@@ -60,7 +60,14 @@ export default {
 			hasurlerror : null
 		};
 	},
-	inject: ["matches", "markText", "streamMode"],
+	inject: [
+		"matches",
+		"markText",
+		"streamMode",
+		"powerLevel",
+		"adminActions",
+		"menuState"
+	],
 	components: {
 		actions,
 		filePreview,
@@ -74,7 +81,6 @@ export default {
 		Request,
 	},
 	watch: {
-		
 		readyToRender: {
 			immediate: true,
 			handler: function () {
@@ -276,113 +282,32 @@ export default {
 			}
 		},
 
-		menu: function() {
-
-			var type = f.deep(this.origin, "event.type") || '';
-
-			var menu = [];
-
-			if (type.indexOf('m.call') == -1) {
-
-				menu.push({
-					action: this.menureply,
-					text: "button.reply",
-					icon: "fas fa-reply",
-				})
-
-				menu.push({
-					action: this.menushowMultiSelect,
-					text: "button.select",
-					icon: "fas fa-check-circle",
-				})
-
-			}
-
-
-
-			if (type.indexOf('m.call') == -1) {
-				menu.push({
-					action: this.menushare,
-					text: "button.share",
-					icon: "fas fa-share-alt",
-				});
-			}
-
-			if (this.my) {
-				menu.push({
-					action: this.menudelete,
-					text: "button.delete",
-					icon: "far fa-trash-alt",
-				});
-			}
-
-
-
-			if (type == "m.room.message") {
-				menu.unshift({
-					action: this.menucopy,
-					text: "button.copy",
-					icon: "far fa-copy",
-				});
-
-				if (this.my && this.canediting)
-					menu.unshift({
-						action: this.menuedit,
-						text: "button.edit",
-						icon: "far fa-edit",
-					});
-			}
-
-			return menu;
-
-            return [
-                {
-                    text: 'labels.scenarioManager',
-                    icon: 'fas fa-tasks',
-                    action: this.scenarioManager
-                },
-            
-                {
-                    text: 'labels.scoreConverter',
-                    icon: 'fas fa-star',
-                    action: this.scoreConverter
-                },
-            
-            ]
-        },
-
 		menuItems: function () {
 
 			var type = f.deep(this.origin, "event.type") || '';
 
 			var menu = [];
-
-			if (type.indexOf('m.call') == -1) {
-
+			
+			if (type.indexOf("m.call") === -1) {
 				menu.push({
 					click: "reply",
 					title: this.$i18n.t("button.reply"),
 					icon: "fas fa-reply",
-				})
-
+				});
+				
 				menu.push({
 					click: "showMultiSelect",
 					title: this.$i18n.t("button.select"),
 					icon: "fas fa-check-circle",
-				})
-
-			}
-
-
-
-			if (type.indexOf('m.call') == -1) {
+				});
+				
 				menu.push({
 					click: "share",
 					title: this.$i18n.t("button.share"),
 					icon: "fas fa-share-alt",
 				});
 			}
-
+			
 			if (this.my) {
 				menu.push({
 					click: "delete",
@@ -390,16 +315,14 @@ export default {
 					icon: "far fa-trash-alt",
 				});
 			}
-
-
-
-			if (type == "m.room.message") {
+			
+			if (type === "m.room.message") {
 				menu.unshift({
 					click: "copy",
 					title: this.$i18n.t("button.copy"),
 					icon: "far fa-copy",
 				});
-
+				
 				if (this.my && this.canediting)
 					menu.unshift({
 						click: "edit",
@@ -448,6 +371,19 @@ export default {
 			);
 			return elem[0]?.message_id === this.origin.event.event_id ? true : false;
 		},
+		
+		user: function () {
+			return this.chat.getMember(this.chat.myUserId);
+		},
+		
+		sender: function () {
+			return this.chat.getMember(this.event.event?.user_id);
+		},
+		
+		isMenuAllowed: function () {
+			return this.streamMode && !this.my && this.user?.powerLevel >= this.powerLevel.moderator && this.sender?.powerLevel < this.user?.powerLevel ||
+						!this.streamMode && !this.content.call_id && this.event.event.type !== 'm.room.request_calls_access';
+		}
 	},
 
 	mounted() { },
@@ -489,13 +425,6 @@ export default {
 			setTimeout(() => {
 				this.setmenu();
 			}, 200);
-		},
-
-		setmenu: function () {
-			this.core.menu({
-				items: this.menu,
-				item: {},
-			});
 		},
 
 		prepareShare : function(){
@@ -737,6 +666,86 @@ export default {
 					}
 				});
 			});
+		},
+		
+		setmenu: function() {
+			/*this.core.menu({
+				items: this.menu(),
+				item: {},
+			});*/
+			this.menuState.set({
+				items: this.menu(),
+				item: {},
+			});
+		},
+		
+		menu: function() {
+			const
+				type = f.deep(this.origin, "event.type") || '',
+				menu = [];
+			
+			if (!this.streamMode) {
+				if (type.indexOf('m.call') === -1) {
+					menu.push({
+						action: this.menureply,
+						text: "button.reply",
+						icon: "fas fa-reply",
+					});
+					
+					menu.push({
+						action: this.menushowMultiSelect,
+						text: "button.select",
+						icon: "fas fa-check-circle",
+					});
+					
+					menu.push({
+						action: this.menushare,
+						text: "button.share",
+						icon: "fas fa-share-alt",
+					});
+				}
+				
+				if (this.my) {
+					menu.push({
+						action: this.menudelete,
+						text: "button.delete",
+						icon: "far fa-trash-alt",
+					});
+				}
+				
+				if (type === "m.room.message") {
+					menu.unshift({
+						action: this.menucopy,
+						text: "button.copy",
+						icon: "far fa-copy",
+					});
+					
+					if (this.my && this.canediting)
+						menu.unshift({
+							action: this.menuedit,
+							text: "button.edit",
+							icon: "far fa-edit",
+						});
+				}
+			} else {
+				if (this.user.powerLevel >= this.powerLevel.administrator) {
+					menu.push({
+						action: () => this.adminActions.toggleModerStatus(this.sender),
+						text: `caption.${ this.sender.powerLevel === this.powerLevel.moderator ? "cancelModeration" : "makeModerator" }`,
+						icon: "fas fa-user-shield",
+					});
+				}
+				
+				if (this.user.powerLevel >= this.powerLevel.moderator) {
+					menu.push({
+						action: () => this.adminActions.toggleBanStatus(this.sender),
+						text: `caption.${ this.sender.membership === "ban" ? "removeBan" : "ban" }`,
+						icon: "fas fa-user-times",
+					});
+				}
+			}
+			
+			return menu;
 		},
 	},
 };

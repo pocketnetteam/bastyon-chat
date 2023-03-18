@@ -337,8 +337,6 @@ export default {
 			this.loading = true;
 			this.firstPaginate = true;
 
-			console.log('this.chat', this.chat)
-
 			//this.chat.getTimelineForEvent('$FXUvcjIqcvDu0meLTnz-8plloZoNHLIYEb6WGQMWO3s')
 			
 			
@@ -351,25 +349,38 @@ export default {
 
 			var ts;
 
-			if (this.filterType === "images") {
-				this.scrollType = "custom";
-				ts = await this.customTimelineSet('FILES');
-			} else if (this.filterType === "text") {
-				ts = await this.customTimelineSet('TEXT', (filter) => {
-					filter.setDefinition({
-						room: {
-							timeline: {
-								contains_url: false,
-								types: ["m.room.message"],
+			switch (this.filterType) {
+				case "images": {
+					this.scrollType = "custom";
+					ts = await this.customTimelineSet('FILES');
+					break;
+				}
+				
+				case "text": {
+					ts = await this.customTimelineSet('TEXT', (filter) => {
+						filter.setDefinition({
+							room: {
+								timeline: {
+									contains_url: false,
+									types: ["m.room.message"],
+								},
 							},
-						},
+						});
 					});
-				});
-			} else {
-
-				var timeline = this.chat.getLiveTimeline();
-
-				ts = timeline.getTimelineSet();
+					break;
+				}
+				
+				case "donations": {
+					ts = await this.customTimelineSet('TEXT', (filter) => {
+						// filter.setDefinition({});
+					});
+					break;
+				}
+				
+				default: {
+					var timeline = this.chat.getLiveTimeline();
+					ts = timeline.getTimelineSet();
+				}
 			}
 
 			this.timeline = new this.core.mtrx.sdk.TimelineWindow(

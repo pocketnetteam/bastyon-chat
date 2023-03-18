@@ -14,6 +14,10 @@
 					</div>
 				</div>
 
+<!--        <div class="left" v-if="streamMode">
+          P
+        </div>-->
+
 				<div class="center">
 					<record-progress
 						v-if="voiceEnable && (isRecording || record)"

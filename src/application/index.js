@@ -78,7 +78,7 @@ class Core {
 
 		this.media = new Media();
 		this.audioContext = null;
-		this.exporter = new Exporter(this)
+		this.exporter = new Exporter(this);
 	}
 
 	hideOptimization = function (v) {
@@ -502,19 +502,6 @@ class Core {
 		});
 	}
 
-	menu(v) {
-		this.store.commit(
-			"SET_MENU",
-			v
-				? {
-						items: v.items,
-						item: v.item,
-						handler: v.handler,
-				  }
-				: null
-		);
-	}
-
 	invitepnt() {
 		var ui = f.deep(this, "user.userinfo.source");
 
@@ -636,6 +623,42 @@ class Core {
 		}
 
 		return this.audioContext;
+	}
+	
+	/**
+	 * TODO: Check is user logged | name exists
+	 *
+	 * @return {*}
+	 */
+	createStreamRoom(name) {
+		return this.mtrx.client
+			.createRoom({
+				room_alias_name: `#${ f.makeid() }/hidden`,
+				visibility: 'public',
+				invite: [],
+				name: `@${ name }`,
+				
+				initial_state: [
+					{
+						type: "m.room.guest_access",
+						state_key: "",
+						content: {
+							guest_access: "can_join",
+						},
+					}
+				],
+			})
+			.then((chat) => {
+				return this.mtrx.client.setGuestAccess(chat.room_id, {
+					allowJoin: true,
+					allowRead: true
+				}).then(() => {
+					return Promise.resolve(chat.room_id);
+				});
+			})
+			.catch((e) => {
+				return Promise.reject(e);
+			});
 	}
 }
 

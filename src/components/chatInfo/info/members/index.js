@@ -4,6 +4,21 @@ export default {
 	components: {
 		chatIcon,
 	},
+	
+	inject: [
+		"streamMode",
+		"menuState"
+	],
+	
+	props: {
+		membersList: Array,
+		allMembers: Array,
+		roles: {
+			type: Boolean,
+			default: true
+		}
+	},
+	
 	data: function () {
 		return {
 			moderItems: [
@@ -22,6 +37,7 @@ export default {
 					icon: "fas fa-user-times",
 				},
 			],
+			
 			menuItems: [
 				{
 					click: "adminMakeModer",
@@ -46,21 +62,20 @@ export default {
 			],
 		};
 	},
-	props: {
-		membersList: Array,
-	},
+	
 	computed: {
 		meid: function () {
 			return this.core.user.userinfo.id;
 		},
 		me: function () {
 			return (
-				_.find(this.membersList, (m) => {
-					return m.userId == this.core.user.userinfo.id;
+				_.find(this.allMembers || this.membersList, (m) => {
+					return m.userId === this.meid;
 				}) || {}
 			);
 		},
 	},
+	
 	methods: {
 		userinfo: function (user) {
 			return f.deep(this, "core.store.state.users." + user.userId) || {};
@@ -105,7 +120,7 @@ export default {
 			if (
 				user.powerLevel === 0 &&
 				this.me.powerLevel >= 50 &&
-				this.core.user.userinfo.id !== user.id
+				this.meid !== user.id
 			) {
 				menu = [items.ban];
 			}
@@ -113,19 +128,19 @@ export default {
 			if (
 				user.powerLevel === 0 &&
 				this.me.powerLevel === 100 &&
-				this.core.user.userinfo.id !== user.id
+				this.meid !== user.id
 			) {
 				menu = [items.setAdmin, items.ban];
 			}
 			if (
 				user.powerLevel === 50 &&
-				this.core.user.userinfo.id !== user.id &&
+				this.meid !== user.id &&
 				this.me.powerLevel === 100
 			) {
 				items.setAdmin.text = this.$i18n.t("caption.cancelModeration");
 				menu = [items.setAdmin, items.ban];
 			}
-
+			
 			return menu;
 		},
 
@@ -136,7 +151,11 @@ export default {
 		},
 
 		setmenu: function (user) {
-			this.core.menu({
+			/*this.core.menu({
+				items: this.menu(user),
+				item: {},
+			});*/
+			this.menuState.set({
 				items: this.menu(user),
 				item: {},
 			});

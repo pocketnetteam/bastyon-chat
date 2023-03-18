@@ -32,24 +32,25 @@
 				:key="key"
 				:chat="m_chat"
 				:searchresults="searchresults"
-				:filterType="streamMode ? 'text' : ''"
+				:filterType.sync="filterType"
 				@editingEvent="editingEvent"
 				@shareEvent="shareEvent"
 				@replyEvent="replyEvent"
 				@eventImage="(e) => galleryImage(e)"
 				@scroll="scroll"
 				@menuIsVisible="menuIsVisibleHandler"
-				v-if="m_chat && membership === 'join' && ready"
+				v-if="m_chat && allowedToRead && ready"
 				@getEvents="events"
 				:selectedMessages="selectedMessages"
 			/>
 
-			<div v-if="m_chat && membership === 'invite'" class="joinwrapper">
+			<div v-if="m_chat && membership !== 'join'" class="joinwrapper">
 				<join
-					:m_chat="m_chat"
+					:m_chat.sync="m_chat"
 					:chat="chat"
 					:usersinfo="usersinfo"
 					@creatorLeft="brokenInvitedRoom"
+					@joined="joined"
 				/>
 			</div>
 

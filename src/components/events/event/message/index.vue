@@ -39,12 +39,10 @@
 
 			<div
 				class="actionsWrapper"
-				v-if="
-					!streamMode && !content.call_id && event.event.type !== 'm.room.request_calls_access'
-				"
+				v-if="isMenuAllowed"
 			>
 				<div
-					v-if="multiSelect"
+					v-if="!streamMode && multiSelect"
 					class="multiSelect"
 					@click="eventMessage(selectedMessage)"
 				>

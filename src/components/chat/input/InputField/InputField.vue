@@ -345,7 +345,7 @@ export default {
 		getsearch(position) {
 			var sposition = this.getsearchposition(position);
 
-			if (!sposition) return null;
+			if (this.streamMode || !sposition) return null;
 
 			return this.text.substring(sposition.start, sposition.middle);
 		},

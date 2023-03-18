@@ -1,0 +1,153 @@
+#chatExported /deep/
+  display: flex
+  flex-direction: column
+  position: absolute
+  left: 0
+  padding: 0
+  overflow: hidden
+  will-change: transform
+  overscroll-behavior: contain
+  height: 100%
+  width: 100%
+
+  .topheader
+    margin: 0 0 .5em
+
+    .row
+      border-bottom: 1px solid #F3F3F2
+      display: flex
+      justify-content: space-between
+      align-items: center
+      padding: 0.5em 1em
+
+      span
+        cursor: default
+        font-weight: 600
+
+      .button
+        background: none
+        border: 1px solid #F3F3F2
+        border-radius: 8px
+        display: inline-flex
+        align-items: center
+        justify-content: center
+        color: #555770
+        padding: .35em
+        transition: 0.3s
+        min-height: 35px
+        min-width: 35px
+
+        &:hover
+          background: rgb(0, 164, 255)
+          border-color: transparent
+          color: rgb(255, 255, 255)
+
+        &.active
+          background: rgba(0, 164, 255, 0.14)
+          border-color: transparent
+          color: rgb(0, 164, 255)
+
+        ~ .button
+          margin: 0 0 0 .35em
+
+      .chat-filter
+        .button
+          font-size: .8em
+          font-weight: 600
+
+          ~ .button
+            margin: 0 0 0 .5em
+
+  #chat.active
+    position: relative
+    padding: 0
+    height: 100%
+
+  .work
+    margin: unset
+    padding: unset
+    max-width: unset
+    width: unset
+
+  #events
+    padding: 0 .5em 50px
+
+    .messageRow
+      padding: 0
+
+  .eventsflex
+    overflow: hidden
+
+  .userpic
+    background: transparent
+    box-shadow: none
+    height: auto
+
+  .chatInputWrapper
+    .center
+      position: static
+
+    #chatInput
+      padding-bottom: .6em
+
+      .work
+        padding: 0 .5em
+
+      .input_component
+        height: 35px
+
+  .joinwrapper
+    background: none
+    border: 1px solid transparent
+    border-radius: 30px
+    top: auto
+    overflow: hidden
+    z-index: 10
+
+    #chatJoin
+      background: rgb(250, 250, 250)
+      border-radius: 30px
+      display: flex
+      align-items: center
+      justify-content: space-between
+      margin: 9px 7px
+      padding: 3px 3px 4px 18px
+
+      .caption
+        cursor: default
+        display: flex
+        font-size: 1em
+        padding: 0
+        width: auto
+
+        span
+          color: #000
+          font-size: .9em
+          font-weight: 500
+
+      .joinAction
+        background: none
+        display: block
+        padding: 0
+
+        .actions
+          .action
+            padding: 0
+
+            .button
+              &.small
+                font-size: 0.8em
+                padding: 0.5em 1em
+
+              &.rounded
+                border-radius: 22px
+
+  .input_component
+    .iconbutton
+      .idummy
+        text-align: center
+
+  #modal
+    .modal-backdrop,
+    .modal-wrapper
+      width: 100%

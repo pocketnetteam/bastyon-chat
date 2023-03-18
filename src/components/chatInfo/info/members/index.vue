@@ -5,7 +5,7 @@
 			:class="user.membership"
 			v-for="(user, index) in membersList"
 			:key="user.userId"
-			
+
 		>
 			<div class="leftWrapper" @click="core.mtrx.opencontact(userinfo(user))">
 				<div class="avatarNameWrapper">
@@ -14,7 +14,7 @@
 				<div class="nameRole">
 					<span class="name">{{ userinfo(user).name || "" }}</span>
 
-					<span class="memberRole" v-if="user.powerLevel">{{
+					<span class="memberRole" v-if="roles && user.powerLevel">{{
 						$t("caption." + role(user))
 					}}</span>
 					<span class="memberRole" v-if="user.userId == meid">You</span>

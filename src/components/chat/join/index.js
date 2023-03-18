@@ -13,6 +13,8 @@ export default {
 	components: {
 		chatPreview,
 	},
+	
+	inject: ["streamMode"],
 
 	data: function () {
 		return {

@@ -31,38 +31,43 @@ const i18n = new VueI18n({
 	silentTranslationWarn: true,
 });
 
-
 const chatConstructor = Vue.extend({...chat, store, i18n})
 
 class Exporter {
-    constructor(core, p) {
-		this.core = core;
-        this.instances = {}
+		constructor(core, p) {
+			this.core = core;
+			this.instances = {}
 	}
-    chat(el, roomId, p){
+		async chat(el, roomId, p){
+				await this.core?.mtrx?.waitchats();
+				const chat = this.core.vm.$store.state.chatsMap[roomId];
+				
+				if (chat) {
+						const instance = new chatConstructor({
+								data: {chat, ...p},
+						});
 
-        
-        var chat = this.core.vm.$store.state.chatsMap[roomId];
+						instance.$options.shadowRoot = el.ownerDocument.body;
+						
+						instance.$mount(el);
 
-        if (chat){
-
-            const instance = new chatConstructor({
-                data: {chat, ...p},
-            })
-
-            instance.$options.shadowRoot = el.ownerDocument.body
-            
-            instance.$mount(el)
-
-            return Promise.resolve({
-                instance
-            })
-
-            
-        }
-
-        return Promise.reject('missing:chat')
-    }
+						return Promise.resolve(instance);
+				} else {
+					await this.core.mtrx.client.peekInRoom(roomId)
+						.then(room => {
+							if (!room) return Promise.reject('missing:chat');
+							
+							this.core.vm.$store.commit(
+								'SET_CHATS_TO_STORE',
+								this.core.vm.$store.state.chats.concat([
+									Object.assign(room.summary, { stream: true })
+								])
+							);
+						});
+					
+					return this.chat.apply(this, arguments);
+				}
+		}
 }
 
 export default Exporter;

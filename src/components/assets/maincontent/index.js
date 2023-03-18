@@ -2,14 +2,15 @@ import { mapState } from "vuex";
 
 export default {
 	name: "maincontent",
-	props: {
-		rbackexp: Boolean,
-	},
-
+	
 	components: {
 		contact: () => import("@/components/contact/index.vue"),
 		contacts: () => import("@/components/contacts/list/index.vue"),
 		complain: () => import("@/components/complain/index.vue"),
+	},
+	
+	props: {
+		rbackexp: Boolean,
 	},
 
 	data: function () {
@@ -70,6 +71,6 @@ export default {
 
 		scroll: function (v) {
 			this.$refs["scrollable"].scrollTop = v || 0;
-		},
+		}
 	},
 };

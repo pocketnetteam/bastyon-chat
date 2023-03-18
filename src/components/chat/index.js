@@ -13,7 +13,8 @@ export default {
 		u: String,
 		search : String,
 		searchresults : Array,
-		style : ''
+		style : '',
+		filterType: ''
 	},
 	components: {
 		list,
@@ -54,10 +55,8 @@ export default {
 	created() { },
 
 	mounted() {
-
-		console.log("CHAT MOUNTED", this)
-
 		this.getuserinfo();
+		
 		if (!this.streamMode) {
 			this.$store.commit("active", true);
 			this.$store.commit("blockactive", { value: true, item: "chat" });
@@ -140,9 +139,11 @@ export default {
 					this.roomMuted = true;
 				}
 
-				var m_chat = this.core.mtrx.client.getRoom(this.chat.roomId);
-
-				return m_chat || {};
+				if (this.chat.pcrypto) {
+					return this.chat;
+				} else {
+					return this.core.mtrx.client.getRoom(this.chat.roomId) || {};
+				}
 			}
 		},
 
@@ -170,9 +171,17 @@ export default {
 						this.roomUserBanned = true;
 					}
 				}
-
-				return this.m_chat.getMyMembership();
+				
+				return this.m_chat.currentState?.members[this.m_chat.myUserId]?.membership;
 			}
+		},
+		
+		allowedToRead: function () {
+			return this.membership === 'join' || this.m_chat.summary.stream;
+		},
+		
+		allowedToJoin: function () {
+			return this.membership === 'invite' || this.m_chat.summary.stream;
 		},
 
 		blockedUser: function () {
@@ -232,8 +241,8 @@ export default {
 		},
 
 		checkcrypto: function () {
-			this.encrypted = this.m_chat.pcrypto.canBeEncrypt();
-			this.cantchat = this.m_chat.pcrypto.cantchat();
+			this.encrypted = this.m_chat.pcrypto?.canBeEncrypt();
+			this.cantchat = this.m_chat.pcrypto?.cantchat();
 		},
 
 		force: function () {
@@ -542,6 +551,11 @@ export default {
 				this.$refs["list"].scrollToEvent(event);
 			})
 			
+		},
+		
+		joined: function () {
+			/*Trigger chat reactivity*/
+			this.$set(this.chat, 'joined', true);
 		}
 		
 	},

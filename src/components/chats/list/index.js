@@ -117,9 +117,9 @@ export default {
 		chats: function (state) {
 			var self = this;
 			var chats = [];
-
+			
 			_.each(state.chats, (chat) => {
-				if (this.deletedrooms[chat.roomId]) return;
+				if (this.deletedrooms[chat.roomId] || chat.stream) return;
 
 				this.core.mtrx.kit.tetatetchat(this.m_chat);
 

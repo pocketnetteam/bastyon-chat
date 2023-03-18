@@ -13,7 +13,10 @@ export default {
 		error: [Object, Error, String],
 		selectedMessages: [],
 	},
-	inject: ["matches"],
+	inject: [
+		"matches",
+		"menuState"
+	],
 	components: {},
 	data: function () {
 		return {
@@ -118,7 +121,8 @@ export default {
 		},
 	},
 	destroyed: function () {
-		this.core.menu(null);
+		/*this.core.menu(null);*/
+		this.menuState.set(null);
 	},
 	updated: function () {
 		/*if(this.countshow === 0) {

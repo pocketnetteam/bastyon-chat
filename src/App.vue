@@ -314,7 +314,11 @@ export default {
 			isChatEncrypted: this.isChatEncrypted,
 			matches: this.matches,
 			markText: this.markText,
-      streamMode: this.streamMode
+      streamMode: this.streamMode,
+      menuState: {
+        get: () => this.menuState,
+        set: (val) => this.$set(this, "menuState", val)
+      }
 		};
 	},
 
@@ -388,6 +392,8 @@ export default {
 				append: this.appendMatch,
 				clear: this.clearMatches,
 			},
+
+      menuState: false
 		};
 	},
 

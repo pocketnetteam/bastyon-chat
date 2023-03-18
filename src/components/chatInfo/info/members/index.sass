@@ -4,7 +4,13 @@
   padding: 0
 
   .setmenu
-    padding : 0 $r
+    font-size: .7em
+    padding : $r
+    opacity: .3
+    transition: opacity .3s
+
+    &:hover
+      opacity: 1
 
   .roomMember
     padding: 2 * $r
@@ -51,8 +57,9 @@
           color: srgb(--neutral-grad-3)
 
     .rightWrapper
-      padding-right: $r
-      /deep/ .icon 
+      padding-right: 1.25 * $r
+      /deep/ .icon
+        font-size: .7em
         width: 100%
         text-align: center
 
@@ -64,7 +71,7 @@
           z-index: 99
           top: 10px
 
-     
+
 .invitedAvatar
     &:after
         content : ""

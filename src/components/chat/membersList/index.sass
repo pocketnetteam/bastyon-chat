@@ -1,0 +1,119 @@
+.chatswrapper
+    padding: 0
+    overflow-x: hidden
+    height: 100%
+
+    /deep/
+        .simpleSearch
+            padding: 0 $r
+
+            input[type="text"]
+                background: unset
+                border: unset
+                border-radius: unset
+                color: unset
+
+        .roomMember
+            border-bottom: 0
+            padding: $r 0 $r $r
+
+            .leftWrapper
+                .avatarNameWrapper
+                    height: 33px
+                    width: 33px
+
+            .menuwrapper
+                display: block !important
+
+            .dropDownIcon i
+                opacity: .3
+                transition: opacity .3s
+
+                &:hover
+                    opacity: 1
+
+
+        .chats
+            border-bottom: 1px solid #F3F3F2
+            position: static
+
+            .caption
+                font-size: 1em !important
+
+.section-title
+    color: srgb(--text-color)
+    cursor: pointer
+    display: flex
+    align-items: center
+    justify-content: flex-start
+    margin: 0
+    padding: $r $r
+    width: 100%
+    text-align: center
+
+    span
+        font-size: 0.8em
+        font-weight: 700
+
+    i.icon
+        color: rgb(142, 144, 166)
+        display: inline-block
+        padding: 0 $r 0 0
+        text-align: center
+        width: 30px
+
+    &.section-administrators i.icon
+        color: rgb(235, 87, 87)
+
+    &.section-moderators i.icon
+        color: rgb(64, 166, 159)
+
+    &.section-banned i.icon
+        color: rgb(87, 89, 102)
+
+    .toggle
+        font-size: 1em
+        margin: 0 0 0 auto
+        padding: 0 $r
+
+        i.fa
+            color: rgb(85, 87, 112)
+            transition: transform .25s ease-in-out
+
+    &.collapsed
+        i[class$="up"]
+            transform: rotate(180deg)
+
+        + .collapsible
+            max-height: 0
+
+.collapsible
+    overflow: hidden
+    max-height: 100vh
+    transition: all 0.25s ease-in-out
+
+.card-content
+    padding: $r $r
+
+.contact
+    cursor: pointer
+
+.show-more
+    text-align: center
+
+    & a
+        color: #00A4FF
+
+
+.preloaderWrapperLine
+    text-align: center
+    padding : 2 * $r
+
+.empty
+    margin-top: 4 * $r
+    text-align: center
+    padding : 2 * $r
+
+    span
+        font-size: 2em
+        font-weight: 100
