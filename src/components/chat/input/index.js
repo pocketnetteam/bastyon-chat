@@ -30,6 +30,7 @@ export default {
 	
 	inject: [
 		"streamMode",
+		"authorId",
 		"menuState"
 	],
 
@@ -64,6 +65,8 @@ export default {
 			prepareRecording: false,
 
 			cancelledCordovaMediaRecorder: false,
+
+			donate: null
 		};
 	},
 
@@ -357,21 +360,33 @@ export default {
 		},
 
 		sendtransactionWrapper: function () {
-
-			var users = _.filter(
-				_.map(this.joined, (j) => {
-					return (
-						this.$f.deep(
-							this,
-							"$store.state.users." + this.$f.getmatrixid(j)
-						) || null
+			var users = (() => {
+				if (this.streamMode && this.authorId) {
+					/* Donate only to author (stream mode) */
+					return [{
+						id: this.authorId,
+						source: {
+							address: this.authorId
+						}
+					}];
+				} else {
+					/* Donate to chat participants */
+					return _.filter(
+						_.map(this.joined, (j) => {
+							return (
+								this.$f.deep(
+									this,
+									"$store.state.users." + this.$f.getmatrixid(j)
+								) || null
+							);
+						}),
+						(r) => {
+							return r && r.source && r.id != this.core.user.userinfo?.id;
+						}
 					);
-				}),
-				(r) => {
-					return r && r.source && r.id != this.core.user.userinfo?.id;
 				}
-			);
-
+			})();
+			
 			if (!users.length) {
 				return "users.length";
 			}
@@ -400,6 +415,8 @@ export default {
 		},
 
 		sendtransaction: function (user) {
+			if (this.donate) return;
+
 			var api = this.transaction;
 
 			//TODO get address and send transaction
@@ -407,13 +424,15 @@ export default {
 			api({
 				roomid: this.chat.roomId,
 				receiver: user.source.address,
-			});
+				send: !this.streamMode,
+				share: !this.streamMode
+			}).then(transaction => {
+				this.donate = transaction;
+			})
+		},
 
-			/*.then(({txid, from}) => {
-	  
-			  return this.core.mtrx.transaction(this.chat.roomId, txid)
-	  
-			})*/
+		removetransaction: function () {
+			this.donate = null;
 		},
 
 		emitInputData: function () {
@@ -598,7 +617,7 @@ export default {
 				.pretry(() => {
 					return this.chat && !this.creating;
 				})
-				.then((r) => {
+				.then(async (r) => {
 					this.$emit("sent");
 
 					text = this.replaceMentions(text);
@@ -652,12 +671,22 @@ export default {
 						}
 					}
 
-					return this.core.mtrx.sendtext(this.chat, text, {
-						relation: this.relationEvent,
-					}, {
-						encryptEvent : this.clbkEncrypt,
-						encryptedEvent : this.clbkEncrypted
-					});
+					const sendText = (text) => {
+						return this.core.mtrx.sendtext(this.chat, text, {
+							relation: this.relationEvent,
+						}, {
+							encryptEvent : this.clbkEncrypt,
+							encryptedEvent : this.clbkEncrypted
+						});
+					}
+
+					if (!this.donate) {
+						return sendText(text);
+					} else {
+						const txid = await this.donate.send(this.donate)
+						this.removetransaction();
+						return sendText(`${ txid } ${ text }`);
+					}
 				})
 				.catch((e) => {
 					this.$emit("sentMessageError", {

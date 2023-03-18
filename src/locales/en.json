@@ -175,7 +175,9 @@
 		"block": "Block",
 		"unblock": "Unblock",
 		"blockUser": "Block user",
-		"Complain": "Complain"
+		"Complain": "Complain",
+		"chat": "Chat",
+		"donations": "Donations"
 	},
 
 	"type": {

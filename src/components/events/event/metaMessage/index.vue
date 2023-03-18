@@ -148,6 +148,7 @@ export default {
 					},
 					(p, m) => {
 						this.module.d = m;
+						this.loaded(m);
 					}
 				);
 		}
@@ -177,6 +178,10 @@ export default {
 
 		//imagesLoaded: function () {},
 		updatedSize: function (before) {},
+
+		loaded: function (data) {
+			this.$emit("loaded", data);
+		}
 	},
 };
 </script>

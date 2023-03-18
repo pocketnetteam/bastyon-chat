@@ -57,7 +57,8 @@ export default {
 		return {
 			referenceshowed: false,
 			markedText: null,
-			hasurlerror : null
+			hasurlerror : null,
+			donationColor: null
 		};
 	},
 	inject: [
@@ -334,8 +335,15 @@ export default {
 			return menu;
 		},
 
+		itIsTransaction: function () {
+			return this.body.startsWith("bastyon://i?stx=");
+		},
+
 		urlpreview: function () {
-			if (!this.streamMode && !this.preview && this.content.msgtype !== "m.file") {
+			if (
+				this.streamMode && this.itIsTransaction ||
+				!this.streamMode && !this.preview && this.content.msgtype !== "m.file"
+			) {
 				var url = f.getUrl(this.body);
 
 				if (url) {
@@ -637,6 +645,38 @@ export default {
 			/*Scroll eventsflex to message*/
 			if (parent)
 				parent.parentNode.scrollTop = evtWrp.offsetTop - parent.offsetTop;
+		},
+
+		urlloaded: function(data) {
+			const
+				holder = data?.el.find('.txcnt'),
+				colors = {
+				/* amt: color */
+					0.5: "blue",
+					0.6: "violette",
+					0.7: "cyan",
+					0.8: "orange",
+					0.9: "pink"
+				};
+
+			holder?.on("DOMSubtreeModified", () => {
+				const value = parseFloat(
+					holder.find(".output:eq(0) .amount").text()
+				);
+
+				if (value > 0) {
+					holder.off("DOMSubtreeModified");
+
+					Object.keys(colors).slice().reverse().every(amount => {
+						if (value >= amount) {
+							this.donationColor = `donation-message donation-color-${ colors[amount] }`;
+							return false;
+						}
+						
+						return true;
+					});
+				}
+			});
 		},
 
 		urlerror : function(e){

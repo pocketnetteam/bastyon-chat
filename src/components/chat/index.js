@@ -13,8 +13,8 @@ export default {
 		u: String,
 		search : String,
 		searchresults : Array,
-		style : '',
-		filterType: ''
+		filterType: String,
+		style : ''
 	},
 	components: {
 		list,
@@ -268,6 +268,7 @@ export default {
 		},
 
 		getuserinfo: function () {
+			console.log('userinfo', this.u)
 			if (this.u) {
 				this.core.user.usersInfo(this.u).then((info) => {
 					this.usersinfo = info;

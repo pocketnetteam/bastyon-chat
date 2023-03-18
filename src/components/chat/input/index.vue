@@ -1,7 +1,11 @@
 <template>
 	<div id="chatInput" class="noswipepnt">
 		<div class="work" v-if="ready">
-			<div class="inputWrapper" v-if="chat">
+			<div
+				class="inputWrapper"
+				:class="{ donate }"
+				v-if="chat"
+			>
 				<div class="tipusers" v-if="tipusers.length">
 					<div
 						@click="insertuser(user)"
@@ -14,15 +18,19 @@
 					</div>
 				</div>
 
-        <div
-          class="left"
-          :class="{ 'donation': streamMode }"
-          v-if="streamMode"
-        >
-          <button class="iconbutton donate">
-            <i class="icon donate">Donate</i>
-          </button>
-        </div>
+				<div
+					class="left"
+					:class="{ 'donation': streamMode }"
+					v-if="streamMode"
+				>
+					<button
+						class="iconbutton"
+						:disabled="this.donate"
+						@click="sendtransactionWrapper"
+					>
+						<i class="icon donate">Donate</i>
+					</button>
+				</div>
 
 				<div class="center">
 					<record-progress
@@ -85,6 +93,14 @@
 							</div>
 						</div>
 					</div>
+				</div>
+
+				<div class="bottom" v-if="donate">
+					<div class="count">
+						<i class="icon donate">Donate</i>
+						<span class="sum">{{ donate.value }} PKOIN</span>
+					</div>
+					<i class="icon remove fa fa-times" @click="removetransaction"></i>
 				</div>
 			</div>
 		</div>

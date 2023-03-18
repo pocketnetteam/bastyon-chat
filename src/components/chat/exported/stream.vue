@@ -1,44 +1,40 @@
 <template>
 	<div id="chatExported" :class="style || ''">
-    <div class="topheader">
-      <div class="row">
-        <span>
-          <template v-if="!showMembers">Stream chat</template>
-          <template v-else>Members list</template>
-        </span>
-        <div class="buttons">
-          <button
-            class="button"
-            @click="toggleMembers"
-          >
-            <i
-              class="fa"
-              :class="{ 'fa-user-friends': !showMembers, 'fa-comment': showMembers }"
-            ></i>
-          </button>
-        </div>
-      </div>
-      <div class="row" v-if="/*!showMembers*/false">
-        <div class="buttons chat-filter">
-          <button
-            class="button"
-            :class="{ active: filterType === 'text' }"
-            @click="filterMessages($event, 'text')"
-          >Chat</button>
-          <button
-            class="button"
-            :class="{ active: filterType === 'donations' }"
-            @click="filterMessages($event, 'donations')"
-          >Donations</button>
-        </div>
-      </div>
-    </div>
+		<div class="topheader">
+			<div class="row">
+				<span>
+					<template v-if="!showMembers">Stream chat</template>
+					<template v-else>Members list</template>
+				</span>
+				<div class="buttons">
+					<button
+						class="button"
+						@click="toggleMembers"
+					>
+						<i
+							class="fa"
+							:class="{ 'fa-user-friends': !showMembers, 'fa-comment': showMembers }"
+						></i>
+					</button>
+				</div>
+			</div>
+			<div class="row" v-if="!showMembers">
+				<div class="buttons chat-filter">
+					<button
+						v-for="{ name, filter } in chatFilter"
+						class="button"
+						:class="{ active: filterType === filter }"
+						@click="filterMessages($event, filter)"
+					>{{ $t("button." + name) }}</button>
+				</div>
+			</div>
+		</div>
 		<transition>
-      <chat :chat="chat" :style="style" :filterType="filterType" v-if="!showMembers" />
-      <membersList :chat="chat" v-else />
-    </transition>
+			<chat :chat="chat" :style="style" :filterType.sync="filterType" v-if="!showMembers" />
+			<membersList :chat="chat" v-else />
+		</transition>
 
-    <pmenu />
+		<pmenu />
 	</div>
 </template>
 
@@ -53,36 +49,40 @@ import pmenu from "@/components/assets/pmenu/index.vue";
 export default {
 	name: "stream",
 
-  components: {
-    chat,
-    membersList,
-    pmenu
-  },
+	components: {
+		chat,
+		membersList,
+		pmenu
+	},
 
-  props: {
-    chat: Object,
-    style: String
-  },
+	props: {
+		chat: Object,
+		style: String
+	},
 
 	data() {
 		return {
-      filterType: "text",
-      showMembers: false
+			showMembers: false,
+			filterType: "text",
+			chatFilter: [
+				{ name: "chat", filter: "text" },
+				{ name: "donations", filter: "donate" }
+			]
 		}
 	},
 
-  computed: mapState({
-    auth: (state) => state.auth
-  }),
+	computed: mapState({
+		auth: (state) => state.auth
+	}),
 
 	methods: {
-    filterMessages(e, type) {
-      this.filterType = type;
-    },
+		filterMessages(e, type) {
+			this.filterType = type;
+		},
 
-    toggleMembers() {
-      this.showMembers = !this.showMembers;
-    }
-  }
+		toggleMembers() {
+			this.showMembers = !this.showMembers;
+		}
+	}
 };
 </script>

@@ -1,3 +1,5 @@
+$bastyon: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTEiIGhlaWdodD0iMTIiIHZpZXdCb3g9IjAgMCAxMSAxMiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik0xMSAxLjMyMzg3TDkuNjE3MTUgMC4wMDYxMDM1Mkw3Ljk4MDUyIDEuNzIzNTZDNy4xODU0OSAxLjIzOTYxIDYuMjUxOCAwLjk2MDg1NiA1LjI1MzAxIDAuOTYwODU2QzQuMzg2IDAuOTYwODU2IDMuNTY4MDUgMS4xNzA5IDIuODQ3MjcgMS41NDI4OEwxLjM4Mjg1IDAuMDA2MTQwMDdMMCAxLjMyMzkxTDEuMzMwMzQgMi43MTk5NkMwLjUwMjg1MSAzLjY0ODM0IDAgNC44NzIzOCAwIDYuMjEzODZDMCA3LjQ0ODYxIDAuNDI2MDEzIDguNTgzODUgMS4xMzkwNyA5LjQ4MDYzTDAgMTAuNjc2TDEuMzgyODUgMTEuOTkzN0wyLjU4MDM1IDEwLjczNzFDMy4zNjMzMyAxMS4yMDA3IDQuMjc3MDkgMTEuNDY2OSA1LjI1MzAxIDExLjQ2NjlDNi4zNTkzOSAxMS40NjY5IDcuMzg1ODggMTEuMTI0OCA4LjIzMjUyIDEwLjU0MDdMOS42MTcxNSAxMS45OTM3TDExIDEwLjY3Nkw5LjU4MjkzIDkuMTg4OTFDMTAuMTY1MiA4LjM0MzEzIDEwLjUwNiA3LjMxODMgMTAuNTA2IDYuMjEzODZDMTAuNTA2IDUuMDAxNzcgMTAuMDk1NSAzLjg4NTU3IDkuNDA1OSAyLjk5NjdMMTEgMS4zMjM4N1pNMS44NzM4MyA2LjIxMzg2QzEuODczODMgOC4wODAxMyAzLjM4Njc0IDkuNTkzMDMgNS4yNTMwMSA5LjU5MzAzQzcuMTE5MjcgOS41OTMwMyA4LjYzMjE4IDguMDgwMTMgOC42MzIxOCA2LjIxMzg2QzguNjMyMTggNC4zNDc2IDcuMTE5MjcgMi44MzQ2OSA1LjI1MzAxIDIuODM0NjlDMy4zODY3NCAyLjgzNDY5IDEuODczODMgNC4zNDc2IDEuODczODMgNi4yMTM4NloiIGZpbGw9IndoaXRlIi8+Cjwvc3ZnPgo="
+  
 #chatExported /deep/
   display: flex
   flex-direction: column
@@ -9,6 +11,16 @@
   overscroll-behavior: contain
   height: 100%
   width: 100%
+
+  .iconbutton
+    cursor: pointer
+    color : srgb(--color-txt-ac)
+    text-align: center
+    +transition(0.3s)
+
+    @media (pointer:fine)
+        &:hover
+            color : srgb(--neutral-grad-3)
 
   .topheader
     margin: 0 0 .5em
@@ -75,6 +87,93 @@
     .messageRow
       padding: 0
 
+      .messageText
+        &.donation-message
+          color: srgb(--text-on-bg-shadow-color)
+
+        &.donation-color-blue
+          background: linear-gradient(270deg, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0) 100%), #495AFF
+
+        &.donation-color-violette
+          background: linear-gradient(270deg, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0) 100%), linear-gradient(0deg, #6A11CB, #6A11CB), linear-gradient(90deg, #495AFF 0%, #0ACFFE 100%)
+
+        &.donation-color-cyan
+          background: linear-gradient(270deg, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0) 100%), linear-gradient(0deg, #3AB5B0, #3AB5B0), linear-gradient(90deg, #FF4E50 0%, #F9D423 100%), linear-gradient(90deg, #495AFF 0%, #0ACFFE 100%)
+
+        &.donation-color-orange
+          background: linear-gradient(270deg, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0) 100%), linear-gradient(0deg, #FF4E50, #FF4E50), linear-gradient(0deg, #A445B2, #A445B2), linear-gradient(90deg, #FF4E50 0%, #F9D423 100%), linear-gradient(225deg, #231557 0%, #44107A 28.6%, #FF1361 66.82%, #FFF800 100%), linear-gradient(90deg, #495AFF 0%, #0ACFFE 100%)
+
+        &.donation-color-pink
+          background: linear-gradient(270deg, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0) 100%), linear-gradient(0deg, #FF0066, #FF0066), linear-gradient(225deg, #231557 0%, #44107A 28.6%, #FF1361 66.82%, #FFF800 100%), linear-gradient(0deg, #FF4E50, #FF4E50), linear-gradient(0deg, #A445B2, #A445B2), linear-gradient(90deg, #FF4E50 0%, #F9D423 100%), linear-gradient(225deg, #231557 0%, #44107A 28.6%, #FF1361 66.82%, #FFF800 100%), linear-gradient(90deg, #495AFF 0%, #0ACFFE 100%)
+
+      .msgtext
+        & + .linkPreview
+          order: -1
+          padding: 0
+
+          .urlMessage .urlwrapper
+            display: inline-flex
+            margin-top: $r
+      
+      .urlwrapper
+        margin: 0
+
+      .pocketnet_iframe_wrapper
+        background: rgba(0, 0, 0, .25)
+        border: 0
+        border-radius: 9px
+        box-shadow: none
+
+        .scaption,
+        .line,
+        .inputs,
+        .ioarrow,
+        .txid
+          display: none
+
+        .workd
+          padding: 0
+
+        .io
+          display: inline-flex
+
+          .outputs
+            border: 0
+            padding: $r
+
+            .output
+              margin: 0
+
+              .info
+                display: none
+              
+              .amount
+                color: srgb(--text-on-bg-shadow-color)
+                cursor: default
+                display: grid
+                grid-template-columns: auto auto
+                grid-gap: $r
+                align-items: center
+                padding: 0
+
+                .fas
+                  font-size: 1.25em
+
+                  &:before
+                    background-color: srgb(--text-on-bg-shadow-color)
+                    mask-image: url($bastyon)
+                    mask-repeat: no-repeat
+                    mask-position: 50% 50%
+                    mask-size: contain
+                    content: ""
+                    display: block
+                    height: 1em
+                    width: 1em
+
+              & + .output
+                display: none
+
+
   .eventsflex
     overflow: hidden
     max-width: none
@@ -85,6 +184,20 @@
     height: auto
 
   .chatInputWrapper
+    .inputWrapper
+      &.donate
+        flex-wrap: wrap
+
+      .left
+        &.donation
+          .iconbutton
+            background: transparent
+            border: 1px solid srgba(--neutral-grad-0, 0.9)
+            border-radius: 8px
+          
+          & + .center
+            margin: 0 0 0 $r / 2
+
     .center
       position: static
 
@@ -95,7 +208,71 @@
         padding: 0 .5em
 
       .input_component
-        height: 35px
+        min-height: 35px
+      
+      .inputWrapper
+        .icon
+          display: inline-block
+          
+          &.donate
+            background-color: srgb(--color-txt-ac)
+            mask-image: url($bastyon)
+            mask-repeat: no-repeat
+            mask-position: 50% 50%
+            mask-size: contain
+          
+        .iconbutton
+          cursor: pointer
+          +transitionopt(.25s, background-color border-color)
+
+          .icon
+            +transitionopt(.25s, background-color)
+            
+          &:hover:not([disabled])
+            background-color: srgb(--color-txt-ac)
+            border-color: srgb(--color-txt-ac)
+            
+            .icon
+              background-color: srgb(--text-on-bg-shadow-color)
+          
+          &[disabled]
+            cursor: default
+            opacity: .5
+
+            .icon
+              filter: grayscale(100%)
+
+        .bottom
+          display: flex
+          flex-basis: 100%
+          align-items: center
+          padding: $r / 2 $r * 2 0 calc(#{$r} * 3 + 35px)
+
+          .count
+            background-color: srgb(--color-txt-ac)
+            border-radius: 6px
+            color: srgb(--text-on-bg-shadow-color)
+            cursor: default
+            display: grid
+            grid-template-columns: auto auto
+            grid-gap: $r
+            padding: $r / 2 $r
+
+          .icon
+            &.donate
+              background-color: srgb(--text-on-bg-shadow-color)
+              width: 1em
+              
+            &.remove
+              color: srgb(--color-bad)
+              cursor: pointer
+              margin: 0 0 0 $r
+              padding: $r / 2
+              opacity: .75
+              +transitionopt(.25s, opacity)
+
+              &:hover
+                opacity: 1
 
   .joinwrapper
     background: none
@@ -152,3 +329,8 @@
     .modal-backdrop,
     .modal-wrapper
       width: 100%
+    
+    .modal-wrapper
+      left: 50%
+      margin-left: 0
+      transform: translateX(-50%)
