@@ -645,7 +645,7 @@ class MTRX {
 		return Promise.resolve(this.sdk.ContentHelpers.makeTextMessage(text));
 	}
 
-	sendtext(chat, text, { relation, from }, clbks) {
+	sendtext(chat, text, { relation, from, donateLink }, clbks) {
 		return this.textEvent(chat, text, clbks).then((r) => {
 			if (relation) {
 				r["m.relates_to"] = {
@@ -656,6 +656,10 @@ class MTRX {
 
 			if (from) {
 				r["from"] = from;
+			}
+
+			if (donateLink) {
+				r["url"] = donateLink;
 			}
 
 			if (chat.pcrypto.canBeEncrypt()) {

@@ -671,22 +671,25 @@ export default {
 						}
 					}
 
-					const sendText = (text) => {
-						return this.core.mtrx.sendtext(this.chat, text, {
-							relation: this.relationEvent,
-						}, {
-							encryptEvent : this.clbkEncrypt,
-							encryptedEvent : this.clbkEncrypted
-						});
+					const
+						sendText = (text, params) => {
+							return this.core.mtrx.sendtext(this.chat, text, Object.assign({
+								relation: this.relationEvent,
+							}, params || {}), {
+								encryptEvent : this.clbkEncrypt,
+								encryptedEvent : this.clbkEncrypted
+							});
+						},
+						data = {};
+
+					if (this.donate) {
+						const donate = Object.assign(this.donate, {});
+						this.removetransaction();
+						const txid = await donate.send();
+						data.donateLink = txid;
 					}
 
-					if (!this.donate) {
-						return sendText(text);
-					} else {
-						const txid = await this.donate.send(this.donate)
-						this.removetransaction();
-						return sendText(`${ txid } ${ text }`);
-					}
+					return sendText(text, data);
 				})
 				.catch((e) => {
 					this.$emit("sentMessageError", {

@@ -12,16 +12,6 @@ $bastyon: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTEiIGhlaWdodD0iMTIiIHZpZXd
   height: 100%
   width: 100%
 
-  .iconbutton
-    cursor: pointer
-    color : srgb(--color-txt-ac)
-    text-align: center
-    +transition(0.3s)
-
-    @media (pointer:fine)
-        &:hover
-            color : srgb(--neutral-grad-3)
-
   .topheader
     margin: 0 0 .5em
 
@@ -188,7 +178,40 @@ $bastyon: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTEiIGhlaWdodD0iMTIiIHZpZXd
       &.donate
         flex-wrap: wrap
 
+      .left,
+      .bottom
+        .iconbutton
+          cursor: pointer
+          color : srgb(--color-txt-ac)
+          text-align: center
+          +transition(0.3s)
+
+          @media (pointer:fine)
+            &:hover
+                color : srgb(--neutral-grad-3)
+
       .left
+        .iconbutton
+          cursor: pointer
+          +transitionopt(.25s, background-color border-color)
+
+          .icon
+            +transitionopt(.25s, background-color)
+            
+          &:hover:not([disabled])
+            background-color: srgb(--color-txt-ac)
+            border-color: srgb(--color-txt-ac)
+            
+            .icon
+              background-color: srgb(--text-on-bg-shadow-color)
+          
+          &[disabled]
+            cursor: default
+            opacity: .5
+
+            .icon
+              filter: grayscale(100%)
+              
         &.donation
           .iconbutton
             background: transparent
@@ -220,27 +243,6 @@ $bastyon: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTEiIGhlaWdodD0iMTIiIHZpZXd
             mask-repeat: no-repeat
             mask-position: 50% 50%
             mask-size: contain
-          
-        .iconbutton
-          cursor: pointer
-          +transitionopt(.25s, background-color border-color)
-
-          .icon
-            +transitionopt(.25s, background-color)
-            
-          &:hover:not([disabled])
-            background-color: srgb(--color-txt-ac)
-            border-color: srgb(--color-txt-ac)
-            
-            .icon
-              background-color: srgb(--text-on-bg-shadow-color)
-          
-          &[disabled]
-            cursor: default
-            opacity: .5
-
-            .icon
-              filter: grayscale(100%)
 
         .bottom
           display: flex

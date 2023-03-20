@@ -335,16 +335,12 @@ export default {
 			return menu;
 		},
 
-		itIsTransaction: function () {
-			return this.body.startsWith("bastyon://i?stx=");
-		},
-
 		urlpreview: function () {
 			if (
-				this.streamMode && this.itIsTransaction ||
+				this.streamMode && this.content.url ||
 				!this.streamMode && !this.preview && this.content.msgtype !== "m.file"
 			) {
-				var url = f.getUrl(this.body);
+				var url = f.getUrl(this.content.url || this.body);
 
 				if (url) {
 					var _u = new URL(url);

@@ -203,7 +203,7 @@
 						</div>
 					</div>
 
-					<div class="linkPreview" v-if="streamMode && urlpreview">
+					<div class="linkPreview" v-if="streamMode && content.url && urlpreview">
 						<template v-if="!sending">
 							<url
 								:url="urlpreview"
