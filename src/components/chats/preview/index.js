@@ -22,6 +22,7 @@ export default {
 	data: function () {
 		return {
 			loading: false,
+			roomMuted: false,
 			ready: false,
 			lastEvent: {},
 			userStatusRoom: String,
@@ -29,7 +30,6 @@ export default {
 	},
 
 	watch: {
-	
 		m_chat: {
 			immediate: true,
 			handler: function () {
@@ -55,24 +55,16 @@ export default {
 				return this.core.mtrx.blockeduser(users[0].userId);
 			}
 		},
-		roomMuted: function(){
-			if(this.chat){
-				let pushRules = this.core.mtrx.client._pushProcessor.getPushRuleById(
-					this.chat.roomId
-				);
-	
-				if (pushRules !== null) {
-					return true
-				}
-
-				
-			}
-
-			return false
-		},
-
 		m_chat: function () {
 			if (!this.core.mtrx.client || !this.chat) return null;
+
+			let pushRules = this.core.mtrx.client.pushProcessor.getPushRuleById(
+				this.chat.roomId
+			);
+
+			if (pushRules !== null) {
+				this.roomMuted = true;
+			}
 
 			if (this.chat.roomId) {
 				var m_chat = this.core.mtrx.client.getRoom(this.chat.roomId);
@@ -108,9 +100,78 @@ export default {
 					return this.messages[0];
 				}
 
-				return this.chatevents[0]
+				var members = this.m_chat.currentState.getMembers();
+				var lastCallAccess = this.chatevents
+					.filter((e) => {
+						return e.event.type === "m.room.request_calls_access";
+					})
+					.pop();
+				var events = _.filter(this.chatevents, (e) => {
+					if (
+						members.length <= 2 &&
+						(e.event.type === "m.room.power_levels" ||
+							(e.event.type === "m.room.member" &&
+								e.event.content.membership !== "invite"))
+					) {
+						return false;
+					}
+					if (e.event.type === "m.room.redaction") {
+						return false;
+					}
+					if (e.event.type === "m.room.callsEnabled") {
+						return false;
+					}
+					if (e.event.type === "m.room.request_calls_access") {
+						if (e.event.event_id === lastCallAccess.event.event_id) {
+							if (e.event.content.accepted !== undefined) {
+								return false;
+							} else {
+								if (this.core.mtrx.me(e.event.sender)) {
+									return false;
+								} else {
+									return true;
+								}
+							}
+						} else {
+							return false;
+						}
+					}
 
-				
+					return !(
+						e.event.content["m.relates_to"] &&
+						e.event.content["m.relates_to"]["rel_type"] === "m.replace"
+					);
+				});
+
+				events = _.sortBy(events, function (e) {
+					return e.event.origin_server_ts;
+				});
+
+				events = _.filter(events, function (e) {
+					return e.event.type !== "m.call.candidates";
+				});
+
+				/*Show matched message instead of last*/
+				/*if (this.matches?.value) {
+					const messages = _.filter(this.chat?.events, (f) => {
+						return (f.event?.content || f.event?.decrypted).body.includes(
+							this.matches.value
+						);
+					});
+
+					if (messages.length) {
+						return _.filter(
+							events,
+							(f) =>
+								f.event.event_id ===
+								messages[messages.length - 1].event.event_id
+						)[0];
+					}
+				}*/
+
+				if (events.length) {
+					return events[events.length - 1];
+				}
 			}
 		},
 

@@ -22,7 +22,7 @@ export default {
 	computed: {
 		time: function () {
 			var d = this.chat.lastModified;
-			if (this.m_chat._selfMembership === "invite") {
+			if (this.m_chat.selfMembership === "invite") {
 				var timeFromNow = moment(moment.utc(d).toDate()).local().fromNow();
 				if (
 					timeFromNow === "in a few seconds" ||

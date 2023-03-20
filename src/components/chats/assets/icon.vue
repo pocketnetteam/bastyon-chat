@@ -85,7 +85,7 @@ export default {
 
 			if (this.blockedCheck) return 0;
 
-			if (this.m_chat._selfMembership === "invite") {
+			if (this.m_chat.selfMembership === "invite") {
 				if (
 					f.date.addseconds(
 						moment.utc(this.m_chat.summary.lastModified).toDate(),

@@ -35,13 +35,13 @@ var store = new Vuex.Store({
 		loading: false,
 		online: true,
 		unauthorized: false,
-		theme: "white",
+		theme: "black",
 		themes: themes,
 		signedUpUsers: [],
 		pocketnet: "",
 		mobile: "",
 		voiceMessagesEnabled: "",
-		isCallsEnabled: false,
+		isCallsEnabled: "",
 		currentPlayingVoiceMessage: null,
 		current_user: {},
 		minimized: true,
@@ -66,7 +66,6 @@ var store = new Vuex.Store({
 		hiddenInParent: false,
 		hideOptimization: false,
 		modalShowed: null,
-		modals: [],
 		menu: null,
 		pinchat: false,
 		lastroom: null,
@@ -76,8 +75,6 @@ var store = new Vuex.Store({
 		deletedrooms: {},
 		pkoindisabled: false,
 		isCallsActive: null,
-		readreciepts : {},
-		ChatStatuses : {}
 		//share : {url : 'https://yandex.ru/'} //null
 	},
 	getters: {
@@ -93,10 +90,6 @@ var store = new Vuex.Store({
 		},
 	},
 	mutations: {
-
-		SET_CHAT_STATUSES(state, payload) {
-			state.ChatStatuses = {...state.ChatStatuses , [payload.roomId]: {...state.ChatStatuses[payload.roomId],...payload}}
-		},
 		SET_CALL(state, isActive) {
 			state.isCallsActive = isActive;
 		},
@@ -143,7 +136,6 @@ var store = new Vuex.Store({
 			state.dontreadreceipts = false;
 			state.lastroom = null;
 			state.voicerecording = false;
-			state.readreciepts = {}
 
 			// state.share = null
 
@@ -267,8 +259,6 @@ var store = new Vuex.Store({
 				state.active = false;
 			}
 
-			console.log("??????????????????")
-
 			state.minimized = true;
 		},
 
@@ -287,7 +277,7 @@ var store = new Vuex.Store({
 			state.voiceMessagesEnabled = voiceMessagesEnabled;
 		},
 		setCallsEnabled(state, isCallsEnabled) {
-			state.isCallsEnabled = isCallsEnabled
+			state.isCallsEnabled = isCallsEnabled;
 		},
 		ls(state) {
 			if (typeof localStorage.getItem("pinchat") != "undefined")
@@ -301,10 +291,6 @@ var store = new Vuex.Store({
 
 		init(state) {
 			mex.theme(state, localStorage.getItem("theme") || "black");
-		},
-
-		SEARCH_BY_MESSAGES(state, process){
-
 		},
 
 		ALL_NOTIFICATIONS_COUNT(state, rooms) {
@@ -371,6 +357,7 @@ var store = new Vuex.Store({
 			var chatsMap = {};
 
 			_.each(chats, (chat) => {
+
 				var aid = chat.info.title.replace("#", "");
 
 				if (!state.chatsMap[chat.roomId] || state.force[chat.roomId]) {
@@ -393,17 +380,6 @@ var store = new Vuex.Store({
 
 			//state.chatsMap = chatsMap;
 		},
-		SET_READ_TO_STORE(state, readreciepts) {
-			_.each(readreciepts, (r, chatid) => {
-
-				if((!state.readreciepts[chatid] && !r) || (!state.readreciepts[chatid] && r) || (state.readreciepts[chatid] && r && state.readreciepts[chatid].ts != r.ts)) {
-					Vue.set(state.readreciepts, chatid, r);
-				}
-
-			})
-
-		},
-
 		SET_EVENTS_TO_STORE(state, events) {
 			//state.events = events
 
@@ -429,11 +405,6 @@ var store = new Vuex.Store({
 
 					timeline.push(_e);
 				});
-
-				if(timeline.length && state.events[k] && state.events[k].timeline && state.events[k].timeline[0] && 
-					(state.events[k].timeline[0].event.event_id == timeline[0].event.event_id)) {
-						return
-					}
 
 				Vue.set(state.events, k, { timeline });
 			});
@@ -479,6 +450,7 @@ var store = new Vuex.Store({
 		SET_CONTACTS_FROM_MATRIX(state, v) {
 			var mp = {};
 
+
 			_.each(v, function (c) {
 				if (
 					f.getmatrixid(c.id) !=
@@ -523,24 +495,6 @@ var store = new Vuex.Store({
 
 		CLEAR_USERSINFO(state, v) {
 			state.users = {};
-		},
-
-		OPEN_MODAL(state, modal) {
-
-			if(modal.one && _.find(state.modals, (m) => {
-				return m.id == modal.id
-			})) return
-
-			state.modals.push(modal);
-
-		
-		},
-
-		CLOSE_MODAL(state, id) {
-			state.modals = _.filter(state.modals, function (m) {
-				return m.id != id
-			})
-
 		},
 
 		GALLERY(state, v) {
@@ -719,8 +673,10 @@ var store = new Vuex.Store({
 					r.summary.lastModified = r.getLastActiveTimestamp();
 				}
 
-				r.summary.key = r.summary.roomId + ':' + r.summary.lastModified
+				r.summary.info = {
+					title : r.name
 
+				}
 				return r.summary;
 			});
 
@@ -733,8 +689,10 @@ var store = new Vuex.Store({
 					store._vm.core.mtrx.kit.usersFromChats(m_chats)
 				);
 
+				console.log("FILLL CONTACTS")
+
 				return store._vm.core.mtrx.kit.fillContacts(m_chats);
-			});
+			})
 
 		},
 
@@ -742,172 +700,29 @@ var store = new Vuex.Store({
 			var m_chats = f.deep(store._vm, "core.mtrx.store.rooms") || {};
 
 			var events = {};
-			var readreciepts = {}
 
 			_.each(m_chats, function (chat) {
 				events[chat.roomId] = {};
 
-				var timeline = _.first([].concat(
+				var timeline = [].concat(
 					chat.timeline,
 					chat.currentState.getStateEvents("m.room.member")
-				).reverse(), 100);
-
-				//console.log(chat.summary.info.title, chat.timeline)
-
-				var members = chat.currentState.getMembers();
-
-				var ts = chat.getLiveTimeline()._eventTimelineSet;
-
-				let isCallsEnabled = chat.currentState.getStateEvents(
-					"m.room.callsEnabled"
 				);
 
-				let ev = chat.currentState.getStateEvents(
-					"m.room.request_calls_access"
-				).find((e) => store._vm.core.mtrx.me(e?.event?.sender))
+				events[chat.roomId].timeline = timeline;
+			});
 
-				timeline = _.filter(timeline, (e, i) => {
-					if (
-						members.length <= 2 &&
-						(e.event.type === "m.room.power_levels" /*||
-							(e.event.type === "m.room.member" &&
-								e.event.content.membership !== "invite")*/)
-					) {
-						return false;
-					}
-					if (e.event.type === "m.room.redaction") {
-						return false;
-					}
-					if (e.event.type === "m.room.callsEnabled") {
-						return false;
-					}
-
-					if (e.event.type === "m.call.candidates") {
-						return false;
-					}
-
-					if (e.event.type === "m.room.request_calls_access") {
-						if (e.event.content.accepted !== null) {
-							return false;
-						} else {
-							if (store._vm.core.mtrx.me(e.event.sender)) {
-								return false;
-							} else {
-								if (ev) {
-									return false;
-								}
-								return true;
-							}
-						}
-					}
-
-					return !(
-						e.event.content["m.relates_to"] &&
-						e.event.content["m.relates_to"]["rel_type"] === "m.replace"
-					);
-				})
-
-				timeline = _.sortBy(timeline, function (event) {
-					return -event.event.origin_server_ts
+			_.each(events, function (e) {
+				e.timeline = _.sortBy(e.timeline, function (event) {
+					return event.getDate();
 				});
-
-
-				var lastread = null
-				
-				_.find(timeline, (event) => {
-					var reciepts = chat.getReceiptsForEvent(event)
-
-					var lastreadr2 = _.find(reciepts, (reciept) => {
-						var m = store._vm.core.mtrx.me(reciept.userId);
-
-						return reciept.type == "m.read" && !m;
-					})
-					
-
-					if (lastreadr2){
-						lastread = lastreadr2
-						return true
-					}
-				})
-
-				if (lastread){
-					readreciepts[chat.roomId] = {
-						ts : lastread.data.ts,
-						ev : _.find(timeline, (event) => {
-							return event.event.origin_server_ts < lastread.data.ts
-						})
-					}
-
-					
-				}
-				else{
-					readreciepts[chat.roomId] = null
-				}
-
-				var e = timeline[0]
-
-				if (e){
-
-					var rt = ts.getRelationsForEvent(
-						e.event.event_id,
-						"m.replace",
-						"m.room.message"
-					);
-	
-					if (rt) {
-						var last = rt.getLastReplacement();
-	
-						if (last) {
-							e = last
-						}
-					}
-
-
-					events[chat.roomId].timeline = [e];
-				}
-				else{
-					events[chat.roomId].timeline = []
-				}
-
-
-				if (ev) {
-					if (ev?.event?.content?.accepted === null) {
-						commit("SET_CHAT_STATUSES", {
-							roomId: chat.roomId,
-							isWaiting: true
-						})
-					} else {
-						commit("SET_CHAT_STATUSES", {
-							roomId: chat.roomId,
-							isWaiting: false
-						})
-					}
-				} else {
-						commit("SET_CHAT_STATUSES", {
-							roomId: chat.roomId,
-							isWaiting: false
-						})
-				}
-
-
-				if (isCallsEnabled.length) {
-					commit("SET_CHAT_STATUSES", {
-						roomId: chat.roomId,
-						enabled: isCallsEnabled.find(
-							(e) =>
-								!store._vm.core.mtrx.me(e?.event?.sender) &&
-								e?.event?.sender.split(":")[0].replace("@", "") ===
-								e?.event?.state_key
-						)?.event?.content?.enabled,
-
-					})
-				}
-
 			});
 
 			commit("SET_EVENTS_TO_STORE", events);
-			commit("SET_READ_TO_STORE", readreciepts);
 
+			//store._vm.core.mtrx.kit.usersInfoForChatsStore(m_chats).then(i => {
+
+			//})
 		},
 	},
 });
