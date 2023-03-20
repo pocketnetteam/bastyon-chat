@@ -1162,7 +1162,7 @@ var getTxt = function (data) {
 	);
 };
 var getmatrixid = function (str) {
-	return str.split(":")[0].replace("@", "");
+	return str?.split(":")[0]?.replace("@", "");
 };
 var getMatrixIdFull = function (id, domain) {
 	id || (id = "");
