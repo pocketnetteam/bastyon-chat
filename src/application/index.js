@@ -124,7 +124,7 @@ class Core {
 			if (typeof BastyonCalls) {
 				this.mtrx.bastyonCalls = new BastyonCalls(
 					this.client || client,
-					matrixcs,
+					this.mtrx.sdk,
 					p.el,
 					p.parameters
 				);

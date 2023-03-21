@@ -255,7 +255,6 @@ export default {
 
 	beforeMount: function () {
 
-		console.log('this.event', this.event)
 
 		if (
 			(this.event && this.event.event && rendered[this.event.event.event_id]) ||

@@ -197,7 +197,8 @@ export default {
 		},
 		callsEnabled: (state) => state.isCallsEnabled,
 
-		checkCallsEnabled: function () {
+		checkCallsEnabled: function (state) {
+			console.log('qwd', state.ChatStatuses)
 			if (
 				this.$store.state.ChatStatuses[this.m_chat.roomId]?.enabled
 			) {

@@ -330,8 +330,6 @@ export default {
 			this.loading = true;
 			this.firstPaginate = true;
 
-			console.log('this.chat', this.chat)
-
 			//this.chat.getTimelineForEvent('$FXUvcjIqcvDu0meLTnz-8plloZoNHLIYEb6WGQMWO3s')
 			
 			
