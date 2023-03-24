@@ -56,6 +56,19 @@
 			</div>
 		</div>
 
+		<div
+			class="iconbutton"
+			v-if="streamMode"
+			@click="donateAction"
+			:disabled="donate"
+		>
+			<div class="rightdummy">
+				<div class="idummy">
+					<i class="icon donate">Donate</i>
+				</div>
+			</div>
+		</div>
+
 		<div class="iconbutton" v-if="send" @click="send_text($event)">
 			<div class="rightdummy">
 				<div class="idummy">
@@ -437,9 +450,14 @@ export default {
 				this.block = false;
 			}, 350);
 		},
+
+		donateAction: function () {
+			this.$emit("donateaction");
+		}
 	},
 
 	props: {
+		donate: Object,
 		storagekey: String,
 		tipusers: Array,
 	},

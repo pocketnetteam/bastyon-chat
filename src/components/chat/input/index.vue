@@ -21,7 +21,7 @@
 				<div
 					class="left"
 					:class="{ 'donation': streamMode }"
-					v-if="streamMode"
+					v-if="!streamMode"
 				>
 					<button
 						class="iconbutton"
@@ -52,6 +52,8 @@
 						@tipsearchrequest="tipBySearch"
 						@browsetip="browsetip"
 						@selectcurrenttip="selectcurrenttip"
+						@donateaction="sendtransactionWrapper"
+						:donate="donate"
 						:storagekey="'chatinput' + chat.roomId"
 						:tipusers="tipusers"
 					/>

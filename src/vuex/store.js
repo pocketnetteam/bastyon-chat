@@ -310,7 +310,7 @@ var store = new Vuex.Store({
 			var n = new Date();
 
 			var count = _.filter(rooms, (room) => {
-				if (room._selfMembership === "invite") {
+				if (room._selfMembership === "invite" && !room.summary.stream) {
 					var users = store._vm.core.mtrx.anotherChatUsers(room);
 
 					if (

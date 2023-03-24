@@ -13,8 +13,6 @@ $bastyon: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTEiIGhlaWdodD0iMTIiIHZpZXd
   width: 100%
 
   .topheader
-    margin: 0 0 .5em
-
     .row
       border-bottom: 1px solid #F3F3F2
       display: flex
@@ -97,7 +95,7 @@ $bastyon: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTEiIGhlaWdodD0iMTIiIHZpZXd
           background: linear-gradient(270deg, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0) 100%), linear-gradient(0deg, #FF0066, #FF0066), linear-gradient(225deg, #231557 0%, #44107A 28.6%, #FF1361 66.82%, #FFF800 100%), linear-gradient(0deg, #FF4E50, #FF4E50), linear-gradient(0deg, #A445B2, #A445B2), linear-gradient(90deg, #FF4E50 0%, #F9D423 100%), linear-gradient(225deg, #231557 0%, #44107A 28.6%, #FF1361 66.82%, #FFF800 100%), linear-gradient(90deg, #495AFF 0%, #0ACFFE 100%)
 
       .msgtext
-        & + .linkPreview
+        & ~ .linkPreview
           order: -1
           padding: 0
 
@@ -178,48 +176,15 @@ $bastyon: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTEiIGhlaWdodD0iMTIiIHZpZXd
       &.donate
         flex-wrap: wrap
 
-      .left,
-      .bottom
-        .iconbutton
-          cursor: pointer
-          color : srgb(--color-txt-ac)
-          text-align: center
-          +transition(0.3s)
+      .iconbutton
+        cursor: pointer
+        color : srgb(--color-txt-ac)
+        text-align: center
+        +transition(0.3s)
 
-          @media (pointer:fine)
-            &:hover
-                color : srgb(--neutral-grad-3)
-
-      .left
-        .iconbutton
-          cursor: pointer
-          +transitionopt(.25s, background-color border-color)
-
-          .icon
-            +transitionopt(.25s, background-color)
-            
-          &:hover:not([disabled])
-            background-color: srgb(--color-txt-ac)
-            border-color: srgb(--color-txt-ac)
-            
-            .icon
-              background-color: srgb(--text-on-bg-shadow-color)
-          
-          &[disabled]
-            cursor: default
-            opacity: .5
-
-            .icon
-              filter: grayscale(100%)
-              
-        &.donation
-          .iconbutton
-            background: transparent
-            border: 1px solid srgba(--neutral-grad-0, 0.9)
-            border-radius: 8px
-          
-          & + .center
-            margin: 0 0 0 $r / 2
+        @media (pointer:fine)
+          &:hover
+              color : srgb(--neutral-grad-3)
 
     .center
       position: static
@@ -243,12 +208,33 @@ $bastyon: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTEiIGhlaWdodD0iMTIiIHZpZXd
             mask-repeat: no-repeat
             mask-position: 50% 50%
             mask-size: contain
+        
+        .input_component
+          .iconbutton
+            cursor: pointer
+
+            .donate
+              +transitionopt(.25s, background-color)
+              text-indent: -9999px
+              overflow: hidden
+              width: 16px
+
+            &:hover:not([disabled])
+              .donate
+                background-color: srgb(--neutral-grad-3)
+            
+            &[disabled]
+              cursor: default
+
+              .donate
+                opacity: .5
+                filter: grayscale(100%)
 
         .bottom
           display: flex
           flex-basis: 100%
           align-items: center
-          padding: $r / 2 $r * 2 0 calc(#{$r} * 3 + 35px)
+          padding: $r / 2 $r * 2 0 $r * 2.5
 
           .count
             background-color: srgb(--color-txt-ac)
