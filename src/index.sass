@@ -291,6 +291,39 @@ button.button
     @media (pointer:fine)
         &:hover
             color : srgb(--neutral-grad-3)
+.closecsscross
+	position: relative
+	width: 64px
+	height: 64px
+	opacity: 0.5
+	margin: 0 auto
+
+	&:before,
+	&:after
+		position: absolute
+		left: 32px
+		content: ' '
+		height: 64px
+		width: 1px
+		background-color: srgb(--neutral-grad-1)
+
+	&:before
+		transform: rotate(45deg)
+
+	&:after
+		transform: rotate(-45deg)
+
+.fademodal-enter-active, .fademodal-leave-active
+	+transition(0.3s)
+	.modal
+		+transition(0.3s)
+
+.fademodal-enter, .fademodal-leave-to
+	opacity: 0
+
+	.modal
+		-webkit-transform: translateY(100%)
+		transform: translateY(100%)
 
 .internalpocketnetlink
     a
@@ -303,6 +336,9 @@ button.button
         color : srgb(--neutral-grad-3)
         border-radius: 5px
 
+.joypixels, .emojione
+    height: 16px
+    
 .rootcontent
     -webkit-font-smoothing: antialiased
     -moz-osx-font-smoothing: grayscale
@@ -310,7 +346,8 @@ button.button
     color : srgb(--text-color)
     font-size: 1.1em
 
-
+    *
+        -webkit-tap-highlight-color: transparent
 
     .dmdv
         width: 1px
@@ -467,6 +504,7 @@ button.button
         .fixedallwrapper
             opacity: 0
 
+    
 
     .fade-in-right-leave-to,
     .fade-in-right-enter,
@@ -474,11 +512,11 @@ button.button
 
         .fixedOnPageBottom
             opacity: 0
-            bottom : -3 * $r
+            
 
         .fixedOnPageTop
             opacity: 0
-            top : -3 * $r
+            
 
     .content
         padding-top : 66px
@@ -616,6 +654,11 @@ button.button
             justify-content: flex-start
             align-items: center
             width: 100%
+            label
+                white-space: nowrap
+                overflow: hidden
+                text-overflow: ellipsis
+            
 
             span
               display: block

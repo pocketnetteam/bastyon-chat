@@ -1,180 +1,185 @@
 .linkwrapper
-  position: relative
-  display: flex
-  align-items: center
+	position: relative
+	display: flex
+	align-items: center
 
-  button
-    min-width: 0
-    width: 100px
-    text-align: right
-    padding-right: 2 * $r
+	button
+		min-width: 0
+		width: 100px
+		text-align: right
+		padding-right: 2 * $r
 
 .linkPlace
-  padding: 1em
-  cursor: pointer
-  overflow: hidden
-  white-space: nowrap
-  text-overflow: ellipsis
-  
-  i
-    width: 30px
+	padding: 1em
+	cursor: pointer
+	overflow: hidden
+	white-space: nowrap
+	text-overflow: ellipsis
+	
+	i
+		width: 30px
 
-  span
-    font-size: 0.8em
-    text-align: left
-    max-width: 400px
-    
-  .shareLink
-    &:hover
-      color: srgb(--color-bg-ac)
+	span
+		font-size: 0.8em
+		text-align: left
+		max-width: 400px
+		
+	.shareLink
+		&:hover
+			color: srgb(--color-bg-ac)
 
+.chatGroupIcon
 
 .chatIconWrapper
-  width : 90%
-  margin : 0 auto
-  padding : $r 0
-  /deep/ .swiperWrapperFlex .imageSwiper
-    width: 100px
-    height: 100px
-    line-height: 100px
+	width : 90%
+	margin : 0 auto
+	padding : $r 0
+	/deep/ .swiperWrapperFlex .imageSwiper
+		width: 100px
+		height: 100px
+		line-height: 100px
 
-  /deep/
-    .swiperWrapperFlex
-      padding-bottom: 2 * $r
+	
 
-    .threeAvatars,
-    .fourAvatars,
-    .twoAvatars
-      width: 50%
-      padding-bottom: 50%
-      +shadowSmaller()
-      background: srgba(--background-total-theme, 0.3)
+	/deep/
+		.chatGroupIcon
+			width: 50%
+			margin : 0 auto
 
-    .oneuser
-      width: 50%
-      margin: 0 auto
+		.swiperWrapperFlex
+			padding-bottom: 2 * $r
 
-    .bgimage
-      +shadowSmaller()
+		.threeAvatars,
+		.fourAvatars,
+		.twoAvatars
+			width: 50%
+			padding-bottom: 50%
+			+shadowSmaller()
+			background: srgba(--background-total-theme, 0.3)
+
+		.oneuser
+			width: 50%
+			margin: 0 auto
+
+		.bgimage
+			+shadowSmaller()
 
 
 .aboutRoom
-  padding-bottom: 100px
+	padding-bottom: 100px
 
-  .roomInfoWrapper
-    background: srgb(--background-secondary-theme)
-    padding : 2 * $r 0
+	.roomInfoWrapper
+		background: srgb(--background-secondary-theme)
+		padding : 2 * $r 0
 
-    .roomNameLine
-      text-overflow: ellipsis
-      overflow: hidden
-      width: 90%
-      height: 1.2em
-      font-weight: 500
-      white-space: nowrap
-      text-align: center
-      margin: 0 auto
-      display: block
+		.roomNameLine
+			text-overflow: ellipsis
+			overflow: hidden
+			width: 90%
+			height: 1.2em
+			font-weight: 500
+			white-space: nowrap
+			text-align: center
+			margin: 0 auto
+			display: block
 
-    .namewrapper
-      position: relative
-      text-align: center
-      padding: 1em 0
-      input
-        text-align: center
-        font-weight: 700
-      .active
-        border-bottom: 1px solid srgb(--neutral-grad-0)
-      .iconwrapper
-        position: absolute
-        right: 2 * $r
-        top : 50%
-        bottom : 0
-        transform: translateY(-50%)
+		.namewrapper
+			position: relative
+			text-align: center
+			padding: 1em 0
+			input
+				text-align: center
+				font-weight: 700
+			.active
+				border-bottom: 1px solid srgb(--neutral-grad-0)
+			.iconwrapper
+				position: absolute
+				right: 2 * $r
+				top : 50%
+				bottom : 0
+				transform: translateY(-50%)
 
-    .userpicWrapper
-      border-bottom: 1px solid srgb(--neutral-grad-0)
-      padding: 2 * $r
+		.userpicWrapper
+			border-bottom: 1px solid srgb(--neutral-grad-0)
+			padding: 2 * $r
 
-    .roomInfo
-      position: relative
-      .name
-        label
-          display: flex
-          justify-content: space-between
-          align-items: center
-          width: 100%
-          height: 60px
-          border-bottom: 1px solid srgb(--neutral-grad-0)
-          input
-            padding: 0.2 * $r
-            display: block
-            border: 0
-            height: 90%
-            width: 90%
-            font-size: 1.2 * $r
-            font-weight: bold
-            text-align: center
-        span
-          font-weight: bold
-    .topicTxt
-      text-align: center
-      font-weight: normal
-      font-size: 0.9em
-      display: block
-      margin: 10px 0
-      padding: 0 1em
-      word-break: break-word
-      height: 44px
+		.roomInfo
+			position: relative
+			.name
+				label
+					display: flex
+					justify-content: space-between
+					align-items: center
+					width: 100%
+					height: 60px
+					border-bottom: 1px solid srgb(--neutral-grad-0)
+					input
+						padding: 0.2 * $r
+						display: block
+						border: 0
+						height: 90%
+						width: 90%
+						font-size: 1.2 * $r
+						font-weight: bold
+						text-align: center
+				span
+					font-weight: bold
+		.topicTxt
+			font-weight: normal
+			font-size: 0.9em
+			display: block
+			margin: 10px 0
+			padding: 0 1em
+			word-break: break-word
 
 
 
-  .roomAccordionsList
-    .active
-      .body
-        border-bottom: 1px solid srgb(--neutral-grad-0)
+	.roomAccordionsList
+		.active
+			.body
+				border-bottom: 1px solid srgb(--neutral-grad-0)
 
-    .accordion
-      .membersCount
-        font-weight: 700
+		.accordion
+			.membersCount
+				font-weight: 700
 
-      .aHeader
-        .head
-          cursor: pointer
-          display: flex
-          justify-content: space-between
-          align-items: center
-          padding: 2 * $r
-          border-bottom: 1px solid srgb(--neutral-grad-0)
-          +transition(0.3s)
+			.aHeader
+				.head
+					cursor: pointer
+					display: flex
+					justify-content: space-between
+					align-items: center
+					padding: 2 * $r
+					border-bottom: 1px solid srgb(--neutral-grad-0)
+					+transition(0.3s)
 
 
-          .leftBlock
-            flex-grow: 1
-            position: relative
-            
-            i
-              font-size: 0.8em
-              width: 30px
-              color: $color-text-slight
+					.leftBlock
+						flex-grow: 1
+						position: relative
+						
+						i
+							font-size: 0.8em
+							width: 30px
+							color: $color-text-slight
 
 .roomActionsList
-  padding: 2 * $r 0
-  padding-top : 4 * $r
-  background: srgb(--neutral-grad-1)
-  text-align: center
+	padding: 2 * $r 0
+	padding-top : 4 * $r
+	background: srgb(--neutral-grad-1)
+	text-align: center
 
-  .button
-    width: 80%
-    margin-bottom: 2 * $r
-      
-  .actionsItem
-    padding: $r
-    border-radius: 2 * $r
-    width: 80px
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1)
+	.button
+		width: 80%
+		margin-bottom: 2 * $r
+			
+	.actionsItem
+		padding: $r
+		border-radius: 2 * $r
+		width: 80px
+		box-shadow: 0 0 10px rgba(0, 0, 0, 0.1)
 
 /deep/
-  #modal
-    .modal-wrapper
-      right : 0
+	#modal
+		.modal-wrapper
+			right : 0

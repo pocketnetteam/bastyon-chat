@@ -1,7 +1,7 @@
 <template>
 	<div class="listPreview">
 		<div v-if="urlpreview && metaPreviewLink" class="previewMessage">
-			<span class="sname txt" v-if="senderName">{{ senderName }}&nbsp;</span>
+			<span class="sname txt" v-if="senderName">{{ senderName == 'You' ? $t("caption.you") : senderName}}&nbsp;</span>
 			<span class="linkTitle txt">sent link: {{ meta["og:title"] }} </span>
 
 			<span v-if="meta['og:site_name'] === 'Pocketnet'" class="pocketnetLink">
@@ -13,8 +13,8 @@
 		</div>
 
 		<div v-if="content.msgtype === 'm.file'" class="previewMessage">
-			<span class="sname txt" v-if="senderName">{{ senderName }}&nbsp;</span>
-			<span class="txt"> sent file: {{ JSON.parse(content.body).name }} </span>
+			<span class="sname txt" v-if="senderName">{{ senderName == 'You' ? $t("caption.you") : senderName }}&nbsp;</span>
+			<span class="txt"> {{ $t("caption.sentfile") }} {{ JSON.parse(content.body).name }} </span>
 		</div>
 
 		<div v-if="content.msgtype === 'm.bad.encrypted'" class="previewMessage">
@@ -32,19 +32,19 @@
 			v-if="event.event.type === 'm.room.power_levels'"
 			class="previewMessage"
 		>
-			<span v-if="senderName" class="txt sname">{{ senderName }}&nbsp;</span>
+			<span v-if="senderName" class="txt sname">{{ senderName == 'You' ? $t("caption.you") : senderName }}:&nbsp;</span>
 			<span class="txt">
 				{{ powerLevels }}
 			</span>
 		</div>
 
 		<div v-if="content.msgtype === 'm.image'" class="previewMessage">
-			<span v-if="senderName" class="txt sname">{{ senderName }}&nbsp;</span
+			<span v-if="senderName" class="txt sname">{{ senderName == 'You' ? $t("caption.you") : senderName }}:&nbsp;</span
 			><span class="txt">{{ $t("caption.sentImage") }}</span>
 		</div>
 
 		<div v-if="content.msgtype === 'm.audio'" class="previewMessage">
-			<span v-if="senderName" class="txt sname">{{ senderName }}&nbsp;</span
+			<span v-if="senderName" class="txt sname">{{ senderName == 'You' ? $t("caption.you") : senderName}}:&nbsp;</span
 			><span class="txt">{{ $t("caption.sentVoiceMessage") }}</span>
 		</div>
 
@@ -57,7 +57,7 @@
 					event.event.type === 'm.call.invite'
 				"
 				class="txt sname"
-				>{{ senderName }}</span
+				> {{ senderName == 'You' ? $t("caption.you") : senderName}}</span
 			>
 		</div>
 
@@ -65,7 +65,7 @@
 			v-if="event.event.type === 'm.room.request_calls_access'"
 			class="previewMessage"
 		>
-			<span class="txt">{{ $t("caption.requestCallAccess") }}</span>
+			<span class="txt">{{ core.vm.$i18n.t("caption.requestCallAccess")}}</span>
 		</div>
 
 		<div
@@ -73,13 +73,12 @@
 			class="previewMessage"
 		>
 			<span v-if="senderName && senderName != 'You'" class="txt sname"
-				>{{ senderName }}:&nbsp;</span
-			><span class="txt"
-				><IncomingMessage
-					:message="content.body"
-					:markedText="markMatches"
-				></IncomingMessage
-			></span>
+				>{{ senderName == 'You' ? $t("caption.you") : senderName }}:&nbsp;</span
+			><IncomingMessage
+				:message="content.body"
+				:markedText="markMatches"
+			></IncomingMessage
+			>
 		</div>
 
 		<div
@@ -87,16 +86,16 @@
 			class="previewMessage"
 		>
 			<span v-if="senderName && senderName != 'You'" class="txt sname"
-				>{{ senderName }}:&nbsp;</span
-			><span class="txt"
-				><IncomingMessage
-					:message="decryptEvent.body"
-					:markedText="markMatches"
-				></IncomingMessage
-			></span>
+				>{{ senderName == 'You' ? $t("caption.you") : senderName }}:&nbsp;</span
+			><IncomingMessage
+				:message="decryptEvent.body"
+				:markedText="markMatches"
+			></IncomingMessage
+			>
 		</div>
 
 		<div v-if="content.membership === 'invite'" class="invitedEvent">
+			<span v-if="senderName" class="txt sname">{{ senderName == 'You' ? $t("caption.you") : senderName }}:&nbsp;</span>
 			<span class="txt" v-if="tetatetchat">{{
 				$t("caption.invitationToChat")
 			}}</span>
@@ -106,19 +105,19 @@
 		</div>
 
 		<div v-if="content.membership === 'leave'" class="previewMessage">
-			<span v-if="senderName" class="txt sname">{{ senderName }}:&nbsp;</span>
+			<span v-if="senderName" class="txt sname">{{ senderName == 'You' ? $t("caption.you") : senderName }}:&nbsp;</span>
 			<span class="txt sname"> {{ name }} </span>
 			<span class="txt">{{ $t("caption.leftChat") }}</span>
 		</div>
 		<div v-if="content.membership === 'ban'">
-			<span v-if="senderName" class="txt sname">{{ senderName }}&nbsp;</span>
+			<span v-if="senderName" class="txt sname">{{ senderName == 'You' ? $t("caption.you") : senderName }}&nbsp;</span>
 			<span class="txt">banned {{ content.displayname }}</span>
 		</div>
 		<div
 			v-if="content.membership === 'join' && event.getSender() !== userId"
 			class="invitedEvent"
 		>
-			<span v-if="senderName" class="txt sname">{{ senderName }}&nbsp;</span
+			<span v-if="senderName" class="txt sname">{{ senderName == 'You' ? $t("caption.you") : senderName }}&nbsp;</span
 			><span class="txt">{{ $t("caption.joined") }}</span>
 		</div>
 
@@ -152,7 +151,7 @@ export default {
 		decryptEvent: {},
 		notificationPreview: false,
 		userinfo: Object,
-		readed: Object,
+		readed: Boolean,
 		my: Boolean,
 	},
 	inject: ["matches", "markText"],
@@ -243,10 +242,10 @@ export default {
 		},
 
 		markMatches: function () {
-			return this.markText(
+			return this.markText ? this.markText(
 				(this.event.event.decrypted || this.event.event.content)?.body,
 				true
-			);
+			) : (this.event.event.decrypted || this.event.event.content)?.body;
 		},
 	},
 };

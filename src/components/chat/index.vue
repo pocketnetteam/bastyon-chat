@@ -31,7 +31,9 @@
 				:error="error"
 				:key="key"
 				:chat="m_chat"
+				:searchresults="searchresults"
 				@editingEvent="editingEvent"
+				@shareEvent="shareEvent"
 				@replyEvent="replyEvent"
 				@eventImage="(e) => galleryImage(e)"
 				@scroll="scroll"
@@ -39,8 +41,6 @@
 				v-if="m_chat && membership === 'join' && ready"
 				@getEvents="events"
 				:selectedMessages="selectedMessages"
-				:isRemoveSelectedMessages="isRemoveSelectedMessages"
-				@messagesIsDeleted="messagesIsDeleted"
 			/>
 
 			<div v-if="m_chat && membership === 'invite'" class="joinwrapper">
@@ -73,7 +73,7 @@
 							>
 								<eventsEvent
 									:event="relationEvent.event"
-									:chat="chat"
+									:chat="m_chat"
 									:preview="true"
 								/>
 							</div>
@@ -99,6 +99,8 @@
 						@clearRelationEvent="clearRelationEvent"
 						@focused="focused"
 						@cantchatcrypto="cantchatcrypto"
+						@encrypt="clbkencrypt"
+						@encrypted="clbkencrypted"
 						:u="u"
 						:chat="m_chat"
 						:usersinfo="usersinfo"
@@ -135,16 +137,17 @@
 			</div>
 
 			<div
-				class="encrypted"
+				class="encrypted fixedOnPageTop"
 				v-if="encrypted && membership != 'invite'"
 				@mouseover="(e) => (hoverEncrypt = true)"
 			>
-				<i class="fas fa-lock"></i>
+				<i v-if="!encrypting" class="fas fa-lock"></i>
+				<i v-else class="fas fa-spinner fa-spin"></i>
 			</div>
 
 			<div
 				v-if="hoverEncrypt"
-				class="encryptedInfo"
+				class="encryptedInfo fixedOnPageTop"
 				@mouseover="(e) => (hoverEncrypt = true)"
 				@mouseleave="(e) => (hoverEncrypt = false)"
 				@click="(e) => (hoverEncrypt = !hoverEncrypt)"

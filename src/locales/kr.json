@@ -57,6 +57,7 @@
 		"following": "팔로잉:",
 		"theme": "테마:",
 		"contacts": "연락처",
+		"other": "바스티온 전역 검색",
 		"phoneContacts": "전화 연락처",
 		"chooseInviteMedia": "초대 방법을 선택하십시오:",
 		"admin": "관리자",
@@ -121,7 +122,9 @@
 		"contactsempty": "아직 연락처가 없습니다. 검색에서 찾으십시오",
 		"chatsearchingempty": "No chats found for the specified filter",
 		"sendmessage": "Send message",
-		"messages" : "Messages"
+		"messages" : "Messages",
+		"you" : "You",
+		"sentfile" : "sent file:"
 	},
 
 	"input": {

@@ -1,15 +1,18 @@
 <template>
-	<label>
-		<label :chunks="chunks" v-for="(chunk, index) in chunks" v-bind:key="index">
+	<div class="msgtext">
+		<template v-for="(chunk, index) in chunks">
 			<label class="likelink" v-if="chunk.id" @click="show(chunk)"
 				>@{{ chunk.name }}</label
 			>
-			<label v-else v-html="markedText || chunk" />
-		</label>
-	</label>
+			<label v-else v-html="echotext(chunk)"></label>
+		</template>
+	</div>
 </template>
 
 <script>
+
+import f from "@/application/functions";
+
 export default {
 	name: "IncomingMessage",
 	props: {
@@ -26,7 +29,9 @@ export default {
 		};
 	},
 	computed: {
+		
 		chunks: function () {
+
 			if (this.message.indexOf("@") == -1) return [this.message];
 
 			var c = this.message.split(this.userCalled);
@@ -49,11 +54,25 @@ export default {
 				}
 			});
 
-			return r;
+			return _.filter(r, (r) => {
+				return r
+			});
 		},
 	},
 
 	methods: {
+
+		echotext : function(chunk){
+
+			var text = f.superXSS(chunk)
+
+			if (typeof joypixels != 'undefined'){
+				text = joypixels.toImage(text)
+			}
+
+			return text
+		},
+
 		show: function (chunk) {
 			this.core.mtrx.kit.usersInfoById(chunk.id).then((r) => {
 				core.mtrx.opencontact(r);
@@ -64,11 +83,11 @@ export default {
 </script>
 
 <style lang="sass" scoped>
+	label
+		cursor: pointer
+		display: inline
 
-label
-    display: inline
-
-.likelink
-    text-decoration: underline
-    cursor: pointer
+	.likelink
+		text-decoration: underline
+		cursor: pointer
 </style>

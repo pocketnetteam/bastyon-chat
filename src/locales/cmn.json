@@ -57,6 +57,7 @@
 		"following": "关注：",
 		"theme": "主题:",
 		"contacts": "联系人",
+		"other": "Bastyon 全球搜索",
 		"phoneContacts": "电话联系人",
 		"chooseInviteMedia": "请选择你的邀请方式：",
 		"admin": "管理员",
@@ -119,7 +120,9 @@
 		"hasInvitedToJoin": "已邀请您加入口袋网",
 		"contactsempty": "您还没有联系人，请在搜索中找到他们",
 		"sendmessage": "Send message",
-		"messages" : "Messages"
+		"messages" : "Messages",
+		"you" : "You",
+		"sentfile" : "sent file:"
 	},
 
 	"input": {

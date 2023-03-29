@@ -67,7 +67,7 @@
 		"following": "Following",
 		"theme": "Theme:",
 		"contacts": "Contacts",
-		"other": "Other",
+		"other": "Bastyon global search",
 		"phoneContacts": "Phone contacts",
 		"chooseInviteMedia": "Please choose how you want to invite:",
 		"admin": "Admin",
@@ -118,7 +118,7 @@
 		"sent": "sent",
 		"PKOINto": " PKOIN to ",
 		"response": "Response",
-		"messagefrom": "Forwarded message from",
+		"messagefrom": "Forwarded message",
 		"edited": "Edited",
 		"settings": "Settings",
 		"unauthorized": "Unauthorized",
@@ -137,7 +137,9 @@
 		"You": "You",
 		"chatsearchingempty": "No chats found for the specified filter",
 		"sendmessage": "Send message",
-		"messages" : "Messages"
+		"messages" : "Messages",
+		"you" : "You",
+		"sentfile" : "sent file:"
 	},
 
 	"input": {

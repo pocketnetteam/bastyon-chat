@@ -13,8 +13,12 @@ export default {
 		u: String,
 		roomInfo: false,
 		aboutUser: false,
+		search : String,
+		process : String,
+		searchresults : null,
+		focusedevent : null
 	},
-	inject: ["isChatEncrypted", "matches"],
+	inject: ["matches"],
 	components: {
 		chatName,
 		chatIcon,
@@ -124,6 +128,7 @@ export default {
 			aboutUserShow: false,
 			roomBanned: false,
 			roomMuted: false,
+			searchactive : false,
 
 			// --- Variables for the donation part ---
 			// Boolean when the donation modal is open
@@ -165,13 +170,52 @@ export default {
 
 	mounted: function () {
 		this.getuserinfo();
+
+		if (this.search) {
+			this.searchactive = true
+		}
 	},
 
 	computed: mapState({
+		focusedeventIndex: function(){
+			if(!this.searchresults || !this.focusedevent){
+				return null
+			}
+
+			var i = -1
+			
+			_.find(this.searchresults, (e, index) => {
+				if(e.event.event_id == this.focusedevent.event.event_id) {
+					i = index
+					return true
+				}
+			}) 
+
+			//if (i < 1) i = 1
+
+			return i
+		},
 		callsEnabled: (state) => state.isCallsEnabled,
 
+		checkCallsEnabled: function () {
+			if (
+				this.$store.state.ChatStatuses[this.m_chat.roomId]?.enabled
+			) {
+				this.wait = false;
+				return true;
+			}else if (
+				this.$store.state.ChatStatuses[this.m_chat.roomId]?.isWaiting
+			) {
+				return "wait";
+			} else {
+				this.wait = false;
+				return false;
+			}
+		},
+
+
 		isGroup: function () {
-			return this.m_chat.name.slice(0, 1) === "@";
+			return this.m_chat?.name.slice(0, 1) === "@";
 		},
 
 		auth: (state) => state.auth,
@@ -214,40 +258,62 @@ export default {
 		},
 	}),
 	methods: {
-		checkCallsEnabled: function () {
-			let isEnabled = this.m_chat.currentState.getStateEvents(
-				"m.room.callsEnabled"
-			);
-			let hasAccess = this.m_chat.currentState.getStateEvents(
-				"m.room.request_calls_access"
-			);
+		searchControlKey : function(key){
+			if(key == 'up') this.tobottomsearch()
+			if(key == 'down') this.toupsearch()
 
-			if (
-				isEnabled.find(
-					(e) =>
-						!this.core.mtrx.me(e?.event?.sender) &&
-						e?.event?.sender.split(":")[0].replace("@", "") ===
-							e?.event?.state_key
-				)?.event?.content?.enabled
-			) {
-				console.log("enabled");
-				this.wait = false;
-				return true;
+		},
+		toupsearch : function(){
+
+			if(!this.searchresults) return 
+
+			var i = this.focusedeventIndex
+
+			if (i <= this.searchresults.length - 2){
+				this.$emit('tosearchevent', this.searchresults[this.focusedeventIndex + 1])
 			}
-			if (
-				hasAccess.find((e) => this.core.mtrx.me(e?.event?.sender))?.event &&
-				hasAccess.find((e) => this.core.mtrx.me(e?.event?.sender))?.event
-					?.content?.accepted === undefined
-			) {
-				console.log("wait");
-				return "wait";
-			} else {
-				console.log("nonono");
-				return false;
+			else{
+				this.$emit('tosearchevent', this.searchresults[0])
+
+			}
+
+		},
+		tobottomsearch : function(){
+
+			if(!this.searchresults && this.searchresults.length) return 
+
+			var i = this.focusedeventIndex
+			if (i > 0) this.$emit('tosearchevent', this.searchresults[this.focusedeventIndex - 1])
+			else this.$emit('tosearchevent', this.searchresults[this.searchresults.length - 1])
+		},
+		backfromsearch : function(){
+			if (this.process){
+				this.$router.push("chats?process=" + this.process).catch((e) => {});
+			}
+			else{
+				this.searchactive = false
+				this.searching('')
 			}
 		},
+
+		tosearch : function(){
+			this.searchactive = true
+
+			setTimeout(() => {
+				if(this.$refs.search) this.$refs.search.focus()
+			}, 100)
+		},
+
+		searching : function(str){
+			this.$emit('searching', str)
+
+			if(!str){
+				this.searchactive = false
+			}
+		},
+
 		bcCall: function () {
-			if (!this.checkCallsEnabled()) {
+			if (!this.checkCallsEnabled) {
 				this.$dialog
 					.confirm(this.$t("caption.request"), {
 						okText: this.$t("yes"),
@@ -266,27 +332,30 @@ export default {
 					});
 
 				return;
-			} else if (this.checkCallsEnabled() === "wait") {
+			} else if (this.checkCallsEnabled === "wait") {
 				return;
 			}
 			let local = document.querySelector("body");
-			try {
-				let matrixCall = this.core.mtrx.bastyonCalls.initCall(
-					this.chat.roomId,
-					local
-				);
-				console.log(matrixCall);
-				if (matrixCall) this.$store.dispatch("CALL", matrixCall);
-			} catch (e) {
-				console.log("ошибка при создании звонка", e);
-				return;
-			}
+
+			this.core.mtrx.bastyonCalls.initCall(
+				this.chat.roomId,
+				local
+			).then((matrixCall) => {
+
+				console.log('matrixCall', matrixCall)
+
+				// if (matrixCall) this.$store.dispatch("CALL", matrixCall);
+			}).catch(e => {
+				console.log("error", e);
+			})
+
 		},
 
 		requestCallsAccess() {
 			this.core.mtrx.client.sendStateEvent(
 				this.m_chat.roomId,
-				"m.room.request_calls_access"
+				"m.room.request_calls_access",
+				{ accepted: null }
 			);
 		},
 

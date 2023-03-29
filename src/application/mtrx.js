@@ -8,6 +8,7 @@ import FingerprintJS from "@fingerprintjs/fingerprintjs";
 import qs from "qs";
 import fileSaver from "file-saver";
 import ChatStorage from "./chatstorage";
+import SearchEngine from "./searchEngine";
 
 var axios = require("axios");
 
@@ -31,6 +32,8 @@ class MTRX {
 		this.customrequest = true;
 
 		this.devicekey = "m8_device";
+
+		this.searchEngine = new SearchEngine(this)
 	}
 
 	async setCredentials() {
@@ -307,19 +310,14 @@ class MTRX {
 	}
 
 	reciepts(event) {
-		var room = null;
 
-		return f
-			.pretry(() => {
-				var rooms = this.core.mtrx.store.rooms;
+		var room = (this.core.mtrx.store.rooms || {})[event.getRoomId()];
 
-				room = rooms[event.getRoomId()];
 
-				return room;
-			})
-			.then(() => {
-				return room.getReceiptsForEvent(event);
-			});
+		if (room){
+			return room.getReceiptsForEvent(event)
+		}
+
 	}
 
 	storeFileLocal(url, file) {
@@ -403,15 +401,14 @@ class MTRX {
 	}
 
 	isReaded(event, me) {
-		return this.reciepts(event).then((reciepts) => {
-			return Promise.resolve(
-				_.find(reciepts, (reciept) => {
-					var m = this.me(reciept.userId);
 
-					return reciept.type == "m.read" && ((me && m) || (!m && !me));
-				})
-			);
-		});
+		var reciepts = this.reciepts(event)
+
+		return _.find(reciepts, (reciept) => {
+			var m = this.me(reciept.userId);
+
+			return reciept.type == "m.read" && ((me && m) || (!m && !me));
+		})
 	}
 
 	initEvents() {
@@ -431,6 +428,7 @@ class MTRX {
 		});
 
 		this.client.on("Room.timeline", (message, member) => {
+
 			if (!this.chatsready) return;
 
 			if (!message.event.content) return;
@@ -515,6 +513,9 @@ class MTRX {
 	}
 
 	destroy() {
+
+		this.searchEngine.destroy()
+		
 		if (this.client) {
 			// Before client is stopped, delete the pusher if needed
 			if (window.cordova) {
@@ -527,6 +528,8 @@ class MTRX {
 		this.chatsready = false;
 		this.ready = false;
 		this.error = false;
+
+		
 	}
 
 	// Try to delete the current pusher if needed
@@ -627,16 +630,25 @@ class MTRX {
 		return previd || event.getId();
 	}
 
-	textEvent(chat, text) {
+	textEvent(chat, text, clbks = {}) {
 		if (chat.pcrypto.canBeEncrypt()) {
-			return chat.pcrypto.encryptEvent(text);
+ 
+			if(clbks.encryptEvent) clbks.encryptEvent()
+
+			return chat.pcrypto.encryptEvent(text).then((e) => {
+
+				if(clbks.encryptedEvent) clbks.encryptedEvent(e)
+
+				return Promise.resolve(e)
+
+			})
 		}
 
 		return Promise.resolve(this.sdk.ContentHelpers.makeTextMessage(text));
 	}
 
-	sendtext(chat, text, { relation, from }) {
-		return this.textEvent(chat, text).then((r) => {
+	sendtext(chat, text, { relation, from }, clbks) {
+		return this.textEvent(chat, text, clbks).then((r) => {
 			if (relation) {
 				r["m.relates_to"] = {
 					rel_type: relation.type,
@@ -872,7 +884,7 @@ class MTRX {
 
 							if (!e) resolve();
 							else reject("unable");
-						});
+						}, true);
 					});
 				}
 
@@ -965,6 +977,15 @@ class MTRX {
 	}
 
 	shareInChat(id, share) {
+
+		if (share.multiple){
+
+			return f.processArray(share.multiple, (share) => {
+				return this.shareInChat(id, share)
+			})
+
+		}
+
 		var m_chat = this.client.getRoom(id);
 
 		//// share.openwithItems []
@@ -983,6 +1004,24 @@ class MTRX {
 					{ from: share.from }
 				);
 
+				promises.push(promise);
+			});
+
+			_.each(share.download, ({event, chat}) => {
+
+				var promise = this.core.mtrx.kit.prepareChat(chat).then(() => {
+
+					return this.core.mtrx.getFile(chat, event)
+
+				}).then((r) => {
+
+					return r.file
+				})
+				.then((r) => {
+					return this.sendFile(m_chat, r, {}, { from: share.from })
+				})
+
+				///this.sendFile(m_chat, file, {}, { from: share.from })
 				promises.push(promise);
 			});
 

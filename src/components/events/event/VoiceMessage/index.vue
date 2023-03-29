@@ -12,15 +12,18 @@
 			<div class="voiceMessage_graph">
 				<canvas ref="canvas" width="100" height="50" @mousedown="goTo"></canvas>
 			</div>
+
+			<div class="encsign" v-if="encrypted && !error">
+				<i class="fas fa-lock"></i>
+			</div>
+
 			<div class="voiceMessage_options">
 				<span v-if="!error">{{ getDurationString }}</span>
 
 				<i v-if="error" class="fas fa-exclamation-circle"></i>
 			</div>
 
-			<div class="encsign" v-if="encrypted && !error">
-				<i class="fas fa-lock"></i>
-			</div>
+			
 		</div>
 	</div>
 </template>
@@ -339,24 +342,26 @@ export default {
 		overflow: hidden;
 		min-width: 10em;
 		padding: 0 0.5em;
-		padding-right: 1em;
 		border-radius: 2em;
-		background: srgb(--background-secondary-theme);
+		background: srgba(--neutral-grad-1, 0.8)
 	}
 
 	&_toggle {
 		cursor: pointer;
 		height: 33px;
 		width: 33px;
+		min-width: 33px;
 		margin-right: 0.5em;
 		border-radius: 50%;
-		background: srgb(--neutral-grad-1);
+		background: srgba(--neutral-grad-2, 0.25);
 		display: flex;
 		align-items: center;
 		justify-content: center;
 		color: srgb(--color-bg-ac);
 
 		i {
+			margin-top: 2px;
+			margin-left: 2px;
 			font-size: 0.5em;
 		}
 	}
@@ -369,11 +374,11 @@ export default {
 	&_options {
 		display: flex;
 		justify-content: center;
-		margin-left: 10px;
-		padding: 2px 10px;
-		min-width: 40px;
-		background: srgb(--neutral-grad-1);
-		border-radius: 10px;
+		margin-left: $r;
+		padding: 0.25 * $r $r;
+		min-width: 4 * $r;
+		background: srgba(--neutral-grad-2, 0.25);
+		border-radius: 2 * $r;
 
 		span {
 			font-size: 0.8em;
@@ -397,13 +402,9 @@ export default {
 	}
 
 	.encsign {
-		position: absolute;
-		right: 0;
-		top: 0;
-		bottom: 0;
 		display: flex;
 		align-items: center;
-		padding-right: 0.35em;
+		margin-left: $r;
 
 		i {
 			font-size: 0.5em;

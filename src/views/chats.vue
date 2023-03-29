@@ -6,15 +6,16 @@
 		<topheader class="topheader" :share="share" @newchat="newchat" />
 		<maincontent ref="maincontent" :rbackexp="true">
 			<template v-slot:content>
-				<list :share="share" @scrolltop="scrolltop" />
-
-				<modal @close="closeNewChat" v-if="newChat && !hiddenInParent">
-					<template v-slot:header>{{ $t("caption.newChat") }}</template>
-					<template v-slot:body>
-						<chatcreate @completed="chatcreated" />
-					</template>
-					<template v-slot:footer></template>
-				</modal>
+				<list :share="share" @scrolltop="scrolltop" :processid="processid"/>
+				<transition name="fademodal">
+					<modal @close="closeNewChat" v-if="newChat && !hiddenInParent">
+						<template v-slot:header>{{ $t("caption.newChat") }}</template>
+						<template v-slot:body>
+							<chatcreate @completed="chatcreated" />
+						</template>
+						<template v-slot:footer></template>
+					</modal>
+				</transition>
 			</template>
 		</maincontent>
 	</div>
@@ -77,6 +78,10 @@ export default {
 		mobile: (state) => state.mobile,
 		hiddenInParent: (state) => state.hiddenInParent,
 		joinroom: (state) => state.joinroom,
+
+		processid(){
+			return this.$route.query.process;
+		},
 	}),
 
 	methods: {

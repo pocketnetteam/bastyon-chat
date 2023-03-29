@@ -6,6 +6,7 @@ import Pcrypto from "./pcrypto.js";
 import listeners from "./listeners";
 import f from "./functions";
 import Media from "./media";
+import Exporter from "./exporter";
 /*
 import pcm from '@/application/utils/pcm.js'
 let Mp3 = require('js-mp3');
@@ -77,6 +78,7 @@ class Core {
 
 		this.media = new Media();
 		this.audioContext = null;
+		this.exporter = new Exporter(this)
 	}
 
 	hideOptimization = function (v) {
@@ -87,6 +89,10 @@ class Core {
 	hideInParent = function (v) {
 		this.hiddenInParent = v;
 		this.store.commit("hiddenInParent", v);
+
+
+		if (v)
+			this.mtrx.searchEngine.stopall()
 
 		/*if(!v)
             this.store.commit('wasunhidden', true)*/
@@ -106,6 +112,8 @@ class Core {
 						console.log(this);
 						return this.vm.$i18n.t(key);
 					},
+
+
 				},
 			};
 
@@ -120,7 +128,8 @@ class Core {
 					p.el,
 					p.parameters
 				);
-				this.mtrx.bastyonCalls.on("initcall", () => {
+				this.mtrx.bastyonCalls.on("initcall", (call) => {
+					console.log("---catch init call", call);
 					if (this.vm.$store.state.currentPlayingVoiceMessage) {
 						this.vm.$store.state.currentPlayingVoiceMessage.pause();
 					}
@@ -138,13 +147,30 @@ class Core {
 							document.msExitFullscreen();
 						}
 					}
-
-					if (window?.POCKETNETINSTANCE?.platform) {
-						console.log(
-							"pocketnet available",
-							window?.POCKETNETINSTANCE?.platform
-						);
+					if (p?.parameters?.onInitCall){
+						p.parameters.onInitCall(call)
 					}
+				});
+				this.mtrx.bastyonCalls.on("error", (err) => {
+					console.log("---catch error", err);
+					if (p?.parameters?.onError) {
+						p.parameters.onError(err)
+					}
+
+				});
+				this.mtrx.bastyonCalls.on("connected", (call) => {
+					console.log("---catch connected", call);
+					if (p?.parameters?.onConnected) {
+						p.parameters.onConnected(call)
+					}
+
+				});
+				this.mtrx.bastyonCalls.on("ended", (call) => {
+					console.log("---catch ended", call);
+					if (p?.parameters?.onEnded) {
+						p.parameters.onEnded(call)
+					}
+
 				});
 			}
 
@@ -190,6 +216,9 @@ class Core {
 		}
 
 		this.vm.$destroy();
+
+		if (this.mtrx.bastyonCalls)
+			this.mtrx.bastyonCalls.destroy()
 	};
 
 	init = function () {
@@ -340,6 +369,10 @@ class Core {
 			.then(() => {
 				return Promise.resolve();
 			});
+	};
+
+	renderChatToElement = function(element, roomid, p){
+		return this.exporter.chat(element, roomid, p)
 	};
 
 	joinRoom(roomid) {

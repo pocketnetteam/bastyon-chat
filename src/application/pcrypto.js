@@ -32,12 +32,17 @@ var PcryptoRoom = async function (pcrypto, chat, { ls, lse }) {
 	var users = {};
 	var m = 12;
 
+	var lsspromises = {}
+	
+
 	var usersinfo = {};
 	var usershistory = [];
 
 	var pcryptoFile = new PcryptoFile();
 
 	chat.pcrypto = self;
+
+	self.version = 1 
 
 	self.clear = function () {
 		hashes = {};
@@ -46,14 +51,52 @@ var PcryptoRoom = async function (pcrypto, chat, { ls, lse }) {
 		users = {};
 	};
 
-	var lcachekey = "pcrypto6_" + chat.roomId + "_";
-	var ecachekey = "e_pcrypto6_";
+	var lcachekey = "pcrypto8_" + chat.roomId + "_";
+	var ecachekey = "e_pcrypto8_";
+	var usershashVersion = 11
 	var cache = {};
 
-	self.preparedUsers = function (time) {
-		return _.filter(getusersinfobytime(time), function (ui) {
-			return ui.keys && ui.keys.length >= m;
-		});
+	self.preparedUsers = function (time, v) {
+
+		if(!v || v <= 1){
+			return _.filter(getusersinfobytime(time), function (ui) {
+				return ui.keys && ui.keys.length >= m;
+			})
+		}
+
+		else{
+			return _.sortBy(_.filter(getusersinfobytime(time), function (ui) {
+				return ui.keys && ui.keys.length >= m;
+			}), (u) => {return u.source.id})
+		}
+
+		
+
+		
+	};
+
+	self.preparedUsersById = function (ids, v) {
+
+		var ui = []
+
+		_.each(users, (u) => {
+			if(_.indexOf(ids, u.id) > -1){
+
+				var u = usersinfo[u.id]
+
+				if (u && u.keys && u.keys.length >= m){
+					ui.push(u)
+				}
+				
+			}
+		})
+
+		if(!v || v <= 1){
+			return ui
+		}
+
+		return _.sortBy(ui, (u) => {return u.source.id})
+	
 	};
 
 	self.cantchat = function () {
@@ -71,7 +114,6 @@ var PcryptoRoom = async function (pcrypto, chat, { ls, lse }) {
 
 		var publicChat = pcrypto.core.mtrx.kit.chatIsPublic(chat);
 
-		// console.log('publicChat', time, publicChat, usersinfoArray.length, self.preparedUsers(time).length)
 
 		if (
 			!publicChat &&
@@ -121,16 +163,22 @@ var PcryptoRoom = async function (pcrypto, chat, { ls, lse }) {
 	var getuserseventshistory = function () {
 		var tetatet = pcrypto.core.mtrx.kit.tetatetchat(chat);
 
+		var allevents = _.uniq([].concat(chat.oldState.getStateEvents("m.room.member"), chat.currentState.getStateEvents("m.room.member")), (e) => {
+		
+			return e.event.event_id
+		}) 
+
 		var history = _.filter(
-			_.map(chat.currentState.getStateEvents("m.room.member"), function (ue) {
+			_.map(allevents, function (ue) {
 				var event = ue.event;
 
 				var membership = event.content.membership;
 
 				if (
-					membership == "join" ||
-					(membership == "leave" && !tetatet) ||
-					(tetatet && membership == "invite")
+					membership  == "invite" ||
+					membership  == "join" ||
+					(membership == "leave" && !tetatet)// ||
+					//(tetatet && membership == "invite")
 				) {
 					return {
 						time: event.origin_server_ts || 1,
@@ -154,6 +202,7 @@ var PcryptoRoom = async function (pcrypto, chat, { ls, lse }) {
 		history = _.sortBy(history, function (ui) {
 			return ui.time;
 		});
+
 
 		return history;
 	};
@@ -190,7 +239,7 @@ var PcryptoRoom = async function (pcrypto, chat, { ls, lse }) {
 
 			if (
 				ui.membership &&
-				(ui.membership == "join" || (ui.membership == "invite" && tetatet))
+				(ui.membership == "join" || (ui.membership == "invite"/* && tetatet*/))
 			) {
 				l.push({
 					start: tetatet ? 1 : ui.time,
@@ -208,6 +257,7 @@ var PcryptoRoom = async function (pcrypto, chat, { ls, lse }) {
 	var getusersinfobytime = function (time) {
 		var us = getusersbytime(time);
 
+
 		return _.filter(
 			_.map(us, function (u) {
 				return usersinfo[u.id];
@@ -219,6 +269,7 @@ var PcryptoRoom = async function (pcrypto, chat, { ls, lse }) {
 	};
 
 	var getusersbytime = function (time) {
+
 		return _.filter(users, function (ui) {
 			var l = _.find(ui.life, function (l) {
 				if (!time) {
@@ -271,7 +322,9 @@ var PcryptoRoom = async function (pcrypto, chat, { ls, lse }) {
 	};
 
 	var eaac = {
-		aeskeysls: function (time, block) {
+		aeskeysls: function (time, block, users, v) {
+
+
 			if (!time) time = 0;
 			if (!block) {
 				if (!pcrypto.core.mtrx.kit.tetatetchat(chat)) {
@@ -285,34 +338,47 @@ var PcryptoRoom = async function (pcrypto, chat, { ls, lse }) {
                 block = 10
             }*/
 
-			var k = period(time) + "-" + block;
+			var k =  ((users ? 'ul+' + orderedIdsHash(users) : period(time)) + "-" + block) + '-' + (v || self.version);
+			var ek = `${lcachekey + pcrypto.user.userinfo.id}-${k}`
 
-			return ls
-				.get(`${lcachekey + pcrypto.user.userinfo.id}-${k}`)
-				.then((keys) => {
-					const keysPrepared = convert.aeskeys.out(keys);
+			
 
-					return { keys: keysPrepared, k };
-				})
-				.catch(async (e) => {
-					const keysPrepared = eaac.aeskeys(time, block);
+			if(!lsspromises[ek]) {
 
-					if (self.preparedUsers(time).length > 1) {
-						const itemId = `${lcachekey + pcrypto.user.userinfo.id}-${k}`;
 
-						await ls
-							.set(itemId, convert.aeskeys.inp(keysPrepared))
-							.catch(() => {});
-					}
+				lsspromises[ek] = ls.get(ek)
+					.then((keys) => {
+						const keysPrepared = convert.aeskeys.out(keys);
 
-					return { keys: keysPrepared, k };
-				});
+						return { keys: keysPrepared, k };
+					})
+					.catch(async (e) => {
+
+						const keysPrepared = eaac.aeskeys(time, block, users, v || self.version);
+
+						if (self.preparedUsers(time).length > 1) {
+							const itemId = ek;
+
+							await ls
+								.set(itemId, convert.aeskeys.inp(keysPrepared))
+								.catch(() => {});
+						}
+
+						return { keys: keysPrepared, k };
+					}).finally(() => {
+						delete lsspromises[ek]
+					});
+			}
+
+				
+
+			return lsspromises[ek]
 		},
-		aeskeys: function (time, block) {
+		aeskeys: function (time, block, users, v) {
 			if (!time) time = 0;
 			if (!block) block = pcrypto.currentblock.height;
 
-			return eaa.aeskeys(time, block);
+			return eaa.aeskeys(time, block, users, v);
 		},
 	};
 
@@ -333,8 +399,8 @@ var PcryptoRoom = async function (pcrypto, chat, { ls, lse }) {
 			);
 		},
 
-		userspublics: function (time, block) {
-			var users = self.preparedUsers(time);
+		userspublics: function (time, block, usersIds, v) {
+			var users = usersIds ? self.preparedUsersById(usersIds, v) : self.preparedUsers(time, v);
 
 			var sum = {};
 
@@ -347,27 +413,27 @@ var PcryptoRoom = async function (pcrypto, chat, { ls, lse }) {
 					return Buffer.from(key, "hex");
 				});
 
-				sum[user.id] = eaa.points(time, block, publics);
+				sum[user.id] = eaa.points(time, block, publics, usersIds, v);
 			});
 
 			return sum;
 		},
 
-		current: function (time, block) {
+		current: function (time, block, users, v) {
 			var privates = _.map(pcrypto.user.private, function (key) {
 				return key.private;
 			});
 
 			var buf = Buffer.allocUnsafe(32);
-			var sc = eaa.scalars(time, block, privates).toBuffer();
+			var sc = eaa.scalars(time, block, privates, users, v).toBuffer();
 
 			sc.copy(buf, 32 - sc.length);
 
 			return buf;
 		},
 
-		scalars: function (time, block, scalars) {
-			var users = self.preparedUsers(time);
+		scalars: function (time, block, scalars, usersIds, v) {
+			var users = usersIds ? self.preparedUsersById(usersIds, v) : self.preparedUsers(time, v);
 
 			var sum = null;
 
@@ -388,8 +454,9 @@ var PcryptoRoom = async function (pcrypto, chat, { ls, lse }) {
 			return sum;
 		},
 
-		points: function (time, block, points) {
-			var users = self.preparedUsers(time);
+		points: function (time, block, points, usersIds, v) {
+			var users = usersIds ? self.preparedUsersById(usersIds, v) : self.preparedUsers(time, v);
+
 
 			var sum = null;
 
@@ -408,9 +475,11 @@ var PcryptoRoom = async function (pcrypto, chat, { ls, lse }) {
 			return sum;
 		},
 
-		aeskeys: function (time, block) {
-			var us = eaa.userspublics(time, block);
-			var c = eaa.current(time, block);
+		aeskeys: function (time, block, usersIds, v) {
+
+
+			var us = eaa.userspublics(time, block, usersIds, v);
+			var c = eaa.current(time, block, usersIds, v);
 
 			var su = {};
 
@@ -431,10 +500,12 @@ var PcryptoRoom = async function (pcrypto, chat, { ls, lse }) {
 		},
 	};
 
-	self.decrypt = async function (userid, { encrypted, nonce }, time, block) {
-		let { keys, k } = await eaac.aeskeysls(time, block);
+	self.decrypt = async function (userid, { encrypted, nonce }, time, block, users, v) {
+
+		let { keys, k } = await eaac.aeskeysls(time, block, users, v);
 
 		var error = null;
+
 
 		if (keys[userid]) {
 			try {
@@ -455,8 +526,8 @@ var PcryptoRoom = async function (pcrypto, chat, { ls, lse }) {
 		throw new Error(error);
 	};
 
-	self.encrypt = async function (userid, text) {
-		let { keys } = await eaac.aeskeysls();
+	self.encrypt = async function (userid, text, version) {
+		let { keys } = await eaac.aeskeysls(undefined, undefined, undefined, version || undefined);
 
 		if (keys[userid]) {
 			return await encrypt(text, keys[userid]);
@@ -574,7 +645,8 @@ var PcryptoRoom = async function (pcrypto, chat, { ls, lse }) {
 	};
 
 	self.encryptKey = async function (key) {
-		var users = self.preparedUsers();
+		var users = self.preparedUsers(undefined, self.version);
+		
 
 		var block = pcrypto.currentblock.height;
 
@@ -583,13 +655,14 @@ var PcryptoRoom = async function (pcrypto, chat, { ls, lse }) {
 		var encrypted = {
 			block: block,
 			keys: {},
+			v : self.version
 		};
 
 		for (var i = 0; i < users.length; i++) {
 			var user = users[i];
 
 			if (user.id != pcrypto.user.userinfo.id || users.length <= 1) {
-				encrypted.keys[user.id] = await self.encrypt(user.id, key);
+				encrypted.keys[user.id] = await self.encrypt(user.id, key, self.version);
 			}
 		}
 
@@ -605,10 +678,14 @@ var PcryptoRoom = async function (pcrypto, chat, { ls, lse }) {
 
 		var secrets = "";
 		var block = "";
+		var v = undefined
+		
 
 		if (event.type == "m.room.encryption") {
 			secrets = event.content.keys;
 			block = event.content.block;
+			v = event.content.version || 1;
+
 		} else {
 			secrets =
 				f.deep(event, "content.info.secrets.keys") ||
@@ -616,7 +693,11 @@ var PcryptoRoom = async function (pcrypto, chat, { ls, lse }) {
 			block =
 				f.deep(event, "content.info.secrets.block") ||
 				f.deep(event, "content.pbody.secrets.block");
+
+			v = f.deep(event, "content.info.secrets.version") ||
+				f.deep(event, "content.pbody.secrets.version") || 1
 		}
+
 
 		if (!secrets) throw new Error("secrets");
 		if (!block) throw new Error("block");
@@ -630,6 +711,15 @@ var PcryptoRoom = async function (pcrypto, chat, { ls, lse }) {
 		var body = JSON.parse(f.Base64.decode(secrets));
 		var time = event.origin_server_ts || 1;
 
+
+		var users = _.map(body, (v, i) => {
+			return i
+		})
+
+		users.push(sender)
+
+		users = _.uniq(users)
+
 		if (sender == me) {
 			_.find(body, function (s, i) {
 				if (i != me) {
@@ -639,6 +729,8 @@ var PcryptoRoom = async function (pcrypto, chat, { ls, lse }) {
 					return true;
 				}
 			});
+
+			
 		} else {
 			bodyindex = me;
 			keyindex = sender;
@@ -650,7 +742,9 @@ var PcryptoRoom = async function (pcrypto, chat, { ls, lse }) {
 			keyindex,
 			body[bodyindex],
 			time,
-			block
+			block,
+			users,
+			v
 		);
 
 		return decryptedKey;
@@ -673,7 +767,7 @@ var PcryptoRoom = async function (pcrypto, chat, { ls, lse }) {
 			var user = users[i];
 
 			if (user.id != pcrypto.user.userinfo.id || users.length <= 1) {
-				encryptedEvent.body[user.id] = await self.encrypt(user.id, text);
+				encryptedEvent.body[user.id] = await self.encrypt(user.id, text, self.version);
 			}
 		}
 
@@ -693,11 +787,17 @@ var PcryptoRoom = async function (pcrypto, chat, { ls, lse }) {
 				(uid) => {
 					return uid && uid != pcrypto.user.userinfo.id;
 				}
-			).join("") + "_v4"
+			).join("") + "_v" + usershashVersion + '_' + self.version
 		);
 
 		return hash;
 	};
+
+	var orderedIdsHash = function(ids){
+		return f.md5(_.sortBy(ids, (id) => {
+			return Number(id.replace(/[^0-9]/g, ''))
+		}).join(''))
+	}
 
 	self.sendCommonKey = function () {
 		return self
@@ -723,6 +823,7 @@ var PcryptoRoom = async function (pcrypto, chat, { ls, lse }) {
 	};
 
 	var getCommonKeyEvent = function (userid, _hash) {
+	
 		var hash = _hash || usershash();
 
 		if (!userid) userid = pcrypto.user.userinfo.id;
@@ -783,6 +884,7 @@ var PcryptoRoom = async function (pcrypto, chat, { ls, lse }) {
 					key,
 					hash: _e.content.hash,
 					block: _e.content.block,
+					version : _e.content.version || undefined
 				};
 			});
 	};
@@ -792,7 +894,9 @@ var PcryptoRoom = async function (pcrypto, chat, { ls, lse }) {
 
 		var result = {
 			private: {},
-			export: {},
+			export: {
+				version : self.version
+			},
 		};
 
 		return pcryptoFile
@@ -830,9 +934,12 @@ var PcryptoRoom = async function (pcrypto, chat, { ls, lse }) {
 		var sender = f.getmatrixid(event.sender);
 		var block = event.content.block;
 
+
 		var dpromise = self
 			.getCommonKey(sender, hash)
 			.then((event) => {
+
+
 				return self.decryptKey(event);
 			})
 			.then((key) => {

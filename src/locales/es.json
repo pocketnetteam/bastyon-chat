@@ -57,6 +57,7 @@
 		"following": "Following:",
 		"theme": "Tema:",
 		"contacts": "Contactos",
+		"other": "Búsqueda global de Bastyon",
 		"phoneContacts": "Contactos telefónicos",
 		"chooseInviteMedia": "Por favor, elige cómo quieres invitar:",
 		"admin": "Admin",
@@ -121,7 +122,8 @@
 		"contactsempty": "Todavía no tienes contactos, encuéntralos en la búsqueda",
 		"chatsearchingempty": "No chats found for the specified filter",
 		"sendmessage": "Send message",
-		"messages" : "Messages"
+		"you" : "You",
+		"sentfile" : "sent file:"
 	},
 
 	"input": {

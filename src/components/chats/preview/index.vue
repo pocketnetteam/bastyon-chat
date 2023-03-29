@@ -7,7 +7,6 @@
 						:m_chat="m_chat"
 						v-if="!dummy"
 						:chat="chat"
-						:key="key"
 						:dontuseslides="true"
 					/>
 					<div v-else class="dummyicon loadinggradient"></div>

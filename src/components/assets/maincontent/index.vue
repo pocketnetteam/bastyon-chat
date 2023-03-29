@@ -3,7 +3,6 @@
 		id="maincontent"
 		@mouseenter="mouseenter"
 		@mouseleave="mouseleave"
-		class="fixedOnPageTop"
 		:class="{
 			bin: pocketnet,
 			bout: !pocketnet,
@@ -23,40 +22,42 @@
 			</div>
 
 			<pmenu></pmenu>
+			
+			<transition name="fademodal">
+				<modal
+					@close="closeModal"
+					v-if="modalShowed && modalShowed.data && !hiddenInParent"
+				>
+					<template v-slot:header>{{ modalShowed.caption }}</template>
 
-			<modal
-				@close="closeModal"
-				v-if="modalShowed && modalShowed.data && !hiddenInParent"
-			>
-				<template v-slot:header>{{ modalShowed.caption }}</template>
+					<template v-slot:body>
+						<div class="modalcommoncontent">
+							<complain
+								v-if="modalShowed.type == 'complain'"
+								:p="modalShowed.data"
+							/>
+							<contact
+								v-if="modalShowed.type == 'contact'"
+								:contact="modalShowed.data.contact"
+							/>
+							<contacts
+								v-if="modalShowed.type == 'showuserselect'"
+								:users="modalShowed.data.users"
+								:mode="`Select`"
+								@close="closeModal"
+								@select="
+									(contact) => {
+										modalShowed.data.userselected(contact);
+										closeModal();
+									}
+								"
+							/>
+						</div>
+					</template>
 
-				<template v-slot:body>
-					<div class="modalcommoncontent">
-						<complain
-							v-if="modalShowed.type == 'complain'"
-							:p="modalShowed.data"
-						/>
-						<contact
-							v-if="modalShowed.type == 'contact'"
-							:contact="modalShowed.data.contact"
-						/>
-						<contacts
-							v-if="modalShowed.type == 'showuserselect'"
-							:users="modalShowed.data.users"
-							:mode="`Select`"
-							@close="closeModal"
-							@select="
-								(contact) => {
-									modalShowed.data.userselected(contact);
-									closeModal();
-								}
-							"
-						/>
-					</div>
-				</template>
-
-				<template v-slot:footer></template>
-			</modal>
+					<template v-slot:footer></template>
+				</modal>
+			</transition>
 
 			<div
 				class="expandp"

@@ -3,7 +3,9 @@
 .chats-list
   .searchWrapperEA
     margin-top : $r
-
+#simpleSearch
+  margin-left: 0.5 * $r
+  margin-right: 0.5 * $r
 .removeRoom
   width: 62px
   height: 100%
@@ -129,3 +131,23 @@
 
 .unauthorized.minimized:not(.active)
   display: none
+
+
+.list-enter-active,
+.list-leave-active
+  transition: all 0.5s ease
+
+.list-enter-from,
+.list-leave-to
+  opacity: 0
+  transform: translateX(30px)
+
+
+.fade-enter-active,
+.fade-leave-active
+  transition: opacity 0.3s ease
+
+
+.fade-enter-from,
+.fade-leave-to 
+  opacity: 0

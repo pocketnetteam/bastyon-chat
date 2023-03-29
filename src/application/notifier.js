@@ -89,18 +89,21 @@ class Notifier {
 	}
 
 	decrypt(event, chat) {
-		return this.core.mtrx.kit
-			.prepareChat(chat)
-			.then((r) => {
-				if (event.event.decrypted) {
-					return Promise.resolve();
-				}
 
-				return chat.pcrypto.decryptEvent(event.event);
-			})
-			.catch((e) => {
+		
+
+		return this.core.mtrx.kit.allchatmembers([chat], false, true).then(() => {
+			return this.core.mtrx.kit.prepareChat(chat)
+		}).then((r) => {
+			if (event.event.decrypted) {
 				return Promise.resolve();
-			});
+			}
+
+			return chat.pcrypto.decryptEvent(event.event);
+		})
+		.catch((e) => {
+			return Promise.resolve();
+		});
 	}
 
 	message(event, user, chat) {
@@ -113,7 +116,9 @@ class Notifier {
 		var external = f.deep(this, "core.external.clbks.NOTIFICATION") || {};
 		var ctype = "";
 
-		var t = f.deep(event, "event.type");
+		var t = f.deep(event, "event.type") || '';
+
+		if (t.indexOf('m.call') > -1) return
 
 		if (["m.room.member"].indexOf(t) > -1) ctype = "invite";
 		if (["m.room.message"].indexOf(t) > -1) ctype = "message";
@@ -162,8 +167,7 @@ class Notifier {
 	event(event, chat) {
 		let pushAction = this.core.mtrx.client.getPushActionsForEvent(event);
 
-		if (!pushAction.notify) return;
-
+		if (!pushAction.notify && event.event.type !=="m.room.request_calls_access") return;
 		//let timeFromNow = moment(moment.utc(event.event.origin_server_ts).toDate()).local().fromNow()
 
 		var date = moment(moment.utc(event.event.origin_server_ts).toDate())
@@ -173,23 +177,23 @@ class Notifier {
 
 		if (!iftime) return;
 
-		this.core.mtrx.isReaded(event, true).then((r) => {
-			if (r) return;
+		var r = this.core.mtrx.isReaded(event, true)
+		
+		if (r) return;
 
-			if (
-				!this.core.mtrx.me(event.getSender()) &&
-				event.getSender() &&
-				event.getSender() !== this.core.mtrx.client.credentials.userId
-			) {
-				this.core.user
-					.usersInfo([f.getmatrixid(event.getSender())])
-					.then((info) => {
-						if (info && info[0]) {
-							this.message(event, info[0], chat);
-						}
-					});
-			}
-		});
+		if (
+			!this.core.mtrx.me(event.getSender()) &&
+			event.getSender() &&
+			event.getSender() !== this.core.mtrx.client.credentials.userId
+		) {
+			this.core.user
+				.usersInfo([f.getmatrixid(event.getSender())])
+				.then((info) => {
+					if (info && info[0]) {
+						this.message(event, info[0], chat);
+					}
+				});
+		}
 	}
 
 	show = function (info, click) {

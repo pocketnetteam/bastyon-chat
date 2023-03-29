@@ -120,6 +120,7 @@ class MTRXKIT {
 		var members = [];
 		var promises = [];
 
+
 		if (withinvite) {
 			var promises = _.map(m_chats, (chat) => {
 
@@ -134,6 +135,8 @@ class MTRXKIT {
 					return chat
 						.loadMembersFromServer()
 						.then((r) => {
+
+
 							chat.summary.membersloading = false;
 
 							chat.summary.members = _.map(r, (user) => {
@@ -171,6 +174,7 @@ class MTRXKIT {
 							return Promise.resolve();
 						})
 						.catch((e) => {
+							console.log("ER", e)
 							chat.summary.membersloading = false;
 
 							return Promise.resolve();
@@ -192,6 +196,8 @@ class MTRXKIT {
 			members = _.uniq(members, function (m) {
 				return m.userId;
 			});
+
+			
 
 			return Promise.resolve(members);
 		});

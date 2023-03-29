@@ -3,7 +3,7 @@
 		<div class="iconGroup" v-if="isShowGroupIcon">
 			<i class="fas fa-user-friends"></i>
 		</div>
-		<div class="nameofchat" v-html="markMatches || convertedName"></div>
+		<div class="nameofchat" >{{convertedName}}</div>
 	</div>
 </template>
 
@@ -90,7 +90,10 @@ export default {
 		},
 
 		markMatches: function () {
-			return this.markText(this.convertedName, true);
+
+
+
+			return this.markText ? this.markText(this.convertedName, true) : this.convertedName;
 		},
 
 		isShowGroupIcon() {

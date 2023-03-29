@@ -11,7 +11,7 @@
 			active,
 		}"
 	>
-		<div class="topheader">
+		<div class="topheader" :class="classstyle || ''">
 			<div class="work">
 				<div class="headerLine">
 					<div class="leftIcon icon" @mouseenter="mouseenter">

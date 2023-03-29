@@ -2,8 +2,8 @@
 	<div
 		class="call"
 		:class="{
-			bad:
-				this.getDescription() === 'ended' || this.getDescription() === 'reject',
+			ended : this.getDescription() === 'ended',
+			bad: this.getDescription() === 'reject',
 		}"
 	>
 		<div
@@ -58,7 +58,7 @@ export default {
 .call {
 	display: flex;
 	align-items: center;
-	width: 180px;
+	width: 200px;
 	height: 6 * $r;
 	padding: 0.5 * $r;
 	border-radius: 2 * $r;
@@ -79,9 +79,19 @@ export default {
 			background-color: srgb(--color-bad);
 		}
 
+		&.ended{
+			background-color: srgba(--neutral-grad-1, 0.8);
+			color : srgb(--text-color);
+
+			.call {
+				&-icon {
+					color: srgb(--color-bg-ac-bright);
+				}
+			}
+		}
+
 		.call {
 			&-icon {
-				background: rgba(255,255, 255, 0.2);
 				color: srgb(--text-on-bg-ac-color);
 			}
 		}
@@ -106,8 +116,9 @@ export default {
 		}
 	}
 	&-info {
+		margin-left: $r;
 		flex-grow: 2;
-		text-align: center;
+		text-align: left;
 		font-weight: 600;
 		font-size: 0.8em;
 		display: flex;

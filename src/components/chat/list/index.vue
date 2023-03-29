@@ -19,6 +19,7 @@
 					@replyEvent="replyEvent"
 					@galleryEventOpen="(e) => imageGallery(e)"
 					@menuIsVisible="menuIsVisibleHandler"
+					@toreference="scrollToEvent"
 					ref="eventslist"
 					:error="error"
 					:timeline="timeline"
@@ -28,8 +29,7 @@
 					v-if="timeline"
 					:scrollType="scrollType"
 					:selectedMessages="selectedMessages"
-					:isRemoveSelectedMessages="isRemoveSelectedMessages"
-					@messagesIsDeleted="messagesIsDeleted"
+					:searchresults="searchresults"
 				/>
 			</div>
 		</div>

@@ -75,39 +75,42 @@ export default {
 <style scoped lang="sass">
 .wrapper
 
-  >div
-    padding: $r
-    vertical-align: middle
+	>div
+		padding: $r
+		vertical-align: middle
 
-  .icon
+	.icon
 
-    width: 60px
-    text-align: center
-    background: srgb(--neutral-grad-0)
+		width: 60px
+		text-align: center
+		background: srgb(--neutral-grad-0)
 
-    i
-      font-size: 1.2em
-      opacity: 0.8
+		i
+			font-size: 1.2em
+			opacity: 0.8
 
-  .filecontent
+	.filecontent
+		.name
+			
 
-    span
-      font-size: 0.8em
+		span
+			font-size: 0.8em
 
-    div
-      max-width: 80%
-      text-overflow: ellipsis
-      overflow: hidden
+		div
+			max-width: 80%
+			text-overflow: ellipsis
+			overflow: hidden
+			white-space: nowrap
 
-    .size
-      color : srgb(--color-txt-ac)
+		.size
+			color : srgb(--color-txt-ac)
 
-    button.button
-      padding : 0.5 * $r
-      margin-top : $r
+		button.button
+			padding : 0.5 * $r
+			margin-top : $r
 
-      &.downloaded
-        background: srgb(--color-good)
-        border-color : srgb(--color-good)
-        color : srgb(--text-on-bg-ac-color)
+			&.downloaded
+				background: srgb(--color-good)
+				border-color : srgb(--color-good)
+				color : srgb(--text-on-bg-ac-color)
 </style>

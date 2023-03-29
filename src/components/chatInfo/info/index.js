@@ -117,6 +117,8 @@ export default {
 
 						this.encrypted = this.m_chat.pcrypto.canBeEncrypt();
 					});
+
+
 				}
 			},
 		},
@@ -126,6 +128,19 @@ export default {
 				if (this.chat) {
 					this.$store.commit("SET_CURRENT_ROOM", this.chat.roomId);
 				} else this.$store.commit("SET_CURRENT_ROOM", false);
+
+
+				if (this.chat && this.chat.roomId) {
+					
+					let pushRules = this.core.mtrx.client._pushProcessor.getPushRuleById(
+						this.chat.roomId
+					);
+
+					if (pushRules !== null) {
+						this.roomMuted = true;
+					}
+
+				}
 			},
 		},
 	},
@@ -150,9 +165,9 @@ export default {
 			return `https://bastyon.com/welcome?publicroom=${this.chat.roomId}`;
 
 			/*if(this.chat.info.title === '@New Room'){
-        return `https://bastyon.com/welcome?publicroom=${this.chat.roomId}`
-      }
-      return `https://bastyon.com/welcome?publicroom=${this.chat.info.title.replace(/ /g, '_')}`*/
+		return `https://bastyon.com/welcome?publicroom=${this.chat.roomId}`
+	  }
+	  return `https://bastyon.com/welcome?publicroom=${this.chat.info.title.replace(/ /g, '_')}`*/
 		},
 		me: function () {
 			return (
@@ -165,22 +180,21 @@ export default {
 			var pushRules = this.core.mtrx.client.pushProcessor.getPushRuleById(
 				this.chat.roomId
 			);
-			var isEnabled = this.m_chat.currentState.getStateEvents(
+			let isEnabled = this.m_chat.currentState.getStateEvents(
 				"m.room.callsEnabled"
-			);
-			console.log(this.core.user.userinfo);
+			).find(
+				(e) =>
+					!(!this.core.mtrx.me(e?.event?.sender)) &&
+					e?.event?.sender.split(":")[0].replace("@", "") ===
+					e?.event?.state_key
+			)
 			if (pushRules !== null) {
 				this.roomMuted = true;
 			}
 			if (
-				isEnabled.find(
-					(e) =>
-						(!this.core.mtrx.me(e?.event?.sender))?.event?.content?.enabled &&
-						e?.event?.sender.split(":")[0].replace("@", "") ===
-							e?.event?.state_key
-				)
+				isEnabled
 			) {
-				this.roomCallsDisabled = true;
+				this.roomCallsDisabled = !isEnabled.event.content.enabled;
 			}
 			return this.m_chat.timeline || {};
 		},
@@ -317,10 +331,13 @@ export default {
 		muteCalls() {
 			let roomId = this.chat.roomId;
 			const self = this;
-			if (self.roomCallsDisabled) {
-				self.roomCallsDisabled = false;
-			} else {
-				self.roomCallsDisabled = true;
+			self.roomCallsDisabled = !self.roomCallsDisabled
+			if (!self.roomCallsDisabled) {
+				self.core.mtrx.client.sendStateEvent(
+				  roomId,
+				  "m.room.request_calls_access",
+				  { accepted: true }
+				);
 			}
 			self.core.mtrx.client.sendStateEvent(
 				roomId,
@@ -349,7 +366,7 @@ export default {
 				return;
 			}
 
-			this.core.mtrx.blockUser(users[0].userId).catch((e) => {});
+			this.core.mtrx.blockUser(users[0].userId).catch((e) => { });
 		},
 
 		unblock() {
@@ -359,7 +376,7 @@ export default {
 				return;
 			}
 
-			this.core.mtrx.unblockUser(users[0].userId).catch((e) => {});
+			this.core.mtrx.unblockUser(users[0].userId).catch((e) => { });
 		},
 
 		eventsList() {
@@ -398,7 +415,7 @@ export default {
 							.then((r) => {
 								this.$store.commit("DELETE_ROOM", this.chat.roomId);
 
-								this.$router.push({ path: "/chats" }).catch((e) => {});
+								this.$router.push({ path: "/chats" }).catch((e) => { });
 							});
 					});
 				});
@@ -423,8 +440,13 @@ export default {
 
 		///////////////
 		banUser(user) {
+
+			var promise = null
+
+			this.$store.state.globalpreloader = true;
+
 			if (user.membership === "ban") {
-				this.core.mtrx.client
+				promise = this.core.mtrx.client
 					.unban(
 						this.m_chat.roomId,
 						f.getMatrixIdFull(user.userId, this.core.domain)
@@ -435,29 +457,38 @@ export default {
 								this.m_chat.roomId,
 								f.getMatrixIdFull(user.userId, this.core.domain)
 							)
-							.then((r) => {});
+							.then((r) => { });
 					});
 			} else {
-				this.core.mtrx.client
+				promise = this.core.mtrx.client
 					.ban(
 						this.m_chat.roomId,
 						f.getMatrixIdFull(user.userId, this.core.domain),
 						"admin ban"
 					)
-					.then((r) => {});
+					.then((r) => { });
 			}
+
+			promise.finally(() => {
+				this.$store.state.globalpreloader = false;
+			})
 		},
 		kickUser(user) {
-			this.core.mtrx.client
-				.kick(
-					this.m_chat.roomId,
-					f.getMatrixIdFull(user.userId, this.core.domain),
-					"admin kicked"
-				)
-				.then(this.$nextTick(function () {}));
+
+			this.$store.state.globalpreloader = true;
+
+			this.core.mtrx.client.kick(
+				this.m_chat.roomId,
+				f.getMatrixIdFull(user.userId, this.core.domain),
+				"admin kicked"
+			)
+			.then(this.$nextTick(function () { })).finally(() => {
+				this.$store.state.globalpreloader = false;
+			});
 		},
 		makeAdmin(user) {
 			var level = 50;
+
 			if (user.powerLevel === 50) {
 				level = 0;
 			}
@@ -465,16 +496,17 @@ export default {
 				"m.room.power_levels"
 			);
 
-			this.core.mtrx.client
-				.setPowerLevel(
-					this.m_chat.roomId,
-					f.getMatrixIdFull(user.userId, this.core.domain),
-					level,
-					event[0]
-				)
-				.then((r) => {
-					// console.log(event[0].event.content.users, "event")
-				});
+			this.$store.state.globalpreloader = true;
+
+			this.core.mtrx.client.setPowerLevel(
+				this.m_chat.roomId,
+				f.getMatrixIdFull(user.userId, this.core.domain),
+				level,
+				event[0]
+			)
+			.finally((r) => {
+				this.$store.state.globalpreloader = false;
+			});
 		},
 
 		/////////////////
@@ -485,7 +517,7 @@ export default {
 			this.inputActive = true;
 		},
 
-		editRoomName() {},
+		editRoomName() { },
 
 		showPhotoSwipe(index) {
 			this.isOpen = true;

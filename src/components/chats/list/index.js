@@ -16,6 +16,7 @@ export default {
 			revealed: {},
 			lastEventDescription: "",
 			blocked: false,
+			globalsearch : ''
 		};
 	},
 	components: {
@@ -32,8 +33,18 @@ export default {
 			type: String,
 			default: () => {},
 		},
+
+		processid : ''
 	},
-	created: () => {},
+
+	beforeMount: function() {
+
+		if (this.processid){
+			var p = this.core.mtrx.searchEngine.getprocess(this.processid)
+
+			if (p && p.text) this.globalsearch = p.text
+		}
+	},
 
 	watch: {
 		topchatid: function () {
@@ -42,9 +53,13 @@ export default {
 			}
 		},
 
-		active: function () {
-			// this.searchText = ''
-		},
+		minimized: {
+			immediate : true,
+			handler : function () {
+				console.log('////')
+				this.globalsearch = ''
+			}
+		}
 		//$route: 'getdata'
 	},
 
@@ -122,31 +137,9 @@ export default {
 				) {
 					return;
 				} else {
-					/*Load messages for every chat*/
-					let rm = this.core.mtrx.client.getRoom(chat.roomId),
-						ts = rm.getLiveTimeline(),
-						tl = new this.core.mtrx.sdk.TimelineWindow(
-							this.core.mtrx.client,
-							ts.getTimelineSet()
-						);
-
-					tl.load()
-						.then(() => {
-							return this.getEventsAndDecrypt(rm, tl);
-						})
-						.then((events) => {
-							chat.events = events.filter(
-								(f) =>
-									f.event.decrypted?.msgtype === "m.text" ||
-									f.event.content?.msgtype === "m.text"
-							);
-						})
-						.catch(() => {});
-
 					chats.push(chat);
 				}
 			});
-
 			return _.sortBy(chats, function (o) {
 				return o.lastModified;
 			}).reverse();
@@ -348,11 +341,11 @@ export default {
 
 		toggleUser: function (id) {
 			if (!this.selected[id]) {
-				if (this.selectedlength >= 11) {
+				if (this.selectedlength >= 10) {
 					this.$store.commit("icon", {
 						icon: "warning",
 						message:
-							"At the moment, you can add no more than 12 users to the chat",
+							"At the moment, you can add no more than 10 users to the chat",
 					});
 
 					return;
@@ -373,6 +366,13 @@ export default {
 		itemToggle(item) {
 			this[item] = this[item] ? null : 2;
 		},
+
+		searchall : function(text){
+			this.globalsearch = (text || "").toLowerCase()
+
+			console.log('searchall', text, this.globalsearch)
+
+		}
 	},
 	mounted() {
 		// ideally should be in some global handler/store

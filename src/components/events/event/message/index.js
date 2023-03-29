@@ -20,7 +20,7 @@ export default {
 		event: Object,
 		preview: Boolean,
 		userinfo: Object,
-		readed: Object,
+		readed: Boolean,
 		downloaded: Boolean,
 		baseImg: {
 			type: String,
@@ -37,7 +37,6 @@ export default {
 		error: String,
 		withImage: Boolean,
 		reference: Object,
-		last: Boolean,
 		showmyicontrue: false,
 		fromreference: Boolean,
 		multiSelect: {
@@ -48,7 +47,6 @@ export default {
 			default: [],
 			type: Array,
 		},
-		isRemoveSelectedMessages: false,
 		audioBuffer: null,
 	},
 	directives: {
@@ -59,6 +57,7 @@ export default {
 		return {
 			referenceshowed: false,
 			markedText: null,
+			hasurlerror : null
 		};
 	},
 	inject: ["matches", "markText"],
@@ -75,30 +74,7 @@ export default {
 		Request,
 	},
 	watch: {
-		isRemoveSelectedMessages: {
-			immediate: true,
-			handler: function () {
-				if (this.isRemoveSelectedMessages) {
-					for (let i = 0; i < this.selectedMessages.length; i++) {
-						if (
-							this.selectedMessages[i].message_id === this.origin.event.event_id
-						) {
-							this.$emit("remove");
-
-							return this.core.mtrx.client.redactEvent(
-								this.chat.roomId,
-								this.origin.event.event_id,
-								null,
-								{
-									reason: "messagedeleting",
-								}
-							);
-						}
-					}
-					this.$emit("messagesIsDeleted", true);
-				}
-			},
-		},
+		
 		readyToRender: {
 			immediate: true,
 			handler: function () {
@@ -239,12 +215,14 @@ export default {
 		textWithoutLinks: function () {
 			var trimmed = this.$f.trim(this.body);
 
+			if(this.hasurlerror) return trimmed
+
 			if (
 				!this.urlpreview ||
 				this.urlpreview.length < 10 ||
 				(trimmed.indexOf(this.urlpreview) > 0 &&
 					trimmed.indexOf(this.urlpreview) + this.urlpreview.length <
-						trimmed.length)
+					trimmed.length)
 			) {
 				return trimmed;
 			}
@@ -298,21 +276,106 @@ export default {
 			}
 		},
 
+		menu: function() {
+
+			var type = f.deep(this.origin, "event.type") || '';
+
+			var menu = [];
+
+			if (type.indexOf('m.call') == -1) {
+
+				menu.push({
+					action: this.menureply,
+					text: "button.reply",
+					icon: "fas fa-reply",
+				})
+
+				menu.push({
+					action: this.menushowMultiSelect,
+					text: "button.select",
+					icon: "fas fa-check-circle",
+				})
+
+			}
+
+
+
+			if (type.indexOf('m.call') == -1) {
+				menu.push({
+					action: this.menushare,
+					text: "button.share",
+					icon: "fas fa-share-alt",
+				});
+			}
+
+			if (this.my) {
+				menu.push({
+					action: this.menudelete,
+					text: "button.delete",
+					icon: "far fa-trash-alt",
+				});
+			}
+
+
+
+			if (type == "m.room.message") {
+				menu.unshift({
+					action: this.menucopy,
+					text: "button.copy",
+					icon: "far fa-copy",
+				});
+
+				if (this.my && this.canediting)
+					menu.unshift({
+						action: this.menuedit,
+						text: "button.edit",
+						icon: "far fa-edit",
+					});
+			}
+
+			return menu;
+
+            return [
+                {
+                    text: 'labels.scenarioManager',
+                    icon: 'fas fa-tasks',
+                    action: this.scenarioManager
+                },
+            
+                {
+                    text: 'labels.scoreConverter',
+                    icon: 'fas fa-star',
+                    action: this.scoreConverter
+                },
+            
+            ]
+        },
+
 		menuItems: function () {
-			var menu = [
-				{
+
+			var type = f.deep(this.origin, "event.type") || '';
+
+			var menu = [];
+
+			if (type.indexOf('m.call') == -1) {
+
+				menu.push({
 					click: "reply",
 					title: this.$i18n.t("button.reply"),
 					icon: "fas fa-reply",
-				},
-				{
+				})
+
+				menu.push({
 					click: "showMultiSelect",
 					title: this.$i18n.t("button.select"),
 					icon: "fas fa-check-circle",
-				},
-			];
+				})
 
-			if (!this.file) {
+			}
+
+
+
+			if (type.indexOf('m.call') == -1) {
 				menu.push({
 					click: "share",
 					title: this.$i18n.t("button.share"),
@@ -328,7 +391,7 @@ export default {
 				});
 			}
 
-			var type = f.deep(this.origin, "event.type");
+
 
 			if (type == "m.room.message") {
 				menu.unshift({
@@ -387,7 +450,7 @@ export default {
 		},
 	},
 
-	mounted() {},
+	mounted() { },
 
 	methods: {
 		gotoreference: function () {
@@ -398,8 +461,6 @@ export default {
 
 		showwhenburn: function () {
 			var text = "";
-
-			//console.log(this.willburn.toDate(), new Date(), this.willburn.toDate() > new Date())
 
 			if (this.willburn.toDate() < new Date()) {
 				text = this.$i18n.t("messagewasburn");
@@ -430,16 +491,13 @@ export default {
 
 		setmenu: function () {
 			this.core.menu({
-				items: this.menuItems,
-				handler: this.menuItemClickHandler,
+				items: this.menu,
 				item: {},
 			});
 		},
 
-		menushare: function () {
+		prepareShare : function(){
 			var sharing = {};
-
-			var trimmed = this.$f.trim(this.body);
 
 			if (this.content.msgtype === "m.image" && this.imageUrl)
 				sharing.images = [this.imageUrl];
@@ -447,23 +505,33 @@ export default {
 			if (this.content.msgtype === "m.audio" && this.audioUrl)
 				sharing.audio = [this.audioUrl];
 
-			if (
-				(this.content.msgtype === "m.text" ||
-					this.content.msgtype === "m.encrypted") &&
-				trimmed
-			)
-				sharing.messages = [trimmed];
+			if ((this.content.msgtype === "m.text" || this.content.msgtype === "m.encrypted")){
 
-			//if(this.urlpreview) sharing.urls = [urlpreview]
+				var trimmed = this.body ? this.$f.trim(this.body) : '';
+
+				if (trimmed){
+					sharing.messages = [trimmed];
+				}
+
+			}
+				
 
 			if (this.file) {
-				sharing.download = true;
+				sharing.download = [{
+					event : this.event,
+					chat : this.chat
+				}]
+				
 			}
 
-			//sharing.route = 'chat?id=' + this.chat.roomId
 			sharing.from = this.userinfo.id;
 
-			this.$emit("share", sharing);
+			return sharing
+		},
+
+		menushare: function () {
+			
+			this.$emit("share", this.prepareShare());
 
 			return Promise.resolve();
 		},
@@ -518,7 +586,7 @@ export default {
 			p.hidePopup();
 
 			this["menu" + item.click]()
-				.then((r) => {})
+				.then((r) => { })
 				.catch((e) => {
 					p.showPopup();
 				});
@@ -586,11 +654,11 @@ export default {
 					this,
 					"$store.state.users." + this.content.from
 				).name;
-			} catch (err) {}
+			} catch (err) { }
 			var to = this.$i18n.t("caption.somebody");
 			try {
 				to = this.$f.deep(this, "$store.state.users." + this.content.to).name;
-			} catch (err) {}
+			} catch (err) { }
 			msg +=
 				from +
 				this.$i18n.t("caption.sent") +
@@ -605,39 +673,21 @@ export default {
 		},
 
 		showreference: function () {
-			this.referenceshowed = !this.referenceshowed;
+
+			this.$emit('toreference', this.reference)
+
+			//this.referenceshowed = !this.referenceshowed;
 		},
 
 		selectMessage: function () {
-			var sharing = {};
+			var sharing = this.prepareShare()
 
-			var trimmed = this.$f.trim(this.body);
-
-			if (this.content.msgtype === "m.image" && this.imageUrl)
-				sharing.images = [this.imageUrl];
-
-			if (this.content.msgtype === "m.audio" && this.decryptedInfo)
-				sharing.audio = [this.decryptedInfo];
-
-			if (
-				(this.content.msgtype === "m.text" ||
-					this.content.msgtype === "m.encrypted") &&
-				trimmed
-			)
-				sharing.messages = [trimmed];
-
-			//if(this.urlpreview) sharing.urls = [urlpreview]
-
-			if (this.file) {
-				sharing.download = true;
-			}
-
-			//sharing.route = 'chat?id=' + this.chat.roomId
-			sharing.from = this.userinfo.id;
 			this.$emit("selectMessage", {
 				message_id: this.origin.event.event_id,
-				...sharing,
+				sharing,
+				time : this.origin._localTimestamp
 			});
+
 		},
 		removeMessage: function () {
 			this.$emit("removeMessage", {
@@ -658,9 +708,15 @@ export default {
 				parent.parentNode.scrollTop = evtWrp.offsetTop - parent.offsetTop;
 		},
 
+		urlerror : function(e){
+			this.hasurlerror = e
+
+			console.log("Errrrrrrrrrrrrrrrrrrrrrrrrrr", e)
+		},
+
 		markMatches: function (content) {
 			/*Highlight matched text*/
-			if (!this.matches) return;
+			if (!this.matches || !this.markText) return;
 
 			this.markedText = this.markText(content);
 
