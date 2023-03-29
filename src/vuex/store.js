@@ -764,7 +764,7 @@ var store = new Vuex.Store({
 
 				var members = chat.currentState.getMembers();
 
-				var ts = chat.getLiveTimeline()._eventTimelineSet;
+				var ts = chat.getLiveTimeline().eventTimelineSet;
 
 				let isCallsEnabled = chat.currentState.getStateEvents(
 					"m.room.callsEnabled"
@@ -856,7 +856,7 @@ var store = new Vuex.Store({
 
 				if (e){
 
-					var rt = ts.getRelationsForEvent(
+					var rt = ts.relations.getChildEventsForEvent(
 						e.event.event_id,
 						"m.replace",
 						"m.room.message"

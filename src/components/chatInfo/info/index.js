@@ -132,7 +132,7 @@ export default {
 
 				if (this.chat && this.chat.roomId) {
 					
-					let pushRules = this.core.mtrx.client._pushProcessor.getPushRuleById(
+					let pushRules = this.core.mtrx.client.pushProcessor.getPushRuleById(
 						this.chat.roomId
 					);
 

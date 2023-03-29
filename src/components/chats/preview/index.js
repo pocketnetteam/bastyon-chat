@@ -57,7 +57,7 @@ export default {
 		},
 		roomMuted: function(){
 			if(this.chat){
-				let pushRules = this.core.mtrx.client._pushProcessor.getPushRuleById(
+				let pushRules = this.core.mtrx.client.pushProcessor.getPushRuleById(
 					this.chat.roomId
 				);
 	
