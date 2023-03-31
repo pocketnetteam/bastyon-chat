@@ -5,6 +5,7 @@ import f from "./functions";
 import images from "./utils/images";
 import FingerprintJS from "@fingerprintjs/fingerprintjs";
 
+import SearchEngine from "@/application/searchEngine";
 import qs from "qs";
 import fileSaver from "file-saver";
 import ChatStorage from "./chatstorage";
@@ -29,7 +30,7 @@ class MTRX {
 		this.db = null;
 
 		this.customrequest = true;
-
+		this.searchEngine = new SearchEngine(this)
 		this.devicekey = "m8_device";
 	}
 
