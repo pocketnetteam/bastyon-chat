@@ -267,7 +267,6 @@ var store = new Vuex.Store({
 				state.active = false;
 			}
 
-			console.log("??????????????????")
 
 			state.minimized = true;
 		},
@@ -413,6 +412,10 @@ var store = new Vuex.Store({
 
 				_.each(ev.timeline, function (__e) {
 					var e = __e.event;
+
+					if(!e) return
+
+					//console.log("EVE", __e)
 
 					var _e = {
 						event: {

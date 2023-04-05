@@ -139,8 +139,6 @@ var Process = function(text, chats, parent /* SearchEngine */){
 
             if(!first){
 
-                console.log("tl.line.canPaginate('b')", tl.line.canPaginate('b'), chat.roomId, tl.line._eventCount)
-
                 if(!tl.line.canPaginate('b')){
                     tl.finished = true
 
@@ -165,8 +163,6 @@ var Process = function(text, chats, parent /* SearchEngine */){
                 })
             })
 
-            console.log('diff.length', diff.length)
-
             if (!curallevents.length || (allevents[chat.roomId] && !diff.length)){
                 tl.finished = true
 
@@ -181,19 +177,11 @@ var Process = function(text, chats, parent /* SearchEngine */){
 
             if(!events[chat.roomId]) events[chat.roomId] = []
 
-            console.log('curevents.length 1', curevents.length)
-
             curevents = _.filter(curevents, (e) => {
                 return !_.find(events[chat.roomId], (e2) => {
                     return e.event.event_id == e2.event.event_id
                 })
             })
-            console.log('curevents.length 2', curevents.length)
-
-
-            
-
-            
 
             events[chat.roomId] = events[chat.roomId].concat(curevents)
 
@@ -317,8 +305,6 @@ var Process = function(text, chats, parent /* SearchEngine */){
             results[id] = searchInEvents(es)
         })
 
-        console.log('results', results)
-
         emit()
     }
 
@@ -370,7 +356,6 @@ var SearchEngine = function (mtrx) {
     }
 
     self.stopall = function(){
-        console.log('stopall')
         _.each(processes, (process) => {
             process.stop()
         })

@@ -342,7 +342,6 @@ export default {
 				local
 			).then((matrixCall) => {
 
-				console.log('matrixCall', matrixCall)
 
 				// if (matrixCall) this.$store.dispatch("CALL", matrixCall);
 			}).catch(e => {

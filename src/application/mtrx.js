@@ -208,8 +208,6 @@ class MTRX {
 		});
 		await store.startup();
 
-		console.log('userData', userData)
-
 		Object.assign(userClientData, {
 			userId: userData.user_id,
 			accessToken: userData.access_token,

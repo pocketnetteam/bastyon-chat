@@ -330,12 +330,9 @@ export default {
 			this.loading = true;
 			this.firstPaginate = true;
 
-			console.log('this.chat', this.chat)
 
 			//this.chat.getTimelineForEvent('$FXUvcjIqcvDu0meLTnz-8plloZoNHLIYEb6WGQMWO3s')
 			
-			
-			console.log('timeline', timeline)
 			
 			//this.chat.getTimelineForEvent('$FXUvcjIqcvDu0meLTnz-8plloZoNHLIYEb6WGQMWO3s')
 			
@@ -506,7 +503,6 @@ export default {
 		readLast: function () {
 			var events = this.timeline.getEvents();
 
-			console.log(events);
 			this.readEvent(events[events.length - 1]);
 		},
 
@@ -529,8 +525,6 @@ export default {
 
 			var i = this.chat.timeline.length - 1;
 			var event = null;
-
-			console.log('debouncedReadAll', this.chat.timeline)
 
 			event = this.chat.timeline[i]
 
@@ -560,8 +554,6 @@ export default {
 
 				i--;
 			}*/
-
-			console.log('event', event)
 
 			if (event) {
 
@@ -645,8 +637,6 @@ export default {
 				
 				return this.paginateToEvent(reference.event.event_id)
 			}).then(event => {
-
-				console.log('event', event)
 
 				if (event){
 					setTimeout(() => {

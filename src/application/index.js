@@ -99,7 +99,6 @@ class Core {
 	};
 
 	setCalls = function () {
-		console.log("set calls");
 		try {
 			let p = {
 				el: document.querySelector("body"),
@@ -109,7 +108,6 @@ class Core {
 						return this.user.usersInfo([address], true, false);
 					},
 					getWithLocale: (key) => {
-						console.log(this);
 						return this.vm.$i18n.t(key);
 					},
 

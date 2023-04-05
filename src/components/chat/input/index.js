@@ -560,12 +560,10 @@ export default {
 		},
 
 		clbkEncrypt(){
-			console.log("ECN")
 			this.$emit('encrypt')
 		},
 
 		clbkEncrypted(){
-			console.log("ECN2")
 			this.$emit('encrypted')
 
 		},
@@ -1291,7 +1289,6 @@ export default {
 		},
 
 		stopRecording({ cancel, sendnow }) {
-			console.log("STOP RECORDING", this.isRecording);
 
 			this.$store.commit("SET_VOICERECORDING", false);
 

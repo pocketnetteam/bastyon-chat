@@ -47,7 +47,6 @@ export default {
 				if(value != this.searchTxt)
 					this.searchTxt = value
 	
-				console.log('this.searchTxt', this.searchTxt)
 			}
 		}
 	},

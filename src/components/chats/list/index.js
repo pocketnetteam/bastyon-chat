@@ -370,8 +370,6 @@ export default {
 		searchall : function(text){
 			this.globalsearch = (text || "").toLowerCase()
 
-			console.log('searchall', text, this.globalsearch)
-
 		}
 	},
 	mounted() {

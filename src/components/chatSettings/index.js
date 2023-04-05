@@ -147,7 +147,6 @@ export default {
 
 		uploadUploaded(data){
 			this.userImagebase64 = data.base64
-			console.log("DATA", data)
 		},
 
 		uploadError(){

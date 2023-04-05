@@ -173,13 +173,11 @@ export default {
 	},
 	methods: {
 		tosearchevent(event){
-			console.log('event', event)
 			this.focusedevent = event
 
 			this.$refs['chat'].scrollToEvent(event)
 		},
 		searchingProcess(){
-			console.log("HERE", this.search, this.chat)
 			if (this.search.length > 1 && this.chat){
 
 				this.processresult = null
@@ -189,7 +187,6 @@ export default {
 					return 
 				}
 
-				console.log("INITTEXT")
 
 				this.process = this.core.mtrx.searchEngine.execute(this.search, [this.chat], ({results}) => {
 
@@ -197,7 +194,6 @@ export default {
 
 				}, {
 					chat : (result) => {
-						console.log("RESULT", result)
 						this.processresult = result.results[this.chat.roomId] || null
 
 						if(!this.processresult) return
@@ -209,8 +205,6 @@ export default {
 								var e = _.find(this.processresult, (e) => {
 									return e.event.event_id == this.toevent
 								})
-								
-								console.log('this.toevent', e, this.toevent)
 
 								if (e){
 									this.toeventscrolled()

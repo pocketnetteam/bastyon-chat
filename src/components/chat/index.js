@@ -53,8 +53,6 @@ export default {
 
 	mounted() {
 
-		console.log("CHAT MOUNTED", this)
-
 		this.getuserinfo();
 		this.$store.commit("active", true);
 		this.$store.commit("blockactive", { value: true, item: "chat" });
@@ -309,8 +307,6 @@ export default {
 
 		replyEvent: function ({ event }) {
 
-			console.log('cha', this.chat)
-
 			this.relationEvent = {
 				type: "m.reference",
 				event: event,
@@ -438,8 +434,6 @@ export default {
 		},
 
 		shareDataMessages: function () {
-
-			console.log('this.selectedMessages', this.selectedMessages)
 
 			var messages = _.map(_.sortBy(this.selectedMessages, (m) => {
 				return m.time
