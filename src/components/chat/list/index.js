@@ -564,13 +564,14 @@ export default {
 				var eid = event.event.event_id
 
 				this.readPromise = this.core.mtrx.client
-					.setRoomReadMarkers(this.chat.currentState.roomId, eid, event, {
+					.setRoomReadMarkers(this.chat.currentState.roomId, eid, event/*, {
 						hidden: !this.settings_read ? true : false,
-					}).then((r) => {
+					}*/).then((r) => {
 						event.readed = true
 						return r;
 					}).catch(e => {
 						console.error(e)
+						console.log(event)
 						event.readError = e	
 					})
 					.finally(() => {

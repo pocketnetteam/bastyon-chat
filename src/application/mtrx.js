@@ -577,9 +577,12 @@ class MTRX {
 			.uploadContent(file)
 			.then((src) => {
 
+				console.log("SRC", src)
+
 				return Promise.resolve(this.core.mtrx.client.mxcUrlToHttp(src.content_uri));
 			})
 			.then((url) => {
+				console.log("URL", url)
 				if (save) {
 					return this.storeFileLocal(url, file)
 						.then(() => {
@@ -590,7 +593,7 @@ class MTRX {
 						});
 				}
 
-				return Promise.resolve();
+				return Promise.resolve(url);
 			});
 	}
 
@@ -691,11 +694,16 @@ class MTRX {
 				return promise;
 			})
 			.then((src) => {
+
+
 				if (meta.aborted) return Promise.reject("aborted");
 
-				return Promise.resolve(this.client.mxcUrlToHttp(src));
+				return Promise.resolve(this.client.mxcUrlToHttp(src.content_uri));
 			})
 			.then((url) => {
+
+
+
 				fileInfo.url = url;
 
 				let body = JSON.stringify(fileInfo);
