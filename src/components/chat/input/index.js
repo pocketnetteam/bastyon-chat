@@ -1112,7 +1112,7 @@ export default {
 			)
 				return;
 
-			if (window.cordova) {
+			if (window.cordova && !f.isios()) {
 				return this.initRecordingCordova();
 			}
 
@@ -1310,7 +1310,12 @@ export default {
 				if (cancel) {
 					//this.mediaRecorder.ondataavailable = () => { }
 				} else {
+					var hasdata = false
 					this.mediaRecorder.addEventListener("dataavailable", (event) => {
+						if(hasdata) return
+
+						hasdata = true
+
 						this.createVoiceMessage(event, sendnow);
 					}); //ondataavailable = (event) => this.createVoiceMessage(event, sendnow)
 				}
