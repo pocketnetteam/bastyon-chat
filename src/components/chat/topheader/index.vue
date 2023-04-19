@@ -58,7 +58,8 @@
 					"
 					@click="bcCall"
 				>
-					<i class="fas fa-video"></i>
+					<i class="fas fa-video" v-if="!callloading"></i>
+					<i class="fas fa-spinner fa-spin" v-else></i>
 				</div>
 			</template>
 

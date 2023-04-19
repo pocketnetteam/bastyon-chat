@@ -295,6 +295,9 @@ export default {
 						var last = rt.getLastReplacement();
 
 						if (last) {
+
+							console.log("last", last)
+
 							e.event.content.body = last.event.content.body;
 							e.event.content.edited = last.event.event_id;
 							e.event.content.block = last.event.content.block;

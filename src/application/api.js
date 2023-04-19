@@ -1,6 +1,5 @@
 import f from "./functions";
 import Axios from "./axios";
-var { error } = require("./error");
 
 import ChatStorage from "./chatstorage";
 
@@ -11,6 +10,7 @@ var ApiWrapper = function (core) {
 	var cache = {};
 	var loading = {};
 	var storages = {};
+	var storageloading = {}
 
 	var apis = {
 		pocketnet: null,
@@ -21,15 +21,23 @@ var ApiWrapper = function (core) {
 	};
 
 	var getstorage = function (p) {
+
 		if (!storages[p.storage]) {
-			return ChatStorage(p.storage, p.version || 1, p.time).then((storage) => {
+
+			if (storageloading[p.storage]) return storageloading[p.storage]
+
+			storageloading[p.storage] = ChatStorage(p.storage, p.version || 1, p.time).then((storage) => {
 				storages[p.storage] = storage;
 
-				return Promise.resolve(storage);
+				return Promise.resolve(storages[p.storage]);
+			}).finally(() => {
+				delete storageloading[p.storage]
 			});
+
+			return storageloading[p.storage]
 		}
 
-		return Promise.resolve(storages[p.storage]);
+		return Promise.resolve(null);
 	};
 
 	var scasheAct = function (ids, key, resultsKey, reload, storageparameters) {

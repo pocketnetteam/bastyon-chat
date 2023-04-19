@@ -97,6 +97,9 @@ var store = new Vuex.Store({
 		SET_CHAT_STATUSES(state, payload) {
 			state.ChatStatuses = {...state.ChatStatuses , [payload.roomId]: {...state.ChatStatuses[payload.roomId],...payload}}
 		},
+		SET_CHAT_STATUSES_ALL(state, ChatStatuses) {
+			state.ChatStatuses = ChatStatuses
+		},
 		SET_CALL(state, isActive) {
 			state.isCallsActive = isActive;
 		},
@@ -754,6 +757,8 @@ var store = new Vuex.Store({
 			var events = {};
 			var readreciepts = {}
 
+			var chatStatuses = {}
+
 			_.each(m_chats, function (chat) {
 				events[chat.roomId] = {};
 
@@ -881,26 +886,31 @@ var store = new Vuex.Store({
 
 				if (ev) {
 					if (ev?.event?.content?.accepted === null) {
-						commit("SET_CHAT_STATUSES", {
+
+						chatStatuses[chat.roomId] = {
 							roomId: chat.roomId,
 							isWaiting: true
-						})
+						}
+
 					} else {
-						commit("SET_CHAT_STATUSES", {
+
+						chatStatuses[chat.roomId] = {
 							roomId: chat.roomId,
 							isWaiting: false
-						})
+						}
 					}
 				} else {
-						commit("SET_CHAT_STATUSES", {
-							roomId: chat.roomId,
-							isWaiting: false
-						})
+
+					chatStatuses[chat.roomId] = {
+						roomId: chat.roomId,
+						isWaiting: false
+					}
+
 				}
 
-
 				if (isCallsEnabled.length) {
-					commit("SET_CHAT_STATUSES", {
+
+					chatStatuses[chat.roomId] = {
 						roomId: chat.roomId,
 						enabled: isCallsEnabled.find(
 							(e) =>
@@ -909,13 +919,14 @@ var store = new Vuex.Store({
 								e?.event?.state_key
 						)?.event?.content?.enabled,
 
-					})
+					}
 				}
 
 			});
 
 			commit("SET_EVENTS_TO_STORE", events);
 			commit("SET_READ_TO_STORE", readreciepts);
+			commit("SET_CHAT_STATUSES_ALL", chatStatuses)
 
 		},
 	},

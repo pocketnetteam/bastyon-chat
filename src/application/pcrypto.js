@@ -42,7 +42,7 @@ var PcryptoRoom = async function (pcrypto, chat, { ls, lse }) {
 
 	chat.pcrypto = self;
 
-	self.version = 1 
+	self.version = 2 
 
 	self.clear = function () {
 		hashes = {};

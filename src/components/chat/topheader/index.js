@@ -161,6 +161,8 @@ export default {
 			],
 
 			hoverEncrypt: false,
+
+			callloading : false
 		};
 	},
 
@@ -337,16 +339,26 @@ export default {
 			}
 			let local = document.querySelector("body");
 
-			this.core.mtrx.bastyonCalls.initCall(
-				this.chat.roomId,
-				local
-			).then((matrixCall) => {
+			if(this.callloading) return
 
+			this.callloading = true
 
-				// if (matrixCall) this.$store.dispatch("CALL", matrixCall);
-			}).catch(e => {
-				console.log("error", e);
-			})
+			setTimeout(() => {
+				this.core.mtrx.bastyonCalls.initCall(
+					this.chat.roomId,
+					local
+				).then((matrixCall) => {
+	
+	
+					// if (matrixCall) this.$store.dispatch("CALL", matrixCall);
+				}).catch(e => {
+					console.log("error", e);
+				}).finally(() => {
+					this.callloading = false
+				})
+			}, 50 )
+
+			
 
 		},
 
