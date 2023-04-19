@@ -2,6 +2,7 @@ import { mapState } from "vuex";
 import chatName from "@/components/chats/assets/name.vue";
 import chatTime from "@/components/chats/assets/time.vue";
 import chatIcon from "@/components/chats/assets/icon.vue";
+import f from "@/application/functions.js";
 
 export default {
 	name: "preview",
@@ -57,6 +58,8 @@ export default {
 		},
 		roomMuted: function(){
 			if(this.chat){
+
+
 				let pushRules = this.core.mtrx.client.pushProcessor.getPushRuleById(
 					this.chat.roomId
 				);
@@ -71,13 +74,13 @@ export default {
 			return false
 		},
 
-		m_chat: function () {
+		m_chat: function (state) {
 			if (!this.core.mtrx.client || !this.chat) return null;
 
 			if (this.chat.roomId) {
-				var m_chat = this.core.mtrx.client.getRoom(this.chat.roomId);
 
-				return m_chat || null;
+				return this.core.mtrx.store.rooms[this.chat.roomId] || null;
+				
 			}
 		},
 		chatevents: function () {

@@ -329,6 +329,7 @@ var store = new Vuex.Store({
 				_.reduce(
 					rooms,
 					(s, chat) => {
+
 						return s + (chat.getUnreadNotificationCount() || 0);
 					},
 					0
@@ -415,7 +416,6 @@ var store = new Vuex.Store({
 
 					if(!e) return
 
-					//console.log("EVE", __e)
 
 					var _e = {
 						event: {
@@ -742,7 +742,6 @@ var store = new Vuex.Store({
 					store._vm.core.mtrx.kit.usersFromChats(m_chats)
 				);
 
-				console.log("FILLL CONTACTS")
 
 				return store._vm.core.mtrx.kit.fillContacts(m_chats);
 			})
@@ -763,7 +762,6 @@ var store = new Vuex.Store({
 					chat.currentState.getStateEvents("m.room.member")
 				).reverse(), 100);
 
-				//console.log(chat.summary.info.title, chat.timeline)
 
 				var members = chat.currentState.getMembers();
 
