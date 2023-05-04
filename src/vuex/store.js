@@ -96,6 +96,9 @@ var store = new Vuex.Store({
 		SET_CHAT_STATUSES(state, payload) {
 			state.ChatStatuses = {...state.ChatStatuses , [payload.roomId]: {...state.ChatStatuses[payload.roomId],...payload}}
 		},
+		SET_CHAT_STATUSES_ALL(state, ChatStatuses) {
+			state.ChatStatuses = ChatStatuses
+		},
 		SET_CALL(state, isActive) {
 			state.isCallsActive = isActive;
 		},
@@ -266,7 +269,6 @@ var store = new Vuex.Store({
 				state.active = false;
 			}
 
-			console.log("??????????????????")
 
 			state.minimized = true;
 		},
@@ -329,6 +331,7 @@ var store = new Vuex.Store({
 				_.reduce(
 					rooms,
 					(s, chat) => {
+
 						return s + (chat.getUnreadNotificationCount() || 0);
 					},
 					0
@@ -370,6 +373,7 @@ var store = new Vuex.Store({
 			var chatsMap = {};
 
 			_.each(chats, (chat) => {
+
 				var aid = chat.info.title.replace("#", "");
 
 				if (!state.chatsMap[chat.roomId] || state.force[chat.roomId]) {
@@ -411,6 +415,9 @@ var store = new Vuex.Store({
 
 				_.each(ev.timeline, function (__e) {
 					var e = __e.event;
+
+					if(!e) return
+
 
 					var _e = {
 						event: {
@@ -477,6 +484,7 @@ var store = new Vuex.Store({
 
 		SET_CONTACTS_FROM_MATRIX(state, v) {
 			var mp = {};
+
 
 			_.each(v, function (c) {
 				if (
@@ -716,6 +724,10 @@ var store = new Vuex.Store({
 					r.summary.lastModified = r.getLastActiveTimestamp();
 				}
 
+				r.summary.info = {
+					title : r.name
+
+				}
 				r.summary.key = r.summary.roomId + ':' + r.summary.lastModified
 				r.summary.stream = hv?.event?.content?.history_visibility === "world_readable";
 
@@ -731,8 +743,9 @@ var store = new Vuex.Store({
 					store._vm.core.mtrx.kit.usersFromChats(m_chats)
 				);
 
+
 				return store._vm.core.mtrx.kit.fillContacts(m_chats);
-			});
+			})
 
 		},
 
@@ -742,6 +755,8 @@ var store = new Vuex.Store({
 			var events = {};
 			var readreciepts = {}
 
+			var chatStatuses = {}
+
 			_.each(m_chats, function (chat) {
 				events[chat.roomId] = {};
 
@@ -750,11 +765,10 @@ var store = new Vuex.Store({
 					chat.currentState.getStateEvents("m.room.member")
 				).reverse(), 100);
 
-				//console.log(chat.summary.info.title, chat.timeline)
 
 				var members = chat.currentState.getMembers();
 
-				var ts = chat.getLiveTimeline()._eventTimelineSet;
+				var ts = chat.getLiveTimeline().eventTimelineSet;
 
 				let isCallsEnabled = chat.currentState.getStateEvents(
 					"m.room.callsEnabled"
@@ -846,7 +860,7 @@ var store = new Vuex.Store({
 
 				if (e){
 
-					var rt = ts.getRelationsForEvent(
+					var rt = ts.relations.getChildEventsForEvent(
 						e.event.event_id,
 						"m.replace",
 						"m.room.message"
@@ -870,26 +884,31 @@ var store = new Vuex.Store({
 
 				if (ev) {
 					if (ev?.event?.content?.accepted === null) {
-						commit("SET_CHAT_STATUSES", {
+
+						chatStatuses[chat.roomId] = {
 							roomId: chat.roomId,
 							isWaiting: true
-						})
+						}
+
 					} else {
-						commit("SET_CHAT_STATUSES", {
+
+						chatStatuses[chat.roomId] = {
 							roomId: chat.roomId,
 							isWaiting: false
-						})
+						}
 					}
 				} else {
-						commit("SET_CHAT_STATUSES", {
-							roomId: chat.roomId,
-							isWaiting: false
-						})
+
+					chatStatuses[chat.roomId] = {
+						roomId: chat.roomId,
+						isWaiting: false
+					}
+
 				}
 
-
 				if (isCallsEnabled.length) {
-					commit("SET_CHAT_STATUSES", {
+
+					chatStatuses[chat.roomId] = {
 						roomId: chat.roomId,
 						enabled: isCallsEnabled.find(
 							(e) =>
@@ -898,13 +917,14 @@ var store = new Vuex.Store({
 								e?.event?.state_key
 						)?.event?.content?.enabled,
 
-					})
+					}
 				}
 
 			});
 
 			commit("SET_EVENTS_TO_STORE", events);
 			commit("SET_READ_TO_STORE", readreciepts);
+			commit("SET_CHAT_STATUSES_ALL", chatStatuses)
 
 		},
 	},

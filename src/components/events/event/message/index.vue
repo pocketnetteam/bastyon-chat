@@ -33,7 +33,7 @@
 				></i>
 
 				<span v-else>
-					{{ format_date(origin._localTimestamp) || "Now" }}
+					{{ format_date(origin.localTimestamp) || "Now" }}
 				</span>
 			</div>
 
@@ -123,7 +123,7 @@
 					v-if="audioUrl"
 					:audioBuffer="audioUrl"
 					:decryptedInfo="decryptedInfo"
-					:id="event._localTimestamp || Date.now()"
+					:id="event.localTimestamp || Date.now()"
 				/>
 			</div>
 
@@ -177,7 +177,7 @@
 						>
 						&middot;
 						<span>
-							{{ format_date(origin._localTimestamp) || "Now" }}
+							{{ format_date(origin.localTimestamp) || "Now" }}
 						</span>
 					</div>
 					<div

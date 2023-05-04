@@ -132,7 +132,7 @@ export default {
 		},
 		m_chat: function () {
 			if (this.chat && this.chat.roomId) {
-				let pushRules = this.core.mtrx.client._pushProcessor.getPushRuleById(
+				let pushRules = this.core.mtrx.client.pushProcessor.getPushRuleById(
 					this.chat.roomId
 				);
 				if (pushRules !== null) {
@@ -327,8 +327,6 @@ export default {
 
 		replyEvent: function ({ event }) {
 
-			console.log('cha', this.chat)
-
 			this.relationEvent = {
 				type: "m.reference",
 				event: event,
@@ -456,8 +454,6 @@ export default {
 		},
 
 		shareDataMessages: function () {
-
-			console.log('this.selectedMessages', this.selectedMessages)
 
 			var messages = _.map(_.sortBy(this.selectedMessages, (m) => {
 				return m.time

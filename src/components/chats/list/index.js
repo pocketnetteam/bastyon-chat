@@ -137,12 +137,48 @@ export default {
 				) {
 					return;
 				} else {
+
+					
+
+					/*let rm = this.core.mtrx.client.getRoom(chat.roomId),
+						ts = rm.getLiveTimeline(),
+						tl = new this.core.mtrx.sdk.TimelineWindow(
+							this.core.mtrx.client,
+							ts.getTimelineSet()
+						);
+
+					tl.load()
+						.then(() => {
+							return this.getEventsAndDecrypt(rm, tl);
+						})
+						.then((events) => {
+							chat.events = events.filter(
+								(f) =>
+									f.event.decrypted?.msgtype === "m.text" ||
+									f.event.content?.msgtype === "m.text"
+							);
+						})
+						.catch(() => {});*/
+
 					chats.push(chat);
 				}
 			});
-			return _.sortBy(chats, function (o) {
+
+			chats = _.sortBy(chats, function (o) {
 				return o.lastModified;
 			}).reverse();
+
+			/*_.each(chats, (chat) => {
+				var chatevents = state.events[chat.roomId] || {}
+
+				console.log('chatevents', chatevents)
+
+				this.getEventsAndDecrypt(this.core.mtrx.client.getRoom(chat.roomId), chatevents.timeline)
+			})*/
+
+
+			return chats
+
 		},
 
 		withoutBlockedChats: function () {
@@ -160,31 +196,42 @@ export default {
 		},
 	}),
 	methods: {
-		getEventsAndDecrypt(chat, timeline) {
-			let events = timeline.getEvents();
+		getEventsAndDecrypt(chat, events) {
 
-			return Promise.all(
-				_.map(events, (e) => {
-					if (e.event.decrypted) return Promise.resolve();
-					if (f.deep(e, "event.content.msgtype") !== "m.encrypted")
-						return Promise.resolve();
+			console.log('chat', chat)
 
-					return chat.pcrypto
-						.decryptEvent(e.event)
-						.then((d) => {
-							e.event.decrypted = d;
-
+			return this.core.mtrx.kit.prepareChat(chat).then(() => {
+				return Promise.all(
+					_.map(events, (_e) => {
+	
+						var e = _e.get()
+	
+						console.log("E", e)
+	
+	
+						if (e.decrypted) return Promise.resolve();
+						if (f.deep(e, "event.content.msgtype") !== "m.encrypted")
 							return Promise.resolve();
-						})
-						.catch((e) => {
-							e.event.decrypted = {
-								msgtype: "m.bad.encrypted",
-							};
+	
+						return chat.pcrypto
+							.decryptEvent(e)
+							.then((d) => {
+								e.decrypted = d;
+	
+								return Promise.resolve();
+							})
+							.catch((e) => {
+								e.decrypted = {
+									msgtype: "m.bad.encrypted",
+								};
+	
+								return Promise.resolve();
+							});
+					})
+				)
+			})
 
-							return Promise.resolve();
-						});
-				})
-			).then(() => {
+			.then(() => {
 				return Promise.resolve(events);
 			});
 		},
@@ -369,8 +416,6 @@ export default {
 
 		searchall : function(text){
 			this.globalsearch = (text || "").toLowerCase()
-
-			console.log('searchall', text, this.globalsearch)
 
 		}
 	},

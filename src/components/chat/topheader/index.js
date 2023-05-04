@@ -161,6 +161,8 @@ export default {
 			],
 
 			hoverEncrypt: false,
+
+			callloading : false
 		};
 	},
 
@@ -224,7 +226,7 @@ export default {
 
 		m_chat: function () {
 			if (this.chat && this.chat.roomId) {
-				let pushRules = this.core.mtrx.client._pushProcessor.getPushRuleById(
+				let pushRules = this.core.mtrx.client.pushProcessor.getPushRuleById(
 					this.chat.roomId
 				);
 				if (pushRules !== null) {
@@ -337,17 +339,26 @@ export default {
 			}
 			let local = document.querySelector("body");
 
-			this.core.mtrx.bastyonCalls.initCall(
-				this.chat.roomId,
-				local
-			).then((matrixCall) => {
+			if(this.callloading) return
 
-				console.log('matrixCall', matrixCall)
+			this.callloading = true
 
-				// if (matrixCall) this.$store.dispatch("CALL", matrixCall);
-			}).catch(e => {
-				console.log("error", e);
-			})
+			setTimeout(() => {
+				this.core.mtrx.bastyonCalls.initCall(
+					this.chat.roomId,
+					local
+				).then((matrixCall) => {
+	
+	
+					// if (matrixCall) this.$store.dispatch("CALL", matrixCall);
+				}).catch(e => {
+					console.log("error", e);
+				}).finally(() => {
+					this.callloading = false
+				})
+			}, 50 )
+
+			
 
 		},
 
@@ -396,7 +407,7 @@ export default {
 				var roomId = this.chat.roomId;
 				var deviceID = this.core.mtrx.client.deviceId;
 				let self = this;
-				let pushRules = this.core.mtrx.client._pushProcessor.getPushRuleById(
+				let pushRules = this.core.mtrx.client.pushProcessor.getPushRuleById(
 					this.chat.roomId
 				);
 				if (pushRules !== null) {

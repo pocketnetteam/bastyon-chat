@@ -286,12 +286,12 @@ export default {
 		},
 
 		relations: function (events) {
-			var ts = this.timeline._timelineSet;
+			var ts = this.timeline.timelineSet;
 
 			_.each(events, (e) => {
 				try {
 					//if(!e.event.content.edited){
-					var rt = ts.getRelationsForEvent(
+					var rt = ts.relations.getChildEventsForEvent(
 						e.event.event_id,
 						"m.replace",
 						"m.room.message"
@@ -301,6 +301,9 @@ export default {
 						var last = rt.getLastReplacement();
 
 						if (last) {
+
+							console.log("last", last)
+
 							e.event.content.body = last.event.content.body;
 							e.event.content.edited = last.event.event_id;
 							e.event.content.block = last.event.content.block;
@@ -343,8 +346,6 @@ export default {
 
 			//this.chat.getTimelineForEvent('$FXUvcjIqcvDu0meLTnz-8plloZoNHLIYEb6WGQMWO3s')
 			
-			
-			console.log('timeline', timeline)
 			
 			//this.chat.getTimelineForEvent('$FXUvcjIqcvDu0meLTnz-8plloZoNHLIYEb6WGQMWO3s')
 			
@@ -545,7 +546,6 @@ export default {
 		readLast: function () {
 			var events = this.timeline.getEvents();
 
-			console.log(events);
 			this.readEvent(events[events.length - 1]);
 		},
 
@@ -568,8 +568,6 @@ export default {
 
 			var i = this.chat.timeline.length - 1;
 			var event = null;
-
-			console.log('debouncedReadAll', this.chat.timeline)
 
 			event = this.chat.timeline[i]
 
@@ -600,8 +598,6 @@ export default {
 				i--;
 			}*/
 
-			console.log('event', event)
-
 			if (event) {
 
 				if (event.readError){
@@ -610,15 +606,16 @@ export default {
 
 				var eid = event.event.event_id
 
-				this.readPromise = this.streamMode || this.core.mtrx.client
-					.setRoomReadMarkers(this.chat.currentState.roomId, eid, event, {
+				this.readPromise = this.core.mtrx.client
+					.setRoomReadMarkers(this.chat.currentState.roomId, eid, event/*, {
 						hidden: !this.settings_read ? true : false,
-					}).then((r) => {
+					}*/).then((r) => {
 						event.readed = true
 						return r;
 					}).catch(e => {
 						console.error(e)
-						event.readError = e
+						console.log(event)
+						event.readError = e	
 					})
 					.finally(() => {
 						this.readPromise = null
@@ -684,8 +681,6 @@ export default {
 				
 				return this.paginateToEvent(reference.event.event_id)
 			}).then(event => {
-
-				console.log('event', event)
 
 				if (event){
 					setTimeout(() => {

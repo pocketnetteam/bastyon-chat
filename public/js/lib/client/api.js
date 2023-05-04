@@ -635,8 +635,6 @@ var Api = function (app) {
 						.then((r) => {
 							var oldc = localStorage["currentproxy"];
 
-							console.log("oldc", oldc);
-
 							if (oldc) {
 								return self.set.current(oldc);
 							}
@@ -716,8 +714,6 @@ var Api = function (app) {
 
 		if (!options) options = {};
 
-		console.log("options.proxy", options.proxy);
-
 		return getproxy(options.proxy)
 			.then((proxy) => {
 				return proxy.rpc(method, parameters, options.rpc);
@@ -731,7 +727,6 @@ var Api = function (app) {
 			})
 			.catch((e) => {
 				console.log("ER", e);
-
 				if (
 					e == "TypeError: Failed to fetch" ||
 					e == "proxy" ||

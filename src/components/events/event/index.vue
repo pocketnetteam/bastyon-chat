@@ -269,9 +269,11 @@ export default {
 	},
 
 	beforeMount: function () {
+
+
 		if (
 			(this.event && this.event.event && rendered[this.event.event.event_id]) ||
-			(this.event._txnId && rendered[this.event._txnId])
+			(this.event.txnId && rendered[this.event.txnId])
 		) {
 			this.readyToRender = true;
 		}
@@ -326,8 +328,8 @@ export default {
 					rendered[this.event.event.event_id] = true;
 				}
 
-				if (this.event && this.event._txnId) {
-					rendered[this.event._txnId] = true;
+				if (this.event && this.event.txnId) {
+					rendered[this.event.txnId] = true;
 				}
 
 				this.readyToRender = true;
@@ -338,7 +340,7 @@ export default {
 	
 		relations() {
 			if (this.timeline) {
-				var ts = this.timeline._timelineSet;
+				var ts = this.timeline.timelineSet;
 				var e = this.event;
 
 				if (
@@ -360,7 +362,7 @@ export default {
 							if (ev) {
 								this.reference = e.event.content.reference = ev;
 
-								var rt = ts.getRelationsForEvent(
+								var rt = ts.relations.getChildEventsForEvent(
 									this.core.mtrx.clearEventId(ev),
 									"m.replace",
 									"m.room.message"

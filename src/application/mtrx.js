@@ -1,4 +1,4 @@
-const sdk = require("@/matrix-js-sdk");
+const sdk = require("matrix-js-sdk-bastyon/lib/browser-index.js");
 
 import MTRXKIT from "./mtrxkit";
 import f from "./functions";
@@ -204,7 +204,7 @@ class MTRX {
 		localStorage.accessToken = userData.access_token;
 		var store = new sdk.IndexedDBStore({
 			indexedDB: window.indexedDB,
-			dbName: "matrix-js-sdk-v2:" + this.credentials.username,
+			dbName: "matrix-js-sdk-v3:" + this.credentials.username,
 		});
 		await store.startup();
 
@@ -214,8 +214,7 @@ class MTRX {
 			unstableClientRelationAggregation: true,
 			timelineSupport: true,
 			store: store,
-
-			// deviceId: userData.device_id,
+			deviceId: userData.device_id,
 		});
 
 		if (this.customrequest) userClientData.request = this.request;
@@ -577,9 +576,13 @@ class MTRX {
 		return this.client
 			.uploadContent(file)
 			.then((src) => {
-				return Promise.resolve(this.core.mtrx.client.mxcUrlToHttp(src));
+
+				console.log("SRC", src)
+
+				return Promise.resolve(this.core.mtrx.client.mxcUrlToHttp(src.content_uri));
 			})
 			.then((url) => {
+				console.log("URL", url)
 				if (save) {
 					return this.storeFileLocal(url, file)
 						.then(() => {
@@ -590,7 +593,7 @@ class MTRX {
 						});
 				}
 
-				return Promise.resolve();
+				return Promise.resolve(url);
 			});
 	}
 
@@ -604,7 +607,7 @@ class MTRX {
   }*/
 
 	originalEvent(id, timeline) {
-		var rtr = timeline._timelineSet.getRelationsForEvent(
+		var rtr = timeline.timelineSet.relations.getChildEventsForEvent(
 			e.event.event_id,
 			"m.reference",
 			"m.room.message"
@@ -695,11 +698,16 @@ class MTRX {
 				return promise;
 			})
 			.then((src) => {
+
+
 				if (meta.aborted) return Promise.reject("aborted");
 
-				return Promise.resolve(this.client.mxcUrlToHttp(src));
+				return Promise.resolve(this.client.mxcUrlToHttp(src.content_uri));
 			})
 			.then((url) => {
+
+
+
 				fileInfo.url = url;
 
 				let body = JSON.stringify(fileInfo);
@@ -778,14 +786,27 @@ class MTRX {
 			.then((image) => {
 				if (meta.aborted) return Promise.reject("aborted");
 
+				
+
+				var content = {
+					msgtype: 'm.image',
+					url: image,
+					
+					body: "Image",
+
+					info
+				}
+
 				if (relation) {
-					info["m.relates_to"] = {
+					content["m.relates_to"] = {
 						rel_type: relation.type,
 						event_id: this.clearEventId(relation.event),
 					};
 				}
 
-				return this.client.sendImageMessage(chat.roomId, image, info, "Image");
+				return this.client.sendMessage(chat.roomId, content);
+
+				//return this.client.sendImageMessage(chat.roomId, image, info, "Image");
 			});
 	}
 
@@ -817,12 +838,21 @@ class MTRX {
 			.then((audio) => {
 				if (meta.aborted) return Promise.reject("aborted");
 
+				var content = {
+					msgtype: 'm.audio',
+					url: audio,
+					body: "Audio",
+					info
+				}
+
 				if (relation) {
-					info["m.relates_to"] = {
+					content["m.relates_to"] = {
 						rel_type: relation.type,
 						event_id: this.clearEventId(relation.event),
 					};
 				}
+
+				return this.client.sendMessage(chat.roomId, content);
 
 				return this.client.sendAudioMessage(chat.roomId, audio, info, "Audio");
 			});
@@ -877,6 +907,8 @@ class MTRX {
 	}
 
 	async getAudioUnencrypt(chat, event) {
+
+
 		if (event.event.content.audioData) {
 			return Promise.resolve(event.event.content.audioData);
 		}

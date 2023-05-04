@@ -132,7 +132,7 @@ export default {
 
 				if (this.chat && this.chat.roomId) {
 					
-					let pushRules = this.core.mtrx.client._pushProcessor.getPushRuleById(
+					let pushRules = this.core.mtrx.client.pushProcessor.getPushRuleById(
 						this.chat.roomId
 					);
 
@@ -177,8 +177,7 @@ export default {
 			);
 		},
 		events: function () {
-
-			var pushRules = this.core.mtrx.client._pushProcessor.getPushRuleById(
+			var pushRules = this.core.mtrx.client.pushProcessor.getPushRuleById(
 				this.chat.roomId
 			);
 			let isEnabled = this.m_chat.currentState.getStateEvents(

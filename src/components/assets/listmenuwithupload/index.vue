@@ -98,8 +98,6 @@ export default {
                 this.$emit('close')
         },
         click : function(item){
-            console.log('items', this.items, item)
-
             if(item.upload) return
 
             if(item.action) {

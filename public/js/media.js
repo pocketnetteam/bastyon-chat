@@ -1,7 +1,22 @@
-import f from "./functions";
-
-var Media = function () {
+window.BSTMediaCs = function () {
 	var self = this;
+
+	function iOS() {
+		return [
+		  'iPad Simulator',
+		  'iPhone Simulator',
+		  'iPod Simulator',
+		  'iPad',
+		  'iPhone',
+		  'iPod'
+		].includes(navigator.platform)
+		// iPad on iOS 13 detection
+		|| (navigator.userAgent.includes("Mac") && "ontouchend" in document)
+	}
+	
+	isios = function () {
+		return (window.cordova && window.device && deep(window, 'device.platform') == 'iOS') || iOS()
+	}
 
 	self.gettingmedia = false;
 
@@ -128,7 +143,7 @@ var Media = function () {
 		};
 
 		if (window.cordova && window.device) {
-			var ios = f.isios();
+			var ios = isios();
 
 			return callperm(
 				ios ? permissions.ios.audio : permissions.audio,
@@ -178,4 +193,5 @@ var Media = function () {
 	self.permissions = initPermissions;
 };
 
-export default Media;
+window.BSTMedia = new window.BSTMediaCs()
+

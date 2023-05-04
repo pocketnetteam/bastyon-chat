@@ -4,7 +4,7 @@
 	"private": true,
 	"scripts": {
 		"serve": "set NODE_OPTIONS=--openssl-legacy-provider && vue-cli-service serve",
-		"build": "vue-cli-service build --dest C:/inetpub/wwwroot/pocketnet/chat",
+		"build": "vue-cli-service build --dest /run/media/freedom/Server/pocketnet/chat/",
 		"build_mac": "vue-cli-service build --dest ~/work/pocketnet/chat",
 		"buildpocketnet": "set NODE_OPTIONS=--openssl-legacy-provider && npm run build -- --target wc-async --inline-vue --name matrix-element src/App.vue",
 		"buildpocketnet_mac": "npm run build_mac -- --target wc-async --inline-vue --name matrix-element src/App.vue",
@@ -32,6 +32,7 @@
 		"file-saver": "^2.0.5",
 		"howler": "^2.2.3",
 		"jquery": "^3.5.1",
+		"matrix-js-sdk-bastyon": "^23.1.4",
 		"miscreant": "^0.3.2",
 		"pbkdf2": "^3.1.2",
 		"qs": "^6.10.3",

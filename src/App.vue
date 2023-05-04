@@ -616,7 +616,7 @@ export default {
 	},
 
 	created() {
-		// this.pocketnet = false;
+		//this.pocketnet = false;
 		// this.mobile = !this.pocketnet;
 		// this.recording = true;
 		// this.iscallsenabled = true;

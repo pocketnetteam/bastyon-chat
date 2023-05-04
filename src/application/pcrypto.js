@@ -42,7 +42,7 @@ var PcryptoRoom = async function (pcrypto, chat, { ls, lse }) {
 
 	chat.pcrypto = self;
 
-	self.version = 1 
+	self.version = 2 
 
 	self.clear = function () {
 		hashes = {};
@@ -65,14 +65,12 @@ var PcryptoRoom = async function (pcrypto, chat, { ls, lse }) {
 		}
 
 		else{
+
 			return _.sortBy(_.filter(getusersinfobytime(time), function (ui) {
 				return ui.keys && ui.keys.length >= m;
 			}), (u) => {return u.source.id})
 		}
 
-		
-
-		
 	};
 
 	self.preparedUsersById = function (ids, v) {
@@ -354,7 +352,7 @@ var PcryptoRoom = async function (pcrypto, chat, { ls, lse }) {
 					})
 					.catch(async (e) => {
 
-						const keysPrepared = eaac.aeskeys(time, block, users, v || self.version);
+						const keysPrepared = eaac.aeskeys(time, block, users, v);
 
 						if (self.preparedUsers(time).length > 1) {
 							const itemId = ek;
@@ -511,6 +509,7 @@ var PcryptoRoom = async function (pcrypto, chat, { ls, lse }) {
 			try {
 				return await decrypt(keys[userid], { encrypted, nonce });
 			} catch (e) {
+
 				error = e;
 			}
 		} else {
@@ -573,6 +572,7 @@ var PcryptoRoom = async function (pcrypto, chat, { ls, lse }) {
 				const body = JSON.parse(f.Base64.decode(event.content.body));
 				const time = event.origin_server_ts || 1;
 				const block = event.content.block;
+				const version = event.content.version
 
 				if (sender == me) {
 					_.find(body, function (s, i) {
@@ -593,7 +593,7 @@ var PcryptoRoom = async function (pcrypto, chat, { ls, lse }) {
 				}
 
 				return self
-					.decrypt(keyindex, body[bodyindex], time, block)
+					.decrypt(keyindex, body[bodyindex], time, block, null, version)
 					.then((decrypted) => {
 						var data = {
 							body: decrypted,
@@ -603,7 +603,12 @@ var PcryptoRoom = async function (pcrypto, chat, { ls, lse }) {
 						lse.set(k, JSON.stringify(data));
 
 						return data;
-					});
+					}).catch(e => {
+						console.error(e)
+						console.log(event)
+
+						return Promise.reject(e)
+					})
 			})
 			.finally(() => {
 				delete event.decrypting;
@@ -759,6 +764,7 @@ var PcryptoRoom = async function (pcrypto, chat, { ls, lse }) {
 
 		var encryptedEvent = {
 			block: pcrypto.currentblock.height,
+			version : this.version,
 			msgtype: "m.encrypted",
 			body: {},
 		};
@@ -940,7 +946,10 @@ var PcryptoRoom = async function (pcrypto, chat, { ls, lse }) {
 			.then((event) => {
 
 
-				return self.decryptKey(event);
+				return self.decryptKey(event).catch(e => {
+
+					return Promise.reject(e)
+				})
 			})
 			.then((key) => {
 				return pcryptoFile
@@ -955,6 +964,9 @@ var PcryptoRoom = async function (pcrypto, chat, { ls, lse }) {
 
 						return Promise.resolve(data);
 					});
+			}).catch(e => {
+
+				return Promise.reject(e)
 			})
 
 			.finally(() => {
@@ -1113,6 +1125,7 @@ var PcryptoFile = function () {
 	self.decryptFile = function (file, secret, p) {
 		return readFile(file)
 			.then((r) => {
+
 				return self.decrypt(r, secret, p);
 			})
 			.then((decrypted) => {

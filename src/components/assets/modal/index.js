@@ -109,7 +109,6 @@ export default {
         },
 
         scrolling : function(e, data){
-            console.log("E", e, data)
             var target = e.target || e.srcElement;
 
             this.scroll = target.scrollTop

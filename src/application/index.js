@@ -5,7 +5,6 @@ import ApiWrapper from "./api.js";
 import Pcrypto from "./pcrypto.js";
 import listeners from "./listeners";
 import f from "./functions";
-import Media from "./media";
 import Exporter from "./exporter";
 /*
 import pcm from '@/application/utils/pcm.js'
@@ -76,7 +75,9 @@ class Core {
 
 		this.pcrypto.init(this.user);
 
-		this.media = new Media();
+		console.log('window.BSTMedia', window.BSTMedia)
+
+		this.media = window.BSTMedia;
 		this.audioContext = null;
 		this.exporter = new Exporter(this);
 	}
@@ -99,7 +100,6 @@ class Core {
 	};
 
 	setCalls = function () {
-		console.log("set calls");
 		try {
 			let p = {
 				el: document.querySelector("body"),
@@ -109,7 +109,6 @@ class Core {
 						return this.user.usersInfo([address], true, false);
 					},
 					getWithLocale: (key) => {
-						console.log(this);
 						return this.vm.$i18n.t(key);
 					},
 
@@ -124,7 +123,7 @@ class Core {
 			if (typeof BastyonCalls) {
 				this.mtrx.bastyonCalls = new BastyonCalls(
 					this.client || client,
-					matrixcs,
+					this.mtrx.sdk,
 					p.el,
 					p.parameters
 				);
@@ -590,9 +589,12 @@ class Core {
 
 	initMediaRecorder() {
 		if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-			return this.media
-				.get({ audio: true })
-				.then((stream) => {
+
+			return this.media.permissions({ audio: true }).then(() => {
+				
+				return this.media.get({ audio: true })
+
+			}).then((stream) => {
 					let mediaRecorder = new AudioRecorder(stream, {
 						audioBitsPerSecond: 32000,
 					});

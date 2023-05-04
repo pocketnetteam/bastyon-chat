@@ -141,7 +141,6 @@ export default {
 					})
 
 					if(_.isEmpty(cl)){
-						console.log("ASASASASSASA")
 						this.$emit('error', 'empty')
 						return Promise.reject('empty')
 					}
@@ -152,7 +151,6 @@ export default {
 				.catch((error) => {
 					this.meta = null;
 					this.error = error
-						console.log("ASASASASSASA")
 
 					this.$emit('error', error)
 				}).finally(() => {
