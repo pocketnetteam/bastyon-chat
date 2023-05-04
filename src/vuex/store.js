@@ -374,7 +374,7 @@ var store = new Vuex.Store({
 
 			_.each(chats, (chat) => {
 
-				var aid = chat.info.title.replace("#", "");
+				var aid = chat.info?.title?.replace("#", "");
 
 				if (!state.chatsMap[chat.roomId] || state.force[chat.roomId]) {
 					Vue.set(state.chatsMap, chat.roomId, chat);
@@ -385,7 +385,7 @@ var store = new Vuex.Store({
 				}
 
 				chatsMap[chat.roomId] = chat;
-				chatsMap[chat.info.title.replace("#", "")] = chat;
+				chatsMap[aid] = chat;
 
 				Vue.delete(state.force, chat.roomId);
 			});

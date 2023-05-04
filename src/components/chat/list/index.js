@@ -529,6 +529,8 @@ export default {
 		},
 
 		readEvent: function (event) {
+			if (this.streamMode) return;
+			
 			var byme = this.core.mtrx.me(event.event.sender);
 
 			if (byme) {
@@ -538,23 +540,31 @@ export default {
 		},
 
 		readFirst: function () {
+			if (this.streamMode) return;
+
 			var events = this.timeline.getEvents();
 
 			this.readEvent(events[0]);
 		},
 
 		readLast: function () {
+			if (this.streamMode) return;
+
 			var events = this.timeline.getEvents();
 
 			this.readEvent(events[events.length - 1]);
 		},
 
 		readEvents: function (events) {
+			if (this.streamMode) return;
+
 			_.each(events, (e) => {
 				this.readEvent(e);
 			});
 		},
 		readOne() {
+			if (this.streamMode) return;
+
 			this.core.mtrx
 				.client(this.chat.timeline[this.chat.timeline.length - 1])
 				.then((r) => {
@@ -563,7 +573,7 @@ export default {
 		},
 		debouncedReadAll : _.debounce(function(){
 
-			if (!this.chat) return;
+			if (!this.chat || this.streamMode) return;
 			if (this.readPromise) return
 
 			var i = this.chat.timeline.length - 1;
