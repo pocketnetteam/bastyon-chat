@@ -122,7 +122,9 @@
 		"contactsempty": "아직 연락처가 없습니다. 검색에서 찾으십시오",
 		"chatsearchingempty": "No chats found for the specified filter",
 		"sendmessage": "Send message",
-		"messages" : "Messages"
+		"messages" : "Messages",
+		"you" : "You",
+		"sentfile" : "sent file:"
 	},
 
 	"input": {

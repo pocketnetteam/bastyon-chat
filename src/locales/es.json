@@ -121,7 +121,9 @@
 		"hasInvitedToJoin": "te ha invitado a unirte a Pocketnet",
 		"contactsempty": "Todavía no tienes contactos, encuéntralos en la búsqueda",
 		"chatsearchingempty": "No chats found for the specified filter",
-		"sendmessage": "Send message"
+		"sendmessage": "Send message",
+		"you" : "You",
+		"sentfile" : "sent file:"
 	},
 
 	"input": {

@@ -76,19 +76,19 @@
     text-overflow: ellipsis
 
   /deep/ .messagePreview
-    max-width: 90%
+    max-width: 100%
     overflow: hidden
     text-overflow: ellipsis
-
-    .listPreview
-      display: inline
-
-      >div
-        display: inline
+  /deep/ .msgtext
+    display: inline
+    font-size: 0.9em
+    white-space: nowrap
+   
 
   /deep/ .deletedMessage
     text-align: left
     font-size: 0.9em
+    padding : 0
 
 
   /deep/ span

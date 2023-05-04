@@ -105,8 +105,8 @@
 		"startChatWith": "Начать чат с",
 		"searchResult": "Результат поиска",
 		"joinedInTheChat": "вошел в чат",
-		"invited": "приглашен ",
-		"hasInvited": "приглашен ",
+		"invited": "приглашение ",
+		"hasInvited": "приглашение ",
 		"inTheChat": " в чат",
 		"banned": "забанен",
 		"andRoom": "и комната",
@@ -138,7 +138,9 @@
 		"You": "Вы",
 		"chatsearchingempty": "Чатов по данному фильтру не найдено",
 		"sendmessage": "Отправить сообщение",
-		"messages" : "Сообщения"
+		"messages" : "Сообщения",
+		"you" : "Вы",
+		"sentfile" : "прислал файл:"
 	},
 
 	"input": {

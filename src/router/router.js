@@ -59,6 +59,18 @@ const router = new Router({
 	],
 
 	mode: document.getElementById("automomous") ? "history" : "abstract",
+
+	/*scrollBehavior(to, from, savedPosition) {
+
+		console.log('to.name' , to.name,savedPosition )
+
+		if (savedPosition && to.name == 'chats') {
+			console.log('savedPosition', savedPosition)
+			return savedPosition
+		} else {
+			return { top: 0 }
+		}
+	}*/
 });
 
 export default router;

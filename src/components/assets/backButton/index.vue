@@ -13,8 +13,9 @@ export default {
 		icon: String,
 		action: {
 			type: String,
-			default: "/",
+			default: "",
 		},
+		
 		caption: {
 			type: String,
 			default: "",
@@ -22,6 +23,12 @@ export default {
 	},
 	methods: {
 		click: function () {
+
+			if(!this.action) {
+				this.$emit('back')
+				return
+			}
+
 			if (this.action == "back") this.$router.go(-1);
 			else this.$router.push(this.action).catch((e) => {});
 		},

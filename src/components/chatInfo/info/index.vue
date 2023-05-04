@@ -9,9 +9,7 @@
 					:m_chat="m_chat"
 					:hideunseen="true"
 				/>
-				<div class="chatGroupIcon">
-					<img :src="groupAvatar" alt="" />
-				</div>
+			
 			</div>
 
 			<chatName
@@ -151,16 +149,17 @@
 				{{ $t("button.Complain") }} <i class="fas fa-exclamation-triangle"></i>
 			</button>
 		</div>
-
-		<modal @close="closeModal" v-if="inviteUserOpened">
-			<template v-slot:header>
-				<span>{{ $t("caption.inviteUser") }}</span>
-			</template>
-			<template v-slot:body>
-				<invite :chatRoomId="chat.roomId" @completed="closeContactModal" />
-			</template>
-			<template v-slot:footer></template>
-		</modal>
+		<transition name="fademodal">
+			<modal @close="closeModal" v-if="inviteUserOpened">
+				<template v-slot:header>
+					<span>{{ $t("caption.inviteUser") }}</span>
+				</template>
+				<template v-slot:body>
+					<invite :chatRoomId="chat.roomId" @completed="closeContactModal" />
+				</template>
+				<template v-slot:footer></template>
+			</modal>
+		</transition>
 	</div>
 </template>
 

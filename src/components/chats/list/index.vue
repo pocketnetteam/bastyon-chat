@@ -12,7 +12,7 @@
 	>
 		<div v-if="!unauthorized">
 			<div class="searchWrapperEA" v-if="!minimized || active">
-				<search />
+				<simpleSearch :value="globalsearch" @search="searchall"/>
 			</div>
 
 			<teamroom
@@ -25,41 +25,45 @@
 			</div>
 
 			<div class="Swipes" v-else>
-				<transition name="fade">
-					<div class="desktopList">
-						<!--v-if="showchatslist"-->
+				<div class="desktopList">
+					<!--v-if="showchatslist"-->
 
-						<div class="chatswrapper" v-if="!matches.value">
-							<RecycleScroller
-								page-mode
-								class="scroller"
-								:items="chats"
-								:item-size="pocketnet ? 60 : 70"
-								key-field="roomId"
-								:buffer="pocketnet ? 400 : 700"
+					<div class="chatswrapper" v-if="!globalsearch">
+						<!--<transition-group name="list">
+							<div
+								v-for="item in chats"
+								:key="item.key"
+								@click="(e) => itemClick(item)"
 							>
-								<template v-slot="{ item, active }">
-									<div
-										ref="content"
-										class="card-content"
-										v-if="item"
-										@click="(e) => itemClick(item)"
-									>
+								<preview :chat="item" />
+							</div>
+						</transition-group>-->
+
+						<RecycleScroller
+							page-mode
+							class="scroller"
+							:items="chats"
+							:item-size="pocketnet ? 60 : 70"
+							key-field="key"
+							:buffer="400"
+						>
+							<template v-slot="{ item, active }">
+								<div
+									class="card-content"
+									v-if="item"
+									@click="(e) => itemClick(item)"
+								>
+									
 										<preview v-if="active" :chat="item" />
-									</div>
-								</template>
-							</RecycleScroller>
-						</div>
-
-						<AllContacts v-else :chats="chats" />
-
-						<!--            <div class="work" v-else>
-              <div class="chatsearchingempty">
-                <span>{{ $t("caption.chatsearchingempty") }}</span>
-              </div>
-            </div>-->
+									
+								</div>
+							</template>
+						</RecycleScroller>
 					</div>
-				</transition>
+					<div v-else class="searchresults">
+						<AllContacts :chats="chats" :search="globalsearch" @clearsearch="() => searchall('')" />
+					</div>
+				</div>
 			</div>
 		</div>
 

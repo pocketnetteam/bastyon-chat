@@ -17,6 +17,7 @@ export default {
 			lastEventDescription: "",
 			blocked: false,
 			eventsLoaded: []
+			globalsearch : ''
 		};
 	},
 	components: {
@@ -33,8 +34,18 @@ export default {
 			type: String,
 			default: () => {},
 		},
+
+		processid : ''
 	},
-	created: () => {},
+
+	beforeMount: function() {
+
+		if (this.processid){
+			var p = this.core.mtrx.searchEngine.getprocess(this.processid)
+
+			if (p && p.text) this.globalsearch = p.text
+		}
+	},
 
 	watch: {
 		topchatid: function () {
@@ -43,9 +54,13 @@ export default {
 			}
 		},
 
-		active: function () {
-			// this.searchText = ''
-		},
+		minimized: {
+			immediate : true,
+			handler : function () {
+				console.log('////')
+				this.globalsearch = ''
+			}
+		}
 		//$route: 'getdata'
 	},
 
@@ -125,8 +140,10 @@ export default {
 				) {
 					return;
 				} else {
-					/*Load messages for every chat*/
-					let rm = this.core.mtrx.client.getRoom(chat.roomId),
+
+					
+
+					/*let rm = this.core.mtrx.client.getRoom(chat.roomId),
 						ts = rm.getLiveTimeline(),
 						tl = new this.core.mtrx.sdk.TimelineWindow(
 							this.core.mtrx.client,
@@ -166,15 +183,27 @@ export default {
 								})
 							);
 						})
-						.catch(() => {});
+						.catch(() => {});*/
 
 					chats.push(chat);
 				}
 			});
 
-			return _.sortBy(chats, function (o) {
+			chats = _.sortBy(chats, function (o) {
 				return o.lastModified;
 			}).reverse();
+
+			/*_.each(chats, (chat) => {
+				var chatevents = state.events[chat.roomId] || {}
+
+				console.log('chatevents', chatevents)
+
+				this.getEventsAndDecrypt(this.core.mtrx.client.getRoom(chat.roomId), chatevents.timeline)
+			})*/
+
+
+			return chats
+
 		},
 
 		withoutBlockedChats: function () {
@@ -192,31 +221,42 @@ export default {
 		},
 	}),
 	methods: {
-		getEventsAndDecrypt(chat, timeline) {
-			let events = timeline.getEvents();
+		getEventsAndDecrypt(chat, events) {
 
-			return Promise.all(
-				_.map(events, (e) => {
-					if (e.event.decrypted) return Promise.resolve();
-					if (f.deep(e, "event.content.msgtype") !== "m.encrypted")
-						return Promise.resolve();
+			console.log('chat', chat)
 
-					return chat.pcrypto
-						.decryptEvent(e.event)
-						.then((d) => {
-							e.event.decrypted = d;
-
+			return this.core.mtrx.kit.prepareChat(chat).then(() => {
+				return Promise.all(
+					_.map(events, (_e) => {
+	
+						var e = _e.get()
+	
+						console.log("E", e)
+	
+	
+						if (e.decrypted) return Promise.resolve();
+						if (f.deep(e, "event.content.msgtype") !== "m.encrypted")
 							return Promise.resolve();
-						})
-						.catch((e) => {
-							e.event.decrypted = {
-								msgtype: "m.bad.encrypted",
-							};
+	
+						return chat.pcrypto
+							.decryptEvent(e)
+							.then((d) => {
+								e.decrypted = d;
+	
+								return Promise.resolve();
+							})
+							.catch((e) => {
+								e.decrypted = {
+									msgtype: "m.bad.encrypted",
+								};
+	
+								return Promise.resolve();
+							});
+					})
+				)
+			})
 
-							return Promise.resolve();
-						});
-				})
-			).then(() => {
+			.then(() => {
 				return Promise.resolve(events);
 			});
 		},
@@ -373,11 +413,11 @@ export default {
 
 		toggleUser: function (id) {
 			if (!this.selected[id]) {
-				if (this.selectedlength >= 11) {
+				if (this.selectedlength >= 10) {
 					this.$store.commit("icon", {
 						icon: "warning",
 						message:
-							"At the moment, you can add no more than 12 users to the chat",
+							"At the moment, you can add no more than 10 users to the chat",
 					});
 
 					return;
@@ -398,6 +438,11 @@ export default {
 		itemToggle(item) {
 			this[item] = this[item] ? null : 2;
 		},
+
+		searchall : function(text){
+			this.globalsearch = (text || "").toLowerCase()
+
+		}
 	},
 	mounted() {
 		// ideally should be in some global handler/store

@@ -16,6 +16,7 @@ export default {
 				return [];
 			},
 		},
+		searchresults : null
 	},
 
 	components: {
@@ -41,6 +42,7 @@ export default {
 			events: [],
 			paginateEvents: false,
 			firstPaginate: true,
+			readPromise : null
 		};
 	},
 
@@ -121,6 +123,7 @@ export default {
 	},
 
 	methods: {
+		
 		editingEvent: function ({ event, text }) {
 			this.$emit("editingEvent", { event, text });
 		},
@@ -151,7 +154,7 @@ export default {
 				}
 				if (e.event.type === "m.room.request_calls_access") {
 					if (e.event.event_id === lastCallAccess.event.event_id) {
-						if (e.event.content.accepted !== undefined) {
+						if (e.event.content.accepted !== null) {
 							return false;
 						} else {
 							if (this.core.mtrx.me(e.event.sender)) {
@@ -241,7 +244,14 @@ export default {
 							});
 						}
 
+						
+					} else {
+						if (subtype == "m.audio") {
+							pr = this.core.mtrx.getAudioUnencrypt(this.chat, e);
+						}
+
 						if (subtype == "m.encrypted") {
+
 							pr = this.chat.pcrypto
 								.decryptEvent(e.event)
 								.then((d) => {
@@ -257,10 +267,6 @@ export default {
 									return Promise.resolve();
 								});
 						}
-					} else {
-						if (subtype == "m.audio") {
-							pr = this.core.mtrx.getAudioUnencrypt(this.chat, e);
-						}
 					}
 
 					if (!pr) return Promise.resolve();
@@ -268,19 +274,7 @@ export default {
 					return pr.catch((e) => {
 						return Promise.resolve();
 					});
-
-					/*return this.chat.pcrypto.decryptEvent(e.event).then(d => {
-          e.event.decrypted = d
-
-          return Promise.resolve()
-        }).catch(e => {
-
-          e.event.decrypted = {
-            msgtype : 'm.bad.encrypted'
-          }
-
-          return Promise.resolve()
-        })*/
+					
 				})
 			).then(() => {
 				return Promise.resolve(events);
@@ -288,12 +282,12 @@ export default {
 		},
 
 		relations: function (events) {
-			var ts = this.timeline._timelineSet;
+			var ts = this.timeline.timelineSet;
 
 			_.each(events, (e) => {
 				try {
 					//if(!e.event.content.edited){
-					var rt = ts.getRelationsForEvent(
+					var rt = ts.relations.getChildEventsForEvent(
 						e.event.event_id,
 						"m.replace",
 						"m.room.message"
@@ -303,6 +297,9 @@ export default {
 						var last = rt.getLastReplacement();
 
 						if (last) {
+
+							console.log("last", last)
+
 							e.event.content.body = last.event.content.body;
 							e.event.content.edited = last.event.event_id;
 							e.event.content.block = last.event.content.block;
@@ -338,7 +335,14 @@ export default {
 			this.loading = true;
 			this.firstPaginate = true;
 
-			var timeline = this.chat.getLiveTimeline();
+
+			//this.chat.getTimelineForEvent('$FXUvcjIqcvDu0meLTnz-8plloZoNHLIYEb6WGQMWO3s')
+			
+			
+			//this.chat.getTimelineForEvent('$FXUvcjIqcvDu0meLTnz-8plloZoNHLIYEb6WGQMWO3s')
+			
+			
+			//this.chat.getLiveTimeline();
 
 			var ts;
 
@@ -346,6 +350,9 @@ export default {
 				this.scrollType = "custom";
 				ts = await this.mediaTimelineSet();
 			} else {
+
+				var timeline = this.chat.getLiveTimeline();
+
 				ts = timeline.getTimelineSet();
 			}
 
@@ -376,11 +383,46 @@ export default {
 						this.loading = false;
 					});
 			}, 30);
+
+			/*setTimeout(() => {
+				this.paginateToEvent('$FXUvcjIqcvDu0meLTnz-8plloZoNHLIYEb6WGQMWO3s').then(event => {
+					console.log("TOEVENT", event)
+				})
+			}, 1000)*/
+		},
+
+		paginateToEvent: function(event_id){
+			var event = _.find(this.events, (e) => {
+				return e.event.event_id == event_id
+			})
+
+			if (event){
+				return Promise.resolve(event)
+			}
+
+			else{
+				var promise = this.paginate('b')
+
+				if (promise){
+					return promise.then(() => {
+						return this.paginateToEvent(event_id)
+					}).catch(e => {
+						console.error('EROR', e)
+						if(!event) return Promise.resolve(null)
+					})
+				}
+
+				else{
+					if(!event) return Promise.resolve(null)
+				}
+			}
 		},
 		
 		autoPaginate: function (direction) {
 			if (this.needLoad(direction)) {
-				this.paginate(direction);
+				var pr = this.paginate(direction)
+
+				if (pr) pr.catch(e => {})
 			}
 		},
 
@@ -393,12 +435,15 @@ export default {
 
 					let count = /*this.firstPaginate ? 24 : */ 20;
 
-					this.timeline
+					var error = null
+
+					return this.timeline
 						.paginate(direction, count)
 						.then((e) => {
 							return Promise.resolve();
 						})
 						.catch((e) => {
+							error = e
 							return Promise.resolve();
 						})
 						.then((r) => {
@@ -409,10 +454,12 @@ export default {
 
 							this.firstPaginate = false;
 
-							// this.readAll();
-
 							this["p_" + direction] = false;
-						});
+						}).catch((e) => {
+							if(e) return Promise.reject(e)
+						})
+
+					
 				} else {
 					this.readAll();
 				}
@@ -464,7 +511,6 @@ export default {
 		readLast: function () {
 			var events = this.timeline.getEvents();
 
-			console.log(events);
 			this.readEvent(events[events.length - 1]);
 		},
 
@@ -480,6 +526,67 @@ export default {
 					return r;
 				});
 		},
+		debouncedReadAll : _.debounce(function(){
+
+			if (!this.chat) return;
+			if (this.readPromise) return
+
+			var i = this.chat.timeline.length - 1;
+			var event = null;
+
+			event = this.chat.timeline[i]
+
+			/*while (i >= 0 && !event) {
+				var e = this.chat.timeline[i];
+
+				var type = (e.event.type || "")
+
+				if (type.indexOf('m.call') > -1){
+					if(type.indexOf('candidates') > -1 ) {
+						return
+					}
+				}
+
+				if(e.readed) return
+
+				if (!this.core.mtrx.me(e.sender.userId)) {
+
+					if(!this.core.mtrx.isReaded(e)){
+						event = e;
+					}
+					
+				}
+				else{
+					
+				}
+
+				i--;
+			}*/
+
+			if (event) {
+
+				if (event.readError){
+					return
+				}
+
+				var eid = event.event.event_id
+
+				this.readPromise = this.core.mtrx.client
+					.setRoomReadMarkers(this.chat.currentState.roomId, eid, event/*, {
+						hidden: !this.settings_read ? true : false,
+					}*/).then((r) => {
+						event.readed = true
+						return r;
+					}).catch(e => {
+						console.error(e)
+						console.log(event)
+						event.readError = e	
+					})
+					.finally(() => {
+						this.readPromise = null
+					});
+			}
+		}, 100),
 		readAll: function () {
 			if (
 				document.hasFocus() &&
@@ -488,33 +595,10 @@ export default {
 				this.chat &&
 				this.chat.getJoinedMemberCount() > 0 &&
 				this.chat.getUnreadNotificationCount() !== 0
-			)
-				setTimeout(() => {
-					if (!this.chat) return;
-
-					var i = this.chat.timeline.length - 1;
-					var event = null;
-
-					while (i >= 0 && !event) {
-						var e = this.chat.timeline[i];
-
-						if (!this.core.mtrx.me(e.sender.userId)) {
-							event = e;
-						}
-
-						i--;
-					}
-
-					if (e) {
-						this.core.mtrx.client
-							.setRoomReadMarkers(this.chat.currentState.roomId, e.eventId, e, {
-								hidden: !this.settings_read ? true : false,
-							})
-							.then((r) => {
-								return r;
-							});
-					}
-				}, 1000);
+			){
+				this.debouncedReadAll()
+			}
+				
 		},
 
 		//////////////
@@ -551,6 +635,31 @@ export default {
 		menuIsVisibleHandler: function (isVisible) {
 			this.$emit("menuIsVisible", isVisible);
 		},
+
+		scrollToEvent: function(reference){
+
+			f.pretry(() => {
+				return (!this.loading && this.timeline && !this["p_b"])
+			}).then(() => {
+
+				this.$store.state.globalpreloader = true;
+				
+				return this.paginateToEvent(reference.event.event_id)
+			}).then(event => {
+
+				if (event){
+					setTimeout(() => {
+						this.$refs.eventslist.scrollToEvent(event)
+					}, 300)
+					
+				}
+			}).catch(e => {
+				console.error(e)
+			}).finally(() => {
+				this.$store.state.globalpreloader = false;
+
+			})
+		}
 
 	
 	},

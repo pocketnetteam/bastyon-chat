@@ -128,7 +128,9 @@
 		"You": "Tu",
 		"chatsearchingempty": "No chats found for the specified filter",
 		"sendmessage": "Send message",
-		"messages" : "Messages"
+		"messages" : "Messages",
+		"you" : "You",
+		"sentfile" : "sent file:"
 	},
 
 	"input": {

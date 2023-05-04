@@ -1,18 +1,50 @@
+import _ from "underscore";
+
 export default {
-	name: "list",
+	name: 'list',
 	props: {
 		items: {
-			type: Array,
+			type: [Array, Object],
 			required: true,
 		},
-		sort: {
-			type: [Object, Boolean],
-			default: false,
+
+
+		simplelistClass : {
+			type : String,
+			default : 'simplelist'
 		},
+
+		transition : String
+
 	},
 	computed: {
 		readyItems: function () {
 			return this.items;
-		},
+		}
 	},
-};
+
+	created : function(){
+
+	},
+
+	data : function(){
+		return {
+		}
+	},
+
+	methods: {
+		
+		click : function(item){
+			this.$emit('click', item)
+		},
+
+		scroll : function(prop, value){
+			if(this.$refs.simplelist) this.$refs.simplelist[prop] = value
+		},
+		
+		touchhold : function(item, e){
+			this.$emit('touchhold', item)
+
+		}
+	}
+}

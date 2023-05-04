@@ -5,9 +5,9 @@
 			:class="user.membership"
 			v-for="(user, index) in membersList"
 			:key="user.userId"
-			@click="core.mtrx.opencontact(userinfo(user))"
+			
 		>
-			<div class="leftWrapper">
+			<div class="leftWrapper" @click="core.mtrx.opencontact(userinfo(user))">
 				<div class="avatarNameWrapper">
 					<userpic :userinfo="userinfo(user)" :status="user.membership" />
 				</div>
@@ -23,13 +23,14 @@
 
 			<div v-if="menu(user).length">
 				<div class="rightWrapper">
-					<dropdownMenu
+					<i @click="e=>setmenu(user)" class="fas fa-ellipsis-h setmenu"></i>
+					<!--<dropdownMenu
 						@itemClicked="menuItemClickHandler"
 						ref="dropdownMenu"
 						:menuItems="menu(user)"
 						:rowObject="{ user: user, index: index }"
 						icon="fas fa-ellipsis-h"
-					/>
+					/>-->
 				</div>
 			</div>
 		</div>

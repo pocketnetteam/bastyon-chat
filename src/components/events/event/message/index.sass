@@ -1,556 +1,592 @@
 
 .referenceTop
-  margin-left: 0.5 * $r
-  margin-right: 0.5 * $r
-  border-radius: 10px
-  border-bottom-left-radius: 0
-  overflow: hidden
-  margin-bottom: $r
+	margin-left: 0.5 * $r
+	margin-right: 0.5 * $r
+	border-radius: 10px
+	border-bottom-left-radius: 0
+	overflow: hidden
+	margin-bottom: $r
 
-  &.my
-    border-bottom-right-radius: 0
-    border-bottom-left-radius: 10px
+	&.my
+		border-bottom-right-radius: 0
+		border-bottom-left-radius: 10px
 
 .actionsWrapper
-  opacity: 1
-  i.fa-check-circle
-    color: srgb(--color-txt-ac)
-    opacity: 1 !important
+	opacity: 1
 
-  .mnwrapper
-    +transitionopt(0.3s, 'opacity')
+	.setmenu
+		padding : $r 0
+	i.fa-check-circle
+		color: srgb(--color-txt-ac)
+		opacity: 1 !important
 
-  .multiSelect
-    position: absolute
-    top: 50%
-    transform: translateY(-50%)
-    left: 0
-    padding: $r
+	.mnwrapper
+		+transitionopt(0.3s, 'opacity')
 
-    width: 100%
-    height: 100%
-    display: flex
-    flex-direction: column
-    justify-content: center
-    &:hover
-      i
-        opacity: 1
+	.multiSelect
+		position: absolute
+		top: 50%
+		transform: translateY(-50%)
+		left: 0
+		padding: $r
+		z-index: 1
+
+		width: 100%
+		height: 100%
+		display: flex
+		flex-direction: column
+		justify-content: center
+		&:hover
+			i
+				opacity: 1
 
 @media (pointer:fine)
-  .messageRow:hover
-    .actionsWrapper
-      .mnwrapper
-        opacity: 1
+	.messageRow:hover
+		.actionsWrapper
+			.mnwrapper
+				opacity: 1
 
 .burn
-  &.big
-    color: srgb(--color-bad)
-  &.medium
-    opacity: 0.8
+	&.big
+		color: srgb(--color-bad)
+	&.medium
+		opacity: 0.8
 
 .showImage
-  width: 100%
-  position: relative
-  overflow: hidden
+	width: 100%
+	position: relative
+	overflow: hidden
 
-  .abswrapper
-    position: absolute
-    left: 0
-    top: 0
-    bottom: 0
-    right: 0
-    display: flex
-    text-align: center
-    align-items: center
-    justify-content: center
+	.abswrapper
+		position: absolute
+		left: 0
+		top: 0
+		bottom: 0
+		right: 0
+		display: flex
+		text-align: center
+		align-items: center
+		justify-content: center
 
 .preloaderImage
-  padding-bottom: 100px
-  border-radius: 10px
-  background: srgba(--neutral-grad-0, 0.5)
-  width: 100%
-  position: relative
+	padding-bottom: 100px
+	border-radius: 10px
+	background: srgba(--neutral-grad-0, 0.5)
+	width: 100%
+	position: relative
 
-  .abswrapper
-    position: absolute
-    left: 0
-    top: 0
-    bottom: 0
-    right: 0
-    display: flex
-    text-align: center
-    align-items: center
-    justify-content: center
+	.abswrapper
+		position: absolute
+		left: 0
+		top: 0
+		bottom: 0
+		right: 0
+		display: flex
+		text-align: center
+		align-items: center
+		justify-content: center
 
-    >div
-      opacity: 0.2
+		>div
+			opacity: 0.2
 
 .statusWrapper
-  padding: $r
-  margin-top: $r
-  border-top: $r solid srgb(--neutral-grad-0)
-  .my
-    font-size: 0.7em
-    opacity: 0.5
-    text-align: center
+	padding: $r
+	margin-top: $r
+	border-top: $r solid srgb(--neutral-grad-0)
+	.my
+		font-size: 0.7em
+		opacity: 0.5
+		text-align: center
+
+
+.fade-enter-active
+  	+transition(0.3s)
+
+.fade-enter-from
+  	opacity: 0
 
 .messageRow
-  display: flex
-  align-items: flex-end
-  padding-left: $r / 2
-  min-height: 34px
-
-  &.aligncenter
-    align-items: center
-
-  /deep/
-    .call
-      border-bottom-left-radius: 0
-      margin-left: 0.5 * $r
-
-  &.my
-    padding-left: 0
-    padding-right: $r / 2
-
-    /deep/
-      .call
-        
-        border-top-right-radius: 0
-        border-bottom-left-radius: 1em
-
-    .messageImg
-      .imgMsg
-        .showImage
-          .abswrapper
-            border-radius: 1em
-            border-top-right-radius: 0
-            border-top-left-radius: 1em
-
-  .maxcontent
-    max-width: 82%
-
-    &.my
-      max-width: 87%
-
-  &.allscreen
-    flex-wrap: wrap
-
-    /deep/
-    .userpic
-      position: relative
-      &::after
-        border-radius: 50%
-        content: ''
-        position: absolute
-        left: -5px
-        right: -5px
-        top: -5px
-        bottom: -5px
-        border: 5px solid srgb(--neutral-grad-0)
-        z-index: 1
-        +shadowSmaller()
-
-  .badenctyptedText
-    .decryptagain
-      font-size: 0.8em
-
-  .metaMsg
-    width: 100%
-
-  .badencrypted
-    position: absolute
-    background: srgb(--background-main)
-    left: 0
-    right: 0
-    top: 0
-    bottom: 0
-    padding: $r
-
-  .encryptedDataIcon
-    position: absolute
-    color: srgb(--text-on-bg-ac-color)
-    opacity: 0.3
-    padding: 0.5 * $r $r
-    +shadowText()
-    left: 0
-    top: 0
-    z-index: 1
-
-    i
-      font-size: 0.7em
-
-  .filePreview
-    position: relative
-
-    .encryptedDataIcon
-      color: srgb(--neutral-grad-2)
-      text-shadow: none
-      right: 0
-      left: auto
-
-  .messageAudio
-    margin-left: $r
-    
-
-  .messageImg
-    width: 85%
-    position: relative
-    margin-top: 0.25 * $r
-
-    .img
-      display: block
-      border-radius: .5em
-      position: relative
-      max-width: 100%
-
-    .loadingImg
-      display: flex
-      align-items: center
-      justify-content: center
-      border-radius: .5em
-      position: relative
-      max-width: 300px
-      height: 250px
-
-      .imgPreview
-        border-radius: .5em
-        position: relative
-        max-width: 100%
-        height: 100%
-        opacity: .6
-
-      .clipLoader
-        position: absolute
-        z-index: 9999
-        left: 50%
-        right: 0
-        top: 50%
-        bottom: 0
-        transform: translate(-50, 50)
-        display: flex
-        align-items: center
-        justify-content: center
-
-    .imgMsg
-
-      .showImage
-        display: flex
-
-      img
-        max-width: 100%
-        object-fit: cover
-        display: block
-
-      .abswrapper
-        border-radius: 1em
-        border-top-left-radius: 0
-        overflow: hidden
-        background: srgb(--neutral-grad-0)
-
-    .metaLink
-
-      background: black
-      .metaMessageLink
-        .metaTitle
-          font-weight: bold
-          font-size: 0.9em
-        .metaDescription
-          margin: .5em 0
-          font-size: 0.8em
-        .metaImgWrapper
-          display: block
-          max-width: 300px
-          object-fit: cover
-          img
-            display: block
-            width: 100%
-            height: 100%
-
-  .filePreview
-    width: 90%
-    border: 1px solid srgb(--neutral-grad-1)
-    overflow: hidden
-    border-radius: 10px
-    position: relative
-    margin-top: $r
-    height: 100px
-
-    .table
-      height: 100%
-
-  .linkPreview
-    width: 100%
-
-  .messagePreview
-    width: 100%
-    overflow: hidden
-    text-overflow: ellipsis
-
-    span
-      word-break: break-all
-      white-space: normal
-
-  .fromimagesfiles
-    display: flex
-    order: 3
-    padding: 0
-    line-height: 33px
-    padding-right: $r
-
-    .fromCaption
-      white-space: nowrap
-      max-width: 240px
-      overflow: hidden
-      text-overflow: ellipsis
-
-  .actionsWrapper
-    order: 4
-    padding-left: $r
-    padding-right: 2.5 * $r
-    cursor: pointer
-    text-align: right
-    margin-left: auto
-    display: flex
-    align-items: center
-    line-height: 33px
-
-    i
-      opacity: 0.3
-      +transitionopt(0.3s, opacity)
-
-    i.fa-ellipsis-h
-      font-size: 0.7em
-
-    i:hover
-      opacity: 1
-      +transitionopt(0.3s, opacity)
-
-
-
-
-  .statusWrapper
-    order: 5
-    padding: $r $r / 2
-    opacity: 0.6
-
-    div,
-    span
-      font-size: 0.7em
-
-  .sendername
-    order: 3
-    opacity: 0.6
-    overflow: hidden
-    font-size: 0.7em
-    span
-
-  .timeWrapper
-    text-align: left
-    order: 2
-    padding: 0 $r / 2
-    line-height: 33px
-    opacity: 0.6
-    flex-grow: 1
-
-    span
-      white-space: nowrap
-      font-size: 0.7em
-
-  .showreference
-    cursor: pointer
-
-  &.referenceshowed
-
-    .messageText
-      background: srgba(--neutral-grad-1, 0.8)!important
-      color: srgb(--color-txt-gray)!important
-
-    .reference
-      padding-bottom: 0!important
-
-    .referenceCaption
-      button
-        width: 100%
-
-  .reference
-    height: 32px
-
-
-  .from,
-  .reference
-    opacity: 0.8
-    border-bottom: 1px solid srgb(--text-on-bg-ac-color)
-    padding: $r 0
-    padding-top: 0
-    margin-bottom: $r
-    display: flex
-
-    .event
-      max-height: 38px
-      text-align: left
-
-    i
-      width: 30px
-      text-align: center
-      font-size: 0.8em
-
-    .referenceCaption
-      min-width: 28px
-
-    .referenceCaption
-      font-size: 0.8em
-
-    .sendername
-      white-space: nowrap
-
-    /deep/
-      .messagePreview
-        font-size: 0.9em
-        height: 22px
-        .previewMessage
-          white-space: nowrap
-
-  .messageText
-    margin-left: 0.5 * $r
-    background: srgba(--neutral-grad-1, 0.8)
-    //background: srgba(--neutral-grad-1, 0.8)
-    color: srgb(--text-color)
-    padding: $r 1.5 * $r
-    padding-top: $r
-    border-radius: 2 * $r
-    border-bottom-left-radius: 0
-    font-weight: 400
-    white-space: normal
-    display: flex
-    flex-direction: column-reverse
-
-    .msgtext
-      text-align: left
-      white-space: pre-wrap
-
-    
-
-    .edited
-      font-size: 0.7em
-      opacity: 0.5
-      text-align: right
-
-    div
-      overflow: hidden
-      text-overflow: ellipsis
-
-  .badenctyptedText
-    margin-left: $r
-    color: srgb(--text-on-bg-ac-color)
-    padding: $r 1.5 * $r
-    border-radius: 2 * $r
-    background: srgb(--neutral-grad-3)
-    word-break: break-all
-    white-space: normal
-
-    span
-      font-size: 0.9em
-
-  .iconWrapper
-    width: 33px
-    min-width: 33px
-
-  .withsendername
-    position: relative
-    .sendername
-      position: absolute
-      top: 100%
-      margin-top: -5px
-      left: 20px
-      color: srgb(--neutral-grad-3)
-      span
-        font-size: 0.7em
-
-  &[my="true"]
-    justify-content: flex-end
-    flex-wrap: wrap
-
-    .iconWrapper
-      margin-left: $r
-      order: 1
-      align-self: flex-start
-
-    .fromimagesfiles
-      order: -3
-    .actionsWrapper
-      text-align: left
-      margin-right: auto
-      margin-left: 0
-      padding-left: 1.5 * $r
-      padding-right: 0.5 *$r
-      order: -4
-
-    .statusWrapper
-      order: -3
-
-    .timeWrapper
-      order: -2
-      text-align: right
-
-    .messageText
-      background: srgb(--color-bg-ac-bright)
-      color: srgb(--text-on-bg-ac-color)
-      text-align: right
-      border: 0
-      border-radius: 2 * $r
-      border-bottom-left-radius: 2 * $r
-      border-top-right-radius: 0
-
-    .messageAudio
-      margin-left: 0
-      /deep/
-      .voiceMessage
-        justify-content: flex-end
-
-  &.urlpreview
-    background: srgb(--background-total-theme)
-    padding: $r
-    padding-left: 0.5 * $r
-    padding-bottom: 2 * $r
-
-    .actionsWrapper
-      padding-right: $r
-      padding-left: $r
-
-  &.allscreen
-    .linkPreview,
-    .filePreview,
-    .metaMsg,
-    .messageImg
-      order: 4
-      padding-left: 0.25 * $r
-
-    &[my="true"]
-      .linkPreview,
-      .filePreview,
-      .metaMsg,
-      .messageImg
-        order: 6
-
-  &.not-preview
-    align-items: center
-    justify-content: center
-    color: srgb(--neutral-grad-3)
-    text-align: center
-    flex-direction: column-reverse
-
-    .messageNoticeWithLink
-      color: $color-text-second
+	display: flex
+	align-items: flex-end
+	padding-left: $r / 2
+	min-height: 34px
+	position: relative
+
+	&.aligncenter
+		align-items: center
+
+	/deep/
+		.call
+			border-bottom-left-radius: 0
+			margin-left: 0.5 * $r
+
+	&.my
+		padding-left: 0
+		padding-right: $r / 2
+
+		/deep/
+			.call
+				
+				border-top-right-radius: 0
+				border-bottom-left-radius: 1em
+
+		.messageImg
+			.imgMsg
+				.showImage
+					.abswrapper
+						border-radius: 1em
+						border-top-right-radius: 0
+						border-top-left-radius: 1em
+
+	.maxcontent
+		max-width: 72%
+
+		&.my
+			max-width: 72%
+
+	&.allscreen
+		flex-wrap: wrap
+		+transitionopt(0.3s, background)
+
+		/deep/
+		.userpic
+			position: relative
+			&::after
+				border-radius: 50%
+				content: ''
+				position: absolute
+				left: -5px
+				right: -5px
+				top: -5px
+				bottom: -5px
+				border: 5px solid srgb(--neutral-grad-0)
+				z-index: 1
+				+shadowSmaller()
+
+	.badenctyptedText
+		.decryptagain
+			font-size: 0.8em
+
+	.metaMsg
+		width: 100%
+
+	.badencrypted
+		position: absolute
+		background: srgb(--background-main)
+		left: 0
+		right: 0
+		top: 0
+		bottom: 0
+		padding: $r
+
+	.encryptedDataIcon
+		position: absolute
+		color: srgb(--text-on-bg-ac-color)
+		opacity: 0.3
+		padding: 0.5 * $r $r
+		+shadowText()
+		left: 0
+		top: 0
+		z-index: 1
+
+		i
+			font-size: 0.7em
+
+	.filePreview
+		position: relative
+
+		.encryptedDataIcon
+			color: srgb(--neutral-grad-2)
+			text-shadow: none
+			right: 0
+			left: auto
+
+	.messageAudio
+		margin-left: 0.5 * $r
+		display: flex
+		align-items: center
+
+
+
+		.reference
+			margin-right: 0
+			max-width: 30px
+			margin-bottom: 0
+
+			i
+				line-height: 28px
+
+			.event
+				display: none
+				max-width: 20px
+		
+
+	.messageImg
+		width: 85%
+		position: relative
+		margin-top: 0.25 * $r
+
+		.img
+			display: block
+			border-radius: .5em
+			position: relative
+			max-width: 100%
+
+		.loadingImg
+			display: flex
+			align-items: center
+			justify-content: center
+			border-radius: .5em
+			position: relative
+			max-width: 300px
+			height: 250px
+
+			.imgPreview
+				border-radius: .5em
+				position: relative
+				max-width: 100%
+				height: 100%
+				opacity: .6
+
+			.clipLoader
+				position: absolute
+				z-index: 9999
+				left: 50%
+				right: 0
+				top: 50%
+				bottom: 0
+				transform: translate(-50, 50)
+				display: flex
+				align-items: center
+				justify-content: center
+
+		.imgMsg
+
+			.showImage
+				display: flex
+
+			img
+				max-width: 100%
+				object-fit: cover
+				display: block
+
+			.abswrapper
+				border-radius: 1em
+				border-top-left-radius: 0
+				overflow: hidden
+				background: srgb(--neutral-grad-0)
+
+		.metaLink
+
+			background: black
+			.metaMessageLink
+				.metaTitle
+					font-weight: bold
+					font-size: 0.9em
+				.metaDescription
+					margin: .5em 0
+					font-size: 0.8em
+				.metaImgWrapper
+					display: block
+					max-width: 300px
+					object-fit: cover
+					img
+						display: block
+						width: 100%
+						height: 100%
+
+	.filePreview
+		width: 90%
+		border: 1px solid srgb(--neutral-grad-1)
+		overflow: hidden
+		border-radius: 10px
+		position: relative
+		margin-top: $r
+		height: 100px
+
+		.table
+			height: 100%
+
+	.linkPreview
+		width: 100%
+
+	.messagePreview
+		width: 100%
+		overflow: hidden
+		text-overflow: ellipsis
+
+		span
+			word-break: break-all
+			white-space: normal
+
+	.fromimagesfiles
+		display: flex
+		order: 3
+		padding: 0
+		line-height: 33px
+		padding-right: $r
+
+		.fromCaption
+			white-space: nowrap
+			max-width: 240px
+			overflow: hidden
+			text-overflow: ellipsis
+
+	.actionsWrapper
+		order: 4
+		padding-left: $r
+		padding-right: 2.5 * $r
+		cursor: pointer
+		text-align: right
+		margin-left: auto
+		display: flex
+		align-items: center
+		line-height: 33px
+
+		i
+			opacity: 0.3
+			+transitionopt(0.3s, opacity)
+
+		i.fa-ellipsis-h
+			font-size: 0.7em
+
+		i:hover
+			opacity: 1
+			+transitionopt(0.3s, opacity)
+
+
+
+
+	.statusWrapper
+		order: 5
+		padding: $r $r / 2
+		opacity: 0.6
+
+		div,
+		span
+			font-size: 0.7em
+
+	.sendername
+		order: 3
+		opacity: 0.6
+		overflow: hidden
+		font-size: 0.7em
+		.b
+			font-weight: 700
+		span
+
+	.timeWrapper
+		text-align: left
+		order: 2
+		padding: 0 $r / 2
+		line-height: 33px
+		opacity: 0.6
+		flex-grow: 1
+
+		span
+			white-space: nowrap
+			font-size: 0.7em
+
+	.showreference
+		cursor: pointer
+
+	&.referenceshowed
+
+		.messageText
+			background: srgba(--neutral-grad-1, 0.8)!important
+			color: srgb(--color-txt-gray)!important
+
+		.reference
+			padding-bottom: 0!important
+
+		.referenceCaption
+			button
+				width: 100%
+
+	.reference
+		height: 32px
+
+
+	.from,
+	.reference
+		opacity: 0.8
+		border-bottom: 1px solid srgb(--text-on-bg-ac-color)
+		padding: $r 0
+		padding-top: 0
+		margin-bottom: $r
+		display: flex
+
+		.event
+			max-height: 38px
+			text-align: left
+
+		i
+			width: 30px
+			text-align: center
+			font-size: 0.8em
+
+		.referenceCaption
+			min-width: 28px
+
+		.referenceCaption
+			font-size: 0.8em
+
+		.sendername
+			white-space: nowrap
+
+		/deep/
+			.messagePreview
+				font-size: 0.9em
+				height: 22px
+				.previewMessage
+					display: flex
+					white-space: nowrap
+
+	.messageText
+		margin-left: 0.5 * $r
+		background: srgba(--neutral-grad-1, 0.8)
+		//background: srgba(--neutral-grad-1, 0.8)
+		color: srgb(--text-color)
+		padding: $r 1.5 * $r
+		padding-top: $r
+		border-radius: 2 * $r
+		border-bottom-left-radius: 0
+		font-weight: 400
+		white-space: normal
+		display: flex
+		flex-direction: column-reverse
+
+		/deep/
+
+			.msgtext
+				text-align: left
+				white-space: pre-wrap
+				word-wrap: break-word
+
+		.edited
+			font-size: 0.7em
+			opacity: 0.5
+			text-align: right
+
+		div
+			overflow: hidden
+			text-overflow: ellipsis
+
+	.badenctyptedText
+		margin-left: $r
+		color: srgb(--text-on-bg-ac-color)
+		padding: $r 1.5 * $r
+		border-radius: 2 * $r
+		background: srgb(--neutral-grad-3)
+		word-break: break-all
+		white-space: normal
+
+		span
+			font-size: 0.9em
+
+	.iconWrapper
+		width: 33px
+		min-width: 33px
+
+	.withsendername
+		position: relative
+		.sendername
+			position: absolute
+			top: 100%
+			margin-top: -5px
+			left: 20px
+			color: srgb(--neutral-grad-3)
+			
+			span
+				font-size: 0.7em
+
+	&[my="true"]
+		justify-content: flex-end
+		flex-wrap: wrap
+
+		.iconWrapper
+			margin-left: $r
+			order: 1
+			align-self: flex-start
+
+		.fromimagesfiles
+			order: -3
+		.actionsWrapper
+			text-align: left
+			margin-right: auto
+			margin-left: 0
+			padding-left: 1.5 * $r
+			padding-right: 0.5 *$r
+			order: -4
+
+		.statusWrapper
+			order: -3
+
+		.timeWrapper
+			order: -2
+			text-align: right
+
+		.messageText
+			background: srgb(--color-bg-ac-bright)
+			color: srgb(--text-on-bg-ac-color)
+			text-align: right
+			border: 0
+			border-radius: 2 * $r
+			border-bottom-left-radius: 2 * $r
+			border-top-right-radius: 0
+
+		.messageAudio
+			margin-left: 0
+			/deep/
+				.voiceMessage_options,
+				.voiceMessage_wrapper
+					border-top-right-radius: 0
+				.voiceMessage
+					justify-content: flex-end
+
+	&.urlpreview
+		background: srgb(--background-total-theme)
+		padding: $r
+		padding-left: 0.5 * $r
+
+		.actionsWrapper
+			padding-right: $r
+			padding-left: $r
+
+	&.allscreen
+		.linkPreview,
+		.filePreview,
+		.metaMsg,
+		.messageImg
+			order: 4
+			padding-left: 0.25 * $r
+
+		&[my="true"]
+			.linkPreview,
+			.filePreview,
+			.metaMsg,
+			.messageImg
+				order: 6
+
+	&.not-preview
+		align-items: center
+		justify-content: center
+		color: srgb(--neutral-grad-3)
+		text-align: center
+		flex-direction: column-reverse
+
+		.messageNoticeWithLink
+			color: $color-text-second
 
 
 .eventWrapper
-  .fromCaption
-    font-size: 0.8em
-    
+	.fromCaption
+		font-size: 0.8em
+		
 .fromimagesfiles
-  .fromCaption  
-    text-align: center
-    i
-      width: 30px
-      text-align: center
-      font-size: 0.8em
+	.fromCaption	
+		text-align: center
+		i
+			width: 30px
+			text-align: center
+			font-size: 0.8em

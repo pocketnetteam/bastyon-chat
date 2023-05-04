@@ -11,8 +11,10 @@ export default {
 	props: {
 		chat: Object,
 		u: String,
+		search : String,
+		searchresults : Array,
+		style : ''
 	},
-	inject: ["isChatEncrypted"],
 	components: {
 		list,
 		chatInput: () => import("@/components/chat/input/index.vue"),
@@ -40,10 +42,9 @@ export default {
 			cantchatexc: false,
 			error: null,
 			hoverEncrypt: false,
-
+			encrypting : false,
 			showInput: true,
 			showShareMessages: false,
-
 			selectedMessages: [],
 		};
 	},
@@ -51,6 +52,7 @@ export default {
 	created() { },
 
 	mounted() {
+
 		this.getuserinfo();
 		this.$store.commit("active", true);
 		this.$store.commit("blockactive", { value: true, item: "chat" });
@@ -64,6 +66,7 @@ export default {
 	},
 
 	watch: {
+		
 		needcreatekey: function () {
 			if (this.needcreatekey) {
 				if (!this.intrv) {
@@ -111,24 +114,16 @@ export default {
 					this.$store.commit("SET_LAST_ROOM", this.chat.roomId);
 				} else this.$store.commit("SET_CURRENT_ROOM", false);
 			},
-		},
-		encrypted: {
-			immediate: true,
-			handler: function (state) {
-				if (typeof this.isChatEncrypted.state === "function")
-					this.isChatEncrypted.state(state);
-			},
-		},
+		}
 	},
 	computed: mapState({
-		activeCall: (state) => state.activeCall,
 		pocketnet: (state) => state.pocketnet,
 		minimized: (state) => state.minimized,
 		active: (state) => state.active,
 		auth: (state) => state.auth,
 		m_chat: function () {
 			if (this.chat && this.chat.roomId) {
-				let pushRules = this.core.mtrx.client._pushProcessor.getPushRuleById(
+				let pushRules = this.core.mtrx.client.pushProcessor.getPushRuleById(
 					this.chat.roomId
 				);
 				if (pushRules !== null) {
@@ -210,11 +205,20 @@ export default {
 		},
 	}),
 	methods: {
+		
 		clearintrv: function () {
 			if (this.intrv) {
 				clearInterval(this.intrv);
 				this.intrv = null;
 			}
+		},
+
+		clbkencrypt : function () {
+			this.encrypting = true
+		},
+
+		clbkencrypted : function () {
+			this.encrypting = false
 		},
 
 		checkcrypto: function () {
@@ -302,6 +306,7 @@ export default {
 		},
 
 		replyEvent: function ({ event }) {
+
 			this.relationEvent = {
 				type: "m.reference",
 				event: event,
@@ -430,8 +435,6 @@ export default {
 
 		shareDataMessages: function () {
 
-			console.log('this.selectedMessages', this.selectedMessages)
-
 			var messages = _.map(_.sortBy(this.selectedMessages, (m) => {
 				return m.time
 			}), (m) => {
@@ -472,6 +475,7 @@ export default {
 			});
 
 
+
 			Promise.all(_.map(this.selectedMessages, (message) => {
 
 				return this.core.mtrx.client.redactEvent(
@@ -484,6 +488,7 @@ export default {
 				);
 
 			})).then(r => {
+
 				this.$store.commit("icon", {
 					icon: "success",
 					message: "",
@@ -494,10 +499,14 @@ export default {
 			}).catch(e => {
 
 				console.error(e)
+
+				this.selectedMessages = [];
+
 				this.$store.commit("icon", {
 					icon: "error",
 					message: "",
 				});
+
 			}).finally(() => {
 				this.force()
 			})
@@ -510,6 +519,16 @@ export default {
 			this.selectedMessages = [];
 		},
 
+
+		scrollToEvent : function(event){
+
+			f.pretry(() => {
+				return this.$refs["list"]
+			}).then(() => {
+				this.$refs["list"].scrollToEvent(event);
+			})
+			
+		}
 		
 	},
 };

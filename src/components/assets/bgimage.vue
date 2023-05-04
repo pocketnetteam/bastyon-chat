@@ -25,6 +25,10 @@
 </style>
 
 <script>
+
+var loadedCache = {}
+
+
 export default {
 	name: "bgimage",
 	directives: {},
@@ -48,6 +52,12 @@ export default {
 		};
 	},
 
+	beforeMount : function(){
+		if(loadedCache[this.src]){
+			this.loaded = true;
+		}
+	},
+
 	methods: {
 		load: function () {
 			if (this.src) {
@@ -59,6 +69,7 @@ export default {
 
 				image.src = this.imageSrc;
 				image.onload = () => {
+					loadedCache[this.src] = true
 					this.loaded = true;
 				};
 			} else this.loaded = true;

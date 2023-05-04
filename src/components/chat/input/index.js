@@ -93,7 +93,8 @@ export default {
 		pkoindisabled: function () {
 			return this.$store.state.pkoindisabled;
 		},
-		menuItems: function () {
+
+		menu: function () {
 			var menuItems = [];
 
 			if (
@@ -101,14 +102,13 @@ export default {
 				window.POCKETNETINSTANCE.mobile.supportimagegallery()
 			) {
 				menuItems.push({
-					click: "cameraHandlerCustom",
-					title: this.$i18n.t("button.takePhotoOrVideo"),
+					action: this.cameraHandlerCustom,
+					text: "button.takePhotoOrVideo",
 					icon: "fas fa-camera",
 				});
 			} else {
 				menuItems.push({
-					click: "cameraHandler",
-					title: this.$i18n.t("button.takePhotoOrVideo"),
+					text: "button.takePhotoOrVideo",
 					icon: "fas fa-camera",
 
 					upload: {
@@ -120,13 +120,17 @@ export default {
 								type: "fit",
 							},
 						},
+
+						start : this.uploadStart,
+						error : this.uploadError,
+						uploaded : this.uploadUploaded,
+						uploadedAll : this.uploadUploadedAll
 					},
 				});
 			}
 
 			menuItems.push({
-				click: "fileHandler",
-				title: this.$i18n.t("button.sendFile"),
+				text: "button.sendFile",
 				icon: "fas fa-sticky-note",
 
 				upload: {
@@ -138,19 +142,25 @@ export default {
 							type: "fit",
 						},
 					},
+
+					start : this.uploadStart,
+					error : this.uploadError,
+					uploaded : this.uploadUploaded,
+					uploadedAll : this.uploadUploadedAll
 				},
 			});
 
 			if (this.transaction && !this.pkoindisabled) {
 				menuItems.unshift({
-					click: "sendtransactionWrapper",
-					title: this.$i18n.t("button.sendCoins"),
+					action: this.sendtransactionWrapper,
+					text: "button.sendCoins",
 					icon: "fas fa-wallet",
 				});
 			}
 
 			return menuItems;
 		},
+
 		...mapState(["chats"]),
 
 		userlist: function () {
@@ -160,7 +170,7 @@ export default {
 		},
 
 		transaction: function () {
-			return f.deep(window, "POCKETNETINSTANCE.platform.ui.wallet.send");
+			return f.deep(window, "POCKETNETINSTANCE.platform.ui.wallet.donate");
 		},
 
 		uusers: function () {
@@ -310,8 +320,6 @@ export default {
 		cameraHandlerCustom: function () {
 			var result = [];
 
-			this.$refs.dropdownMenu.hidePopup();
-
 			window.POCKETNETINSTANCE.platform.ui.uploadImage({
 				multiple: true,
 
@@ -344,7 +352,6 @@ export default {
 		},
 
 		sendtransactionWrapper: function () {
-			this.menuIsVisible = false;
 
 			var users = _.filter(
 				_.map(this.joined, (j) => {
@@ -385,7 +392,6 @@ export default {
 				this.sendtransaction(users[0]);
 			}
 
-			this.$refs.dropdownMenu.hidePopup();
 		},
 
 		sendtransaction: function (user) {
@@ -395,7 +401,7 @@ export default {
 
 			api({
 				roomid: this.chat.roomId,
-				address: user.source.address,
+				receiver: user.source.address,
 			});
 
 			/*.then(({txid, from}) => {
@@ -553,6 +559,15 @@ export default {
 			return text;
 		},
 
+		clbkEncrypt(){
+			this.$emit('encrypt')
+		},
+
+		clbkEncrypted(){
+			this.$emit('encrypted')
+
+		},
+
 		send(text) {
 			if (!this.chat) {
 				this.newchat().catch((e) => {});
@@ -585,7 +600,10 @@ export default {
 							this.relationEvent.event
 						) {
 							return this.core.mtrx
-								.textEvent(this.chat, text)
+								.textEvent(this.chat, text, {
+									encryptEvent : this.clbkEncrypt,
+									encryptedEvent : this.clbkEncrypted
+								})
 								.then((r) => {
 									r["m.relates_to"] = {
 										rel_type: "m.replace",
@@ -627,6 +645,9 @@ export default {
 
 					return this.core.mtrx.sendtext(this.chat, text, {
 						relation: this.relationEvent,
+					}, {
+						encryptEvent : this.clbkEncrypt,
+						encryptedEvent : this.clbkEncrypted
 					});
 				})
 				.catch((e) => {
@@ -808,16 +829,6 @@ export default {
 				this.core.mtrx.client.sendTyping(this.chat.roomId, true, 100);
 		},
 
-		menuItemClick(item, rowObject) {
-			this[item.click](rowObject);
-		},
-
-		menuItemLoadedHandler: function (value) {
-			this.menuIsVisible = value;
-
-			return this.menuIsVisible;
-		},
-
 		uploadStart(item, files) {},
 
 		uploadError(item, error) {
@@ -831,7 +842,6 @@ export default {
 		},
 		uploadSizeError(value) {
 			if (!value) {
-				this.$refs.dropdownMenu.hidePopup();
 			}
 		},
 		uploadUploaded(item, data) {
@@ -868,7 +878,6 @@ export default {
 		},
 		uploadUploadedAll(item, result) {
 			this.$store.state.loading = false;
-			this.$refs.dropdownMenu.hidePopup();
 		},
 
 		catchPermissonsError(err) {
@@ -1103,7 +1112,7 @@ export default {
 			)
 				return;
 
-			if (window.cordova) {
+			if (window.cordova && !f.isios()) {
 				return this.initRecordingCordova();
 			}
 
@@ -1280,7 +1289,6 @@ export default {
 		},
 
 		stopRecording({ cancel, sendnow }) {
-			console.log("STOP RECORDING", this.isRecording);
 
 			this.$store.commit("SET_VOICERECORDING", false);
 
@@ -1302,7 +1310,12 @@ export default {
 				if (cancel) {
 					//this.mediaRecorder.ondataavailable = () => { }
 				} else {
+					var hasdata = false
 					this.mediaRecorder.addEventListener("dataavailable", (event) => {
+						if(hasdata) return
+
+						hasdata = true
+
 						this.createVoiceMessage(event, sendnow);
 					}); //ondataavailable = (event) => this.createVoiceMessage(event, sendnow)
 				}
@@ -1409,6 +1422,12 @@ export default {
 
 		setOpacity(opacity) {
 			this.cancelOpacity = opacity;
+		},
+
+		showinputmenu : function(){
+			this.core.menu({
+				items: this.menu,
+			});
 		},
 	},
 };

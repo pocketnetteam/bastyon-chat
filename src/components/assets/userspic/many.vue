@@ -15,12 +15,11 @@
 			</div>
 		</div>
 
-		<div class="swiperWrapper" v-else>
-			<div class="swiperWrapperFlex noswipepnt">
-				<div class="imageSwiper" v-for="(user, i) in userinfo">
-					<userpic :status="status[user.id]" :userinfo="user" />
-				</div>
+		<div class="manyavatars" v-else>
+			<div class="useravatar" v-for="(user, i) in userinfo">
+				<userpic :status="status[user.id]" :userinfo="user" />
 			</div>
+			
 		</div>
 	</div>
 </template>
@@ -42,112 +41,122 @@ export default {
 };
 </script>
 <style lang="sass" scoped>
+.manyavatars
+	display: flex
+	justify-content: center
+	align-items: center
+	flex-wrap: wrap
+	.useravatar
+		margin: 0.25 * $r
+		width: 44px
+		height: 44px
+
 .swiperWrapper
-  padding-bottom: 0
-  display: flex
-  overflow-x: scroll
-  scrollbar-width: none
-  &::-webkit-scrollbar
-    width: 0!important
-    height: 0!important
+	padding-bottom: 0
+	display: flex
+	overflow-x: scroll
+	scrollbar-width: none
+	&::-webkit-scrollbar
+		width: 0!important
+		height: 0!important
 
 .swiperWrapperFlex
-  display: flex
-  flex-wrap: nowrap
-  height: 100%
-  align-items: center
-  .imageSwiper
-    width: 33px
-    min-width: 33px
+	display: flex
+	flex-wrap: nowrap
+	height: 100%
+	align-items: center
+	.imageSwiper
+		width: 33px
+		min-width: 33px
 .aboutRoomAvatar
-  font-size: 0.5em
+	font-size: 0.5em
 
 .userwrapper
-  border-radius: 50%
+	border-radius: 50%
 
 .userinfopicwrapper
-  padding-bottom: 100%
-  position: relative
-  background: none
-  margin: 0 auto
-  border-radius: 50%
-  overflow: hidden
-  .userwrapper
-    width: 50%
+	padding-bottom: 100%
+	position: relative
+	background: none
+	margin: 0 auto
+	border-radius: 50%
+	overflow: hidden
+	.userwrapper
+		width: 50%
 
 .threeAvatars
-  .userwrapper
+	.userwrapper
 
-    &:nth-child(1)
-      position: absolute
-      left: 50%
-      top: 0
-      transform: translate(-50%, 6.5%)
+		&:nth-child(1)
+			position: absolute
+			left: 50%
+			top: 0
+			transform: translate(-50%, 6.5%)
 
-    &:nth-child(2)
-      position: absolute
-      right: 0
-      bottom: 0
-      transform: translate(0, -6.5%)
+		&:nth-child(2)
+			position: absolute
+			right: 0
+			bottom: 0
+			transform: translate(0, -6.5%)
 
-    &:nth-child(3)
-      position: absolute
-      left: 0
-      bottom: 0
-      transform: translate(0, -6.5%)
+		&:nth-child(3)
+			position: absolute
+			left: 0
+			bottom: 0
+			transform: translate(0, -6.5%)
 
 .twoAvatars
 
-  .userwrapper
-    &:first-child
-      position: absolute
-      top: 0
-      left: 0
-      transform: translate(6.5%, 6.5%)
-    &:last-child
-      position: absolute
-      right: 0
-      bottom: 0
-      transform: translate(-6.5%, -6.5%)
+	.userwrapper
+		&:first-child
+			position: absolute
+			top: 0
+			left: 0
+			transform: translate(6.5%, 6.5%)
+		&:last-child
+			position: absolute
+			right: 0
+			bottom: 0
+			transform: translate(-6.5%, -6.5%)
 
 .fourAvatars
 
-  .userwrapper
+	.userwrapper
 
-    &:nth-child(1)
-      position: absolute
-      top: 0
-      left: 0
+		&:nth-child(1)
+			position: absolute
+			top: 0
+			left: 0
 
-    &:nth-child(2)
-      position: absolute
-      right: 0
-      top: 0
+		&:nth-child(2)
+			position: absolute
+			right: 0
+			top: 0
 
-    &:nth-child(3)
-      position: absolute
-      left: 0
-      bottom: 0
+		&:nth-child(3)
+			position: absolute
+			left: 0
+			bottom: 0
 
-    &:nth-child(4)
-      position: absolute
-      right: 0
-      bottom: 0
+		&:nth-child(4)
+			position: absolute
+			right: 0
+			bottom: 0
 
 .fourMore
-  background: none
-  margin: 0 auto
+	background: none
+	margin: 0 auto
 
 .imageSwiper
-  margin: 0 auto
+	margin: 0 auto
 
-  img
-    display: block
-    border-radius: 50%
-    width: 100%
-    height: 100%
-    object-fit: cover
+	img
+		display: block
+		border-radius: 50%
+		width: 100%
+		height: 100%
+		object-fit: cover
 
 .invited
-  opacity: .5
+	opacity: .5
 </style>

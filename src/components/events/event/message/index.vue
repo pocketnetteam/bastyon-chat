@@ -1,22 +1,10 @@
 <template>
 	<div class="eventsMessage">
-		<div
-			class="reference referenceTop"
-			:class="{ my }"
-			v-if="referenceshowed && reference && !preview && !fromreference"
-		>
-			<eventsEvent
-				:event="reference"
-				:chat="chat"
-				:preview="false"
-				:fromreference="true"
-			/>
-		</div>
+	
 		
 		<div
 			v-touch:touchhold="dropDownMenuShow"
 			:class="{
-				referenceshowed,
 				showmeta: showmeta,
 				my,
 				messageRow: 'messageRow',
@@ -44,8 +32,8 @@
 					@click="showwhenburn"
 				></i>
 
-				<span>
-					{{ format_date(origin._localTimestamp) || "Now" }}
+				<span v-else>
+					{{ format_date(origin.localTimestamp) || "Now" }}
 				</span>
 			</div>
 
@@ -63,9 +51,7 @@
 					<i v-if="selectedMessage" class="far fa-check-circle"></i>
 					<i v-else class="far fa-circle"></i>
 				</div>
-				<div class="mnwrapper" v-else>
-					<i @click="setmenu" class="fas fa-ellipsis-h"></i>
-				</div>
+					<i @click="setmenu" v-else class="fas fa-ellipsis-h setmenu"></i>
 			</div>
 
 			<div
@@ -83,15 +69,13 @@
 					v-if="reference && !preview && !fromreference"
 				>
 					<eventsEvent
-						v-if="!referenceshowed"
 						:event="reference"
 						:chat="chat"
 						:preview="true"
 					/>
 
 					<div class="referenceCaption">
-						<span v-if="!referenceshowed"><i class="fas fa-share"></i></span>
-						<button class="button ghost small" v-else>Hide</button>
+						<span><i class="fas fa-share"></i></span>
 					</div>
 				</div>
 
@@ -127,15 +111,13 @@
 					v-if="reference && !preview && !fromreference"
 				>
 					<eventsEvent
-						v-if="!referenceshowed"
 						:event="reference"
 						:chat="chat"
 						:preview="true"
 					/>
 
 					<div class="referenceCaption">
-						<span v-if="!referenceshowed"><i class="fas fa-share"></i></span>
-						<button class="button ghost small" v-else>Hide</button>
+						<span><i class="fas fa-share"></i></span>
 					</div>
 				</div>
 
@@ -143,7 +125,7 @@
 					v-if="audioUrl"
 					:audioBuffer="audioUrl"
 					:decryptedInfo="decryptedInfo"
-					:id="event._localTimestamp || Date.now()"
+					:id="event.localTimestamp || Date.now()"
 				/>
 			</div>
 
@@ -180,22 +162,20 @@
 					<div class="edited" v-if="edited">
 						<i class="fas fa-pen"></i> {{ $t("caption.edited") }}
 					</div>
-					<div class="msgtext">
-						<IncomingMessage
-							:message="textWithoutLinks"
-							:marked-text="markedText"
-						></IncomingMessage>
-					</div>
+					<IncomingMessage
+						:message="textWithoutLinks"
+						:marked-text="markedText"
+					></IncomingMessage>
 					<div
 						class="sendername"
 						v-if="(!content.from && !my && showmeta) || (showmyicon && !my)"
 					>
-						<span
-							><b>{{ userinfo.name }}</b></span
+						<span class="b"
+							>{{ userinfo.name }}</span
 						>
 						&middot;
 						<span>
-							{{ format_date(origin._localTimestamp) || "Now" }}
+							{{ format_date(origin.localTimestamp) || "Now" }}
 						</span>
 					</div>
 					<div
@@ -204,15 +184,13 @@
 						v-if="reference && !preview && !fromreference"
 					>
 						<eventsEvent
-							v-if="!referenceshowed"
 							:event="reference"
 							:chat="chat"
 							:preview="true"
 						/>
 
 						<div class="referenceCaption">
-							<span v-if="!referenceshowed"><i class="fas fa-share"></i></span>
-							<button class="button ghost small" v-else>Hide</button>
+							<span><i class="fas fa-share"></i></span>
 						</div>
 					</div>
 
@@ -242,15 +220,16 @@
 			</div>
 
 			<div class="linkPreview" v-if="urlpreview">
-				<div class="pr" v-if="!sending">
+				<template v-if="!sending">
 					<url
 						:url="urlpreview"
 						:urllink="urlpreview"
 						:preview="true"
 						@updatedSize="updatedSize"
+						@error="urlerror"
 						v-if="!origin.localRedactionEvent() && !origin.getRedactionEvent()"
 					/>
-				</div>
+				</template>
 				<div v-else>
 					<linepreloader />
 				</div>
@@ -283,6 +262,7 @@
 			/>
 		</div>
 
+
 		<div
 			class="statusWrapper"
 			v-if="my && readed && !preview && !fromreference"
@@ -290,9 +270,9 @@
 			<div class="my">
 				<i class="fas fa-check-double"></i>
 				<span>{{ $t("caption.messageRead") }}</span>
-				<!--<date v-if="readed.data" :date="readed.data.ts"/>-->
 			</div>
 		</div>
+
 	</div>
 </template>
 

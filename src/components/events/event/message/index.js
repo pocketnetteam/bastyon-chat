@@ -20,7 +20,7 @@ export default {
 		event: Object,
 		preview: Boolean,
 		userinfo: Object,
-		readed: Object,
+		readed: Boolean,
 		downloaded: Boolean,
 		baseImg: {
 			type: String,
@@ -37,7 +37,6 @@ export default {
 		error: String,
 		withImage: Boolean,
 		reference: Object,
-		last: Boolean,
 		showmyicontrue: false,
 		fromreference: Boolean,
 		multiSelect: {
@@ -48,7 +47,6 @@ export default {
 			default: [],
 			type: Array,
 		},
-		isRemoveSelectedMessages: false,
 		audioBuffer: null,
 	},
 	directives: {
@@ -59,6 +57,7 @@ export default {
 		return {
 			referenceshowed: false,
 			markedText: null,
+			hasurlerror : null
 		};
 	},
 	inject: ["matches", "markText"],
@@ -75,30 +74,7 @@ export default {
 		Request,
 	},
 	watch: {
-		isRemoveSelectedMessages: {
-			immediate: true,
-			handler: function () {
-				if (this.isRemoveSelectedMessages) {
-					for (let i = 0; i < this.selectedMessages.length; i++) {
-						if (
-							this.selectedMessages[i].message_id === this.origin.event.event_id
-						) {
-							this.$emit("remove");
-
-							return this.core.mtrx.client.redactEvent(
-								this.chat.roomId,
-								this.origin.event.event_id,
-								null,
-								{
-									reason: "messagedeleting",
-								}
-							);
-						}
-					}
-					this.$emit("messagesIsDeleted", true);
-				}
-			},
-		},
+		
 		readyToRender: {
 			immediate: true,
 			handler: function () {
@@ -127,7 +103,7 @@ export default {
 			return "";
 		},
 		willburn: function () {
-			var d = moment(this.origin._localTimestamp).add(
+			var d = moment(this.origin.localTimestamp).add(
 				this.core.options.burn.w,
 				this.core.options.burn.v
 			);
@@ -175,13 +151,13 @@ export default {
 
 			var t = 10 * 60000;
 
-			if (moment().diff(this.origin._localTimestamp, "days") != 0) {
+			if (moment().diff(this.origin.localTimestamp, "days") != 0) {
 				t = 60 * 1000 * 60 * 24;
 			}
 
 			if (
 				prevuser != this.userinfo.id ||
-				this.prevevent._localTimestamp + t < this.origin._localTimestamp
+				this.prevevent.localTimestamp + t < this.origin.localTimestamp
 			) {
 				return true;
 			}
@@ -238,6 +214,8 @@ export default {
 
 		textWithoutLinks: function () {
 			var trimmed = this.$f.trim(this.body);
+
+			if(this.hasurlerror) return trimmed
 
 			if (
 				!this.urlpreview ||
@@ -297,6 +275,81 @@ export default {
 				}
 			}
 		},
+
+		menu: function() {
+
+			var type = f.deep(this.origin, "event.type") || '';
+
+			var menu = [];
+
+			if (type.indexOf('m.call') == -1) {
+
+				menu.push({
+					action: this.menureply,
+					text: "button.reply",
+					icon: "fas fa-reply",
+				})
+
+				menu.push({
+					action: this.menushowMultiSelect,
+					text: "button.select",
+					icon: "fas fa-check-circle",
+				})
+
+			}
+
+
+
+			if (type.indexOf('m.call') == -1) {
+				menu.push({
+					action: this.menushare,
+					text: "button.share",
+					icon: "fas fa-share-alt",
+				});
+			}
+
+			if (this.my) {
+				menu.push({
+					action: this.menudelete,
+					text: "button.delete",
+					icon: "far fa-trash-alt",
+				});
+			}
+
+
+
+			if (type == "m.room.message") {
+				menu.unshift({
+					action: this.menucopy,
+					text: "button.copy",
+					icon: "far fa-copy",
+				});
+
+				if (this.my && this.canediting)
+					menu.unshift({
+						action: this.menuedit,
+						text: "button.edit",
+						icon: "far fa-edit",
+					});
+			}
+
+			return menu;
+
+            return [
+                {
+                    text: 'labels.scenarioManager',
+                    icon: 'fas fa-tasks',
+                    action: this.scenarioManager
+                },
+            
+                {
+                    text: 'labels.scoreConverter',
+                    icon: 'fas fa-star',
+                    action: this.scoreConverter
+                },
+            
+            ]
+        },
 
 		menuItems: function () {
 
@@ -438,8 +491,7 @@ export default {
 
 		setmenu: function () {
 			this.core.menu({
-				items: this.menuItems,
-				handler: this.menuItemClickHandler,
+				items: this.menu,
 				item: {},
 			});
 		},
@@ -621,7 +673,10 @@ export default {
 		},
 
 		showreference: function () {
-			this.referenceshowed = !this.referenceshowed;
+
+			this.$emit('toreference', this.reference)
+
+			//this.referenceshowed = !this.referenceshowed;
 		},
 
 		selectMessage: function () {
@@ -653,6 +708,12 @@ export default {
 				parent.parentNode.scrollTop = evtWrp.offsetTop - parent.offsetTop;
 		},
 
+		urlerror : function(e){
+			this.hasurlerror = e
+
+			console.log("Errrrrrrrrrrrrrrrrrrrrrrrrrr", e)
+		},
+
 		markMatches: function (content) {
 			/*Highlight matched text*/
 			if (!this.matches || !this.markText) return;
@@ -662,7 +723,7 @@ export default {
 			/*Add highlighted parts to search*/
 			this.$nextTick(() => {
 				const localMsg =
-					this.origin._localTimestamp !== this.origin._localTimestamp,
+						this.origin.localTimestamp !== this.origin.localTimestamp,
 					matches = Array.from(this.$el.querySelectorAll("mark"));
 
 				if (localMsg) matches.reverse();

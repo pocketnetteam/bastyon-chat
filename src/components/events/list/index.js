@@ -9,9 +9,9 @@ export default {
 		chat: Object,
 		loading: Boolean,
 		scrollType: "",
+		searchresults : null,
 		error: [Object, Error, String],
 		selectedMessages: [],
-		isRemoveSelectedMessages: false,
 	},
 	inject: ["matches"],
 	components: {},
@@ -127,6 +127,16 @@ export default {
 	this.countshow = 1;*/
 	},
 	methods: {
+		eventinsearchresult : function(event){
+
+			if(this.searchresults){
+				return _.find(this.searchresults, (e) => {
+					return e.event.event_id == event.event.event_id
+				})
+			}
+
+			return false
+		},
 		scrollToReadMessages: function () {
 			/*if(this.notificationCount > 0) {
 		const elem = document.getElementById("eventWrapper_" + (this.notificationCount + 1));
@@ -235,6 +245,20 @@ export default {
 			}
 		},
 
+		scrollToEvent(e) {
+			if (this.$refs[e.event.event_id]){
+				var r_element = this.$refs[e.event.event_id][0]
+				this.scrollToNew(r_element.offsetTop - this.lscroll.clientHeight / 2 + r_element.clientHeight / 2)
+				
+				r_element.classList.add('attention')
+
+				setTimeout(() => {
+					r_element.classList.remove('attention')
+				}, 1000)
+			}
+			//this.scrollToNew(120);
+		},
+
 		menuIsVisibleHandler: function (isVisible) {
 			this.menuOpen = isVisible;
 			this.$emit("menuIsVisible", isVisible);
@@ -270,8 +294,9 @@ export default {
 			}
 		},
 
-		messagesIsDeleted(state) {
-			this.$emit("messagesIsDeleted", state);
+		toreference(reference) {
+
+			this.$emit("toreference", reference);
 		},
 	},
 };

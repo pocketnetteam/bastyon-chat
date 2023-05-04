@@ -1,21 +1,30 @@
 .call
 	font-size: 0.8em
+	outline: none
+	position: relative
+	-webkit-tap-highlight-color: transparent
+
 	&.disabled
 		color: srgb(--neutral-grad-1)
 		cursor: not-allowed
+		&:after
+			display: none
 	&.wait
 		color: srgb(--color-star-yellow)
 		cursor: not-allowed
+		&:after
+			display: none
 
 .nameWrapper
 	display: flex
 	align-items: center
 	justify-content: center
 .roomMuted
-	margin-left: 3px
-
+	margin-left: 0.5 * $r
+	color: srgb(--neutral-grad-4)
 	i
-		font-size: 0.7em
+		font-size: 0.8em
+
 .editButton
 	display: flex
 	justify-content: center
@@ -88,6 +97,22 @@
 		text-align: center
 		height: 29px
 		margin-top: 1em
+
+#simpleSearch
+	.matches
+		display: flex
+		align-items: center
+		height: 100%
+		span,
+		i
+			font-size: 0.8em
+			padding : $r
+
+		i
+			cursor: pointer
+
+			&:hover
+				color : srgb(--color-txt-ac)
 
 .encrypted
 	z-index: 2

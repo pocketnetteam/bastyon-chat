@@ -120,7 +120,9 @@
 		"hasInvitedToJoin": "已邀请您加入口袋网",
 		"contactsempty": "您还没有联系人，请在搜索中找到他们",
 		"sendmessage": "Send message",
-		"messages" : "Messages"
+		"messages" : "Messages",
+		"you" : "You",
+		"sentfile" : "sent file:"
 	},
 
 	"input": {

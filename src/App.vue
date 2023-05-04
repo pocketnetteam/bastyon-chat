@@ -139,7 +139,7 @@ import store from "@/vuex/store";
 import router from "@/router/router";
 import modal from "@/components/assets/modal/index.vue";
 import pmenu from "@/components/assets/pmenu/index.vue";
-
+import swipable from "@/components/assets/swipable/index.vue"; 
 import VuePageTransition from "@/editedplugins/vue-page-transition/src/index.js";
 import TextareaAutosize from "vue-textarea-autosize";
 import VueI18n from "vue-i18n";
@@ -152,10 +152,18 @@ import VuejsDialog from "vuejs-dialog";
 Vue.use(VuejsDialog);
 
 import ToggleButton from "vue-js-toggle-button";
-
 import eventsEvent from "@/components/events/event/index.vue";
+import list from "@/components/assets/list/index.vue";
+import listmenu from "@/components/assets/listmenu/index.vue";
+import listmenuwithupload from "@/components/assets/listmenuwithupload/index.vue";
+
+
 
 Vue.component("eventsEvent", eventsEvent);
+Vue.component("listmenu", listmenu);
+Vue.component("listmenuwithupload", listmenuwithupload);
+Vue.component("list", list);
+
 ////////
 
 Vue.use(Message);
@@ -164,7 +172,6 @@ Vue.use(VuePageTransition);
 Vue.use(VueI18n);
 Vue.use(Vue2TouchEvents);
 Vue.use(ToggleButton);
-
 ////////
 
 import "vuejs-dialog/dist/vuejs-dialog.min.css";
@@ -199,12 +206,12 @@ import simpleSearch from "@/components/assets/simpleSearch/index.vue";
 import linepreloader from "@/components/assets/linepreloader/index.vue";
 
 import chats from "@/views/chats.vue";
-
+import vuescroll from 'vue-scroll'
 ////////
-
+Vue.use(vuescroll)
 Vue.component("pmenu", pmenu);
 Vue.component("modal", modal);
-
+Vue.component("swipable", swipable);
 Vue.component("preloader", preloader);
 Vue.component("date", date);
 Vue.component("userpic", userpic);
@@ -355,6 +362,11 @@ export default {
 			type: Boolean,
 			default: false,
 		},
+
+    cssrules: {
+      type: Array,
+      default: []
+    }
 	},
 
 	data: function () {
@@ -450,7 +462,7 @@ export default {
 
 		unselect: function () {
 			return this.$store.state.voicerecording;
-		},
+		}
 	},
 
 	methods: {
@@ -477,19 +489,7 @@ export default {
 		iteraction: function () {
 			this.$store.commit("setiteraction", true);
 		},
-		importInitialScripts() {
-			/*if (scriptsadded) return
-        scriptsadded = true
 
-      let src = document.createElement('script')
-      src.setAttribute('src', './js/vendor/emojionearea.js')
-      document.head.appendChild(src);
-
-      let link = document.createElement('link')
-      link.setAttribute('src', './js/vendor/emojionearea.css')
-      link.setAttribute('rel', 'stylesheet')
-      document.head.appendChild(link);*/
-		},
 		// Set a new pusher (if possible) using the token passed as parameter
 		setPusher(fcmtoken) {
 			// Try to get a saved token
@@ -614,13 +614,11 @@ export default {
 		this.$store.commit("setPocketnet", this.pocketnet);
 		this.$store.commit("setMobile", this.mobile);
 		this.$store.commit("setVoiceMessagesEnabled", this.recording);
-		this.$store.commit("setCallsEnabled", this.iscallsenabled);
 		this.$store.commit("pkoindisabled", this.pkoindisabled);
 		this.$store.commit("clearall");
 
 		this.$store.commit("ls");
 
-		this.importInitialScripts();
 
 		this.generateTeamroomMessages();
 		setTimeout(() => {
@@ -908,7 +906,7 @@ export default {
 					setTimeout(() => {
 						if (
 							this.$route.name !== "chats" &&
-							/*this.$route.name !== 'chat' &&*/
+							this.$route.name !== 'chat' &&
 							/*this.$route.name !== 'chatInfo' &&*/
 							this.$route.name !== "publicPreview" &&
 							this.$route.name !== "chatSettings" &&
@@ -928,6 +926,22 @@ export default {
 			if (this.$store.state.autohide || !this.$store.state.iteraction)
 				this.$store.commit("active", false);
 		}, 3000);
+
+    (() => {
+      try {
+        return JSON.parse(this.cssrules || "[]");
+      } catch {
+        return [];
+      }
+    })().forEach(rule => {
+      this.$nextTick(() => {
+        const link = document.createElement("link");
+              link.setAttribute("rel", "stylesheet");
+              link.setAttribute("href", rule);
+
+        this.$root.$el.append(link);
+      });
+    });
 
 		window.matrixchat = core;
 	},
@@ -950,7 +964,6 @@ if (module.hot) {
 <style src="./editedplugins/vue-m-message/dist/index.css"></style>
 <style lang="sass" src="./index.sass"></style>
 <style>
-@import "https://use.fontawesome.com/releases/v5.2.0/css/all.css";
 @import "@/../../public/css/main.css";
 @import "@/../../public/css/normalize.css";
 @import "@/../../public/css/emoji-mart.css";

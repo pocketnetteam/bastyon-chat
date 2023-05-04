@@ -6,20 +6,31 @@
 			v-show="!hideHeader || !ios"
 			:u="u"
 			:chat="chat"
+			:search="search"
+			:focusedevent="focusedevent"
+			:process="processid"
+			:searchresults="processresult"
+			@searching="searching"
 			@addMember="addMemberModal"
+			@tosearchevent="tosearchevent"
 		/>
 
 		<maincontent>
 			<template v-slot:content>
 				<chat
+					ref="chat"
 					@sending="sending"
 					@newchat="newchat"
 					:u="u"
 					:chat="chat"
+					:toevent="toevent"
 					:key="k"
+					:search="search"
+					:searchresults="processresult"
 					@removeBrokenRoom="creatorLeft"
 					@getEvents="eventsRoom"
 					@menuIsVisible="menuIsVisibleHandler"
+					@toeventscrolled="toeventscrolled"
 				/>
 			</template>
 		</maincontent>
@@ -86,6 +97,12 @@ export default {
 			openInviteModal: false,
 			brokenRoom: false,
 			hideHeader: false,
+			hastoeventscrolled : false,
+			hasprocesscleared : false,
+			searchchanged : undefined,
+			process : null,
+			processresult : null,
+			focusedevent : null
 		};
 	},
 
@@ -102,6 +119,19 @@ export default {
 		k() {
 			return this.u + this.$route.query.id;
 		},
+
+		processid(){
+			return this.hasprocesscleared ? null : this.$route.query.process;
+		},
+
+		search(){
+			return (typeof this.searchchanged == 'undefined' ? this.$route.query.search : this.searchchanged) || "";
+		},
+
+		toevent(){
+			return this.hastoeventscrolled ? null : this.$route.query.toevent;
+		},
+
 		ios() {
 			return f.isios();
 		},
@@ -118,8 +148,104 @@ export default {
 			if (!this.leaveIfBroken()) {
 			}
 		}, 2000);
+
+		//setTimeout(() => {
+			if(this.toevent){
+
+			}
+		//}, 300)
+	},
+	beforeDestroy : function(){
+		if(this.process) this.process.stop()
+	},
+	watch : {
+		search : {
+			immediate : true,
+			handler : function(){
+				pretry(() => {
+					return this.chat;
+				}).then(() => {
+					this.searchingProcess()
+				})
+				
+			}
+		},
 	},
 	methods: {
+		tosearchevent(event){
+			this.focusedevent = event
+
+			this.$refs['chat'].scrollToEvent(event)
+		},
+		searchingProcess(){
+			if (this.search.length > 1 && this.chat){
+
+				this.processresult = null
+
+				if (this.process){
+					this.process.updateText(this.search)
+					return 
+				}
+
+
+				this.process = this.core.mtrx.searchEngine.execute(this.search, [this.chat], ({results}) => {
+
+					return false
+
+				}, {
+					chat : (result) => {
+						this.processresult = result.results[this.chat.roomId] || null
+
+						if(!this.processresult) return
+
+						if(!this.focusedevent && this.processresult[0]){
+
+							if (this.toevent){
+
+								var e = _.find(this.processresult, (e) => {
+									return e.event.event_id == this.toevent
+								})
+
+								if (e){
+									this.toeventscrolled()
+									this.tosearchevent(e)
+								}
+
+								
+							}
+							else{
+								this.tosearchevent(this.processresult[0])
+							}
+
+							
+						}
+					}
+				})
+
+				this.process.execute().catch(e => {
+					console.error(e)
+				})
+
+			}
+
+			else{
+				if(this.process) this.process.stop()
+
+				this.processresult = null
+				this.focusedevent = null
+
+				this.processcleared()
+			}
+		},
+		searching(txt){
+			this.searchchanged = txt
+		},
+		processcleared(){
+			this.hasprocesscleared = true
+		},
+		toeventscrolled(){
+			this.hastoeventscrolled = true
+		},
 		creatorLeft(val) {
 			this.brokenRoom = val;
 		},

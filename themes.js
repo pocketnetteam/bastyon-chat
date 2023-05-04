@@ -114,7 +114,6 @@ var thm = function () {
 						"theme_" + theme + ".sass"
 					);
 
-					console.log("filename", filename);
 
 					var options = {};
 

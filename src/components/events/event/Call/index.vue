@@ -58,7 +58,7 @@ export default {
 .call {
 	display: flex;
 	align-items: center;
-	width: 180px;
+	width: 200px;
 	height: 6 * $r;
 	padding: 0.5 * $r;
 	border-radius: 2 * $r;
@@ -92,7 +92,6 @@ export default {
 
 		.call {
 			&-icon {
-				background: rgba(255,255, 255, 0.2);
 				color: srgb(--text-on-bg-ac-color);
 			}
 		}
