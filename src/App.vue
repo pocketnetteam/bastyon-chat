@@ -586,7 +586,7 @@ export default {
 							<span>${this.$i18n.t('teamMessages.2-message2')}</span>
 						`,
 						previewText: this.$i18n.t('teamMessages.2-title')
-					}*/
+					}
 			]);
 		},
 
