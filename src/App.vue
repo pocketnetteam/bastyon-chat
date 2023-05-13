@@ -314,10 +314,10 @@ export default {
 			isChatEncrypted: this.isChatEncrypted,
 			matches: this.matches,
 			markText: this.markText,
-      streamMode: this.streamMode,
-      menuState: {
-        get: () => this.menuState,
-        set: (val) => this.$set(this, "menuState", val)
+			streamMode: this.streamMode,
+			menuState: {
+				get: () => this.menuState,
+				set: (val) => this.$set(this, "menuState", val)
 			},
 			adminActions: {},
 			powerLevel: {}
@@ -370,10 +370,10 @@ export default {
 			default: false,
 		},
 
-    cssrules: {
-      type: String,
-      default: []
-    }
+		cssrules: {
+			type: String,
+			default: []
+		}
 	},
 
 	data: function () {
@@ -395,7 +395,7 @@ export default {
 				clear: this.clearMatches,
 			},
 
-      menuState: false
+			menuState: false
 		};
 	},
 
@@ -429,9 +429,9 @@ export default {
 	},
 
 	computed: {
-    streamMode: function () {
-      return this.style === 'stream';
-    },
+		streamMode: function () {
+			return this.style === 'stream';
+		},
 
 		statetheme: function () {
 			return this.$store.state.theme;
@@ -860,21 +860,21 @@ export default {
 			window,
 			"window.POCKETNETINSTANCE.options.listofproxies"
 		) || [
-      /*{
-        host: "test.pocketnet.app",
-        port: 8899,
-        wss: 809
-      },
-      /*{
-          host : 'pocketnet.app',
-          port : 8899,
-          wss : 8099
-      },*/
-      {
-          host : '1.pocketnet.app',
-          port : 8899,
-          wss : 8099
-      }
+			/*{
+				host: "test.pocketnet.app",
+				port: 8899,
+				wss: 809
+			},
+			/*{
+					host : 'pocketnet.app',
+					port : 8899,
+					wss : 8099
+			},*/
+			{
+					host : '1.pocketnet.app',
+					port : 8899,
+					wss : 8099
+			}
 		];
 
 		/*
@@ -954,21 +954,21 @@ export default {
 				this.$store.commit("active", false);
 		}, 3000);
 
-    (() => {
-      try {
-        return JSON.parse(this.cssrules || "[]");
-      } catch {
+		(() => {
+			try {
+				return JSON.parse(this.cssrules || "[]");
+			} catch {
 				return ["https://use.fontawesome.com/releases/v5.2.0/css/all.css"];
-      }
-    })().forEach(rule => {
-      this.$nextTick(() => {
-        const link = document.createElement("link");
-              link.setAttribute("rel", "stylesheet");
-              link.setAttribute("href", rule);
+			}
+		})().forEach(rule => {
+			this.$nextTick(() => {
+				const link = document.createElement("link");
+							link.setAttribute("rel", "stylesheet");
+							link.setAttribute("href", rule);
 
-        this.$root.$el.append(link);
-      });
-    });
+				this.$root.$el.append(link);
+			});
+		});
 
 		window.matrixchat = core;
 	},
