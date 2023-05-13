@@ -32,7 +32,10 @@ export default {
 			menuState: {
 				get: () => this.menuState,
 				set: (val) => this.$set(this, "menuState", val)
-			}
+			},
+
+			matches: {},
+			markText: () => {}
 		}
 	},
 
