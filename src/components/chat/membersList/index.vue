@@ -4,7 +4,7 @@
       <simpleSearch :value="search" @search="searching"/>
     </div>
 
-		<template v-if="members.length">
+		<template v-if="allMembers.length">
       <section
         v-for="(members, title) in lists"
         :key="members"
