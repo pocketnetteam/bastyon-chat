@@ -557,6 +557,7 @@ export default {
 	// min-height: 26px
 	overflow-y: auto
 	resize: none
+	line-height: inherit
 
 	&::-webkit-scrollbar
 		width: 0 !important
