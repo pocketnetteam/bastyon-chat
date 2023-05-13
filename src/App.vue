@@ -958,7 +958,7 @@ export default {
       try {
         return JSON.parse(this.cssrules || "[]");
       } catch {
-        return [];
+				return ["https://use.fontawesome.com/releases/v5.2.0/css/all.css"];
       }
     })().forEach(rule => {
       this.$nextTick(() => {
