@@ -18,20 +18,6 @@
 					</div>
 				</div>
 
-				<div
-					class="left"
-					:class="{ 'donation': streamMode }"
-					v-if="!streamMode"
-				>
-					<button
-						class="iconbutton"
-						:disabled="this.donate"
-						@click="sendtransactionWrapper"
-					>
-						<i class="icon donate">Donate</i>
-					</button>
-				</div>
-
 				<div class="center">
 					<record-progress
 						v-if="voiceEnable && (isRecording || record)"
