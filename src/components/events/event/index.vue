@@ -4,7 +4,7 @@
 		:class="{ readyToRender, my }"
 		ref="msgElement"
 		v-if="
-			!event.localRedactionEvent() && !event.getRedactionEvent() && !removed && !isBlocked
+			(streamMode && !isBanned) && !event.localRedactionEvent() && !event.getRedactionEvent() && !removed
 		"
 	>
 		<member
@@ -71,7 +71,7 @@
 		</div>
 	</div>
 
-	<div v-else-if="!isBlocked" class="deletedMessage">
+	<div v-else-if="!streamMode" class="deletedMessage">
 		<i class="fas fa-eraser"></i> {{ $t("caption.messageDeleted") }}
 	</div>
 </template>
@@ -125,6 +125,8 @@ export default {
 		message,
 		dummypreviews,
 	},
+
+	inject: ['streamMode'],
 
 	data: function () {
 		return {
@@ -256,9 +258,9 @@ export default {
 			return this.userinfo.id === this.core.user.userinfo?.id;
 		},
 
-		isBlocked: function() {
-			const user = this.chat.getMember(this.event.event.user_id);
-			return user?.membership === "ban";
+		isBanned: function() {
+			const id = this.event.event.user_id ?? this.event.event.sender;
+			return this.chat.currentState?.members[id]?.membership === "ban";
 		}
 	},
 
