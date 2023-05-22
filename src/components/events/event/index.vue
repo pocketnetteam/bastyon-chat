@@ -71,7 +71,7 @@
 		</div>
 	</div>
 
-	<div v-else class="deletedMessage">
+	<div v-else-if="!isBlocked" class="deletedMessage">
 		<i class="fas fa-eraser"></i> {{ $t("caption.messageDeleted") }}
 	</div>
 </template>
@@ -257,9 +257,8 @@ export default {
 		},
 
 		isBlocked: function() {
-			const user = this.chat.m_chat.getMember(user);
-			console.log('blocked', this.chat)
-			return this.core.mtrx.blockeduser(this.event.event.user_id);
+			const user = this.chat.getMember(this.event.event.user_id);
+			return user?.membership === "ban";
 		}
 	},
 
