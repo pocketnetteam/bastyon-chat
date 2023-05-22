@@ -4,7 +4,7 @@
 		:class="{ readyToRender, my }"
 		ref="msgElement"
 		v-if="
-			!event.localRedactionEvent() && !event.getRedactionEvent() && !removed
+			!event.localRedactionEvent() && !event.getRedactionEvent() && !removed && !isBlocked
 		"
 	>
 		<member
@@ -255,6 +255,11 @@ export default {
 		my: function () {
 			return this.userinfo.id === this.core.user.userinfo?.id;
 		},
+
+		isBlocked: function() {
+			console.log('blocked', this.core.mtrx.blockeduser(this.userinfo.id))
+			return this.core.mtrx.blockeduser(this.userinfo.id);
+		}
 	},
 
 	beforeDestroy: function () {

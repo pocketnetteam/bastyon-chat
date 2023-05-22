@@ -573,8 +573,6 @@ export default {
 		},
 
 		replaceMentions(text) {
-			if (this.streamMode) return text; /*Disable mentions in stream mode*/
-			
 			_.each(this.userlist, function (user) {
 				text = text.replace(
 					new RegExp("@" + user.name, "g"),

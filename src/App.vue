@@ -928,7 +928,7 @@ export default {
 			.initWithUser(user)
 			.then((r) => {
 				return core.mtrx.wait().then(() => {
-					core.user.getContacts();
+					if (!this.streamMode) core.user.getContacts();
 
 					setTimeout(() => {
 						if (

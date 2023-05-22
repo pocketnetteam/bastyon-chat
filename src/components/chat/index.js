@@ -25,8 +25,6 @@ export default {
 	},
 	
 	inject: ['streamMode'],
-	
-	inject: ['streamMode'],
 
 	data: function () {
 		return {
@@ -57,9 +55,9 @@ export default {
 	created() { },
 
 	mounted() {
-		this.getuserinfo();
-		
 		if (!this.streamMode) {
+			this.getuserinfo();
+		
 			this.$store.commit("active", true);
 			this.$store.commit("blockactive", { value: true, item: "chat" });
 		}
