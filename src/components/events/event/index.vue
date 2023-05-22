@@ -257,8 +257,9 @@ export default {
 		},
 
 		isBlocked: function() {
-			console.log('blocked', this.core.mtrx.blockeduser(this.userinfo.id))
-			return this.core.mtrx.blockeduser(this.userinfo.id);
+			const user = this.chat.m_chat.getMember(user);
+			console.log('blocked', this.chat)
+			return this.core.mtrx.blockeduser(this.event.event.user_id);
 		}
 	},
 
