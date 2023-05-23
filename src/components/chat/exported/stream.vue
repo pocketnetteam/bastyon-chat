@@ -30,7 +30,7 @@
 				</div>
 			</div>
 		</div>
-		<transition>
+		<transition v-if="!isBanned">
 			<chat :chat="chat" :style="style" :filterType.sync="filterType" v-if="!showMembers" />
 			<membersList :chat="chat" v-else />
 		</transition>
@@ -72,9 +72,16 @@ export default {
 		}
 	},
 
-	computed: mapState({
-		auth: (state) => state.auth
-	}),
+	computed: {
+		...mapState({
+			auth: (state) => state.auth
+		}),
+
+		isBanned() {
+			const id = this.core.user.userinfo?.id;
+			return this.chat.currentState?.members[id]?.membership === "ban";
+		}
+	},
 
 	methods: {
 		filterMessages(e, type) {
