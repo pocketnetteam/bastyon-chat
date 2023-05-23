@@ -44,7 +44,7 @@
 				:selectedMessages="selectedMessages"
 			/>
 
-			<div v-if="m_chat && membership !== 'join'" class="joinwrapper">
+			<div v-if="!roomUserBanned && m_chat && membership !== 'join'" class="joinwrapper">
 				<join
 					:m_chat.sync="m_chat"
 					:chat="chat"

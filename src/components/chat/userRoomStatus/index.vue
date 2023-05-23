@@ -6,7 +6,7 @@
 		<div class="text">
 			{{ text }}
 		</div>
-		<button class="button small black rounded" @click="leaveRoom()">
+		<button class="button small black rounded" @click="leaveRoom()" v-if="!streamMode">
 			Delete room
 		</button>
 	</div>

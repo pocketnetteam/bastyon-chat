@@ -171,11 +171,14 @@ export default {
 				if (this.m_chat.timeline.length > 0) {
 					var id = this.core.mtrx.client.credentials.userId;
 					var lastEvent = this.m_chat.timeline[this.m_chat.timeline.length - 1];
+
 					if (
 						lastEvent.event.state_key === id &&
 						lastEvent.event.content.reason === "admin ban"
 					) {
 						this.roomUserBanned = true;
+					} else {
+						this.roomUserBanned = false;
 					}
 				}
 				
