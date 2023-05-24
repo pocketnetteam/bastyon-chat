@@ -25,7 +25,7 @@
 			</div>
 		</div>
 
-		<div class="chatcontent" v-else>
+		<div class="chatcontent" v-else-if="!roomUserBanned || !userBanned.value">
 			<list
 				ref="list"
 				:error="error"
@@ -44,7 +44,7 @@
 				:selectedMessages="selectedMessages"
 			/>
 
-			<div v-if="!roomUserBanned && m_chat && membership !== 'join'" class="joinwrapper">
+			<div v-if="m_chat && membership !== 'join'" class="joinwrapper">
 				<join
 					:m_chat.sync="m_chat"
 					:chat="chat"
@@ -174,7 +174,7 @@
 			</div>
 		</div>
 		<userRoomStatus
-			v-if="roomUserBanned"
+			v-if="roomUserBanned || userBanned.value"
 			:chat="chat"
 			:text="`You've have been banned in this room`"
 		/>

@@ -24,7 +24,7 @@ export default {
 		userRoomStatus,
 	},
 	
-	inject: ['streamMode'],
+	inject: ["streamMode", "userBanned"],
 
 	data: function () {
 		return {
@@ -565,5 +565,13 @@ export default {
 			this.$set(this.chat, 'joined', true);
 		}
 		
+	},
+
+	mounted() {
+		this.refreshMembership = setInterval(() => this.membership, 1000);
+	},
+
+	unmounted() {
+		clearInterval(this.refreshMembership);
 	},
 };

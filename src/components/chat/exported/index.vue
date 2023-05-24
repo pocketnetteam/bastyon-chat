@@ -35,7 +35,12 @@ export default {
 			},
 
 			matches: {},
-			markText: () => {}
+			markText: () => {},
+			
+			userBanned: {
+				value: this.userBanned,
+				set: this.setBanned
+			}
 		}
 	},
 
@@ -51,7 +56,8 @@ export default {
 				moderator: 50,
 				participant: 0
 			},
-			menuState: false
+			menuState: false,
+			userBanned: false
 		}
 	},
 
@@ -148,6 +154,10 @@ export default {
 			}
 
 			return Promise.resolve();
+		},
+
+		setBanned(value) {
+			return this.userBanned = value;
 		}
 	}
 };

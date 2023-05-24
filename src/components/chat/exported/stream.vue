@@ -55,6 +55,8 @@ export default {
 		membersList,
 		pmenu
 	},
+
+	inject: ["userBanned"],
 	
 	props: {
 		chat: Object,
@@ -76,12 +78,7 @@ export default {
 	computed: {
 		...mapState({
 			auth: (state) => state.auth
-		}),
-
-		/* isBanned() {
-			const id = this.m_chat.myUserId;
-			return this.m_chat.currentState?.members[id]?.membership === "ban";
-		} */
+		})
 	},
 
 	methods: {
