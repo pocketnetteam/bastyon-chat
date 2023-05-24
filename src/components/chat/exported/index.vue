@@ -57,7 +57,7 @@ export default {
 				participant: 0
 			},
 			menuState: false,
-			userBanned: false
+			userBanned: null
 		}
 	},
 
@@ -71,6 +71,8 @@ export default {
 						console.log('META', this.videoMeta, this);
 					}
 			});
+
+		this.userBanned = this.isBanned();
 	},
 
 	computed: {
@@ -78,18 +80,12 @@ export default {
 			auth: (state) => state.auth
 		}),
 
-		streamMode: function () {
+		streamMode() {
 			return this.style === "stream";
 		},
 
-		m_chat: function () {
-			if (this.chat && this.chat.roomId) {
-				if (this.chat.pcrypto) {
-					return this.chat;
-				} else {
-					return this.core.mtrx.client.getRoom(this.chat.roomId) || {};
-				}
-			}
+		m_chat() {
+			return this.core.mtrx.client.getRoom(this.chat.roomId) || {};
 		}
 	},
 
@@ -154,6 +150,12 @@ export default {
 			}
 
 			return Promise.resolve();
+		},
+
+		isBanned: function() {
+			const id = this.m_chat.myUserId;
+
+			return this.chat.currentState?.members[id]?.membership === "ban";
 		}
 	}
 };

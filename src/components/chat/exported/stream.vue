@@ -6,7 +6,7 @@
 					<template v-if="!showMembers">Stream chat</template>
 					<template v-else>Members list</template>
 				</span>
-				<div class="buttons" v-if="!userBanned.value">
+				<div class="buttons" v-if="!userBanned.get()">
 					<button
 						class="button"
 						@click="toggleMembers"
@@ -18,7 +18,7 @@
 					</button>
 				</div>
 			</div>
-			<div class="row" v-if="!showMembers && !userBanned.value">
+			<div class="row" v-if="!showMembers && !userBanned.get()">
 				<div class="buttons chat-filter">
 					<button
 						v-for="{ name, filter } in chatFilter"
