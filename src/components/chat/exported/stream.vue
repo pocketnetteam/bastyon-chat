@@ -30,7 +30,7 @@
 				</div>
 			</div>
 		</div>
-		<transition v-if="!isBanned">
+		<transition>
 			<chat :chat="chat" :style="style" :filterType.sync="filterType" v-if="!showMembers" />
 			<membersList :chat="chat" v-else />
 		</transition>
@@ -55,9 +55,10 @@ export default {
 		membersList,
 		pmenu
 	},
-
+	
 	props: {
 		chat: Object,
+		m_chat: Object,
 		style: String
 	},
 
@@ -77,10 +78,10 @@ export default {
 			auth: (state) => state.auth
 		}),
 
-		isBanned() {
-			const id = this.core.user.userinfo?.id;
-			return this.chat.currentState?.members[id]?.membership === "ban";
-		}
+		/* isBanned() {
+			const id = this.m_chat.myUserId;
+			return this.m_chat.currentState?.members[id]?.membership === "ban";
+		} */
 	},
 
 	methods: {

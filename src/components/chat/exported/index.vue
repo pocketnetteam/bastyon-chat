@@ -10,7 +10,7 @@ import f from "@/application/functions";
 export default {
 	name: "chatExported",
 
-	components : {
+	components: {
 		Stream
 	},
 
@@ -77,7 +77,13 @@ export default {
 		},
 
 		m_chat: function () {
-			return this.core.mtrx.client.getRoom(this.chat.roomId);
+			if (this.chat && this.chat.roomId) {
+				if (this.chat.pcrypto) {
+					return this.chat;
+				} else {
+					return this.core.mtrx.client.getRoom(this.chat.roomId) || {};
+				}
+			}
 		}
 	},
 
