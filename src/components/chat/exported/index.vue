@@ -38,8 +38,8 @@ export default {
 			markText: () => {},
 			
 			userBanned: {
-				value: this.userBanned,
-				set: this.setBanned
+				get: () => this.userBanned,
+				set: (val) => this.$set(this, "setBanned", val)
 			}
 		}
 	},
@@ -154,10 +154,6 @@ export default {
 			}
 
 			return Promise.resolve();
-		},
-
-		setBanned(value) {
-			return this.userBanned = value;
 		}
 	}
 };

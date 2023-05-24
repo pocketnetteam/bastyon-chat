@@ -25,7 +25,7 @@
 			</div>
 		</div>
 
-		<div class="chatcontent" v-else-if="!roomUserBanned || !userBanned.value">
+		<div class="chatcontent" v-else-if="!roomUserBanned || !userBanned.get()">
 			<list
 				ref="list"
 				:error="error"
@@ -174,7 +174,7 @@
 			</div>
 		</div>
 		<userRoomStatus
-			v-if="roomUserBanned || userBanned.value"
+			v-if="roomUserBanned || userBanned.get()"
 			:chat="chat"
 			:text="`You've have been banned in this room`"
 		/>

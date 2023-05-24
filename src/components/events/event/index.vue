@@ -126,7 +126,7 @@ export default {
 		dummypreviews,
 	},
 
-	inject: ['streamMode'],
+	inject: ["streamMode", "userBanned"],
 
 	data: function () {
 		return {
@@ -259,8 +259,13 @@ export default {
 		},
 
 		isBanned: function() {
-			const id = this.event.event.user_id ?? this.event.event.sender;
-			return this.chat.currentState?.members[id]?.membership === "ban";
+			const
+				id = this.event.event.user_id ?? this.event.event.sender,
+				state = this.chat.currentState?.members[id]?.membership === "ban";
+
+			if (this.my) this.userBanned.set(state);
+
+			return state;
 		}
 	},
 
