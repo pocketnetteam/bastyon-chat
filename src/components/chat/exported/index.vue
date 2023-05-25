@@ -37,10 +37,7 @@ export default {
 			matches: {},
 			markText: () => {},
 			
-			userBanned: {
-				get: () => this.userBanned,
-				set: (val) => this.$set(this, "setBanned", val)
-			}
+			userBanned: this.userBanned
 		}
 	},
 
@@ -57,7 +54,13 @@ export default {
 				participant: 0
 			},
 			menuState: false,
-			userBanned: null
+			userBanned: {
+				value: null,
+				get: () => this.userBanned.value,
+				set: (val) => {
+					this.$set(this.userBanned, "value", val);
+				}
+			}
 		}
 	},
 
@@ -72,7 +75,7 @@ export default {
 					}
 			});
 
-		this.userBanned = this.isBanned();
+		this.userBanned.set(this.isBanned());
 	},
 
 	computed: {
@@ -155,6 +158,7 @@ export default {
 		isBanned: function() {
 			const id = this.m_chat.myUserId;
 
+			console.log(id, "status", this.chat.currentState)
 			return this.chat.currentState?.members[id]?.membership === "ban";
 		}
 	}

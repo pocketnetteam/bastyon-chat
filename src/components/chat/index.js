@@ -16,6 +16,7 @@ export default {
 		filterType: String,
 		style : ''
 	},
+
 	components: {
 		list,
 		chatInput: () => import("@/components/chat/input/index.vue"),
@@ -77,7 +78,6 @@ export default {
 	},
 
 	watch: {
-		
 		needcreatekey: function () {
 			if (this.needcreatekey) {
 				if (!this.intrv) {
@@ -97,6 +97,7 @@ export default {
 				});
 			}
 		},
+
 		m_chat: {
 			immediate: true,
 			handler: function () {
@@ -112,8 +113,9 @@ export default {
 							this.checkcrypto();
 						});
 				}
-			},
+			}
 		},
+
 		chat: {
 			immediate: true,
 			handler: function () {
@@ -124,9 +126,19 @@ export default {
 					this.$store.commit("SET_CURRENT_ROOM", this.chat.roomId);
 					this.$store.commit("SET_LAST_ROOM", this.chat.roomId);
 				} else this.$store.commit("SET_CURRENT_ROOM", false);
-			},
+			}
+		},
+
+		userBanned: {
+			immediate: true,
+			deep: true,
+			handler: function () {
+				this.$set(this.m_chat, "refreshValue", +new Date());
+				console.log('membership', this.m_chat.currentState?.members[this.m_chat.myUserId]?.membership, this.membership)
+			}
 		}
 	},
+
 	computed: mapState({
 		pocketnet: (state) => state.pocketnet,
 		minimized: (state) => state.minimized,
@@ -233,8 +245,8 @@ export default {
 			return this.$i18n.t("button");
 		},
 	}),
+
 	methods: {
-		
 		clearintrv: function () {
 			if (this.intrv) {
 				clearInterval(this.intrv);
@@ -563,6 +575,7 @@ export default {
 		joined: function () {
 			/*Trigger chat reactivity*/
 			this.$set(this.chat, 'joined', true);
+			this.userBanned.set(false);
 		}
 		
 	}
