@@ -259,6 +259,11 @@ export default {
 
 			return null;
 		},
+
+		me() {
+			/* Compare author and user bastyon id to prevent donate themself */
+			return this.authorId === this.core.user.userinfo?.source.address;
+		}
 	},
 
 	created() {},
