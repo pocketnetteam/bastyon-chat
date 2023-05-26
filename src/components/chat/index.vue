@@ -40,12 +40,12 @@
 				@scroll="scroll"
 				@menuIsVisible="menuIsVisibleHandler"
 				v-if="m_chat && allowedToRead && ready"
-				v-show="!userBanned.value"
+				v-show="!userBanned?.value"
 				@getEvents="events"
 				:selectedMessages="selectedMessages"
 			/>
 
-			<div v-if="!userBanned.value && m_chat && !['join', 'ban'].includes(membership)" class="joinwrapper">
+			<div v-if="!userBanned?.value && m_chat && !['join', 'ban'].includes(membership)" class="joinwrapper">
 				<join
 					:m_chat.sync="m_chat"
 					:chat="chat"
@@ -60,7 +60,7 @@
 			</div>
 
 			<div
-				v-if="!userBanned.value && (!m_chat || membership === 'join')"
+				v-if="!userBanned?.value && (!m_chat || membership === 'join')"
 				class="chatInputWrapper fixedOnPageBottom"
 				:class="{ bin: pocketnet, bout: !pocketnet }"
 			>
@@ -175,7 +175,7 @@
 			</div>
 		</div>
 		<userRoomStatus
-			v-if="userBanned.value || roomUserBanned"
+			v-if="userBanned?.value || roomUserBanned"
 			:chat="chat"
 			:text="`You've have been banned in this room`"
 		/>

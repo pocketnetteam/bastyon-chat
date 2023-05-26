@@ -56,7 +56,7 @@ export default {
 			menuState: false,
 			userBanned: {
 				value: null,
-				get: () => this.userBanned.value,
+				get: () => this.userBanned?.value,
 				set: (val) => {
 					this.$set(this.userBanned, "value", val);
 				}
