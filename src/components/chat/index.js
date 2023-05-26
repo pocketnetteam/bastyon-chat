@@ -576,7 +576,7 @@ export default {
 		joined: function () {
 			/*Trigger chat reactivity*/
 			this.$set(this.chat, 'joined', true);
-			this.$forceUpdate();
+			this.m_chat.currentState.forceUpdate = +new Date();
 		}
 		
 	}
