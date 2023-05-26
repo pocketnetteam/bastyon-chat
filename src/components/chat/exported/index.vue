@@ -157,8 +157,6 @@ export default {
 
 		isBanned: function() {
 			const id = this.m_chat.myUserId;
-
-			console.log(id, "status", this.chat.currentState)
 			return this.chat.currentState?.members[id]?.membership === "ban";
 		}
 	}

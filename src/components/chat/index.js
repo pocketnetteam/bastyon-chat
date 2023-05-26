@@ -133,8 +133,7 @@ export default {
 			immediate: true,
 			deep: true,
 			handler: function () {
-				this.$set(this.m_chat, "refreshValue", +new Date());
-				console.log('membership', this.m_chat.currentState?.members[this.m_chat.myUserId]?.membership, this.membership)
+				this.m_chat.currentState.forceUpdate = +new Date();
 			}
 		}
 	},
@@ -181,8 +180,10 @@ export default {
 		membership: function () {
 			if (this.m_chat) {
 				if (this.m_chat.timeline.length > 0) {
-					var id = this.core.mtrx.client.credentials.userId;
-					var lastEvent = this.m_chat.timeline[this.m_chat.timeline.length - 1];
+					const
+						id = this.core.mtrx.client.credentials.userId,
+						timeline = this.core.mtrx.client.getRoom(this.chat.roomId).timeline,
+						lastEvent = timeline[timeline.length - 1];
 
 					if (
 						lastEvent.event.state_key === id &&
@@ -193,9 +194,9 @@ export default {
 						this.roomUserBanned = false;
 					}
 				}
-				
-				return this.m_chat.currentState?.members[this.m_chat.myUserId]?.membership;
 			}
+
+			return this.m_chat?.currentState?.members[this.m_chat.myUserId]?.membership;
 		},
 		
 		allowedToRead: function () {
@@ -575,7 +576,7 @@ export default {
 		joined: function () {
 			/*Trigger chat reactivity*/
 			this.$set(this.chat, 'joined', true);
-			this.userBanned.set(false);
+			this.$forceUpdate();
 		}
 		
 	}
