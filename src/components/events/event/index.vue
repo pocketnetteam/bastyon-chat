@@ -4,7 +4,7 @@
 		:class="{ readyToRender, my }"
 		ref="msgElement"
 		v-if="
-			(streamMode && !isBanned) && !event.localRedactionEvent() && !event.getRedactionEvent() && !removed
+			(streamMode && !isBanned?.value) || (!event.localRedactionEvent() && !event.getRedactionEvent() && !removed)
 		"
 	>
 		<member
