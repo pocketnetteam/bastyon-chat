@@ -133,7 +133,15 @@ export default {
 			immediate: true,
 			deep: true,
 			handler: function () {
-				this.m_chat.currentState.forceUpdate = +new Date();
+				this.m_chat.currentState.forceUpdate = +new Date(); /* Force recalc membership */
+				console.log('membership', this.membership, this.m_chat?.currentState?.members[this.m_chat.myUserId]?.membership)
+			}
+		},
+
+		'm_chat.currentState.members': {
+			immediate: true,
+			handler: function () {
+				console.log('membership_STATUS: ', this.m_chat?.currentState?.members[this.m_chat.myUserId]?.membership);
 			}
 		}
 	},
@@ -178,7 +186,7 @@ export default {
 		},
 
 		membership: function () {
-			if (this.m_chat) {
+			if (this.m_chat && !this.streamMode) {
 				if (this.m_chat.timeline.length > 0) {
 					const
 						id = this.core.mtrx.client.credentials.userId,
@@ -194,9 +202,11 @@ export default {
 						this.roomUserBanned = false;
 					}
 				}
+			} else if (this.streamMode) {
+				this.roomUserBanned = this.m_chat?.currentState.members[this.m_chat.myUserId].membership === "ban";
 			}
 
-			return this.m_chat?.currentState?.members[this.m_chat.myUserId]?.membership;
+			return this.m_chat?.currentState.members[this.m_chat.myUserId].membership;
 		},
 		
 		allowedToRead: function () {
@@ -575,9 +585,9 @@ export default {
 		
 		joined: function () {
 			/*Trigger chat reactivity*/
-			this.$set(this.chat, 'joined', true);
-			this.m_chat.currentState.forceUpdate = +new Date();
+			this.$set(this.chat, 'joined', +new Date());
+			this.m_chat.currentState.forceUpdate = +new Date(); /* Force recalc membership */
+			console.log('join', this.membership, this.m_chat?.currentState?.members[this.m_chat.myUserId]?.membership);
 		}
-		
 	}
 };
