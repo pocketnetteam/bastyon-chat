@@ -29,6 +29,7 @@ export default {
 
 	data: function () {
 		return {
+			membership: null,
 			roomUserBanned: false,
 			roomUserKicked: false,
 			roomMuted: false,
@@ -62,6 +63,30 @@ export default {
 			this.$store.commit("active", true);
 			this.$store.commit("blockactive", { value: true, item: "chat" });
 		}
+
+		this.membershipReactivity = setInterval(() => {
+			if (this.m_chat && !this.streamMode) {
+				if (this.m_chat.timeline.length > 0) {
+					const
+						id = this.core.mtrx.client.credentials.userId,
+						timeline = this.core.mtrx.client.getRoom(this.chat.roomId).timeline,
+						lastEvent = timeline[timeline.length - 1];
+
+					if (
+						lastEvent.event.state_key === id &&
+						lastEvent.event.content.reason === "admin ban"
+					) {
+						this.roomUserBanned = true;
+					} else {
+						this.roomUserBanned = false;
+					}
+				}
+			} else if (this.streamMode) {
+				this.roomUserBanned = this.m_chat?.currentState.members[this.m_chat.myUserId].membership === "ban";
+			}
+
+			this.membership = this.m_chat?.currentState.members[this.m_chat.myUserId].membership;
+		}, 1000);
 	},
 
 	destroyed() {
@@ -69,12 +94,9 @@ export default {
 			this.$store.commit("blockactive", { value: false, item: "chat" });
 			this.$store.commit("SET_CURRENT_ROOM", false);
 		}
-		if (!this.streamMode) {
-			this.$store.commit("blockactive", { value: false, item: "chat" });
-			this.$store.commit("SET_CURRENT_ROOM", false);
-		}
 
 		this.clearintrv();
+		clearInterval(this.membershipReactivity);
 	},
 
 	watch: {
@@ -133,15 +155,7 @@ export default {
 			immediate: true,
 			deep: true,
 			handler: function () {
-				this.m_chat.currentState.forceUpdate = +new Date(); /* Force recalc membership */
-				console.log('membership', this.membership, this.m_chat?.currentState?.members[this.m_chat.myUserId]?.membership)
-			}
-		},
-
-		'm_chat.currentState.members': {
-			immediate: true,
-			handler: function () {
-				console.log('membership_STATUS: ', this.m_chat?.currentState?.members[this.m_chat.myUserId]?.membership);
+				this.membership = this.m_chat?.currentState.members[this.m_chat.myUserId].membership;
 			}
 		}
 	},
@@ -150,9 +164,6 @@ export default {
 		pocketnet: (state) => state.pocketnet,
 		minimized: (state) => state.minimized,
 		auth: (state) => state.auth,
-		active: function(state) {
-			return this.streamMode || state.active;
-		},
 		active: function(state) {
 			return this.streamMode || state.active;
 		},
@@ -183,30 +194,6 @@ export default {
 			return (
 				this.keyproblem == "younotgen" && this.cantchat && !this.cantchatexc
 			);
-		},
-
-		membership: function () {
-			if (this.m_chat && !this.streamMode) {
-				if (this.m_chat.timeline.length > 0) {
-					const
-						id = this.core.mtrx.client.credentials.userId,
-						timeline = this.core.mtrx.client.getRoom(this.chat.roomId).timeline,
-						lastEvent = timeline[timeline.length - 1];
-
-					if (
-						lastEvent.event.state_key === id &&
-						lastEvent.event.content.reason === "admin ban"
-					) {
-						this.roomUserBanned = true;
-					} else {
-						this.roomUserBanned = false;
-					}
-				}
-			} else if (this.streamMode) {
-				this.roomUserBanned = this.m_chat?.currentState.members[this.m_chat.myUserId].membership === "ban";
-			}
-
-			return this.m_chat?.currentState.members[this.m_chat.myUserId].membership;
 		},
 		
 		allowedToRead: function () {
@@ -585,9 +572,7 @@ export default {
 		
 		joined: function () {
 			/*Trigger chat reactivity*/
-			this.$set(this.chat, 'joined', +new Date());
-			this.m_chat.currentState.forceUpdate = +new Date(); /* Force recalc membership */
-			console.log('join', this.membership, this.m_chat?.currentState?.members[this.m_chat.myUserId]?.membership);
+			this.userBanned.set(false);
 		}
 	}
 };

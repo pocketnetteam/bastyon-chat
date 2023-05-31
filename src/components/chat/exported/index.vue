@@ -71,7 +71,7 @@ export default {
 			.then(meta => {
 					if (meta?.type === "peertube") {
 						this.videoMeta = Object.assign(this.videoMeta, window.peertubeglobalcache[meta.id]);
-						console.log('META', this.videoMeta, this);
+						console.log('META', this.videoMeta, meta);
 					}
 			});
 
