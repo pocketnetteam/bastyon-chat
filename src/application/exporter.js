@@ -39,7 +39,26 @@ class Exporter {
 			this.instances = {}
 	}
 		async chat(el, roomId, p){
+				console.log('chat init', p)
 				await this.core?.mtrx?.waitchats();
+
+				/*Get video meta (&stream state)*/
+				await window.POCKETNETINSTANCE?.platform?.sdk?.videos?.info(p.videoUrl)
+					.then(() => window.parseVideo(p.videoUrl))
+					.then(meta => {
+							if (meta?.type === "peertube") {
+								meta = window.peertubeglobalcache[meta.id];
+		
+								if ([1,4].includes(meta?.state?.id) && meta?.state?.label === "Published") {
+									meta.state.streamCompleted = true;
+								} else {
+									meta.state.streamCompleted = false;
+								}
+								
+								p.videoMeta = meta;
+							}
+					});
+
 				const chat = this.core.vm.$store.state.chatsMap[roomId];
 				
 				if (chat) {
