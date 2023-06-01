@@ -27,7 +27,6 @@ export default {
 	
 	inject: [
 		"streamMode",
-		"videoMeta",
 		"userBanned"
 	],
 
