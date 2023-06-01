@@ -45,14 +45,9 @@
 				:selectedMessages="selectedMessages"
 			/>
 
-			streamCompleted: {{ videoMeta?.state?.streamCompleted }}<br>
-			userBanned: {{ userBanned?.value }}<br>
-			m_chat: {{ m_chat !== 'undefined' }}<br>
-			membership (join or ban): {{ ['join', 'ban'].includes(membership) }}
 			<div
 				v-if="
 					m_chat &&
-					!videoMeta?.state?.streamCompleted &&
 					!userBanned?.value &&
 					!['join', 'ban'].includes(membership)
 				"
