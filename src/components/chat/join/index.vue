@@ -6,7 +6,8 @@
 					{{ $t("caption.chatInvite") }}
 				</span>
 				<span v-if="!streamMode && creatorLeft">{{ $t("caption.cantJoin") }}</span>
-        <span v-if="streamMode">You need join to write</span>
+				<span v-if="streamMode && !videoMeta?.state?.streamOver">You need join to write</span>
+				<span v-if="streamMode && videoMeta?.state?.streamOver">This stream is over</span>
 			</div>
 		</div>
 
@@ -43,7 +44,15 @@
 					</div>
 
 					<div class="action" v-if="!creatorLeft">
-						<button class="small button rounded" @click="join">
+						<button
+							:class="{
+								'small': true,
+								'button': true,
+								'rounded': true,
+								'disabled': videoMeta?.state?.streamOver
+							}"
+							@click="join"
+						>
 							{{ $t("button.join") }}
 						</button>
 					</div>
