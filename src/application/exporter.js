@@ -39,25 +39,29 @@ class Exporter {
 			this.instances = {}
 	}
 		async chat(el, roomId, p){
-				console.log('chat init', p)
-				await this.core?.mtrx?.waitchats();
+				/* await this.core?.mtrx?.waitchats(); */
 
 				/*Get video meta (&stream state)*/
-				await window.POCKETNETINSTANCE?.platform?.sdk?.videos?.info(p.videoUrl)
+				if (!p.videoMeta && p.style === "stream") {
+					await window.POCKETNETINSTANCE?.platform?.sdk?.videos?.info(p.videoUrl)
 					.then(() => window.parseVideo(p.videoUrl))
 					.then(meta => {
 							if (meta?.type === "peertube") {
 								meta = window.peertubeglobalcache[meta.id];
 		
-								if ([1,4].includes(meta?.state?.id) && meta?.state?.label === "Published") {
-									meta.state.streamCompleted = true;
+								if (
+									[1,4].includes(meta?.state?.id) &&
+									meta?.state?.label === "Published"
+								) {
+									meta.state.streamOver = true;
 								} else {
-									meta.state.streamCompleted = false;
+									meta.state.streamOver = false;
 								}
 								
 								p.videoMeta = meta;
 							}
 					});
+				}
 
 				const chat = this.core.vm.$store.state.chatsMap[roomId];
 				
@@ -79,10 +83,10 @@ class Exporter {
 				} else {
 					await this.core.mtrx.client.peekInRoom(roomId)
 						.then(room => {
-							if (!room) return Promise.reject('missing:chat');
+							if (!room) return Promise.reject("missing:chat");
 							
 							this.core.vm.$store.commit(
-								'SET_CHATS_TO_STORE',
+								"SET_CHATS_TO_STORE",
 								this.core.vm.$store.state.chats.concat([
 									Object.assign(room.summary, { stream: true })
 								])
