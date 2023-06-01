@@ -25,7 +25,11 @@ export default {
 		userRoomStatus,
 	},
 	
-	inject: ["streamMode", "userBanned"],
+	inject: [
+		"streamMode",
+		"videoMeta",
+		"userBanned"
+	],
 
 	data: function () {
 		return {
@@ -197,11 +201,11 @@ export default {
 		},
 		
 		allowedToRead: function () {
-			return this.membership === 'join' || this.m_chat.summary.stream;
+			return this.membership === 'join' || this.streamMode;
 		},
 		
 		allowedToJoin: function () {
-			return this.membership === 'invite' || this.m_chat.summary.stream;
+			return this.membership === 'invite' || this.streamMode;
 		},
 
 		blockedUser: function () {

@@ -64,18 +64,32 @@ export default {
 		}
 	},
 
-	mounted () {
+	created () {
 		/*Get video meta (&stream state)*/
 		window.POCKETNETINSTANCE?.platform?.sdk?.videos?.info(this.videoUrl)
 			.then(() => window.parseVideo(this.videoUrl))
 			.then(meta => {
 					if (meta?.type === "peertube") {
-						this.videoMeta = Object.assign(this.videoMeta, window.peertubeglobalcache[meta.id]);
-						console.log('META', this.videoMeta, meta);
+						meta = window.peertubeglobalcache[meta.id];
+
+						if ([1,4].includes(meta?.state?.id) && meta?.state?.label === "Published") {
+							meta.state.streamCompleted = true;
+						} else {
+							meta.state.streamCompleted = false;
+						}
+						
+						this.$set(this, "videoMeta", meta);
+
+						if (meta.state.streamCompleted) {
+							this.leaveRoom();
+						}
 					}
 			});
 
-		this.userBanned.set(this.isBanned());
+		this.userBanned.set((() => {
+			const id = this.m_chat.myUserId;
+			return this.chat.currentState?.members[id]?.membership === "ban";
+		})());
 	},
 
 	computed: {
@@ -155,9 +169,14 @@ export default {
 			return Promise.resolve();
 		},
 
-		isBanned: function() {
-			const id = this.m_chat.myUserId;
-			return this.chat.currentState?.members[id]?.membership === "ban";
+		leaveRoom() {
+			this.core.mtrx.client.leave(this.chat.roomId).then((r) => {
+				this.core.mtrx.client
+					.forget(this.chat.roomId, true)
+					.then((r) => {
+						this.$store.commit("DELETE_ROOM", this.chat.roomId);
+					});
+			});
 		}
 	}
 };
