@@ -65,7 +65,7 @@ export default {
 	},
 
 	created () {
-		if (this.videoMeta.state.streamCompleted) {
+		if (this.videoMeta.state.streamOver) {
 			this.leaveRoom();
 		}
 
@@ -154,11 +154,11 @@ export default {
 
 		leaveRoom() {
 			this.core.mtrx.client.leave(this.chat.roomId).then((r) => {
-				this.core.mtrx.client
+				/* this.core.mtrx.client
 					.forget(this.chat.roomId, true)
 					.then((r) => {
 						this.$store.commit("DELETE_ROOM", this.chat.roomId);
-					});
+					}); */
 			});
 		}
 	}
