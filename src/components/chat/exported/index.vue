@@ -45,7 +45,7 @@ export default {
 		return {
 			style: null,
 			videoUrl: null,
-			videoMeta: {},
+			videoMeta: null,
 			authorId: null,
 			chat: null,
 			powerLevels: {
@@ -65,26 +65,9 @@ export default {
 	},
 
 	created () {
-		/*Get video meta (&stream state)*/
-		window.POCKETNETINSTANCE?.platform?.sdk?.videos?.info(this.videoUrl)
-			.then(() => window.parseVideo(this.videoUrl))
-			.then(meta => {
-					if (meta?.type === "peertube") {
-						meta = window.peertubeglobalcache[meta.id];
-
-						if ([1,4].includes(meta?.state?.id) && meta?.state?.label === "Published") {
-							meta.state.streamCompleted = true;
-						} else {
-							meta.state.streamCompleted = false;
-						}
-						
-						this.$set(this, "videoMeta", meta);
-
-						if (meta.state.streamCompleted) {
-							this.leaveRoom();
-						}
-					}
-			});
+		if (this.videoMeta.state.streamCompleted) {
+			this.leaveRoom();
+		}
 
 		this.userBanned.set((() => {
 			const id = this.m_chat.myUserId;
