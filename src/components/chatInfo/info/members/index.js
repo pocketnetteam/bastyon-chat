@@ -182,6 +182,10 @@ export default {
 			return this[item.click](rowObject.user);
 		},
 
+		openModal: function(user) {
+			this.core.mtrx.opencontact(this.userinfo(user));
+		},
+
 		setAdmin(user) {
 			this.$emit("admin", user);
 			return Promise.resolve();
