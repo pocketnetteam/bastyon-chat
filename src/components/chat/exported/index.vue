@@ -65,7 +65,7 @@ export default {
 	},
 
 	created () {
-		if (this.videoMeta.state.streamOver) {
+		if (!this.videoMeta.isLive) {
 			this.leaveRoom();
 		}
 

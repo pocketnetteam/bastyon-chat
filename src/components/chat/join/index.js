@@ -51,7 +51,7 @@ export default {
 	mounted: function () {},
 	methods: {
 		join: function () {
-			if (this.videoMeta?.state?.streamOver) return;
+			if (!this.videoMeta?.isLive) return;
 
 			var self = this;
 
