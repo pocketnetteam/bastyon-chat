@@ -3,7 +3,7 @@
 		<div
 			class="roomMember"
 			:class="user.membership"
-			v-for="(user, index) in membersList"
+			v-for="user in membersList"
 			:key="user.userId"
 
 		>

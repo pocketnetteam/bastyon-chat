@@ -4,11 +4,13 @@
       <simpleSearch :value="search" @search="searching"/>
     </div>
 
-		<template v-if="allMembers.length">
+		<template
+      v-for="(members, title) in lists"
+      :key="members"
+    >
       <section
-        v-for="(members, title) in lists"
-        :key="members"
         class="chats"
+        v-if="members.length"
       >
         <!--Title-->
         <div
