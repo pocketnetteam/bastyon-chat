@@ -3,8 +3,8 @@
 		<div class="topheader">
 			<div class="row">
 				<span>
-					<template v-if="!showMembers">Stream chat</template>
-					<template v-else>Members list</template>
+					<template v-if="!showMembers">{{ $t(`caption.streamChat`) }}</template>
+					<template v-else>{{ $t(`caption.membersList`) }}</template>
 				</span>
 				<div class="buttons" v-if="!userBanned?.value">
 					<button

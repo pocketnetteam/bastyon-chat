@@ -140,7 +140,12 @@
 		"sendmessage": "Отправить сообщение",
 		"messages" : "Сообщения",
 		"you" : "Вы",
-		"sentfile" : "прислал файл:"
+		"sentfile" : "прислал файл:",
+		"administrators": "Владелец",
+		"moderators": "Модераторы",
+		"participants": "Участники",
+		"streamChat": "Чат стрима",
+		"membersList": "Список участников"
 	},
 
 	"input": {
@@ -172,7 +177,9 @@
 		"block": "Заблокировать",
 		"unblock": "Разблокировать",
 		"blockUser": "Заблокировать пользователя",
-		"Complain": "Пожаловаться"
+		"Complain": "Пожаловаться",
+		"chat": "Чат",
+		"donations": "Донаты"
 	},
 
 	"type": {

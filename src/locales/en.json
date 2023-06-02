@@ -139,10 +139,12 @@
 		"sendmessage": "Send message",
 		"messages" : "Messages",
 		"you" : "You",
+		"sentfile" : "sent file:",
 		"administrators": "Owner",
 		"moderators": "Moderators",
 		"participants": "Participants",
-		"sentfile" : "sent file:"
+		"streamChat": "Stream chat",
+		"membersList": "Members list"
 	},
 
 	"input": {
