@@ -23,6 +23,9 @@ export default {
 
 	watch: {
 		//$route: 'getdata'
+		active(val) {
+			if (!val) this.closeModal();
+		}
 	},
 
 	computed: mapState({
