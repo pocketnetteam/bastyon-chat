@@ -7,7 +7,7 @@
 			:key="user.userId"
 
 		>
-			<div class="leftWrapper" @click="core.mtrx.opencontact(userinfo(user))">
+			<div class="leftWrapper" @click="openModal(user)">
 				<div class="avatarNameWrapper">
 					<userpic :userinfo="userinfo(user)" :status="user.membership" />
 				</div>
