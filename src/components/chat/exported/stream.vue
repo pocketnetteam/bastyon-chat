@@ -60,7 +60,6 @@ export default {
 	
 	props: {
 		chat: Object,
-		m_chat: Object,
 		style: String
 	},
 
