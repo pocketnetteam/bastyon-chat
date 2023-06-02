@@ -48,16 +48,6 @@ class Exporter {
 					.then(meta => {
 							if (meta?.type === "peertube") {
 								meta = window.peertubeglobalcache[meta.id];
-		
-								if (
-									[1,4].includes(meta?.state?.id) &&
-									meta?.state?.label === "Published"
-								) {
-									meta.state.streamOver = true;
-								} else {
-									meta.state.streamOver = false;
-								}
-								
 								p.videoMeta = meta;
 							}
 					});
