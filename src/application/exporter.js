@@ -71,7 +71,7 @@ class Exporter {
 
 						return Promise.resolve(instance);
 				} else {
-					await this.core.mtrx.client.peekInRoom(roomId)
+					await this?.core?.mtrx?.client?.peekInRoom(roomId)
 						.then(room => {
 							if (!room) return Promise.reject("missing:chat");
 							
