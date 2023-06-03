@@ -70,8 +70,8 @@ class Exporter {
 						}
 
 						return Promise.resolve(instance);
-				} else {
-					await this?.core?.mtrx?.client?.peekInRoom(roomId)
+				} else if (typeof this.core?.mtrx?.client?.peekInRoom !== "undefined") {
+					await this.core.mtrx.client.peekInRoom(roomId)
 						.then(room => {
 							if (!room) return Promise.reject("missing:chat");
 							
