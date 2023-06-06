@@ -39,7 +39,7 @@ class Exporter {
 			this.instances = {}
 	}
 		async chat(el, roomId, p){
-				/* await this.core?.mtrx?.waitchats(); */
+				await this.core?.mtrx?.waitchats();
 
 				/*Get video meta (&stream state)*/
 				if (!p.videoMeta && p.style === "stream") {
