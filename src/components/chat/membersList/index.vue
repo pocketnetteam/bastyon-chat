@@ -6,11 +6,12 @@
 
 		<template
       v-for="(members, title) in lists"
-      :key="members"
+      
     >
       <section
         class="chats"
         v-if="members.length"
+        :key="members"
       >
         <!--Title-->
         <div

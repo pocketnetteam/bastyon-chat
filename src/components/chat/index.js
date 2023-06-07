@@ -85,10 +85,10 @@ export default {
 					}
 				}
 			} else if (this.streamMode) {
-				this.roomUserBanned = this.m_chat?.currentState.members[this.m_chat.myUserId].membership === "ban";
+				this.roomUserBanned = this.m_chat?.currentState.members[this.m_chat.myUserId]?.membership === "ban";
 			}
 
-			this.membership = this.m_chat?.currentState.members[this.m_chat.myUserId].membership;
+			this.membership = this.m_chat?.currentState.members[this.m_chat.myUserId]?.membership;
 		}, 1000);
 	},
 

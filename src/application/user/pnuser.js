@@ -127,6 +127,8 @@ class PNUser extends User {
 
 		var decodedAddress = f.hexDecode(this.credentials.address);
 
+		console.log('decodedAddress', decodedAddress)
+
 		try {
 			var key = Buffer.from(this.credentials.privateKey, "hex");
 

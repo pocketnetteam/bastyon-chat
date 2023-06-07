@@ -25,7 +25,7 @@
 		/>
 
 		<div
-			v-if="!hiddenInParent"
+			v-if="!hiddenInParent || streamMode"
 			class="joinAction fixedOnPageBottom"
 			:class="{ bin: pocketnet, bout: !pocketnet }"
 		>

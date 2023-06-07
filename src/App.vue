@@ -860,30 +860,17 @@ export default {
 			window,
 			"window.POCKETNETINSTANCE.options.listofproxies"
 		) || [
-			/*{
+			{
 				host: "test.pocketnet.app",
 				port: 8899,
-				wss: 809
+				wss: 8099
 			},
-			/*{
-					host : 'pocketnet.app',
-					port : 8899,
-					wss : 8099
-			},*/
-			{
-					host : '1.pocketnet.app',
-					port : 8899,
-					wss : 8099
-			}
+			
 		];
 
 		/*
 
 		////////// new server
-
-
-		var sarr = ['vamily.ru', 'pnt.com','bst.app', 'sd.ci']
-
 
 		*/
 

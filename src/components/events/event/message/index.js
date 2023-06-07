@@ -337,10 +337,10 @@ export default {
 
 		urlpreview: function () {
 			if (
-				this.streamMode && this.content.url ||
-				!this.streamMode && !this.preview && this.content.msgtype !== "m.file"
+				(this.streamMode && this.content.url) ||
+			(!this.streamMode && !this.preview && this.content.msgtype !== "m.file" && this.content.msgtype !== "m.image" && this.content.msgtype !== "m.audio")
 			) {
-				var url = f.getUrl(this.content.url || this.body);
+				var url = f.getUrl(this.streamMode ? this.content.url : this.body);
 
 				if (url) {
 					var _u = new URL(url);

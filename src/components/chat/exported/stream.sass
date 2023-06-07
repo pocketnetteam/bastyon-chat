@@ -52,6 +52,7 @@ $bastyon: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTEiIGhlaWdodD0iMTIiIHZpZXd
 
       .chat-filter
         .button
+          min-width: 120px
           font-size: .8em
           font-weight: 600
 
@@ -70,10 +71,13 @@ $bastyon: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTEiIGhlaWdodD0iMTIiIHZpZXd
     width: unset
 
   #events
-    padding: 0 .5em 50px
+    
 
     .messageRow
-      padding: 0
+
+      &.my
+        padding-left: 0.5 * $r
+        padding-right: 0
 
       .messageText
         &.donation-message
@@ -276,8 +280,8 @@ $bastyon: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTEiIGhlaWdodD0iMTIiIHZpZXd
       display: flex
       align-items: center
       justify-content: space-between
-      margin: 9px 7px
-      padding: 3px 3px 4px 18px
+      margin: $r
+      padding: 2 * $r
 
       .caption
         cursor: default
@@ -295,6 +299,7 @@ $bastyon: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTEiIGhlaWdodD0iMTIiIHZpZXd
         background: none
         display: block
         padding: 0
+        position: relative
 
         .actions
           .action
