@@ -232,6 +232,7 @@ export default {
 
 		imageUrl: function () {
 			if (this.content.msgtype === "m.image") {
+
 				if (this.encryptedData) {
 					return this.decryptedInfo;
 				} else {

@@ -1566,6 +1566,11 @@ f.fetchLocal = function (url) {
 
 f.superXSS = function(str, p){
 
+	if(!p) p = {
+		stripIgnoreTag : true,
+		whiteList: {}
+	}
+
 	var l = str.length;
 
 	var nstr = filterXSS(str, p)

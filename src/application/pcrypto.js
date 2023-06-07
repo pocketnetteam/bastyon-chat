@@ -684,7 +684,6 @@ var PcryptoRoom = async function (pcrypto, chat, { ls, lse }) {
 		var secrets = "";
 		var block = "";
 		var v = undefined
-		
 
 		if (event.type == "m.room.encryption") {
 			secrets = event.content.keys;
@@ -699,8 +698,8 @@ var PcryptoRoom = async function (pcrypto, chat, { ls, lse }) {
 				f.deep(event, "content.info.secrets.block") ||
 				f.deep(event, "content.pbody.secrets.block");
 
-			v = f.deep(event, "content.info.secrets.version") ||
-				f.deep(event, "content.pbody.secrets.version") || 1
+			v = f.deep(event, "content.info.secrets.version") || f.deep(event, "content.info.secrets.v") ||
+				f.deep(event, "content.pbody.secrets.version") || f.deep(event, "content.pbody.secrets.v") || 1
 		}
 
 
