@@ -1,5 +1,5 @@
 $bastyon: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTEiIGhlaWdodD0iMTIiIHZpZXdCb3g9IjAgMCAxMSAxMiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik0xMSAxLjMyMzg3TDkuNjE3MTUgMC4wMDYxMDM1Mkw3Ljk4MDUyIDEuNzIzNTZDNy4xODU0OSAxLjIzOTYxIDYuMjUxOCAwLjk2MDg1NiA1LjI1MzAxIDAuOTYwODU2QzQuMzg2IDAuOTYwODU2IDMuNTY4MDUgMS4xNzA5IDIuODQ3MjcgMS41NDI4OEwxLjM4Mjg1IDAuMDA2MTQwMDdMMCAxLjMyMzkxTDEuMzMwMzQgMi43MTk5NkMwLjUwMjg1MSAzLjY0ODM0IDAgNC44NzIzOCAwIDYuMjEzODZDMCA3LjQ0ODYxIDAuNDI2MDEzIDguNTgzODUgMS4xMzkwNyA5LjQ4MDYzTDAgMTAuNjc2TDEuMzgyODUgMTEuOTkzN0wyLjU4MDM1IDEwLjczNzFDMy4zNjMzMyAxMS4yMDA3IDQuMjc3MDkgMTEuNDY2OSA1LjI1MzAxIDExLjQ2NjlDNi4zNTkzOSAxMS40NjY5IDcuMzg1ODggMTEuMTI0OCA4LjIzMjUyIDEwLjU0MDdMOS42MTcxNSAxMS45OTM3TDExIDEwLjY3Nkw5LjU4MjkzIDkuMTg4OTFDMTAuMTY1MiA4LjM0MzEzIDEwLjUwNiA3LjMxODMgMTAuNTA2IDYuMjEzODZDMTAuNTA2IDUuMDAxNzcgMTAuMDk1NSAzLjg4NTU3IDkuNDA1OSAyLjk5NjdMMTEgMS4zMjM4N1pNMS44NzM4MyA2LjIxMzg2QzEuODczODMgOC4wODAxMyAzLjM4Njc0IDkuNTkzMDMgNS4yNTMwMSA5LjU5MzAzQzcuMTE5MjcgOS41OTMwMyA4LjYzMjE4IDguMDgwMTMgOC42MzIxOCA2LjIxMzg2QzguNjMyMTggNC4zNDc2IDcuMTE5MjcgMi44MzQ2OSA1LjI1MzAxIDIuODM0NjlDMy4zODY3NCAyLjgzNDY5IDEuODczODMgNC4zNDc2IDEuODczODMgNi4yMTM4NloiIGZpbGw9IndoaXRlIi8+Cjwvc3ZnPgo="
-  
+
 #chatExported /deep/
   display: flex
   flex-direction: column
@@ -71,7 +71,6 @@ $bastyon: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTEiIGhlaWdodD0iMTIiIHZpZXd
     width: unset
 
   #events
-    
 
     .messageRow
 
@@ -106,7 +105,7 @@ $bastyon: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTEiIGhlaWdodD0iMTIiIHZpZXd
           .urlMessage .urlwrapper
             display: inline-flex
             margin-top: $r
-      
+
       .urlwrapper
         margin: 0
 
@@ -138,7 +137,7 @@ $bastyon: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTEiIGhlaWdodD0iMTIiIHZpZXd
 
               .info
                 display: none
-              
+
               .amount
                 color: srgb(--text-on-bg-shadow-color)
                 cursor: default
@@ -165,10 +164,12 @@ $bastyon: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTEiIGhlaWdodD0iMTIiIHZpZXd
               & + .output
                 display: none
 
-
   .eventsflex
-    overflow: hidden
     max-width: none
+    scrollbar-width: none
+
+    &::-webkit-scrollbar
+      width: 0!important
 
   .userpic
     background: transparent
@@ -182,13 +183,13 @@ $bastyon: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTEiIGhlaWdodD0iMTIiIHZpZXd
 
       .iconbutton
         cursor: pointer
-        color : srgb(--color-txt-ac)
+        color: srgb(--color-txt-ac)
         text-align: center
         +transition(0.3s)
 
         @media (pointer:fine)
           &:hover
-              color : srgb(--neutral-grad-3)
+            color: srgb(--neutral-grad-3)
 
     .center
       position: static
@@ -201,18 +202,18 @@ $bastyon: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTEiIGhlaWdodD0iMTIiIHZpZXd
 
       .input_component
         min-height: 35px
-      
+
       .inputWrapper
         .icon
           display: inline-block
-          
+
           &.donate
             background-color: srgb(--color-txt-ac)
             mask-image: url($bastyon)
             mask-repeat: no-repeat
             mask-position: 50% 50%
             mask-size: contain
-        
+
         .input_component
           .iconbutton
             cursor: pointer
@@ -226,7 +227,7 @@ $bastyon: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTEiIGhlaWdodD0iMTIiIHZpZXd
             &:hover:not([disabled])
               .donate
                 background-color: srgb(--neutral-grad-3)
-            
+
             &[disabled]
               cursor: default
 
@@ -254,7 +255,7 @@ $bastyon: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTEiIGhlaWdodD0iMTIiIHZpZXd
             &.donate
               background-color: srgb(--text-on-bg-shadow-color)
               width: 1em
-              
+
             &.remove
               color: srgb(--color-bad)
               cursor: pointer
@@ -322,7 +323,7 @@ $bastyon: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTEiIGhlaWdodD0iMTIiIHZpZXd
     .modal-backdrop,
     .modal-wrapper
       width: 100%
-    
+
     .modal-wrapper
       left: 50%
       margin-left: 0

@@ -272,9 +272,21 @@ export default {
 			if (this.scrollType === "custom") {
 				return;
 			} else {
+
+				/*if(this.$refs["container"].scrollTop >= this.$refs["container"].scrollHeight - this.$refs["container"].clientHeight - 1 && e.deltaY < 0) {
+					return
+				}
+
+				if(this.$refs["container"].scrollTop == 0 && e.deltaY > 0) {
+					return
+				}*/
+
 				e.preventDefault();
+
 				this.$refs["container"].scrollTop += -e.deltaY;
+
 				return false;
+
 			}
 		},
 		showMultiSelect() {

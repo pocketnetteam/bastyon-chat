@@ -175,7 +175,9 @@ export default {
 		},
 
 		showmyicon: function () {
+			
 			return (
+				this.streamMode || 
 				this.showmyicontrue ||
 				this.content.msgtype === "m.image" ||
 				/*this.content.msgtype === 'm.audio' ||*/

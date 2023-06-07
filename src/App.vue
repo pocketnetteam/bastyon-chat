@@ -416,8 +416,8 @@ export default {
 				// Update the teamroom messages
 				this.generateTeamroomMessages();
 
-				if (core.exporter){
-					core.exporter.changeLocalization(i18n.locale)
+				if (this.core && this.core.exporter){
+					this.core.exporter.changeLocalization(i18n.locale)
 				}
 
 
