@@ -425,6 +425,9 @@ export default {
 		},
 
 		dropDownMenuShow: function (e) {
+
+			if(this.streamMode) return
+
 			if (e?.button === 2) return e.preventDefault();
 			
 			setTimeout(() => {
