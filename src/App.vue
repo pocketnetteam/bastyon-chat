@@ -415,6 +415,12 @@ export default {
 
 				// Update the teamroom messages
 				this.generateTeamroomMessages();
+
+				if (core.exporter){
+					core.exporter.changeLocalization(i18n.locale)
+				}
+
+
 			},
 		},
 
@@ -892,6 +898,10 @@ export default {
 		});
 
 		core.init();
+
+		if (core.exporter){
+			core.exporter.changeLocalization(i18n.locale)
+		}
 
 		/*
 
