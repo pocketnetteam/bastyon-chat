@@ -188,6 +188,8 @@ export default {
 				this.scrollCorrection();
 				this.dupdated();
 			});
+
+			new this.smoothScroll(this.$refs["container"], 120, 15);
 		},
 		scroll: function () {
 			this.$emit("scroll", this.size());
@@ -244,8 +246,9 @@ export default {
 			//this.scrollToNew(this.c * this.ls)
 		},
 		scrollToNew(s) {
-			if (this.$refs["container"]) {
-				this.$refs["container"].scrollTop = this.c * s;
+			const container = this.$refs["container"];
+			if (container.scrolling) {
+				container.scrolling(-1, -container.scrollHeight);
 			}
 		},
 
@@ -283,11 +286,75 @@ export default {
 
 				e.preventDefault();
 
-				this.$refs["container"].scrollTop += -e.deltaY;
+				/* this.$refs["container"].scrollTop += -e.deltaY; */
+				const container = this.$refs["container"];
+				if (container.scrolling) {
+					container.scrolling(e);
+				}
 
 				return false;
 
 			}
+		},
+		smoothScroll: function(target, speed, smooth) {
+			let
+				moving = false,
+				pos = target.scrollTop,
+				frame = target === document.body 
+									&& document.documentElement 
+									? document.documentElement 
+									: target // safari is the new IE
+
+			target.scrolling = function(e, dest) {
+				let delta = normalizeWheelDelta(e);
+		
+				pos += delta * speed;
+				pos = Math.max(0, Math.min(pos, dest || (target.scrollHeight - frame.clientHeight))); // limit scrolling
+		
+				if (!moving) update();
+				console.log(delta, pos)
+			}
+		
+			function normalizeWheelDelta(e) {
+				if (e.detail) {
+					if (e.wheelDelta) {
+						return e.wheelDelta/e.detail/40 * (e.detail>0 ? 1 : -1) // Opera
+					} else {
+						return -e.detail/3 // Firefox
+					}
+				} else if (e.wheelDelta) {
+					return e.wheelDelta/120 // IE,Safari,Chrome
+				} else {
+					return e;
+				}
+			}
+		
+			function update() {
+				moving = true
+				
+				let delta = (pos - target.scrollTop) / smooth
+				
+				target.scrollTop += delta
+				
+				if (Math.abs(delta) > 0.5) {
+					requestFrame(update)
+				} else {
+					moving = false
+				}
+			}
+		
+			let requestFrame = function() { // requestAnimationFrame cross browser
+				return (
+					window.requestAnimationFrame ||
+					window.webkitRequestAnimationFrame ||
+					window.mozRequestAnimationFrame ||
+					window.oRequestAnimationFrame ||
+					window.msRequestAnimationFrame ||
+					function(func) {
+						window.setTimeout(func, 1000 / 50);
+					}
+				);
+			}()
 		},
 		showMultiSelect() {
 			this.multiSelect = true;

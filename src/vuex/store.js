@@ -331,8 +331,7 @@ var store = new Vuex.Store({
 				_.reduce(
 					rooms,
 					(s, chat) => {
-
-						return s + (chat.getUnreadNotificationCount() || 0);
+						return !chat.summary.stream ? s + (chat.getUnreadNotificationCount() || 0) : 0;
 					},
 					0
 				) + count.length;
