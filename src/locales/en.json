@@ -139,7 +139,12 @@
 		"sendmessage": "Send message",
 		"messages" : "Messages",
 		"you" : "You",
-		"sentfile" : "sent file:"
+		"sentfile" : "sent file:",
+		"administrators": "Owner",
+		"moderators": "Moderators",
+		"participants": "Participants",
+		"streamChat": "Stream chat",
+		"membersList": "Members list"
 	},
 
 	"input": {
@@ -172,7 +177,9 @@
 		"block": "Block",
 		"unblock": "Unblock",
 		"blockUser": "Block user",
-		"Complain": "Complain"
+		"Complain": "Complain",
+		"chat": "Chat",
+		"donations": "Donations"
 	},
 
 	"type": {

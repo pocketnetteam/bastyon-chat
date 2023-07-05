@@ -31,38 +31,73 @@ const i18n = new VueI18n({
 	silentTranslationWarn: true,
 });
 
-
-const chatConstructor = Vue.extend({...chat, store, i18n})
+const chatConstructor = Vue.extend({ ...chat, store, i18n })
 
 class Exporter {
-    constructor(core, p) {
+	constructor(core, p) {
 		this.core = core;
-        this.instances = {}
+		this.instances = {}
 	}
-    chat(el, roomId, p){
 
-        
-        var chat = this.core.vm.$store.state.chatsMap[roomId];
+	changeLocalization(localization) {
+		i18n.locale = localization;
+	}
+	async chat(el, roomId, p) {
+		console.log('chat: initializing')
+		await this.core?.mtrx?.waitchats();
 
-        if (chat){
+		/*Get video meta (&stream state)*/
+		console.log('chat: get video meta')
+		if (!p.videoMeta && p.style === "stream") {
+			await window.POCKETNETINSTANCE?.platform?.sdk?.videos?.info(p.videoUrl)
+				.then(() => window.parseVideo(p.videoUrl))
+				.then(meta => {
+					if (meta?.type === "peertube") {
+						meta = window.peertubeglobalcache[meta.id];
+						p.videoMeta = meta;
+						console.log('chat:', meta)
+					}
+				});
+		}
 
-            const instance = new chatConstructor({
-                data: {chat, ...p},
-            })
+		const chat = this.core.vm.$store.state.chatsMap[roomId];
+		console.log('chat:', chat)
 
-            instance.$options.shadowRoot = el.ownerDocument.body
-            
-            instance.$mount(el)
+		if (chat) {
+			console.log('chat: build')
+			const instance = new chatConstructor({
+				data: { chat, ...p },
+			});
 
-            return Promise.resolve({
-                instance
-            })
+			instance.$options.shadowRoot = el.ownerDocument.body;
 
-            
-        }
+			console.log('chat: mount', el)
+			instance.$mount(el);
 
-        return Promise.reject('missing:chat')
-    }
+			instance.destroy = () => {
+				instance.$destroy();
+				instance.$el.parentNode.removeChild(instance.$el);
+			}
+
+			return Promise.resolve(instance);
+		} else if (typeof this.core?.mtrx?.client?.peekInRoom !== "undefined") {
+			console.log('chat: peekInRoom')
+			await this.core.mtrx.client.peekInRoom(roomId)
+				.then(room => {
+					if (!room) return Promise.reject("missing:chat");
+
+					console.log('chat: room', room)
+					this.core.vm.$store.commit(
+						"SET_CHATS_TO_STORE",
+						this.core.vm.$store.state.chats.concat([
+							Object.assign(room.summary, { stream: true })
+						])
+					);
+				});
+
+			return this.chat.apply(this, arguments);
+		}
+	}
 }
 
 export default Exporter;

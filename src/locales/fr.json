@@ -126,7 +126,12 @@
 		"sendmessage": "Send message",
 		"messages" : "Messages",
 		"you" : "You",
-		"sentfile" : "sent file:"
+		"sentfile" : "sent file:",
+		"administrators": "Propriétaire",
+		"moderators": "Modérateurs",
+		"participants": "Intervenants",
+		"streamChat": "Chat en streaming",
+		"membersList": "Liste des membres"
 	},
 
 	"input": {
@@ -158,7 +163,10 @@
 		"select": "Sélectionner",
 		"block": "Bloquer",
 		"unblock": "Débloquer",
-		"blockUser": "Bloquer utilisateur"
+		"blockUser": "Bloquer utilisateur",
+		"Complain": "Se plaindre",
+		"chat": "Discuter",
+		"donations": "Des dons"
 	},
 
 	"yes": "Oui",

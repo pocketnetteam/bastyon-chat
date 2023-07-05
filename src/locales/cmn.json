@@ -122,7 +122,12 @@
 		"sendmessage": "Send message",
 		"messages" : "Messages",
 		"you" : "You",
-		"sentfile" : "sent file:"
+		"sentfile" : "sent file:",
+		"administrators": "所有者",
+		"moderators": "主持人",
+		"participants": "参加者",
+		"streamChat": "串流聊天",
+		"membersList": "会员名单"
 	},
 
 	"input": {
@@ -154,7 +159,10 @@
 		"select": "選擇",
 		"block": "阻止",
 		"unblock": "解除封锁",
-		"blockUser": "阻止用户"
+		"blockUser": "阻止用户",
+		"Complain": "抱怨",
+		"chat": "聊天",
+		"donations": "捐款"
 	},
 
 	"yes": "是的",

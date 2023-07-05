@@ -1,7 +1,11 @@
 <template>
 	<div id="chatInput" class="noswipepnt">
 		<div class="work" v-if="ready">
-			<div class="inputWrapper" v-if="chat">
+			<div
+				class="inputWrapper"
+				:class="{ donate }"
+				v-if="chat"
+			>
 				<div class="tipusers" v-if="tipusers.length">
 					<div
 						@click="insertuser(user)"
@@ -34,13 +38,16 @@
 						@tipsearchrequest="tipBySearch"
 						@browsetip="browsetip"
 						@selectcurrenttip="selectcurrenttip"
+						@donateaction="sendtransactionWrapper"
+						:donate="donate"
 						:storagekey="'chatinput' + chat.roomId"
 						:tipusers="tipusers"
+						:me="me"
 					/>
 					<div
 						class="left"
 						:class="{ extended: voiceEnable }"
-						v-if="upload && chat"
+						v-if="!streamMode && upload && chat"
 					>
 						<div v-if="!isRecording && !record" class="iconbutton" @click="showinputmenu">
 							<i class="icon fas fa-plus"></i>
@@ -75,6 +82,14 @@
 							</div>
 						</div>
 					</div>
+				</div>
+
+				<div class="bottom" v-if="donate">
+					<div class="count">
+						<i class="icon donate">Donate</i>
+						<span class="sum">{{ donate.value }} PKOIN</span>
+					</div>
+					<i class="icon remove fa fa-times" @click="removetransaction"></i>
 				</div>
 			</div>
 		</div>

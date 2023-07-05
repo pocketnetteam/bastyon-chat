@@ -123,7 +123,12 @@
 		"chatsearchingempty": "No chats found for the specified filter",
 		"sendmessage": "Send message",
 		"you" : "You",
-		"sentfile" : "sent file:"
+		"sentfile" : "sent file:",
+		"administrators": "Dueño",
+		"moderators": "Moderadores",
+		"participants": "Participantes",
+		"streamChat": "Transmitir chat",
+		"membersList": "Lista de miembros"
 	},
 
 	"input": {
@@ -155,7 +160,10 @@
 		"select": "Seleccione",
 		"block": "Bloquear",
 		"unblock": "Desbloquear",
-		"blockUser": "Bloquear usuario"
+		"blockUser": "Bloquear usuario",
+		"Complain": "Quejarse",
+		"chat": "Charlar",
+		"donations": "Donaciones"
 	},
 
 	"yes": "sí",

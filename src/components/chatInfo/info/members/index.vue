@@ -3,18 +3,18 @@
 		<div
 			class="roomMember"
 			:class="user.membership"
-			v-for="(user, index) in membersList"
+			v-for="user in membersList"
 			:key="user.userId"
-			
+
 		>
-			<div class="leftWrapper" @click="core.mtrx.opencontact(userinfo(user))">
+			<div class="leftWrapper" @click="openModal(user)">
 				<div class="avatarNameWrapper">
 					<userpic :userinfo="userinfo(user)" :status="user.membership" />
 				</div>
 				<div class="nameRole">
 					<span class="name">{{ userinfo(user).name || "" }}</span>
 
-					<span class="memberRole" v-if="user.powerLevel">{{
+					<span class="memberRole" v-if="roles && user.powerLevel">{{
 						$t("caption." + role(user))
 					}}</span>
 					<span class="memberRole" v-if="user.userId == meid">You</span>

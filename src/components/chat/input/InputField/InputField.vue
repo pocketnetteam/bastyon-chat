@@ -20,7 +20,7 @@
 					@paste="paste_image"
 					:placeholder="$t('caption.sendmessage')"
 				></textarea>
-				<transition name="fade" mode="out-in" v-if="!mobile && emojiIndex">
+				<transition name="fade" mode="out-in" v-if="!streamMode && !mobile && emojiIndex">
 					<picker
 						:data="emojiIndex"
 						v-show="display_emoji"
@@ -46,12 +46,25 @@
 		<div
 			class="iconbutton emojipicker"
 			@click="toggle_emoji_picker()"
-			v-if="!mobile"
+			v-if="!streamMode && !mobile"
 		>
 			<div class="leftdummy">
 				<div class="idummy">
 					<i v-if="display_emoji" class="fas fa-times"></i>
 					<i v-else class="far fa-smile"></i>
+				</div>
+			</div>
+		</div>
+
+		<div
+			class="iconbutton"
+			v-if="streamMode && !me"
+			@click="donateAction"
+			:disabled="donate"
+		>
+			<div class="rightdummy">
+				<div class="idummy">
+					<i class="icon donate">Donate</i>
 				</div>
 			</div>
 		</div>
@@ -87,6 +100,8 @@ export default {
 	directives: {
 		clickOutside: vClickOutside.directive,
 	},
+
+	inject: ['streamMode'],
 
 	watch: {
 		text: {
@@ -134,11 +149,11 @@ export default {
 	computed: {
 		mobile: function () {
 			return !this.$store.state.pocketnet && this.$store.state.mobile;
-		},
+		}
 
 		/*emojiIndex: function () {
 
-		 
+
 
 			return window.emojiIndex
 
@@ -242,7 +257,7 @@ export default {
 			this.savetextinstorage();
 		},
 		paste_image(event) {
-			this.get_base64(event);
+			if (!this.streamMode) this.get_base64(event);
 		},
 		get_base64(event) {
 			this.pasted_data = event.clipboardData.items;
@@ -435,11 +450,17 @@ export default {
 				this.block = false;
 			}, 350);
 		},
+
+		donateAction: function () {
+			this.$emit("donateaction");
+		}
 	},
 
 	props: {
+		donate: Object,
 		storagekey: String,
 		tipusers: Array,
+		me: Boolean
 	},
 
 	creared() {},
@@ -530,11 +551,14 @@ export default {
 		align-items: center
 
 .chat-input
+	background: transparent
+	border: 0
 	width: 100%
 	max-height: 100px
 	// min-height: 26px
 	overflow-y: auto
 	resize: none
+	line-height: inherit
 
 	&::-webkit-scrollbar
 		width: 0 !important

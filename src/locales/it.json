@@ -130,7 +130,12 @@
 		"sendmessage": "Send message",
 		"messages" : "Messages",
 		"you" : "You",
-		"sentfile" : "sent file:"
+		"sentfile" : "sent file:",
+		"administrators": "Proprietario",
+		"moderators": "Moderatori",
+		"participants": "Partecipanti",
+		"streamChat": "Chatta in streaming",
+		"membersList": "Elenco dei membri"
 	},
 
 	"input": {
@@ -163,7 +168,9 @@
 		"block": "Blocca",
 		"unblock": "Sblocca",
 		"blockUser": "Blocca utente",
-		"Complain": "Segnala"
+		"Complain": "Segnala",
+		"chat": "Chiacchierata",
+		"donations": "Donazioni"
 	},
 
 	"type": {

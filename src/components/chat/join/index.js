@@ -13,6 +13,11 @@ export default {
 	components: {
 		chatPreview,
 	},
+	
+	inject: [
+		"streamMode",
+		"videoMeta"
+	],
 
 	data: function () {
 		return {
@@ -46,6 +51,8 @@ export default {
 	mounted: function () {},
 	methods: {
 		join: function () {
+			if (!this.videoMeta?.isLive) return;
+
 			var self = this;
 
 			this.$store.commit("SET_CHAT_TO_FORCE", this.m_chat.roomId);
