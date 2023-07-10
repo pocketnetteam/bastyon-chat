@@ -4,7 +4,7 @@
 		:class="{ readyToRender, my }"
 		ref="msgElement"
 		v-if="
-			!event.localRedactionEvent() && !event.getRedactionEvent() && !removed
+			(streamMode && !isBanned) || (!streamMode && !event.localRedactionEvent() && !event.getRedactionEvent() && !removed)
 		"
 	>
 		<member
@@ -71,7 +71,7 @@
 		</div>
 	</div>
 
-	<div v-else class="deletedMessage">
+	<div v-else-if="!streamMode" class="deletedMessage">
 		<i class="fas fa-eraser"></i> {{ $t("caption.messageDeleted") }}
 	</div>
 </template>
@@ -124,6 +124,8 @@ export default {
 		dummypreviews : () => import("@/components/chats/dummypreviews"),
 	},
 
+	inject: ["streamMode", "userBanned"],
+
 	data: function () {
 		return {
 			decryptEvent: {},
@@ -138,6 +140,7 @@ export default {
 			audioBuffer: null,
 
 			readyToRender: false,
+      users: []
 		};
 	},
 
@@ -227,8 +230,16 @@ export default {
 		userinfo: function () {
 
 			return this.$store?.state.users[this.$f.getmatrixid(this.event.getSender())] || {}
+      /*const id = this.$f.getmatrixid(this.event.getSender());
 
-		
+      return this.$store?.state.users[id] || (() => {
+				if (!this.users[id]) {
+					this.$set(this.users, id, this.chat.getMember(id));
+				}
+
+				return this.users[id];
+			})();*/
+
 		},
 
 		///readreciepts
@@ -244,6 +255,16 @@ export default {
 		my: function () {
 			return this.userinfo.id === this.core.user.userinfo?.id;
 		},
+
+		isBanned: function() {
+			const
+				id = this.event.event.user_id ?? this.event.event.sender,
+				state = this.chat.currentState?.members[id]?.membership === "ban";
+
+			if (this.my) this.userBanned.set(state);
+
+			return state;
+		}
 	},
 
 	beforeDestroy: function () {

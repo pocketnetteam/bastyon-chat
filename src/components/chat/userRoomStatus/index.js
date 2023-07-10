@@ -1,4 +1,5 @@
 export default {
+	inject: ["streamMode"],
 	props: {
 		text: String,
 		chat: Object,

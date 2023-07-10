@@ -67,7 +67,6 @@ var store = new Vuex.Store({
 		hideOptimization: false,
 		modalShowed: null,
 		modals: [],
-		menu: null,
 		pinchat: false,
 		lastroom: null,
 		dontreadreceipts: false,
@@ -313,7 +312,7 @@ var store = new Vuex.Store({
 			var n = new Date();
 
 			var count = _.filter(rooms, (room) => {
-				if (room._selfMembership === "invite") {
+				if (room._selfMembership === "invite" && !room.summary.stream) {
 					var users = store._vm.core.mtrx.anotherChatUsers(room);
 
 					if (
@@ -332,8 +331,7 @@ var store = new Vuex.Store({
 				_.reduce(
 					rooms,
 					(s, chat) => {
-
-						return s + (chat.getUnreadNotificationCount() || 0);
+						return !chat.summary.stream ? s + (chat.getUnreadNotificationCount() || 0) : 0;
 					},
 					0
 				) + count.length;
@@ -375,7 +373,7 @@ var store = new Vuex.Store({
 
 			_.each(chats, (chat) => {
 
-				var aid = chat.info.title.replace("#", "");
+				var aid = chat.info?.title?.replace("#", "");
 
 				if (!state.chatsMap[chat.roomId] || state.force[chat.roomId]) {
 					Vue.set(state.chatsMap, chat.roomId, chat);
@@ -386,7 +384,7 @@ var store = new Vuex.Store({
 				}
 
 				chatsMap[chat.roomId] = chat;
-				chatsMap[chat.info.title.replace("#", "")] = chat;
+				chatsMap[aid] = chat;
 
 				Vue.delete(state.force, chat.roomId);
 			});
@@ -437,7 +435,7 @@ var store = new Vuex.Store({
 					timeline.push(_e);
 				});
 
-				if(timeline.length && state.events[k] && state.events[k].timeline && state.events[k].timeline[0] && 
+				if(timeline.length && state.events[k] && state.events[k].timeline && state.events[k].timeline[0] &&
 					(state.events[k].timeline[0].event.event_id == timeline[0].event.event_id)) {
 						return
 					}
@@ -628,10 +626,6 @@ var store = new Vuex.Store({
 			}
 		},
 
-		SET_MENU(state, v) {
-			state.menu = v;
-		},
-
 		SET_VOICERECORDING(state, v) {
 			state.voicerecording = v;
 		},
@@ -718,6 +712,8 @@ var store = new Vuex.Store({
 			var id = store._vm.core.user.myMatrixId();
 
 			var chats = _.map(m_chats, function (r) {
+				const hv = r.currentState.getStateEvents("m.room.history_visibility", "");
+				
 				if (r.getLastActiveTimestamp() === -9007199254740991) {
 					if (r.getMember(id)) {
 						r.summary.lastModified =
@@ -732,6 +728,7 @@ var store = new Vuex.Store({
 
 				}
 				r.summary.key = r.summary.roomId + ':' + r.summary.lastModified
+				r.summary.stream = hv?.event?.content?.history_visibility === "world_readable";
 
 				return r.summary;
 			});

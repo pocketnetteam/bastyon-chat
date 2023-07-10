@@ -1,7 +1,7 @@
 <template>
 	<div class="eventsMessage">
-	
-		
+
+
 		<div
 			v-touch:touchhold="dropDownMenuShow"
 			:class="{
@@ -12,7 +12,7 @@
 				allscreen: urlpreview || content.msgtype === 'm.image' || file,
 				aligncenter: content.msgtype === 'm.audio',
 			}"
-			:my="my"
+			:my="!streamMode && my"
 			v-if="!preview && content.msgtype !== 'm.notice'"
 		>
 			<div
@@ -28,7 +28,7 @@
 			>
 				<i
 					:class="'fas fa-fire burn ' + showburn"
-					v-if="showburn"
+					v-if="!streamMode && showburn"
 					@click="showwhenburn"
 				></i>
 
@@ -39,12 +39,10 @@
 
 			<div
 				class="actionsWrapper"
-				v-if="
-					!content.call_id && event.event.type !== 'm.room.request_calls_access'
-				"
+				v-if="isMenuAllowed"
 			>
 				<div
-					v-if="multiSelect"
+					v-if="!streamMode && multiSelect"
 					class="multiSelect"
 					@click="eventMessage(selectedMessage)"
 				>
@@ -56,7 +54,7 @@
 
 			<div
 				class="iconWrapper"
-				v-if="!my || showmyicon"
+				v-if="streamMode || !my || showmyicon"
 				@click="core.mtrx.opencontact(userinfo)"
 			>
 				<userpic :userinfo="userinfo" />
@@ -154,11 +152,15 @@
 				class="maxcontent"
 				:class="{ my: my }"
 				v-if="
+					this.streamMode ||
 					(content.msgtype === 'm.text' || content.msgtype === 'm.encrypted') &&
 					textWithoutLinks
 				"
 			>
-				<div class="messageText">
+				<div
+					class="messageText"
+					:class="donationColor"
+				>
 					<div class="edited" v-if="edited">
 						<i class="fas fa-pen"></i> {{ $t("caption.edited") }}
 					</div>
@@ -200,6 +202,23 @@
 							<span>{{ userinfo.name }}: {{ $t("caption.messagefrom").toLowerCase() }}</span>
 						</div>
 					</div>
+
+					<div class="linkPreview" v-if="streamMode && content.url && urlpreview">
+						<template v-if="!sending">
+							<url
+								:url="urlpreview"
+								:urllink="urlpreview"
+								:preview="true"
+								@updatedSize="updatedSize"
+								@loaded="urlloaded"
+								@error="urlerror"
+								v-if="!origin.localRedactionEvent() && !origin.getRedactionEvent()"
+							/>
+						</template>
+						<div v-else>
+							<linepreloader />
+						</div>
+					</div>
 				</div>
 			</div>
 
@@ -219,7 +238,7 @@
 				</div>
 			</div>
 
-			<div class="linkPreview" v-if="urlpreview">
+			<div class="linkPreview" v-if="!streamMode && urlpreview">
 				<template v-if="!sending">
 					<url
 						:url="urlpreview"
@@ -243,7 +262,7 @@
 						(content.msgtype === 'm.image' && imageUrl) ||
 						(content.msgtype === 'm.audio' && audioUrl))
 				"
-			>	
+			>
 				<div class="fromCaption">
 					<i class="fas fa-share-alt"></i>
 					<span>{{ userinfo.name }}: {{ $t("caption.messagefrom").toLowerCase() }} </span>
@@ -265,7 +284,7 @@
 
 		<div
 			class="statusWrapper"
-			v-if="my && readed && !preview && !fromreference"
+			v-if="!streamMode && my && readed && !preview && !fromreference"
 		>
 			<div class="my">
 				<i class="fas fa-check-double"></i>

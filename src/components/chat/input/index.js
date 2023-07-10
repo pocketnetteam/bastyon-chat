@@ -27,6 +27,12 @@ export default {
 		recordVoice,
 		upload,
 	},
+	
+	inject: [
+		"streamMode",
+		"authorId",
+		"menuState"
+	],
 
 	data: function () {
 		return {
@@ -59,6 +65,8 @@ export default {
 			prepareRecording: false,
 
 			cancelledCordovaMediaRecorder: false,
+
+			donate: null
 		};
 	},
 
@@ -251,6 +259,11 @@ export default {
 
 			return null;
 		},
+
+		me() {
+			/* Compare author and user bastyon id to prevent donate myself */
+			return this.authorId === this.core.user.userinfo?.source.address;
+		}
 	},
 
 	created() {},
@@ -352,21 +365,33 @@ export default {
 		},
 
 		sendtransactionWrapper: function () {
-
-			var users = _.filter(
-				_.map(this.joined, (j) => {
-					return (
-						this.$f.deep(
-							this,
-							"$store.state.users." + this.$f.getmatrixid(j)
-						) || null
+			var users = (() => {
+				if (this.streamMode && this.authorId) {
+					/* Donate only to author (stream mode) */
+					return [{
+						id: this.authorId,
+						source: {
+							address: this.authorId
+						}
+					}];
+				} else {
+					/* Donate to chat participants */
+					return _.filter(
+						_.map(this.joined, (j) => {
+							return (
+								this.$f.deep(
+									this,
+									"$store.state.users." + this.$f.getmatrixid(j)
+								) || null
+							);
+						}),
+						(r) => {
+							return r && r.source && r.id != this.core.user.userinfo?.id;
+						}
 					);
-				}),
-				(r) => {
-					return r && r.source && r.id != this.core.user.userinfo?.id;
 				}
-			);
-
+			})();
+			
 			if (!users.length) {
 				return "users.length";
 			}
@@ -395,6 +420,8 @@ export default {
 		},
 
 		sendtransaction: function (user) {
+			if (this.donate) return;
+
 			var api = this.transaction;
 
 			//TODO get address and send transaction
@@ -402,13 +429,15 @@ export default {
 			api({
 				roomid: this.chat.roomId,
 				receiver: user.source.address,
-			});
+				send: !this.streamMode,
+				share: !this.streamMode
+			}).then(transaction => {
+				this.donate = transaction;
+			})
+		},
 
-			/*.then(({txid, from}) => {
-	  
-			  return this.core.mtrx.transaction(this.chat.roomId, txid)
-	  
-			})*/
+		removetransaction: function () {
+			this.donate = null;
 		},
 
 		emitInputData: function () {
@@ -589,7 +618,7 @@ export default {
 				.pretry(() => {
 					return this.chat && !this.creating;
 				})
-				.then((r) => {
+				.then(async (r) => {
 					this.$emit("sent");
 
 					text = this.replaceMentions(text);
@@ -643,12 +672,25 @@ export default {
 						}
 					}
 
-					return this.core.mtrx.sendtext(this.chat, text, {
-						relation: this.relationEvent,
-					}, {
-						encryptEvent : this.clbkEncrypt,
-						encryptedEvent : this.clbkEncrypted
-					});
+					const
+						sendText = (text, params) => {
+							return this.core.mtrx.sendtext(this.chat, text, Object.assign({
+								relation: this.relationEvent,
+							}, params || {}), {
+								encryptEvent : this.clbkEncrypt,
+								encryptedEvent : this.clbkEncrypted
+							});
+						},
+						data = {};
+
+					if (this.donate) {
+						const donate = Object.assign(this.donate, {});
+						this.removetransaction();
+						const txid = await donate.send();
+						data.donateLink = txid;
+					}
+
+					return sendText(text, data);
 				})
 				.catch((e) => {
 					this.$emit("sentMessageError", {
@@ -1425,7 +1467,10 @@ export default {
 		},
 
 		showinputmenu : function(){
-			this.core.menu({
+			/*this.core.menu({
+				items: this.menu,
+			});*/
+			this.menuState.set({
 				items: this.menu,
 			});
 		},

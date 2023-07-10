@@ -32,23 +32,33 @@
 				:key="key"
 				:chat="m_chat"
 				:searchresults="searchresults"
+				:filterType.sync="filterType"
 				@editingEvent="editingEvent"
 				@shareEvent="shareEvent"
 				@replyEvent="replyEvent"
 				@eventImage="(e) => galleryImage(e)"
 				@scroll="scroll"
 				@menuIsVisible="menuIsVisibleHandler"
-				v-if="m_chat && membership === 'join' && ready"
+				v-if="m_chat && allowedToRead && ready"
+				v-show="!userBanned?.value"
 				@getEvents="events"
 				:selectedMessages="selectedMessages"
 			/>
 
-			<div v-if="m_chat && membership === 'invite'" class="joinwrapper">
+			<div
+				v-if="
+					m_chat &&
+					!userBanned?.value &&
+					!['join', 'ban'].includes(membership)
+				"
+				class="joinwrapper"
+			>
 				<join
-					:m_chat="m_chat"
+					:m_chat.sync="m_chat"
 					:chat="chat"
 					:usersinfo="usersinfo"
 					@creatorLeft="brokenInvitedRoom"
+					@joined="joined"
 				/>
 			</div>
 
@@ -57,7 +67,7 @@
 			</div>
 
 			<div
-				v-if="!m_chat || membership === 'join'"
+				v-if="!userBanned?.value && (!m_chat || membership === 'join')"
 				class="chatInputWrapper fixedOnPageBottom"
 				:class="{ bin: pocketnet, bout: !pocketnet }"
 			>
@@ -138,7 +148,7 @@
 
 			<div
 				class="encrypted fixedOnPageTop"
-				v-if="encrypted && membership != 'invite'"
+				v-if="!streamMode && encrypted && membership != 'invite'"
 				@mouseover="(e) => (hoverEncrypt = true)"
 			>
 				<i v-if="!encrypting" class="fas fa-lock"></i>
@@ -172,7 +182,7 @@
 			</div>
 		</div>
 		<userRoomStatus
-			v-if="roomUserBanned"
+			v-if="userBanned?.value || roomUserBanned"
 			:chat="chat"
 			:text="`You've have been banned in this room`"
 		/>

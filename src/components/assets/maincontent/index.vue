@@ -21,8 +21,8 @@
 				</div>
 			</div>
 
-			<pmenu></pmenu>
-			
+			<pmenu />
+
 			<transition name="fademodal">
 				<modal
 					@close="closeModal"

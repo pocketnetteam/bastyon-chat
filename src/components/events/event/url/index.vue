@@ -13,6 +13,7 @@
 				:h="meta['og:image:height']"
 				:w="meta['og:image:width']"
 				@updatedSize="updatedSize"
+				@loaded="loaded"
 			/>
 
 			<div v-else>
@@ -130,6 +131,9 @@ export default {
 	methods: {
 		updatedSize: function (before) {
 			this.$emit("updatedSize", before);
+		},
+		loaded: function (data) {
+			this.$emit("loaded", data);
 		},
 		geturl: function () {
 			//this.loading = true;

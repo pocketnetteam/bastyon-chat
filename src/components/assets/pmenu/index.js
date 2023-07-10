@@ -2,11 +2,12 @@ import simpleMenu from "@/components/assets/simpleMenu/simpleMenu.vue";
 import { mapState } from "vuex";
 export default {
 	name: "pmenu",
-	props: {},
-
+	
 	components: {
 		simpleMenu,
 	},
+	
+	inject: ["menuState"],
 
 	data: function () {
 		return {
@@ -14,18 +15,18 @@ export default {
 		};
 	},
 
-	watch: {},
-
 	computed: {
 		...mapState({
 			pocketnet: (state) => state.pocketnet,
 			minimized: (state) => state.minimized,
 			mobile: (state) => state.mobile,
 			active: (state) => state.active,
-			hiddenInParent: (state) => state.hiddenInParent,
-
-			menu: (state) => state.menu,
+			hiddenInParent: (state) => state.hiddenInParent
 		}),
+		
+		menu() {
+			return this.menuState.get();
+		}
 	},
 
 	methods: {
@@ -44,13 +45,15 @@ export default {
 
 		showPopup: function () {
 			if (this.last) {
-				this.$store.commit("SET_MENU", this.last);
+				this.menuState.set(this.last);
+				this.$emit('setmenu', this.last);
 				this.last = null;
 			}
 		},
 
 		hidePopup() {
-			this.$store.commit("SET_MENU", null);
+			this.menuState.set(null);
+			this.$emit('setmenu', null);
 		},
 	},
 };

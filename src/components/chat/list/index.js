@@ -22,6 +22,8 @@ export default {
 	components: {
 		events,
 	},
+	
+	inject: ['streamMode'],
 
 	data: function () {
 		return {
@@ -64,6 +66,10 @@ export default {
 			//   this.readAll();
 			// }
 		},
+
+		filterType: function (value) {
+			this.init();
+		}
 	},
 	computed: mapState({
 		lloading: function () {
@@ -310,20 +316,25 @@ export default {
 				}
 			});
 		},
-		mediaTimelineSet: async function () {
+		customTimelineSet: async function (name, set) {
+			if (!name) return;
+			
 			var filter = new this.core.mtrx.sdk.Filter(client.getUserId());
 
-			filter.setDefinition({
-				room: {
-					timeline: {
-						contains_url: true,
-						types: ["m.room.message"],
+			if (typeof set === 'function') set(filter);
+			else {
+				filter.setDefinition({
+					room: {
+						timeline: {
+							contains_url: this.filterType === "images",
+							types: ["m.room.message"],
+						},
 					},
-				},
-			});
+				});
+			}
 
 			filter.filterId = await this.core.mtrx.client.getOrCreateFilter(
-				"FILTER_FILES_" + this.core.mtrx.client.credentials.userId,
+				`FILTER_${ name }_` + this.core.mtrx.client.credentials.userId,
 				filter
 			);
 
@@ -332,7 +343,6 @@ export default {
 		init: async function () {
 			this.loading = true;
 			this.firstPaginate = true;
-
 
 			//this.chat.getTimelineForEvent('$FXUvcjIqcvDu0meLTnz-8plloZoNHLIYEb6WGQMWO3s')
 			
@@ -344,14 +354,44 @@ export default {
 
 			var ts;
 
-			if (this.filterType === "images") {
-				this.scrollType = "custom";
-				ts = await this.mediaTimelineSet();
-			} else {
-
-				var timeline = this.chat.getLiveTimeline();
-
-				ts = timeline.getTimelineSet();
+			switch (this.filterType) {
+				case "images": {
+					this.scrollType = "custom";
+					ts = await this.customTimelineSet('FILES');
+					break;
+				}
+				
+				case "text": {
+					ts = await this.customTimelineSet('TEXT', (filter) => {
+						filter.setDefinition({
+							room: {
+								timeline: {
+									types: ["m.room.message"],
+								},
+							},
+						});
+					});
+					break;
+				}
+				
+				case "donate": {
+					ts = await this.customTimelineSet('TEXT', (filter) => {
+						filter.setDefinition({
+							room: {
+								timeline: {
+									contains_url: true,
+									types: ["m.room.message"]
+								},
+							},
+						});
+					});
+					break;
+				}
+				
+				default: {
+					var timeline = this.chat.getLiveTimeline();
+					ts = timeline.getTimelineSet();
+				}
 			}
 
 			this.timeline = new this.core.mtrx.sdk.TimelineWindow(
@@ -489,6 +529,8 @@ export default {
 		},
 
 		readEvent: function (event) {
+			if (this.streamMode) return;
+			
 			var byme = this.core.mtrx.me(event.event.sender);
 
 			if (byme) {
@@ -498,23 +540,31 @@ export default {
 		},
 
 		readFirst: function () {
+			if (this.streamMode) return;
+
 			var events = this.timeline.getEvents();
 
 			this.readEvent(events[0]);
 		},
 
 		readLast: function () {
+			if (this.streamMode) return;
+
 			var events = this.timeline.getEvents();
 
 			this.readEvent(events[events.length - 1]);
 		},
 
 		readEvents: function (events) {
+			if (this.streamMode) return;
+
 			_.each(events, (e) => {
 				this.readEvent(e);
 			});
 		},
 		readOne() {
+			if (this.streamMode) return;
+
 			this.core.mtrx
 				.client(this.chat.timeline[this.chat.timeline.length - 1])
 				.then((r) => {
@@ -523,7 +573,7 @@ export default {
 		},
 		debouncedReadAll : _.debounce(function(){
 
-			if (!this.chat) return;
+			if (!this.chat || this.streamMode) return;
 			if (this.readPromise) return
 
 			var i = this.chat.timeline.length - 1;
@@ -552,7 +602,7 @@ export default {
 					
 				}
 				else{
-					
+				
 				}
 
 				i--;
@@ -566,7 +616,7 @@ export default {
 
 				var eid = event.event.event_id
 
-				this.readPromise = this.core.mtrx.client
+				this.readPromise = this.streamMode || this.core.mtrx.client
 					.setRoomReadMarkers(this.chat.currentState.roomId, eid, event/*, {
 						hidden: !this.settings_read ? true : false,
 					}*/).then((r) => {
@@ -574,8 +624,7 @@ export default {
 						return r;
 					}).catch(e => {
 						console.error(e)
-						console.log(event)
-						event.readError = e	
+						event.readError = e
 					})
 					.finally(() => {
 						this.readPromise = null
@@ -593,7 +642,7 @@ export default {
 			){
 				this.debouncedReadAll()
 			}
-				
+			
 		},
 
 		//////////////

@@ -27,11 +27,13 @@ export default {
 			);
 		},
 		readyChat: function () {
-			var chats = this.$store.state.chats;
-			var chatID = this.tetatetid;
+			const
+				chats = this.$store.state.chats,
+				chatID = this.tetatetid;
+
 			return _.filter(
 				chats,
-				(chat) => chat.info.title.replace(/#/, "") === chatID
+				(chat) => (chat?.info?.title ?? "").replace(/#/, "") === chatID
 			);
 		},
 	}),

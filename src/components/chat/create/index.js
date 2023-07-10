@@ -139,8 +139,6 @@ export default {
 					],
 				})
 				.then((chat) => {
-					this.$store.state.globalpreloader = false;
-
 					return chat;
 				})
 				.catch((e) => {
