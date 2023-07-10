@@ -1,6 +1,5 @@
 import {mapState} from 'vuex';
 // TODO IGOR' SEARCH ALL COMPONENTS
-import _ from 'underscore'
 export default {
 	name: 'search',
 	props: {

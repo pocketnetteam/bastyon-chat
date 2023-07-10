@@ -14,7 +14,7 @@
 <script>
 import { mapState } from "vuex";
 
-import chat from '../index.vue'
+//import chat from '../index.vue'
 
 export default {
 	name: "chatExported",
@@ -26,7 +26,7 @@ export default {
 		}
 	},
 	components : {
-		chat
+		chat : () => import('../index.vue')
 	},
 	computed: mapState({
 		auth: (state) => state.auth,

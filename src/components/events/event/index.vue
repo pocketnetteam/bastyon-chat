@@ -107,10 +107,8 @@
 </style>
 
 <script>
-import dummypreviews from "@/components/chats/dummypreviews";
 import common from "@/components/events/event/common/index.vue";
 import member from "@/components/events/event/member/index.vue";
-import message from "@/components/events/event/message/index.vue";
 
 import f from "@/application/functions";
 
@@ -122,8 +120,8 @@ export default {
 	components: {
 		common,
 		member,
-		message,
-		dummypreviews,
+		message : () => import("@/components/events/event/message/index.vue"),
+		dummypreviews : () => import("@/components/chats/dummypreviews"),
 	},
 
 	data: function () {

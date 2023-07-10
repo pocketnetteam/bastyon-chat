@@ -1,11 +1,10 @@
 import { mapState } from "vuex";
-import sweetalert from "@/editedplugins/vue-sweetalert-icons/src/components/icon.vue";
 export default {
 	name: "fixedmessageicon",
 	props: {},
 
 	components: {
-		sweetalert,
+		sweetalert : () => import("@/editedplugins/vue-sweetalert-icons/src/components/icon.vue") ,
 	},
 
 	data: function () {

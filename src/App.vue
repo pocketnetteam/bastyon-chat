@@ -205,7 +205,7 @@ import simpleSearch from "@/components/assets/simpleSearch/index.vue";
 
 import linepreloader from "@/components/assets/linepreloader/index.vue";
 
-import chats from "@/views/chats.vue";
+
 import vuescroll from 'vue-scroll'
 ////////
 Vue.use(vuescroll)
@@ -305,7 +305,6 @@ export default {
 	name: "App",
 	components: {
 		MainWrapper,
-		chats,
 		userUnauthorized,
 	},
 

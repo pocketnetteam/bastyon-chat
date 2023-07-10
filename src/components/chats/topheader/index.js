@@ -1,6 +1,5 @@
 import { mapState } from "vuex";
 
-import contacts from "@/components/contacts/index.vue";
 
 export default {
 	name: "chatsTopheader",
@@ -9,7 +8,6 @@ export default {
 	inject: ["matches"],
 
 	components: {
-		contacts,
 	},
 
 	data: function () {

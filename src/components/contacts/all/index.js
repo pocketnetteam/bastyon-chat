@@ -1,4 +1,3 @@
-import _ from "underscore/underscore-node.mjs";
 import { mapActions, mapState } from "vuex";
 import previewRoom from "@/components/chats/preview/index.vue";
 import previewContact from "@/components/contacts/preview/index.vue";

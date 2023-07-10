@@ -1,4 +1,3 @@
-import { _ } from "core-js";
 import f from "./functions";
 
 var Process = function(text, chats, parent /* SearchEngine */){

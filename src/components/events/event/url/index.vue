@@ -109,6 +109,14 @@ export default {
 
 			return "custom";
 		},
+
+		subtype : function(){
+			if(this.urltype == 'custom'){
+				if(this.clearurl && this.clearurl.indexOf && this.clearurl.indexOf('zoom.us') > -1){
+					return 'zoom'
+				}
+			}
+		}
 	}),
 
 	beforeMount: function () {
@@ -125,6 +133,16 @@ export default {
 		},
 		geturl: function () {
 			//this.loading = true;
+
+			if(this.subtype){
+				if(this.subtype == 'zoom'){
+					this.meta = {
+						'og:title' : "Join our Cloud HD Video Meeting"
+					}
+				}
+
+				return
+			}
 
 			this.core.mtrx.client
 				.getUrlPreview(this.clearurl, 0)

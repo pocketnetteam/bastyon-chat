@@ -1,5 +1,3 @@
-import _ from "underscore";
-
 export default {
 	name: 'list',
 	props: {

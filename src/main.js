@@ -4,7 +4,7 @@ import App from "@/App.vue";
 
 Vue.config.silent = true
 
-require("babel-polyfill");
+//require("babel-polyfill");
 
 new Vue({
 	render: (h) => h(App),
