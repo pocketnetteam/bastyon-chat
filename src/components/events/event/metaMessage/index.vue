@@ -124,13 +124,22 @@ export default {
 
 	beforeMount() {},
 	beforeDestroy() {
+		setTimeout(() => {
+
+		
 		if (this.module.d) {
+
+				console.log("DESTR1")
+
 			try {
 				this.module.d.destroy();
+				console.log("DESTR2")
 			} catch (e) {}
 
 			delete this.module.d;
 		}
+
+		}, 200)
 	},
 	mounted() {
 		if (this.type === "pocketnet" && this.$refs.iframe) {

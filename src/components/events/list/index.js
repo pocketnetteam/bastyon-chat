@@ -189,7 +189,8 @@ export default {
 				this.dupdated();
 			});
 
-			new this.smoothScroll(this.$refs["container"], 120, 15);
+			if(!this.mobile)
+				new this.smoothScroll(this.$refs["container"], 120, 15);
 		},
 		scroll: function () {
 			this.$emit("scroll", this.size());

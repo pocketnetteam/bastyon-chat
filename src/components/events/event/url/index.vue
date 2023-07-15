@@ -44,8 +44,7 @@ export default {
 		data: Object,
 	},
 	components: {
-		metaMessage: () =>
-			import("@/components/events/event/metaMessage/index.vue"),
+		metaMessage: () => import("@/components/events/event/metaMessage/index.vue"),
 	},
 	data: function () {
 		return {
