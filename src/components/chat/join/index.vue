@@ -49,7 +49,7 @@
 								'small': true,
 								'button': true,
 								'rounded': true,
-								'disabled': !videoMeta?.isLive
+								'disabled': streamMode && !videoMeta?.isLive
 							}"
 							@click="join"
 						>
