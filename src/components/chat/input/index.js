@@ -432,7 +432,11 @@ export default {
 				send: !this.streamMode,
 				share: !this.streamMode
 			}).then(transaction => {
-				this.donate = transaction;
+
+				if (this.streamMode){
+					this.donate = transaction;
+				}
+				
 			})
 		},
 
