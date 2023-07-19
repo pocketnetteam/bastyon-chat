@@ -155,8 +155,6 @@ var PNWIDGETS = function () {
 
 		ps.additional = _.extend(ps.additional, additional || {});
 
-		console.log("MAKEFROMURL", ps)
-
 		return self.make(
 			seed,
 			ps.action,

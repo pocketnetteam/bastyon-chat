@@ -99,19 +99,35 @@ class PNUser extends User {
 
 		if (key) {
 			for (var i = 1; i < 13; i++) {
-				var d =
+				let d =
 					storage[i - 1] ||
 					bitcoin.bip32.fromSeed(key).derivePath(this.path33(i)).toWIF();
 
 				storage[i - 1] = d;
 
-				var keyPair = bitcoin.ECPair.fromWIF(d);
+				let keyPair = bitcoin.ECPair.fromWIF(d);
 
-				ckeys.push({
-					pair: keyPair,
-					public: keyPair.publicKey.toString("hex"),
-					private: keyPair.privateKey,
-				});
+				let proxyData = {
+					keyPair
+				}
+
+				let proxy = new Proxy(proxyData, {
+                    get: (p, i) => {
+
+						console.log('proxyData', proxyData)
+
+						if(!proxyData.pair){
+							proxyData.pair = p.keyPair
+							proxyData.public = p.keyPair.publicKey.toString("hex")
+							proxyData.private = p.keyPair.privateKey
+						}
+
+						return proxyData[i]
+
+                    }
+                })
+
+				ckeys.push(proxy);
 			}
 		}
 
@@ -126,8 +142,6 @@ class PNUser extends User {
 		}
 
 		var decodedAddress = f.hexDecode(this.credentials.address);
-
-		console.log('decodedAddress', decodedAddress)
 
 		try {
 			var key = Buffer.from(this.credentials.privateKey, "hex");

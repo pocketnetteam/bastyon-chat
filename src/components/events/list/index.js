@@ -249,7 +249,10 @@ export default {
 		scrollToNew(s) {
 			const container = this.$refs["container"];
 			if (container.scrolling) {
-				container.scrolling(-1, -container.scrollHeight);
+				container.scrolling(-1, this.c * s);
+			}
+			else{
+				container.scrollTop = this.c * s;
 			}
 		},
 
@@ -313,7 +316,6 @@ export default {
 				pos = Math.max(0, Math.min(pos, dest || (target.scrollHeight - frame.clientHeight))); // limit scrolling
 		
 				if (!moving) update();
-				console.log(delta, pos)
 			}
 		
 			function normalizeWheelDelta(e) {

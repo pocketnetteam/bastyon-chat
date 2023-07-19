@@ -466,7 +466,8 @@ export default {
 	creared() {},
 
 	mounted() {
-		if (!this.mobile) {
+		if (!this.mobile && !this.streamMode) {
+			
 			this.focus();
 		}
 

@@ -260,8 +260,6 @@ var ApiWrapper = function (core) {
 
 				return psdk.userState.load(addresses).then(result => {
 
-					console.log('result userState', result)
-
 					return _.toArray(result)
 
 				})
@@ -352,7 +350,6 @@ var ApiWrapper = function (core) {
 
 				return psdk.userInfo.load(addresses, true, reload).then(result => {
 
-					console.log('result userInfo', result)
 
 					return _.toArray(result)
 

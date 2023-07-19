@@ -75,8 +75,6 @@ class Core {
 
 		this.pcrypto.init(this.user);
 
-		console.log('window.BSTMedia', window.BSTMedia)
-
 		this.media = window.BSTMedia;
 		this.audioContext = null;
 		this.exporter = new Exporter(this);
@@ -128,13 +126,11 @@ class Core {
 					p.parameters
 				);
 				this.mtrx.bastyonCalls.on("initcall", (call) => {
-					console.log("---catch init call", call);
 					if (this.vm.$store.state.currentPlayingVoiceMessage) {
 						this.vm.$store.state.currentPlayingVoiceMessage.pause();
 					}
 
 					if (window?.POCKETNETINSTANCE?.playingvideo) {
-						console.log(window.POCKETNETINSTANCE.playingvideo);
 						window?.POCKETNETINSTANCE?.playingvideo.pause();
 						if (document.exitFullscreen) {
 							document.exitFullscreen();
@@ -151,21 +147,18 @@ class Core {
 					}
 				});
 				this.mtrx.bastyonCalls.on("error", (err) => {
-					console.log("---catch error", err);
 					if (p?.parameters?.onError) {
 						p.parameters.onError(err)
 					}
 
 				});
 				this.mtrx.bastyonCalls.on("connected", (call) => {
-					console.log("---catch connected", call);
 					if (p?.parameters?.onConnected) {
 						p.parameters.onConnected(call)
 					}
 
 				});
 				this.mtrx.bastyonCalls.on("ended", (call) => {
-					console.log("---catch ended", call);
 					if (p?.parameters?.onEnded) {
 						p.parameters.onEnded(call)
 					}
@@ -179,7 +172,6 @@ class Core {
 			return;
 		}
 
-		console.log("Calls ready");
 	};
 	canback = function () {
 		return this.store.state.gallery ? false : true;

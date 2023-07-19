@@ -1067,7 +1067,6 @@ export default {
 								/*if (f.isios())
 							r.duration = (new Date()).getTime() / 1000 - startedTime
 
-						console.log("R", r)
 
 						/*var e = {
 							data : r.data

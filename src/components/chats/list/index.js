@@ -171,7 +171,6 @@ export default {
 			/*_.each(chats, (chat) => {
 				var chatevents = state.events[chat.roomId] || {}
 
-				console.log('chatevents', chatevents)
 
 				this.getEventsAndDecrypt(this.core.mtrx.client.getRoom(chat.roomId), chatevents.timeline)
 			})*/
@@ -198,15 +197,12 @@ export default {
 	methods: {
 		getEventsAndDecrypt(chat, events) {
 
-			console.log('chat', chat)
 
 			return this.core.mtrx.kit.prepareChat(chat).then(() => {
 				return Promise.all(
 					_.map(events, (_e) => {
 	
 						var e = _e.get()
-	
-						console.log("E", e)
 	
 	
 						if (e.decrypted) return Promise.resolve();

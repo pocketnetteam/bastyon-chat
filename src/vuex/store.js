@@ -793,7 +793,23 @@ var store = new Vuex.Store({
 						return false;
 					}
 
-					if (e.event.type === "m.call.candidates") {
+					if (e.event.type === "m.room.replaces") {
+						return false;
+					}
+
+					if (e.event.type === "m.room.select_answer") {
+						return false;
+					}
+
+					if (e.event.type === "m.room.negotiate") {
+						return false;
+					}
+
+					if (e.event.type === "m.room.candidates") {
+						return false;
+					}
+
+					if (e.event.type === "m.call.asserted_identity") {
 						return false;
 					}
 
