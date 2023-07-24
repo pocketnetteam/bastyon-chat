@@ -18,8 +18,8 @@
 					</button>
 				</div>
 			</div>
-			<div class="row" v-if="!showMembers && !userBanned?.value">
-				<div class="buttons chat-filter" v-if="!pkoindisabled">
+			<div class="row" v-if="!showMembers && !userBanned?.value && !pkoindisabled">
+				<div class="buttons chat-filter">
 					<button
 						v-for="{ name, filter } in chatFilter"
 						:key="name"
