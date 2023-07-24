@@ -682,11 +682,15 @@ export default {
 
 					/* Play donate animation */
 					if (this.event?.event?.unsigned?.age < 5000) {
-						window.app.platform.donateAnimation.inqueue({
-							senderName: this.sender.name,
-							senderMessage: this.body,
-							value: value.toFixed(2)
-						});
+
+						if(window.app.platform.donateAnimation){
+							window.app.platform.donateAnimation.inqueue({
+								senderName: this.sender.name,
+								senderMessage: this.body,
+								value: value.toFixed(2)
+							});
+						}
+						
 					}
 				}
 			});

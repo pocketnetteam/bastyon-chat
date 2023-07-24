@@ -189,6 +189,7 @@ class Notifier {
 			this.core.user
 				.usersInfo([f.getmatrixid(event.getSender())])
 				.then((info) => {
+
 					if (info && info[0]) {
 						this.message(event, info[0], chat);
 					}
@@ -217,7 +218,7 @@ class Notifier {
 			title: info.title,
 			message: info.message,
 			roomId: info.roomId,
-			iconImg: info.icon || null,
+			iconImg: info.icon ? info.icon.replace('bastyon.com:8092', 'pocketnet.app:8092').replace('test.pocketnet', 'pocketnet') : null,
 			onClick: click,
 			zIndex: 999,
 			supportHTML: true,
@@ -225,7 +226,7 @@ class Notifier {
 			position: position,
 			type: "info",
 			chat: info.chat,
-			duration: 5000,
+			duration: 3000,
 		});
 	};
 }

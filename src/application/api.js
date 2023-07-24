@@ -251,26 +251,44 @@ var ApiWrapper = function (core) {
 		userState: (addresses) => {
 			if (!_.isArray(addresses)) addresses = [addresses];
 
+			var psdk = f.deep(
+				window,
+				"POCKETNETINSTANCE.platform.psdk"
+			)
+
+			if (psdk){
+
+				return psdk.userState.load(addresses).then(result => {
+
+					return _.toArray(result)
+
+				})
+				
+			}
+
+
 			var parameters = [addresses.join(",")];
 
 			return self.pocketnet.common({ parameters }, "getuserstate");
 		},
 
 		userStateMe: (address) => {
-			var cacheresult = f.deep(
+			/*var cacheresult = f.deep(
 				window,
 				"POCKETNETINSTANCE.platform.sdk.ustate.storage." + address
 			);
 
 			if (cacheresult) {
 				return Promise.resolve(cacheresult);
-			}
+			}*/
 
 			return self.pocketnet.userState(address);
 		},
 
 		userInfoCached: (addresses, reload) => {
 			var rescached = [];
+
+			///+deprecated
 
 			if (!reload) {
 				rescached = _.filter(
@@ -293,6 +311,9 @@ var ApiWrapper = function (core) {
 					});
 				});
 			}
+
+			///-deprecated
+
 
 			return self.pocketnet.userInfo(addresses, reload).then((rs) => {
 				rs = _.toArray(rs);
@@ -320,6 +341,25 @@ var ApiWrapper = function (core) {
 				return Promise.resolve([]);
 			}
 
+			var psdk = f.deep(
+				window,
+				"POCKETNETINSTANCE.platform.psdk"
+			)
+
+			if (psdk){
+
+				return psdk.userInfo.load(addresses, true, reload).then(result => {
+
+					result = _.filter(result, (u) => {
+						return u && u.address && addresses.indexOf(u.address) > -1
+					})
+					
+					return _.toArray(result)
+
+				})
+				
+			}
+
 			return crequest(addresses, "pocketnet_userInfo", "address", reload, {
 				storage: "userInfo",
 				time: 60 * 60 * 24,
@@ -337,6 +377,8 @@ var ApiWrapper = function (core) {
 					});
 			});
 		},
+
+		/// deprecated
 
 		postInfo: (params) => {
 			var parameters = [[params.parameters]];

@@ -577,12 +577,10 @@ class MTRX {
 			.uploadContent(file)
 			.then((src) => {
 
-				console.log("SRC", src)
 
 				return Promise.resolve(this.core.mtrx.client.mxcUrlToHttp(src.content_uri));
 			})
 			.then((url) => {
-				console.log("URL", url)
 				if (save) {
 					return this.storeFileLocal(url, file)
 						.then(() => {

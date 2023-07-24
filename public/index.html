@@ -1,89 +1,86 @@
 <!DOCTYPE html>
 <html class="no-js" lang="">
-	<head>
-		<meta charset="utf-8" />
-		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-		<meta http-equiv="Pragma" content="no-cache" />
-		<meta http-equiv="Cache-Control" content="no-cache" />
-		<meta http-equiv="expires" content="0" />
-		<meta name="description" content="" />
-		<meta name="keywords" content="" />
 
-		<title>Matrix Client</title>
-		<meta
-			name="description"
-			content="Machine Learning Analytics For Researchers"
-		/>
-		<meta
-			name="viewport"
-			content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no"
-		/>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Cache-Control" content="no-cache" />
+    <meta http-equiv="expires" content="0" />
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
 
-		<!-- <script src="https://localhost/pocketnet/js/widgets.js"></script> -->
-		<script>
-			window.testpocketnet = false;
-		</script>
-		<script src="js/lib/pocketnet/buffer.js"></script>
-		<script src="js/lib/pocketnet/btc17.js"></script>
-		<script src="js/media.js"></script>
+    <title>Matrix Client</title>
+    <meta name="description" content="Machine Learning Analytics For Researchers" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no" />
 
-		<script src="js/lib/client/api.js"></script>
-		<script src="js/lib/client/system16.js"></script>
-		<script src="js/functionsfirst.js"></script>
-		<script src="js/vendor/unmute.js"></script>
-		<script src="js/lib/bastyonCalls/bastyonCalls.min.js"></script>
-		<script src="js/vendor/joypixels.js"></script>
-		<script src="js/vendor/xss.min.js"></script>
+    <!-- <script src="https://localhost/pocketnet/js/widgets.js"></script> -->
+    <script>
+        window.testpocketnet = false;
+    </script>
+    <script src="js/lib/pocketnet/buffer.js"></script>
+    <script src="js/lib/pocketnet/btc17.js"></script>
+    <script src="js/media.js"></script>
+
+    <script src="js/lib/client/api.js"></script>
+    <script src="js/lib/client/system16.js"></script>
+    <script src="js/functionsfirst.js"></script>
+    <script src="js/vendor/unmute.js"></script>
+    <script src="js/lib/bastyonCalls/bastyonCalls.min.js"></script>
+    <script src="js/vendor/joypixels.js"></script>
+    <script src="js/vendor/xss.min.js"></script>
+    <script src="js/vendor/hammer.min.js"></script>
 
 
 
-		<script src="https://pocketnet.app/js/widgets.js"></script>
+    <script src="https://pocketnet.app/js/widgets.js"></script>
 
-		<!--<script src="https://localhost/pocketnet/js/widgets.js"></script> -->
+    <!--<script src="https://localhost/pocketnet/js/widgets.js"></script> -->
 
-		<style>
-      @import "https://use.fontawesome.com/releases/v5.2.0/css/all.css";
+    <style>
+        @import "https://use.fontawesome.com/releases/v5.2.0/css/all.css";
+        html[chatbin] .matrix {
+            position: relative;
+            top: 10px;
+            float: right;
+            bottom: auto;
+            z-index: 999;
+            width: 340px;
+        }
+        
+        html[chatbin] .matrix .wrappermtrx {
+            position: fixed;
+            width: 340px;
+            right: 1em;
+            bottom: 1em;
+            border-radius: 3px;
+            border: 1px solid rgb(247, 247, 247);
+        }
+        
+        #exported {
+            position: relative;
+            width: 300px;
+            height: 500px;
+        }
+        
+        @media screen and (max-width: 768px) {
+            #exported {
+                position: fixed;
+                left: 0;
+                top: 0;
+                bottom: 0;
+                right: 0;
+                width: 100%;
+                height: 100%;
+            }
+        }
+    </style>
 
-			html[chatbin] .matrix {
-				position: relative;
-				top: 10px;
-				float: right;
-				bottom: auto;
-				z-index: 999;
-				width: 340px;
-			}
+    <meta name="theme-color" content="#fafafa" />
+</head>
 
-			html[chatbin] .matrix .wrappermtrx {
-				position: fixed;
-				width: 340px;
-				right: 1em;
-				bottom: 1em;
-				border-radius: 3px;
-				border: 1px solid rgb(247, 247, 247);
-			}
-
-			#exported{
-				position: relative;
-				width: 300px; height: 500px;
-			}
-
-			@media screen and (max-width: 768px){
-				#exported{
-					position: fixed;
-					left : 0;
-					top : 0;
-					bottom : 0;
-					right : 0;
-					width: 100%; height: 100%;
-				}
-			}
-		</style>
-
-		<meta name="theme-color" content="#fafafa" />
-	</head>
-
-	<body>
-		<noscript>
+<body>
+    <noscript>
 			<strong
 				>We're sorry but Project doesn't work properly without JavaScript
 				enabled. Please enable it to continue.</strong
@@ -91,60 +88,64 @@
 		</noscript>
 
     <div>
-      <!--<button id="create-chat" class="button">Create stream chat</button>
+        <!--<button id="create-chat" class="button">Create stream chat</button>
       <div id="exported"><div></div></div>-->
     </div>
 
-		<div id="automomous">
-			<!--<div class="matrix"><div class="wrappermtrx">-->
-			<div id="matrix-root"></div>
-			<!--</div></div>-->
-		</div>
-		<script src="https://momentjs.com/downloads/moment.js"></script>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.5.2/underscore-min.js"></script>
-		<script src="https://cdn.jsdelivr.net/npm/linkifyjs@3.0.5/dist/linkify.min.js"></script>
+    <div id="automomous">
+        <!--<div class="matrix"><div class="wrappermtrx">-->
+        <div id="matrix-root"></div>
+        <!--</div></div>-->
+    </div>
+    <script src="https://momentjs.com/downloads/moment.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.5.2/underscore-min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/linkifyjs@3.0.5/dist/linkify.min.js"></script>
 
-		<script>
-      window.jQuery ||
-				document.write(
-					'<script src="<%= BASE_URL %>js/vendor/jquery-3.4.1.min.js"><\/script>'
-				);
+    <script>
+        window.jQuery ||
+            document.write(
+                '<script src="<%= BASE_URL %>js/vendor/jquery-3.4.1.min.js"><\/script>'
+            );
 
-      function buildChat(streamRoom) {
-        const roomId = streamRoom || localStorage.getItem('streamRoom');
+        function buildChat(streamRoom) {
+            const roomId = streamRoom || localStorage.getItem('streamRoom');
 
-        if (roomId) {
-          if (window.core?.mtrx?.client) {
-            window.matrixchat.mtrx.core.renderChatToElement(
-              document.querySelector('#exported div'),
-              roomId,
-              {
-                style: 'stream'
-              }
-            )
-              .then((r) => {
-                console.log('stream', r)
-              })
-              .catch(e => {
-                if (e) console.error(e)
-              });
-          } else {
-            setTimeout(() => buildChat(streamRoom), 1000);
-          }
-        } else {
-          console.error('missing:roomId');
+            if (roomId) {
+                if (window.core?.mtrx?.client) {
+                    window.matrixchat.mtrx.core.renderChatToElement(
+                            document.querySelector('#exported div'),
+                            roomId, {
+                                style: 'stream'
+                            }
+                        )
+                        .then((r) => {
+                            console.log('stream', r)
+                        })
+                        .catch(e => {
+                            if (e) console.error(e)
+                        });
+                } else {
+                    setTimeout(() => buildChat(streamRoom), 1000);
+                }
+            } else {
+                console.error('missing:roomId');
+            }
         }
-      }
 
-      document.querySelector('#create-chat').onclick = function () {
-        window.core.createStreamRoom(`ForTest-${ Math.random().toString(32).slice(2) }`).then(r => {
-          console.log('stream', r)
-          localStorage.setItem('streamRoom', r);
-          buildChat(r);
-        });
-      }
+        if (document.querySelector('#create-chat')) {
+            document.querySelector('#create-chat').onclick = function() {
+                window.core.createStreamRoom(`ForTest-${ Math.random().toString(32).slice(2) }`).then(r => {
+                    console.log('stream', r)
+                    localStorage.setItem('streamRoom', r);
+                    buildChat(r);
+                });
+            }
+        }
 
-      /*buildChat("!efFONsHMHtaMAUzxpn:test.matrix.pocketnet.app");*/
-		</script>
-	</body>
+
+
+        /*buildChat("!efFONsHMHtaMAUzxpn:test.matrix.pocketnet.app");*/
+    </script>
+</body>
+
 </html>

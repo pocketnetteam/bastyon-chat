@@ -1273,6 +1273,8 @@ var Pcrypto = function (core, p) {
 				core.user.userinfo.keys &&
 				core.user.userinfo.keys.length
 			) {
+
+				return true
 				var pk = core.user.userinfo.keys.join(",");
 
 				var pk2 = _.map(core.user.private, function (p) {

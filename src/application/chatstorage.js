@@ -40,8 +40,6 @@ const ChatStorage = function (storageName, version, time) {
 
 		let openRequest = indexedDB.open(storageName, version);
 
-		console.log('initIndexedDb', storageName, version)
-
 		openRequest.onupgradeneeded = function (e) {
 			let db = openRequest.result;
 
@@ -276,7 +274,6 @@ const ChatStorage = function (storageName, version, time) {
 
 				clearOldItems()
 					.then((r) => {
-						console.log("????")
 						return getall();
 					})
 					.then((r) => {

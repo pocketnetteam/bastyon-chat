@@ -331,7 +331,7 @@ var store = new Vuex.Store({
 				_.reduce(
 					rooms,
 					(s, chat) => {
-						return !chat.summary.stream ? s + (chat.getUnreadNotificationCount() || 0) : 0;
+						return  s + (!chat.summary.stream ? (chat.getUnreadNotificationCount() || 0) : 0);
 					},
 					0
 				) + count.length;
@@ -793,7 +793,23 @@ var store = new Vuex.Store({
 						return false;
 					}
 
+					if (e.event.type === "m.call.replaces") {
+						return false;
+					}
+
+					if (e.event.type === "m.call.select_answer") {
+						return false;
+					}
+
+					if (e.event.type === "m.call.negotiate") {
+						return false;
+					}
+
 					if (e.event.type === "m.call.candidates") {
+						return false;
+					}
+
+					if (e.event.type === "m.call.asserted_identity") {
 						return false;
 					}
 

@@ -50,15 +50,6 @@
 
 		<div v-if="content.call_id" class="previewMessage">
 			<span class="txt">{{ $t(event.event.type) }}</span>
-			<span
-				v-if="
-					senderName &&
-					senderName != 'You' &&
-					event.event.type === 'm.call.invite'
-				"
-				class="txt sname"
-				> {{ senderName == 'You' ? $t("caption.you") : senderName}}</span
-			>
 		</div>
 
 		<div

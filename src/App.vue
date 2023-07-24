@@ -637,10 +637,10 @@ export default {
 	},
 
 	created() {
-		// this.pocketnet = false;
-		// this.mobile = !this.pocketnet;
-		// this.recording = true;
-		// this.iscallsenabled = true;
+		//this.pocketnet = false;
+		//this.mobile = !this.pocketnet;
+		//this.recording = true;
+		//this.iscallsenabled = true;
 
 		this.$store.commit("setCallsEnabled", this.iscallsenabled);
 		this.$store.commit("setPocketnet", this.pocketnet);
@@ -866,6 +866,8 @@ export default {
 			"window.POCKETNETINSTANCE.options.listofproxies"
 		) || [
 			{
+
+				
 				host: "test.pocketnet.app",
 				port: 8899,
 				wss: 8099

@@ -370,8 +370,6 @@ export default {
 			handler : function(){
 				this.loadNewUsers()
 
-				console.log('?????')
-
 				if(!this.share)
 					this.initSearchProcess()
 			}
