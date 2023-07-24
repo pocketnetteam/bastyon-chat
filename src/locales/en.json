@@ -231,7 +231,7 @@
 	"endedCall": "Call completed",
 	"incomingCall": "Incoming call",
 	"outgoingCall": "Outgoing call",
-	"m.call.invite": "Incoming call from",
+	"m.call.invite": "Call",
 	"m.call.hangup": "Call completed",
 	"m.call.reject": "Call rejected",
 	"m.call.answer": "Active call",

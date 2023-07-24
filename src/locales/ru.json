@@ -229,7 +229,7 @@
 	"endedCall": "Звонок завершён",
 	"incomingCall": "Входящий звонок",
 	"outgoingCall": "Исходящий звонок",
-	"m.call.invite": "Входящий звонок от",
+	"m.call.invite": "Звонок",
 	"m.call.hangup": "Звонок завершён",
 	"m.call.reject": "Звонок отклонён",
 	"m.call.answer": "Активный звонок",

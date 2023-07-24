@@ -350,7 +350,10 @@ var ApiWrapper = function (core) {
 
 				return psdk.userInfo.load(addresses, true, reload).then(result => {
 
-
+					result = _.filter(result, (u) => {
+						return u && u.address && addresses.indexOf(u.address) > -1
+					})
+					
 					return _.toArray(result)
 
 				})

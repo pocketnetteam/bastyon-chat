@@ -189,6 +189,7 @@ class Notifier {
 			this.core.user
 				.usersInfo([f.getmatrixid(event.getSender())])
 				.then((info) => {
+
 					if (info && info[0]) {
 						this.message(event, info[0], chat);
 					}
@@ -225,7 +226,7 @@ class Notifier {
 			position: position,
 			type: "info",
 			chat: info.chat,
-			duration: 5000,
+			duration: 3000,
 		});
 	};
 }
