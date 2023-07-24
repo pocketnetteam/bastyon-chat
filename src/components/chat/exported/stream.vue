@@ -19,7 +19,7 @@
 				</div>
 			</div>
 			<div class="row" v-if="!showMembers && !userBanned?.value">
-				<div class="buttons chat-filter">
+				<div class="buttons chat-filter" v-if="!pkoindisabled">
 					<button
 						v-for="{ name, filter } in chatFilter"
 						:key="name"
@@ -31,7 +31,12 @@
 			</div>
 		</div>
 		<transition>
-			<chat :chat="chat" :style="style" :filterType.sync="filterType" v-if="!showMembers" />
+			<chat
+				:chat="chat"
+				:style="style"
+				:filterType.sync="filterType"
+				v-if="!showMembers"
+			/>
 			<membersList :chat="chat" v-else />
 		</transition>
 
@@ -66,7 +71,7 @@ export default {
 	data() {
 		return {
 			showMembers: false,
-			filterType: "text",
+			filterType: !this.pkoindisabled ? "text" : "pkoindisabled",
 			chatFilter: [
 				{ name: "chat", filter: "text" },
 				{ name: "donations", filter: "donate" }
@@ -76,7 +81,8 @@ export default {
 
 	computed: {
 		...mapState({
-			auth: (state) => state.auth
+			auth: (state) => state.auth,
+			pkoindisabled: (state) => state.pkoindisabled
 		})
 	},
 
