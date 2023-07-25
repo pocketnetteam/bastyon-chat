@@ -385,6 +385,20 @@ export default {
 					});
 					break;
 				}
+
+				case "pkoindisabled": {
+					ts = await this.customTimelineSet('TEXT', (filter) => {
+						filter.setDefinition({
+							room: {
+								timeline: {
+									contains_url: false,
+									types: ["m.room.message"]
+								},
+							},
+						});
+					});
+					break;
+				}
 				
 				default: {
 					var timeline = this.chat.getLiveTimeline();

@@ -58,7 +58,7 @@
 
 		<div
 			class="iconbutton"
-			v-if="streamMode && !me"
+			v-if="streamMode && !me && !pkoindisabled"
 			@click="donateAction"
 			:disabled="donate"
 		>
@@ -149,6 +149,10 @@ export default {
 	computed: {
 		mobile: function () {
 			return !this.$store.state.pocketnet && this.$store.state.mobile;
+		},
+
+		pkoindisabled: function () {
+			return this.$store.state.pkoindisabled;
 		}
 
 		/*emojiIndex: function () {
