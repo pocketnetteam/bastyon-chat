@@ -230,8 +230,11 @@ export default {
 				this.textarea_resize_reset();
 			} else {
 				this.$refs.textarea.style.height = 1 + "px";
-				this.$refs.textarea.style.height =
-					this.$refs.textarea.scrollHeight + "px";
+				var a = 0
+	
+				if(this.text[this.text.length - 1] == '\n') a = 20
+
+				this.$refs.textarea.style.height = (this.$refs.textarea.scrollHeight + a) + "px";
 				//this.display_emoji = false;
 			}
 		},
@@ -389,7 +392,7 @@ export default {
 			}
 
 			if (event.keyCode === 13) {
-				if (this.mobile) {
+				if (this.mobile || event.ctrlKey) {
 					this.text = this.text + "\n";
 				} else {
 					this.send_text(event);

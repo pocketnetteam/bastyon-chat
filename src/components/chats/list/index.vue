@@ -9,6 +9,7 @@
 			active,
 			empty,
 		}"
+
 	>
 		<div v-if="!unauthorized">
 			<div class="searchWrapperEA" v-if="!minimized || active">

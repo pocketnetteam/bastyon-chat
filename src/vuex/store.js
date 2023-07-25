@@ -759,10 +759,12 @@ var store = new Vuex.Store({
 			_.each(m_chats, function (chat) {
 				events[chat.roomId] = {};
 
-				var timeline = _.first([].concat(
-					chat.timeline,
-					chat.currentState.getStateEvents("m.room.member")
-				).reverse(), 100);
+				
+
+				var timeline = [].concat(
+					_.first([].concat(chat.timeline).reverse(), 50),
+					_.first([].concat(chat.currentState.getStateEvents("m.room.member")).reverse(), 50)
+				)
 
 
 				var members = chat.currentState.getMembers();
@@ -838,7 +840,6 @@ var store = new Vuex.Store({
 					return -event.event.origin_server_ts
 				});
 
-
 				var lastread = null
 				
 				_.find(timeline, (event) => {
@@ -872,6 +873,8 @@ var store = new Vuex.Store({
 				}
 
 				var e = timeline[0]
+
+				//console.log('timeline', e, timeline, chat.roomId)
 
 				if (e){
 
