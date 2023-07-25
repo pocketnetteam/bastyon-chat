@@ -103,7 +103,7 @@ export default {
 				return _.indexOf(g, url.host) > -1 && _.indexOf(g, domain) > -1;
 			});
 
-			if (m && this.url.indexOf("embedVideo.php") == -1) {
+			if (m && this.url.indexOf("embedVideo.php") == -1 && this.url.indexOf("docs/") == -1) {
 				return "pocketnet";
 			}
 
@@ -114,6 +114,27 @@ export default {
 			if(this.urltype == 'custom'){
 				if(this.clearurl && this.clearurl.indexOf && this.clearurl.indexOf('zoom.us') > -1){
 					return 'zoom'
+				}
+
+				if(this.clearurl && this.clearurl.split){
+
+					var ch = this.clearurl.split(/\//g)
+
+					console.log('ch', ch)
+
+					if (ch.length > 2){
+						var ls = ch[ch.length - 1] || ''
+
+						console.log('ls', ls)
+
+
+						var lsc = ls.split('.')
+
+						if (lsc.length == 2 && lsc[lsc.length - 1].length == 3){
+							return 'file'
+						}
+					}
+
 				}
 			}
 		}
@@ -141,6 +162,12 @@ export default {
 				if(this.subtype == 'zoom'){
 					this.meta = {
 						'og:title' : "Join our Cloud HD Video Meeting"
+					}
+				}
+
+				if(this.subtype == 'file'){
+					this.meta = {
+						'og:title' : "File"
 					}
 				}
 
