@@ -386,7 +386,7 @@ export default {
 					break;
 				}
 
-				case "pkoindisabled": {
+				/*case "pkoindisabled": {
 					ts = await this.customTimelineSet('TEXT', (filter) => {
 						filter.setDefinition({
 							room: {
@@ -398,7 +398,7 @@ export default {
 						});
 					});
 					break;
-				}
+				}*/
 				
 				default: {
 					var timeline = this.chat.getLiveTimeline();

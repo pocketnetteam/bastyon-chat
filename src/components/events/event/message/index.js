@@ -90,6 +90,11 @@ export default {
 		},
 	},
 	computed: {
+
+		pkoindisabled: function(){
+			return this.$store.state.pkoindisabled || false
+		},
+
 		showburn: function () {
 			if (new Date() < new Date(2021, 11, 28)) {
 				return "";

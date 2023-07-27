@@ -203,7 +203,7 @@
 						</div>
 					</div>
 
-					<div class="linkPreview" v-if="streamMode && content.url && urlpreview">
+					<div class="linkPreview" v-if="streamMode && content.url && urlpreview" v-show="!pkoindisabled">
 						<template v-if="!sending">
 							<url
 								:url="urlpreview"

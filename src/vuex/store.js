@@ -182,6 +182,7 @@ var store = new Vuex.Store({
 		},
 
 		pkoindisabled(state, value) {
+
 			state.pkoindisabled = value && value == "true" ? true : false;
 		},
 

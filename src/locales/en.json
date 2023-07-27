@@ -144,7 +144,10 @@
 		"moderators": "Moderators",
 		"participants": "Participants",
 		"streamChat": "Stream chat",
-		"membersList": "Members list"
+		"membersList": "Members list",
+		"needjointowrite" : "You need join to write",
+		"streamisover" : "This stream is over"
+
 	},
 
 	"input": {

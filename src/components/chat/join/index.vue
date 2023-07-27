@@ -6,8 +6,8 @@
 					{{ $t("caption.chatInvite") }}
 				</span>
 				<span v-if="!streamMode && creatorLeft">{{ $t("caption.cantJoin") }}</span>
-				<span v-if="streamMode && videoMeta?.isLive">You need join to write</span>
-				<span v-if="streamMode && !videoMeta?.isLive">This stream is over</span>
+				<span v-if="streamMode && videoMeta?.isLive">{{ $t("caption.needjointowrite") }}</span>
+				<span v-if="streamMode && !videoMeta?.isLive">{{ $t("caption.streamisover") }}</span>
 			</div>
 		</div>
 

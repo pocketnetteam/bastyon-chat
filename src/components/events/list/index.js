@@ -189,8 +189,8 @@ export default {
 				this.dupdated();
 			});
 
-			if(!this.mobile)
-				new this.smoothScroll(this.$refs["container"], 120, 15);
+			/*if(!this.mobile)
+				new this.smoothScroll(this.$refs["container"], 120, 15);*/
 		},
 		scroll: function () {
 			this.$emit("scroll", this.size());
@@ -290,11 +290,12 @@ export default {
 
 				e.preventDefault();
 
-				/* this.$refs["container"].scrollTop += -e.deltaY; */
-				const container = this.$refs["container"];
+				this.$refs["container"].scrollTop += -e.deltaY;
+				
+				/*const container = this.$refs["container"];
 				if (container.scrolling) {
 					container.scrolling(e);
-				}
+				}*/
 
 				return false;
 

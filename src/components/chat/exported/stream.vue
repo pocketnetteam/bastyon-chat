@@ -71,7 +71,7 @@ export default {
 	data() {
 		return {
 			showMembers: false,
-			filterType: !this.pkoindisabled ? "text" : "pkoindisabled",
+			filterType: "text",
 			chatFilter: [
 				{ name: "chat", filter: "text" },
 				{ name: "donations", filter: "donate" }
