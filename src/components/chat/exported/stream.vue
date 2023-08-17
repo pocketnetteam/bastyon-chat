@@ -5,7 +5,7 @@
 				<span>
 					<template v-if="!showMembers">{{ $t(`caption.streamChat`) }}</template>
 					<template v-else>{{ $t(`caption.membersList`) }}</template>
-					({{ membersCount }})
+					<sup> ({{ membersCount }})</sup>
 				</span>
 				<div class="buttons" v-if="!userBanned?.value">
 					<button
