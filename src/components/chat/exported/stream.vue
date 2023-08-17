@@ -5,6 +5,7 @@
 				<span>
 					<template v-if="!showMembers">{{ $t(`caption.streamChat`) }}</template>
 					<template v-else>{{ $t(`caption.membersList`) }}</template>
+					({{ membersCount }})
 				</span>
 				<div class="buttons" v-if="!userBanned?.value">
 					<button
@@ -83,7 +84,11 @@ export default {
 		...mapState({
 			auth: (state) => state.auth,
 			pkoindisabled: (state) => state.pkoindisabled
-		})
+		}),
+
+		membersCount() {
+			return this.core.mtrx.chatUsers(this.chat.roomId).length;
+		}
 	},
 
 	methods: {
