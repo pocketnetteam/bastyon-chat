@@ -28,7 +28,10 @@
               'fa-user-slash': title === 'banned'
             }"
           ></i>
-          <span>{{ ucFirst($t(`caption.${ title }`)) }}</span>
+          <span>
+            {{ ucFirst($t(`caption.${ title }`)) }}
+            <sup v-if="members.length > 1">({{ members.length }})</sup>
+          </span>
           <span class="toggle">
             <i class="fa fa-angle-up"></i>
           </span>
