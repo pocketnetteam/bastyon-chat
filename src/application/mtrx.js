@@ -223,6 +223,10 @@ class MTRX {
 		window.client = userClient;
 		window.core = this.core;
 
+		this.client = userClient;
+
+		this.initEvents()
+
 		await userClient.startClient({
 			pollTimeout: 60000,
 			resolveInvitesToProfiles: true,
@@ -230,7 +234,7 @@ class MTRX {
 
 		this.access = userClientData;
 
-		this.client = userClient;
+		
 
 		return userClient;
 	}
@@ -454,17 +458,19 @@ class MTRX {
 		});
 
 		this.client.on("sync", (state, prevState, res) => {
-			if (state === "PREPARED") {
-				this.setready();
-			}
+			this.setready();
 
 			this.core.store.dispatch("FETCH_CHATS").then((r) => {
-				this.core.store.dispatch("FETCH_EVENTS");
-				this.core.store.commit(
-					"ALL_NOTIFICATIONS_COUNT",
-					this.client.getRooms()
-				);
+				
 			});
+
+			this.core.store.dispatch("FETCH_EVENTS");
+
+			this.core.store.commit(
+				"ALL_NOTIFICATIONS_COUNT",
+				this.client.getRooms()
+			);
+			
 		});
 	}
 
@@ -496,7 +502,7 @@ class MTRX {
 				return this.initdb();
 			})
 			.then(() => {
-				this.initEvents();
+				//this.initEvents();
 
 				return Promise.resolve();
 			});

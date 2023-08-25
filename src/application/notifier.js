@@ -9,19 +9,6 @@ class Notifier {
 		this.core = core;
 		this.showed = JSON.parse(localStorage[this.key] || "{}");
 
-		this.ion = null;
-
-		if (typeof ion != "undefined") this.ion = ion;
-
-		/*ion.sound({
-		  sounds: [
-			{
-			  name: "glass"
-			}
-		  ],
-		  path: "sounds/",
-		  preload: true
-		});*/
 	}
 
 	key = "showednotifications";
@@ -39,32 +26,14 @@ class Notifier {
 	}
 
 	playsound() {
-		// If cordova is available, use the media plugin to play a sound
 		if (
-			window.Media &&
-			window.cordova &&
-			window.cordova.file &&
-			window.cordova.file.applicationDirectory
+			window.cordova
 		) {
 			return;
-
-			var soundSrc =
-				window.cordova.file.applicationDirectory + "www/sounds/glass.mp3";
-			if (soundSrc.startsWith("file://")) soundSrc = soundSrc.substring(7);
-			var notificationSound = new Media(soundSrc);
-			// Play audio
-			notificationSound.play();
 		}
 
-		// Else, try to use the Howler sound plugin
 		else if (window.ion) {
 			ion.sound.play("glass");
-
-			/*var notificationSound = new Howl({
-				src: ['sounds/glass.mp3'],
-				html5: true
-			});
-			notificationSound.play();*/
 		}
 	}
 

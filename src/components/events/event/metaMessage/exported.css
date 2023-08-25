@@ -1,125 +1,128 @@
 .pocketnet_iframe {
   /*./components/transactionview/index.css*/
   /*./components/comments/index.css*/
-  /*./components/lenta/index.css*/
-  /*./components/commentBanner/index.css*/
   /*./components/author/index.css*/
   /*./components/channel/index.css*/
   /*./components/post/index.css*/
+  /*./components/lenta/index.css*/
+  /*./components/commentBanner/index.css*/
+  /*./components/updatenotifier/index.css*/
   /*./css/main.css*/
   /*! HTML5 Boilerplate v5.2.0 | MIT License | https://html5boilerplate.com/ */
   /*
- * What follows is the result of much research on cross-browser styling.
- * Credit left inline and big thanks to Nicolas Gallagher, Jonathan Neal,
- * Kroc Camen, and the H5BP dev community and team.
- */
+   * What follows is the result of much research on cross-browser styling.
+   * Credit left inline and big thanks to Nicolas Gallagher, Jonathan Neal,
+   * Kroc Camen, and the H5BP dev community and team.
+   */
   /* ==========================================================================
-   Base styles: opinionated defaults
-   ========================================================================== */
+     Base styles: opinionated defaults
+     ========================================================================== */
+  /* iOS 11.0: supports constant() css function. (Assume all other inset vars are supported.) */
+  /* iOS 11.2 and latest Chrome webviews support the env() css function. (Assume all other inset vars are supported.) */
   /*
- * Remove text-shadow in selection highlight:
- * https://twitter.com/miketaylr/status/12228805301
- *
- * These selection rule sets have to be separate.
- * Customize the background color to match your design.
- */
+   * Remove text-shadow in selection highlight:
+   * https://twitter.com/miketaylr/status/12228805301
+   *
+   * These selection rule sets have to be separate.
+   * Customize the background color to match your design.
+   */
   /*
- * A better looking default horizontal rule
- */
+   * A better looking default horizontal rule
+   */
   /*
- * Remove the gap between audio, canvas, iframes,
- * images, videos and the bottom of their containers:
- * https://github.com/h5bp/html5-boilerplate/issues/440
- */
+   * Remove the gap between audio, canvas, iframes,
+   * images, videos and the bottom of their containers:
+   * https://github.com/h5bp/html5-boilerplate/issues/440
+   */
   /*
- * Remove default fieldset styles.
- */
+   * Remove default fieldset styles.
+   */
   /*
- * Allow only vertical resizing of textareas.
- */
+   * Allow only vertical resizing of textareas.
+   */
   /* Webkit */
   /* Mozilla */
   /* Internet Explorer */
   /* ==========================================================================
-   Browser Upgrade Prompt
-   ========================================================================== */
+     Browser Upgrade Prompt
+     ========================================================================== */
   /* ==========================================================================
-   Author's custom styles
-   ========================================================================== */
+     Author's custom styles
+     ========================================================================== */
   /* ==========================================================================
-   ========================================================================== */
+     ========================================================================== */
   /*t*/
   /*
-.jqvmap-label,.jqvmap-pin{pointer-events:none}.jqvmap-label{position:absolute;display:none;-webkit-border-radius:3px;-moz-border-radius:3px;border-radius:3px;background:#292929;color:#fff;font-family:sans-serif,Verdana;font-size:smaller;padding:3px}.jqvmap-zoomin,.jqvmap-zoomout{position:absolute;left:10px;-webkit-border-radius:3px;-moz-border-radius:3px;border-radius:3px;background:#000;padding:3px;color:#fff;width:10px;height:10px;cursor:pointer;line-height:10px;text-align:center}.jqvmap-zoomin{top:10px}.jqvmap-zoomout{top:30px}.jqvmap-region{cursor:pointer}.jqvmap-ajax_response{width:100%;height:500px}*/
+  .jqvmap-label,.jqvmap-pin{pointer-events:none}.jqvmap-label{position:absolute;display:none;-webkit-border-radius:3px;-moz-border-radius:3px;border-radius:3px;background:#292929;color:#fff;font-family:sans-serif,Verdana;font-size:smaller;padding:3px}.jqvmap-zoomin,.jqvmap-zoomout{position:absolute;left:10px;-webkit-border-radius:3px;-moz-border-radius:3px;border-radius:3px;background:#000;padding:3px;color:#fff;width:10px;height:10px;cursor:pointer;line-height:10px;text-align:center}.jqvmap-zoomin{top:10px}.jqvmap-zoomout{top:30px}.jqvmap-region{cursor:pointer}.jqvmap-ajax_response{width:100%;height:500px}*/
   /* ==========================================================================
-   Splash screen
-   ========================================================================== */
+     Splash screen
+     ========================================================================== */
   /*t*/
   /* ==========================================================================
-   Helper classes
-   ========================================================================== */
+     Helper classes
+     ========================================================================== */
   /*
- * Hide visually and from screen readers:
- */
+   * Hide visually and from screen readers:
+   */
   /*
- * Hide only visually, but have it available for screen readers:
- * http://snook.ca/archives/html_and_css/hiding-content-for-accessibility
- */
+   * Hide only visually, but have it available for screen readers:
+   * http://snook.ca/archives/html_and_css/hiding-content-for-accessibility
+   */
   /*
- * Extends the .visuallyhidden class to allow the element
- * to be focusable when navigated to via the keyboard:
- * https://www.drupal.org/node/897638
- */
+   * Extends the .visuallyhidden class to allow the element
+   * to be focusable when navigated to via the keyboard:
+   * https://www.drupal.org/node/897638
+   */
   /*
- * Hide visually and from screen readers, but maintain layout
- */
+   * Hide visually and from screen readers, but maintain layout
+   */
   /*
- * Clearfix: contain floats
- *
- * For modern browsers
- * 1. The space content is one way to avoid an Opera bug when the
- *    `contenteditable` attribute is included anywhere else in the document.
- *    Otherwise it causes space to appear at the top and bottom of elements
- *    that receive the `clearfix` class.
- * 2. The use of `table` rather than `block` is only necessary if using
- *    `:before` to contain the top-margins of child elements.
- */
+   * Clearfix: contain floats
+   *
+   * For modern browsers
+   * 1. The space content is one way to avoid an Opera bug when the
+   *    `contenteditable` attribute is included anywhere else in the document.
+   *    Otherwise it causes space to appear at the top and bottom of elements
+   *    that receive the `clearfix` class.
+   * 2. The use of `table` rather than `block` is only necessary if using
+   *    `:before` to contain the top-margins of child elements.
+   */
   /* ==========================================================================
-   EXAMPLE Media Queries for Responsive Design.
-   These examples override the primary ('mobile first') styles.
-   Modify as content requires.
-   ========================================================================== */
+     EXAMPLE Media Queries for Responsive Design.
+     These examples override the primary ('mobile first') styles.
+     Modify as content requires.
+     ========================================================================== */
   /*
-.electronapp{
-    .rightchatspacer{
-        margin-left: 44px;
-    }
-
-    .electronnav{
-        position: fixed;
-        left: 0;
-        top : 0;
-        bottom : 0;
-        width : 44px;
-        z-index: 999;
-        backdrop-filter: blur(14px);
-        -webkit-backdrop-filter: blur(14px);  
-
-        background: rgba(179,220,237,0);
-        background: -moz-linear-gradient(top, rgba(179,220,237,0) 0%, rgba(255,255,255,1) 100%);
-        background: -webkit-gradient(left top, left bottom, color-stop(0%, rgba(179,220,237,0)), color-stop(100%, rgba(255,255,255,1)));
-        background: -webkit-linear-gradient(top, rgba(179,220,237,0) 0%, rgba(255,255,255,1) 100%);
-        background: -o-linear-gradient(top, rgba(179,220,237,0) 0%, rgba(255,255,255,1) 100%);
-        background: -ms-linear-gradient(top, rgba(179,220,237,0) 0%, rgba(255,255,255,1) 100%);
-        background: linear-gradient(to bottom, rgba(179,220,237,0) 0%, rgba(255,255,255,1) 100%);
-        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#b3dced', endColorstr='#ffffff', GradientType=0 );
-    }
-}*/
+  .electronapp{
+      .rightchatspacer{
+          margin-left: 44px;
+      }
+  
+      .electronnav{
+          position: fixed;
+          left: 0;
+          top : 0;
+          bottom : 0;
+          width : 44px;
+          z-index: 999;
+          backdrop-filter: blur(14px);
+          -webkit-backdrop-filter: blur(14px);  
+  
+          background: rgba(179,220,237,0);
+          background: -moz-linear-gradient(top, rgba(179,220,237,0) 0%, rgba(255,255,255,1) 100%);
+          background: -webkit-gradient(left top, left bottom, color-stop(0%, rgba(179,220,237,0)), color-stop(100%, rgba(255,255,255,1)));
+          background: -webkit-linear-gradient(top, rgba(179,220,237,0) 0%, rgba(255,255,255,1) 100%);
+          background: -o-linear-gradient(top, rgba(179,220,237,0) 0%, rgba(255,255,255,1) 100%);
+          background: -ms-linear-gradient(top, rgba(179,220,237,0) 0%, rgba(255,255,255,1) 100%);
+          background: linear-gradient(to bottom, rgba(179,220,237,0) 0%, rgba(255,255,255,1) 100%);
+          filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#b3dced', endColorstr='#ffffff', GradientType=0 );
+      }
+  }*/
   /* ==========================================================================
-   Print styles.
-   Inlined to avoid the additional HTTP request:
-   http://www.phpied.com/delay-loading-your-print-css/
-   ========================================================================== */
+     Print styles.
+     Inlined to avoid the additional HTTP request:
+     http://www.phpied.com/delay-loading-your-print-css/
+     ========================================================================== */
   /*t*/
   /*t*/
   /*./css/common.css*/
@@ -127,16 +130,16 @@
   /*./css/plyr.css*/
   /*./js/vendor/owl/assets/owl.carousel.min.css*/
   /**
- * Owl Carousel v2.3.4
- * Copyright 2013-2018 David Deutsch
- * Licensed under: SEE LICENSE IN https://github.com/OwlCarousel2/OwlCarousel2/blob/master/LICENSE
- */
+   * Owl Carousel v2.3.4
+   * Copyright 2013-2018 David Deutsch
+   * Licensed under: SEE LICENSE IN https://github.com/OwlCarousel2/OwlCarousel2/blob/master/LICENSE
+   */
   /*./js/vendor/owl/assets/owl.theme.default.min.css*/
   /**
- * Owl Carousel v2.3.4
- * Copyright 2013-2018 David Deutsch
- * Licensed under: SEE LICENSE IN https://github.com/OwlCarousel2/OwlCarousel2/blob/master/LICENSE
- */
+   * Owl Carousel v2.3.4
+   * Copyright 2013-2018 David Deutsch
+   * Licensed under: SEE LICENSE IN https://github.com/OwlCarousel2/OwlCarousel2/blob/master/LICENSE
+   */
 }
 .pocketnet_iframe #transactionview .workd {
   background: rgb(var(--background-secondary-theme));
@@ -256,6 +259,9 @@
 .pocketnet_iframe #transactionview .output > div.amount {
   padding-left: 1em;
 }
+.pocketnet_iframe .share_common.fullScreenVideo #comments .streamLink {
+  margin: 0;
+}
 .pocketnet_iframe #comments {
   position: relative;
 }
@@ -351,6 +357,25 @@
 }
 .pocketnet_iframe #comments.listpreview .list .comment.firstcomment:nth-last-child(1) {
   display: block;
+}
+.pocketnet_iframe #comments .streamLink {
+  margin: 0 4em;
+  padding: 1.2em 1em;
+  padding-right: 0;
+  margin-right: 1.75em;
+}
+.pocketnet_iframe #comments .streamLink button {
+  width: 100%;
+}
+.pocketnet_iframe #comments .captionfwrapper {
+  overflow: hidden;
+  height: 0;
+}
+.pocketnet_iframe #comments .captionfwrapper .caption {
+  padding-top: var(--app-margin-top);
+}
+.pocketnet_iframe #comments .captionfwrapper .csharetable {
+  display: none;
 }
 .pocketnet_iframe #comments.fromtop .list {
   border-bottom: 0;
@@ -497,7 +522,7 @@
   min-height: 66px;
   padding-top: 1em;
   padding-bottom: 1em;
-  padding-left: 1em;
+  padding-left: 2em;
 }
 .pocketnet_iframe #comments .list .comment.showedreplies .answersWrapper {
   display: block;
@@ -1156,7 +1181,7 @@
   box-shadow: none;
   padding: 0;
   padding-left: 1em;
-  padding-right: 1em;
+  padding-right: 4em;
   outline: 0;
   line-height: 36px;
   height: 38px;
@@ -1416,10 +1441,6 @@
 .pocketnet_iframe #comments .edit .posttable > div.postCellWrapper {
   padding-right: 0;
 }
-.pocketnet_iframe #comments .answers .comment .commentPaddingWrapper {
-  padding-left: 0;
-  padding-right: 0;
-}
 .pocketnet_iframe #comments.inited .post .commentPanel {
   display: table;
 }
@@ -1464,6 +1485,29 @@
   max-height: 100px;
 }
 @media only screen and (max-width: 1920px) {
+  .pocketnet_iframe #comments .repliesloaderWrapper,
+  .pocketnet_iframe #comments .loaderWrapper {
+    padding: 0.5em;
+  }
+  .pocketnet_iframe #comments .caption {
+    padding-left: 0.5em;
+    padding-right: 1em;
+  }
+  .pocketnet_iframe #comments .caption .csharetable > div.csharecnt {
+    padding-left: 0;
+  }
+  .pocketnet_iframe #comments .caption .csharetable .shareprwrapper > div.fortext {
+    padding-left: 0;
+  }
+  .pocketnet_iframe #comments .caption .csharetable .shareprwrapper > div.forimage {
+    width: 42px;
+  }
+  .pocketnet_iframe #comments .streamLink {
+    margin-right: 0.5em;
+    margin-left: 0.5em;
+    padding-left: 0;
+    padding-right: 0;
+  }
   .pocketnet_iframe #comments .list .comment .commentPaddingWrapper {
     padding-left: 0.5em;
     padding-right: 0.5em;
@@ -1475,6 +1519,9 @@
   .pocketnet_iframe #comments .list .comment .answers .commentPaddingWrapper {
     padding-left: 0.5em;
     padding-right: 0.5em;
+  }
+  .pocketnet_iframe #comments .list .comment .answersWrapper {
+    padding-left: 1em;
   }
   .pocketnet_iframe #comments .list .commentWrapper > div {
     vertical-align: top;
@@ -1646,6 +1693,1960 @@
   .pocketnet_iframe #comments .answer .postbody .posttable > div.iconWrapper .icon .usericon {
     display: none;
   }
+}
+.pocketnet_iframe #author .rightchatspacer {
+  height: 100%;
+}
+.pocketnet_iframe #author .curationWrapper {
+  padding: 6em;
+  text-align: center;
+}
+.pocketnet_iframe #author .authorlentawrapper {
+  padding-top: 0.5em;
+}
+.pocketnet_iframe #author.curation .startchat {
+  padding-left: 0.5em;
+}
+.pocketnet_iframe #author .mobileinfo {
+  display: none;
+}
+.pocketnet_iframe #author .mobileinfo .item.name {
+  display: none;
+}
+.pocketnet_iframe #author .copyaddress {
+  cursor: pointer;
+  text-overflow: ellipsis;
+}
+.pocketnet_iframe #author .newsharewrapper {
+  padding-bottom: 0;
+  border-radius: 12px;
+  background: rgb(var(--background-total-theme));
+  margin-top: 0.5em;
+}
+.pocketnet_iframe #author .authorlentawrappermain {
+  position: relative;
+}
+.pocketnet_iframe #author .authorlentawrappermain .authorsearchicon {
+  position: absolute;
+  left: 100%;
+  top: 0;
+  padding-top: 0.5em;
+}
+.pocketnet_iframe #author .authorlentawrappermain .authorsearchicon .icon {
+  padding: 1em;
+  cursor: pointer;
+  -moz-transition: 0.3s;
+  -o-transition: 0.3s;
+  -webkit-transition: 0.3s;
+  transition: 0.3s;
+  color: rgb(var(--neutral-grad-3));
+}
+.pocketnet_iframe #author .authorlentawrappermain .authorsearchicon .icon:hover {
+  color: rgb(var(--color-txt-ac));
+}
+.pocketnet_iframe #author .authorlentawrappermain .authorsearchwrapper {
+  background: rgb(var(--background-total-theme));
+  padding: 0.25em 0.5em;
+  padding-right: 0;
+  display: none;
+  border-right: 3px;
+  margin-top: 0.5em;
+  border-radius: 12px;
+}
+.pocketnet_iframe #author .authorlentawrappermain .authorsearchwrapper .search .searchPanel {
+  background: transparent;
+  border: 0;
+  display: none;
+}
+.pocketnet_iframe #author .authorlentawrappermain .authorsearchwrapper .search .searchInput .searchInputIcon .sminput {
+  padding: 1em;
+  padding-left: 1em;
+  background: transparent;
+  border: 0;
+}
+.pocketnet_iframe #author .authorlentawrappermain.searchactive .authorsearchwrapper {
+  display: block;
+}
+.pocketnet_iframe #author .authorlentawrappermain.searchactive .newsharewrapper {
+  display: none;
+}
+.pocketnet_iframe #author .authorlentawrappermain.searchactive .authorsearchicon .icon i:before {
+  content: '\f00d';
+}
+.pocketnet_iframe #author .postauwrapper .postauarrows {
+  background: rgb(var(--background-total-theme));
+  padding: 0 3em;
+  padding-right: 2.5em;
+  opacity: 0;
+  -moz-transition: 0.3s;
+  -o-transition: 0.3s;
+  -webkit-transition: 0.3s;
+  transition: 0.3s;
+}
+.pocketnet_iframe #author .postauwrapper .postauarrows.topwr {
+  border-bottom: 1px solid rgb(var(--color-medium-theme));
+  opacity: 1;
+}
+.pocketnet_iframe #author .postauwrapper .postauarrows.active {
+  opacity: 1;
+}
+.pocketnet_iframe #author .postauwrapper .arrowstable {
+  height: 100%;
+}
+.pocketnet_iframe #author .postauwrapper .arrowstable > div {
+  padding: 1.5em 0;
+  vertical-align: middle;
+}
+.pocketnet_iframe #author .postauwrapper .arrowaucenter {
+  text-align: center;
+}
+.pocketnet_iframe #author .postauwrapper .arrowauwrapper {
+  width: 60px;
+  text-align: center;
+}
+.pocketnet_iframe #author .postauwrapper .arrowauwrapperback {
+  width: 60px;
+}
+.pocketnet_iframe #author .postauwrapper .arrowaucenter {
+  width: 120px;
+}
+.pocketnet_iframe #author .postauwrapper .arrowau {
+  cursor: pointer;
+  height: 100%;
+}
+.pocketnet_iframe #author .postauwrapper .arrowau:hover {
+  color: rgb(var(--color-txt-ac));
+}
+.pocketnet_iframe #author .postauwrapper .backtoshares {
+  cursor: pointer;
+  height: 100%;
+  color: rgb(var(--neutral-grad-2));
+}
+.pocketnet_iframe #author .postauwrapper .backtoshares:hover {
+  color: rgb(var(--color-txt-ac));
+}
+.pocketnet_iframe #author .postauwrapper .arrowaucenter {
+  font-weight: 700;
+  font-size: 0.8em;
+}
+.pocketnet_iframe #author .postauwrapper .postcnt #post .share .cntswrk {
+  padding-right: 3.5em;
+  margin-left: 5em;
+}
+.pocketnet_iframe #author .postauwrapper .postcnt #post .share .iconWrapper {
+  width: 5em;
+  padding-left: 2em;
+}
+.pocketnet_iframe #author .postauwrapper .postcnt #post #post .cntswrk {
+  padding-right: 3.5em;
+}
+.pocketnet_iframe #author .postauwrapper .postcnt #post #post .share .cntswrk {
+  margin-left: 4.5em;
+}
+.pocketnet_iframe #author .postauwrapper .postcnt #post #post .share .iconWrapper {
+  width: 4.5em;
+  padding-left: 2em;
+}
+.pocketnet_iframe #author .postauwrapper .postcnt #comments .caption {
+  padding-right: 3.5em;
+  padding-left: 2.5em;
+}
+.pocketnet_iframe #author .postauwrapper .postcnt #comments .answer,
+.pocketnet_iframe #author .postauwrapper .postcnt #comments .post {
+  padding-right: 4em;
+  padding-left: 1em;
+}
+.pocketnet_iframe #author .postauwrapper .postcnt #comments .list .comment .commentPaddingWrapper {
+  padding-right: 4.5em;
+  padding-left: 1em;
+}
+.pocketnet_iframe #author .lentacell {
+  margin-right: 150px;
+  margin-left: 240px;
+  min-height: 800px;
+}
+.pocketnet_iframe #author .lentacell .cnt {
+  margin: 0 auto;
+  max-width: 760px;
+}
+.pocketnet_iframe #author .authorinfo {
+  font-size: 0.9em;
+  margin-bottom: 3.5em;
+}
+.pocketnet_iframe #author .authorinfo .donateWrapper {
+  margin-top: 2em;
+  padding-left: 1em;
+}
+.pocketnet_iframe #author .authorinfo .itemtable {
+  display: flex;
+  align-items: center;
+}
+.pocketnet_iframe #author .authorinfo .itemtable > div.icon {
+  min-width: 30px;
+  width: 30px;
+  text-align: center;
+  opacity: 0.6;
+  font-size: 0.8em;
+}
+.pocketnet_iframe #author .authorinfo .itemtable > div.label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding-right: 0.5em;
+}
+.pocketnet_iframe #author .authorinfo .itemtable > div.label a {
+  color: rgb(var(--color-txt-ac));
+  text-decoration: underline;
+}
+.pocketnet_iframe #author .authorinfo .itemtable > div .showmoreabout {
+  margin-top: 1em;
+  font-size: 0.8em;
+  text-decoration: underline;
+  color: rgb(var(--color-txt-ac));
+  cursor: pointer;
+}
+.pocketnet_iframe #author .authorinfo .itemtable > div .showmoreabout:hover {
+  color: rgb(var(--neutral-grad-2));
+}
+.pocketnet_iframe #author .authorinfo .item {
+  margin-bottom: 1em;
+}
+.pocketnet_iframe #author .authorinfo .postcnt {
+  cursor: pointer;
+}
+.pocketnet_iframe #author .authorinfo .postcnt .label {
+  text-transform: capitalize;
+}
+.pocketnet_iframe #author .authorinfo .name {
+  font-size: 1.2em;
+  font-weight: 500;
+}
+.pocketnet_iframe #author .authorinfo .site {
+  text-decoration: underline;
+  color: rgb(var(--color-txt-ac));
+}
+.pocketnet_iframe #author .authorinfo .showmoreinabout {
+  display: none;
+  color: rgb(var(--color-txt-ac));
+  text-decoration: underline;
+  cursor: pointer;
+}
+.pocketnet_iframe #author .lentaWrapper .authorinfo {
+  padding: 0.5em;
+}
+.pocketnet_iframe #author .leftpanelcell {
+  float: left;
+  width: 240px;
+  padding: 2.5em 0;
+  padding-left: 0.5em;
+  padding-right: 1.5em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.pocketnet_iframe #author .lentaWrapper {
+  min-height: 700px;
+}
+.pocketnet_iframe #author .mainpanelcell {
+  float: right;
+  width: 350px;
+  padding-top: 10px;
+}
+.pocketnet_iframe #author .work.mwork {
+  padding: 0 !important;
+  overflow: hidden;
+}
+.pocketnet_iframe #author .work .work {
+  width: 100% !important;
+}
+.pocketnet_iframe #author .mworkwrapper {
+  background: rgb(var(--background-main));
+}
+.pocketnet_iframe #author .bgCaption {
+  background: rgb(var(--color-shadow-var));
+  color: rgb(var(--text-on-bg-shadow-color));
+  height: auto;
+  position: relative;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+.pocketnet_iframe #author .bgCaption .cwrapper {
+  display: flex;
+  margin-top: 2em;
+  margin-bottom: 2em;
+}
+.pocketnet_iframe #author .bgCaption .deletedAccount {
+  padding: 5em 3em;
+  text-align: center;
+}
+.pocketnet_iframe #author .bgCaption .deletedAccount .deletedsettings {
+  margin-top: 1em;
+  cursor: pointer;
+}
+.pocketnet_iframe #author .bgCaption .nameWrapper {
+  max-width: 500px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 0.5em;
+}
+.pocketnet_iframe #author .bgCaption .nameWrapper span {
+  font-size: 1.9em;
+  font-weight: 700;
+}
+.pocketnet_iframe #author .bgCaption .panel {
+  display: flex;
+  flex-wrap: wrap;
+}
+.pocketnet_iframe #author .bgCaption .panel .changeAccount {
+  display: none;
+}
+.pocketnet_iframe #author .bgCaption .panel > div {
+  margin-right: 0.5em;
+  margin-bottom: 0.5em;
+  display: flex;
+  align-items: center;
+  border-radius: 6px;
+  background: rgba(var(--color-bg-ac-bright), 0.3);
+  color: rgb(var(--text-on-bg-shadow-color));
+  padding: 0.625em 1em;
+  text-align: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 5px 7px -5px rgba(var(--color-shadow-base), 0.4);
+}
+.pocketnet_iframe #author .bgCaption .panel > div.donate {
+  background: rgba(var(--color-good), 0.7);
+}
+.pocketnet_iframe #author .bgCaption .panel > div i {
+  text-align: center;
+  font-size: 0.8em;
+}
+.pocketnet_iframe #author .bgCaption .panel > div .label {
+  margin-right: 0.5em;
+}
+.pocketnet_iframe #author .bgCaption .panel > div:nth-child(1) {
+  padding-left: 2em;
+  padding-right: 2em;
+  background: rgba(var(--color-bg-ac-bright), 0.7);
+  color: rgb(var(--text-on-bg-shadow-color));
+}
+.pocketnet_iframe #author .bgCaption .panel > div:nth-child(1) .label {
+  display: block;
+}
+.pocketnet_iframe #author .bgCaption .create {
+  min-width: 250px;
+}
+.pocketnet_iframe #author .bgCaption .blockingWrapper {
+  display: none;
+}
+.pocketnet_iframe #author .bgCaption.blocking {
+  background: #290318;
+}
+.pocketnet_iframe #author .bgCaption.blocking .subscribebuttonstop {
+  display: none;
+}
+.pocketnet_iframe #author .bgCaption.blocking .blockingWrapper {
+  display: inline;
+}
+.pocketnet_iframe #author .bgCaption .subscribebuttonstop .unsubscribe {
+  display: none;
+}
+.pocketnet_iframe #author .bgCaption .subscribebuttonstop .startchat {
+  white-space: nowrap;
+}
+.pocketnet_iframe #author .bgCaption .subscribebuttonstop .fa-comments {
+  font-size: 0.35em;
+}
+.pocketnet_iframe #author .bgCaption .subscribebuttonstop .notificationturn {
+  display: none;
+  cursor: pointer;
+}
+.pocketnet_iframe #author .bgCaption .subscribebuttonstop .notificationturn i {
+  width: 38px;
+  text-align: center;
+  font-size: 0.6em;
+  -moz-transition: 0.3s;
+  -o-transition: 0.3s;
+  -webkit-transition: 0.3s;
+  transition: 0.3s;
+}
+.pocketnet_iframe #author .bgCaption .subscribebuttonstop .notificationturn.turnon i:before {
+  content: '\f0f3';
+}
+.pocketnet_iframe #author .bgCaption .subscribebuttonstop.following .startchat {
+  display: inline;
+}
+.pocketnet_iframe #author .bgCaption .subscribebuttonstop.following .unsubscribe {
+  display: inline;
+}
+.pocketnet_iframe #author .bgCaption .subscribebuttonstop.following .notificationturn {
+  display: inline;
+}
+.pocketnet_iframe #author .bgCaption .subscribebuttonstop.following .subscribe {
+  display: none;
+}
+.pocketnet_iframe #author .bgCaption .telements {
+  overflow: hidden;
+}
+.pocketnet_iframe #author .bgCaption .telements .telement {
+  float: left;
+  margin-right: 1em;
+}
+.pocketnet_iframe #author .bgCaption .telements .telement.sbscr {
+  padding-right: 2em;
+}
+.pocketnet_iframe #author .bgCaption .usermenu {
+  overflow: hidden;
+}
+.pocketnet_iframe #author .bgCaption .usermenu .usermenuitem {
+  float: left;
+  margin-right: 1em;
+  font-size: 0.8em;
+  font-weight: 500;
+  padding: 0.5em;
+  border-bottom: 2px solid transparent;
+  white-space: nowrap;
+  cursor: pointer;
+  -moz-transition: 0.3s;
+  -o-transition: 0.3s;
+  -webkit-transition: 0.3s;
+  transition: 0.3s;
+}
+.pocketnet_iframe #author .bgCaption .usermenu .usermenuitem:hover {
+  border-bottom: 2px solid rgb(var(--text-on-bg-shadow-color));
+}
+.pocketnet_iframe #author .bgCaption .usermenu .usermenuitem.active {
+  border-bottom: 2px solid rgb(var(--text-on-bg-shadow-color));
+}
+.pocketnet_iframe #author .bgCaption .usermenu .usermenuitem:nth-child(1) {
+  padding-left: 0;
+}
+.pocketnet_iframe #author .bgCaption .cellforimage {
+  width: 95px;
+}
+.pocketnet_iframe #author .bgCaption .cellforimage .usericon {
+  width: 75px;
+  height: 75px;
+  line-height: 73px;
+  font-size: 1.5em;
+}
+.pocketnet_iframe #author .bgCaption .cellforimage .usericon.active {
+  cursor: pointer;
+}
+.pocketnet_iframe #author .bgCaption .cellforimage .usericon .plissingCnt {
+  left: 45px;
+}
+.pocketnet_iframe #author .bgCaption .work {
+  position: relative;
+  overflow: hidden;
+}
+.pocketnet_iframe #author .fxd {
+  top: 75px;
+  z-index: 10;
+}
+.pocketnet_iframe #author .fxd.dfxd {
+  position: fixed;
+}
+.pocketnet_iframe #author .contents {
+  background: rgb(var(--background-total-theme));
+  padding: 1em 2em;
+}
+.pocketnet_iframe #author .contents .cgroup {
+  padding-top: 1em;
+  padding-bottom: 1em;
+}
+.pocketnet_iframe #author .contents .ccaption {
+  font-weight: 100;
+  margin-bottom: 1em;
+}
+.pocketnet_iframe #author .contents .ccaption span {
+  font-size: 2em;
+}
+.pocketnet_iframe #author .contents .gcontents .citemtable > div {
+  vertical-align: middle;
+  overflow: hidden;
+  padding: 0.5em 0;
+}
+.pocketnet_iframe #author .contents .gcontents .citemtable > div.cscorecell {
+  width: 150px;
+  text-align: right;
+  padding-right: 1em;
+}
+.pocketnet_iframe #author .contents .gcontents .score,
+.pocketnet_iframe #author .contents .gcontents .cname {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.pocketnet_iframe #author .contents .gcontents .cname span {
+  font-size: 1.1em;
+  font-weight: 100;
+}
+.pocketnet_iframe #author .contents .gcontents .score {
+  color: rgb(var(--color-txt-gray));
+}
+.pocketnet_iframe #author .contents .gcontents .citem.selected .cname span {
+  font-weight: 700;
+}
+.pocketnet_iframe #author .contents .gcontents .citem.selected .score {
+  font-weight: 700;
+  color: rgb(var(--color-star-yellow));
+}
+.pocketnet_iframe #author .contents .chidden {
+  display: none;
+}
+.pocketnet_iframe #author .contents .captiontable {
+  width: auto;
+}
+.pocketnet_iframe #author .contents .captiontable .captionicon {
+  width: 30px;
+  text-align: center;
+  display: none;
+}
+.pocketnet_iframe #author .contents .cgroup.hasmore .captiontable {
+  cursor: pointer;
+}
+.pocketnet_iframe #author .contents .cgroup.hasmore .captionicon {
+  display: table-cell;
+}
+.pocketnet_iframe #author .contents .cgroup.hasmore.showedmore .captionicon i:before {
+  content: '\f078';
+}
+.pocketnet_iframe #author .contents .cgroup.hasmore.showedmore .dots {
+  display: none;
+}
+.pocketnet_iframe #author .contents .cgroup.hasmore.showedmore .chidden {
+  display: block;
+}
+.pocketnet_iframe #author.preshell .bgCaption .cellforimage .usericon {
+  background: rgba(var(--background-secondary-theme), 0.3);
+}
+.pocketnet_iframe html.mobileview #author .lentacell {
+  margin-right: 0;
+  margin-left: 0;
+}
+.pocketnet_iframe html.mobileview #author .leftpanelcell {
+  display: none;
+}
+.pocketnet_iframe html.mobileview #author .authorlentawrappermain {
+  position: relative;
+}
+.pocketnet_iframe html.mobileview #author .authorlentawrappermain .authorsearchicon {
+  display: none;
+}
+.pocketnet_iframe html.mobileview #author .authorlentawrappermain .authorsearchwrapper {
+  padding: 0 0.5em;
+}
+.pocketnet_iframe html.mobileview #author .authorlentawrappermain .authorsearchwrapper .search .searchPanel {
+  display: table-cell;
+}
+.pocketnet_iframe html.mobileview #author .authorlentawrappermain .authorsearchwrapper .search .searchPanel .searchPanelWrapper > div[event=clear] {
+  display: block;
+}
+.pocketnet_iframe html.mobileview #author .authorlentawrappermain .authorsearchwrapper .search .searchInput .searchInputIcon .sminput {
+  background: transparent;
+  padding-left: 0.5em;
+}
+@media only screen and (max-width: 1920px) {
+  .pocketnet_iframe #author .bgCaption {
+    min-height: 485px;
+  }
+  .pocketnet_iframe #author .bgCaption .adr {
+    max-width: none;
+    display: block;
+  }
+  .pocketnet_iframe #author .bgCaption .middotwrapper {
+    display: none;
+  }
+  .pocketnet_iframe #author .bgCaption .panel {
+    margin-top: 1.5em;
+    margin-bottom: 1.5em;
+    margin-left: 0.5em;
+  }
+  .pocketnet_iframe #author .bgCaption {
+    margin-bottom: 0;
+    margin-top: 0;
+    height: auto;
+    padding-bottom: 2em;
+    background: #051b48;
+    border-bottom-left-radius: 12px;
+    border-bottom-right-radius: 12px;
+  }
+  .pocketnet_iframe #author .bgCaption .usermenu {
+    min-height: 37px;
+    contain: strict;
+  }
+  .pocketnet_iframe #author .bgCaption .cwrapper {
+    margin: 0;
+    flex-direction: column;
+  }
+  .pocketnet_iframe #author .bgCaption .cwrapper .cellforimage {
+    margin: 0 auto;
+  }
+  .pocketnet_iframe #author .bgCaption .infomain {
+    display: flex;
+    flex-direction: column;
+  }
+  .pocketnet_iframe #author .bgCaption .nameWrapper {
+    margin: 0 auto;
+    margin-top: 0.5em;
+    margin-bottom: 2em;
+    text-align: center;
+  }
+  .pocketnet_iframe #author .bgCaption .nameWrapper span {
+    font-size: 1.6em;
+  }
+  .pocketnet_iframe #author .bgCaption .work {
+    padding-right: 0;
+  }
+  .pocketnet_iframe #author .bgCaption .telements .telement {
+    width: 100%;
+    margin-right: 0;
+  }
+  .pocketnet_iframe #author .bgCaption .telements .telement.sbscr {
+    display: none;
+    padding-left: 1em;
+    padding-right: 0;
+  }
+  .pocketnet_iframe #author .bgCaption .tips {
+    margin-top: 0.5em;
+  }
+  .pocketnet_iframe #author .bgCaption .caption {
+    font-size: 1.1em;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: center;
+    padding-left: 0;
+    padding-right: 0;
+    white-space: nowrap;
+    margin-top: 0;
+    margin-bottom: 1em;
+  }
+  .pocketnet_iframe #author .bgCaption .caption .adr {
+    font-size: 1em;
+  }
+  .pocketnet_iframe #author .bgCaption .usermenu {
+    width: 100%;
+    display: flex !important;
+    flex-wrap: nowrap;
+  }
+  .pocketnet_iframe #author .bgCaption .usermenu .usermenuitem {
+    flex-grow: 1;
+    width: auto;
+    float: none;
+    margin-right: 0;
+    padding-left: 0;
+    padding-right: 0;
+    text-align: center;
+    padding-bottom: 1em;
+    font-size: 0.8em;
+    border-bottom: 2px solid rgba(var(--color-txt-gray), 0.5);
+  }
+  .pocketnet_iframe #author .bgCaption .usermenu .usermenuitem.active {
+    border-bottom: 2px solid rgba(var(--color-txt-gray), 0.8);
+  }
+  .pocketnet_iframe #author .bgCaption .cellforimage {
+    width: 100px;
+    padding-top: 2em;
+  }
+  .pocketnet_iframe #author .bgCaption .cellforimage .usericon {
+    width: 100px;
+    height: 100px;
+    line-height: 98px;
+    border: 4px solid rgb(var(--text-on-bg-shadow-color));
+    box-shadow: 0 5px 7px -5px rgba(var(--color-shadow-base), 0.4);
+  }
+  .pocketnet_iframe #author .bgCaption .infoWrapper {
+    position: static;
+    left: 0;
+    right: 0;
+    top: 20px;
+    bottom: 0;
+    z-index: 1;
+  }
+  .pocketnet_iframe #author .bgCaption .infoWrapper .work {
+    padding: 0 0.5em;
+  }
+  .pocketnet_iframe #author .bgCaption .work {
+    position: relative;
+    overflow: hidden;
+  }
+  .pocketnet_iframe #author .bgCaption {
+    padding-top: 0;
+  }
+  .pocketnet_iframe #author .bgCaption .caption {
+    text-align: left !important;
+    padding-left: 0.5em;
+  }
+  .pocketnet_iframe #author .bgCaption .panel .changeAccount {
+    display: flex;
+  }
+  .pocketnet_iframe #author .bgCaption .infoWrapper,
+  .pocketnet_iframe #author .lentacell .cnt {
+    max-width: 768px;
+    margin: 0 auto;
+  }
+  .pocketnet_iframe #author .mobileinfo {
+    display: block;
+  }
+  .pocketnet_iframe #author .lentacell {
+    margin-right: 44px;
+    margin-left: 0;
+  }
+  .pocketnet_iframe #author .newsharewrapper {
+    display: none;
+  }
+  .pocketnet_iframe #author .leftpanelcell {
+    display: none;
+  }
+  .pocketnet_iframe #author .lentacell {
+    margin-right: 44px;
+    margin-left: 0;
+  }
+  .pocketnet_iframe #author .work.mwork {
+    width: 90%;
+  }
+  .pocketnet_iframe #author .authorinfo .showmoreinabout {
+    display: inline;
+  }
+  .pocketnet_iframe #author .authorinfo .additionalinfo.hasabout {
+    display: none;
+  }
+  .pocketnet_iframe #author .authorinfo.displayedall .showmoreinabout {
+    display: none;
+  }
+  .pocketnet_iframe #author .authorinfo.displayedall .additionalinfo.hasabout {
+    display: block;
+  }
+}
+@media only screen and (max-width: 1920px) {
+  .pocketnet_iframe #author .authorlentawrappermain .authorsearchwrapper {
+    padding-right: 0.25em !important;
+  }
+  .pocketnet_iframe #author .newsharewrapper {
+    display: none;
+  }
+  .pocketnet_iframe html.allcontent #author .bgCaption {
+    padding-top: calc(36px + var(--app-margin-top));
+  }
+  .pocketnet_iframe #author .work.mwork {
+    width: 100%;
+  }
+  .pocketnet_iframe #author .lentaWrapper .authorinfo {
+    padding: 1em;
+  }
+  .pocketnet_iframe #author .copyaddress {
+    font-size: 1em;
+    font-weight: 700;
+  }
+  .pocketnet_iframe #author .subscribewrapperphones .subscribebuttons button {
+    padding-bottom: 0.5em;
+    padding-top: 0.5em;
+  }
+  .pocketnet_iframe #author .bgCaption .caption .subscribe {
+    font-size: 1.4em;
+    border-bottom: 1px solid #ff4800;
+    opacity: 1;
+  }
+  .pocketnet_iframe #author .bgCaption .nameWrapper {
+    margin-left: 0.5em;
+    text-align: left;
+  }
+  .pocketnet_iframe #author .lentaWrapper {
+    min-height: 0;
+  }
+  .pocketnet_iframe #author .lentacell {
+    margin-right: 0;
+    margin-left: 0;
+  }
+  .pocketnet_iframe #author .leftpanelcell {
+    float: none;
+    display: none;
+    width: 100%;
+    padding: 1em;
+  }
+  .pocketnet_iframe #author .leftpanelcell .authorinfo .itemtable > div {
+    vertical-align: middle;
+  }
+  .pocketnet_iframe #author .leftpanelcell .authorinfo .itemtable > div.icon {
+    width: 30px;
+  }
+  .pocketnet_iframe #author .leftpanelcell .authorinfo .item:nth-last-child(1) {
+    margin-bottom: 0;
+  }
+  .pocketnet_iframe #author .mainpanelcell {
+    display: none;
+  }
+  .pocketnet_iframe #author .work.mwork {
+    padding: 0 !important;
+    overflow: hidden;
+  }
+  .pocketnet_iframe #author .work .work {
+    width: 100% !important;
+  }
+  .pocketnet_iframe #author .fxd {
+    position: fixed;
+  }
+}
+.pocketnet_iframe #channel .emptychannel {
+  text-align: center;
+}
+.pocketnet_iframe #channel .channel {
+  background: rgb(var(--background-total-theme));
+  padding: 0 0.5em;
+}
+.pocketnet_iframe #channel .channel .userinfo {
+  padding: 0.5em 0;
+  display: flex;
+}
+.pocketnet_iframe #channel .channel .userinfo .name {
+  font-size: 1.75em;
+  font-weight: 700;
+  padding-bottom: 0.5em;
+}
+.pocketnet_iframe #channel .channel .userinfo .adr {
+  max-width: 500px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  vertical-align: bottom;
+  display: inline-block;
+}
+.pocketnet_iframe #channel .channel .userinfo .nameinfo {
+  padding-left: 1em;
+  flex-grow: 2;
+}
+.pocketnet_iframe #channel .channel .userinfo .openprofilebuttonwrapper {
+  padding-bottom: 1em;
+}
+.pocketnet_iframe #channel .channel .userinfo .openprofilebutton {
+  min-width: 200px;
+}
+.pocketnet_iframe #channel .channel .userinfo .additional {
+  margin-top: 0.5em;
+  padding-top: 1em;
+  padding-bottom: 1em;
+  border-top: 1px solid rgb(var(--neutral-grad-0));
+}
+.pocketnet_iframe #channel .channel .panel {
+  margin: 0 auto;
+  max-width: 600px;
+  display: flex;
+  flex-direction: column;
+}
+.pocketnet_iframe #channel .channel .panel .usermenuitem {
+  padding: 0.5em 0;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.pocketnet_iframe #channel .channel .panel > div i {
+  text-align: center;
+  width: 30px;
+  font-size: 0.8em;
+}
+.pocketnet_iframe #channel .channel .usericon {
+  width: 40px;
+  height: 40px;
+  line-height: 40px;
+  margin: 0 auto;
+}
+.pocketnet_iframe #channel .channel .usericon.letter {
+  font-size: 1.5em;
+}
+.pocketnet_iframe #channel .channel .action {
+  padding: 1em;
+  text-align: center;
+}
+.pocketnet_iframe .wnd #channel {
+  padding-bottom: 3em;
+  padding-left: 0.5em;
+  padding-right: 0.5em;
+}
+.pocketnet_iframe .lentaWrapper > div#post {
+  background: transparent;
+}
+.pocketnet_iframe .lentaWrapper > div#post .share {
+  margin-bottom: 0;
+}
+.pocketnet_iframe #post.preshell {
+  background: transparent;
+}
+.pocketnet_iframe #post {
+  background: rgb(var(--background-main));
+}
+.pocketnet_iframe #post .brighteonVideoIframe {
+  max-width: 650px;
+}
+.pocketnet_iframe #post .jsPlayerLoading,
+.pocketnet_iframe #post .video-js:not(.vjs-fullscreen) {
+  max-height: 80vh;
+  max-height: calc(var(--vh, 1vh) * 80);
+}
+.pocketnet_iframe #post .videoWrapper {
+  max-width: 650px;
+  position: relative;
+  overflow: hidden;
+}
+.pocketnet_iframe #post .lockedaccount,
+.pocketnet_iframe #post .empty {
+  text-align: center;
+  padding: 5em;
+}
+.pocketnet_iframe #post .lockedaccount span,
+.pocketnet_iframe #post .empty span {
+  font-size: 2em;
+  font-weight: 100;
+}
+.pocketnet_iframe #post .lockedaccount.allb,
+.pocketnet_iframe #post .empty.allb {
+  background: rgb(var(--background-main));
+  margin: 0 auto;
+  margin-top: 5em;
+  max-width: 400px;
+  border-radius: 12px;
+}
+.pocketnet_iframe #post #chatExported .caption {
+  font-size: 1em;
+}
+.pocketnet_iframe #post #chatExported .messageRow .iconWrapper {
+  width: 33px;
+}
+.pocketnet_iframe #post .showmorelenta {
+  display: none;
+  background: rgb(var(--background-total-theme));
+}
+.pocketnet_iframe #post .showmorelenta .anothercntswrk {
+  border-bottom: none !important;
+}
+.pocketnet_iframe #post .showmorelenta .share.share_common.shareinlenta {
+  margin-right: 1em !important;
+}
+.pocketnet_iframe #post .showmorelenta.hasshares {
+  display: block;
+}
+.pocketnet_iframe #post .showmorelenta .horizontalLentaWrapper {
+  padding: 1em;
+}
+.pocketnet_iframe #post .showmorelenta .horizontalLentacaption {
+  padding: 1em 0;
+}
+.pocketnet_iframe #post .showmorelenta .horizontalLentacaption span {
+  font-weight: 700;
+  font-size: 0.8em;
+}
+.pocketnet_iframe #post .showmorelenta .durationWrapper,
+.pocketnet_iframe #post .showmorelenta .statswrapper {
+  top: 0;
+  bottom: auto !important;
+}
+.pocketnet_iframe #post #lenta .share .sharecaption {
+  font-size: 1em;
+}
+.pocketnet_iframe #post .debuginfo {
+  display: none !important;
+}
+.pocketnet_iframe #post .postWrapper {
+  margin: 0 auto;
+  padding-bottom: 1em;
+  max-width: 800px;
+  flex-grow: 1;
+  opacity: 0;
+  -moz-transition: opacity 0.3s;
+  -o-transition: opacity 0.3s;
+  -webkit-transition: opacity 0.3s;
+  transition: opacity 0.3s;
+}
+.pocketnet_iframe #post .postWrapper.active {
+  opacity: 1;
+}
+.pocketnet_iframe #post .share {
+  background: rgb(var(--background-total-theme));
+  border-radius: 6px;
+}
+.pocketnet_iframe #post .share .work {
+  padding: 0;
+  padding-right: 0;
+  margin: 0;
+  padding-bottom: 0;
+}
+.pocketnet_iframe #post .share .videoTips {
+  display: none;
+}
+.pocketnet_iframe #post .share .exitFull {
+  display: none;
+}
+.pocketnet_iframe #post .share .images {
+  max-width: 620px;
+}
+.pocketnet_iframe #post .share .sharecaption {
+  max-width: 620px;
+}
+.pocketnet_iframe #post .share .message {
+  max-width: 620px;
+}
+.pocketnet_iframe #post.videomainpost {
+  padding-top: 0;
+  display: flex;
+  flex-wrap: wrap;
+}
+.pocketnet_iframe #post.videomainpost .cntswrk.tags {
+  opacity: 0.6;
+}
+.pocketnet_iframe #post.videomainpost .videoDescription {
+  padding-bottom: 0.5em;
+}
+.pocketnet_iframe #post.videomainpost .authorMetatable {
+  align-items: center;
+}
+.pocketnet_iframe #post.videomainpost .hiddenpost {
+  background: rgb(var(--background-total-theme));
+}
+.pocketnet_iframe #post.videomainpost .postWrapper {
+  background: transparent;
+  max-width: none;
+}
+.pocketnet_iframe #post.videomainpost .videoWrapper {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+.pocketnet_iframe #post.videomainpost .videoWrapper .js-player {
+  border-radius: 0;
+}
+.pocketnet_iframe #post.videomainpost .videoWrapper .vjs-control-bar {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+.pocketnet_iframe #post.videomainpost .share {
+  margin: 0 auto;
+  max-width: 960px;
+  background: transparent;
+}
+.pocketnet_iframe #post.videomainpost .share .shareTable {
+  background: rgb(var(--background-total-theme));
+  padding-top: 0;
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+}
+.pocketnet_iframe #post.videomainpost .share .message,
+.pocketnet_iframe #post.videomainpost .share .sharecaption {
+  max-width: 650px;
+}
+.pocketnet_iframe #post.videomainpost .share .commentmessage div {
+  max-width: 650px;
+}
+.pocketnet_iframe #post.videomainpost .share .jsPlayerLoading {
+  width: 100%;
+}
+.pocketnet_iframe #post.videomainpost .share .statswrapperExtended {
+  background: rgb(var(--background-total-theme));
+  padding-left: 1em;
+}
+.pocketnet_iframe #post.videomainpost .share .anothercntswrk {
+  background: rgb(var(--background-total-theme));
+  padding-left: 1em;
+  padding-right: 1em;
+}
+.pocketnet_iframe #post.videomainpost .share .work {
+  padding: 0;
+}
+.pocketnet_iframe #post.videomainpost .share .url {
+  margin-bottom: 0;
+}
+.pocketnet_iframe #post.videomainpost .share .paddingWrapper {
+  margin-left: 48px;
+  padding-left: 0.5em;
+}
+.pocketnet_iframe #post.videomainpost .share .urlcnt {
+  display: none;
+}
+.pocketnet_iframe #post.videomainpost .share .shareTable .iconWrapper {
+  padding: 0;
+  z-index: 12;
+  width: 48px;
+}
+.pocketnet_iframe #post.videomainpost .share .shareTable .iconWrapper .icon {
+  width: auto;
+  height: 48px;
+}
+.pocketnet_iframe #post.videomainpost .share .shareTable .iconWrapper .icon .usericon {
+  width: 48px;
+  height: 48px;
+}
+.pocketnet_iframe #post.videomainpost .shareTable .authorTable > div.authorCell {
+  padding-left: 0.5em;
+  padding-right: 0;
+}
+.pocketnet_iframe #post.videomainpost .shareTable .authorTable > div .datetime {
+  opacity: 0.5;
+}
+.pocketnet_iframe #post.videomainpost .shareTable .metatable > div.metapanel .metapanelitem {
+  color: rgba(var(--neutral-grad-3), 0.8);
+}
+.pocketnet_iframe #post.videomainpost .cntswrk {
+  padding: 0;
+  margin: 0;
+}
+.pocketnet_iframe #post.videomainpost .share .metatable > div.metapanel {
+  padding-right: 0.5em;
+}
+.pocketnet_iframe #post.videomainpost .videoWrapper {
+  overflow: hidden;
+  max-width: none;
+  position: static;
+}
+.pocketnet_iframe #post.videomainpost .jsPlayerLoading,
+.pocketnet_iframe #post.videomainpost .video-js {
+  max-height: 80vh;
+  max-height: calc(var(--vh, 1vh) * 80);
+}
+.pocketnet_iframe #post.videomainpost .forurl .url {
+  border-radius: 12px;
+  background: #000;
+}
+.pocketnet_iframe #post.videomainpost .statswrapperExtended {
+  display: none;
+}
+.pocketnet_iframe #post.videomainpost .share {
+  margin: 0 auto;
+}
+.pocketnet_iframe #post .recomandationsFromContent {
+  display: none;
+}
+.pocketnet_iframe #post.recommendationsenabled .recomandationsFromContent {
+  display: block;
+}
+.pocketnet_iframe #post .recomandationsFromContent {
+  margin-top: 0.5em;
+}
+.pocketnet_iframe #post .recomandationsFromContent .recomandationsbgwrapper {
+  background: rgb(var(--background-total-theme));
+  border-radius: 9px;
+  padding: 0.5em;
+}
+.pocketnet_iframe #post .recomandationsFromContent .streambgwrapper {
+  background: rgb(var(--background-total-theme));
+  border-radius: 9px;
+  box-sizing: border-box;
+  position: relative;
+  margin-left: 0.25em;
+  padding: 0 0.5em;
+  overflow: hidden;
+}
+.pocketnet_iframe #post .recomandationsFromContent .streambgwrapper .toggle-chat {
+  background: rgba(0, 0, 0, 0.04);
+  display: none;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+}
+.pocketnet_iframe #post .recomandationsFromContent .streambgwrapper .toggle-chat .toggle {
+  border-radius: 0 0 9px 9px;
+  color: #8e90a6;
+  font-size: 12px;
+  font-weight: 600;
+  text-align: center;
+  display: block;
+  padding: 8px;
+  transition: all 0.3s ease-in-out;
+}
+.pocketnet_iframe #post .recomandationsFromContent .streambgwrapper .toggle-chat .toggle:hover {
+  color: #000;
+}
+.pocketnet_iframe #post .recomandationsFromContent .streambgwrapper.chat-ready {
+  margin-bottom: 0.5em;
+  height: 70vh;
+  transition: height 0.3s ease-in-out;
+}
+.pocketnet_iframe #post .recomandationsFromContent .streambgwrapper.chat-ready .toggle-chat {
+  display: block;
+}
+.pocketnet_iframe #post .recomandationsFromContent .streambgwrapper.chat-ready #chatExported {
+  padding-bottom: 0.5em;
+  transition: all 0.3s ease-in-out;
+}
+.pocketnet_iframe #post .recomandationsFromContent .streambgwrapper.chat-ready #chatExported #modal {
+  bottom: 33px;
+}
+.pocketnet_iframe #post .recomandationsFromContent .streambgwrapper.chat-ready #chatExported .modal-backdrop {
+  border-radius: 8px 8px 0 0;
+}
+.pocketnet_iframe #post .recomandationsFromContent .streambgwrapper.chat-hidden {
+  height: 35px;
+}
+.pocketnet_iframe #post .recomandationsFromContent .streambgwrapper.chat-hidden .toggle {
+  border: 1px solid #c7c8d9;
+  border-radius: 9px;
+}
+.pocketnet_iframe #post .recomandationsFromContent .streambgwrapper.chat-hidden #chatExported {
+  padding: 0;
+  height: 0;
+}
+.pocketnet_iframe #post.videomainpost.recommendationsenabled .postWrapper {
+  display: flex;
+}
+.pocketnet_iframe #post.videomainpost.recommendationsenabled .share {
+  margin: 0 auto;
+  max-width: 960px;
+}
+.pocketnet_iframe #post.videomainpost.recommendationsenabled .postsharemain {
+  flex-grow: 1;
+}
+.pocketnet_iframe #post.videomainpost.recommendationsenabled .recomandationsFromContent {
+  margin-top: 0;
+  max-width: 400px;
+  min-width: 400px;
+  margin-left: auto;
+}
+.pocketnet_iframe #post.videomainpost.recommendationsenabled .recomandationsFromContent .recomandationsbgwrapper {
+  margin-left: 0.25em;
+}
+@media only screen and (max-width: 1920px) {
+  .pocketnet_iframe #post.videomainpost.recommendationsenabled .postWrapper {
+    display: block;
+  }
+  .pocketnet_iframe #post.videomainpost.recommendationsenabled .recomandationsFromContent {
+    margin-top: 0.5em;
+    min-width: 0;
+    max-width: 960px;
+    margin: 1em auto;
+    width: 100%;
+  }
+  .pocketnet_iframe #post.videomainpost.recommendationsenabled .recomandationsFromContent .recomandationsbgwrapper {
+    margin-left: 0;
+  }
+}
+.pocketnet_iframe .wnd #post.videomainpost.recommendationsenabled .postWrapper {
+  display: block;
+}
+.pocketnet_iframe .wnd #post.videomainpost.recommendationsenabled .recomandationsFromContent {
+  margin-top: 0.5em;
+  min-width: 0;
+  max-width: 960px;
+  margin: 1em auto;
+  width: 100%;
+}
+.pocketnet_iframe .wnd #post.videomainpost.recommendationsenabled .recomandationsFromContent .recomandationsbgwrapper {
+  margin-left: 0;
+}
+@media only screen and (min-width: 1730px) {
+  .pocketnet_iframe #post.videomainpost.recommendationsenabled {
+    max-width: 1350px;
+  }
+  .pocketnet_iframe #post.videomainpost.recommendationsenabled .postWrapper {
+    display: flex !important;
+  }
+  .pocketnet_iframe #post.videomainpost.recommendationsenabled .recomandationsFromContent {
+    display: flex;
+    flex-direction: column;
+    max-width: 390px !important;
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+    margin-left: 1em !important;
+  }
+}
+.pocketnet_iframe #post .sharearticle {
+  opacity: 0;
+  -moz-transition: opacity 0.3s;
+  -o-transition: opacity 0.3s;
+  -webkit-transition: opacity 0.3s;
+  transition: opacity 0.3s;
+}
+.pocketnet_iframe #post .sharearticle .article_body {
+  overflow: hidden;
+}
+.pocketnet_iframe #post .sharearticle .shareTable {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+.pocketnet_iframe #post .sharearticle .sharecaption,
+.pocketnet_iframe #post .sharearticle .tags,
+.pocketnet_iframe #post .sharearticle .sharecaption {
+  max-width: none;
+}
+.pocketnet_iframe #post .sharearticle.ready {
+  opacity: 1;
+}
+.pocketnet_iframe #post .sharearticle .sharepanel {
+  padding-right: 0.5em;
+}
+.pocketnet_iframe #post .sharearticle .translateApi {
+  margin-bottom: 0;
+}
+.pocketnet_iframe #post .sharearticle .translateApi .translateto {
+  margin-right: 0;
+  background: transparent;
+}
+.pocketnet_iframe #post .sharearticle .translateApi .translateto span {
+  color: rgb(var(--text-on-bg-shadow-color));
+}
+.pocketnet_iframe #post .sharearticle .translateApi .translateto.active span {
+  color: rgb(var(--color-bg-ac-bright));
+}
+.pocketnet_iframe #post .sharearticle .shareBgCaption .author,
+.pocketnet_iframe #post .sharearticle .articleend .author {
+  margin-top: 1em;
+  margin-bottom: 0.5em;
+}
+.pocketnet_iframe #post .sharearticle .shareBgCaption .author i,
+.pocketnet_iframe #post .sharearticle .articleend .author i {
+  display: none;
+}
+.pocketnet_iframe #post .sharearticle .shareBgCaption .author .notificationturn,
+.pocketnet_iframe #post .sharearticle .articleend .author .notificationturn {
+  display: none !important;
+}
+.pocketnet_iframe #post .sharearticle .shareBgCaption .forstars,
+.pocketnet_iframe #post .sharearticle .articleend .forstars {
+  margin-bottom: 1em;
+}
+.pocketnet_iframe #post .sharearticle .shareBgCaption .forstars .itemwr,
+.pocketnet_iframe #post .sharearticle .articleend .forstars .itemwr {
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: center;
+}
+.pocketnet_iframe #post .sharearticle .shareBgCaption .forstars .itemwr i,
+.pocketnet_iframe #post .sharearticle .articleend .forstars .itemwr i {
+  text-align: center;
+}
+.pocketnet_iframe #post .sharearticle .shareBgCaption .forstars .starWrapper,
+.pocketnet_iframe #post .sharearticle .articleend .forstars .starWrapper {
+  text-align: center;
+}
+.pocketnet_iframe #post .sharearticle .shareBgCaption .forstars .count span,
+.pocketnet_iframe #post .sharearticle .articleend .forstars .count span {
+  font-size: 2em;
+}
+.pocketnet_iframe #post .sharearticle .shareBgCaption .forstars .count span,
+.pocketnet_iframe #post .sharearticle .articleend .forstars .count span {
+  font-weight: 700;
+  font-family: Nunito Sans;
+}
+.pocketnet_iframe #post .sharearticle .shareBgCaption .sys,
+.pocketnet_iframe #post .sharearticle .articleend .sys {
+  text-align: center;
+}
+.pocketnet_iframe #post .sharearticle .shareBgCaption .buttonOpenWrapper,
+.pocketnet_iframe #post .sharearticle .articleend .buttonOpenWrapper {
+  margin-bottom: 0.5em;
+}
+.pocketnet_iframe #post .sharearticle .shareBgCaption .buttonOpenWrapper button,
+.pocketnet_iframe #post .sharearticle .articleend .buttonOpenWrapper button {
+  width: 130px;
+  border-radius: 0;
+  background: rgba(var(--color-shadow-base), 0.1);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid transparent !important;
+}
+.pocketnet_iframe #post .sharearticle .shareBgCaption .buttonOpenWrapper button:hover,
+.pocketnet_iframe #post .sharearticle .articleend .buttonOpenWrapper button:hover {
+  background: rgba(var(--color-shadow-base), 0.01);
+}
+.pocketnet_iframe #post .sharearticle .shareBgCaption .divider,
+.pocketnet_iframe #post .sharearticle .articleend .divider {
+  margin: 0 auto;
+  margin-bottom: 0.5em;
+  height: 1px;
+  width: 110px;
+  background: rgb(var(--background-total-theme));
+}
+.pocketnet_iframe #post .sharearticle .shareBgCaption .tags,
+.pocketnet_iframe #post .sharearticle .articleend .tags {
+  justify-content: center;
+}
+.pocketnet_iframe #post .sharearticle .shareBgCaption {
+  height: 640px;
+  position: relative;
+}
+.pocketnet_iframe #post .sharearticle .shareBgCaption .tags div span {
+  color: rgb(var(--text-on-bg-ac-color));
+}
+.pocketnet_iframe #post .sharearticle .shareBgCaption .sys span {
+  color: rgb(var(--text-on-bg-shadow-color));
+}
+.pocketnet_iframe #post .sharearticle .shareBgCaption .blackmatte {
+  background: #000;
+  background: linear-gradient(0, #000 0, rgba(255, 255, 255, 0) 100%);
+}
+.pocketnet_iframe #post .sharearticle .shareBgCaption .captioncnt {
+  padding-bottom: 2em;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  z-index: 1;
+  color: rgb(var(--text-on-bg-ac-color));
+  text-align: center;
+}
+.pocketnet_iframe #post .sharearticle .shareBgCaption .captioncnt .sharecaption {
+  font-size: 4em;
+  font-family: Georgia,serif;
+  max-height: 400px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  text-overflow: ellipsis;
+  overscroll-behavior: auto;
+  max-width: none;
+}
+.pocketnet_iframe #post .sharearticle .shareBgCaption .icon .usericon {
+  margin: 0 auto;
+  position: relative;
+}
+.pocketnet_iframe #post .sharearticle .shareBgCaption.showtext .iconWrapper {
+  position: absolute;
+  width: auto;
+  bottom: -22px;
+  left: 0;
+  right: 0;
+  padding-left: 0;
+}
+.pocketnet_iframe #post .sharearticle .shareBgCaption .starstoppanel,
+.pocketnet_iframe #post .sharearticle .shareBgCaption .socialsharewrapper {
+  position: absolute;
+  bottom: 0.75em;
+  right: 1.25em;
+}
+.pocketnet_iframe #post .sharearticle .shareBgCaption .starstoppanel .iconwrapper,
+.pocketnet_iframe #post .sharearticle .shareBgCaption .socialsharewrapper .iconwrapper {
+  width: 3.5em;
+  height: 3.5em;
+  line-height: 3.5em;
+  border-radius: 3.5em;
+  color: rgb(var(--neutral-grad-3));
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  font-family: Nunito Sans;
+}
+.pocketnet_iframe #post .sharearticle .shareBgCaption .starstoppanel .iconwrapper:hover,
+.pocketnet_iframe #post .sharearticle .shareBgCaption .socialsharewrapper .iconwrapper:hover {
+  opacity: 0.6;
+}
+.pocketnet_iframe #post .sharearticle .shareBgCaption .starstoppanel .iconwrapper i,
+.pocketnet_iframe #post .sharearticle .shareBgCaption .socialsharewrapper .iconwrapper i {
+  width: 30px;
+  text-align: center;
+  font-size: 0.7em;
+}
+.pocketnet_iframe #post .sharearticle .shareBgCaption .socialsharewrapper .iconwrapper {
+  justify-content: flex-end;
+}
+.pocketnet_iframe #post .sharearticle .shareBgCaption .starstoppanel {
+  bottom: 0.75em;
+  left: 1.5em;
+  right: auto;
+  display: flex;
+}
+.pocketnet_iframe #post .sharearticle .shareBgCaption .starstoppanel .panelLeft {
+  display: flex;
+}
+.pocketnet_iframe #post .sharearticle .shareBgCaption .articleCover,
+.pocketnet_iframe #post .sharearticle .shareBgCaption .captioncnt,
+.pocketnet_iframe #post .sharearticle .shareBgCaption .blackmatte {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+}
+.pocketnet_iframe #post .sharearticle .shareBgCaption.smallimage .articleCover {
+  background-color: rgb(var(--color-shadow-base));
+  background-size: 100px auto !important;
+}
+.pocketnet_iframe #post .sharearticle .shareBgCaption.caption_small .captionmult {
+  font-size: 1.5em;
+}
+.pocketnet_iframe #post .sharearticle .shareBgCaption.caption_long .captionmult {
+  font-size: 0.5em;
+}
+.pocketnet_iframe #post .sharearticle .shareBgCaption.withcover .tags div {
+  background: transparent;
+  box-shadow: none;
+}
+.pocketnet_iframe #post .sharearticle .shareBgCaption.verticalcover {
+  height: 720px;
+}
+.pocketnet_iframe #post .sharearticle .shareBgCaption.verticalcover .translateApi .translateto span {
+  color: rgb(var(--text-color));
+}
+.pocketnet_iframe #post .sharearticle .shareBgCaption.verticalcover .translateApi .translateto.active span {
+  color: rgb(var(--color-bg-ac-bright));
+}
+.pocketnet_iframe #post .sharearticle .shareBgCaption.verticalcover.showtext {
+  border-bottom: 1px dashed rgba(var(--neutral-grad-4), 0.5);
+}
+.pocketnet_iframe #post .sharearticle .shareBgCaption.verticalcover .articleCover {
+  left: 0.5em;
+  top: 0.5em;
+  bottom: 0.5em;
+  right: 56%;
+}
+.pocketnet_iframe #post .sharearticle .shareBgCaption.verticalcover .captioncnt {
+  left: 44%;
+  right: 0.5em;
+  top: 0.5em;
+  bottom: 0.5em;
+}
+.pocketnet_iframe #post .sharearticle .shareBgCaption.verticalcover .blackmatte {
+  display: none;
+}
+.pocketnet_iframe #post .sharearticle .shareBgCaption.verticalcover .icon {
+  position: static;
+}
+.pocketnet_iframe #post .sharearticle .shareBgCaption.verticalcover .captioncnt {
+  justify-content: center;
+  color: rgb(var(--text-color));
+}
+.pocketnet_iframe #post .sharearticle .shareBgCaption.verticalcover .divider {
+  background: rgb(var(--text-color));
+}
+.pocketnet_iframe #post .sharearticle .shareBgCaption.verticalcover .tags div span {
+  color: rgb(var(--text-color));
+}
+.pocketnet_iframe #post .sharearticle .shareBgCaption.verticalcover .sys span {
+  color: rgb(var(--text-color));
+}
+.pocketnet_iframe #post .sharearticle .shareBgCaption.verticalcover .starstoppanel .iconwrapper,
+.pocketnet_iframe #post .sharearticle .shareBgCaption.verticalcover .socialsharewrapper .iconwrapper {
+  color: rgb(var(--text-color));
+}
+.pocketnet_iframe #post .sharearticle .shareBgCaption.verticalcover.showtext .iconWrapper {
+  position: static;
+  width: auto;
+  padding-left: 0;
+  float: none;
+}
+.pocketnet_iframe #post .sharearticle .shareBgCaption.verticalcover.showtext .toppanel {
+  order: 1;
+}
+.pocketnet_iframe #post .sharearticle .shareBgCaption.withoutcover {
+  border-bottom: 1px dashed rgb(var(--color-shadow-base));
+}
+.pocketnet_iframe #post .sharearticle .shareBgCaption.withoutcover .tags div span {
+  color: rgb(var(--text-color));
+}
+.pocketnet_iframe #post .sharearticle .shareBgCaption.withoutcover .captioncnt {
+  color: rgb(var(--text-color));
+}
+.pocketnet_iframe #post .sharearticle .shareBgCaption.withoutcover .sys span {
+  color: rgb(var(--text-color));
+}
+.pocketnet_iframe #post .sharearticle .shareBgCaption.withoutcover .blackmatte {
+  display: none;
+}
+.pocketnet_iframe #post .sharearticle .articlecontent {
+  padding-top: 4em;
+  padding-bottom: 4em;
+}
+.pocketnet_iframe #post .sharearticle .articlecontent .articlerenderError {
+  text-align: center;
+}
+.pocketnet_iframe #post .sharearticle .articlecontent .cntswrk {
+  margin-left: 0;
+  padding-left: 0;
+  padding-right: 0;
+}
+.pocketnet_iframe #post .sharearticle .articlecontent .articleend {
+  margin-top: 3em;
+}
+.pocketnet_iframe #post .sharearticle .articlecontent .commentsWrapper,
+.pocketnet_iframe #post .sharearticle .articlecontent .commentRegisterDiv .commentRegister {
+  border-radius: 12px;
+}
+.pocketnet_iframe #post .sharearticle .articlecontent .forcomments {
+  margin-top: 2em;
+}
+.pocketnet_iframe #post .sharearticle .articlecontent .article {
+  max-width: 640px;
+  margin: 0 auto;
+}
+.pocketnet_iframe #post .sharearticle .removeDescription {
+  display: none;
+  padding: 1.5em;
+  color: rgb(var(--neutral-grad-2));
+  text-align: center;
+}
+.pocketnet_iframe #post .sharearticle.deleted .forcomments,
+.pocketnet_iframe #post .sharearticle.deleted .starstoppanel,
+.pocketnet_iframe #post .sharearticle.deleted .socialsharewrapper,
+.pocketnet_iframe #post .sharearticle.deleted .textscnts {
+  display: none !important;
+}
+.pocketnet_iframe #post .sharearticle.deleted .acticletext {
+  display: none;
+}
+.pocketnet_iframe #post .sharearticle.deleted .removeDescription {
+  display: block !important;
+}
+.pocketnet_iframe #post .sharearticle.deleted .articleCover {
+  filter: blur(10px);
+}
+.pocketnet_iframe #post .sharearticle p a {
+  word-break: break-all;
+  text-overflow: ellipsis;
+  max-width: 90%;
+  overflow: hidden;
+}
+.pocketnet_iframe #content > div#post.sharec .postWrapper {
+  max-width: none;
+}
+.pocketnet_iframe #content > div#post.sharec .widthcontainer {
+  width: 80%;
+  max-width: 800px;
+  margin: 0 auto;
+}
+.pocketnet_iframe html.mobileview #post .videoWrapper {
+  max-width: none;
+}
+.pocketnet_iframe html.mobileview #post.videomainpost {
+  padding-top: 0;
+}
+.pocketnet_iframe html.mobileview #post .sharearticle .articlecontent {
+  padding-left: 0.5em;
+  padding-right: 0.5em;
+}
+.pocketnet_iframe html.mobileview .wnd.normalizedmobile.articlewindow .wndinner .wndcontent {
+  max-width: none;
+}
+@media only screen and (max-width: 1920px) {
+  .pocketnet_iframe #content > div#post.sharec .widthcontainer {
+    width: 100%;
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+  }
+  .pocketnet_iframe #post {
+    padding: 0;
+  }
+  .pocketnet_iframe #post .videoWrapper {
+    border-radius: 0;
+  }
+  .pocketnet_iframe #post .videoWrapper .js-player {
+    border-radius: 0;
+    overflow: visible;
+  }
+  .pocketnet_iframe #post .videoWrapper .js-player .vjs-control-bar {
+    border-radius: 0;
+    overflow: visible;
+  }
+  .pocketnet_iframe #post .brighteonVideoIframe {
+    width: 100%;
+    max-width: inherit;
+    border-radius: 0;
+  }
+  .pocketnet_iframe #post .sharearticle .shareBgCaption.caption_small .captionmult {
+    font-size: 1.1em;
+  }
+  .pocketnet_iframe #post .sharearticle .shareBgCaption.caption_long .captionmult {
+    font-size: 0.8em;
+  }
+  .pocketnet_iframe #post .sharearticle .shareBgCaption .captioncnt .sharecaption {
+    max-height: none;
+  }
+  .pocketnet_iframe #post .sharearticle .shareBgCaption:not(.verticalcover) {
+    height: auto;
+  }
+  .pocketnet_iframe #post .sharearticle .shareBgCaption:not(.verticalcover) .captioncnt {
+    padding-bottom: 2em;
+    padding-left: 1em;
+    padding-right: 1em;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    z-index: 1;
+    text-align: center;
+    position: relative;
+    border-bottom: 1px dashed rgba(var(--neutral-grad-4), 0.5);
+    color: rgb(var(--text-color));
+  }
+  .pocketnet_iframe #post .sharearticle .shareBgCaption:not(.verticalcover) .captioncnt .tags {
+    justify-content: center;
+  }
+  .pocketnet_iframe #post .sharearticle .shareBgCaption:not(.verticalcover) .captioncnt .tags div span {
+    color: rgb(var(--text-color));
+  }
+  .pocketnet_iframe #post .sharearticle .shareBgCaption:not(.verticalcover) .captioncnt .sys span {
+    color: rgb(var(--text-color));
+  }
+  .pocketnet_iframe #post .sharearticle .shareBgCaption:not(.verticalcover) .captioncnt .sharecaption {
+    font-size: 3em;
+    padding: 0.5em 0;
+    padding-top: 1em;
+  }
+  .pocketnet_iframe #post .sharearticle .shareBgCaption:not(.verticalcover) .articleCover {
+    height: 300px;
+    position: relative;
+  }
+  .pocketnet_iframe #post .sharearticle .shareBgCaption:not(.verticalcover) .blackmatte {
+    display: none;
+  }
+  .pocketnet_iframe #post .sharearticle .shareBgCaption.withoutcover .articleCover {
+    height: 1.5em;
+  }
+  .pocketnet_iframe #post .sharearticle .shareBgCaption.verticalcover {
+    height: 720px;
+    border-bottom: 0;
+  }
+  .pocketnet_iframe #post .sharearticle .shareBgCaption.verticalcover .articleCover {
+    left: 0;
+    top: 0;
+    bottom: 0;
+    right: 0;
+  }
+  .pocketnet_iframe #post .sharearticle .shareBgCaption.verticalcover .captioncnt {
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    padding-bottom: 4em;
+  }
+  .pocketnet_iframe #post .sharearticle .shareBgCaption.verticalcover .captioncnt .sharecaption {
+    font-size: 3em;
+    padding: 0.5em 0;
+    padding-top: 1em;
+  }
+  .pocketnet_iframe #post .sharearticle .shareBgCaption.verticalcover .blackmatte {
+    display: block;
+    backdrop-filter: brightness(85%);
+  }
+  .pocketnet_iframe #post .sharearticle .shareBgCaption.verticalcover .translateApi .translateto {
+    height: 3.5em;
+  }
+  .pocketnet_iframe #post .sharearticle .shareBgCaption.verticalcover .translateApi .translateto span {
+    color: rgb(var(--text-on-bg-ac-color));
+  }
+  .pocketnet_iframe #post .sharearticle .shareBgCaption.verticalcover .translateApi .translateto.active span {
+    color: rgb(var(--color-bg-ac-bright));
+  }
+  .pocketnet_iframe #post .sharearticle .shareBgCaption.verticalcover .captioncnt {
+    justify-content: flex-end;
+    color: rgb(var(--text-on-bg-ac-color));
+  }
+  .pocketnet_iframe #post .sharearticle .shareBgCaption.verticalcover .divider {
+    background: rgb(var(--text-on-bg-ac-color));
+  }
+  .pocketnet_iframe #post .sharearticle .shareBgCaption.verticalcover .tags div span {
+    color: rgb(var(--text-on-bg-ac-color));
+  }
+  .pocketnet_iframe #post .sharearticle .shareBgCaption.verticalcover .sys span {
+    color: rgb(var(--text-on-bg-ac-color));
+  }
+  .pocketnet_iframe #post .sharearticle .shareBgCaption.verticalcover .starstoppanel .iconwrapper,
+  .pocketnet_iframe #post .sharearticle .shareBgCaption.verticalcover .socialsharewrapper .iconwrapper {
+    color: rgb(var(--text-on-bg-ac-color));
+  }
+  .pocketnet_iframe #post .sharearticle .panel {
+    contain: none;
+  }
+  .pocketnet_iframe #post .sharearticle .articlecontent {
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+  }
+  .pocketnet_iframe #post .sharearticle .articlecontent .article {
+    max-width: 640px;
+    margin: 0 auto;
+  }
+  .pocketnet_iframe #post .sharearticle .articlecontent .article_quote,
+  .pocketnet_iframe #post .sharearticle .articlecontent .article_link_custom {
+    width: 96%;
+    max-width: none;
+  }
+  .pocketnet_iframe #post .sharearticle .articlecontent .article_this_embed {
+    padding: 0;
+    margin-top: 1em;
+    border: 0;
+  }
+  .pocketnet_iframe #post .recomandationsFromContent .streambgwrapper {
+    margin-left: 0;
+  }
+}
+.pocketnet_iframe html.mobileview.fullscreen #post #comments {
+  display: none;
+}
+.pocketnet_iframe .wnd.postwindow .wndcontent {
+  top: 0;
+  background: transparent;
+  height: 100%;
+  width: 100%;
+  padding-top: 0;
+  margin: 0 auto;
+  padding-bottom: 10em;
+}
+.pocketnet_iframe .wnd.postwindow .wndinner {
+  height: 100%;
+  width: 100%;
+  max-height: none;
+  background: transparent;
+}
+.pocketnet_iframe .wnd.postwindow.articlewindow .wndcontent {
+  padding: 0;
+  border-radius: 0;
+  background: rgb(var(--background-total-theme));
+}
+.pocketnet_iframe .wnd.postwindow.articlewindow #post .postWrapper {
+  max-width: none;
+}
+.pocketnet_iframe .wnd.postwindow .widthcontainer {
+  width: 80%;
+  max-width: 800px;
+  margin: 0 auto;
+}
+.pocketnet_iframe .wnd.postwindow #post {
+  margin: 0 auto;
+  background: transparent;
+}
+.pocketnet_iframe .wnd.postwindow #post .nextpost {
+  display: block;
+}
+.pocketnet_iframe html.mobileview .wnd.postwindow .widthcontainer {
+  width: 100%;
+  max-width: none;
+}
+.pocketnet_iframe html.mobileview .wnd.articlewindow .widthcontainer {
+  width: 96%;
+  max-width: 768px;
+}
+@media only screen and (max-width: 1920px) {
+  .pocketnet_iframe #post {
+    border-top: 1px solid rgba(var(--neutral-grad-1), 0.3);
+  }
+  .pocketnet_iframe #post .statswrapperExtended {
+    padding: 0.5em;
+  }
+  .pocketnet_iframe #post .showmorelenta .horizontalLentaWrapper {
+    padding: 0.5em;
+  }
+  .pocketnet_iframe #post .showmorelenta .horizontalLentacaption {
+    padding: 0.5em;
+  }
+  .pocketnet_iframe #post .repostsecond {
+    text-align: center;
+  }
+  .pocketnet_iframe #post .nextpost {
+    display: none;
+  }
+  .pocketnet_iframe #post .iconWrapper {
+    width: 4em;
+    padding-top: 0.5em;
+    padding-left: 0.5em;
+    padding-right: 0;
+  }
+  .pocketnet_iframe #post .openoriginallabel {
+    display: none;
+  }
+  .pocketnet_iframe #post.videomainpost .formeta {
+    margin-left: 0;
+    margin-bottom: 1em;
+    padding-left: 0;
+  }
+  .pocketnet_iframe #post.videomainpost.squareVideo .forurl .videoWrapper,
+  .pocketnet_iframe #post.videomainpost.verticalVideo .forurl .videoWrapper {
+    max-width: none;
+  }
+  .pocketnet_iframe #post.videomainpost .share .anothercntswrk {
+    padding-right: 0.5em;
+  }
+  .pocketnet_iframe #post.videomainpost .share .paddingWrapper {
+    margin-left: 0;
+    padding-left: 0;
+  }
+  .pocketnet_iframe .wnd.postwindow .widthcontainer {
+    width: 100%;
+  }
+  .pocketnet_iframe .wnd.postwindow .wndcontent {
+    padding-bottom: 0;
+  }
+  .pocketnet_iframe .wnd.postwindow #post .share .sharearticle .commentsWrapper,
+  .pocketnet_iframe .wnd.postwindow #post .share .sharearticle .commentRegisterDiv .commentRegister {
+    padding-bottom: 0;
+  }
+  .pocketnet_iframe .wnd.postwindow #post .share .recomandationsFromContent {
+    padding-bottom: 5em;
+  }
+  .pocketnet_iframe html.mobileview .wnd.postwindow .widthcontainer {
+    width: 100%;
+  }
+  .pocketnet_iframe html.mobileview .wnd.postwindow.normalizedmobile .wndcontent {
+    background: rgb(var(--background-total-theme));
+  }
+  .pocketnet_iframe html.mobileview .wnd.postwindow.normalizedmobile #post {
+    border-top: 0;
+  }
+  .pocketnet_iframe html.mobileview .wnd.postwindow.normalizedmobile #post .cntswrk.forcomments .paddingWrapper {
+    padding: 0;
+  }
+  .pocketnet_iframe html.mobileview .wnd.articlewindow.normalizedmobile #post .postWrapper {
+    padding-top: 0;
+  }
+}
+.pocketnet_iframe .wnd.postwindow.pipmini .wndcontent {
+  padding-right: 0;
+  overflow-y: hidden;
+}
+.pocketnet_iframe .wnd.postwindow.pipmini #post {
+  padding: 0 !important;
+}
+.pocketnet_iframe .wnd.postwindow.pipmini #post .postWrapper {
+  padding: 0 !important;
+}
+.pocketnet_iframe .wnd.postwindow.pipmini #post .shareTable {
+  padding: 0;
+  border-radius: 6px;
+}
+.pocketnet_iframe .wnd.postwindow.pipmini #post .videoWrapper {
+  border-radius: 6px;
+}
+.pocketnet_iframe .wnd.postwindow.pipmini #post .videoWrapper .video-js {
+  min-height: 150px;
+  max-height: calc(var(--vh, 1vh) * 25);
+}
+.pocketnet_iframe .wnd.postwindow.pipmini #post .videoWrapper .video-js .vjs-control-bar .vjs-mute-control {
+  position: absolute;
+  height: 3em;
+  line-height: 3.5em;
+  font-size: 1em;
+  right: 0.25em;
+  bottom: 0;
+  width: 3em;
+  font-size: 0.9em;
+}
+.pocketnet_iframe .wnd.postwindow.pipmini #post .work {
+  position: static;
+}
+.pocketnet_iframe html.pipmode .wnd.postwindow.pipmini #post .shareTable {
+  padding: 0;
+  border-radius: 0;
+}
+.pocketnet_iframe html.pipmode .wnd.postwindow.pipmini #post .videoWrapper {
+  border-radius: 0;
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  right: 0;
+}
+.pocketnet_iframe html.pipmode .wnd.postwindow.pipmini #post .videoWrapper .js-player {
+  height: 100%;
+}
+.pocketnet_iframe html.pipmode .wnd.postwindow.pipmini #post .videoWrapper .video-js {
+  max-height: none;
+  min-height: 0;
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  right: 0;
+}
+.pocketnet_iframe html.pipmode .wnd.postwindow.pipmini #post .videoWrapper .video-js .vjs-control-bar {
+  padding-left: 0;
+}
+.pocketnet_iframe .item.loadingBar {
+  display: flex;
+  width: 40px;
+  height: 40px;
+}
+.pocketnet_iframe .item.loadingBar .loading-bar {
+  margin: auto;
 }
 .pocketnet_iframe #lenta .boosted {
   min-height: 100px;
@@ -2607,1873 +4608,298 @@
     transform: translate(0, 0);
   }
 }
-.pocketnet_iframe #author .rightchatspacer {
-  height: 100%;
-}
-.pocketnet_iframe #author .curationWrapper {
-  padding: 6em;
-  text-align: center;
-}
-.pocketnet_iframe #author .authorlentawrapper {
-  padding-top: 0.5em;
-}
-.pocketnet_iframe #author.curation .startchat {
-  padding-left: 0.5em;
-}
-.pocketnet_iframe #author .mobileinfo {
-  display: none;
-}
-.pocketnet_iframe #author .mobileinfo .item.name {
-  display: none;
-}
-.pocketnet_iframe #author .copyaddress {
-  cursor: pointer;
-  text-overflow: ellipsis;
-}
-.pocketnet_iframe #author .newsharewrapper {
-  padding-bottom: 0;
-  border-radius: 12px;
-  background: rgb(var(--background-total-theme));
-  margin-top: 0.5em;
-}
-.pocketnet_iframe #author .authorlentawrappermain {
-  position: relative;
-}
-.pocketnet_iframe #author .authorlentawrappermain .authorsearchicon {
-  position: absolute;
-  left: 100%;
-  top: 0;
-  padding-top: 0.5em;
-}
-.pocketnet_iframe #author .authorlentawrappermain .authorsearchicon .icon {
-  padding: 1em;
-  cursor: pointer;
-  -moz-transition: 0.3s;
-  -o-transition: 0.3s;
-  -webkit-transition: 0.3s;
-  transition: 0.3s;
-  color: rgb(var(--neutral-grad-3));
-}
-.pocketnet_iframe #author .authorlentawrappermain .authorsearchicon .icon:hover {
-  color: rgb(var(--color-txt-ac));
-}
-.pocketnet_iframe #author .authorlentawrappermain .authorsearchwrapper {
-  background: rgb(var(--background-total-theme));
-  padding: 0.25em 0.5em;
-  padding-right: 0;
-  display: none;
-  border-right: 3px;
-  margin-top: 0.5em;
-  border-radius: 12px;
-}
-.pocketnet_iframe #author .authorlentawrappermain .authorsearchwrapper .search .searchPanel {
-  background: transparent;
-  border: 0;
-  display: none;
-}
-.pocketnet_iframe #author .authorlentawrappermain .authorsearchwrapper .search .searchInput .searchInputIcon .sminput {
-  padding: 1em;
-  padding-left: 1em;
-  background: transparent;
-  border: 0;
-}
-.pocketnet_iframe #author .authorlentawrappermain.searchactive .authorsearchwrapper {
-  display: block;
-}
-.pocketnet_iframe #author .authorlentawrappermain.searchactive .newsharewrapper {
-  display: none;
-}
-.pocketnet_iframe #author .authorlentawrappermain.searchactive .authorsearchicon .icon i:before {
-  content: '\f00d';
-}
-.pocketnet_iframe #author .postauwrapper .postauarrows {
-  background: rgb(var(--background-total-theme));
-  padding: 0 3em;
-  padding-right: 2.5em;
-  opacity: 0;
-  -moz-transition: 0.3s;
-  -o-transition: 0.3s;
-  -webkit-transition: 0.3s;
-  transition: 0.3s;
-}
-.pocketnet_iframe #author .postauwrapper .postauarrows.topwr {
-  border-bottom: 1px solid rgb(var(--color-medium-theme));
-  opacity: 1;
-}
-.pocketnet_iframe #author .postauwrapper .postauarrows.active {
-  opacity: 1;
-}
-.pocketnet_iframe #author .postauwrapper .arrowstable {
-  height: 100%;
-}
-.pocketnet_iframe #author .postauwrapper .arrowstable > div {
-  padding: 1.5em 0;
-  vertical-align: middle;
-}
-.pocketnet_iframe #author .postauwrapper .arrowaucenter {
-  text-align: center;
-}
-.pocketnet_iframe #author .postauwrapper .arrowauwrapper {
-  width: 60px;
-  text-align: center;
-}
-.pocketnet_iframe #author .postauwrapper .arrowauwrapperback {
-  width: 60px;
-}
-.pocketnet_iframe #author .postauwrapper .arrowaucenter {
-  width: 120px;
-}
-.pocketnet_iframe #author .postauwrapper .arrowau {
-  cursor: pointer;
-  height: 100%;
-}
-.pocketnet_iframe #author .postauwrapper .arrowau:hover {
-  color: rgb(var(--color-txt-ac));
-}
-.pocketnet_iframe #author .postauwrapper .backtoshares {
-  cursor: pointer;
-  height: 100%;
-  color: rgb(var(--neutral-grad-2));
-}
-.pocketnet_iframe #author .postauwrapper .backtoshares:hover {
-  color: rgb(var(--color-txt-ac));
-}
-.pocketnet_iframe #author .postauwrapper .arrowaucenter {
-  font-weight: 700;
-  font-size: 0.8em;
-}
-.pocketnet_iframe #author .postauwrapper .postcnt #post .share .cntswrk {
-  padding-right: 3.5em;
-  margin-left: 5em;
-}
-.pocketnet_iframe #author .postauwrapper .postcnt #post .share .iconWrapper {
-  width: 5em;
-  padding-left: 2em;
-}
-.pocketnet_iframe #author .postauwrapper .postcnt #post #post .cntswrk {
-  padding-right: 3.5em;
-}
-.pocketnet_iframe #author .postauwrapper .postcnt #post #post .share .cntswrk {
-  margin-left: 4.5em;
-}
-.pocketnet_iframe #author .postauwrapper .postcnt #post #post .share .iconWrapper {
-  width: 4.5em;
-  padding-left: 2em;
-}
-.pocketnet_iframe #author .postauwrapper .postcnt #comments .caption {
-  padding-right: 3.5em;
-  padding-left: 2.5em;
-}
-.pocketnet_iframe #author .postauwrapper .postcnt #comments .answer,
-.pocketnet_iframe #author .postauwrapper .postcnt #comments .post {
-  padding-right: 4em;
-  padding-left: 1em;
-}
-.pocketnet_iframe #author .postauwrapper .postcnt #comments .list .comment .commentPaddingWrapper {
-  padding-right: 4.5em;
-  padding-left: 1em;
-}
-.pocketnet_iframe #author .lentacell {
-  margin-right: 150px;
-  margin-left: 240px;
-  min-height: 800px;
-}
-.pocketnet_iframe #author .lentacell .cnt {
-  margin: 0 auto;
-  max-width: 760px;
-}
-.pocketnet_iframe #author .authorinfo {
-  font-size: 0.9em;
-  margin-bottom: 3.5em;
-}
-.pocketnet_iframe #author .authorinfo .donateWrapper {
-  margin-top: 2em;
-  padding-left: 1em;
-}
-.pocketnet_iframe #author .authorinfo .itemtable {
-  display: flex;
-  align-items: center;
-}
-.pocketnet_iframe #author .authorinfo .itemtable > div.icon {
-  min-width: 30px;
-  width: 30px;
-  text-align: center;
-  opacity: 0.6;
-  font-size: 0.8em;
-}
-.pocketnet_iframe #author .authorinfo .itemtable > div.label {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  padding-right: 0.5em;
-}
-.pocketnet_iframe #author .authorinfo .itemtable > div.label a {
-  color: rgb(var(--color-txt-ac));
-  text-decoration: underline;
-}
-.pocketnet_iframe #author .authorinfo .itemtable > div .showmoreabout {
-  margin-top: 1em;
-  font-size: 0.8em;
-  text-decoration: underline;
-  color: rgb(var(--color-txt-ac));
-  cursor: pointer;
-}
-.pocketnet_iframe #author .authorinfo .itemtable > div .showmoreabout:hover {
-  color: rgb(var(--neutral-grad-2));
-}
-.pocketnet_iframe #author .authorinfo .item {
-  margin-bottom: 1em;
-}
-.pocketnet_iframe #author .authorinfo .postcnt {
-  cursor: pointer;
-}
-.pocketnet_iframe #author .authorinfo .postcnt .label {
-  text-transform: capitalize;
-}
-.pocketnet_iframe #author .authorinfo .name {
-  font-size: 1.2em;
-  font-weight: 500;
-}
-.pocketnet_iframe #author .authorinfo .site {
-  text-decoration: underline;
-  color: rgb(var(--color-txt-ac));
-}
-.pocketnet_iframe #author .authorinfo .showmoreinabout {
-  display: none;
-  color: rgb(var(--color-txt-ac));
-  text-decoration: underline;
-  cursor: pointer;
-}
-.pocketnet_iframe #author .lentaWrapper .authorinfo {
-  padding: 0.5em;
-}
-.pocketnet_iframe #author .leftpanelcell {
-  float: left;
-  width: 240px;
-  padding: 2.5em 0;
-  padding-left: 0.5em;
-  padding-right: 1.5em;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.pocketnet_iframe #author .lentaWrapper {
-  min-height: 700px;
-}
-.pocketnet_iframe #author .mainpanelcell {
-  float: right;
-  width: 350px;
-  padding-top: 10px;
-}
-.pocketnet_iframe #author .work.mwork {
-  padding: 0 !important;
-  overflow: hidden;
-}
-.pocketnet_iframe #author .work .work {
-  width: 100% !important;
-}
-.pocketnet_iframe #author .mworkwrapper {
-  background: rgb(var(--background-main));
-}
-.pocketnet_iframe #author .bgCaption {
-  background: rgb(var(--color-shadow-var));
-  color: rgb(var(--text-on-bg-shadow-color));
-  height: auto;
-  position: relative;
-  margin-bottom: 0;
-  padding-bottom: 0;
-}
-.pocketnet_iframe #author .bgCaption .cwrapper {
-  display: flex;
-  margin-top: 2em;
-  margin-bottom: 2em;
-}
-.pocketnet_iframe #author .bgCaption .deletedAccount {
-  padding: 5em 3em;
-  text-align: center;
-}
-.pocketnet_iframe #author .bgCaption .deletedAccount .deletedsettings {
-  margin-top: 1em;
-  cursor: pointer;
-}
-.pocketnet_iframe #author .bgCaption .nameWrapper {
-  max-width: 500px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  margin-bottom: 0.5em;
-}
-.pocketnet_iframe #author .bgCaption .nameWrapper span {
-  font-size: 1.9em;
-  font-weight: 700;
-}
-.pocketnet_iframe #author .bgCaption .panel {
-  display: flex;
-  flex-wrap: wrap;
-}
-.pocketnet_iframe #author .bgCaption .panel .changeAccount {
-  display: none;
-}
-.pocketnet_iframe #author .bgCaption .panel > div {
-  margin-right: 0.5em;
-  margin-bottom: 0.5em;
-  display: flex;
-  align-items: center;
-  border-radius: 6px;
-  background: rgba(var(--color-bg-ac-bright), 0.3);
-  color: rgb(var(--text-on-bg-shadow-color));
-  padding: 0.625em 1em;
-  text-align: center;
-  justify-content: center;
-  box-shadow: 0 5px 7px -5px rgba(var(--color-shadow-base), 0.4);
-}
-.pocketnet_iframe #author .bgCaption .panel > div.donate {
-  background: rgba(var(--color-good), 0.7);
-}
-.pocketnet_iframe #author .bgCaption .panel > div i {
-  text-align: center;
-  font-size: 0.8em;
-}
-.pocketnet_iframe #author .bgCaption .panel > div .label {
-  margin-right: 0.5em;
-  display: none;
-}
-.pocketnet_iframe #author .bgCaption .panel > div:nth-child(1) {
-  padding-left: 2em;
-  padding-right: 2em;
-  background: rgba(var(--color-bg-ac-bright), 0.7);
-  color: rgb(var(--text-on-bg-shadow-color));
-}
-.pocketnet_iframe #author .bgCaption .panel > div:nth-child(1) .label {
-  display: block;
-}
-.pocketnet_iframe #author .bgCaption .create {
-  min-width: 250px;
-}
-.pocketnet_iframe #author .bgCaption .blockingWrapper {
-  display: none;
-}
-.pocketnet_iframe #author .bgCaption.blocking {
-  background: #290318;
-}
-.pocketnet_iframe #author .bgCaption.blocking .subscribebuttonstop {
-  display: none;
-}
-.pocketnet_iframe #author .bgCaption.blocking .blockingWrapper {
-  display: inline;
-}
-.pocketnet_iframe #author .bgCaption .subscribebuttonstop .unsubscribe {
-  display: none;
-}
-.pocketnet_iframe #author .bgCaption .subscribebuttonstop .startchat {
-  white-space: nowrap;
-}
-.pocketnet_iframe #author .bgCaption .subscribebuttonstop .fa-comments {
-  font-size: 0.35em;
-}
-.pocketnet_iframe #author .bgCaption .subscribebuttonstop .notificationturn {
-  display: none;
-  cursor: pointer;
-}
-.pocketnet_iframe #author .bgCaption .subscribebuttonstop .notificationturn i {
-  width: 38px;
-  text-align: center;
-  font-size: 0.6em;
-  -moz-transition: 0.3s;
-  -o-transition: 0.3s;
-  -webkit-transition: 0.3s;
-  transition: 0.3s;
-}
-.pocketnet_iframe #author .bgCaption .subscribebuttonstop .notificationturn.turnon i:before {
-  content: '\f0f3';
-}
-.pocketnet_iframe #author .bgCaption .subscribebuttonstop.following .startchat {
-  display: inline;
-}
-.pocketnet_iframe #author .bgCaption .subscribebuttonstop.following .unsubscribe {
-  display: inline;
-}
-.pocketnet_iframe #author .bgCaption .subscribebuttonstop.following .notificationturn {
-  display: inline;
-}
-.pocketnet_iframe #author .bgCaption .subscribebuttonstop.following .subscribe {
-  display: none;
-}
-.pocketnet_iframe #author .bgCaption .telements {
-  overflow: hidden;
-}
-.pocketnet_iframe #author .bgCaption .telements .telement {
-  float: left;
-  margin-right: 1em;
-}
-.pocketnet_iframe #author .bgCaption .telements .telement.sbscr {
-  padding-right: 2em;
-}
-.pocketnet_iframe #author .bgCaption .usermenu {
-  overflow: hidden;
-}
-.pocketnet_iframe #author .bgCaption .usermenu .usermenuitem {
-  float: left;
-  margin-right: 1em;
-  font-size: 0.8em;
-  font-weight: 500;
-  padding: 0.5em;
-  border-bottom: 2px solid transparent;
-  white-space: nowrap;
-  cursor: pointer;
-  -moz-transition: 0.3s;
-  -o-transition: 0.3s;
-  -webkit-transition: 0.3s;
-  transition: 0.3s;
-}
-.pocketnet_iframe #author .bgCaption .usermenu .usermenuitem:hover {
-  border-bottom: 2px solid rgb(var(--text-on-bg-shadow-color));
-}
-.pocketnet_iframe #author .bgCaption .usermenu .usermenuitem.active {
-  border-bottom: 2px solid rgb(var(--text-on-bg-shadow-color));
-}
-.pocketnet_iframe #author .bgCaption .usermenu .usermenuitem:nth-child(1) {
-  padding-left: 0;
-}
-.pocketnet_iframe #author .bgCaption .cellforimage {
-  width: 95px;
-}
-.pocketnet_iframe #author .bgCaption .cellforimage .usericon {
-  width: 75px;
-  height: 75px;
-  line-height: 73px;
-  font-size: 1.5em;
-}
-.pocketnet_iframe #author .bgCaption .cellforimage .usericon.active {
-  cursor: pointer;
-}
-.pocketnet_iframe #author .bgCaption .cellforimage .usericon .plissingCnt {
-  left: 45px;
-}
-.pocketnet_iframe #author .bgCaption .work {
-  position: relative;
-  overflow: hidden;
-}
-.pocketnet_iframe #author .fxd {
-  top: 75px;
-  z-index: 10;
-}
-.pocketnet_iframe #author .fxd.dfxd {
+@media only screen and (max-width: 1920px) {
+  .pocketnet_iframe .bannerComment.show {
+    padding: 0.5em;
+  }
+}
+.pocketnet_iframe #updatenotifier {
   position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
-.pocketnet_iframe #author .contents {
-  background: rgb(var(--background-total-theme));
-  padding: 1em 2em;
+.pocketnet_iframe #updatenotifier #update-found {
+  width: 360px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 8px 30px 5px #00000040;
 }
-.pocketnet_iframe #author .contents .cgroup {
-  padding-top: 1em;
-  padding-bottom: 1em;
+.pocketnet_iframe #updatenotifier #update-found .decoration .waves {
+  position: absolute;
+  width: 360px;
+  height: 200px;
+  border-radius: 10px;
 }
-.pocketnet_iframe #author .contents .ccaption {
-  font-weight: 100;
-  margin-bottom: 1em;
+.pocketnet_iframe #updatenotifier #update-found .decoration .waves::before {
+  background-image: linear-gradient(137deg, #2c84cc 0, #95c5e6 100%);
 }
-.pocketnet_iframe #author .contents .ccaption span {
-  font-size: 2em;
+.pocketnet_iframe #updatenotifier #update-found .decoration .waves::after {
+  background-repeat: no-repeat;
+  background-size: 150%;
+  background-position: 50%;
+  opacity: 0.3;
 }
-.pocketnet_iframe #author .contents .gcontents .citemtable > div {
-  vertical-align: middle;
-  overflow: hidden;
-  padding: 0.5em 0;
+.pocketnet_iframe #updatenotifier #update-found .decoration .clouds {
+  position: absolute;
+  width: 360px;
+  height: 200px;
 }
-.pocketnet_iframe #author .contents .gcontents .citemtable > div.cscorecell {
-  width: 150px;
+.pocketnet_iframe #updatenotifier #update-found .decoration .clouds::before {
+  filter: brightness(0);
+  background-position-y: 90%;
+  mix-blend-mode: overlay;
+  opacity: 0.6;
+}
+.pocketnet_iframe #updatenotifier #update-found .decoration .clouds::after {
+  background-position-y: 100.1%;
+}
+.pocketnet_iframe #updatenotifier #update-found .decoration .clouds::after,
+.pocketnet_iframe #updatenotifier #update-found .decoration .clouds::before {
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+.pocketnet_iframe #updatenotifier #update-found .decoration .waves::before,
+.pocketnet_iframe #updatenotifier #update-found .decoration .waves::after,
+.pocketnet_iframe #updatenotifier #update-found .decoration .clouds::before,
+.pocketnet_iframe #updatenotifier #update-found .decoration .clouds::after {
+  content: '';
+  position: absolute;
+  width: 360px;
+  height: 200px;
+  border-radius: 10px 10px 0 0;
+}
+.pocketnet_iframe #updatenotifier #update-found .top {
+  width: 360px;
+  height: 130px;
+  box-sizing: border-box;
   text-align: right;
-  padding-right: 1em;
 }
-.pocketnet_iframe #author .contents .gcontents .score,
-.pocketnet_iframe #author .contents .gcontents .cname {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+.pocketnet_iframe #updatenotifier #update-found .top .logo {
+  position: absolute;
+  padding: 30px;
 }
-.pocketnet_iframe #author .contents .gcontents .cname span {
-  font-size: 1.1em;
-  font-weight: 100;
-}
-.pocketnet_iframe #author .contents .gcontents .score {
-  color: rgb(var(--color-txt-gray));
-}
-.pocketnet_iframe #author .contents .gcontents .citem.selected .cname span {
-  font-weight: 700;
-}
-.pocketnet_iframe #author .contents .gcontents .citem.selected .score {
-  font-weight: 700;
-  color: rgb(var(--color-star-yellow));
-}
-.pocketnet_iframe #author .contents .chidden {
-  display: none;
-}
-.pocketnet_iframe #author .contents .captiontable {
-  width: auto;
-}
-.pocketnet_iframe #author .contents .captiontable .captionicon {
-  width: 30px;
-  text-align: center;
-  display: none;
-}
-.pocketnet_iframe #author .contents .cgroup.hasmore .captiontable {
-  cursor: pointer;
-}
-.pocketnet_iframe #author .contents .cgroup.hasmore .captionicon {
-  display: table-cell;
-}
-.pocketnet_iframe #author .contents .cgroup.hasmore.showedmore .captionicon i:before {
-  content: '\f078';
-}
-.pocketnet_iframe #author .contents .cgroup.hasmore.showedmore .dots {
-  display: none;
-}
-.pocketnet_iframe #author .contents .cgroup.hasmore.showedmore .chidden {
-  display: block;
-}
-.pocketnet_iframe #author.preshell .bgCaption .cellforimage .usericon {
-  background: rgba(var(--background-secondary-theme), 0.3);
-}
-.pocketnet_iframe html.mobileview #author .lentacell {
-  margin-right: 0;
-  margin-left: 0;
-}
-.pocketnet_iframe html.mobileview #author .leftpanelcell {
-  display: none;
-}
-.pocketnet_iframe html.mobileview #author .authorlentawrappermain {
-  position: relative;
-}
-.pocketnet_iframe html.mobileview #author .authorlentawrappermain .authorsearchicon {
-  display: none;
-}
-.pocketnet_iframe html.mobileview #author .authorlentawrappermain .authorsearchwrapper {
-  padding: 0 0.5em;
-}
-.pocketnet_iframe html.mobileview #author .authorlentawrappermain .authorsearchwrapper .search .searchPanel {
-  display: table-cell;
-}
-.pocketnet_iframe html.mobileview #author .authorlentawrappermain .authorsearchwrapper .search .searchPanel .searchPanelWrapper > div[event=clear] {
-  display: block;
-}
-.pocketnet_iframe html.mobileview #author .authorlentawrappermain .authorsearchwrapper .search .searchInput .searchInputIcon .sminput {
-  background: transparent;
-  padding-left: 0.5em;
-}
-@media only screen and (max-width: 1920px) {
-  .pocketnet_iframe #author .bgCaption {
-    min-height: 485px;
-  }
-  .pocketnet_iframe #author .bgCaption .adr {
-    max-width: none;
-    display: block;
-  }
-  .pocketnet_iframe #author .bgCaption .middotwrapper {
-    display: none;
-  }
-  .pocketnet_iframe #author .bgCaption .panel {
-    margin-top: 1.5em;
-    margin-bottom: 1.5em;
-    margin-left: 0.5em;
-  }
-  .pocketnet_iframe #author .bgCaption {
-    margin-bottom: 0;
-    margin-top: 0;
-    height: auto;
-    padding-bottom: 2em;
-    background: #051b48;
-    border-bottom-left-radius: 12px;
-    border-bottom-right-radius: 12px;
-  }
-  .pocketnet_iframe #author .bgCaption .usermenu {
-    min-height: 37px;
-    contain: strict;
-  }
-  .pocketnet_iframe #author .bgCaption .cwrapper {
-    margin: 0;
-    flex-direction: column;
-  }
-  .pocketnet_iframe #author .bgCaption .cwrapper .cellforimage {
-    margin: 0 auto;
-  }
-  .pocketnet_iframe #author .bgCaption .infomain {
-    display: flex;
-    flex-direction: column;
-  }
-  .pocketnet_iframe #author .bgCaption .nameWrapper {
-    margin: 0 auto;
-    margin-top: 0.5em;
-    margin-bottom: 2em;
-    text-align: center;
-  }
-  .pocketnet_iframe #author .bgCaption .nameWrapper span {
-    font-size: 1.6em;
-  }
-  .pocketnet_iframe #author .bgCaption .work {
-    padding-right: 0;
-  }
-  .pocketnet_iframe #author .bgCaption .telements .telement {
-    width: 100%;
-    margin-right: 0;
-  }
-  .pocketnet_iframe #author .bgCaption .telements .telement.sbscr {
-    display: none;
-    padding-left: 1em;
-    padding-right: 0;
-  }
-  .pocketnet_iframe #author .bgCaption .tips {
-    margin-top: 0.5em;
-  }
-  .pocketnet_iframe #author .bgCaption .caption {
-    font-size: 1.1em;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    text-align: center;
-    padding-left: 0;
-    padding-right: 0;
-    white-space: nowrap;
-    margin-top: 0;
-    margin-bottom: 1em;
-  }
-  .pocketnet_iframe #author .bgCaption .caption .adr {
-    font-size: 1em;
-  }
-  .pocketnet_iframe #author .bgCaption .usermenu {
-    width: 100%;
-    display: flex !important;
-    flex-wrap: nowrap;
-  }
-  .pocketnet_iframe #author .bgCaption .usermenu .usermenuitem {
-    flex-grow: 1;
-    width: auto;
-    float: none;
-    margin-right: 0;
-    padding-left: 0;
-    padding-right: 0;
-    text-align: center;
-    padding-bottom: 1em;
-    font-size: 0.8em;
-    border-bottom: 2px solid rgba(var(--color-txt-gray), 0.5);
-  }
-  .pocketnet_iframe #author .bgCaption .usermenu .usermenuitem.active {
-    border-bottom: 2px solid rgba(var(--color-txt-gray), 0.8);
-  }
-  .pocketnet_iframe #author .bgCaption .cellforimage {
-    width: 100px;
-    padding-top: 2em;
-  }
-  .pocketnet_iframe #author .bgCaption .cellforimage .usericon {
-    width: 100px;
-    height: 100px;
-    line-height: 98px;
-    border: 4px solid rgb(var(--text-on-bg-shadow-color));
-    box-shadow: 0 5px 7px -5px rgba(var(--color-shadow-base), 0.4);
-  }
-  .pocketnet_iframe #author .bgCaption .infoWrapper {
-    position: static;
-    left: 0;
-    right: 0;
-    top: 20px;
-    bottom: 0;
-    z-index: 1;
-  }
-  .pocketnet_iframe #author .bgCaption .infoWrapper .work {
-    padding: 0 0.5em;
-  }
-  .pocketnet_iframe #author .bgCaption .work {
-    position: relative;
-    overflow: hidden;
-  }
-  .pocketnet_iframe #author .bgCaption {
-    padding-top: 0;
-  }
-  .pocketnet_iframe #author .bgCaption .caption {
-    text-align: left !important;
-    padding-left: 0.5em;
-  }
-  .pocketnet_iframe #author .bgCaption .panel .changeAccount {
-    display: flex;
-  }
-  .pocketnet_iframe #author .bgCaption .infoWrapper,
-  .pocketnet_iframe #author .lentacell .cnt {
-    max-width: 768px;
-    margin: 0 auto;
-  }
-  .pocketnet_iframe #author .mobileinfo {
-    display: block;
-  }
-  .pocketnet_iframe #author .lentacell {
-    margin-right: 44px;
-    margin-left: 0;
-  }
-  .pocketnet_iframe #author .newsharewrapper {
-    display: none;
-  }
-  .pocketnet_iframe #author .leftpanelcell {
-    display: none;
-  }
-  .pocketnet_iframe #author .lentacell {
-    margin-right: 44px;
-    margin-left: 0;
-  }
-  .pocketnet_iframe #author .work.mwork {
-    width: 90%;
-  }
-  .pocketnet_iframe #author .authorinfo .showmoreinabout {
-    display: inline;
-  }
-  .pocketnet_iframe #author .authorinfo .additionalinfo.hasabout {
-    display: none;
-  }
-  .pocketnet_iframe #author .authorinfo.displayedall .showmoreinabout {
-    display: none;
-  }
-  .pocketnet_iframe #author .authorinfo.displayedall .additionalinfo.hasabout {
-    display: block;
-  }
-}
-@media only screen and (max-width: 1920px) {
-  .pocketnet_iframe #author .authorlentawrappermain .authorsearchwrapper {
-    padding-right: 0.25em !important;
-  }
-  .pocketnet_iframe #author .newsharewrapper {
-    display: none;
-  }
-  .pocketnet_iframe html.allcontent #author .bgCaption {
-    padding-top: 36px;
-  }
-  .pocketnet_iframe #author .work.mwork {
-    width: 100%;
-  }
-  .pocketnet_iframe #author .lentaWrapper .authorinfo {
-    padding: 1em;
-  }
-  .pocketnet_iframe #author .copyaddress {
-    font-size: 1em;
-    font-weight: 700;
-  }
-  .pocketnet_iframe #author .subscribewrapperphones .subscribebuttons button {
-    padding-bottom: 0.5em;
-    padding-top: 0.5em;
-  }
-  .pocketnet_iframe #author .bgCaption .caption .subscribe {
-    font-size: 1.4em;
-    border-bottom: 1px solid #ff4800;
-    opacity: 1;
-  }
-  .pocketnet_iframe #author .bgCaption .nameWrapper {
-    margin-left: 0.5em;
-    text-align: left;
-  }
-  .pocketnet_iframe #author .lentaWrapper {
-    min-height: 0;
-  }
-  .pocketnet_iframe #author .lentacell {
-    margin-right: 0;
-    margin-left: 0;
-  }
-  .pocketnet_iframe #author .leftpanelcell {
-    float: none;
-    display: none;
-    width: 100%;
-    padding: 1em;
-  }
-  .pocketnet_iframe #author .leftpanelcell .authorinfo .itemtable > div {
-    vertical-align: middle;
-  }
-  .pocketnet_iframe #author .leftpanelcell .authorinfo .itemtable > div.icon {
-    width: 30px;
-  }
-  .pocketnet_iframe #author .leftpanelcell .authorinfo .item:nth-last-child(1) {
-    margin-bottom: 0;
-  }
-  .pocketnet_iframe #author .mainpanelcell {
-    display: none;
-  }
-  .pocketnet_iframe #author .work.mwork {
-    padding: 0 !important;
-    overflow: hidden;
-  }
-  .pocketnet_iframe #author .work .work {
-    width: 100% !important;
-  }
-  .pocketnet_iframe #author .fxd {
-    position: fixed;
-  }
-}
-.pocketnet_iframe #channel .emptychannel {
-  text-align: center;
-}
-.pocketnet_iframe #channel .channel {
-  background: rgb(var(--background-total-theme));
-  padding: 0 0.5em;
-}
-.pocketnet_iframe #channel .channel .userinfo {
-  padding: 0.5em 0;
-  display: flex;
-}
-.pocketnet_iframe #channel .channel .userinfo .name {
-  font-size: 1.75em;
-  font-weight: 700;
-  padding-bottom: 0.5em;
-}
-.pocketnet_iframe #channel .channel .userinfo .adr {
-  max-width: 500px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  vertical-align: bottom;
-  display: inline-block;
-}
-.pocketnet_iframe #channel .channel .userinfo .nameinfo {
-  padding-left: 1em;
-  flex-grow: 2;
-}
-.pocketnet_iframe #channel .channel .userinfo .openprofilebuttonwrapper {
-  padding-bottom: 1em;
-}
-.pocketnet_iframe #channel .channel .userinfo .openprofilebutton {
-  min-width: 200px;
-}
-.pocketnet_iframe #channel .channel .userinfo .additional {
-  margin-top: 0.5em;
-  padding-top: 1em;
-  padding-bottom: 1em;
-  border-top: 1px solid rgb(var(--neutral-grad-0));
-}
-.pocketnet_iframe #channel .channel .panel {
-  margin: 0 auto;
-  max-width: 600px;
-  display: flex;
-  flex-direction: column;
-}
-.pocketnet_iframe #channel .channel .panel .usermenuitem {
-  padding: 0.5em 0;
-  cursor: pointer;
-  white-space: nowrap;
-}
-.pocketnet_iframe #channel .channel .panel > div i {
-  text-align: center;
-  width: 30px;
-  font-size: 0.8em;
-}
-.pocketnet_iframe #channel .channel .usericon {
-  width: 40px;
-  height: 40px;
-  line-height: 40px;
-  margin: 0 auto;
-}
-.pocketnet_iframe #channel .channel .usericon.letter {
-  font-size: 1.5em;
-}
-.pocketnet_iframe #channel .channel .action {
-  padding: 1em;
-  text-align: center;
-}
-.pocketnet_iframe .wnd #channel {
-  padding-bottom: 3em;
-  padding-left: 0.5em;
-  padding-right: 0.5em;
-}
-.pocketnet_iframe .lentaWrapper > div#post {
-  background: transparent;
-}
-.pocketnet_iframe .lentaWrapper > div#post .share {
-  margin-bottom: 0;
-}
-.pocketnet_iframe #post.preshell {
-  background: transparent;
-}
-.pocketnet_iframe #post {
-  background: rgb(var(--background-main));
-}
-.pocketnet_iframe #post .brighteonVideoIframe {
-  max-width: 650px;
-}
-.pocketnet_iframe #post .jsPlayerLoading,
-.pocketnet_iframe #post .video-js:not(.vjs-fullscreen) {
-  max-height: 80vh;
-  max-height: calc(var(--vh, 1vh) * 80);
-}
-.pocketnet_iframe #post .videoWrapper {
-  max-width: 650px;
-  position: relative;
-  overflow: hidden;
-}
-.pocketnet_iframe #post .lockedaccount,
-.pocketnet_iframe #post .empty {
-  text-align: center;
-  padding: 5em;
-}
-.pocketnet_iframe #post .lockedaccount span,
-.pocketnet_iframe #post .empty span {
-  font-size: 2em;
-  font-weight: 100;
-}
-.pocketnet_iframe #post .lockedaccount.allb,
-.pocketnet_iframe #post .empty.allb {
-  background: rgb(var(--background-main));
-  margin: 0 auto;
-  margin-top: 5em;
-  max-width: 400px;
-  border-radius: 12px;
-}
-.pocketnet_iframe #post .showmorelenta {
-  display: none;
-  background: rgb(var(--background-total-theme));
-}
-.pocketnet_iframe #post .showmorelenta .anothercntswrk {
-  border-bottom: none !important;
-}
-.pocketnet_iframe #post .showmorelenta .share.share_common.shareinlenta {
-  margin-right: 1em !important;
-}
-.pocketnet_iframe #post .showmorelenta.hasshares {
-  display: block;
-}
-.pocketnet_iframe #post .showmorelenta .horizontalLentaWrapper {
-  padding: 1em;
-}
-.pocketnet_iframe #post .showmorelenta .horizontalLentacaption {
-  padding: 1em 0;
-}
-.pocketnet_iframe #post .showmorelenta .horizontalLentacaption span {
-  font-weight: 700;
-  font-size: 0.8em;
-}
-.pocketnet_iframe #post .showmorelenta .durationWrapper,
-.pocketnet_iframe #post .showmorelenta .statswrapper {
-  top: 0;
-  bottom: auto !important;
-}
-.pocketnet_iframe #post #lenta .share .sharecaption {
-  font-size: 1em;
-}
-.pocketnet_iframe #post .debuginfo {
-  display: none !important;
-}
-.pocketnet_iframe #post .postWrapper {
-  margin: 0 auto;
-  padding-bottom: 1em;
-  max-width: 800px;
-  flex-grow: 1;
-  opacity: 0;
-  -moz-transition: opacity 0.3s;
-  -o-transition: opacity 0.3s;
-  -webkit-transition: opacity 0.3s;
-  transition: opacity 0.3s;
-}
-.pocketnet_iframe #post .postWrapper.active {
-  opacity: 1;
-}
-.pocketnet_iframe #post .share {
-  background: rgb(var(--background-total-theme));
-  border-radius: 6px;
-}
-.pocketnet_iframe #post .share .work {
-  padding: 0;
-  padding-right: 0;
-  margin: 0;
-  padding-bottom: 0;
-}
-.pocketnet_iframe #post .share .videoTips {
-  display: none;
-}
-.pocketnet_iframe #post .share .exitFull {
-  display: none;
-}
-.pocketnet_iframe #post .share .images {
-  max-width: 620px;
-}
-.pocketnet_iframe #post .share .sharecaption {
-  max-width: 620px;
-}
-.pocketnet_iframe #post .share .message {
-  max-width: 620px;
-}
-.pocketnet_iframe #post.videomainpost {
-  padding-top: 0;
-  display: flex;
-  flex-wrap: wrap;
-}
-.pocketnet_iframe #post.videomainpost .cntswrk.tags {
+.pocketnet_iframe #updatenotifier #update-found .top .logo::before {
+  filter: brightness(0);
+  mix-blend-mode: overlay;
   opacity: 0.6;
-}
-.pocketnet_iframe #post.videomainpost .videoDescription {
-  padding-bottom: 0.5em;
-}
-.pocketnet_iframe #post.videomainpost .authorMetatable {
-  align-items: center;
-}
-.pocketnet_iframe #post.videomainpost .hiddenpost {
-  background: rgb(var(--background-total-theme));
-}
-.pocketnet_iframe #post.videomainpost .postWrapper {
-  background: transparent;
-  max-width: none;
-}
-.pocketnet_iframe #post.videomainpost .videoWrapper {
-  border-bottom-left-radius: 0;
-  border-bottom-right-radius: 0;
-}
-.pocketnet_iframe #post.videomainpost .videoWrapper .js-player {
-  border-radius: 0;
-}
-.pocketnet_iframe #post.videomainpost .videoWrapper .vjs-control-bar {
-  border-bottom-left-radius: 0;
-  border-bottom-right-radius: 0;
-}
-.pocketnet_iframe #post.videomainpost .share {
-  margin: 0 auto;
-  max-width: 960px;
-  background: transparent;
-}
-.pocketnet_iframe #post.videomainpost .share .shareTable {
-  background: rgb(var(--background-total-theme));
-  padding-top: 0;
-  border-top-left-radius: 12px;
-  border-top-right-radius: 12px;
-}
-.pocketnet_iframe #post.videomainpost .share .message,
-.pocketnet_iframe #post.videomainpost .share .sharecaption {
-  max-width: 650px;
-}
-.pocketnet_iframe #post.videomainpost .share .commentmessage div {
-  max-width: 650px;
-}
-.pocketnet_iframe #post.videomainpost .share .jsPlayerLoading {
-  width: 100%;
-}
-.pocketnet_iframe #post.videomainpost .share .statswrapperExtended {
-  background: rgb(var(--background-total-theme));
-  padding-left: 1em;
-}
-.pocketnet_iframe #post.videomainpost .share .anothercntswrk {
-  background: rgb(var(--background-total-theme));
-  padding-left: 1em;
-  padding-right: 1em;
-}
-.pocketnet_iframe #post.videomainpost .share .work {
-  padding: 0;
-}
-.pocketnet_iframe #post.videomainpost .share .url {
-  margin-bottom: 0;
-}
-.pocketnet_iframe #post.videomainpost .share .paddingWrapper {
-  margin-left: 48px;
-  padding-left: 0.5em;
-}
-.pocketnet_iframe #post.videomainpost .share .urlcnt {
-  display: none;
-}
-.pocketnet_iframe #post.videomainpost .share .shareTable .iconWrapper {
-  padding: 0;
-  z-index: 12;
-  width: 48px;
-}
-.pocketnet_iframe #post.videomainpost .share .shareTable .iconWrapper .icon {
-  width: auto;
-  height: 48px;
-}
-.pocketnet_iframe #post.videomainpost .share .shareTable .iconWrapper .icon .usericon {
-  width: 48px;
-  height: 48px;
-}
-.pocketnet_iframe #post.videomainpost .shareTable .authorTable > div.authorCell {
-  padding-left: 0.5em;
-  padding-right: 0;
-}
-.pocketnet_iframe #post.videomainpost .shareTable .authorTable > div .datetime {
-  opacity: 0.5;
-}
-.pocketnet_iframe #post.videomainpost .shareTable .metatable > div.metapanel .metapanelitem {
-  color: rgba(var(--neutral-grad-3), 0.8);
-}
-.pocketnet_iframe #post.videomainpost .cntswrk {
-  padding: 0;
-  margin: 0;
-}
-.pocketnet_iframe #post.videomainpost .share .metatable > div.metapanel {
-  padding-right: 0.5em;
-}
-.pocketnet_iframe #post.videomainpost .videoWrapper {
-  overflow: hidden;
-  max-width: none;
-  position: static;
-}
-.pocketnet_iframe #post.videomainpost .jsPlayerLoading,
-.pocketnet_iframe #post.videomainpost .video-js {
-  max-height: 80vh;
-  max-height: calc(var(--vh, 1vh) * 80);
-}
-.pocketnet_iframe #post.videomainpost .forurl .url {
-  border-radius: 12px;
-  background: #000;
-}
-.pocketnet_iframe #post.videomainpost .statswrapperExtended {
-  display: none;
-}
-.pocketnet_iframe #post.videomainpost .share {
-  margin: 0 auto;
-}
-.pocketnet_iframe #post .recomandationsFromContent {
-  display: none;
-}
-.pocketnet_iframe #post.recommendationsenabled .recomandationsFromContent {
-  display: block;
-}
-.pocketnet_iframe #post .recomandationsFromContent {
-  margin-top: 0.5em;
-}
-.pocketnet_iframe #post .recomandationsFromContent .recomandationsbgwrapper {
-  background: rgb(var(--background-total-theme));
-  border-radius: 9px;
-  padding: 0.5em;
-}
-.pocketnet_iframe #post.videomainpost.recommendationsenabled .postWrapper {
-  display: flex;
-}
-.pocketnet_iframe #post.videomainpost.recommendationsenabled .share {
-  margin: 0 auto;
-  max-width: 960px;
-}
-.pocketnet_iframe #post.videomainpost.recommendationsenabled .postsharemain {
-  flex-grow: 1;
-}
-.pocketnet_iframe #post.videomainpost.recommendationsenabled .recomandationsFromContent {
-  margin-top: 0;
-  max-width: 400px;
-  min-width: 400px;
-  margin-left: auto;
-}
-.pocketnet_iframe #post.videomainpost.recommendationsenabled .recomandationsFromContent .recomandationsbgwrapper {
-  margin-left: 0.25em;
-}
-@media only screen and (max-width: 1920px) {
-  .pocketnet_iframe #post.videomainpost.recommendationsenabled .postWrapper {
-    display: block;
-  }
-  .pocketnet_iframe #post.videomainpost.recommendationsenabled .recomandationsFromContent {
-    margin-top: 0.5em;
-    min-width: 0;
-    max-width: 960px;
-    margin: 1em auto;
-    width: 100%;
-  }
-  .pocketnet_iframe #post.videomainpost.recommendationsenabled .recomandationsFromContent .recomandationsbgwrapper {
-    margin-left: 0;
-  }
-}
-.pocketnet_iframe .wnd #post.videomainpost.recommendationsenabled .postWrapper {
-  display: block;
-}
-.pocketnet_iframe .wnd #post.videomainpost.recommendationsenabled .recomandationsFromContent {
-  margin-top: 0.5em;
-  min-width: 0;
-  max-width: 960px;
-  margin: 1em auto;
-  width: 100%;
-}
-.pocketnet_iframe .wnd #post.videomainpost.recommendationsenabled .recomandationsFromContent .recomandationsbgwrapper {
-  margin-left: 0;
-}
-@media only screen and (min-width: 1730px) {
-  .pocketnet_iframe #post.videomainpost.recommendationsenabled {
-    max-width: 1350px;
-  }
-  .pocketnet_iframe #post.videomainpost.recommendationsenabled .postWrapper {
-    display: flex !important;
-  }
-  .pocketnet_iframe #post.videomainpost.recommendationsenabled .recomandationsFromContent {
-    display: flex;
-    max-width: 390px !important;
-    margin-top: 0 !important;
-    margin-bottom: 0 !important;
-    margin-left: 1em !important;
-  }
-  .pocketnet_iframe #post.videomainpost.recommendationsenabled .recomandationsFromContent .recomandationsbgwrapper {
-    width: 100%;
-  }
-}
-.pocketnet_iframe #post .sharearticle {
-  opacity: 0;
-  -moz-transition: opacity 0.3s;
-  -o-transition: opacity 0.3s;
-  -webkit-transition: opacity 0.3s;
-  transition: opacity 0.3s;
-}
-.pocketnet_iframe #post .sharearticle .article_body {
-  overflow: hidden;
-}
-.pocketnet_iframe #post .sharearticle .shareTable {
-  padding-top: 0;
-  padding-bottom: 0;
-}
-.pocketnet_iframe #post .sharearticle .sharecaption,
-.pocketnet_iframe #post .sharearticle .tags,
-.pocketnet_iframe #post .sharearticle .sharecaption {
-  max-width: none;
-}
-.pocketnet_iframe #post .sharearticle.ready {
-  opacity: 1;
-}
-.pocketnet_iframe #post .sharearticle .sharepanel {
-  padding-right: 0.5em;
-}
-.pocketnet_iframe #post .sharearticle .shareBgCaption .author,
-.pocketnet_iframe #post .sharearticle .articleend .author {
-  margin-top: 1em;
-  margin-bottom: 0.5em;
-}
-.pocketnet_iframe #post .sharearticle .shareBgCaption .author i,
-.pocketnet_iframe #post .sharearticle .articleend .author i {
-  display: none;
-}
-.pocketnet_iframe #post .sharearticle .shareBgCaption .author .notificationturn,
-.pocketnet_iframe #post .sharearticle .articleend .author .notificationturn {
-  display: none !important;
-}
-.pocketnet_iframe #post .sharearticle .shareBgCaption .forstars,
-.pocketnet_iframe #post .sharearticle .articleend .forstars {
-  margin-bottom: 1em;
-}
-.pocketnet_iframe #post .sharearticle .shareBgCaption .forstars .itemwr,
-.pocketnet_iframe #post .sharearticle .articleend .forstars .itemwr {
-  display: flex;
-  flex-direction: column-reverse;
-  align-items: center;
-}
-.pocketnet_iframe #post .sharearticle .shareBgCaption .forstars .itemwr i,
-.pocketnet_iframe #post .sharearticle .articleend .forstars .itemwr i {
-  text-align: center;
-}
-.pocketnet_iframe #post .sharearticle .shareBgCaption .forstars .starWrapper,
-.pocketnet_iframe #post .sharearticle .articleend .forstars .starWrapper {
-  text-align: center;
-}
-.pocketnet_iframe #post .sharearticle .shareBgCaption .forstars .count span,
-.pocketnet_iframe #post .sharearticle .articleend .forstars .count span {
-  font-size: 2em;
-}
-.pocketnet_iframe #post .sharearticle .shareBgCaption .forstars .count span,
-.pocketnet_iframe #post .sharearticle .articleend .forstars .count span {
-  font-weight: 700;
-  font-family: Nunito Sans;
-}
-.pocketnet_iframe #post .sharearticle .shareBgCaption .sys,
-.pocketnet_iframe #post .sharearticle .articleend .sys {
-  text-align: center;
-}
-.pocketnet_iframe #post .sharearticle .shareBgCaption .buttonOpenWrapper,
-.pocketnet_iframe #post .sharearticle .articleend .buttonOpenWrapper {
-  margin-bottom: 0.5em;
-}
-.pocketnet_iframe #post .sharearticle .shareBgCaption .buttonOpenWrapper button,
-.pocketnet_iframe #post .sharearticle .articleend .buttonOpenWrapper button {
-  width: 130px;
-  border-radius: 0;
-  background: rgba(var(--color-shadow-base), 0.1);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  border: 1px solid transparent !important;
-}
-.pocketnet_iframe #post .sharearticle .shareBgCaption .buttonOpenWrapper button:hover,
-.pocketnet_iframe #post .sharearticle .articleend .buttonOpenWrapper button:hover {
-  background: rgba(var(--color-shadow-base), 0.01);
-}
-.pocketnet_iframe #post .sharearticle .shareBgCaption .divider,
-.pocketnet_iframe #post .sharearticle .articleend .divider {
-  margin: 0 auto;
-  margin-bottom: 0.5em;
-  height: 1px;
-  width: 110px;
-  background: rgb(var(--background-total-theme));
-}
-.pocketnet_iframe #post .sharearticle .shareBgCaption .tags,
-.pocketnet_iframe #post .sharearticle .articleend .tags {
-  justify-content: center;
-}
-.pocketnet_iframe #post .sharearticle .shareBgCaption {
-  height: 640px;
-  position: relative;
-}
-.pocketnet_iframe #post .sharearticle .shareBgCaption .tags div span {
-  color: rgb(var(--text-on-bg-ac-color));
-}
-.pocketnet_iframe #post .sharearticle .shareBgCaption .sys span {
-  color: rgb(var(--text-on-bg-shadow-color));
-}
-.pocketnet_iframe #post .sharearticle .shareBgCaption .blackmatte {
-  background: #000;
-  background: linear-gradient(0, #000 0, rgba(255, 255, 255, 0) 100%);
-}
-.pocketnet_iframe #post .sharearticle .shareBgCaption .captioncnt {
-  padding-bottom: 2em;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  z-index: 1;
-  color: rgb(var(--text-on-bg-ac-color));
-  text-align: center;
-}
-.pocketnet_iframe #post .sharearticle .shareBgCaption .captioncnt .sharecaption {
-  font-size: 4em;
-  font-family: Georgia, serif;
-  max-height: 400px;
-  overflow-x: hidden;
-  overflow-y: auto;
-  text-overflow: ellipsis;
-  overscroll-behavior: auto;
-  max-width: none;
-}
-.pocketnet_iframe #post .sharearticle .shareBgCaption .icon .usericon {
-  margin: 0 auto;
-  position: relative;
-}
-.pocketnet_iframe #post .sharearticle .shareBgCaption.showtext .iconWrapper {
+  margin-top: -5px;
+}
+.pocketnet_iframe #updatenotifier #update-found .top .logo::before,
+.pocketnet_iframe #updatenotifier #update-found .top .logo::after {
+  content: '';
   position: absolute;
-  width: auto;
-  bottom: -22px;
-  left: 0;
-  right: 0;
-  padding-left: 0;
+  width: 50px;
+  height: 50px;
+  background-repeat: no-repeat;
+  background-size: contain;
 }
-.pocketnet_iframe #post .sharearticle .shareBgCaption .starstoppanel,
-.pocketnet_iframe #post .sharearticle .shareBgCaption .socialsharewrapper {
+.pocketnet_iframe #updatenotifier #update-found .top .text {
   position: absolute;
-  bottom: 0.75em;
-  right: 1.25em;
+  width: 360px;
+  color: #fff;
+  letter-spacing: 0.05em;
 }
-.pocketnet_iframe #post .sharearticle .shareBgCaption .starstoppanel .iconwrapper,
-.pocketnet_iframe #post .sharearticle .shareBgCaption .socialsharewrapper .iconwrapper {
-  width: 3.5em;
-  height: 3.5em;
-  line-height: 3.5em;
-  border-radius: 3.5em;
-  color: rgb(var(--neutral-grad-3));
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  font-family: Nunito Sans;
-}
-.pocketnet_iframe #post .sharearticle .shareBgCaption .starstoppanel .iconwrapper:hover,
-.pocketnet_iframe #post .sharearticle .shareBgCaption .socialsharewrapper .iconwrapper:hover {
-  opacity: 0.6;
-}
-.pocketnet_iframe #post .sharearticle .shareBgCaption .starstoppanel .iconwrapper i,
-.pocketnet_iframe #post .sharearticle .shareBgCaption .socialsharewrapper .iconwrapper i {
-  width: 30px;
-  text-align: center;
-  font-size: 0.7em;
-}
-.pocketnet_iframe #post .sharearticle .shareBgCaption .socialsharewrapper .iconwrapper {
-  justify-content: flex-end;
-}
-.pocketnet_iframe #post .sharearticle .shareBgCaption .starstoppanel {
-  bottom: 0.75em;
-  left: 1.5em;
-  right: auto;
-  display: flex;
-}
-.pocketnet_iframe #post .sharearticle .shareBgCaption .starstoppanel .panelLeft {
-  display: flex;
-}
-.pocketnet_iframe #post .sharearticle .shareBgCaption .articleCover,
-.pocketnet_iframe #post .sharearticle .shareBgCaption .captioncnt,
-.pocketnet_iframe #post .sharearticle .shareBgCaption .blackmatte {
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 0;
-  bottom: 0;
-}
-.pocketnet_iframe #post .sharearticle .shareBgCaption.smallimage .articleCover {
-  background-color: rgb(var(--color-shadow-base));
-  background-size: 100px auto !important;
-}
-.pocketnet_iframe #post .sharearticle .shareBgCaption.caption_small .captionmult {
+.pocketnet_iframe #updatenotifier #update-found .top .text .text-1 {
   font-size: 1.5em;
+  padding-top: 20px;
+  padding-right: 30px;
 }
-.pocketnet_iframe #post .sharearticle .shareBgCaption.caption_long .captionmult {
-  font-size: 0.5em;
+.pocketnet_iframe #updatenotifier #update-found .top .text .text-2 {
+  font-size: 0.9em;
+  line-height: 0.8;
+  padding-right: 30px;
 }
-.pocketnet_iframe #post .sharearticle .shareBgCaption.withcover .tags div {
-  background: transparent;
-  box-shadow: none;
+.pocketnet_iframe #updatenotifier #update-found .main {
+  position: relative;
+  width: 360px;
+  box-sizing: border-box;
+  padding: 30px;
+  color: #555770;
 }
-.pocketnet_iframe #post .sharearticle .shareBgCaption.verticalcover {
-  height: 720px;
+.pocketnet_iframe #updatenotifier #update-found .main .heading {
+  text-align: right;
+  font-size: 1.5em;
+  font-weight: bold;
+  padding-bottom: 1em;
 }
-.pocketnet_iframe #post .sharearticle .shareBgCaption.verticalcover.showtext {
-  border-bottom: 1px dashed rgba(var(--neutral-grad-4), 0.5);
-}
-.pocketnet_iframe #post .sharearticle .shareBgCaption.verticalcover .articleCover {
-  left: 0.5em;
-  top: 0.5em;
-  bottom: 0.5em;
-  right: 56%;
-}
-.pocketnet_iframe #post .sharearticle .shareBgCaption.verticalcover .captioncnt {
-  left: 44%;
-  right: 0.5em;
-  top: 0.5em;
-  bottom: 0.5em;
-}
-.pocketnet_iframe #post .sharearticle .shareBgCaption.verticalcover .blackmatte {
-  display: none;
-}
-.pocketnet_iframe #post .sharearticle .shareBgCaption.verticalcover .icon {
-  position: static;
-}
-.pocketnet_iframe #post .sharearticle .shareBgCaption.verticalcover .captioncnt {
-  justify-content: center;
-  color: rgb(var(--text-color));
-}
-.pocketnet_iframe #post .sharearticle .shareBgCaption.verticalcover .divider {
-  background: rgb(var(--text-color));
-}
-.pocketnet_iframe #post .sharearticle .shareBgCaption.verticalcover .tags div span {
-  color: rgb(var(--text-color));
-}
-.pocketnet_iframe #post .sharearticle .shareBgCaption.verticalcover .sys span {
-  color: rgb(var(--text-color));
-}
-.pocketnet_iframe #post .sharearticle .shareBgCaption.verticalcover .starstoppanel .iconwrapper,
-.pocketnet_iframe #post .sharearticle .shareBgCaption.verticalcover .socialsharewrapper .iconwrapper {
-  color: rgb(var(--text-color));
-}
-.pocketnet_iframe #post .sharearticle .shareBgCaption.verticalcover.showtext .iconWrapper {
-  position: static;
-  width: auto;
-  padding-left: 0;
-  float: none;
-}
-.pocketnet_iframe #post .sharearticle .shareBgCaption.verticalcover.showtext .toppanel {
-  order: 1;
-}
-.pocketnet_iframe #post .sharearticle .shareBgCaption.withoutcover {
-  border-bottom: 1px dashed rgb(var(--color-shadow-base));
-}
-.pocketnet_iframe #post .sharearticle .shareBgCaption.withoutcover .tags div span {
-  color: rgb(var(--text-color));
-}
-.pocketnet_iframe #post .sharearticle .shareBgCaption.withoutcover .captioncnt {
-  color: rgb(var(--text-color));
-}
-.pocketnet_iframe #post .sharearticle .shareBgCaption.withoutcover .sys span {
-  color: rgb(var(--text-color));
-}
-.pocketnet_iframe #post .sharearticle .shareBgCaption.withoutcover .blackmatte {
-  display: none;
-}
-.pocketnet_iframe #post .sharearticle .articlecontent {
-  padding-top: 4em;
-  padding-bottom: 4em;
-}
-.pocketnet_iframe #post .sharearticle .articlecontent .articlerenderError {
-  text-align: center;
-}
-.pocketnet_iframe #post .sharearticle .articlecontent .cntswrk {
-  margin-left: 0;
-  padding-left: 0;
-  padding-right: 0;
-}
-.pocketnet_iframe #post .sharearticle .articlecontent .articleend {
-  margin-top: 3em;
-}
-.pocketnet_iframe #post .sharearticle .articlecontent .commentsWrapper,
-.pocketnet_iframe #post .sharearticle .articlecontent .commentRegisterDiv .commentRegister {
-  border-radius: 12px;
-}
-.pocketnet_iframe #post .sharearticle .articlecontent .forcomments {
+.pocketnet_iframe #updatenotifier #update-found .main .buttons {
+  display: flex;
+  justify-content: space-between;
   margin-top: 2em;
 }
-.pocketnet_iframe #post .sharearticle .articlecontent .article {
-  max-width: 640px;
-  margin: 0 auto;
-}
-.pocketnet_iframe #post .sharearticle .removeDescription {
-  display: none;
-  padding: 1.5em;
-  color: rgb(var(--neutral-grad-2));
-  text-align: center;
-}
-.pocketnet_iframe #post .sharearticle.deleted .forcomments,
-.pocketnet_iframe #post .sharearticle.deleted .starstoppanel,
-.pocketnet_iframe #post .sharearticle.deleted .socialsharewrapper,
-.pocketnet_iframe #post .sharearticle.deleted .textscnts {
-  display: none !important;
-}
-.pocketnet_iframe #post .sharearticle.deleted .acticletext {
-  display: none;
-}
-.pocketnet_iframe #post .sharearticle.deleted .removeDescription {
-  display: block !important;
-}
-.pocketnet_iframe #post .sharearticle.deleted .articleCover {
-  filter: blur(10px);
-}
-.pocketnet_iframe #post .sharearticle p a {
-  word-break: break-all;
-  text-overflow: ellipsis;
-  max-width: 90%;
-  overflow: hidden;
-}
-.pocketnet_iframe #content > div#post.sharec .postWrapper {
-  max-width: none;
-}
-.pocketnet_iframe #content > div#post.sharec .widthcontainer {
-  width: 80%;
-  max-width: 800px;
-  margin: 0 auto;
-}
-.pocketnet_iframe html.mobileview #post .videoWrapper {
-  max-width: none;
-}
-.pocketnet_iframe html.mobileview #post.videomainpost {
-  padding-top: 0;
-}
-.pocketnet_iframe html.mobileview #post .sharearticle .articlecontent {
-  padding-left: 0.5em;
-  padding-right: 0.5em;
-}
-.pocketnet_iframe html.mobileview .wnd.normalizedmobile.articlewindow .wndinner .wndcontent {
-  max-width: none;
-}
-@media only screen and (max-width: 1920px) {
-  .pocketnet_iframe #content > div#post.sharec .widthcontainer {
-    width: 100%;
-    padding-left: 0.5em;
-    padding-right: 0.5em;
-  }
-  .pocketnet_iframe #post {
-    padding: 0;
-  }
-  .pocketnet_iframe #post .videoWrapper {
-    border-radius: 0;
-  }
-  .pocketnet_iframe #post .videoWrapper .js-player {
-    border-radius: 0;
-    overflow: visible;
-  }
-  .pocketnet_iframe #post .videoWrapper .js-player .vjs-control-bar {
-    border-radius: 0;
-    overflow: visible;
-  }
-  .pocketnet_iframe #post .brighteonVideoIframe {
-    width: 100%;
-    max-width: inherit;
-    border-radius: 0;
-  }
-  .pocketnet_iframe #post .sharearticle .shareBgCaption.caption_small .captionmult {
-    font-size: 1.1em;
-  }
-  .pocketnet_iframe #post .sharearticle .shareBgCaption.caption_long .captionmult {
-    font-size: 0.8em;
-  }
-  .pocketnet_iframe #post .sharearticle .shareBgCaption .captioncnt .sharecaption {
-    max-height: none;
-  }
-  .pocketnet_iframe #post .sharearticle .shareBgCaption:not(.verticalcover) {
-    height: auto;
-  }
-  .pocketnet_iframe #post .sharearticle .shareBgCaption:not(.verticalcover) .captioncnt {
-    padding-bottom: 2em;
-    padding-left: 1em;
-    padding-right: 1em;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    z-index: 1;
-    text-align: center;
-    position: relative;
-    border-bottom: 1px dashed rgba(var(--neutral-grad-4), 0.5);
-    color: rgb(var(--text-color));
-  }
-  .pocketnet_iframe #post .sharearticle .shareBgCaption:not(.verticalcover) .captioncnt .tags {
-    justify-content: center;
-  }
-  .pocketnet_iframe #post .sharearticle .shareBgCaption:not(.verticalcover) .captioncnt .tags div span {
-    color: rgb(var(--text-color));
-  }
-  .pocketnet_iframe #post .sharearticle .shareBgCaption:not(.verticalcover) .captioncnt .sys span {
-    color: rgb(var(--text-color));
-  }
-  .pocketnet_iframe #post .sharearticle .shareBgCaption:not(.verticalcover) .captioncnt .sharecaption {
-    font-size: 3em;
-    padding: 0.5em 0;
-    padding-top: 1em;
-  }
-  .pocketnet_iframe #post .sharearticle .shareBgCaption:not(.verticalcover) .articleCover {
-    height: 300px;
-    position: relative;
-  }
-  .pocketnet_iframe #post .sharearticle .shareBgCaption:not(.verticalcover) .blackmatte {
-    display: none;
-  }
-  .pocketnet_iframe #post .sharearticle .shareBgCaption.withoutcover .articleCover {
-    height: 1.5em;
-  }
-  .pocketnet_iframe #post .sharearticle .shareBgCaption.verticalcover {
-    height: 720px;
-    border-bottom: 0;
-  }
-  .pocketnet_iframe #post .sharearticle .shareBgCaption.verticalcover .articleCover {
-    left: 0;
-    top: 0;
-    bottom: 0;
-    right: 0;
-  }
-  .pocketnet_iframe #post .sharearticle .shareBgCaption.verticalcover .captioncnt {
-    left: 0;
-    right: 0;
-    top: 0;
-    bottom: 0;
-    padding-bottom: 4em;
-  }
-  .pocketnet_iframe #post .sharearticle .shareBgCaption.verticalcover .captioncnt .sharecaption {
-    font-size: 3em;
-    padding: 0.5em 0;
-    padding-top: 1em;
-  }
-  .pocketnet_iframe #post .sharearticle .shareBgCaption.verticalcover .blackmatte {
-    display: block;
-    backdrop-filter: brightness(85%);
-  }
-  .pocketnet_iframe #post .sharearticle .shareBgCaption.verticalcover .captioncnt {
-    justify-content: flex-end;
-    color: rgb(var(--text-on-bg-ac-color));
-  }
-  .pocketnet_iframe #post .sharearticle .shareBgCaption.verticalcover .divider {
-    background: rgb(var(--text-on-bg-ac-color));
-  }
-  .pocketnet_iframe #post .sharearticle .shareBgCaption.verticalcover .tags div span {
-    color: rgb(var(--text-on-bg-ac-color));
-  }
-  .pocketnet_iframe #post .sharearticle .shareBgCaption.verticalcover .sys span {
-    color: rgb(var(--text-on-bg-ac-color));
-  }
-  .pocketnet_iframe #post .sharearticle .shareBgCaption.verticalcover .starstoppanel .iconwrapper,
-  .pocketnet_iframe #post .sharearticle .shareBgCaption.verticalcover .socialsharewrapper .iconwrapper {
-    color: rgb(var(--text-on-bg-ac-color));
-  }
-  .pocketnet_iframe #post .sharearticle .starstoppanel,
-  .pocketnet_iframe #post .sharearticle .socialsharewrapper {
-    bottom: -0.25em !important;
-  }
-  .pocketnet_iframe #post .sharearticle .starstoppanel .panelLeft,
-  .pocketnet_iframe #post .sharearticle .socialsharewrapper .panelLeft {
-    flex-direction: column;
-  }
-  .pocketnet_iframe #post .sharearticle .articlecontent {
-    padding-left: 0.5em;
-    padding-right: 0.5em;
-  }
-  .pocketnet_iframe #post .sharearticle .articlecontent .article {
-    max-width: 640px;
-    margin: 0 auto;
-  }
-  .pocketnet_iframe #post .sharearticle .articlecontent .article_quote,
-  .pocketnet_iframe #post .sharearticle .articlecontent .article_link_custom {
-    width: 96%;
-    max-width: none;
-  }
-  .pocketnet_iframe #post .sharearticle .articlecontent .article_this_embed {
-    padding: 0;
-    margin-top: 1em;
-    border: 0;
-  }
-}
-.pocketnet_iframe html.mobileview.fullscreen #post #comments {
-  display: none;
-}
-.pocketnet_iframe .wnd.postwindow .wndcontent {
-  top: 0;
-  background: transparent;
-  height: 100%;
-  width: 100%;
-  padding-top: 0;
-  margin: 0 auto;
-  padding-bottom: 10em;
-}
-.pocketnet_iframe .wnd.postwindow .wndinner {
-  height: 100%;
-  width: 100%;
-  max-height: none;
-  background: transparent;
-}
-.pocketnet_iframe .wnd.postwindow.articlewindow .wndcontent {
-  padding: 0;
-  border-radius: 0;
-  background: rgb(var(--background-total-theme));
-}
-.pocketnet_iframe .wnd.postwindow.articlewindow #post .postWrapper {
-  max-width: none;
-}
-.pocketnet_iframe .wnd.postwindow .widthcontainer {
-  width: 80%;
-  max-width: 800px;
-  margin: 0 auto;
-}
-.pocketnet_iframe .wnd.postwindow #post {
-  margin: 0 auto;
-  background: transparent;
-}
-.pocketnet_iframe .wnd.postwindow #post .postWrapper {
-  overflow: hidden;
-}
-.pocketnet_iframe .wnd.postwindow #post .nextpost {
-  display: block;
-}
-.pocketnet_iframe html.mobileview .wnd.postwindow .widthcontainer {
-  width: 100%;
-  max-width: none;
-}
-.pocketnet_iframe html.mobileview .wnd.articlewindow .widthcontainer {
-  width: 96%;
-  max-width: 768px;
-}
-@media only screen and (max-width: 1920px) {
-  .pocketnet_iframe #post {
-    border-top: 1px solid rgba(var(--neutral-grad-1), 0.3);
-  }
-  .pocketnet_iframe #post .statswrapperExtended {
-    padding: 0.5em;
-  }
-  .pocketnet_iframe #post .showmorelenta .horizontalLentaWrapper {
-    padding: 0.5em;
-  }
-  .pocketnet_iframe #post .showmorelenta .horizontalLentacaption {
-    padding: 0.5em;
-  }
-  .pocketnet_iframe #post .repostsecond {
-    text-align: center;
-  }
-  .pocketnet_iframe #post .nextpost {
-    display: none;
-  }
-  .pocketnet_iframe #post .iconWrapper {
-    width: 4em;
-    padding-top: 0.5em;
-    padding-left: 0.5em;
-    padding-right: 0;
-  }
-  .pocketnet_iframe #post .openoriginallabel {
-    display: none;
-  }
-  .pocketnet_iframe #post.videomainpost .formeta {
-    margin-left: 0;
-    margin-bottom: 1em;
-    padding-left: 0;
-  }
-  .pocketnet_iframe #post.videomainpost.squareVideo .forurl .videoWrapper,
-  .pocketnet_iframe #post.videomainpost.verticalVideo .forurl .videoWrapper {
-    max-width: none;
-  }
-  .pocketnet_iframe #post.videomainpost .share .anothercntswrk {
-    padding-right: 0.5em;
-  }
-  .pocketnet_iframe #post.videomainpost .share .paddingWrapper {
-    margin-left: 0;
-    padding-left: 0;
-  }
-  .pocketnet_iframe .wnd.postwindow .widthcontainer {
-    width: 100%;
-  }
-  .pocketnet_iframe .wnd.postwindow .wndcontent {
-    padding-bottom: 0;
-  }
-  .pocketnet_iframe .wnd.postwindow #post .share .sharearticle .commentsWrapper,
-  .pocketnet_iframe .wnd.postwindow #post .share .sharearticle .commentRegisterDiv .commentRegister {
-    padding-bottom: 0;
-  }
-  .pocketnet_iframe .wnd.postwindow #post .share .recomandationsFromContent {
-    padding-bottom: 5em;
-  }
-  .pocketnet_iframe html.mobileview .wnd.postwindow .widthcontainer {
-    width: 100%;
-  }
-  .pocketnet_iframe html.mobileview .wnd.postwindow.normalizedmobile .wndcontent {
-    background: rgb(var(--background-total-theme));
-  }
-  .pocketnet_iframe html.mobileview .wnd.postwindow.normalizedmobile #post {
-    border-top: 0;
-  }
-  .pocketnet_iframe html.mobileview .wnd.postwindow.normalizedmobile #post .cntswrk.forcomments .paddingWrapper {
-    padding: 0;
-  }
-  .pocketnet_iframe html.mobileview .wnd.articlewindow.normalizedmobile #post .postWrapper {
-    padding-top: 0;
-  }
-}
-.pocketnet_iframe .wnd.postwindow.pipmini .wndcontent {
-  padding-right: 0;
-  overflow-y: hidden;
-}
-.pocketnet_iframe .wnd.postwindow.pipmini #post {
-  padding: 0 !important;
-}
-.pocketnet_iframe .wnd.postwindow.pipmini #post .postWrapper {
-  padding: 0 !important;
-}
-.pocketnet_iframe .wnd.postwindow.pipmini #post .shareTable {
-  padding: 0;
-  border-radius: 6px;
-}
-.pocketnet_iframe .wnd.postwindow.pipmini #post .videoWrapper {
-  border-radius: 6px;
-}
-.pocketnet_iframe .wnd.postwindow.pipmini #post .videoWrapper .video-js {
-  min-height: 150px;
-  max-height: calc(var(--vh, 1vh) * 25);
-}
-.pocketnet_iframe .wnd.postwindow.pipmini #post .videoWrapper .video-js .vjs-control-bar .vjs-mute-control {
-  position: absolute;
-  height: 3em;
-  line-height: 3.5em;
-  font-size: 1em;
-  right: 0.25em;
-  bottom: 0;
-  width: 3em;
-  font-size: 0.9em;
-}
-.pocketnet_iframe .wnd.postwindow.pipmini #post .work {
-  position: static;
-}
-.pocketnet_iframe html.pipmode .wnd.postwindow.pipmini #post .shareTable {
-  padding: 0;
-  border-radius: 0;
-}
-.pocketnet_iframe html.pipmode .wnd.postwindow.pipmini #post .videoWrapper {
-  border-radius: 0;
-  position: absolute;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  right: 0;
-}
-.pocketnet_iframe html.pipmode .wnd.postwindow.pipmini #post .videoWrapper .js-player {
-  height: 100%;
-}
-.pocketnet_iframe html.pipmode .wnd.postwindow.pipmini #post .videoWrapper .video-js {
-  max-height: none;
-  min-height: 0;
-  position: absolute;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  width: 100%;
-  height: 100%;
-  max-width: none;
-  right: 0;
-}
-.pocketnet_iframe html.pipmode .wnd.postwindow.pipmini #post .videoWrapper .video-js .vjs-control-bar {
-  padding-left: 0;
-}
-.pocketnet_iframe .item.loadingBar {
-  display: flex;
-  width: 40px;
+.pocketnet_iframe #updatenotifier #update-found .main .buttons button:nth-child(1) {
   height: 40px;
+  flex-grow: 1;
+  margin-right: 10px;
 }
-.pocketnet_iframe .item.loadingBar .loading-bar {
-  margin: auto;
+.pocketnet_iframe #updatenotifier #update-found .main .buttons button:nth-child(2) {
+  height: 40px;
+  flex-grow: 1;
+  margin-left: 10px;
+  background: transparent;
+  color: #00a3f7;
+}
+.pocketnet_iframe :root {
+  --background-hidden-layer: 255, 255, 255;
+  --background-total-theme: 255, 255, 255;
+  --background-secondary-theme: 250, 250, 250;
+  --background-secondary-theme-2: 18, 22, 33;
+  --background-main: 240, 242, 245;
+  --background-main-contrast: 10, 12, 23;
+  --color-medium-theme: 199, 200, 217;
+  --neutral-grad-0: 235,235,240;
+  --neutral-grad-1: 227,228,235;
+  --neutral-grad-2: 142,144,166;
+  --neutral-grad-3: 85,87,112;
+  --neutral-grad-4: 64,65,82;
+  --text-color: 10, 12, 23;
+  --text-on-main-bg-color: 85,87,112;
+  --text-on-bg-ac-color: 255, 255, 255;
+  --color-bg-ac-bright: 0,163,247;
+  --color-bg-ac: 0,164,255;
+  --color-bg-ac-1: 0,142,191;
+  --color-bg-ac-2: 250,110,132;
+  --color-bg-selection: 179, 212, 252;
+  --color-txt-ac: 0,164,255;
+  --color-txt-ac-1: 0,142,191;
+  --color-txt-ac-2: 250,110,132;
+  --color-txt-gray: 70, 71, 98;
+  --color-txt-gray-dark: 53, 53, 63;
+  --color-bg-orange: 255, 59, 0;
+  --color-txt-orange: 255, 72, 0;
+  --color-star-yellow: 255,174, 0;
+  --color-shadow-base: 2, 18, 24;
+  --color-shadow-var: 32, 35, 42;
+  --text-on-bg-shadow-color: 255, 255, 255;
+  --color-bad: 244, 26, 77;
+  --color-nrml: 0, 0, 0;
+  --color-good: 7, 108, 52;
+  --color-yellow: 255, 238, 0;
+  --color-h2-aboutcc: 68, 68, 68;
+  --color-h2-works__container: 255, 255, 255;
+  --color-black: 0, 0, 0;
+  --color-cc-videos: 38,38,38;
+  --color-cc-open: 251,240,195;
+  --color-cc-blue: 0, 166, 255;
+  --color-cc-white: 255,255,255;
+  --color-cc-grey: 221,221,221;
+  --color-cc-menu: 0,213,195;
+  --color-cc-dark-blue: 49,60,155;
+  --color-cc-dark: 59,59,59;
+  --color-cc-description: 207,207,207;
+  --color-cc-line: 49,60,155;
+  --color-cc-table: 246, 246, 246;
+  --color-services-item: 5, 5, 5, 0.2;
+  --color-cc-dark-grey: 102,102,102;
+  --color-cc-dark-blue-cc: 22,28,53;
+  --color-cc-dark-blue-ccc: 22,28,53, 0.7;
+  --color-cc-team-container: 204,204,204;
+  --color-cc-bc: 238,238,238;
+  --color-cc-bc-span: 51,51,51;
+  --color-cc-bc-p: 22,28,53;
+  --color-cc-form: 33, 42, 73, 0.6;
+  --color-fb: 10, 35, 71;
+  --color-menu-2: 100, 255, 237;
+  --color-not-catchy-grey: 171, 171, 171;
+}
+.pocketnet_iframe :root[theme='black'] {
+  --background-hidden-layer: 10, 12, 23;
+  --background-total-theme: 18, 22, 33;
+  --background-secondary-theme: 24, 36, 52;
+  --background-secondary-theme-2: 24, 36, 52;
+  --background-main: 12, 14, 18;
+  --background-main-contrast: 240, 242, 245;
+  --color-medium-theme: 99, 100, 117;
+  --neutral-grad-0: 25,25,29;
+  --neutral-grad-1: 38,38,42;
+  --neutral-grad-2: 78,78,99;
+  --neutral-grad-3: 85,87,112;
+  --neutral-grad-4: 96,103,112;
+  --text-color: 178, 171, 172;
+  --text-on-main-bg-color: 85,87,112;
+  --text-on-bg-ac-color: 255, 255, 255;
+  --color-bg-ac-bright: 0, 90, 200;
+  --color-bg-ac: 0, 80, 190;
+  --color-bg-ac-1: 0, 142, 191;
+  --color-bg-ac-2: 250, 110,132;
+  --color-bg-selection: 7, 36, 170;
+  --color-txt-ac: 0, 164, 255;
+  --color-txt-ac-1: 0, 142, 191;
+  --color-txt-ac-2: 250, 110, 132;
+  --color-txt-gray: 103, 105, 128;
+  --color-txt-gray-dark: 113, 113, 134;
+  --color-bg-orange: 255, 72, 0;
+  --text-txt-orange: 255, 72, 0;
+  --color-shadow-base: 12, 14, 33;
+  --color-shadow-var: 18, 18, 26;
+  --text-on-bg-shadow-color: 214, 219, 230;
+  --color-bad: 244, 26, 77;
+  --color-nrml: 180, 180, 180;
+  --color-good: 7, 108, 52;
+  --color-yellow: 255, 238, 0;
+  --color-not-catchy-grey: 94, 98, 100;
+}
+.pocketnet_iframe :root[theme='gray'] {
+  --background-hidden-layer: 12, 12, 12;
+  --background-total-theme: 20, 20, 20;
+  --background-secondary-theme: 36, 36, 36;
+  --background-secondary-theme-2: 36, 36, 36;
+  --background-main: 28, 28, 28;
+  --background-main-contrast: 242, 242, 242;
+  --color-medium-theme: 104, 104, 104;
+  --neutral-grad-0: 37,37,37;
+  --neutral-grad-1: 47,47,47;
+  --neutral-grad-2: 88,88,88;
+  --neutral-grad-3: 95,95,95;
+  --neutral-grad-4: 105,105,105;
+  --text-color: 190, 190, 190;
+  --text-on-main-bg-color: 130,130,130;
+  --text-on-bg-ac-color: 255, 255, 255;
+  --color-bg-ac-bright: 55, 120, 160;
+  --color-bg-ac: 50, 110, 150;
+  --color-bg-ac-1: 0, 142, 191;
+  --color-bg-ac-2: 255, 216, 0;
+  --color-bg-selection: 30, 80, 150;
+  --color-txt-ac: 50, 110, 150;
+  --color-txt-ac-1: 0, 142, 191;
+  --color-txt-ac-2: 255, 216, 0;
+  --color-txt-gray: 110, 110, 110;
+  --color-txt-gray-dark: 120, 120, 120;
+  --color-bg-orange: 255, 72, 0;
+  --text-txt-orange: 255, 72, 0;
+  --color-shadow-base: 22, 22, 22;
+  --color-shadow-var: 25, 25, 25;
+  --text-on-bg-shadow-color: 214, 214, 214;
+  --color-bad: 210, 0, 20;
+  --color-nrml: 180, 180, 0180;
+  --color-good: 0, 140, 40;
+  --color-yellow: 250, 230, 10;
+  --color-not-catchy-grey: 72, 72, 72;
+}
+.pocketnet_iframe :root {
+  --app-margin-top-default: 0px;
+  --app-margin-top: 0px;
+}
+@supports (padding-top: constant(safe-area-inset-top)) {
+  .pocketnet_iframe :root {
+    --safe-area-inset-top: constant(safe-area-inset-top, 0);
+    --safe-area-inset-right: constant(safe-area-inset-right, 0);
+    --safe-area-inset-bottom: constant(safe-area-inset-bottom, 0);
+    --safe-area-inset-left: constant(safe-area-inset-left, 0);
+  }
+}
+@supports (padding-top: env(safe-area-inset-top)) {
+  .pocketnet_iframe :root {
+    --safe-area-inset-top: env(safe-area-inset-top, 0);
+    --safe-area-inset-right: env(safe-area-inset-right, 0);
+    --safe-area-inset-bottom: env(safe-area-inset-bottom, 0);
+    --safe-area-inset-left: env(safe-area-inset-left, 0);
+  }
 }
 .pocketnet_iframe .disable-hover,
 .pocketnet_iframe .disable-hover * {
@@ -4569,6 +4995,9 @@
     background-image: linear-gradient(180deg, rgba(var(--background-main-contrast), 0.25) 0%, rgba(var(--background-hidden-layer), 0) 90%);
   }
 }
+.pocketnet_iframe .wnd:not(.pipmini) {
+  contain: strict;
+}
 .pocketnet_iframe .wnd .wndcustomscroll {
   overflow-y: overlay;
   overflow-x: hidden;
@@ -4600,10 +5029,10 @@
   position: relative;
   overflow-x: hidden;
   overflow-y: overlay;
-  scroll-behavior: initial !important;
+  scroll-behavior: initial!important;
   /*&.mobileview{
-        scroll-behavior: smooth;
-    }*/
+          scroll-behavior: smooth;
+      }*/
 }
 .pocketnet_iframe html.nooverflow {
   overflow: hidden;
@@ -4614,7 +5043,7 @@
 }
 .pocketnet_iframe [image] {
   will-change: opacity, background;
-  /*contain: strict;*/
+  contain: strict;
   opacity: 0;
   -moz-transition: opacity 0.3s;
   -o-transition: opacity 0.3s;
@@ -4901,11 +5330,11 @@
   user-select: none;
 }
 .pocketnet_iframe .cancopy {
-  -webkit-user-select: text !important;
-  -khtml-user-select: text !important;
-  -moz-user-select: text !important;
-  -ms-user-select: text !important;
-  user-select: text !important;
+  -webkit-user-select: text!important;
+  -khtml-user-select: text!important;
+  -moz-user-select: text!important;
+  -ms-user-select: text!important;
+  user-select: text!important;
 }
 .pocketnet_iframe html.testaddress .vjs-peertube {
   display: block;
@@ -4931,8 +5360,17 @@
   background: rgb(var(--background-hidden-layer));
   color: rgb(var(--text-color));
   border-radius: 6px;
-  padding: 0.5em;
+  padding: 0 0.5em;
   border: 1px solid rgb(var(--neutral-grad-2));
+}
+.pocketnet_iframe button {
+  padding: 0.5em;
+}
+.pocketnet_iframe input[type="text"],
+.pocketnet_iframe input[type="email"],
+.pocketnet_iframe input[type="password"],
+.pocketnet_iframe input[type="number"] {
+  min-height: 44px;
 }
 .pocketnet_iframe textarea {
   background: rgb(var(--background-hidden-layer));
@@ -5136,7 +5574,6 @@
 .pocketnet_iframe select {
   background: rgb(var(--background-hidden-layer));
   -webkit-appearance: none;
-  background-image: url(../img/arrow.png);
   background-position: right 10px center;
   background-repeat: no-repeat;
   line-height: 1em;
@@ -5150,7 +5587,7 @@
   text-indent: 0.01px;
   text-overflow: '';
   -ms-appearance: none;
-  appearance: none !important;
+  appearance: none!important;
   text-align: left;
 }
 .pocketnet_iframe .psselect .name,
@@ -5855,7 +6292,7 @@
   display: inline;
   cursor: pointer;
   position: relative;
-  padding-left: 27px !important;
+  padding-left: 27px!important;
   margin-right: 15px;
   font-size: 0.9em;
   line-height: 20px;
@@ -5920,7 +6357,7 @@
 }
 .pocketnet_iframe .checkbox + label {
   line-height: 40px;
-  padding-left: 35px !important;
+  padding-left: 35px!important;
 }
 .pocketnet_iframe .checkbox + label:before {
   margin-top: 9px;
@@ -6025,7 +6462,6 @@
   vertical-align: middle;
   cursor: pointer;
   margin: 3px 0;
-  background-image: url(../img/csscheckbox.png);
   -webkit-touch-callout: none;
   -webkit-user-select: none;
   -khtml-user-select: none;
@@ -6572,13 +7008,13 @@
 }
 .pocketnet_iframe #windowsContainer .wnd.nobfilter .wndback {
   background: rgb(var(--color-shadow-base)) !important;
-  backdrop-filter: none !important;
-  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none!important;
+  -webkit-backdrop-filter: none!important;
 }
 .pocketnet_iframe html.mobileview.android .wnd .wndback {
   background: rgb(var(--color-shadow-base)) !important;
-  backdrop-filter: none !important;
-  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none!important;
+  -webkit-backdrop-filter: none!important;
 }
 .pocketnet_iframe .wnd {
   position: fixed;
@@ -6592,9 +7028,9 @@
   -webkit-overflow-scrolling: touch;
   overscroll-behavior: contain;
   /*.result{
-        margin-top: 50px;
-        text-align: center;
-    }*/
+          margin-top: 50px;
+          text-align: center;
+      }*/
 }
 .pocketnet_iframe .wnd.embeding {
   z-index: 2005;
@@ -6944,7 +7380,7 @@
   box-shadow: none;
 }
 .pocketnet_iframe .wnd.withoutButtons .wndinner > div.buttons {
-  display: none !important;
+  display: none!important;
 }
 .pocketnet_iframe .wnd.withoutButtons .wndcontent {
   bottom: 0;
@@ -6985,7 +7421,7 @@
   z-index: 999;
 }
 .pocketnet_iframe .wnd.pipmini .recomandationsFromContent {
-  display: none !important;
+  display: none!important;
 }
 .pocketnet_iframe .wnd.pipmini .wndinner {
   box-shadow: none;
@@ -7011,7 +7447,7 @@
   transition: 0.3s;
 }
 .pocketnet_iframe .wnd.pipmini .peertube-server-hint {
-  display: none !important;
+  display: none!important;
 }
 .pocketnet_iframe .wnd.pipmini ._changeplace {
   bottom: 0;
@@ -7036,14 +7472,14 @@
 }
 .pocketnet_iframe .wnd.pipmini .wndcontent {
   position: static;
-  padding: 0 !important;
+  padding: 0!important;
 }
 .pocketnet_iframe .wnd.pipmini .wndcontent .widthcontainer {
-  max-width: none !important;
+  max-width: none!important;
   width: 100%;
 }
 .pocketnet_iframe .wnd.pipmini .piphidden {
-  display: none !important;
+  display: none!important;
 }
 .pocketnet_iframe .wnd.centercontentWindow .wndinner {
   display: flex;
@@ -7303,7 +7739,7 @@
   height: 2px;
   left: 0;
   right: 0;
-  top: 0;
+  top: var(--app-margin-top);
   width: 100%;
   z-index: 10000000;
   display: none;
@@ -7550,8 +7986,8 @@
 }
 .pocketnet_iframe .dialog.accepting .buttons > div button {
   width: 100%;
-  padding-left: 0 !important;
-  padding-right: 0 !important;
+  padding-left: 0!important;
+  padding-right: 0!important;
   text-align: center;
 }
 .pocketnet_iframe .dialog.accepting .buttons > div.btn2wr {
@@ -7796,7 +8232,7 @@
   width: 0;
 }
 .pocketnet_iframe .menudialog .mobiledialogcontent::-webkit-scrollbar {
-  display: none !important;
+  display: none!important;
 }
 .pocketnet_iframe .refadd {
   background: rgb(var(--color-shadow-base, 0.95));
@@ -8355,14 +8791,14 @@
   right: 0;
   top: 0;
   bottom: 0;
-  background: transparent !important;
+  background: transparent!important;
 }
 .pocketnet_iframe .vc_autosearchInput .autosearchInputCnt input {
-  background: transparent !important;
+  background: transparent!important;
 }
 .pocketnet_iframe .vc_valuecustom {
   width: 200px;
-  height: 38px;
+  height: 44px;
   position: relative;
   border-radius: 6px;
 }
@@ -8427,7 +8863,7 @@
   border-top-right-radius: 0;
 }
 .pocketnet_iframe .vc_valuecustom .vc_selectInput .vc_value {
-  padding: 0.25em 0.5em;
+  padding: 1em 0.5em;
   cursor: pointer;
 }
 .pocketnet_iframe .vc_valuecustom .vc_selectInput .vc_value:hover {
@@ -8552,11 +8988,11 @@
   border-radius: 10px;
 }
 .pocketnet_iframe .horizontalLentaWrapper .showmorebywrapper::-webkit-scrollbar {
-  display: none !important;
+  display: none!important;
 }
 .pocketnet_iframe .horizontalLentaWrapper .showmorebywrapper .anothercntswrk {
-  padding-left: 0 !important;
-  padding-right: 0 !important;
+  padding-left: 0!important;
+  padding-right: 0!important;
 }
 .pocketnet_iframe .horizontalLentaWrapper .showmorebywrapper .showmorebywrapper {
   display: none;
@@ -8564,7 +9000,7 @@
 .pocketnet_iframe .carousel {
   width: 100%;
   display: flex;
-  flex-wrap: nowrap !important;
+  flex-wrap: nowrap!important;
   grid-gap: 0.5em;
   overflow-x: scroll;
   scroll-behavior: smooth;
@@ -8574,7 +9010,7 @@
   position: relative;
 }
 .pocketnet_iframe .carousel::-webkit-scrollbar {
-  display: none !important;
+  display: none!important;
 }
 .pocketnet_iframe .carousel .carousel_item {
   width: 100%;
@@ -8733,7 +9169,7 @@
   margin: 0 auto;
   border: 0;
   margin-bottom: 0;
-  padding-bottom: 1em;
+  padding-bottom: 60px;
   box-shadow: none;
 }
 .pocketnet_iframe html.mobileview .tooltipMobileDialog ._close {
@@ -8752,7 +9188,7 @@
   margin: 0;
 }
 .pocketnet_iframe html.mobileview .tooltipMobileDialog .label {
-  padding-right: 30px !important;
+  padding-right: 30px!important;
 }
 .pocketnet_iframe html.mobileview .tooltipMobileDialog .header {
   color: rgb(var(--neutral-grad-3));
@@ -8763,7 +9199,7 @@
 }
 .pocketnet_iframe html.mobileview .tooltipMobileDialog .closeButton,
 .pocketnet_iframe html.mobileview .tooltipMobileDialog .menuitem {
-  padding: 2em 1em;
+  padding: 1.5em 1em;
   text-align: center;
   background: rgb(var(--background-total-theme));
   cursor: pointer;
@@ -8790,7 +9226,7 @@
   text-decoration: none;
 }
 .pocketnet_iframe html.mobileview.nooverflow body {
-  overflow: hidden !important;
+  overflow: hidden!important;
   touch-action: none;
   -webkit-overflow-scrolling: none;
   overscroll-behavior: none;
@@ -8948,18 +9384,18 @@
   user-select: none;
 }
 .pocketnet_iframe html.mobileview.fullscreen .matrixchatwrapper {
-  display: none !important;
+  display: none!important;
 }
 .pocketnet_iframe html.mobileview.fullscreen #menuWrapper {
-  display: none !important;
+  display: none!important;
 }
 .pocketnet_iframe html.mobileview.fullscreen #navigationWrapper {
-  display: none !important;
+  display: none!important;
 }
 .pocketnet_iframe html.allcontent_application #navigationWrapper,
 .pocketnet_iframe html.allcontent_application #menuWrapper,
 .pocketnet_iframe html.allcontent_application #footerWrapper {
-  display: none !important;
+  display: none!important;
 }
 .pocketnet_iframe .windowsContainer {
   position: relative;
@@ -8975,7 +9411,7 @@
     scrollbar-width: none;
   }
   .pocketnet_iframe .horizontalLentaWrapper .showmorebywrapper::-webkit-scrollbar {
-    display: none !important;
+    display: none!important;
   }
   .pocketnet_iframe .brighteonVideoIframe {
     max-width: inherit;
@@ -9082,10 +9518,10 @@
   padding: 1em;
 }
 .pocketnet_iframe .lighttooltip.zindex {
-  z-index: 3000 !important;
+  z-index: 3000!important;
 }
 .pocketnet_iframe .lighttooltip .removeInTooltip {
-  display: none !important;
+  display: none!important;
 }
 .pocketnet_iframe .lighttooltip .tooltipster-arrow-border {
   margin-right: 1px;
@@ -9145,6 +9581,9 @@
 .pocketnet_iframe .registrationProgressIcon.in_progress_transaction i,
 .pocketnet_iframe .registrationProgressIcon.in_progress_hasUnspents i {
   color: rgb(var(--color-bg-ac-bright)) !important;
+}
+.pocketnet_iframe .registrationProgressIcon.blocked i {
+  color: rgb(var(--color-bad)) !important;
 }
 .pocketnet_iframe .usericon {
   background: rgb(var(--neutral-grad-0));
@@ -9357,6 +9796,7 @@
 .pocketnet_iframe .notification .sharedivide {
   color: rgb(var(--color-text-ac));
   padding: 0.25em 0;
+  border-bottom: 1px solid rgb(var(--neutral-grad-0));
 }
 .pocketnet_iframe .fastMessage .sharepreview .shareprwrapper > div,
 .pocketnet_iframe .notification .sharepreview .shareprwrapper > div {
@@ -9528,8 +9968,8 @@
 .pocketnet_iframe .notification .sharepreview {
   cursor: pointer;
   /*&:hover{
-            color : rgb(var(--color-txt-ac));
-        }*/
+              color : rgb(var(--color-txt-ac));
+          }*/
 }
 .pocketnet_iframe .fastMessage {
   border-radius: 12px;
@@ -9850,7 +10290,7 @@
 }
 .pocketnet_iframe .trumbowyg-button-pane,
 .pocketnet_iframe .trumbowyg-modal {
-  z-index: 0 !important;
+  z-index: 0!important;
 }
 .pocketnet_iframe .hyhpensenable {
   -webkit-hyphens: auto;
@@ -9889,7 +10329,7 @@
   font-size: 1.3em;
   margin-top: 1em;
   margin-bottom: 1em;
-  font-family: Georgia, serif !important;
+  font-family: Georgia, serif!important;
 }
 .pocketnet_iframe .article_body p a {
   color: rgb(var(--color-txt-ac));
@@ -9899,7 +10339,7 @@
   font-size: 1.3em;
   margin-top: 1em;
   margin-bottom: 1em;
-  font-family: Georgia, serif !important;
+  font-family: Georgia, serif!important;
 }
 .pocketnet_iframe .article_body .article_list li {
   margin-top: 0.5em;
@@ -9923,7 +10363,7 @@
 .pocketnet_iframe .article_body .article_image.withBackground img {
   display: block;
   margin: 0 auto;
-  max-width: 400px !important;
+  max-width: 400px!important;
   width: 100%;
 }
 .pocketnet_iframe .article_body .article_image img {
@@ -9968,7 +10408,7 @@
   margin: 2em auto;
 }
 .pocketnet_iframe .article_body .article_carousel .img {
-  background-size: contain !important;
+  background-size: contain!important;
 }
 .pocketnet_iframe .article_body .article_this_embed {
   padding: 1.5em;
@@ -10220,7 +10660,7 @@
   left: 0;
   bottom: 0;
   right: 0;
-  height: 90px;
+  height: 100px;
 }
 .pocketnet_iframe html.mobileview #navigation .fakem {
   display: none;
@@ -10280,7 +10720,7 @@
   left: 0;
   bottom: 0;
   right: 0;
-  height: 90px;
+  height: 100px;
 }
 .pocketnet_iframe html.mobileview #navigation .fakem {
   display: none;
@@ -10290,7 +10730,7 @@
     display: flex;
   }
   .pocketnet_iframe html.mobileview #content.optimized > div {
-    display: none !important;
+    display: none!important;
   }
   .pocketnet_iframe .menudialog .secondwrapper {
     padding-bottom: 1.5em;
@@ -10508,13 +10948,13 @@
 @media print {
   .pocketnet_iframe {
     /*
-     * Don't show links that are fragment identifiers,
-     * or use the `javascript:` pseudo protocol
-     */
+       * Don't show links that are fragment identifiers,
+       * or use the `javascript:` pseudo protocol
+       */
     /*
-     * Printing Tables:
-     * http://css-discuss.incutio.com/wiki/Printing_Tables
-     */
+       * Printing Tables:
+       * http://css-discuss.incutio.com/wiki/Printing_Tables
+       */
   }
   .pocketnet_iframe *,
   .pocketnet_iframe *:before,
@@ -10522,7 +10962,7 @@
     background: transparent !important;
     color: #000 !important;
     /* Black prints faster:
-                                   http://www.sanbeiji.com/archives/953 */
+                                     http://www.sanbeiji.com/archives/953 */
     box-shadow: none !important;
     text-shadow: none !important;
   }
@@ -10574,10 +11014,10 @@
     display: none;
   }
   .pocketnet_iframe .workstation {
-    display: none !important;
+    display: none!important;
   }
   .pocketnet_iframe .mobiledevice {
-    display: inherit !important;
+    display: inherit!important;
   }
   .pocketnet_iframe .subscribebuttons > div button.subscribe i {
     margin-left: 0;
@@ -10654,10 +11094,10 @@
   }
   .pocketnet_iframe .wnd {
     /*.wndcontent{
-            top: 0;
-            padding : 0;
-            padding-top : 55px;
-        }*/
+              top: 0;
+              padding : 0;
+              padding-top : 55px;
+          }*/
   }
   .pocketnet_iframe .wnd .wndinner {
     position: absolute;
@@ -10666,8 +11106,8 @@
     right: 0;
     bottom: 0;
     margin: auto;
-    width: 100% !important;
-    height: 100% !important;
+    width: 100%!important;
+    height: 100%!important;
     max-height: none;
   }
   .pocketnet_iframe .wnd.small .wndinner {
@@ -10721,8 +11161,8 @@
   }
   .pocketnet_iframe html.allcontent {
     /*body{
-            background: #051b48;
-        }*/
+              background: #051b48;
+          }*/
   }
   .pocketnet_iframe html.allcontent .contentWrapper {
     padding-top: 0;
@@ -10736,12 +11176,12 @@
   }
 }
 .pocketnet_iframe html.mobileview.keyboadrshown .focusedinput {
-  position: fixed !important;
+  position: fixed!important;
   bottom: calc(var(--keyboardheight, 0) - 1px) !important;
-  top: auto !important;
-  left: 0 !important;
-  right: 0 !important;
-  max-height: 25vh !important;
+  top: auto!important;
+  left: 0!important;
+  right: 0!important;
+  max-height: 25vh!important;
 }
 .pocketnet_iframe html.mobileview .dialog {
   padding-bottom: calc(var(--keyboardheight, 0) - 1px);
@@ -10800,19 +11240,19 @@
   vertical-align: bottom;
 }
 .pocketnet_iframe html.mobileview .fastMessage .foramount {
-  width: auto !important;
+  width: auto!important;
 }
 .pocketnet_iframe html.mobileview .wnd.normalizedmobile:not(.hiddenState) {
   contain: strict;
   /*.hideButton{
-                display: none!important;
-            }*/
+                  display: none!important;
+              }*/
 }
 .pocketnet_iframe html.mobileview .wnd.normalizedmobile:not(.hiddenState) .wndinner {
   width: 100%;
-  background: transparent !important;
+  background: transparent!important;
   will-change: transform;
-  box-shadow: none !important;
+  box-shadow: none!important;
 }
 .pocketnet_iframe html.mobileview .wnd.normalizedmobile:not(.hiddenState) .wndback {
   backface-visibility: hidden;
@@ -10824,15 +11264,17 @@
 .pocketnet_iframe html.mobileview .wnd.normalizedmobile:not(.hiddenState) .buttons {
   padding-bottom: 6em !important;
   position: relative;
-  height: auto !important;
-  border-radius: 0 !important;
-  padding-right: 0 !important;
+  height: auto!important;
+  border-radius: 0!important;
+  padding-right: 0!important;
+  max-width: 768px;
+  margin: 0 auto;
 }
 .pocketnet_iframe html.mobileview .wnd.normalizedmobile:not(.hiddenState) .buttons .close {
-  display: none !important;
+  display: none!important;
 }
 .pocketnet_iframe html.mobileview .wnd.normalizedmobile:not(.hiddenState) ._close {
-  backdrop-filter: none !important;
+  backdrop-filter: none!important;
   opacity: 0;
 }
 .pocketnet_iframe html.mobileview .wnd.normalizedmobile:not(.hiddenState) .closeline {
@@ -10851,13 +11293,13 @@
   transition: top 0.3s;
 }
 .pocketnet_iframe html.mobileview .wnd.normalizedmobile:not(.hiddenState) .wndinner {
-  max-height: none !important;
-  top: auto !important;
+  max-height: none!important;
+  top: auto!important;
   bottom: 0;
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
-  height: auto !important;
-  max-width: none !important;
+  height: auto!important;
+  max-width: none!important;
   -webkit-transform: translateY(100%);
   transform: translateY(100%);
   backface-visibility: hidden;
@@ -10905,7 +11347,7 @@
   width: 0;
 }
 .pocketnet_iframe html.mobileview .wnd.normalizedmobile:not(.hiddenState) .wndinner .wndcontent::-webkit-scrollbar {
-  display: none !important;
+  display: none!important;
 }
 .pocketnet_iframe html.mobileview .wnd.normalizedmobile:not(.hiddenState) .wndinner > div.buttons {
   display: none;
@@ -10915,9 +11357,9 @@
   margin: 0 auto;
 }
 .pocketnet_iframe html.mobileview .wnd.normalizedmobile:not(.hiddenState).fromtop .wndinner {
-  top: 0 !important;
-  bottom: auto !important;
-  border-radius: 0 !important;
+  top: 0!important;
+  bottom: auto!important;
+  border-radius: 0!important;
   -webkit-transform: translateY(-110%);
   transform: translateY(-110%);
 }
@@ -11016,27 +11458,27 @@
   transform: translateY(calc(-1 * var(--keyboardheight, 0) + 1px));
 }
 .pocketnet_iframe html.pipmode .pipped {
-  position: fixed !important;
-  left: 0 !important;
-  right: 0 !important;
-  top: 0 !important;
-  bottom: 0 !important;
-  width: 100% !important;
-  height: 100% !important;
-  z-index: 10000 !important;
-  max-height: none !important;
-  max-width: none !important;
-  transform: none !important;
+  position: fixed!important;
+  left: 0!important;
+  right: 0!important;
+  top: 0!important;
+  bottom: 0!important;
+  width: 100%!important;
+  height: 100%!important;
+  z-index: 10000!important;
+  max-height: none!important;
+  max-width: none!important;
+  transform: none!important;
 }
 .pocketnet_iframe html.pipmode .wnd ._expand,
 .pocketnet_iframe html.pipmode .wnd ._changeplace,
 .pocketnet_iframe html.pipmode .wnd ._close,
 .pocketnet_iframe html.pipmode .wnd .closeline {
-  display: none !important;
+  display: none!important;
 }
 .pocketnet_iframe html.pipmode .wnd .wndinner {
-  -webkit-transform: none !important;
-  transform: none !important;
+  -webkit-transform: none!important;
+  transform: none!important;
 }
 .pocketnet_iframe html.pipmode #content,
 .pocketnet_iframe html.pipmode .matrixchatwrapper {
@@ -11089,7 +11531,7 @@
 .pocketnet_iframe #application .embedEmojiPrivew,
 .pocketnet_iframe #application .emojionearea .emojionearea-button > div.emojionearea-button-open {
   position: relative;
-  background-image: none !important;
+  background-image: none!important;
 }
 .pocketnet_iframe #application .embedEmojiPrivew:after,
 .pocketnet_iframe #application .emojionearea .emojionearea-button > div.emojionearea-button-open:after {
@@ -11115,7 +11557,7 @@
 }
 .pocketnet_iframe #application .emojionearea .emojionearea-button > div.emojionearea-button-close {
   position: relative;
-  background-image: none !important;
+  background-image: none!important;
 }
 .pocketnet_iframe #application .emojionearea .emojionearea-button > div.emojionearea-button-close:after {
   position: absolute;
@@ -11722,6 +12164,17 @@
     aspect-ratio: 1.44;
   }
 }
+.pocketnet_iframe div#bc-root.pipped {
+  position: fixed;
+  left: 0!important;
+  top: 0!important;
+  bottom: 0!important;
+  right: 0!important;
+  border: 0!important;
+}
+.pocketnet_iframe div#bc-root.pipped .bc-video-container {
+  max-width: none!important;
+}
 .pocketnet_iframe .share_common {
   background: rgb(var(--background-total-theme));
 }
@@ -11771,6 +12224,11 @@
   border-bottom-left-radius: 12px;
   border-bottom-right-radius: 12px;
 }
+.pocketnet_iframe .share_common .commentsWrapper.commentsEmpty {
+  background: rgb(var(--background-total-theme));
+  padding: 0;
+  min-height: 1em;
+}
 .pocketnet_iframe .share_common .commentRegisterDiv .commentRegister {
   border-bottom-left-radius: 12px;
   border-bottom-right-radius: 12px;
@@ -11783,10 +12241,11 @@
 }
 .pocketnet_iframe .share_common .sbtnxs,
 .pocketnet_iframe .share_common .adr {
-  max-width: 30vw;
+  max-width: 25vw;
   overflow: hidden;
   text-overflow: ellipsis;
   vertical-align: middle;
+  vertical-align: -webkit-baseline-middle;
   display: inline-block;
   white-space: nowrap;
 }
@@ -11888,25 +12347,29 @@
 .pocketnet_iframe .share_common .repostShare {
   border-radius: 12px;
   border: 1px solid rgba(var(--neutral-grad-1), 0.5);
-  border-bottom: 1px solid rgba(var(--background-total-theme), 0.75);
-  border-right: 1px solid rgba(var(--background-total-theme), 0.75);
+  border-bottom: 1px solid rgba(var(--neutral-grad-1), 0.35);
+  border-right: 1px solid rgba(var(--neutral-grad-1), 0.35);
+  min-height: 120px;
   box-shadow: 0 5px 7px -5px rgba(var(--color-shadow-base), 0.4);
   margin-left: 0.5em;
   margin-right: 0.5em;
   margin-bottom: 0.5em;
 }
 .pocketnet_iframe .share_common .repostShare .share {
-  margin-bottom: 0 !important;
+  margin-bottom: 0!important;
 }
-.pocketnet_iframe .share_common .repostShare .share .videoTips {
-  display: none !important;
+.pocketnet_iframe .share_common .repostShare .share .videoTips:not(.tipsforstream) {
+  display: none!important;
+}
+.pocketnet_iframe .share_common .repostShare .share .videoTips.tipsforstream {
+  display: block!important;
 }
 .pocketnet_iframe .share_common .article .unsupportedplayer {
   padding: 1em;
   text-align: center;
 }
 .pocketnet_iframe .share_common .article .message b {
-  font-size: 1em !important;
+  font-size: 1em!important;
 }
 .pocketnet_iframe .share_common .article .message p img {
   max-width: 95%;
@@ -11919,7 +12382,7 @@
   margin: 0 auto;
 }
 .pocketnet_iframe .share_common .article .message span {
-  font-size: 1em !important;
+  font-size: 1em!important;
 }
 .pocketnet_iframe .share_common .medium-insert-embeds {
   position: relative;
@@ -12024,6 +12487,9 @@
   -o-transition: 0.3s;
   -webkit-transition: 0.3s;
   transition: 0.3s;
+}
+.pocketnet_iframe .share_common .videoWrapper .videoTips.tipsforstream {
+  bottom: 0;
 }
 .pocketnet_iframe .share_common .videoWrapper .videoTips .videoTip {
   position: absolute;
@@ -12319,7 +12785,7 @@
   background: transparent;
 }
 .pocketnet_iframe .share_common .images .imagesContainer.owlcar .imagesWrapper .image {
-  background-size: contain !important;
+  background-size: contain!important;
 }
 .pocketnet_iframe .share_common .images .imagesContainer.carousel {
   max-width: 450px;
@@ -12511,6 +12977,35 @@
   font-size: 0.8em;
   opacity: 0.8;
 }
+.pocketnet_iframe .share_common .translateApi {
+  margin-bottom: 0.5em;
+  display: flex;
+}
+.pocketnet_iframe .share_common .translateApi .translateto {
+  margin-right: 0.5em;
+  border-radius: 8px;
+  padding: 4px 10px;
+  background: rgb(var(--background-secondary-theme));
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+.pocketnet_iframe .share_common .translateApi .translateto i {
+  color: rgb(var(--color-bg-ac-bright));
+  margin-left: 0.25em;
+  display: none;
+}
+.pocketnet_iframe .share_common .translateApi .translateto span {
+  font-weight: 500;
+  font-size: 0.9em;
+  color: rgb(var(--neutral-grad-4));
+}
+.pocketnet_iframe .share_common .translateApi .translateto.active span {
+  color: rgb(var(--color-bg-ac-bright));
+}
+.pocketnet_iframe .share_common .translateApi .translateto.loading i {
+  display: block;
+}
 .pocketnet_iframe .share_common .tags {
   margin-bottom: 1em;
   max-width: 650px;
@@ -12621,7 +13116,7 @@
 .pocketnet_iframe .share_common .sharecnt.deleted .commentsWrapperHb,
 .pocketnet_iframe .share_common .sharecnt.deleted .metapanel,
 .pocketnet_iframe .share_common .sharecnt.deleted .sys {
-  display: none !important;
+  display: none!important;
 }
 .pocketnet_iframe .share_common .sharecnt.deleted .removeDescription {
   display: block;
@@ -12686,8 +13181,9 @@
   top: 0;
   background: rgb(var(--color-shadow-base));
   padding-top: 0;
-  border-radius: 0 !important;
-  margin-bottom: 0 !important;
+  border-radius: 0!important;
+  margin-bottom: 0!important;
+  contain: strict;
 }
 .pocketnet_iframe .share_common.fullScreenVideo .extrashare {
   display: block;
@@ -12897,40 +13393,40 @@
     padding-bottom: 0;
     border-radius: 0;
     /* #comments{			
-				
-            .caption{
-                padding-left: 1 * @rhythm;
-                padding-right: 2 * @rhythm;
-            }
-
-            .commentPaddingWrapper,
-            .post{
-                padding-left: 1 * @rhythm;
-                padding-right:  @rhythm;
-            }
-
-            .commentPaddingWrapper{
-                padding-right:  @rhythm;
-            }
-
-            .list .answer .postbody{
-                padding-left: 1 * @rhythm;
-                padding-right: @rhythm;
-            }
-
-            .answers{
-                .commentPaddingWrapper{
-                    padding-right: 0;
-                    padding-left: 0;
-                }
-            }				
-
-            .answer .posttable>div.postCellWrapper .postaction, 
-            .edit .posttable>div.postCellWrapper .postaction, 
-            .post .posttable>div.postCellWrapper .postaction{
-                text-align: center;
-            }
-        }*/
+          
+              .caption{
+                  padding-left: 1 * @rhythm;
+                  padding-right: 2 * @rhythm;
+              }
+  
+              .commentPaddingWrapper,
+              .post{
+                  padding-left: 1 * @rhythm;
+                  padding-right:  @rhythm;
+              }
+  
+              .commentPaddingWrapper{
+                  padding-right:  @rhythm;
+              }
+  
+              .list .answer .postbody{
+                  padding-left: 1 * @rhythm;
+                  padding-right: @rhythm;
+              }
+  
+              .answers{
+                  .commentPaddingWrapper{
+                      padding-right: 0;
+                      padding-left: 0;
+                  }
+              }				
+  
+              .answer .posttable>div.postCellWrapper .postaction, 
+              .edit .posttable>div.postCellWrapper .postaction, 
+              .post .posttable>div.postCellWrapper .postaction{
+                  text-align: center;
+              }
+          }*/
   }
   .pocketnet_iframe .share_common .pkoin {
     padding: 6px 8px;
@@ -13095,7 +13591,8 @@
     margin-right: 0;
   }
   .pocketnet_iframe .share_common .meta .metatable > div.metapanel {
-    width: 47px;
+    padding: 1em;
+    margin-right: 0.5em;
   }
   .pocketnet_iframe .share_common .meta .metatable > div.metapanel .metapanelitem {
     opacity: 1;
@@ -13213,7 +13710,7 @@
   cursor: pointer;
 }
 .pocketnet_iframe .common_share_article_wrapper .share .sharearticle .readarticlebutton {
-  display: block !important;
+  display: block!important;
 }
 .pocketnet_iframe .common_share_article_wrapper .share .sharearticle .readarticlebutton span {
   display: inline;
@@ -13232,7 +13729,7 @@
 }
 .pocketnet_iframe .common_share_article_wrapper .share .sharearticle .shareBgCaption .author .notificationturn,
 .pocketnet_iframe .common_share_article_wrapper .share .sharearticle .articleend .author .notificationturn {
-  display: none !important;
+  display: none!important;
 }
 .pocketnet_iframe .common_share_article_wrapper .share .sharearticle .shareBgCaption .forstars .itemwr,
 .pocketnet_iframe .common_share_article_wrapper .share .sharearticle .articleend .forstars .itemwr {
@@ -13291,6 +13788,19 @@
 }
 .pocketnet_iframe .common_share_article_wrapper .share .sharearticle .author {
   white-space: nowrap;
+}
+.pocketnet_iframe .common_share_article_wrapper .share .sharearticle .translateApi {
+  margin-bottom: 0;
+}
+.pocketnet_iframe .common_share_article_wrapper .share .sharearticle .translateApi .translateto {
+  margin-right: 0;
+  background: transparent;
+}
+.pocketnet_iframe .common_share_article_wrapper .share .sharearticle .translateApi .translateto span {
+  color: rgb(var(--text-on-bg-shadow-color));
+}
+.pocketnet_iframe .common_share_article_wrapper .share .sharearticle .translateApi .translateto.active span {
+  color: rgb(var(--color-bg-ac-bright));
 }
 .pocketnet_iframe .common_share_article_wrapper .share .sharearticle .shareBgCaption {
   height: 425px;
@@ -13486,7 +13996,7 @@
 }
 .pocketnet_iframe .common_share_article_wrapper .share .sharearticle .shareBgCaption.smallimage .articleCover {
   background-color: rgb(var(--color-shadow-base));
-  background-size: 100px auto !important;
+  background-size: 100px auto!important;
 }
 .pocketnet_iframe .common_share_article_wrapper .share .sharearticle .shareBgCaption.caption_small .captionmult {
   font-size: 1.5em;
@@ -13520,7 +14030,7 @@
 .pocketnet_iframe .common_share_article_wrapper .share .sharearticle.deleted .starstoppanel,
 .pocketnet_iframe .common_share_article_wrapper .share .sharearticle.deleted .socialsharewrapper,
 .pocketnet_iframe .common_share_article_wrapper .share .sharearticle.deleted .textscnts {
-  display: none !important;
+  display: none!important;
 }
 .pocketnet_iframe .common_share_article_wrapper .share .sharearticle.deleted .removeDescription {
   display: block;
@@ -13531,6 +14041,12 @@
 @media only screen and (min-width: 768px) {
   .pocketnet_iframe .common_share_article_wrapper .share .sharearticle .shareBgCaption.verticalcover {
     height: 520px;
+  }
+  .pocketnet_iframe .common_share_article_wrapper .share .sharearticle .shareBgCaption.verticalcover .translateApi .translateto span {
+    color: rgb(var(--text-color));
+  }
+  .pocketnet_iframe .common_share_article_wrapper .share .sharearticle .shareBgCaption.verticalcover .translateApi .translateto.active span {
+    color: rgb(var(--color-bg-ac-bright));
   }
   .pocketnet_iframe .common_share_article_wrapper .share .sharearticle .shareBgCaption.verticalcover .articleCover {
     left: 0;
@@ -14492,21 +15008,21 @@
 }
 .pocketnet_iframe .plyr:-webkit-full-screen {
   background: #000;
-  border-radius: 0 !important;
+  border-radius: 0!important;
   height: 100%;
   margin: 0;
   width: 100%;
 }
 .pocketnet_iframe .plyr:-ms-fullscreen {
   background: #000;
-  border-radius: 0 !important;
+  border-radius: 0!important;
   height: 100%;
   margin: 0;
   width: 100%;
 }
 .pocketnet_iframe .plyr:fullscreen {
   background: #000;
-  border-radius: 0 !important;
+  border-radius: 0!important;
   height: 100%;
   margin: 0;
   width: 100%;
@@ -14587,7 +15103,7 @@
 }
 .pocketnet_iframe .plyr:-webkit-full-screen {
   background: #000;
-  border-radius: 0 !important;
+  border-radius: 0!important;
   height: 100%;
   margin: 0;
   width: 100%;
@@ -14620,7 +15136,7 @@
 }
 .pocketnet_iframe .plyr:-moz-full-screen {
   background: #000;
-  border-radius: 0 !important;
+  border-radius: 0!important;
   height: 100%;
   margin: 0;
   width: 100%;
@@ -14653,7 +15169,7 @@
 }
 .pocketnet_iframe .plyr:-ms-fullscreen {
   background: #000;
-  border-radius: 0 !important;
+  border-radius: 0!important;
   height: 100%;
   margin: 0;
   width: 100%;
@@ -14686,7 +15202,7 @@
 }
 .pocketnet_iframe .plyr--fullscreen-fallback {
   background: #000;
-  border-radius: 0 !important;
+  border-radius: 0!important;
   height: 100%;
   margin: 0;
   width: 100%;
@@ -14866,10 +15382,10 @@
 .pocketnet_iframe .plyr__sr-only {
   clip: rect(1px, 1px, 1px, 1px);
   overflow: hidden;
-  border: 0 !important;
-  height: 1px !important;
-  padding: 0 !important;
-  position: absolute !important;
+  border: 0!important;
+  height: 1px!important;
+  padding: 0!important;
+  position: absolute!important;
   width: 1px !important;
 }
 .pocketnet_iframe .plyr [hidden] {
@@ -14947,7 +15463,7 @@
   background: 0 0;
   color: inherit;
   border: none;
-  padding: 0 !important;
+  padding: 0!important;
   font: inherit;
 }
 .pocketnet_iframe .owl-carousel.owl-loading {

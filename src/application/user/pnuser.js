@@ -114,8 +114,6 @@ class PNUser extends User {
 				let proxy = new Proxy(proxyData, {
                     get: (p, i) => {
 
-						console.log('proxyData', proxyData)
-
 						if(!proxyData.pair){
 							proxyData.pair = p.keyPair
 							proxyData.public = p.keyPair.publicKey.toString("hex")

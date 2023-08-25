@@ -36,6 +36,10 @@
 
 <script>
 import { mapState } from "vuex";
+
+
+var exts = ["bin", "dat", "swf", "doc", "docx", "sig", "tif", "cdr", "xls", "xlsx", "p7s", "mkv", "tmp", "db", "isz", "mdf", "jpg", "cr2", "fb2", "iso", "svg", "exe", "mdx", "vob", "ppt", "xls", "dcm", "vsd", "mov", "img", "pdf", "jpg", "jfif", "png"]
+
 export default {
 	name: "eventsurl",
 	props: {
@@ -120,17 +124,13 @@ export default {
 
 					var ch = this.clearurl.split(/\//g)
 
-					console.log('ch', ch)
-
 					if (ch.length > 2){
 						var ls = ch[ch.length - 1] || ''
-
-						console.log('ls', ls)
 
 
 						var lsc = ls.split('.')
 
-						if (lsc.length == 2 && lsc[lsc.length - 1].length == 3){
+						if (lsc.length == 2 && exts.indexOf(lsc[lsc.length - 1]) > -1){
 							return 'file'
 						}
 					}

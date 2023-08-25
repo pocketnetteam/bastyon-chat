@@ -734,17 +734,19 @@ var store = new Vuex.Store({
 				return r.summary;
 			});
 
-			commit("SET_PRECHATS_TO_STORE", chats);
+			//commit("SET_PRECHATS_TO_STORE", chats);
+			commit("SET_CHATS_TO_STORE", chats);
+			
 
 			return store._vm.core.mtrx.kit.allchatmembers(m_chats).then((r) => {
-				commit("SET_CHATS_TO_STORE", chats);
+
 				commit(
 					"SET_CHATS_USERS",
 					store._vm.core.mtrx.kit.usersFromChats(m_chats)
 				);
 
-
 				return store._vm.core.mtrx.kit.fillContacts(m_chats);
+				
 			})
 
 		},
