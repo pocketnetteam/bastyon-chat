@@ -48,9 +48,9 @@
 							:class="{
 								'small': true,
 								'button': true,
-								'rounded': true,
-								'disabled': streamMode && !videoMeta?.isLive
+								'rounded': true
 							}"
+							:style="`visibility: ${ streamMode && !videoMeta?.isLive ? 'hidden' : 'visible' }`"
 							@click="join"
 						>
 							{{ $t("button.join") }}
