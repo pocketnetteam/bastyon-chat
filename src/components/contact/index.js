@@ -52,5 +52,9 @@ export default {
 		active: (state) => state.active,
 	}),
 
-	methods: {},
+	methods: {
+		close : function(){
+			this.$emit('close')
+		}
+	},
 };

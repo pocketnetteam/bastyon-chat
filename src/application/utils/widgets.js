@@ -109,6 +109,8 @@ var PNWIDGETS = function () {
 				commentid: parsed_url.searchParams.get("commentid"),
 				parentid: parsed_url.searchParams.get("parentid"),
 			},
+
+			node : parsed_url.searchParams.get('node') || null
 		};
 
 		if (connect) {
@@ -132,6 +134,8 @@ var PNWIDGETS = function () {
 			id = txid;
 			action = "transaction";
 		}
+
+		
 
 		return {
 			action: action,

@@ -47,14 +47,14 @@ export default {
 			if (!this.type) return false;
 
 			if (this.type.id == "privategroup") {
-				return this.selectedLength > 1;
+				if(this.groupName && this.selectedLength > 0) return true
 			}
 
 			if (this.type.id == "publicgroup") {
-				if (this.groupName) return true;
-
-				return false;
+				if(this.groupName && this.selectedLength > 0) return true
 			}
+
+			return false;
 		},
 
 		selectedLength: function () {
@@ -139,6 +139,9 @@ export default {
 					],
 				})
 				.then((chat) => {
+
+					this.$store.state.globalpreloader = false;
+					
 					return chat;
 				})
 				.catch((e) => {

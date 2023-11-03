@@ -1,6 +1,6 @@
 <template>
 	<div id="contactid">
-		<contact v-if="contact" :contact="contact" />
+		<contact v-if="contact" @close="close" :contact="contact" />
 	</div>
 </template>
 
@@ -29,7 +29,11 @@ export default {
 		},
 	}),
 
-	methods: {},
+	methods: {
+		close : function(){
+			this.$emit('close')
+		}
+	},
 
 	mounted: function () {
 		if (this.id) this.core.user.usersInfo(this.id, true).then((r) => {});

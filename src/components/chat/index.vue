@@ -49,6 +49,7 @@
 				v-if="
 					m_chat &&
 					!userBanned?.value &&
+					membership && 
 					!['join', 'ban'].includes(membership)
 				"
 				class="joinwrapper"

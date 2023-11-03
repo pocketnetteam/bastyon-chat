@@ -484,6 +484,10 @@ export default {
 
 		if (this.storagekey && localStorage[this.storagekey]) {
 			this.text = localStorage[this.storagekey];
+
+			setTimeout(() => {
+				this.textarea_resize()
+			}, 50)
 		}
 	},
 };

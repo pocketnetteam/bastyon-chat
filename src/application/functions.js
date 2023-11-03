@@ -1596,6 +1596,8 @@ f.saveFileCordova = function (file, name, clbk, todownloads) {
 			break;
 	}
 
+	console.log('file, name', file, name, todownloads)
+
 	var onsuccess = function (fileSystem) {
 		fileSystem.getDirectory(
 			"Download",
@@ -1607,10 +1609,16 @@ f.saveFileCordova = function (file, name, clbk, todownloads) {
 					function (entry) {
 						// After you save the file, you can access it with this URL
 						var myFileUrl = entry.toURL();
+						var haserror = false
 
 						entry.createWriter(
 							function (writer) {
+								console.log('myFileUrl', myFileUrl)
 								writer.onwriteend = function (evt) {
+
+									if(haserror) return
+
+									console.log('evt', evt)
 									//sitemessage("File " + name + " successfully downloaded");
 
 									if (window.galleryRefresh) {
@@ -1629,6 +1637,8 @@ f.saveFileCordova = function (file, name, clbk, todownloads) {
 								};
 
 								writer.onerror = function (e) {
+									haserror = true
+									console.error(e)
 									if (clbk) clbk(null, e);
 								};
 
@@ -1638,21 +1648,11 @@ f.saveFileCordova = function (file, name, clbk, todownloads) {
 								writer.write(file);
 							},
 							function (error) {
-								/*dialog({
-                        html : "Error: Could not create file writer, " + error.code,
-                        class : "one"
-                    })*/
-
 								if (clbk) clbk(null, error);
 							}
 						);
 					},
 					function (error) {
-						/*dialog({
-                    html : "Error: Could not create file, " + error.code,
-                    class : "one"
-                })*/
-
 						if (clbk) clbk(null, error);
 					}
 				);
@@ -1671,7 +1671,11 @@ f.saveFileCordova = function (file, name, clbk, todownloads) {
 			function (fileSystem) {
 				onsuccess(fileSystem.root);
 			},
-			onerror
+			function(e){
+				console.log('er', e)
+
+				f.saveFileCordova(file, name, clbk)
+			}
 		);
 	} else {
 		window.resolveLocalFileSystemURL(storageLocation, onsuccess, onerror);

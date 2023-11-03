@@ -31,7 +31,7 @@
 							:class="{ orange: cancomplete, ghost: !cancomplete }"
 						>
 							{{ $t("caption.create") }} <i :class="type.icon"></i>
-							<span v-if="selectedLength">{{ selectedLength }}</span>
+							<span class="selectedLength" v-if="selectedLength">{{ selectedLength }}</span>
 						</button>
 					</div>
 				</div>

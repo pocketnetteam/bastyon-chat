@@ -12,7 +12,7 @@
 	>
 		<div class="viewWrapper">
 			<div class="uviewwr">
-				<userView :userinfo="contact" :blocked="blocked" />
+				<userView @close="close" :userinfo="contact" :blocked="blocked" />
 			</div>
 		</div>
 		<div class="actionsWrapper" v-if="contact.id !== activeuser.id">
