@@ -426,6 +426,13 @@ export default {
 		mobile: function () {
 			this.$store.commit("setMobile", this.mobile);
 			this.$store.commit("minimize");
+
+			setTimeout(() => {
+				this.$router.push("/chats").catch((e) => {})
+			}, 300)
+
+			this.clearMatches();
+			
 		},
 		pocketnet: function () {
 			this.$store.commit("setPocketnet", this.pocketnet);

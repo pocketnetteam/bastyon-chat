@@ -680,6 +680,7 @@ class MTRX {
 
 		var fileInfo = {};
 		fileInfo.name = file.name;
+		fileInfo.type = file.type;
 		fileInfo.size = file.size;
 
 		var encpromise = (() => Promise.resolve(file))();
@@ -873,9 +874,15 @@ class MTRX {
 
 		return this.download(event.event.content.pbody.url)
 			.then((blob) => {
-				return chat.pcrypto.decryptFile(blob, decryptKey);
+
+				console.log("DOWNLOADED BLOB", blob, event.event.content.pbody)
+
+				return chat.pcrypto.decryptFile(blob, decryptKey, null, event.event.content.pbody);
 			})
 			.then((r) => {
+
+				console.log("R" ,r , event)
+
 				return Promise.resolve({
 					file: r,
 					name: event.event.content.pbody.name,
@@ -1029,10 +1036,8 @@ class MTRX {
 
 				}).then((r) => {
 
-					return r.file
-				})
-				.then((r) => {
-					return this.sendFile(m_chat, r, {}, { from: share.from })
+					return this.sendFile(m_chat, r.file, {}, { from: share.from })
+					
 				})
 
 				///this.sendFile(m_chat, file, {}, { from: share.from })

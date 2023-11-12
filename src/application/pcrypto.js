@@ -643,8 +643,8 @@ var PcryptoRoom = async function (pcrypto, chat, { ls, lse }) {
 			});
 	};
 
-	self.decryptFile = async function (file, secret, p) {
-		return pcryptoFile.decryptFile(file, secret, p).then((file) => {
+	self.decryptFile = async function (file, secret, p, additionalFinfo) {
+		return pcryptoFile.decryptFile(file, secret, p, additionalFinfo).then((file) => {
 			return Promise.resolve(file);
 		});
 	};
@@ -1056,16 +1056,22 @@ var PcryptoFile = function () {
 	};
 
 	var convertFile = function (blob, file) {
+		console.log('blob, file', blob, file)
 		return new (window.wFile || window.File)([blob], "encrypted", {
 			type: "encrypted/" + file.type,
 			name: file.name,
 		});
 	};
 
-	var convertDecryptedFile = function (blob, file) {
-		return new (window.wFile || window.File)([blob], "decrypted", {
-			type: (file.type || "").replace("encrypted/", ""),
-			name: "Unnamed",
+	var convertDecryptedFile = function (blob, file, additionalFinfo = {}) {
+
+		console.log('blob, file', blob, file, additionalFinfo)
+
+		var name = file.name || additionalFinfo.name || "decrypted"
+		var type = (file.type || "").replace("encrypted/", "") || (additionalFinfo.type || "").replace("encrypted/", "")
+		return new (window.wFile || window.File)([blob], name, {
+			type,
+			name,
 		});
 	};
 
@@ -1121,14 +1127,13 @@ var PcryptoFile = function () {
 			});
 	};
 
-	self.decryptFile = function (file, secret, p) {
+	self.decryptFile = function (file, secret, p, additionalFinfo) {
 		return readFile(file)
 			.then((r) => {
-
 				return self.decrypt(r, secret, p);
 			})
 			.then((decrypted) => {
-				return Promise.resolve(convertDecryptedFile(decrypted, file));
+				return Promise.resolve(convertDecryptedFile(decrypted, file, additionalFinfo));
 			});
 	};
 

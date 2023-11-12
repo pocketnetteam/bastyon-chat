@@ -49,7 +49,7 @@
 				v-if="
 					m_chat &&
 					!userBanned?.value &&
-					membership && 
+					(membership || streamMode) && 
 					!['join', 'ban'].includes(membership)
 				"
 				class="joinwrapper"

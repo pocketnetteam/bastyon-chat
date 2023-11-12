@@ -147,6 +147,8 @@ class Notifier {
 		if (!iftime) return;
 
 		var r = this.core.mtrx.isReaded(event, true)
+
+		if (chat?.summary?.stream) return
 		
 		if (r) return;
 
