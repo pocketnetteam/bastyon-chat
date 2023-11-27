@@ -184,12 +184,12 @@ class Notifier {
 			position = "top-left";
 		}
 
-		var formatIcon = info.icon ? info.icon.replace('bastyon.com:8092', 'pocketnet.app:8092').replace('test.pocketnet', 'pocketnet') : null;
+		var formatIcon = info.icon || null;
 		
 		if (formatIcon && typeof replaceArchiveInImage != 'undefined') {
 			formatIcon =  replaceArchiveInImage(formatIcon);
 		};
-		
+
 		this.core.vm.$message({
 			event: info.event,
 			title: info.title,
