@@ -1049,7 +1049,7 @@ export default {
 							fu = this.getFileIosCordova(
 								f.isios()
 									? path
-									: window.cordova.file.externalDataDirectory + path
+									: (window.cordova.file.externalDataDirectory + path)
 							).then((blob) => {
 								return Promise.resolve({
 									data: blob,

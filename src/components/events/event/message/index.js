@@ -731,6 +731,9 @@ export default {
 		},
 		
 		setmenu: function() {
+
+			if (document.activeElement)
+				document.activeElement.blur();
 			/*this.core.menu({
 				items: this.menu(),
 				item: {},

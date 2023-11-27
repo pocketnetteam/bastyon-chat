@@ -107,7 +107,7 @@ export default {
 				return _.indexOf(g, url.host) > -1 && _.indexOf(g, domain) > -1;
 			});
 
-			if (m && this.url.indexOf("embedVideo.php") == -1 && this.url.indexOf("docs/") == -1) {
+			if (m && this.url.indexOf("embedVideo.php") == -1 && this.url.indexOf("docs/") == -1 && this.url.indexOf("/blockexplorer") == -1) {
 				return "pocketnet";
 			}
 

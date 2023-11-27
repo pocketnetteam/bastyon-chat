@@ -53,7 +53,7 @@ var PcryptoRoom = async function (pcrypto, chat, { ls, lse }) {
 
 	var lcachekey = "pcrypto8_" + chat.roomId + "_";
 	var ecachekey = "e_pcrypto8_";
-	var usershashVersion = 11
+	var usershashVersion = 12
 	var cache = {};
 
 	self.preparedUsers = function (time, v) {
@@ -589,6 +589,7 @@ var PcryptoRoom = async function (pcrypto, chat, { ls, lse }) {
 				}
 
 				if (!body[bodyindex]) {
+					console.log('body', body, bodyindex)
 					throw new Error("emptyforme");
 				}
 
@@ -740,7 +741,10 @@ var PcryptoRoom = async function (pcrypto, chat, { ls, lse }) {
 			keyindex = sender;
 		}
 
-		if (!body[bodyindex]) throw new Error("emptyforme");
+		if (!body[bodyindex]) {
+			console.log('body', body, bodyindex, event)
+			throw new Error("emptyforme");
+		}
 
 		var decryptedKey = await self.decrypt(
 			keyindex,
@@ -782,7 +786,9 @@ var PcryptoRoom = async function (pcrypto, chat, { ls, lse }) {
 	};
 
 	var usershash = function () {
-		var users = self.preparedUsers();
+		var users = self.preparedUsers(undefined, self.version);
+
+		console.log("users", users)
 
 		var hash = f.md5(
 			_.filter(
@@ -1068,7 +1074,9 @@ var PcryptoFile = function () {
 		console.log('blob, file', blob, file, additionalFinfo)
 
 		var name = file.name || additionalFinfo.name || "decrypted"
-		var type = (file.type || "").replace("encrypted/", "") || (additionalFinfo.type || "").replace("encrypted/", "")
+		var type = (additionalFinfo.type || "").replace("encrypted/", "") || (file.type || "").replace("encrypted/", "")
+
+
 		return new (window.wFile || window.File)([blob], name, {
 			type,
 			name,

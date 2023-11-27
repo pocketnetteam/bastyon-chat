@@ -369,6 +369,8 @@ export default {
 			default: false,
 		},
 
+		device: String,
+
 		cssrules: {
 			type: String,
 			default: []
@@ -895,11 +897,12 @@ export default {
 		core = new Core(this, {
 			domain: domain,
 			mtrx: {
+				device : this.device,
 				logger: function () {},
 			},
 
 			listofproxies: listofproxies,
-
+			
 			servers: {
 				pocketnet: "https://pocketnet.app:8888",
 			},

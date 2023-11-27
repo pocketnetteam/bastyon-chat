@@ -1596,12 +1596,15 @@ f.saveFileCordova = function (file, name, clbk, todownloads) {
 			break;
 	}
 
+	if(f.isios() && todownloads) storageLocation = cordova.file.documentsDirectory
+
 	console.log('file, name', file, name, todownloads)
 
 	var onsuccess = function (fileSystem) {
+		console.log('success')
 		fileSystem.getDirectory(
 			"Download",
-			{ exclusive: false },
+			{ exclusive: false, create : true },
 			function (directory) {
 				directory.getFile(
 					name,
@@ -1610,6 +1613,8 @@ f.saveFileCordova = function (file, name, clbk, todownloads) {
 						// After you save the file, you can access it with this URL
 						var myFileUrl = entry.toURL();
 						var haserror = false
+
+						console.log('entry', entry)
 
 						entry.createWriter(
 							function (writer) {
@@ -1633,6 +1638,7 @@ f.saveFileCordova = function (file, name, clbk, todownloads) {
 										clbk({
 											name,
 											url: myFileUrl,
+											nativeURL : entry.nativeURL
 										});
 								};
 
@@ -1648,23 +1654,30 @@ f.saveFileCordova = function (file, name, clbk, todownloads) {
 								writer.write(file);
 							},
 							function (error) {
+								console.error(error)
+								
 								if (clbk) clbk(null, error);
 							}
 						);
 					},
 					function (error) {
+						console.error(error)
 						if (clbk) clbk(null, error);
 					}
 				);
+			}, function(error){
+				console.error(error)
+				if (clbk) clbk(null, error);
 			}
 		);
 	};
 
 	var onerror = function (evt) {
+		console.error(evt)
 		if (clbk) clbk(null, evt);
 	};
 
-	if (todownloads) {
+	if (todownloads && !f.isios()) {
 		window.requestFileSystem(
 			LocalFileSystem.PERSISTENT,
 			0,
@@ -1672,12 +1685,13 @@ f.saveFileCordova = function (file, name, clbk, todownloads) {
 				onsuccess(fileSystem.root);
 			},
 			function(e){
-				console.log('er', e)
-
 				f.saveFileCordova(file, name, clbk)
 			}
 		);
 	} else {
+
+
+
 		window.resolveLocalFileSystemURL(storageLocation, onsuccess, onerror);
 	}
 };

@@ -412,7 +412,7 @@ export default {
 			this.downloading = true;
 
 			this.core.mtrx
-				.downloadFile(this.chat, this.event).then((r) => {
+				.downloadFile(this.chat, this.event).then(({name, url, type, nativeURL}) => {
 					
 					this.downloaded = true;
 
@@ -420,6 +420,21 @@ export default {
 						icon: "success",
 						message: "Downloaded",
 					});
+
+					
+
+					if(window.cordova && typeof cordova.plugins.fileOpener2 != 'undefined'){
+
+						cordova.plugins.fileOpener2.open(
+							nativeURL || url,
+							type,
+							{
+								error : function(err){ console.error(err) },
+								success : function(){ console.log("SUCCESS") }
+							}
+						);
+
+					}
 
 				})
 				.catch((e) => {

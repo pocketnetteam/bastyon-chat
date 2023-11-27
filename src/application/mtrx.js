@@ -28,6 +28,9 @@ class MTRX {
 		this.dversion = "2";
 		this.backup = {};
 		this.db = null;
+		this.device = p.device
+
+		console.log('this.device', core, this.device)
 
 		this.customrequest = true;
 
@@ -171,7 +174,13 @@ class MTRX {
 			baseUrl: this.baseUrl,
 		};
 
+		if (this.device){
+			opts.deviceId = this.device
+		}
+
 		if (this.customrequest) opts.request = this.request;
+
+		console.log('opts', opts)
 
 		var client = this.createMtrxClient(opts);
 
@@ -179,6 +188,7 @@ class MTRX {
 			var userData = await client.login("m.login.password", {
 				user: this.credentials.username,
 				password: this.credentials.password,
+				device_id : this.device
 			});
 		} catch (e) {
 			if (e && e.indexOf && e.indexOf("M_USER_DEACTIVATED") > -1) {
@@ -273,6 +283,7 @@ class MTRX {
 			this.store = this.client.store;
 			this.ready = true;
 		} catch (e) {
+			console.error(e)
 			this.error = e;
 		}
 
@@ -898,12 +909,18 @@ class MTRX {
 			.then((r) => {
 				if (window.cordova && f.saveFileCordova) {
 					return new Promise((resolve, reject) => {
-						f.saveFileCordova(r.file, r.name, function (i, e) {
+						f.saveFileCordova(r.file, r.name, function (i = {}, e) {
 							if (e) {
 								console.error(e);
 							}
 
-							if (!e) resolve();
+							if (!e) {
+
+								console.log("Rfile", r, i)
+
+								i.type = r.type
+								resolve(i);
+							}
 							else reject("unable");
 						}, true);
 					});
