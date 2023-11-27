@@ -61,9 +61,11 @@ export default {
 	methods: {
 		load: function () {
 			if (this.src) {
-				this.imageSrc = this.src
-					.replace("bastyon.com:8092", "pocketnet.app:8092")
-					.replace("test.pocketnet", "pocketnet");
+				this.imageSrc = this.src;
+			
+			if (this.imageSrc && typeof replaceArchiveInImage != 'undefined') {
+				this.imageSrc =  replaceArchiveInImage(this.imageSrc);
+			};
 
 				var image = new Image();
 
