@@ -82,7 +82,7 @@ export default {
 
 		show: function (chunk) {
 			this.core.mtrx.kit.usersInfoById(chunk.id).then((r) => {
-				core.mtrx.opencontact(r);
+				this.core.mtrx.opencontact(r);
 			});
 		},
 	},
