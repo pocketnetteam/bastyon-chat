@@ -24,15 +24,27 @@ export default {
 	data() {
 		return {
 			user_id: /\w{68}:/,
-			userCalled: /@\w{68}:\w{1,50}/g,
+			userCall: /@\w{68}:\w{1,50}(?=\s)/g,
+			userPublicCall: /@\w{68}:\w{1,70}:\w{1,70}:\w{1,70}:\w{1,50}(?=\s)/g,
+			userUnrecognizedCall: /@[\w:]+:\w{1,50}(?=\s)/g,
 		};
 	},
 	computed: {
 		chunks: function () {
 			if (this.message.indexOf("@") == -1) return [this.message];
 
-			var c = this.message.split(this.userCalled);
-			var us = Array.from(this.message.matchAll(this.userCalled), (m) => m[0]);
+			let userCallRegex;
+
+			if (this.userCall.test(this.message)) {
+				userCallRegex = userCall;
+			} else if (this.userPublicCall.test(this.message)) {
+				userCallRegex = userPublicCall;
+			} else {
+				userCallRegex = userUnrecognizedCall;
+			}
+
+			var c = this.message.split(userCallRegex);
+			var us = Array.from(this.message.matchAll(userCallRegex), (m) => m[0]);
 
 			var r = [];
 
