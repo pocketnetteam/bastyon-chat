@@ -27,8 +27,7 @@ export default {
 			);
 		},
 		readyChat: function () {
-			const
-				chats = this.$store.state.chats,
+			const chats = this.$store.state.chats,
 				chatID = this.tetatetid;
 
 			return _.filter(

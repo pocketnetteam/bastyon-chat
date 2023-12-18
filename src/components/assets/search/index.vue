@@ -13,8 +13,6 @@
 	>
 		<div class="searchWrapper">
 			<div class="iconWrapper">
-
-				
 				<i
 					v-if="!chat || (!searchTxt && (collapsed === null || collapsed))"
 					class="fas fa-search"

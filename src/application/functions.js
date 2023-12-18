@@ -1564,25 +1564,23 @@ f.fetchLocal = function (url) {
 	});
 };
 
-f.superXSS = function(str, p){
-
-	if(!p) p = {
-		stripIgnoreTag : true,
-		whiteList: {}
-	}
+f.superXSS = function (str, p) {
+	if (!p)
+		p = {
+			stripIgnoreTag: true,
+			whiteList: {},
+		};
 
 	var l = str.length;
 
-	var nstr = filterXSS(str, p)
+	var nstr = filterXSS(str, p);
 
-	if(!nstr.length || l == nstr.length){
-		return nstr
+	if (!nstr.length || l == nstr.length) {
+		return nstr;
+	} else {
+		return f.superXSS(nstr, p);
 	}
-	else{
-		return f.superXSS(nstr, p)
-	}
-
-}
+};
 
 f.saveFileCordova = function (file, name, clbk, todownloads) {
 	var storageLocation = "";
@@ -1596,15 +1594,16 @@ f.saveFileCordova = function (file, name, clbk, todownloads) {
 			break;
 	}
 
-	if(f.isios() && todownloads) storageLocation = cordova.file.documentsDirectory
+	if (f.isios() && todownloads)
+		storageLocation = cordova.file.documentsDirectory;
 
-	console.log('file, name', file, name, todownloads)
+	console.log("file, name", file, name, todownloads);
 
 	var onsuccess = function (fileSystem) {
-		console.log('success')
+		console.log("success");
 		fileSystem.getDirectory(
 			"Download",
-			{ exclusive: false, create : true },
+			{ exclusive: false, create: true },
 			function (directory) {
 				directory.getFile(
 					name,
@@ -1612,18 +1611,17 @@ f.saveFileCordova = function (file, name, clbk, todownloads) {
 					function (entry) {
 						// After you save the file, you can access it with this URL
 						var myFileUrl = entry.toURL();
-						var haserror = false
+						var haserror = false;
 
-						console.log('entry', entry)
+						console.log("entry", entry);
 
 						entry.createWriter(
 							function (writer) {
-								console.log('myFileUrl', myFileUrl)
+								console.log("myFileUrl", myFileUrl);
 								writer.onwriteend = function (evt) {
+									if (haserror) return;
 
-									if(haserror) return
-
-									console.log('evt', evt)
+									console.log("evt", evt);
 									//sitemessage("File " + name + " successfully downloaded");
 
 									if (window.galleryRefresh) {
@@ -1638,13 +1636,13 @@ f.saveFileCordova = function (file, name, clbk, todownloads) {
 										clbk({
 											name,
 											url: myFileUrl,
-											nativeURL : entry.nativeURL
+											nativeURL: entry.nativeURL,
 										});
 								};
 
 								writer.onerror = function (e) {
-									haserror = true
-									console.error(e)
+									haserror = true;
+									console.error(e);
 									if (clbk) clbk(null, e);
 								};
 
@@ -1654,26 +1652,27 @@ f.saveFileCordova = function (file, name, clbk, todownloads) {
 								writer.write(file);
 							},
 							function (error) {
-								console.error(error)
-								
+								console.error(error);
+
 								if (clbk) clbk(null, error);
 							}
 						);
 					},
 					function (error) {
-						console.error(error)
+						console.error(error);
 						if (clbk) clbk(null, error);
 					}
 				);
-			}, function(error){
-				console.error(error)
+			},
+			function (error) {
+				console.error(error);
 				if (clbk) clbk(null, error);
 			}
 		);
 	};
 
 	var onerror = function (evt) {
-		console.error(evt)
+		console.error(evt);
 		if (clbk) clbk(null, evt);
 	};
 
@@ -1684,14 +1683,11 @@ f.saveFileCordova = function (file, name, clbk, todownloads) {
 			function (fileSystem) {
 				onsuccess(fileSystem.root);
 			},
-			function(e){
-				f.saveFileCordova(file, name, clbk)
+			function (e) {
+				f.saveFileCordova(file, name, clbk);
 			}
 		);
 	} else {
-
-
-
 		window.resolveLocalFileSystemURL(storageLocation, onsuccess, onerror);
 	}
 };
@@ -1921,126 +1917,111 @@ f.setCaretPosition = function (ctrl, start, end) {
 	}
 };
 
-f.processArray = function(array, fn) {
+f.processArray = function (array, fn) {
 	var results = [];
-	return array.reduce(function(p, item) {
-		return p.then(function() {
-			return fn(item).then(function(data) {
+	return array.reduce(function (p, item) {
+		return p.then(function () {
+			return fn(item).then(function (data) {
 				results.push(data);
 				return results;
 			});
 		});
 	}, Promise.resolve());
-}
-
+};
 
 f.bw = function (s) {
-    return s.split(/[ \t\v\r\n\f,.]+/)
-}
+	return s.split(/[ \t\v\r\n\f,.]+/);
+};
 
 f.stringComparison = function (s1, s2, p = 0.5) {
+	var w1 = f.bw(s1),
+		w2 = f.bw(s2);
 
-    var w1 = f.bw(s1),
-        w2 = f.bw(s2)
-
-    return _.filter(w1, function (w) {
-
-        return _.find(w2, function (ww) {
-
-            return f.wordComparison(w, ww) > p
-        })
-    }).length > 0 ? true : false
-
-}
+	return _.filter(w1, function (w) {
+		return _.find(w2, function (ww) {
+			return f.wordComparison(w, ww) > p;
+		});
+	}).length > 0
+		? true
+		: false;
+};
 
 f.wordComparison = function (s1, s2) {
+	if (!s1) s1 = "";
+	if (!s2) s2 = "";
 
-    if (!s1) s1 = ''
-    if (!s2) s2 = ''
+	var hash = function (s) {
+		var ps = _.sortBy(f.bw(s), function (w) {
+			return w.length;
+		}).join(" ");
 
+		return ps.toLowerCase().replace(/[^\p{L}\p{N}\p{Z}]/gu, "");
+	};
 
-    var hash = function (s) {
+	var makeTr = function (w) {
+		var trs = {};
 
-        var ps = _.sortBy(f.bw(s), function (w) {
-            return w.length
-        }).join(' ')
+		var takeC = function (index) {
+			var c;
 
+			if (index < 0 || index >= w.length) c = "_";
+			else c = w[index];
 
+			return c;
+		};
 
-        return ps.toLowerCase().replace(/[^\p{L}\p{N}\p{Z}]/gu, '')
-    }
+		for (var i = -1; i <= w.length; i++) {
+			var tr = "";
 
-    var makeTr = function (w) {
-        var trs = {};
+			for (var j = i - 1; j <= i + 1; j++) {
+				tr = tr + takeC(j);
+			}
 
-        var takeC = function (index) {
-            var c;
+			trs[tr] = 1;
+		}
 
-            if (index < 0 || index >= w.length) c = "_";
+		return trs;
+	};
 
-            else c = w[index];
+	var t1 = makeTr(hash(s1)),
+		t2 = makeTr(hash(s2));
 
-            return c;
-        }
+	var c = 0,
+		m = Math.max(_.toArray(t1).length, _.toArray(t2).length);
 
-        for (var i = -1; i <= w.length; i++) {
+	_.each(t1, function (t, index) {
+		if (t2[index]) c++;
+	});
 
-            var tr = "";
-
-            for (var j = i - 1; j <= i + 1; j++) {
-                tr = tr + takeC(j);
-            }
-
-
-            trs[tr] = 1;
-        }
-
-        return trs;
-    }
-
-
-    var t1 = makeTr(hash(s1)),
-        t2 = makeTr(hash(s2));
-
-
-    var c = 0,
-        m = Math.max(_.toArray(t1).length, _.toArray(t2).length)
-
-    _.each(t1, function (t, index) {
-
-        if (t2[index]) c++;
-
-    })
-
-    return c / m;
-
-
-}
+	return c / m;
+};
 
 f.clientsearch = function (value, arr, exe) {
-    var txt = value
-    var ctxt = txt.toLowerCase().replace(/[^\p{L}\p{N}\p{Z}]/gu, '')
+	var txt = value;
+	var ctxt = txt.toLowerCase().replace(/[^\p{L}\p{N}\p{Z}]/gu, "");
 
-    return _.filter(arr, function (obj) {
+	return _.filter(arr, function (obj) {
+		var txtf = obj;
 
-        var txtf = obj
+		if (_.isObject(txtf)) {
+			if (!exe) return;
 
-        if (_.isObject(txtf)) {
+			txtf = exe(txtf);
+		}
 
-            if (!exe) return
+		if (!txtf) return;
 
-            txtf = exe(txtf)
-        }
+		var stext = txtf;
 
-        if (!txtf) return
+		var ctext = stext.toLowerCase().replace(/[^\p{L}\p{N}\p{Z}]/gu, "");
 
-        var stext = txtf
-
-        var ctext = stext.toLowerCase().replace(/[^\p{L}\p{N}\p{Z}]/gu, '')
-
-        if ((ctext && ctext.indexOf(ctxt) > -1) || f.stringComparison(txt, stext, 0.9)) return true
-    })
-}
+		if (
+			(ctext && ctext.indexOf(ctxt) > -1) ||
+			f.stringComparison(txt, stext, 0.9)
+		)
+			return true;
+	});
+};
 
 f.ObjDiff = ObjDiff;
 f._arrayBufferToBase64 = _arrayBufferToBase64;

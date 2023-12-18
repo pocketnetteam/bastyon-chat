@@ -12,19 +12,18 @@ export default {
 
 	props: {
 		chats: Array,
-		search : String,
+		search: String,
 		mode: {
 			default: "",
 			type: String,
 		},
-		
 	},
 
 	data: function () {
 		return {
 			loading: false,
-			loadedUsers : {},
-			loadedingUsers : {},
+			loadedUsers: {},
+			loadedingUsers: {},
 			users: [],
 			contacts: [],
 			lists: [
@@ -39,23 +38,29 @@ export default {
 					action: "navigateToRoomFromMsg",
 				},
 			],
-			processresult : null,
+			processresult: null,
 			searchChanged: true,
-			processing : false
+			processing: false,
 		};
 	},
 
-	beforeDestroy : function(){
-		if(this.process) this.process.stop()
+	beforeDestroy: function () {
+		if (this.process) this.process.stop();
 	},
 
 	computed: {
 		...mapState(["contactsMap", "share"]),
 
-		filteredListsEmpty : function(){
-			return _.reduce(this.filteredLists, (m, i) => {
-				return m + i.items.length
-			}, 0) == 0 ? true : false
+		filteredListsEmpty: function () {
+			return _.reduce(
+				this.filteredLists,
+				(m, i) => {
+					return m + i.items.length;
+				},
+				0
+			) == 0
+				? true
+				: false;
 		},
 
 		filteredLists: function () {
@@ -77,31 +82,26 @@ export default {
 
 		filteredMessages() {
 			let chats = this.chats;
-			var expandedResults = []
+			var expandedResults = [];
 
 			if (this.search && this.processresult) {
-
 				_.each(this.processresult.results, (results, roomId) => {
 					var chat = _.find(chats, (chat) => {
-						return chat.roomId == roomId
-					})
+						return chat.roomId == roomId;
+					});
 
-					if(chat){
+					if (chat) {
 						_.each(results, (e) => {
 							expandedResults.push({
 								chat,
-								messages : [e]
-							})
-						})
+								messages: [e],
+							});
+						});
 					}
-					
-					
-				})
-
+				});
 			}
 
-			return expandedResults
-
+			return expandedResults;
 		},
 
 		filteredChats() {
@@ -172,15 +172,12 @@ export default {
 		},
 
 		filteredContacts() {
-
-			if(this.share) return []
+			if (this.share) return [];
 			/*Add my contacts*/
 			this.contacts = _.filter(this.contactsMap, (contact) => {
-				return contact.name
-					.toLowerCase()
-					.includes(this.search.toLowerCase());
+				return contact.name.toLowerCase().includes(this.search.toLowerCase());
 			});
-			
+
 			return this.contacts;
 		},
 
@@ -218,15 +215,11 @@ export default {
 				return;
 			}
 
-			
-
 			if (section.action == "navigateToProfile") {
 				this.navigateToProfile(item.id, item);
 			}
 
-			if (
-				section.action == "navigateToRoom"
-			) {
+			if (section.action == "navigateToRoom") {
 				var chat = item;
 
 				if (this.share) {
@@ -266,19 +259,29 @@ export default {
 						});
 				} else {
 					this.$router.push("chat?id=" + chat.roomId).catch((e) => {});
-				};
+				}
 			}
 
 			if (section.action == "navigateToRoomFromMsg") {
 				chat = item.chat;
-				var e = item.messages[0]
-				this.$router.push("chat?id=" + chat.roomId + '&process=' + this.processresult.id + '&search=' + this.processresult.text + '&toevent=' + e.event.event_id).catch((e) => {});
+				var e = item.messages[0];
+				this.$router
+					.push(
+						"chat?id=" +
+							chat.roomId +
+							"&process=" +
+							this.processresult.id +
+							"&search=" +
+							this.processresult.text +
+							"&toevent=" +
+							e.event.event_id
+					)
+					.catch((e) => {});
 			}
 
 			if (!section.keepMatches) {
-				this.$emit('clearsearch')
+				this.$emit("clearsearch");
 			}
-			
 		},
 		navigateToProfile(id, contact) {
 			if (this.mode === "Select") {
@@ -288,92 +291,88 @@ export default {
 			}
 		},
 
-		initSearchProcess(){
+		initSearchProcess() {
+			if (this.share) return;
 
-			if (this.share) return
-
-			if (this.search.length > 2){
-
-				if (this.process){
-					this.process.updateText(this.search)
-					return 
+			if (this.search.length > 2) {
+				if (this.process) {
+					this.process.updateText(this.search);
+					return;
 				}
 
-				this.processresult = null
+				this.processresult = null;
 
-				this.process = this.core.mtrx.searchEngine.execute(this.search, this.chats, ({results}) => {
+				this.process = this.core.mtrx.searchEngine.execute(
+					this.search,
+					this.chats,
+					({ results }) => {
+						var evscount = _.reduce(
+							results,
+							(m, r, i) => {
+								return m + r.length;
+							},
+							0
+						);
 
-					var evscount = _.reduce(results, (m, r, i) => {
-						return m + r.length
-					}, 0)
-
-					if (evscount > 25) return true
-
-				}, {
-					all : (result) => {
-						this.processresult = result
+						if (evscount > 25) return true;
+					},
+					{
+						all: (result) => {
+							this.processresult = result;
+						},
 					}
-				})
+				);
 
-				this.processing = true
-				this.process.execute().then(() => {
+				this.processing = true;
+				this.process
+					.execute()
+					.then(() => {})
+					.catch((e) => {
+						console.error(e);
+					})
+					.finally(() => {
+						this.processing = false;
+					});
+			} else {
+				if (this.process) this.process.stop();
 
-				}).catch(e => {
-					console.error(e)
-				}).finally(() => {
-
-					this.processing = false
-				})
-
-			}
-
-			else{
-				if(this.process) this.process.stop()
-
-				this.processresult = null
+				this.processresult = null;
 			}
 		},
 
-		loadNewUsers(){
+		loadNewUsers() {
+			if (this.share) return;
 
-			if(this.share) return
-
-			try{
-
-				var txt = (this.search || "").replace(/[^a-z0-9]/g,'')
+			try {
+				var txt = (this.search || "").replace(/[^a-z0-9]/g, "");
 
 				if (txt.length > 3) {
-
-					this.loadedingUsers[this.search] = this.core.user.searchContacts(txt).then((users) => {
-
-						this.$set(this.loadedUsers, this.search, users)
-
-					}).catch((e) => {
-						console.error(e)
-					}).finally(() => {
-						this.$delete(this.loadedingUsers, this.search)
-					})
-
+					this.loadedingUsers[this.search] = this.core.user
+						.searchContacts(txt)
+						.then((users) => {
+							this.$set(this.loadedUsers, this.search, users);
+						})
+						.catch((e) => {
+							console.error(e);
+						})
+						.finally(() => {
+							this.$delete(this.loadedingUsers, this.search);
+						});
 				}
-
-			}catch(e){
-				console.error(e)
+			} catch (e) {
+				console.error(e);
 			}
-
-			
-		}
+		},
 	},
 
 	watch: {
-		search : {
-			immediate : true,
-			handler : function(){
-				this.loadNewUsers()
+		search: {
+			immediate: true,
+			handler: function () {
+				this.loadNewUsers();
 
-				if(!this.share)
-					this.initSearchProcess()
-			}
-		}
-		
+				if (!this.share) this.initSearchProcess();
+			},
+		},
 	},
 };

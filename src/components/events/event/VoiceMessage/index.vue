@@ -22,8 +22,6 @@
 
 				<i v-if="error" class="fas fa-exclamation-circle"></i>
 			</div>
-
-			
 		</div>
 	</div>
 </template>
@@ -343,7 +341,7 @@ export default {
 		min-width: 10em;
 		padding: 0 0.5em;
 		border-radius: 2em;
-		background: srgba(--neutral-grad-1, 0.8)
+		background: srgba(--neutral-grad-1, 0.8);
 	}
 
 	&_toggle {

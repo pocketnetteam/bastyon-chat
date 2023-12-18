@@ -1,14 +1,12 @@
 import { mapState } from "vuex";
 
-
 export default {
 	name: "chatsTopheader",
 	props: {},
 
 	inject: ["matches"],
 
-	components: {
-	},
+	components: {},
 
 	data: function () {
 		return {

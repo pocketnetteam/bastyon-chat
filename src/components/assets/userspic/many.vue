@@ -19,7 +19,6 @@
 			<div class="useravatar" v-for="(user, i) in userinfo">
 				<userpic :status="status[user.id]" :userinfo="user" />
 			</div>
-			
 		</div>
 	</div>
 </template>

@@ -1,6 +1,6 @@
 import f from "./functions";
-import Vue from 'vue'
-import chat from '@/components/chat/exported/index.vue'
+import Vue from "vue";
+import chat from "@/components/chat/exported/index.vue";
 import store from "@/vuex/store";
 import VueI18n from "vue-i18n";
 
@@ -31,12 +31,12 @@ const i18n = new VueI18n({
 	silentTranslationWarn: true,
 });
 
-const chatConstructor = Vue.extend({ ...chat, store, i18n })
+const chatConstructor = Vue.extend({ ...chat, store, i18n });
 
 class Exporter {
 	constructor(core, p) {
 		this.core = core;
-		this.instances = {}
+		this.instances = {};
 	}
 
 	changeLocalization(localization) {
@@ -47,9 +47,10 @@ class Exporter {
 
 		/*Get video meta (&stream state)*/
 		if (!p.videoMeta && p.style === "stream") {
-			await window.POCKETNETINSTANCE?.platform?.sdk?.videos?.info([p.videoUrl])
+			await window.POCKETNETINSTANCE?.platform?.sdk?.videos
+				?.info([p.videoUrl])
 				.then(() => window.parseVideo(p.videoUrl))
-				.then(meta => {
+				.then((meta) => {
 					if (meta?.type === "peertube") {
 						meta = _.clone(window.peertubeglobalcache[meta.id]);
 						p.videoMeta = meta;
@@ -73,21 +74,20 @@ class Exporter {
 
 				if (instance.$el.parentNode)
 					instance.$el.parentNode.removeChild(instance.$el);
-			}
+			};
 
 			return Promise.resolve(instance);
 		} else if (typeof this.core?.mtrx?.client?.peekInRoom !== "undefined") {
-			await this.core.mtrx.client.peekInRoom(roomId)
-				.then(room => {
-					if (!room) return Promise.reject("missing:chat");
+			await this.core.mtrx.client.peekInRoom(roomId).then((room) => {
+				if (!room) return Promise.reject("missing:chat");
 
-					this.core.vm.$store.commit(
-						"SET_CHATS_TO_STORE",
-						this.core.vm.$store.state.chats.concat([
-							Object.assign(room.summary, { stream: true })
-						])
-					);
-				});
+				this.core.vm.$store.commit(
+					"SET_CHATS_TO_STORE",
+					this.core.vm.$store.state.chats.concat([
+						Object.assign(room.summary, { stream: true }),
+					])
+				);
+			});
 
 			return this.chat.apply(this, arguments);
 		}

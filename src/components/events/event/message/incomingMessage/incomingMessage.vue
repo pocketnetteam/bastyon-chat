@@ -10,7 +10,6 @@
 </template>
 
 <script>
-
 import f from "@/application/functions";
 
 export default {
@@ -29,9 +28,7 @@ export default {
 		};
 	},
 	computed: {
-		
 		chunks: function () {
-
 			if (this.message.indexOf("@") == -1) return [this.message];
 
 			var c = this.message.split(this.userCalled);
@@ -55,22 +52,20 @@ export default {
 			});
 
 			return _.filter(r, (r) => {
-				return r
+				return r;
 			});
 		},
 	},
 
 	methods: {
+		echotext: function (chunk) {
+			var text = f.superXSS(chunk);
 
-		echotext : function(chunk){
-
-			var text = f.superXSS(chunk)
-
-			if (typeof joypixels != 'undefined'){
-				text = joypixels.toImage(text)
+			if (typeof joypixels != "undefined") {
+				text = joypixels.toImage(text);
 			}
 
-			return text
+			return text;
 		},
 
 		show: function (chunk) {
@@ -83,11 +78,11 @@ export default {
 </script>
 
 <style lang="sass" scoped>
-	label
-		cursor: pointer
-		display: inline
+label
+	cursor: pointer
+	display: inline
 
-	.likelink
-		text-decoration: underline
-		cursor: pointer
+.likelink
+	text-decoration: underline
+	cursor: pointer
 </style>

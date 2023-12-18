@@ -9,14 +9,11 @@ export default {
 		chat: Object,
 		loading: Boolean,
 		scrollType: "",
-		searchresults : null,
+		searchresults: null,
 		error: [Object, Error, String],
 		selectedMessages: [],
 	},
-	inject: [
-		"matches",
-		"menuState"
-	],
+	inject: ["matches", "menuState"],
 	components: {},
 	data: function () {
 		return {
@@ -56,7 +53,7 @@ export default {
 	},
 
 	watch: {
-		events: function () { },
+		events: function () {},
 
 		selectedMessages: {
 			immediate: true,
@@ -131,15 +128,14 @@ export default {
 	this.countshow = 1;*/
 	},
 	methods: {
-		eventinsearchresult : function(event){
-
-			if(this.searchresults){
+		eventinsearchresult: function (event) {
+			if (this.searchresults) {
 				return _.find(this.searchresults, (e) => {
-					return e.event.event_id == event.event.event_id
-				})
+					return e.event.event_id == event.event.event_id;
+				});
 			}
 
-			return false
+			return false;
 		},
 		scrollToReadMessages: function () {
 			/*if(this.notificationCount > 0) {
@@ -160,7 +156,7 @@ export default {
 					okText: "Ok",
 					backdropClose: true,
 				})
-				.catch((e) => { });
+				.catch((e) => {});
 		},
 
 		dupdated: _.debounce(function () {
@@ -250,22 +246,25 @@ export default {
 			const container = this.$refs["container"];
 			if (container.scrolling) {
 				container.scrolling(-1, this.c * s);
-			}
-			else{
+			} else {
 				container.scrollTop = this.c * s;
 			}
 		},
 
 		scrollToEvent(e) {
-			if (this.$refs[e.event.event_id]){
-				var r_element = this.$refs[e.event.event_id][0]
-				this.scrollToNew(r_element.offsetTop - this.lscroll.clientHeight / 2 + r_element.clientHeight / 2)
-				
-				r_element.classList.add('attention')
+			if (this.$refs[e.event.event_id]) {
+				var r_element = this.$refs[e.event.event_id][0];
+				this.scrollToNew(
+					r_element.offsetTop -
+						this.lscroll.clientHeight / 2 +
+						r_element.clientHeight / 2
+				);
+
+				r_element.classList.add("attention");
 
 				setTimeout(() => {
-					r_element.classList.remove('attention')
-				}, 1000)
+					r_element.classList.remove("attention");
+				}, 1000);
 			}
 			//this.scrollToNew(120);
 		},
@@ -279,7 +278,6 @@ export default {
 			if (this.scrollType === "custom") {
 				return;
 			} else {
-
 				/*if(this.$refs["container"].scrollTop >= this.$refs["container"].scrollHeight - this.$refs["container"].clientHeight - 1 && e.deltaY < 0) {
 					return
 				}
@@ -291,74 +289,76 @@ export default {
 				e.preventDefault();
 
 				this.$refs["container"].scrollTop += -e.deltaY;
-				
+
 				/*const container = this.$refs["container"];
 				if (container.scrolling) {
 					container.scrolling(e);
 				}*/
 
 				return false;
-
 			}
 		},
-		smoothScroll: function(target, speed, smooth) {
-			let
-				moving = false,
+		smoothScroll: function (target, speed, smooth) {
+			let moving = false,
 				pos = target.scrollTop,
-				frame = target === document.body 
-									&& document.documentElement 
-									? document.documentElement 
-									: target // safari is the new IE
+				frame =
+					target === document.body && document.documentElement
+						? document.documentElement
+						: target; // safari is the new IE
 
-			target.scrolling = function(e, dest) {
+			target.scrolling = function (e, dest) {
 				let delta = normalizeWheelDelta(e);
-		
+
 				pos += delta * speed;
-				pos = Math.max(0, Math.min(pos, dest || (target.scrollHeight - frame.clientHeight))); // limit scrolling
-		
+				pos = Math.max(
+					0,
+					Math.min(pos, dest || target.scrollHeight - frame.clientHeight)
+				); // limit scrolling
+
 				if (!moving) update();
-			}
-		
+			};
+
 			function normalizeWheelDelta(e) {
 				if (e.detail) {
 					if (e.wheelDelta) {
-						return e.wheelDelta/e.detail/40 * (e.detail>0 ? 1 : -1) // Opera
+						return (e.wheelDelta / e.detail / 40) * (e.detail > 0 ? 1 : -1); // Opera
 					} else {
-						return -e.detail/3 // Firefox
+						return -e.detail / 3; // Firefox
 					}
 				} else if (e.wheelDelta) {
-					return e.wheelDelta/120 // IE,Safari,Chrome
+					return e.wheelDelta / 120; // IE,Safari,Chrome
 				} else {
 					return e;
 				}
 			}
-		
+
 			function update() {
-				moving = true
-				
-				let delta = (pos - target.scrollTop) / smooth
-				
-				target.scrollTop += delta
-				
+				moving = true;
+
+				let delta = (pos - target.scrollTop) / smooth;
+
+				target.scrollTop += delta;
+
 				if (Math.abs(delta) > 0.5) {
-					requestFrame(update)
+					requestFrame(update);
 				} else {
-					moving = false
+					moving = false;
 				}
 			}
-		
-			let requestFrame = function() { // requestAnimationFrame cross browser
+
+			let requestFrame = (function () {
+				// requestAnimationFrame cross browser
 				return (
 					window.requestAnimationFrame ||
 					window.webkitRequestAnimationFrame ||
 					window.mozRequestAnimationFrame ||
 					window.oRequestAnimationFrame ||
 					window.msRequestAnimationFrame ||
-					function(func) {
+					function (func) {
 						window.setTimeout(func, 1000 / 50);
 					}
 				);
-			}()
+			})();
 		},
 		showMultiSelect() {
 			this.multiSelect = true;
@@ -382,7 +382,6 @@ export default {
 		},
 
 		toreference(reference) {
-
 			this.$emit("toreference", reference);
 		},
 	},

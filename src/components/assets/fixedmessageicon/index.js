@@ -4,7 +4,8 @@ export default {
 	props: {},
 
 	components: {
-		sweetalert : () => import("@/editedplugins/vue-sweetalert-icons/src/components/icon.vue") ,
+		sweetalert: () =>
+			import("@/editedplugins/vue-sweetalert-icons/src/components/icon.vue"),
 	},
 
 	data: function () {

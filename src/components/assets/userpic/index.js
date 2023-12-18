@@ -5,7 +5,7 @@ export default {
 			type: Object,
 			default: {},
 		},
-		image : "",
+		image: "",
 		status: "",
 	},
 };

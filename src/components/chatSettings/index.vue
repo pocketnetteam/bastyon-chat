@@ -2,7 +2,6 @@
 	<div id="chatSettings" :class="{ minimized, active }">
 		<div class="chatSettingAbout">
 			<div :class="{ chatIconWrapper: 'chatIconWrapper', noSwipe: true }">
-
 				<upload
 					@uploaded="(data) => uploadUploaded(data)"
 					@error="(error) => uploadError(error)"
@@ -15,7 +14,7 @@
 						<label class="chatIconEditImage" for="roomImage">
 							<i class="fas fa-camera"></i>
 						</label>
-						
+
 						<chatIcon
 							:slidesPerView="4"
 							:dontuseslides="minimized && !active"
@@ -33,8 +32,6 @@
 
 					<template v-slot:dropzone></template>
 				</upload>
-
-				
 			</div>
 			<div class="chatNameEdit">
 				<input type="text" v-model="m_chat.name" placeholder="Name" />
@@ -91,7 +88,7 @@
 	justify-content: center;
 	i {
 		transform: scale(2);
-		color: srgb(--color-bg-ac)
+		color: srgb(--color-bg-ac);
 	}
 }
 .chatIconFile {

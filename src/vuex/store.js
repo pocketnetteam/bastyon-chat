@@ -75,8 +75,8 @@ var store = new Vuex.Store({
 		deletedrooms: {},
 		pkoindisabled: false,
 		isCallsActive: null,
-		readreciepts : {},
-		ChatStatuses : {}
+		readreciepts: {},
+		ChatStatuses: {},
 		//share : {url : 'https://yandex.ru/'} //null
 	},
 	getters: {
@@ -92,12 +92,14 @@ var store = new Vuex.Store({
 		},
 	},
 	mutations: {
-
 		SET_CHAT_STATUSES(state, payload) {
-			state.ChatStatuses = {...state.ChatStatuses , [payload.roomId]: {...state.ChatStatuses[payload.roomId],...payload}}
+			state.ChatStatuses = {
+				...state.ChatStatuses,
+				[payload.roomId]: { ...state.ChatStatuses[payload.roomId], ...payload },
+			};
 		},
 		SET_CHAT_STATUSES_ALL(state, ChatStatuses) {
-			state.ChatStatuses = ChatStatuses
+			state.ChatStatuses = ChatStatuses;
 		},
 		SET_CALL(state, isActive) {
 			state.isCallsActive = isActive;
@@ -145,7 +147,7 @@ var store = new Vuex.Store({
 			state.dontreadreceipts = false;
 			state.lastroom = null;
 			state.voicerecording = false;
-			state.readreciepts = {}
+			state.readreciepts = {};
 
 			// state.share = null
 
@@ -182,7 +184,6 @@ var store = new Vuex.Store({
 		},
 
 		pkoindisabled(state, value) {
-
 			state.pkoindisabled = value && value == "true" ? true : false;
 		},
 
@@ -270,7 +271,6 @@ var store = new Vuex.Store({
 				state.active = false;
 			}
 
-
 			state.minimized = true;
 		},
 
@@ -289,7 +289,7 @@ var store = new Vuex.Store({
 			state.voiceMessagesEnabled = voiceMessagesEnabled;
 		},
 		setCallsEnabled(state, isCallsEnabled) {
-			state.isCallsEnabled = isCallsEnabled
+			state.isCallsEnabled = isCallsEnabled;
 		},
 		ls(state) {
 			if (typeof localStorage.getItem("pinchat") != "undefined")
@@ -305,9 +305,7 @@ var store = new Vuex.Store({
 			mex.theme(state, localStorage.getItem("theme") || "black");
 		},
 
-		SEARCH_BY_MESSAGES(state, process){
-
-		},
+		SEARCH_BY_MESSAGES(state, process) {},
 
 		ALL_NOTIFICATIONS_COUNT(state, rooms) {
 			var n = new Date();
@@ -332,7 +330,12 @@ var store = new Vuex.Store({
 				_.reduce(
 					rooms,
 					(s, chat) => {
-						return  s + (!chat.summary.stream ? (chat.getUnreadNotificationCount() || 0) : 0);
+						return (
+							s +
+							(!chat.summary.stream
+								? chat.getUnreadNotificationCount() || 0
+								: 0)
+						);
 					},
 					0
 				) + count.length;
@@ -373,7 +376,6 @@ var store = new Vuex.Store({
 			var chatsMap = {};
 
 			_.each(chats, (chat) => {
-
 				var aid = chat.info?.title?.replace("#", "");
 
 				if (!state.chatsMap[chat.roomId] || state.force[chat.roomId]) {
@@ -398,13 +400,16 @@ var store = new Vuex.Store({
 		},
 		SET_READ_TO_STORE(state, readreciepts) {
 			_.each(readreciepts, (r, chatid) => {
-
-				if((!state.readreciepts[chatid] && !r) || (!state.readreciepts[chatid] && r) || (state.readreciepts[chatid] && r && state.readreciepts[chatid].ts != r.ts)) {
+				if (
+					(!state.readreciepts[chatid] && !r) ||
+					(!state.readreciepts[chatid] && r) ||
+					(state.readreciepts[chatid] &&
+						r &&
+						state.readreciepts[chatid].ts != r.ts)
+				) {
 					Vue.set(state.readreciepts, chatid, r);
 				}
-
-			})
-
+			});
 		},
 
 		SET_EVENTS_TO_STORE(state, events) {
@@ -416,8 +421,7 @@ var store = new Vuex.Store({
 				_.each(ev.timeline, function (__e) {
 					var e = __e.event;
 
-					if(!e) return
-
+					if (!e) return;
 
 					var _e = {
 						event: {
@@ -436,10 +440,16 @@ var store = new Vuex.Store({
 					timeline.push(_e);
 				});
 
-				if(timeline.length && state.events[k] && state.events[k].timeline && state.events[k].timeline[0] &&
-					(state.events[k].timeline[0].event.event_id == timeline[0].event.event_id)) {
-						return
-					}
+				if (
+					timeline.length &&
+					state.events[k] &&
+					state.events[k].timeline &&
+					state.events[k].timeline[0] &&
+					state.events[k].timeline[0].event.event_id ==
+						timeline[0].event.event_id
+				) {
+					return;
+				}
 
 				Vue.set(state.events, k, { timeline });
 			});
@@ -484,7 +494,6 @@ var store = new Vuex.Store({
 
 		SET_CONTACTS_FROM_MATRIX(state, v) {
 			var mp = {};
-
 
 			_.each(v, function (c) {
 				if (
@@ -533,21 +542,21 @@ var store = new Vuex.Store({
 		},
 
 		OPEN_MODAL(state, modal) {
-
-			if(modal.one && _.find(state.modals, (m) => {
-				return m.id == modal.id
-			})) return
+			if (
+				modal.one &&
+				_.find(state.modals, (m) => {
+					return m.id == modal.id;
+				})
+			)
+				return;
 
 			state.modals.push(modal);
-
-		
 		},
 
 		CLOSE_MODAL(state, id) {
 			state.modals = _.filter(state.modals, function (m) {
-				return m.id != id
-			})
-
+				return m.id != id;
+			});
 		},
 
 		GALLERY(state, v) {
@@ -713,8 +722,11 @@ var store = new Vuex.Store({
 			var id = store._vm.core.user.myMatrixId();
 
 			var chats = _.map(m_chats, function (r) {
-				const hv = r.currentState.getStateEvents("m.room.history_visibility", "");
-				
+				const hv = r.currentState.getStateEvents(
+					"m.room.history_visibility",
+					""
+				);
+
 				if (r.getLastActiveTimestamp() === -9007199254740991) {
 					if (r.getMember(id)) {
 						r.summary.lastModified =
@@ -725,50 +737,48 @@ var store = new Vuex.Store({
 				}
 
 				r.summary.info = {
-					title : r.name
-
-				}
-				r.summary.key = r.summary.roomId + ':' + r.summary.lastModified
-				r.summary.stream = hv?.event?.content?.history_visibility === "world_readable";
+					title: r.name,
+				};
+				r.summary.key = r.summary.roomId + ":" + r.summary.lastModified;
+				r.summary.stream =
+					hv?.event?.content?.history_visibility === "world_readable";
 
 				return r.summary;
 			});
 
 			//commit("SET_PRECHATS_TO_STORE", chats);
 			commit("SET_CHATS_TO_STORE", chats);
-			
 
 			return store._vm.core.mtrx.kit.allchatmembers(m_chats).then((r) => {
-
 				commit(
 					"SET_CHATS_USERS",
 					store._vm.core.mtrx.kit.usersFromChats(m_chats)
 				);
 
 				return store._vm.core.mtrx.kit.fillContacts(m_chats);
-				
-			})
-
+			});
 		},
 
 		FETCH_EVENTS({ commit }) {
 			var m_chats = f.deep(store._vm, "core.mtrx.store.rooms") || {};
 
 			var events = {};
-			var readreciepts = {}
+			var readreciepts = {};
 
-			var chatStatuses = {}
+			var chatStatuses = {};
 
 			_.each(m_chats, function (chat) {
 				events[chat.roomId] = {};
 
-				
-
 				var timeline = [].concat(
 					_.first([].concat(chat.timeline).reverse(), 50),
-					_.first([].concat(chat.currentState.getStateEvents("m.room.member")).reverse(), 50)
-				)
-
+					_.first(
+						[]
+							.concat(chat.currentState.getStateEvents("m.room.member"))
+							.reverse(),
+						50
+					)
+				);
 
 				var members = chat.currentState.getMembers();
 
@@ -778,16 +788,16 @@ var store = new Vuex.Store({
 					"m.room.callsEnabled"
 				);
 
-				let ev = chat.currentState.getStateEvents(
-					"m.room.request_calls_access"
-				).find((e) => store._vm.core.mtrx.me(e?.event?.sender))
+				let ev = chat.currentState
+					.getStateEvents("m.room.request_calls_access")
+					.find((e) => store._vm.core.mtrx.me(e?.event?.sender));
 
 				timeline = _.filter(timeline, (e, i) => {
 					if (
 						members.length <= 2 &&
-						(e.event.type === "m.room.power_levels" /*||
+						e.event.type === "m.room.power_levels" /*||
 							(e.event.type === "m.room.member" &&
-								e.event.content.membership !== "invite")*/)
+								e.event.content.membership !== "invite")*/
 					) {
 						return false;
 					}
@@ -837,116 +847,99 @@ var store = new Vuex.Store({
 						e.event.content["m.relates_to"] &&
 						e.event.content["m.relates_to"]["rel_type"] === "m.replace"
 					);
-				})
-
-				timeline = _.sortBy(timeline, function (event) {
-					return -event.event.origin_server_ts
 				});
 
-				var lastread = null
-				
+				timeline = _.sortBy(timeline, function (event) {
+					return -event.event.origin_server_ts;
+				});
+
+				var lastread = null;
+
 				_.find(timeline, (event) => {
-					var reciepts = chat.getReceiptsForEvent(event)
+					var reciepts = chat.getReceiptsForEvent(event);
 
 					var lastreadr2 = _.find(reciepts, (reciept) => {
 						var m = store._vm.core.mtrx.me(reciept.userId);
 
 						return reciept.type == "m.read" && !m;
-					})
-					
+					});
 
-					if (lastreadr2){
-						lastread = lastreadr2
-						return true
+					if (lastreadr2) {
+						lastread = lastreadr2;
+						return true;
 					}
-				})
+				});
 
-				if (lastread){
+				if (lastread) {
 					readreciepts[chat.roomId] = {
-						ts : lastread.data.ts,
-						ev : _.find(timeline, (event) => {
-							return event.event.origin_server_ts < lastread.data.ts
-						})
-					}
-
-					
-				}
-				else{
-					readreciepts[chat.roomId] = null
+						ts: lastread.data.ts,
+						ev: _.find(timeline, (event) => {
+							return event.event.origin_server_ts < lastread.data.ts;
+						}),
+					};
+				} else {
+					readreciepts[chat.roomId] = null;
 				}
 
-				var e = timeline[0]
+				var e = timeline[0];
 
 				//console.log('timeline', e, timeline, chat.roomId)
 
-				if (e){
-
+				if (e) {
 					var rt = ts.relations.getChildEventsForEvent(
 						e.event.event_id,
 						"m.replace",
 						"m.room.message"
 					);
-	
+
 					if (rt) {
 						var last = rt.getLastReplacement();
-	
+
 						if (last) {
-							e = last
+							e = last;
 						}
 					}
 
-
 					events[chat.roomId].timeline = [e];
+				} else {
+					events[chat.roomId].timeline = [];
 				}
-				else{
-					events[chat.roomId].timeline = []
-				}
-
 
 				if (ev) {
 					if (ev?.event?.content?.accepted === null) {
-
 						chatStatuses[chat.roomId] = {
 							roomId: chat.roomId,
-							isWaiting: true
-						}
-
+							isWaiting: true,
+						};
 					} else {
-
 						chatStatuses[chat.roomId] = {
 							roomId: chat.roomId,
-							isWaiting: false
-						}
+							isWaiting: false,
+						};
 					}
 				} else {
-
 					chatStatuses[chat.roomId] = {
 						roomId: chat.roomId,
-						isWaiting: false
-					}
-
+						isWaiting: false,
+					};
 				}
 
 				if (isCallsEnabled.length) {
-
 					chatStatuses[chat.roomId] = {
 						roomId: chat.roomId,
 						enabled: isCallsEnabled.find(
 							(e) =>
 								!store._vm.core.mtrx.me(e?.event?.sender) &&
 								e?.event?.sender.split(":")[0].replace("@", "") ===
-								e?.event?.state_key
+									e?.event?.state_key
 						)?.event?.content?.enabled,
-
-					}
+					};
 				}
-
 			});
 
 			commit("SET_EVENTS_TO_STORE", events);
 			commit("SET_READ_TO_STORE", readreciepts);
-			commit("SET_CHAT_STATUSES_ALL", chatStatuses)
-
+			commit("SET_CHAT_STATUSES_ALL", chatStatuses);
 		},
 	},
 });

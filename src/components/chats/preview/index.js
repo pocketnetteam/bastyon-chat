@@ -30,7 +30,6 @@ export default {
 	},
 
 	watch: {
-	
 		m_chat: {
 			immediate: true,
 			handler: function () {
@@ -56,31 +55,25 @@ export default {
 				return this.core.mtrx.blockeduser(users[0].userId);
 			}
 		},
-		roomMuted: function(){
-			if(this.chat){
-
-
+		roomMuted: function () {
+			if (this.chat) {
 				let pushRules = this.core.mtrx.client.pushProcessor.getPushRuleById(
 					this.chat.roomId
 				);
-	
-				if (pushRules !== null) {
-					return true
-				}
 
-				
+				if (pushRules !== null) {
+					return true;
+				}
 			}
 
-			return false
+			return false;
 		},
 
 		m_chat: function (state) {
 			if (!this.core.mtrx.client || !this.chat) return null;
 
 			if (this.chat.roomId) {
-
 				return this.core.mtrx.store.rooms[this.chat.roomId] || null;
-				
 			}
 		},
 		chatevents: function () {
@@ -111,9 +104,7 @@ export default {
 					return this.messages[0];
 				}
 
-				return this.chatevents[0]
-
-				
+				return this.chatevents[0];
 			}
 		},
 

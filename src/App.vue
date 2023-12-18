@@ -157,8 +157,6 @@ import list from "@/components/assets/list/index.vue";
 import listmenu from "@/components/assets/listmenu/index.vue";
 import listmenuwithupload from "@/components/assets/listmenuwithupload/index.vue";
 
-
-
 Vue.component("eventsEvent", eventsEvent);
 Vue.component("listmenu", listmenu);
 Vue.component("listmenuwithupload", listmenuwithupload);
@@ -205,10 +203,9 @@ import simpleSearch from "@/components/assets/simpleSearch/index.vue";
 
 import linepreloader from "@/components/assets/linepreloader/index.vue";
 
-
-import vuescroll from 'vue-scroll'
+import vuescroll from "vue-scroll";
 ////////
-Vue.use(vuescroll)
+Vue.use(vuescroll);
 Vue.component("pmenu", pmenu);
 Vue.component("modal", modal);
 Vue.component("swipable", swipable);
@@ -316,10 +313,10 @@ export default {
 			streamMode: this.streamMode,
 			menuState: {
 				get: () => this.menuState,
-				set: (val) => this.$set(this, "menuState", val)
+				set: (val) => this.$set(this, "menuState", val),
 			},
 			adminActions: {},
-			powerLevel: {}
+			powerLevel: {},
 		};
 	},
 
@@ -373,8 +370,8 @@ export default {
 
 		cssrules: {
 			type: String,
-			default: []
-		}
+			default: [],
+		},
 	},
 
 	data: function () {
@@ -396,7 +393,7 @@ export default {
 				clear: this.clearMatches,
 			},
 
-			menuState: false
+			menuState: false,
 		};
 	},
 
@@ -417,11 +414,9 @@ export default {
 				// Update the teamroom messages
 				this.generateTeamroomMessages();
 
-				if (this.core && this.core.exporter){
-					this.core.exporter.changeLocalization(i18n.locale)
+				if (this.core && this.core.exporter) {
+					this.core.exporter.changeLocalization(i18n.locale);
 				}
-
-
 			},
 		},
 
@@ -430,11 +425,10 @@ export default {
 			this.$store.commit("minimize");
 
 			setTimeout(() => {
-				this.$router.push("/chats").catch((e) => {})
-			}, 300)
+				this.$router.push("/chats").catch((e) => {});
+			}, 300);
 
 			this.clearMatches();
-			
 		},
 		pocketnet: function () {
 			this.$store.commit("setPocketnet", this.pocketnet);
@@ -444,7 +438,7 @@ export default {
 
 	computed: {
 		streamMode: function () {
-			return this.style === 'stream';
+			return this.style === "stream";
 		},
 
 		statetheme: function () {
@@ -489,7 +483,7 @@ export default {
 
 		unselect: function () {
 			return this.$store.state.voicerecording;
-		}
+		},
 	},
 
 	methods: {
@@ -589,20 +583,20 @@ export default {
 						`,
 						previewText: this.$i18n.t('teamMessages.2-title')
 					}*/
-					{
-						id: 2,
-						text: `
-							<h4>${this.$i18n.t('teamMessages.2-title')}</h4>
-							<span>${this.$i18n.t('teamMessages.2-message1')}</span>
+				{
+					id: 2,
+					text: `
+							<h4>${this.$i18n.t("teamMessages.2-title")}</h4>
+							<span>${this.$i18n.t("teamMessages.2-message1")}</span>
 							<ul>
-								<li>${this.$i18n.t('teamMessages.2-list1')}</li>
-								<li class="mt">${this.$i18n.t('teamMessages.2-list2')}</li>
-								<li class="mt">${this.$i18n.t('teamMessages.2-list3')}</li>
+								<li>${this.$i18n.t("teamMessages.2-list1")}</li>
+								<li class="mt">${this.$i18n.t("teamMessages.2-list2")}</li>
+								<li class="mt">${this.$i18n.t("teamMessages.2-list3")}</li>
 							</ul>
-							<span>${this.$i18n.t('teamMessages.2-message2')}</span>
+							<span>${this.$i18n.t("teamMessages.2-message2")}</span>
 						`,
-						previewText: this.$i18n.t('teamMessages.2-title')
-					}
+					previewText: this.$i18n.t("teamMessages.2-title"),
+				},
 			]);
 		},
 
@@ -636,7 +630,7 @@ export default {
 						}">${match}</mark>`;
 						highlight = null;
 						return str;
-					})
+				  })
 				: null;
 		},
 	},
@@ -659,7 +653,6 @@ export default {
 		this.$store.commit("clearall");
 
 		this.$store.commit("ls");
-
 
 		this.generateTeamroomMessages();
 		setTimeout(() => {
@@ -875,13 +868,10 @@ export default {
 			"window.POCKETNETINSTANCE.options.listofproxies"
 		) || [
 			{
-
-				
 				host: "test.pocketnet.app",
 				port: 8899,
-				wss: 8099
+				wss: 8099,
 			},
-			
 		];
 
 		/*
@@ -897,12 +887,12 @@ export default {
 		core = new Core(this, {
 			domain: domain,
 			mtrx: {
-				device : this.device,
+				device: this.device,
 				logger: function () {},
 			},
 
 			listofproxies: listofproxies,
-			
+
 			servers: {
 				pocketnet: "https://pocketnet.app:8888",
 			},
@@ -910,8 +900,8 @@ export default {
 
 		core.init();
 
-		if (core.exporter){
-			core.exporter.changeLocalization(i18n.locale)
+		if (core.exporter) {
+			core.exporter.changeLocalization(i18n.locale);
 		}
 
 		/*
@@ -941,7 +931,7 @@ export default {
 					setTimeout(() => {
 						if (
 							this.$route.name !== "chats" &&
-							this.$route.name !== 'chat' &&
+							this.$route.name !== "chat" &&
 							/*this.$route.name !== 'chatInfo' &&*/
 							this.$route.name !== "publicPreview" &&
 							this.$route.name !== "chatSettings" &&
@@ -968,11 +958,11 @@ export default {
 			} catch {
 				return ["https://use.fontawesome.com/releases/v5.2.0/css/all.css"];
 			}
-		})().forEach(rule => {
+		})().forEach((rule) => {
 			this.$nextTick(() => {
 				const link = document.createElement("link");
-							link.setAttribute("rel", "stylesheet");
-							link.setAttribute("href", rule);
+				link.setAttribute("rel", "stylesheet");
+				link.setAttribute("href", rule);
 
 				this.$root.$el.append(link);
 			});

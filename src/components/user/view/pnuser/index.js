@@ -36,7 +36,7 @@ export default {
 			if (this.core.backtoapp) this.core.backtoapp(this.href);
 			else window.open(this.href, "_blank");
 
-			this.$emit('close')
+			this.$emit("close");
 		},
 	},
 };

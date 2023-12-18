@@ -108,22 +108,20 @@ class PNUser extends User {
 				let keyPair = bitcoin.ECPair.fromWIF(d);
 
 				let proxyData = {
-					keyPair
-				}
+					keyPair,
+				};
 
 				let proxy = new Proxy(proxyData, {
-                    get: (p, i) => {
-
-						if(!proxyData.pair){
-							proxyData.pair = p.keyPair
-							proxyData.public = p.keyPair.publicKey.toString("hex")
-							proxyData.private = p.keyPair.privateKey
+					get: (p, i) => {
+						if (!proxyData.pair) {
+							proxyData.pair = p.keyPair;
+							proxyData.public = p.keyPair.publicKey.toString("hex");
+							proxyData.private = p.keyPair.privateKey;
 						}
 
-						return proxyData[i]
-
-                    }
-                })
+						return proxyData[i];
+					},
+				});
 
 				ckeys.push(proxy);
 			}

@@ -3,23 +3,28 @@
 		<div class="topheader">
 			<div class="row">
 				<span>
-					<template v-if="!showMembers">{{ $t(`caption.streamChat`) }}</template>
+					<template v-if="!showMembers">{{
+						$t(`caption.streamChat`)
+					}}</template>
 					<template v-else>{{ $t(`caption.membersList`) }}</template>
 					<sup> ({{ membersCount }})</sup>
 				</span>
 				<div class="buttons" v-if="!userBanned?.value">
-					<button
-						class="button"
-						@click="toggleMembers"
-					>
+					<button class="button" @click="toggleMembers">
 						<i
 							class="fa"
-							:class="{ 'fa-user-friends': !showMembers, 'fa-comment': showMembers }"
+							:class="{
+								'fa-user-friends': !showMembers,
+								'fa-comment': showMembers,
+							}"
 						></i>
 					</button>
 				</div>
 			</div>
-			<div class="row" v-if="!showMembers && !userBanned?.value && !pkoindisabled">
+			<div
+				class="row"
+				v-if="!showMembers && !userBanned?.value && !pkoindisabled"
+			>
 				<div class="buttons chat-filter">
 					<button
 						v-for="{ name, filter } in chatFilter"
@@ -27,7 +32,9 @@
 						class="button"
 						:class="{ active: filterType === filter }"
 						@click="filterMessages($event, filter)"
-					>{{ $t("button." + name) }}</button>
+					>
+						{{ $t("button." + name) }}
+					</button>
 				</div>
 			</div>
 		</div>
@@ -59,14 +66,14 @@ export default {
 	components: {
 		chat,
 		membersList,
-		pmenu
+		pmenu,
 	},
 
 	inject: ["userBanned"],
-	
+
 	props: {
 		chat: Object,
-		style: String
+		style: String,
 	},
 
 	data() {
@@ -75,20 +82,20 @@ export default {
 			filterType: "text",
 			chatFilter: [
 				{ name: "chat", filter: "text" },
-				{ name: "donations", filter: "donate" }
-			]
-		}
+				{ name: "donations", filter: "donate" },
+			],
+		};
 	},
 
 	computed: {
 		...mapState({
 			auth: (state) => state.auth,
-			pkoindisabled: (state) => state.pkoindisabled
+			pkoindisabled: (state) => state.pkoindisabled,
 		}),
 
 		membersCount() {
 			return this.core.mtrx.chatUsers(this.chat.roomId).length;
-		}
+		},
 	},
 
 	methods: {
@@ -98,7 +105,7 @@ export default {
 
 		toggleMembers() {
 			this.showMembers = !this.showMembers;
-		}
-	}
+		},
+	},
 };
 </script>

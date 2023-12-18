@@ -10,7 +10,7 @@ var ApiWrapper = function (core) {
 	var cache = {};
 	var loading = {};
 	var storages = {};
-	var storageloading = {}
+	var storageloading = {};
 
 	var apis = {
 		pocketnet: null,
@@ -21,20 +21,20 @@ var ApiWrapper = function (core) {
 	};
 
 	var getstorage = function (p) {
-
 		if (!storages[p.storage]) {
+			if (storageloading[p.storage]) return storageloading[p.storage];
 
-			if (storageloading[p.storage]) return storageloading[p.storage]
+			storageloading[p.storage] = ChatStorage(p.storage, p.version || 1, p.time)
+				.then((storage) => {
+					storages[p.storage] = storage;
 
-			storageloading[p.storage] = ChatStorage(p.storage, p.version || 1, p.time).then((storage) => {
-				storages[p.storage] = storage;
+					return Promise.resolve(storages[p.storage]);
+				})
+				.finally(() => {
+					delete storageloading[p.storage];
+				});
 
-				return Promise.resolve(storages[p.storage]);
-			}).finally(() => {
-				delete storageloading[p.storage]
-			});
-
-			return storageloading[p.storage]
+			return storageloading[p.storage];
 		}
 
 		return Promise.resolve(null);
@@ -251,21 +251,13 @@ var ApiWrapper = function (core) {
 		userState: (addresses) => {
 			if (!_.isArray(addresses)) addresses = [addresses];
 
-			var psdk = f.deep(
-				window,
-				"POCKETNETINSTANCE.platform.psdk"
-			)
+			var psdk = f.deep(window, "POCKETNETINSTANCE.platform.psdk");
 
-			if (psdk){
-
-				return psdk.userState.load(addresses).then(result => {
-
-					return _.toArray(result)
-
-				})
-				
+			if (psdk) {
+				return psdk.userState.load(addresses).then((result) => {
+					return _.toArray(result);
+				});
 			}
-
 
 			var parameters = [addresses.join(",")];
 
@@ -314,7 +306,6 @@ var ApiWrapper = function (core) {
 
 			///-deprecated
 
-
 			return self.pocketnet.userInfo(addresses, reload).then((rs) => {
 				rs = _.toArray(rs);
 
@@ -341,23 +332,16 @@ var ApiWrapper = function (core) {
 				return Promise.resolve([]);
 			}
 
-			var psdk = f.deep(
-				window,
-				"POCKETNETINSTANCE.platform.psdk"
-			)
+			var psdk = f.deep(window, "POCKETNETINSTANCE.platform.psdk");
 
-			if (psdk){
-
-				return psdk.userInfo.load(addresses, true, reload).then(result => {
-
+			if (psdk) {
+				return psdk.userInfo.load(addresses, true, reload).then((result) => {
 					result = _.filter(result, (u) => {
-						return u && u.address && addresses.indexOf(u.address) > -1
-					})
-					
-					return _.toArray(result)
+						return u && u.address && addresses.indexOf(u.address) > -1;
+					});
 
-				})
-				
+					return _.toArray(result);
+				});
 			}
 
 			return crequest(addresses, "pocketnet_userInfo", "address", reload, {
