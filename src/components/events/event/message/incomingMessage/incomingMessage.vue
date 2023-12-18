@@ -36,11 +36,11 @@ export default {
 			let userCallRegex;
 
 			if (this.userCall.test(this.message)) {
-				userCallRegex = this.userCall;
+				userCallRegex = new RegExp(this.userCall);
 			} else if (this.userPublicCall.test(this.message)) {
-				userCallRegex = this.userPublicCall;
+				userCallRegex = new RegExp(this.userPublicCall);
 			} else {
-				userCallRegex = this.userUnrecognizedCall;
+				userCallRegex = new RegExp(this.userUnrecognizedCall);
 			}
 
 			var c = this.message.split(userCallRegex);
@@ -54,10 +54,10 @@ export default {
 				if (us[i]) {
 					var ch = us[i].replace("@", "").split(":");
 
-					ch.length == 2
+					ch.length >= 2
 						? r.push({
-								id: ch[0],
-								name: ch[1],
+								id: ch.shift(),
+								name: ch.pop(),
 						  })
 						: r.push(us[i]);
 				}
