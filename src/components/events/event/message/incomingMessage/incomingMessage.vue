@@ -36,11 +36,11 @@ export default {
 			let userCallRegex;
 
 			if (this.userCall.test(this.message)) {
-				userCallRegex = userCall;
+				userCallRegex = this.userCall;
 			} else if (this.userPublicCall.test(this.message)) {
-				userCallRegex = userPublicCall;
+				userCallRegex = this.userPublicCall;
 			} else {
-				userCallRegex = userUnrecognizedCall;
+				userCallRegex = this.userUnrecognizedCall;
 			}
 
 			var c = this.message.split(userCallRegex);
