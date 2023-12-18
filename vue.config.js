@@ -23,6 +23,8 @@ module.exports = {
 	runtimeCompiler: true,
 	transpileDependencies: ["rxjs-interop", "standardized-audio-context"],
 
+	productionSourceMap: false,
+
 	pluginOptions: {
 		webpackBundleAnalyzer: {
 			openAnalyzer: false,
