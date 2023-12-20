@@ -15,7 +15,7 @@ export default {
 			type: String,
 			default: "",
 		},
-		
+
 		caption: {
 			type: String,
 			default: "",
@@ -23,10 +23,9 @@ export default {
 	},
 	methods: {
 		click: function () {
-
-			if(!this.action) {
-				this.$emit('back')
-				return
+			if (!this.action) {
+				this.$emit("back");
+				return;
 			}
 
 			if (this.action == "back") this.$router.go(-1);

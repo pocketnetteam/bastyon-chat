@@ -4,7 +4,11 @@
 		:class="{ readyToRender, my }"
 		ref="msgElement"
 		v-if="
-			(streamMode && !isBanned) || (!streamMode && !event.localRedactionEvent() && !event.getRedactionEvent() && !removed)
+			(streamMode && !isBanned) ||
+			(!streamMode &&
+				!event.localRedactionEvent() &&
+				!event.getRedactionEvent() &&
+				!removed)
 		"
 	>
 		<member
@@ -120,8 +124,8 @@ export default {
 	components: {
 		common,
 		member,
-		message : () => import("@/components/events/event/message/index.vue"),
-		dummypreviews : () => import("@/components/chats/dummypreviews"),
+		message: () => import("@/components/events/event/message/index.vue"),
+		dummypreviews: () => import("@/components/chats/dummypreviews"),
 	},
 
 	inject: ["streamMode", "userBanned"],
@@ -140,7 +144,7 @@ export default {
 			audioBuffer: null,
 
 			readyToRender: false,
-      users: []
+			users: [],
 		};
 	},
 
@@ -206,14 +210,15 @@ export default {
 			return "";
 		},
 
-		readed: function(){
+		readed: function () {
+			var reciept = this.$store?.state.readreciepts[this.chat.roomId];
 
-			var reciept = this.$store?.state.readreciepts[this.chat.roomId]
+			if (!reciept) return false;
 
-			if(!reciept) return false
-
-			return (this.event.event.origin_server_ts < reciept.ts && reciept.ev?.event.event_id == this.event.event.event_id)
-
+			return (
+				this.event.event.origin_server_ts < reciept.ts &&
+				reciept.ev?.event.event_id == this.event.event.event_id
+			);
 		},
 
 		subtype: function () {
@@ -228,9 +233,11 @@ export default {
 		},
 
 		userinfo: function () {
-
-			return this.$store?.state.users[this.$f.getmatrixid(this.event.getSender())] || {}
-      /*const id = this.$f.getmatrixid(this.event.getSender());
+			return (
+				this.$store?.state.users[this.$f.getmatrixid(this.event.getSender())] ||
+				{}
+			);
+			/*const id = this.$f.getmatrixid(this.event.getSender());
 
       return this.$store?.state.users[id] || (() => {
 				if (!this.users[id]) {
@@ -239,7 +246,6 @@ export default {
 
 				return this.users[id];
 			})();*/
-
 		},
 
 		///readreciepts
@@ -256,15 +262,14 @@ export default {
 			return this.userinfo.id === this.core.user.userinfo?.id;
 		},
 
-		isBanned: function() {
-			const
-				id = this.event.event.user_id ?? this.event.event.sender,
+		isBanned: function () {
+			const id = this.event.event.user_id ?? this.event.event.sender,
 				state = this.chat.currentState?.members[id]?.membership === "ban";
 
 			if (this.my) this.userBanned.set(state);
 
 			return state;
-		}
+		},
 	},
 
 	beforeDestroy: function () {
@@ -279,8 +284,6 @@ export default {
 	},
 
 	beforeMount: function () {
-
-
 		if (
 			(this.event && this.event.event && rendered[this.event.event.event_id]) ||
 			(this.event.txnId && rendered[this.event.txnId])
@@ -290,7 +293,6 @@ export default {
 	},
 
 	watch: {
-		
 		event: {
 			immediate: true,
 			handler: function () {
@@ -331,7 +333,6 @@ export default {
 	methods: {
 		setReadyToRender() {
 			setTimeout(() => {
-
 				if (this.readyToRender) return;
 
 				if (this.event && this.event.event) {
@@ -347,7 +348,7 @@ export default {
 				rendered;
 			}, 20);
 		},
-	
+
 		relations() {
 			if (this.timeline) {
 				var ts = this.timeline.timelineSet;
@@ -405,15 +406,15 @@ export default {
 		},
 
 		share(sharing) {
-			return this.core.share(sharing)
+			return this.core.share(sharing);
 		},
 
 		downloadFile() {
 			this.downloading = true;
 
 			this.core.mtrx
-				.downloadFile(this.chat, this.event).then(({name, url, type, nativeURL}) => {
-					
+				.downloadFile(this.chat, this.event)
+				.then(({ name, url, type, nativeURL }) => {
 					this.downloaded = true;
 
 					this.$store.commit("icon", {
@@ -421,21 +422,19 @@ export default {
 						message: "Downloaded",
 					});
 
-					
-
-					if(window.cordova && typeof cordova.plugins.fileOpener2 != 'undefined'){
-
-						cordova.plugins.fileOpener2.open(
-							nativeURL || url,
-							type,
-							{
-								error : function(err){ console.error(err) },
-								success : function(){ console.log("SUCCESS") }
-							}
-						);
-
+					if (
+						window.cordova &&
+						typeof cordova.plugins.fileOpener2 != "undefined"
+					) {
+						cordova.plugins.fileOpener2.open(nativeURL || url, type, {
+							error: function (err) {
+								console.error(err);
+							},
+							success: function () {
+								console.log("SUCCESS");
+							},
+						});
 					}
-
 				})
 				.catch((e) => {
 					this.error = e.toString();
@@ -446,10 +445,10 @@ export default {
 					});
 
 					return Promise.resolve(e);
-				}).finally(() => {
-					this.downloading = false;
-					
 				})
+				.finally(() => {
+					this.downloading = false;
+				});
 		},
 
 		getAudioUnencrypt() {
@@ -548,11 +547,9 @@ export default {
 			this.$emit("shareManyMessages", isShare);
 		},
 
-
-		toreference : function(reference){
+		toreference: function (reference) {
 			this.$emit("toreference", reference);
-
-		}
+		},
 	},
 };
 </script>

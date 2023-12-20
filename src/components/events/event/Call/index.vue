@@ -2,7 +2,7 @@
 	<div
 		class="call"
 		:class="{
-			ended : this.getDescription() === 'ended',
+			ended: this.getDescription() === 'ended',
 			bad: this.getDescription() === 'reject',
 		}"
 	>
@@ -74,14 +74,14 @@ export default {
 	&.my {
 		background-color: srgb(--color-bg-ac-bright);
 		color: srgb(--text-on-bg-ac-color);
-		
+
 		&.bad {
 			background-color: srgb(--color-bad);
 		}
 
-		&.ended{
+		&.ended {
 			background-color: srgba(--neutral-grad-1, 0.8);
-			color : srgb(--text-color);
+			color: srgb(--text-color);
 
 			.call {
 				&-icon {

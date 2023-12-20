@@ -30,9 +30,9 @@ export default {
 	}),
 
 	methods: {
-		close : function(){
-			this.$emit('close')
-		}
+		close: function () {
+			this.$emit("close");
+		},
 	},
 
 	mounted: function () {

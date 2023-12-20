@@ -25,9 +25,7 @@
 </style>
 
 <script>
-
-var loadedCache = {}
-
+var loadedCache = {};
 
 export default {
 	name: "bgimage",
@@ -52,8 +50,8 @@ export default {
 		};
 	},
 
-	beforeMount : function(){
-		if(loadedCache[this.src]){
+	beforeMount: function () {
+		if (loadedCache[this.src]) {
 			this.loaded = true;
 		}
 	},
@@ -62,16 +60,16 @@ export default {
 		load: function () {
 			if (this.src) {
 				this.imageSrc = this.src;
-			
-			if (this.imageSrc && typeof replaceArchiveInImage != 'undefined') {
-				this.imageSrc =  replaceArchiveInImage(this.imageSrc);
-			};
+
+				if (this.imageSrc && typeof replaceArchiveInImage != "undefined") {
+					this.imageSrc = replaceArchiveInImage(this.imageSrc);
+				}
 
 				var image = new Image();
 
 				image.src = this.imageSrc;
 				image.onload = () => {
-					loadedCache[this.src] = true
+					loadedCache[this.src] = true;
 					this.loaded = true;
 				};
 			} else this.loaded = true;

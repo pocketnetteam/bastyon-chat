@@ -5,9 +5,15 @@
 				<span v-if="!streamMode && !creatorLeft">
 					{{ $t("caption.chatInvite") }}
 				</span>
-				<span v-if="!streamMode && creatorLeft">{{ $t("caption.cantJoin") }}</span>
-				<span v-if="streamMode && videoMeta?.isLive">{{ $t("caption.needjointowrite") }}</span>
-				<span v-if="streamMode && !videoMeta?.isLive">{{ $t("caption.streamisover") }}</span>
+				<span v-if="!streamMode && creatorLeft">{{
+					$t("caption.cantJoin")
+				}}</span>
+				<span v-if="streamMode && videoMeta?.isLive">{{
+					$t("caption.needjointowrite")
+				}}</span>
+				<span v-if="streamMode && !videoMeta?.isLive">{{
+					$t("caption.streamisover")
+				}}</span>
 			</div>
 		</div>
 
@@ -46,11 +52,13 @@
 					<div class="action" v-if="!creatorLeft">
 						<button
 							:class="{
-								'small': true,
-								'button': true,
-								'rounded': true
+								small: true,
+								button: true,
+								rounded: true,
 							}"
-							:style="`visibility: ${ streamMode && !videoMeta?.isLive ? 'hidden' : 'visible' }`"
+							:style="`visibility: ${
+								streamMode && !videoMeta?.isLive ? 'hidden' : 'visible'
+							}`"
 							@click="join"
 						>
 							{{ $t("button.join") }}

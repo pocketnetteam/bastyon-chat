@@ -2,11 +2,11 @@ import simpleMenu from "@/components/assets/simpleMenu/simpleMenu.vue";
 import { mapState } from "vuex";
 export default {
 	name: "pmenu",
-	
+
 	components: {
 		simpleMenu,
 	},
-	
+
 	inject: ["menuState"],
 
 	data: function () {
@@ -21,12 +21,12 @@ export default {
 			minimized: (state) => state.minimized,
 			mobile: (state) => state.mobile,
 			active: (state) => state.active,
-			hiddenInParent: (state) => state.hiddenInParent
+			hiddenInParent: (state) => state.hiddenInParent,
 		}),
-		
+
 		menu() {
 			return this.menuState.get();
-		}
+		},
 	},
 
 	methods: {
@@ -46,14 +46,14 @@ export default {
 		showPopup: function () {
 			if (this.last) {
 				this.menuState.set(this.last);
-				this.$emit('setmenu', this.last);
+				this.$emit("setmenu", this.last);
 				this.last = null;
 			}
 		},
 
 		hidePopup() {
 			this.menuState.set(null);
-			this.$emit('setmenu', null);
+			this.$emit("setmenu", null);
 		},
 	},
 };

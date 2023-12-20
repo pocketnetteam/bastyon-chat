@@ -114,7 +114,6 @@ var thm = function () {
 						"theme_" + theme + ".sass"
 					);
 
-
 					var options = {};
 
 					if (file.indexOf("notrewrite") > -1) {

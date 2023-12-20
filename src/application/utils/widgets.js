@@ -110,7 +110,7 @@ var PNWIDGETS = function () {
 				parentid: parsed_url.searchParams.get("parentid"),
 			},
 
-			node : parsed_url.searchParams.get('node') || null
+			node: parsed_url.searchParams.get("node") || null,
 		};
 
 		if (connect) {
@@ -134,8 +134,6 @@ var PNWIDGETS = function () {
 			id = txid;
 			action = "transaction";
 		}
-
-		
 
 		return {
 			action: action,

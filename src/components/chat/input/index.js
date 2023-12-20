@@ -27,12 +27,8 @@ export default {
 		recordVoice,
 		upload,
 	},
-	
-	inject: [
-		"streamMode",
-		"authorId",
-		"menuState"
-	],
+
+	inject: ["streamMode", "authorId", "menuState"],
 
 	data: function () {
 		return {
@@ -66,7 +62,7 @@ export default {
 
 			cancelledCordovaMediaRecorder: false,
 
-			donate: null
+			donate: null,
 		};
 	},
 
@@ -129,10 +125,10 @@ export default {
 							},
 						},
 
-						start : this.uploadStart,
-						error : this.uploadError,
-						uploaded : this.uploadUploaded,
-						uploadedAll : this.uploadUploadedAll
+						start: this.uploadStart,
+						error: this.uploadError,
+						uploaded: this.uploadUploaded,
+						uploadedAll: this.uploadUploadedAll,
 					},
 				});
 			}
@@ -151,10 +147,10 @@ export default {
 						},
 					},
 
-					start : this.uploadStart,
-					error : this.uploadError,
-					uploaded : this.uploadUploaded,
-					uploadedAll : this.uploadUploadedAll
+					start: this.uploadStart,
+					error: this.uploadError,
+					uploaded: this.uploadUploaded,
+					uploadedAll: this.uploadUploadedAll,
 				},
 			});
 
@@ -263,7 +259,7 @@ export default {
 		me() {
 			/* Compare author and user bastyon id to prevent donate myself */
 			return this.authorId === this.core.user.userinfo?.source.address;
-		}
+		},
 	},
 
 	created() {},
@@ -368,12 +364,14 @@ export default {
 			var users = (() => {
 				if (this.streamMode && this.authorId) {
 					/* Donate only to author (stream mode) */
-					return [{
-						id: this.authorId,
-						source: {
-							address: this.authorId
-						}
-					}];
+					return [
+						{
+							id: this.authorId,
+							source: {
+								address: this.authorId,
+							},
+						},
+					];
 				} else {
 					/* Donate to chat participants */
 					return _.filter(
@@ -391,7 +389,7 @@ export default {
 					);
 				}
 			})();
-			
+
 			if (!users.length) {
 				return "users.length";
 			}
@@ -416,7 +414,6 @@ export default {
 			} else {
 				this.sendtransaction(users[0]);
 			}
-
 		},
 
 		sendtransaction: function (user) {
@@ -430,14 +427,12 @@ export default {
 				roomid: this.chat.roomId,
 				receiver: user.source.address,
 				send: !this.streamMode,
-				share: !this.streamMode
-			}).then(transaction => {
-
-				if (this.streamMode){
+				share: !this.streamMode,
+			}).then((transaction) => {
+				if (this.streamMode) {
 					this.donate = transaction;
 				}
-				
-			})
+			});
 		},
 
 		removetransaction: function () {
@@ -592,13 +587,12 @@ export default {
 			return text;
 		},
 
-		clbkEncrypt(){
-			this.$emit('encrypt')
+		clbkEncrypt() {
+			this.$emit("encrypt");
 		},
 
-		clbkEncrypted(){
-			this.$emit('encrypted')
-
+		clbkEncrypted() {
+			this.$emit("encrypted");
 		},
 
 		send(text) {
@@ -634,8 +628,8 @@ export default {
 						) {
 							return this.core.mtrx
 								.textEvent(this.chat, text, {
-									encryptEvent : this.clbkEncrypt,
-									encryptedEvent : this.clbkEncrypted
+									encryptEvent: this.clbkEncrypt,
+									encryptedEvent: this.clbkEncrypted,
 								})
 								.then((r) => {
 									r["m.relates_to"] = {
@@ -676,14 +670,21 @@ export default {
 						}
 					}
 
-					const
-						sendText = (text, params) => {
-							return this.core.mtrx.sendtext(this.chat, text, Object.assign({
-								relation: this.relationEvent,
-							}, params || {}), {
-								encryptEvent : this.clbkEncrypt,
-								encryptedEvent : this.clbkEncrypted
-							});
+					const sendText = (text, params) => {
+							return this.core.mtrx.sendtext(
+								this.chat,
+								text,
+								Object.assign(
+									{
+										relation: this.relationEvent,
+									},
+									params || {}
+								),
+								{
+									encryptEvent: this.clbkEncrypt,
+									encryptedEvent: this.clbkEncrypted,
+								}
+							);
 						},
 						data = {};
 
@@ -1049,7 +1050,7 @@ export default {
 							fu = this.getFileIosCordova(
 								f.isios()
 									? path
-									: (window.cordova.file.externalDataDirectory + path)
+									: window.cordova.file.externalDataDirectory + path
 							).then((blob) => {
 								return Promise.resolve({
 									data: blob,
@@ -1334,7 +1335,6 @@ export default {
 		},
 
 		stopRecording({ cancel, sendnow }) {
-
 			this.$store.commit("SET_VOICERECORDING", false);
 
 			if (this.prepareRecording) {
@@ -1355,11 +1355,11 @@ export default {
 				if (cancel) {
 					//this.mediaRecorder.ondataavailable = () => { }
 				} else {
-					var hasdata = false
+					var hasdata = false;
 					this.mediaRecorder.addEventListener("dataavailable", (event) => {
-						if(hasdata) return
+						if (hasdata) return;
 
-						hasdata = true
+						hasdata = true;
 
 						this.createVoiceMessage(event, sendnow);
 					}); //ondataavailable = (event) => this.createVoiceMessage(event, sendnow)
@@ -1469,7 +1469,7 @@ export default {
 			this.cancelOpacity = opacity;
 		},
 
-		showinputmenu : function(){
+		showinputmenu: function () {
 			/*this.core.menu({
 				items: this.menu,
 			});*/

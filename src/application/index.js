@@ -89,9 +89,7 @@ class Core {
 		this.hiddenInParent = v;
 		this.store.commit("hiddenInParent", v);
 
-
-		if (v)
-			this.mtrx.searchEngine.stopall()
+		if (v) this.mtrx.searchEngine.stopall();
 
 		/*if(!v)
             this.store.commit('wasunhidden', true)*/
@@ -109,8 +107,6 @@ class Core {
 					getWithLocale: (key) => {
 						return this.vm.$i18n.t(key);
 					},
-
-
 				},
 			};
 
@@ -142,27 +138,24 @@ class Core {
 							document.msExitFullscreen();
 						}
 					}
-					if (p?.parameters?.onInitCall){
-						p.parameters.onInitCall(call)
+					if (p?.parameters?.onInitCall) {
+						p.parameters.onInitCall(call);
 					}
 				});
 				this.mtrx.bastyonCalls.on("error", (err) => {
 					if (p?.parameters?.onError) {
-						p.parameters.onError(err)
+						p.parameters.onError(err);
 					}
-
 				});
 				this.mtrx.bastyonCalls.on("connected", (call) => {
 					if (p?.parameters?.onConnected) {
-						p.parameters.onConnected(call)
+						p.parameters.onConnected(call);
 					}
-
 				});
 				this.mtrx.bastyonCalls.on("ended", (call) => {
 					if (p?.parameters?.onEnded) {
-						p.parameters.onEnded(call)
+						p.parameters.onEnded(call);
 					}
-
 				});
 			}
 
@@ -171,7 +164,6 @@ class Core {
 			console.log(e);
 			return;
 		}
-
 	};
 	canback = function () {
 		return this.store.state.gallery ? false : true;
@@ -208,8 +200,7 @@ class Core {
 
 		this.vm.$destroy();
 
-		if (this.mtrx.bastyonCalls)
-			this.mtrx.bastyonCalls.destroy()
+		if (this.mtrx.bastyonCalls) this.mtrx.bastyonCalls.destroy();
 	};
 
 	init = function () {
@@ -362,8 +353,8 @@ class Core {
 			});
 	};
 
-	renderChatToElement = function(element, roomid, p){
-		return this.exporter.chat(element, roomid, p)
+	renderChatToElement = function (element, roomid, p) {
+		return this.exporter.chat(element, roomid, p);
 	};
 
 	joinRoom(roomid) {
@@ -581,12 +572,12 @@ class Core {
 
 	initMediaRecorder() {
 		if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-
-			return this.media.permissions({ audio: true }).then(() => {
-				
-				return this.media.get({ audio: true })
-
-			}).then((stream) => {
+			return this.media
+				.permissions({ audio: true })
+				.then(() => {
+					return this.media.get({ audio: true });
+				})
+				.then((stream) => {
 					let mediaRecorder = new AudioRecorder(stream, {
 						audioBitsPerSecond: 32000,
 					});
@@ -618,7 +609,7 @@ class Core {
 
 		return this.audioContext;
 	}
-	
+
 	/**
 	 * Create room for stream
 	 *
@@ -628,11 +619,11 @@ class Core {
 	createStreamRoom(name) {
 		return this.mtrx.client
 			.createRoom({
-				room_alias_name: `#${ f.makeid() }/hidden`,
-				visibility: 'public',
+				room_alias_name: `#${f.makeid()}/hidden`,
+				visibility: "public",
 				invite: [],
-				name: `@${ name }`,
-				
+				name: `@${name}`,
+
 				initial_state: [
 					{
 						type: "m.room.guest_access",
@@ -640,22 +631,24 @@ class Core {
 						content: {
 							guest_access: "can_join",
 						},
-					}
+					},
 				],
 			})
 			.then((chat) => {
-				return this.mtrx.client.setGuestAccess(chat.room_id, {
-					allowJoin: true,
-					allowRead: true
-				}).then(() => {
-					return Promise.resolve(chat.room_id);
-				});
+				return this.mtrx.client
+					.setGuestAccess(chat.room_id, {
+						allowJoin: true,
+						allowRead: true,
+					})
+					.then(() => {
+						return Promise.resolve(chat.room_id);
+					});
 			})
 			.catch((e) => {
 				return Promise.reject(e);
 			});
 	}
-	
+
 	/**
 	 * Remove stream room
 	 *
@@ -663,8 +656,7 @@ class Core {
 	 * @return {*}
 	 */
 	removeStreamRoom(roomId) {
-		return this.mtrx.client
-			.removeRoom(roomId);
+		return this.mtrx.client.removeRoom(roomId);
 	}
 }
 

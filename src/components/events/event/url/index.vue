@@ -37,8 +37,42 @@
 <script>
 import { mapState } from "vuex";
 
-
-var exts = ["bin", "dat", "swf", "doc", "docx", "sig", "tif", "cdr", "xls", "xlsx", "p7s", "mkv", "tmp", "db", "isz", "mdf", "jpg", "cr2", "fb2", "iso", "svg", "exe", "mdx", "vob", "ppt", "xls", "dcm", "vsd", "mov", "img", "pdf", "jpg", "jfif", "png"]
+var exts = [
+	"bin",
+	"dat",
+	"swf",
+	"doc",
+	"docx",
+	"sig",
+	"tif",
+	"cdr",
+	"xls",
+	"xlsx",
+	"p7s",
+	"mkv",
+	"tmp",
+	"db",
+	"isz",
+	"mdf",
+	"jpg",
+	"cr2",
+	"fb2",
+	"iso",
+	"svg",
+	"exe",
+	"mdx",
+	"vob",
+	"ppt",
+	"xls",
+	"dcm",
+	"vsd",
+	"mov",
+	"img",
+	"pdf",
+	"jpg",
+	"jfif",
+	"png",
+];
 
 export default {
 	name: "eventsurl",
@@ -48,7 +82,8 @@ export default {
 		data: Object,
 	},
 	components: {
-		metaMessage: () => import("@/components/events/event/metaMessage/index.vue"),
+		metaMessage: () =>
+			import("@/components/events/event/metaMessage/index.vue"),
 	},
 	data: function () {
 		return {
@@ -107,37 +142,43 @@ export default {
 				return _.indexOf(g, url.host) > -1 && _.indexOf(g, domain) > -1;
 			});
 
-			if (m && this.url.indexOf("embedVideo.php") == -1 && this.url.indexOf("docs/") == -1 && this.url.indexOf("/blockexplorer") == -1) {
+			if (
+				m &&
+				this.url.indexOf("embedVideo.php") == -1 &&
+				this.url.indexOf("docs/") == -1 &&
+				this.url.indexOf("/blockexplorer") == -1
+			) {
 				return "pocketnet";
 			}
 
 			return "custom";
 		},
 
-		subtype : function(){
-			if(this.urltype == 'custom'){
-				if(this.clearurl && this.clearurl.indexOf && this.clearurl.indexOf('zoom.us') > -1){
-					return 'zoom'
+		subtype: function () {
+			if (this.urltype == "custom") {
+				if (
+					this.clearurl &&
+					this.clearurl.indexOf &&
+					this.clearurl.indexOf("zoom.us") > -1
+				) {
+					return "zoom";
 				}
 
-				if(this.clearurl && this.clearurl.split){
+				if (this.clearurl && this.clearurl.split) {
+					var ch = this.clearurl.split(/\//g);
 
-					var ch = this.clearurl.split(/\//g)
+					if (ch.length > 2) {
+						var ls = ch[ch.length - 1] || "";
 
-					if (ch.length > 2){
-						var ls = ch[ch.length - 1] || ''
+						var lsc = ls.split(".");
 
-
-						var lsc = ls.split('.')
-
-						if (lsc.length == 2 && exts.indexOf(lsc[lsc.length - 1]) > -1){
-							return 'file'
+						if (lsc.length == 2 && exts.indexOf(lsc[lsc.length - 1]) > -1) {
+							return "file";
 						}
 					}
-
 				}
 			}
-		}
+		},
 	}),
 
 	beforeMount: function () {
@@ -158,48 +199,47 @@ export default {
 		geturl: function () {
 			//this.loading = true;
 
-			if(this.subtype){
-				if(this.subtype == 'zoom'){
+			if (this.subtype) {
+				if (this.subtype == "zoom") {
 					this.meta = {
-						'og:title' : "Join our Cloud HD Video Meeting"
-					}
+						"og:title": "Join our Cloud HD Video Meeting",
+					};
 				}
 
-				if(this.subtype == 'file'){
+				if (this.subtype == "file") {
 					this.meta = {
-						'og:title' : "File"
-					}
+						"og:title": "File",
+					};
 				}
 
-				return
+				return;
 			}
 
 			this.core.mtrx.client
 				.getUrlPreview(this.clearurl, 0)
 				.then((response) => {
-
-					var cl = {}
+					var cl = {};
 
 					_.each(response, (r, i) => {
-						if(r) cl[i] = r
-					})
+						if (r) cl[i] = r;
+					});
 
-					if(_.isEmpty(cl)){
-						this.$emit('error', 'empty')
-						return Promise.reject('empty')
+					if (_.isEmpty(cl)) {
+						this.$emit("error", "empty");
+						return Promise.reject("empty");
 					}
 
 					this.meta = response;
-
 				})
 				.catch((error) => {
 					this.meta = null;
-					this.error = error
+					this.error = error;
 
-					this.$emit('error', error)
-				}).finally(() => {
-					this.loading = false;
+					this.$emit("error", error);
 				})
+				.finally(() => {
+					this.loading = false;
+				});
 		},
 	},
 };

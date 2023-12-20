@@ -75,26 +75,27 @@ export default {
 		download(event) {
 			this.downloading = true;
 
-			this.core.mtrx.downloadFile(this.chat, event).then((r) => {
+			this.core.mtrx
+				.downloadFile(this.chat, event)
+				.then((r) => {
+					this.$store.commit("icon", {
+						icon: "success",
+						message: "Downloaded",
+					});
+				})
+				.catch((e) => {
+					this.error = e.toString();
 
-				this.$store.commit("icon", {
-					icon: "success",
-					message: "Downloaded",
+					this.$store.commit("icon", {
+						icon: "error",
+						message: "Downloading Failed",
+					});
+
+					return Promise.resolve(e);
+				})
+				.finally(() => {
+					this.downloading = false;
 				});
-
-			})
-			.catch((e) => {
-				this.error = e.toString();
-
-				this.$store.commit("icon", {
-					icon: "error",
-					message: "Downloading Failed",
-				});
-
-				return Promise.resolve(e);
-			}).finally(() => {
-				this.downloading = false;
-			})
 		},
 	},
 };

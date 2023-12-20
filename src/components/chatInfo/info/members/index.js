@@ -4,21 +4,18 @@ export default {
 	components: {
 		chatIcon,
 	},
-	
-	inject: [
-		"streamMode",
-		"menuState"
-	],
-	
+
+	inject: ["streamMode", "menuState"],
+
 	props: {
 		membersList: Array,
 		allMembers: Array,
 		roles: {
 			type: Boolean,
-			default: true
-		}
+			default: true,
+		},
 	},
-	
+
 	data: function () {
 		return {
 			moderItems: [
@@ -37,7 +34,7 @@ export default {
 					icon: "fas fa-user-times",
 				},
 			],
-			
+
 			menuItems: [
 				{
 					click: "adminMakeModer",
@@ -62,7 +59,7 @@ export default {
 			],
 		};
 	},
-	
+
 	computed: {
 		meid: function () {
 			return this.core.user.userinfo.id;
@@ -75,7 +72,7 @@ export default {
 			);
 		},
 	},
-	
+
 	methods: {
 		userinfo: function (user) {
 			return f.deep(this, "core.store.state.users." + user.userId) || {};
@@ -89,8 +86,6 @@ export default {
 			return r;
 		},
 		menu: function (user) {
-
-
 			/*menu.push({
 				action: this.menureply,
 				text: "button.reply",
@@ -110,7 +105,10 @@ export default {
 				},
 				ban: {
 					action: () => this.ban(user),
-					text: user.membership === "ban" ? this.$i18n.t("caption.removeBan") : this.$i18n.t("caption.ban"),
+					text:
+						user.membership === "ban"
+							? this.$i18n.t("caption.removeBan")
+							: this.$i18n.t("caption.ban"),
 					icon: "fas fa-user-times",
 				},
 			};
@@ -140,7 +138,7 @@ export default {
 				items.setAdmin.text = this.$i18n.t("caption.cancelModeration");
 				menu = [items.setAdmin, items.ban];
 			}
-			
+
 			return menu;
 		},
 
@@ -182,7 +180,7 @@ export default {
 			return this[item.click](rowObject.user);
 		},
 
-		openModal: function(user) {
+		openModal: function (user) {
 			this.core.mtrx.opencontact(this.userinfo(user));
 		},
 
@@ -198,7 +196,6 @@ export default {
 			this.$emit("ban", user);
 			return Promise.resolve();
 		},
-
 
 		/*setAdmin: function (user) {
 			this.$emit("setAdmin", user.id);

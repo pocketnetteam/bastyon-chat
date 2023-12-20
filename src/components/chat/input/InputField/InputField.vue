@@ -20,7 +20,11 @@
 					@paste="paste_image"
 					:placeholder="$t('caption.sendmessage')"
 				></textarea>
-				<transition name="fade" mode="out-in" v-if="!streamMode && !mobile && emojiIndex">
+				<transition
+					name="fade"
+					mode="out-in"
+					v-if="!streamMode && !mobile && emojiIndex"
+				>
 					<picker
 						:data="emojiIndex"
 						v-show="display_emoji"
@@ -30,7 +34,7 @@
 							position: 'absolute',
 							bottom: '48px',
 							right: '0px',
-							left : '0px',
+							left: '0px',
 							fontSize: '0.8em',
 							fontFamily: 'Segoe UI',
 						}"
@@ -101,7 +105,7 @@ export default {
 		clickOutside: vClickOutside.directive,
 	},
 
-	inject: ['streamMode'],
+	inject: ["streamMode"],
 
 	watch: {
 		text: {
@@ -153,7 +157,7 @@ export default {
 
 		pkoindisabled: function () {
 			return this.$store.state.pkoindisabled;
-		}
+		},
 
 		/*emojiIndex: function () {
 
@@ -220,7 +224,7 @@ export default {
 			if (event.target.localName !== "i") {
 				if (event.target.localName !== "matrix-element") {
 					this.display_emoji = false;
-					return false
+					return false;
 				}
 			}
 		},
@@ -230,11 +234,12 @@ export default {
 				this.textarea_resize_reset();
 			} else {
 				this.$refs.textarea.style.height = 1 + "px";
-				var a = 0
-	
-				if(this.text[this.text.length - 1] == '\n') a = 20
+				var a = 0;
 
-				this.$refs.textarea.style.height = (this.$refs.textarea.scrollHeight + a) + "px";
+				if (this.text[this.text.length - 1] == "\n") a = 20;
+
+				this.$refs.textarea.style.height =
+					this.$refs.textarea.scrollHeight + a + "px";
 				//this.display_emoji = false;
 			}
 		},
@@ -460,21 +465,20 @@ export default {
 
 		donateAction: function () {
 			this.$emit("donateaction");
-		}
+		},
 	},
 
 	props: {
 		donate: Object,
 		storagekey: String,
 		tipusers: Array,
-		me: Boolean
+		me: Boolean,
 	},
 
 	creared() {},
 
 	mounted() {
 		if (!this.mobile && !this.streamMode) {
-			
 			this.focus();
 		}
 
@@ -486,8 +490,8 @@ export default {
 			this.text = localStorage[this.storagekey];
 
 			setTimeout(() => {
-				this.textarea_resize()
-			}, 50)
+				this.textarea_resize();
+			}, 50);
 		}
 	},
 };
@@ -582,7 +586,6 @@ export default {
 	opacity: 0
 </style>
 
-
 <style>
 .emoji-mart,
 .emoji-mart * {
@@ -591,7 +594,7 @@ export default {
 }
 
 .emoji-mart {
-	font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+	font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif;
 	font-size: 16px;
 	/* display: inline-block; */
 	display: flex;
@@ -624,9 +627,9 @@ export default {
 }
 
 .emoji-type-native {
-	font-family: 'Segoe UI Emoji', 'Segoe UI Symbol', 'Segoe UI',
-		'Apple Color Emoji', 'Twemoji Mozilla', 'Noto Color Emoji', 'EmojiOne Color',
-		'Android Emoji';
+	font-family: "Segoe UI Emoji", "Segoe UI Symbol", "Segoe UI",
+		"Apple Color Emoji", "Twemoji Mozilla", "Noto Color Emoji", "EmojiOne Color",
+		"Android Emoji";
 	word-break: keep-all;
 }
 
@@ -765,7 +768,7 @@ export default {
 .emoji-mart-category .emoji-mart-emoji:hover:before,
 .emoji-mart-emoji-selected:before {
 	z-index: 0;
-	content: '';
+	content: "";
 	position: absolute;
 	top: 0;
 	left: 0;
@@ -936,7 +939,7 @@ export default {
 	padding: 0 2px;
 }
 .emoji-mart-skin-swatch-selected:after {
-	content: '';
+	content: "";
 	position: absolute;
 	top: 50%;
 	left: 50%;
@@ -1054,5 +1057,4 @@ export default {
 	display: none;
 	visibility: hidden;
 }
-
 </style>

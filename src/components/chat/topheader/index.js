@@ -13,10 +13,10 @@ export default {
 		u: String,
 		roomInfo: false,
 		aboutUser: false,
-		search : String,
-		process : String,
-		searchresults : null,
-		focusedevent : null
+		search: String,
+		process: String,
+		searchresults: null,
+		focusedevent: null,
 	},
 	inject: ["matches"],
 	components: {
@@ -128,7 +128,7 @@ export default {
 			aboutUserShow: false,
 			roomBanned: false,
 			roomMuted: false,
-			searchactive : false,
+			searchactive: false,
 
 			// --- Variables for the donation part ---
 			// Boolean when the donation modal is open
@@ -162,7 +162,7 @@ export default {
 
 			hoverEncrypt: false,
 
-			callloading : false
+			callloading: false,
 		};
 	},
 
@@ -174,38 +174,36 @@ export default {
 		this.getuserinfo();
 
 		if (this.search) {
-			this.searchactive = true
+			this.searchactive = true;
 		}
 	},
 
 	computed: mapState({
-		focusedeventIndex: function(){
-			if(!this.searchresults || !this.focusedevent){
-				return null
+		focusedeventIndex: function () {
+			if (!this.searchresults || !this.focusedevent) {
+				return null;
 			}
 
-			var i = -1
-			
+			var i = -1;
+
 			_.find(this.searchresults, (e, index) => {
-				if(e.event.event_id == this.focusedevent.event.event_id) {
-					i = index
-					return true
+				if (e.event.event_id == this.focusedevent.event.event_id) {
+					i = index;
+					return true;
 				}
-			}) 
+			});
 
 			//if (i < 1) i = 1
 
-			return i
+			return i;
 		},
 		callsEnabled: (state) => state.isCallsEnabled,
 
 		checkCallsEnabled: function () {
-			if (
-				this.$store.state.ChatStatuses[this.m_chat.roomId]?.enabled
-			) {
+			if (this.$store.state.ChatStatuses[this.m_chat.roomId]?.enabled) {
 				this.wait = false;
 				return true;
-			}else if (
+			} else if (
 				this.$store.state.ChatStatuses[this.m_chat.roomId]?.isWaiting
 			) {
 				return "wait";
@@ -214,7 +212,6 @@ export default {
 				return false;
 			}
 		},
-
 
 		isGroup: function () {
 			return this.m_chat?.name.slice(0, 1) === "@";
@@ -260,57 +257,61 @@ export default {
 		},
 	}),
 	methods: {
-		searchControlKey : function(key){
-			if(key == 'up') this.tobottomsearch()
-			if(key == 'down') this.toupsearch()
-
+		searchControlKey: function (key) {
+			if (key == "up") this.tobottomsearch();
+			if (key == "down") this.toupsearch();
 		},
-		toupsearch : function(){
+		toupsearch: function () {
+			if (!this.searchresults) return;
 
-			if(!this.searchresults) return 
+			var i = this.focusedeventIndex;
 
-			var i = this.focusedeventIndex
-
-			if (i <= this.searchresults.length - 2){
-				this.$emit('tosearchevent', this.searchresults[this.focusedeventIndex + 1])
+			if (i <= this.searchresults.length - 2) {
+				this.$emit(
+					"tosearchevent",
+					this.searchresults[this.focusedeventIndex + 1]
+				);
+			} else {
+				this.$emit("tosearchevent", this.searchresults[0]);
 			}
-			else{
-				this.$emit('tosearchevent', this.searchresults[0])
-
-			}
-
 		},
-		tobottomsearch : function(){
+		tobottomsearch: function () {
+			if (!this.searchresults && this.searchresults.length) return;
 
-			if(!this.searchresults && this.searchresults.length) return 
-
-			var i = this.focusedeventIndex
-			if (i > 0) this.$emit('tosearchevent', this.searchresults[this.focusedeventIndex - 1])
-			else this.$emit('tosearchevent', this.searchresults[this.searchresults.length - 1])
+			var i = this.focusedeventIndex;
+			if (i > 0)
+				this.$emit(
+					"tosearchevent",
+					this.searchresults[this.focusedeventIndex - 1]
+				);
+			else
+				this.$emit(
+					"tosearchevent",
+					this.searchresults[this.searchresults.length - 1]
+				);
 		},
-		backfromsearch : function(){
-			if (this.process){
+		backfromsearch: function () {
+			if (this.process) {
 				this.$router.push("chats?process=" + this.process).catch((e) => {});
-			}
-			else{
-				this.searchactive = false
-				this.searching('')
+			} else {
+				this.searchactive = false;
+				this.searching("");
 			}
 		},
 
-		tosearch : function(){
-			this.searchactive = true
+		tosearch: function () {
+			this.searchactive = true;
 
 			setTimeout(() => {
-				if(this.$refs.search) this.$refs.search.focus()
-			}, 100)
+				if (this.$refs.search) this.$refs.search.focus();
+			}, 100);
 		},
 
-		searching : function(str){
-			this.$emit('searching', str)
+		searching: function (str) {
+			this.$emit("searching", str);
 
-			if(!str){
-				this.searchactive = false
+			if (!str) {
+				this.searchactive = false;
 			}
 		},
 
@@ -339,27 +340,23 @@ export default {
 			}
 			let local = document.querySelector("body");
 
-			if(this.callloading) return
+			if (this.callloading) return;
 
-			this.callloading = true
+			this.callloading = true;
 
 			setTimeout(() => {
-				this.core.mtrx.bastyonCalls.initCall(
-					this.chat.roomId,
-					local
-				).then((matrixCall) => {
-	
-	
-					// if (matrixCall) this.$store.dispatch("CALL", matrixCall);
-				}).catch(e => {
-					console.log("error", e);
-				}).finally(() => {
-					this.callloading = false
-				})
-			}, 50 )
-
-			
-
+				this.core.mtrx.bastyonCalls
+					.initCall(this.chat.roomId, local)
+					.then((matrixCall) => {
+						// if (matrixCall) this.$store.dispatch("CALL", matrixCall);
+					})
+					.catch((e) => {
+						console.log("error", e);
+					})
+					.finally(() => {
+						this.callloading = false;
+					});
+			}, 50);
 		},
 
 		requestCallsAccess() {

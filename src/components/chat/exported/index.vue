@@ -10,7 +10,7 @@ export default {
 	name: "chatExported",
 
 	components: {
-		Stream: () => import('./stream.vue')
+		Stream: () => import("./stream.vue"),
 	},
 
 	provide() {
@@ -20,27 +20,27 @@ export default {
 			authorId: this.authorId,
 
 			powerLevel: Object.assign(this.powerLevels, {
-				get: this.getPowerLevel
+				get: this.getPowerLevel,
 			}),
 
 			adminActions: {
 				toggleModerStatus: this.toggleModerStatus,
-				toggleBanStatus: this.toggleBanStatus
+				toggleBanStatus: this.toggleBanStatus,
 			},
 
 			menuState: {
 				get: () => this.menuState,
-				set: (val) => this.$set(this, "menuState", val)
+				set: (val) => this.$set(this, "menuState", val),
 			},
 
 			matches: {},
 			markText: () => {},
-			
-			userBanned: this.userBanned
-		}
+
+			userBanned: this.userBanned,
+		};
 	},
 
-	data : function(){
+	data: function () {
 		return {
 			style: null,
 			videoUrl: null,
@@ -50,7 +50,7 @@ export default {
 			powerLevels: {
 				administrator: 100,
 				moderator: 50,
-				participant: 0
+				participant: 0,
 			},
 			menuState: false,
 			userBanned: {
@@ -58,25 +58,27 @@ export default {
 				get: () => this.userBanned?.value,
 				set: (val) => {
 					this.$set(this.userBanned, "value", val);
-				}
-			}
-		}
+				},
+			},
+		};
 	},
 
-	created () {
+	created() {
 		if (!this.videoMeta.isLive) {
 			this.leaveRoom();
 		}
 
-		this.userBanned.set((() => {
-			const id = this.m_chat.myUserId;
-			return this.chat.currentState?.members[id]?.membership === "ban";
-		})());
+		this.userBanned.set(
+			(() => {
+				const id = this.m_chat.myUserId;
+				return this.chat.currentState?.members[id]?.membership === "ban";
+			})()
+		);
 	},
 
 	computed: {
 		...mapState({
-			auth: (state) => state.auth
+			auth: (state) => state.auth,
 		}),
 
 		streamMode() {
@@ -85,13 +87,15 @@ export default {
 
 		m_chat() {
 			return this.core.mtrx.client.getRoom(this.chat.roomId) || {};
-		}
+		},
 	},
 
 	methods: {
 		getMember(user) {
 			return this.m_chat.getMember(
-				user.userId.includes("@") ? user.userId : f.getMatrixIdFull(user.userId, this.core.domain)
+				user.userId.includes("@")
+					? user.userId
+					: f.getMatrixIdFull(user.userId, this.core.domain)
 			);
 		},
 
@@ -112,13 +116,12 @@ export default {
 				"m.room.power_levels"
 			);
 
-			this.core.mtrx.client
-				.setPowerLevel(
-					this.chat.roomId,
-					user.userId,
-					user.powerLevel === 50 ? 0 : 50,
-					event[0]
-				);
+			this.core.mtrx.client.setPowerLevel(
+				this.chat.roomId,
+				user.userId,
+				user.powerLevel === 50 ? 0 : 50,
+				event[0]
+			);
 
 			return Promise.resolve();
 		},
@@ -128,24 +131,12 @@ export default {
 
 			if (user.membership === "ban") {
 				this.core.mtrx.client
-					.unban(
-						this.m_chat.roomId,
-						user.userId
-					)
+					.unban(this.m_chat.roomId, user.userId)
 					.then(() => {
-						this.core.mtrx.client
-							.invite(
-								this.m_chat.roomId,
-								user.userId
-							);
+						this.core.mtrx.client.invite(this.m_chat.roomId, user.userId);
 					});
 			} else {
-				this.core.mtrx.client
-					.ban(
-						this.m_chat.roomId,
-						user.userId,
-						"admin ban"
-					);
+				this.core.mtrx.client.ban(this.m_chat.roomId, user.userId, "admin ban");
 			}
 
 			return Promise.resolve();
@@ -159,7 +150,7 @@ export default {
 						this.$store.commit("DELETE_ROOM", this.chat.roomId);
 					}); */
 			});
-		}
-	}
+		},
+	},
 };
 </script>

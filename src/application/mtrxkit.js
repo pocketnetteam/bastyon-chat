@@ -54,8 +54,6 @@ class MTRXKIT {
 		var users = {};
 
 		_.each(m_chats, (chat) => {
-			
-
 			users[chat.roomId] = _.map(
 				_.uniq(
 					[].concat(
@@ -91,7 +89,6 @@ class MTRXKIT {
 		});
 
 		return this.usersInfoForChatsStore(m_chats).then((i) => {
-
 			this.core.store.commit(
 				"SET_CONTACTS_FROM_MATRIX",
 				_.filter(i, (m) => {
@@ -106,7 +103,6 @@ class MTRXKIT {
 	usersInfoForChatsStore(m_chats, reload) {
 		return this.usersInfoForChats(m_chats, reload)
 			.then((i) => {
-
 				this.core.store.commit("SET_CHATS_USERS", this.usersFromChats(m_chats));
 
 				return Promise.resolve(i);
@@ -120,11 +116,8 @@ class MTRXKIT {
 		var members = [];
 		var promises = [];
 
-
 		if (withinvite) {
 			var promises = _.map(m_chats, (chat) => {
-
-
 				if (
 					chat.selfMembership === "invite" &&
 					(!chat.summary.members || reload) &&
@@ -135,8 +128,6 @@ class MTRXKIT {
 					return chat
 						.loadMembersFromServer()
 						.then((r) => {
-
-
 							chat.summary.membersloading = false;
 
 							chat.summary.members = _.map(r, (user) => {
@@ -149,10 +140,7 @@ class MTRXKIT {
 								};
 							});
 
-							if (
-								chat.selfMembership === "invite" &&
-								this.core.user.userinfo
-							) {
+							if (chat.selfMembership === "invite" && this.core.user.userinfo) {
 								if (
 									!_.find(chat.summary.members, (m) => {
 										return (
@@ -174,7 +162,7 @@ class MTRXKIT {
 							return Promise.resolve();
 						})
 						.catch((e) => {
-							console.log("ER", e)
+							console.log("ER", e);
 							chat.summary.membersloading = false;
 
 							return Promise.resolve();
@@ -197,8 +185,6 @@ class MTRXKIT {
 				return m.userId;
 			});
 
-			
-
 			return Promise.resolve(members);
 		});
 	}
@@ -207,7 +193,6 @@ class MTRXKIT {
 		/// TODO FILTER CONTACTS
 
 		return this.allchatmembers(m_chats, reload).then((members) => {
-
 			return this.usersInfo(members, reload);
 		});
 	}

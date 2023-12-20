@@ -9,7 +9,6 @@
 					:m_chat="m_chat"
 					:hideunseen="true"
 				/>
-			
 			</div>
 
 			<chatName

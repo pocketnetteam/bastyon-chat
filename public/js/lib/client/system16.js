@@ -193,7 +193,6 @@ var System16 = function (app, proxy, direct) {
 		if (electron && direct) {
 			return request(rdata);
 		} else {
-
 			return proxy.fetchauth("manage", rdata);
 		}
 	};

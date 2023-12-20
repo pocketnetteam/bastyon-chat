@@ -91,7 +91,7 @@ export default {
 
 	.filecontent
 		.name
-			
+
 
 		span
 			font-size: 0.8em

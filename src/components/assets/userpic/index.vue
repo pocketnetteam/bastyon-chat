@@ -5,7 +5,6 @@
 				<bgimage v-if="props.image" :src="props.image" />
 
 				<template v-else>
-
 					<bgimage v-if="props.userinfo.image" :src="props.userinfo.image" />
 
 					<div
@@ -21,7 +20,14 @@
 						<span>{{ props.userinfo.name.charAt(0) }}</span>
 					</div>
 
-					<div class="statusIcon" v-if="props.status == 'blocked' || props.status == 'ban' || props.status == 'invite'">
+					<div
+						class="statusIcon"
+						v-if="
+							props.status == 'blocked' ||
+							props.status == 'ban' ||
+							props.status == 'invite'
+						"
+					>
 						<i
 							v-if="props.status == 'blocked' || props.status == 'ban'"
 							class="fas fa-ban"

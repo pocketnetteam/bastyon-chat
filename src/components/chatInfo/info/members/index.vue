@@ -5,7 +5,6 @@
 			:class="user.membership"
 			v-for="user in membersList"
 			:key="user.userId"
-
 		>
 			<div class="leftWrapper" @click="openModal(user)">
 				<div class="avatarNameWrapper">
@@ -23,7 +22,10 @@
 
 			<div v-if="menu(user).length">
 				<div class="rightWrapper">
-					<i @click="e=>setmenu(user)" class="fas fa-ellipsis-h setmenu"></i>
+					<i
+						@click="(e) => setmenu(user)"
+						class="fas fa-ellipsis-h setmenu"
+					></i>
 					<!--<dropdownMenu
 						@itemClicked="menuItemClickHandler"
 						ref="dropdownMenu"

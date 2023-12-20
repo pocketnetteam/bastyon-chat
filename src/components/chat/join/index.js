@@ -13,11 +13,8 @@ export default {
 	components: {
 		chatPreview,
 	},
-	
-	inject: [
-		"streamMode",
-		"videoMeta"
-	],
+
+	inject: ["streamMode", "videoMeta"],
 
 	data: function () {
 		return {

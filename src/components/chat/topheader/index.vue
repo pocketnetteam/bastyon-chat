@@ -1,6 +1,5 @@
 <template>
 	<div id="chatTopheader">
-
 		<topheader v-if="chat || u">
 			<template v-slot:left>
 				<backButton action="chats" />
@@ -72,31 +71,46 @@
 
 		<topheader v-if="chat && searchactive" classstyle="noiconsButWithL">
 			<template v-slot:left>
-				<backButton @back="backfromsearch"/>
+				<backButton @back="backfromsearch" />
 			</template>
 
 			<template v-slot:info>
-				<simpleSearch :value="search" :controlKeys="true" @search="searching" ref="search" @controlKey="searchControlKey">
+				<simpleSearch
+					:value="search"
+					:controlKeys="true"
+					@search="searching"
+					ref="search"
+					@controlKey="searchControlKey"
+				>
 					<template v-slot:default v-if="searchresults && searchresults.length">
-
 						<div class="matches">
 							<span class="current-match"
-								>{{ searchresults.length - (focusedeventIndex) }}/{{ searchresults.length }}</span
+								>{{ searchresults.length - focusedeventIndex }}/{{
+									searchresults.length
+								}}</span
 							>
-							<i class="prev-match fas fa-chevron-up" @click="tobottomsearch"></i>
+							<i
+								class="prev-match fas fa-chevron-up"
+								@click="tobottomsearch"
+							></i>
 							<i class="next-match fas fa-chevron-down" @click="toupsearch"></i>
 						</div>
 
-						<div class="iconWrapper" v-if="search" @click="() => {searching('')}">
+						<div
+							class="iconWrapper"
+							v-if="search"
+							@click="
+								() => {
+									searching('');
+								}
+							"
+						>
 							<i class="fas fa-times"></i>
 						</div>
-
 					</template>
 				</simpleSearch>
 			</template>
-			
 		</topheader>
-
 	</div>
 </template>
 

@@ -1,7 +1,7 @@
 <template>
 	<div class="chatIcon" :class="{ unknowngroupusers }">
 		<div v-if="groupAvatar" class="chatGroupIcon">
-			<userpic :image="groupAvatar"/>
+			<userpic :image="groupAvatar" />
 		</div>
 		<userspic
 			v-else

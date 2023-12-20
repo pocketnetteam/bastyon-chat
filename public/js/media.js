@@ -2,21 +2,28 @@ window.BSTMediaCs = function () {
 	var self = this;
 
 	function iOS() {
-		return [
-		  'iPad Simulator',
-		  'iPhone Simulator',
-		  'iPod Simulator',
-		  'iPad',
-		  'iPhone',
-		  'iPod'
-		].includes(navigator.platform)
-		// iPad on iOS 13 detection
-		|| (navigator.userAgent.includes("Mac") && "ontouchend" in document)
+		return (
+			[
+				"iPad Simulator",
+				"iPhone Simulator",
+				"iPod Simulator",
+				"iPad",
+				"iPhone",
+				"iPod",
+			].includes(navigator.platform) ||
+			// iPad on iOS 13 detection
+			(navigator.userAgent.includes("Mac") && "ontouchend" in document)
+		);
 	}
-	
+
 	isios = function () {
-		return (window.cordova && window.device && deep(window, 'device.platform') == 'iOS') || iOS()
-	}
+		return (
+			(window.cordova &&
+				window.device &&
+				deep(window, "device.platform") == "iOS") ||
+			iOS()
+		);
+	};
 
 	self.gettingmedia = false;
 
@@ -193,5 +200,4 @@ window.BSTMediaCs = function () {
 	self.permissions = initPermissions;
 };
 
-window.BSTMedia = new window.BSTMediaCs()
-
+window.BSTMedia = new window.BSTMediaCs();
