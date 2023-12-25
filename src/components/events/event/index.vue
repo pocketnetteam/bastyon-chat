@@ -412,7 +412,7 @@ export default {
 			this.downloading = true;
 
 			this.core.mtrx
-				.downloadFile(this.chat, this.event).then(({name, url, type, nativeURL}) => {
+				.downloadFile(this.chat, this.event).then((r) => {
 					
 					this.downloaded = true;
 
@@ -421,23 +421,29 @@ export default {
 						message: "Downloaded",
 					});
 
-					
+					if(r){
 
-					if(window.cordova && typeof cordova.plugins.fileOpener2 != 'undefined'){
+						var {name, url, type, nativeURL} = r
 
-						cordova.plugins.fileOpener2.open(
-							nativeURL || url,
-							type,
-							{
-								error : function(err){ console.error(err) },
-								success : function(){ console.log("SUCCESS") }
-							}
-						);
+						if(window.cordova && typeof cordova.plugins.fileOpener2 != 'undefined'){
 
+							cordova.plugins.fileOpener2.open(
+								nativeURL || url,
+								type,
+								{
+									error : function(err){ console.error(err) },
+									success : function(){ console.log("SUCCESS") }
+								}
+							);
+
+						}
 					}
+
+					
 
 				})
 				.catch((e) => {
+					console.error(e)
 					this.error = e.toString();
 
 					this.$store.commit("icon", {
