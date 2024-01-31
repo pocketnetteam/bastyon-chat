@@ -589,7 +589,6 @@ var PcryptoRoom = async function (pcrypto, chat, { ls, lse }) {
 				}
 
 				if (!body[bodyindex]) {
-					console.log('body', body, bodyindex)
 					throw new Error("emptyforme");
 				}
 
@@ -742,7 +741,6 @@ var PcryptoRoom = async function (pcrypto, chat, { ls, lse }) {
 		}
 
 		if (!body[bodyindex]) {
-			console.log('body', body, bodyindex, event)
 			throw new Error("emptyforme");
 		}
 
@@ -787,8 +785,6 @@ var PcryptoRoom = async function (pcrypto, chat, { ls, lse }) {
 
 	var usershash = function () {
 		var users = self.preparedUsers(undefined, self.version);
-
-		console.log("users", users)
 
 		var hash = f.md5(
 			_.filter(
@@ -1062,7 +1058,6 @@ var PcryptoFile = function () {
 	};
 
 	var convertFile = function (blob, file) {
-		console.log('blob, file', blob, file)
 		return new (window.wFile || window.File)([blob], "encrypted", {
 			type: "encrypted/" + file.type,
 			name: file.name,
@@ -1071,7 +1066,6 @@ var PcryptoFile = function () {
 
 	var convertDecryptedFile = function (blob, file, additionalFinfo = {}) {
 
-		console.log('blob, file', blob, file, additionalFinfo)
 
 		var name = file.name || additionalFinfo.name || "decrypted"
 		var type = (additionalFinfo.type || "").replace("encrypted/", "") || (file.type || "").replace("encrypted/", "")

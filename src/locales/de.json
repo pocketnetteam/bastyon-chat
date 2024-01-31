@@ -56,7 +56,7 @@
 		"following": "Folgen:",
 		"theme": "Thema:",
 		"contacts": "Kontakte",
-		"other": "Globale Bastyon suche",
+		"other": "Globale suche",
 		"phoneContacts": "Telefonische Kontakte",
 		"chooseInviteMedia": "Bitte wählen Sie, wie Sie einladen möchten",
 		"admin": "Admin",
@@ -170,14 +170,14 @@
 	"cancel": "Abbrechen",
 
 	"teamMessages": {
-		"1-title": "Willkommen beim privaten Bastyon-Chat!",
+		"1-title": "Willkommen beim privaten Chat!",
 		"1-list1": "Privater Messenger, der NICHT mit Ihrer Telefonnummer verbunden ist.",
 		"1-list2": "Standardmäßig Ende-zu-Ende-Verschlüsselung jedes 1-zu-1-Gesprächs",
 		"1-list3": "Alle per Chat gesendeten oder empfangenen Bilder werden verschlüsselt gespeichert",
 		"1-list4": "Der Nachrichtenverlauf wird nur 7 Tage lang gespeichert",
 
-		"2-title": "Eine riesige Ankündigung! Die Pocketnet-Anwendung heißt jetzt Bastyon!",
-		"2-message1": "Die Domain wird auf Bastyon.com verschoben. Wir haben kürzlich die folgenden wichtigen Updates veröffentlicht:",
+		"2-title": "Eine riesige Ankündigung!",
+		"2-message1": "Wir haben kürzlich die folgenden wichtigen Updates veröffentlicht:",
 		"2-list1": "Privater verschlüsselter Messenger, der nicht mit Ihrer Telefonnummer verbunden ist",
 		"2-list2": "Möglichkeit, PKOIN an Blogger zu spenden",
 		"2-list3": "Video- und Live-Streaming",

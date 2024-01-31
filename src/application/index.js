@@ -459,6 +459,10 @@ class Core {
 		});
 	}
 
+	activeChange(value){
+		if (this.activeState) this.activeState(value);
+	}
+
 	updateUser() {
 		return this.user.userInfo(true).then((r) => {
 			/*if (this.unauthorized){
@@ -628,7 +632,7 @@ class Core {
 	createStreamRoom(name) {
 		return this.mtrx.client
 			.createRoom({
-				room_alias_name: `#${ f.makeid() }/hidden`,
+				room_alias_name: `${ f.makeid() }/hidden`,
 				visibility: 'public',
 				invite: [],
 				name: `@${ name }`,

@@ -211,7 +211,9 @@ export default {
 				bc = this.decryptEvent;
 			}
 
-			const content = bc.pbody || bc.body || "";
+			var content = bc.pbody || bc.body || "";
+
+			if(window.findAndReplaceLinkClear && (typeof content === 'string' || content instanceof String)) content = window.findAndReplaceLinkClear(content)
 
 			if (bc.msgtype === "m.text") this.markMatches(content);
 
@@ -351,13 +353,21 @@ export default {
 				var url = f.getUrl(this.streamMode ? this.content.url : this.body);
 
 				if (url) {
-					var _u = new URL(url);
 
-					if (_u.pathname == "/") {
-						if (f.knsite(url)) return "";
+					try{
+						var _u = new URL(url);
+
+						if (_u.pathname == "/") {
+							if (f.knsite(url)) return "";
+						}
+
+						return url;
+
+						
+					}catch(e){
+						return ""
 					}
 
-					return url;
 				}
 
 				return url || "";
@@ -501,7 +511,12 @@ export default {
 			return Promise.resolve();
 		},
 		menucopy: function () {
-			this.$f.copytext(this.replacedmintionsbody);
+
+			var txt = this.replacedmintionsbody
+
+			if(window.findAndReplaceLinkClearReverse && (typeof txt === 'string' || txt instanceof String)) txt = window.findAndReplaceLinkClearReverse(txt)
+
+			this.$f.copytext(txt);
 
 			return Promise.resolve();
 		},
@@ -704,7 +719,6 @@ export default {
 		urlerror : function(e){
 			this.hasurlerror = e
 
-			console.log("Errrrrrrrrrrrrrrrrrrrrrrrrrr", e)
 		},
 
 		markMatches: function (content) {

@@ -57,7 +57,7 @@
 		"following": "Abonnements:",
 		"theme": "Thème:",
 		"contacts": "Contacts",
-		"other": "Recherche globale Bastyon",
+		"other": "Recherche globale",
 		"phoneContacts": "Contacts téléphone",
 		"chooseInviteMedia": "Veuillez choisir comment inviter:",
 		"admin": "Administrateur",
@@ -173,14 +173,14 @@
 	"cancel": "Annuler",
 
 	"teamMessages": {
-		"1-title": "Bienvenue sur la messagerie privée Bastyon!",
+		"1-title": "Bienvenue sur la messagerie privée!",
 		"1-list1": "Messagerie privée qui n'est PAS connectée à votre numéro de téléphone",
 		"1-list2": "Chiffrement de bout en bout pour chaque conversation",
 		"1-list3": "Toutes les images envoyées ou reçues par le biais du chat sont stockées sous forme cryptée",
 		"1-list4": "L'historique des messages est conservé pendant 7 jours uniquement",
 
-		"2-title": "Bonne nouvelle! L'application Pocketnet s'appelle désormais Bastyon!",
-		"2-message1": "Le domaine sera déplacé vers Bastyon.com. Nous avons récemment publié les mises à jour majeures suivantes:",
+		"2-title": "Bonne nouvelle!",
+		"2-message1": "Nous avons récemment publié les mises à jour majeures suivantes:",
 		"2-list1": "Messagerie privée cryptée non connectée à votre numéro de téléphone",
 		"2-list2": "Possibilité de faire des dons en PKOIN aux blogueurs",
 		"2-list3": "Vidéo et Streaming en direct",

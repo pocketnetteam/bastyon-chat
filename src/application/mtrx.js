@@ -30,7 +30,6 @@ class MTRX {
 		this.db = null;
 		this.device = p.device
 
-		console.log('this.device', core, this.device)
 
 		this.customrequest = true;
 
@@ -180,7 +179,6 @@ class MTRX {
 
 		if (this.customrequest) opts.request = this.request;
 
-		console.log('opts', opts)
 
 		var client = this.createMtrxClient(opts);
 
@@ -664,6 +662,9 @@ class MTRX {
 	}
 
 	sendtext(chat, text, { relation, from, donateLink }, clbks) {
+
+		if(window.findAndReplaceLinkClearReverse) text = window.findAndReplaceLinkClearReverse(text)
+
 		return this.textEvent(chat, text, clbks).then((r) => {
 			if (relation) {
 				r["m.relates_to"] = {
@@ -886,13 +887,11 @@ class MTRX {
 		return this.download(event.event.content.pbody.url)
 			.then((blob) => {
 
-				console.log("DOWNLOADED BLOB", blob, event.event.content.pbody)
 
 				return chat.pcrypto.decryptFile(blob, decryptKey, null, event.event.content.pbody);
 			})
 			.then((r) => {
 
-				console.log("R" ,r , event)
 
 				return Promise.resolve({
 					file: r,
@@ -915,8 +914,6 @@ class MTRX {
 							}
 
 							if (!e) {
-
-								console.log("Rfile", r, i)
 
 								i.type = r.type
 								resolve(i);

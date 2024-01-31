@@ -177,9 +177,10 @@ export default {
 
 		openlinkiframe: function (url) {
 			if (this.core.backtoapp) {
-				var pu = new URL(url);
+				//var pu = new URL(url);
 
-				this.core.backtoapp(pu.pathname.replace("/", "") + pu.search);
+				this.core.backtoapp(url);
+
 			} else window.open(url, "_blank");
 		},
 

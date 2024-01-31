@@ -95,8 +95,7 @@ var PNWIDGETS = function () {
 			? "lenta"
 			: "channel";
 
-		var id =
-			action === "channel" ? parsed_url.pathname.replace("/", "") : postid;
+		var id = action === "channel" ? (parsed_url.pathname).replace(window.pocketnetpublicpath || "/", "") : postid;
 
 		if (id == "author" && action === "channel")
 			id = parsed_url.searchParams.get("address");

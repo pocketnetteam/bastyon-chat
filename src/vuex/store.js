@@ -241,6 +241,8 @@ var store = new Vuex.Store({
 
 					state.active = value;
 
+					store._vm.core.activeChange(state.active)
+
 					if (!state.active) {
 						state.share = null;
 						delete state.activeBlock.share;
@@ -268,6 +270,7 @@ var store = new Vuex.Store({
 			if (state.minimized) {
 				state.activeBlock = {};
 				state.active = false;
+				store._vm.core.activeChange(state.active)
 			}
 
 
@@ -578,6 +581,7 @@ var store = new Vuex.Store({
 			if (!state.mobile) {
 				state.activeBlock.share = true;
 				state.active = true;
+				store._vm.core.activeChange(state.active)
 			}
 		},
 
@@ -713,6 +717,7 @@ var store = new Vuex.Store({
 			var id = store._vm.core.user.myMatrixId();
 
 			var chats = _.map(m_chats, function (r) {
+				
 				const hv = r.currentState.getStateEvents("m.room.history_visibility", "");
 				
 				if (r.getLastActiveTimestamp() === -9007199254740991) {
@@ -726,7 +731,6 @@ var store = new Vuex.Store({
 
 				r.summary.info = {
 					title : r.name
-
 				}
 				r.summary.key = r.summary.roomId + ':' + r.summary.lastModified
 				r.summary.stream = hv?.event?.content?.history_visibility === "world_readable";

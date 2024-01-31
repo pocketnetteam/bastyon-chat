@@ -872,7 +872,7 @@ export default {
 
 		var listofproxies = f.deep(
 			window,
-			"window.POCKETNETINSTANCE.options.listofproxies"
+			"POCKETNETINSTANCE.options.listofproxies"
 		) || [
 			{
 
@@ -891,7 +891,7 @@ export default {
 		*/
 
 		var domain =
-			f.deep(window, "window.POCKETNETINSTANCE.options.matrix") ||
+			f.deep(window, "POCKETNETINSTANCE.options.matrix") ||
 			"test.matrix.pocketnet.app";
 
 		core = new Core(this, {

@@ -36,6 +36,8 @@
 
 <script>
 import { mapState } from "vuex";
+import f from "@/application/functions";
+
 
 
 var exts = ["bin", "dat", "swf", "doc", "docx", "sig", "tif", "cdr", "xls", "xlsx", "p7s", "mkv", "tmp", "db", "isz", "mdf", "jpg", "cr2", "fb2", "iso", "svg", "exe", "mdx", "vob", "ppt", "xls", "dcm", "vsd", "mov", "img", "pdf", "jpg", "jfif", "png"]
@@ -93,12 +95,18 @@ export default {
 				this.error = e;
 			}
 
-			if (!url.pathname || url.pathname == "/") return "custom";
-
-			var domain = window.pocketnetdomain || "pocketnet.app";
+			if (url.pathname == "/") return "custom";
 
 			if (this.url.indexOf("publicroom=") > -1) return "matrix";
 			if (this.url.indexOf("connect=") > -1) return "matrix";
+
+			if (f.deep(window, "POCKETNETINSTANCE.thislink") && f.deep(window, "POCKETNETINSTANCE.thislink")(this.url)){
+				return "pocketnet";
+			}
+
+			/*
+			
+			var domain = window.pocketnetdomain || "pocketnet.app";
 
 			if (this.url.indexOf("bastyon://") > -1) return "pocketnet";
 			if (this.url.indexOf("pocketnet://") > -1) return "pocketnet";
@@ -109,7 +117,7 @@ export default {
 
 			if (m && this.url.indexOf("embedVideo.php") == -1 && this.url.indexOf("docs/") == -1 && this.url.indexOf("/blockexplorer") == -1) {
 				return "pocketnet";
-			}
+			}*/
 
 			return "custom";
 		},
