@@ -41,6 +41,23 @@ class MTRXKIT {
 		return hash;
 	}
 
+	groupid(users, owner) {
+		var seed = 2;
+
+		var id = users.reduce((s, u) => {
+			s += parseInt(u.id, 16);
+			return s;
+		}, 0) * parseInt(owner.id, 16) * seed;
+
+		if (cachestorage[id]) return cachestorage[id];
+
+		var hash = f.sha224(id.toString()).toString("hex");
+
+		cachestorage[id] = hash;
+
+		return hash;
+	}
+
 	unknowngroupusers(m_chat) {
 		return (
 			m_chat &&
