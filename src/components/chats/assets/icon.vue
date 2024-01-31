@@ -1,7 +1,7 @@
 <template>
 	<div class="chatIcon" :class="{ unknowngroupusers }">
 		<div v-if="groupAvatar" class="chatGroupIcon">
-			<userpic :image="groupAvatar"/>
+			<userpic :image="groupAvatar" :appIcon="appIcon" />
 		</div>
 		<userspic
 			v-else
@@ -11,6 +11,7 @@
 			:unseen="unseen"
 			:key="allnotifications"
 			:single="singleAvatar"
+			:appIcon="appIcon"
 			:class="{ opacity: groupAvatar }"
 		/>
 
@@ -168,6 +169,10 @@ export default {
 					.content.avatarUrl;
 			return avatar !== "" ? avatar : "";
 		},
+
+		appIcon: function () {
+			console.log('appIcon', this.chat, this.m_chat)
+		}
 	},
 };
 </script>
