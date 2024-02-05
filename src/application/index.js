@@ -670,6 +670,10 @@ class Core {
 		return this.mtrx.client
 			.removeRoom(roomId);
 	}
+
+	getNotificationsCount() {
+		return this.vm.$store.state.allnotifications
+	}
 }
 
 export default Core;
