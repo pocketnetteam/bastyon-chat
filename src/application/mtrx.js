@@ -1027,12 +1027,14 @@ class MTRX {
 
 		//// https://github.com/j3k0/cordova-plugin-openwith (item.type ---> resize)
 
+		if(!m_chat) return Promise.reject("chat:notfound")
+
 		return this.core.mtrx.kit.prepareChat(m_chat).then((r) => {
 			var promises = [];
 
 			//// todo resize images.resize.fit
 			_.each(share.images, (base64) => {
-				var promise = this.sendImageBase64(
+				var promise = () => this.sendImageBase64(
 					m_chat,
 					base64,
 					{},
@@ -1044,7 +1046,7 @@ class MTRX {
 
 			_.each(share.download, ({event, chat}) => {
 
-				var promise = this.core.mtrx.kit.prepareChat(chat).then(() => {
+				var promise = () => this.core.mtrx.kit.prepareChat(chat).then(() => {
 
 					return this.core.mtrx.getFile(chat, event)
 
@@ -1059,15 +1061,15 @@ class MTRX {
 			});
 
 			_.each(share.files, (file) => {
-				promises.push(this.sendFile(m_chat, file, {}, { from: share.from }));
+				promises.push(() => this.sendFile(m_chat, file, {}, { from: share.from }));
 			});
 
 			_.each(share.urls, (url) => {
-				promises.push(this.sendtext(m_chat, url, { from: share.from }));
+				promises.push(() => this.sendtext(m_chat, url, { from: share.from }));
 			});
 
 			_.each(share.messages, (text) => {
-				promises.push(this.sendtext(m_chat, text, { from: share.from }));
+				promises.push(() => this.sendtext(m_chat, text, { from: share.from }));
 			});
 
 			_.each(share.audio, (arraybuffer) => {
@@ -1075,9 +1077,13 @@ class MTRX {
 					"data:audio/mpeg;base64," + f._arrayBufferToBase64(arraybuffer);
 
 				promises.push(
-					this.sendAudioBase64(m_chat, base64, {}, { from: share.from })
+					() => this.sendAudioBase64(m_chat, base64, {}, { from: share.from })
 				);
 			});
+
+			return f.processArray(promises, (promise) => {
+				return promise()
+			})
 
 			return Promise.all(promises);
 		});

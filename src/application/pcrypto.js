@@ -536,6 +536,7 @@ var PcryptoRoom = async function (pcrypto, chat, { ls, lse }) {
 	};
 
 	self.decryptEvent = async function (event) {
+		console.log('event', event)
 		if (event.content.hash) return self.decryptEventGroup(event);
 
 		if (!pcrypto.user.userinfo) {

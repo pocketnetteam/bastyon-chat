@@ -11,14 +11,15 @@
   .customURL
     display: flex
     flex-direction: column-reverse
-
+  .pocketnet_miniapp,
   .pocketnet_iframe_wrapper,
   .customURL
     border-top : 1px solid srgb(--neutral-grad-0)
     +shadowSmaller()
     border-radius: 5px
     overflow: hidden
-
+    
+  .pocketnet_miniapp,
   .pocketnet_iframe_wrapper
     background: srgba(--background-main, 0.1)
     font-size: 0.9em
@@ -80,6 +81,23 @@
     border-radius: 5px
     border-bottom-left-radius: 0
     border-top-right-radius: 0
+
+  .pocketnet_miniapp
+    padding : $r
+    .link
+      padding-right: 0
+      white-space: nowrap
+    .linkinfo
+      
+    .approw
+      display: flex
+    .appicon
+      margin-right: $r
+      .bgimage
+        width: 20px
+        height: 20px
+        border-radius: 5px
+	
   .textMsg
     word-break: break-all
     font-size: 0.8em

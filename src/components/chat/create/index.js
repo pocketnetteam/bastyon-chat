@@ -128,7 +128,7 @@ export default {
 					invite: data.idForInviting,
 					name: "@" + (this.groupName ? this.groupName : "New Room"),
 
-					initial_state: [
+					initial_state: this.type.id == "publicgroup" ? [
 						{
 							type: "m.room.guest_access",
 							state_key: "",
@@ -136,7 +136,7 @@ export default {
 								guest_access: "can_join",
 							},
 						},
-					],
+					] : [],
 				})
 				.then((chat) => {
 

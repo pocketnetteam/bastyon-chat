@@ -1161,6 +1161,9 @@ var getTxt = function (data) {
 		""
 	);
 };
+var getmatrixidFA = function (str) {
+	return str?.split(":")[0];
+};
 var getmatrixid = function (str) {
 	return str?.split(":")[0]?.replace("@", "");
 };
@@ -2046,6 +2049,7 @@ f.ObjDiff = ObjDiff;
 f._arrayBufferToBase64 = _arrayBufferToBase64;
 f._base64ToArrayBuffer = _base64ToArrayBuffer;
 f.Base64 = Base64;
+f.getmatrixidFA = getmatrixidFA;
 f.getmatrixid = getmatrixid;
 f.getMatrixIdFull = getMatrixIdFull;
 f.formatBytes = formatBytes;

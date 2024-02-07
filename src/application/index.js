@@ -551,6 +551,152 @@ class Core {
 		}
 	}
 
+
+	getOrCreateRoom({users = [], alliasSuffix = '', parameters = {}}){
+
+		var tetatet = false
+		var roomid = null
+
+		if(!users.length){
+			return Promise.reject('users:empty')
+		}
+
+		if (users.length > 10){
+			return Promise.reject('users:max:10')
+		}
+
+		//var cryptoenabled = true
+
+		/*if (users.length == 1){
+			cryptoenabled = true
+		}*/
+
+		this.vm.$store.state.globalpreloader = true;
+
+		return this.user.usersInfo(users, true).then((info) => {
+
+			console.log('info', info, users)
+
+			if(info.length != users.length) return Promise.reject('users:info:notloaded')
+
+			var room_alias_name = null
+			
+
+			if (users.length == 1){
+				room_alias_name = this.mtrx.kit.tetatetid(info[0], this.user.userinfo);
+				tetatet = true
+			}
+			else{
+				room_alias_name = this.mtrx.kit.groupideq(info.concat(this.user.userinfo));
+			}
+
+			var inviteids = _.map(info, (i) => {
+				return this.user.matrixId(i.id)
+			})
+
+			var initialstate = [
+				{
+					type: "m.set.encrypted",
+					state_key: "",
+					content: {
+						encrypted: true,
+					},
+				},
+			];
+
+			var commonAliasName = room_alias_name + (alliasSuffix ? '@' + alliasSuffix : '')
+
+			var existingroom = _.find(this.mtrx.client.getRooms(), (r) => {
+				return f.getmatrixidFA(r.getCanonicalAlias()) == '#' + commonAliasName
+			})
+
+			if (existingroom){
+				roomid = existingroom.roomId
+				
+				return Promise.resolve()
+			}
+
+			var name = ((parameters.name || tetatet) ? "#" : "@") + (parameters.name || f.makeid())
+
+			return this.mtrx.client.createRoom({
+				room_alias_name: commonAliasName, 
+				visibility: "private",
+				invite: inviteids,
+				name: name,
+				initial_state: initialstate
+			}).then((r) => {
+
+				roomid = r.room_id
+	
+				var chat = this.mtrx.client.getRoom(roomid);
+	
+				if(!chat) return Promise.reject('chat:notfound')
+
+				console.log('chat', chat)
+
+	
+				if (tetatet || parameters.equal){
+	
+					let event = chat.currentState.getStateEvents(
+						"m.room.power_levels"
+					);
+	
+					if (event){
+	
+						return Promise.all(_.map(inviteids, (id) => {
+							return this.mtrx.client.setPowerLevel(chat.roomId, id, 100, event[0]).catch((e) => {});
+						}))
+	
+					}
+	
+				}
+	
+			})
+
+		}).then(() => {
+			return {
+				roomid
+			}
+		}).finally(() => {
+			this.vm.$store.state.globalpreloader = false;
+		})
+	}
+
+	sendMessage({roomid, content, alliasSuffix}){
+
+		var chat = this.mtrx.client.getRoom(roomid);
+
+		if(!chat){
+			return Promise.reject("chat:notfound")
+		}
+
+		/*if (alliasSuffix && chat.getCanonicalAlias().indexOf(alliasSuffix) == -1){
+			return Promise.reject("alliasSuffix:notmatch")
+		}*/
+
+		return this.mtrx.shareInChat(roomid, content).then((r) => {
+
+			this.vm.$store.commit("icon", {
+				icon: "success",
+				message: "",
+			});
+
+			return Promise.resolve(r)
+
+		}).catch((e) => {
+
+			console.error(e);
+
+			this.vm.$store.commit("icon", {
+				icon: "error",
+				message: "",
+			});
+
+			return Promise.reject(e)
+			
+		});
+	}
+
 	async convertAudioToBase64(blob) {
 		const reader = new FileReader();
 		reader.readAsDataURL(blob);

@@ -671,6 +671,8 @@ export default {
 
 		urlloaded: function(data) {
 			/* Parse donation link */
+
+			if(!data) return
 			
 			const
 				holder = data?.el.find('.txcnt'),

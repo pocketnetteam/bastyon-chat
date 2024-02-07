@@ -1,6 +1,56 @@
 <template>
 	<div ref="metaMsg" class="metaMsg">
-		<div class="pocketnet_iframe_wrapper" v-show="iframe">
+
+		<div class="pocketnet_miniapp" v-if="miniapplink">
+
+			<div class="miniappcontent">
+				<div class="preloaderWrapperLocal" v-if="applicationLoading">
+					<linepreloader />
+				</div>
+
+				<div class="info" v-else>
+					<template v-if="application">
+						<div class="approw">
+							<div class="appicon">
+								<bgimage v-if="application.application.icon" :src="application.application.icon" />
+							</div>
+							<div class="appname">
+								<span>{{ application.application.manifest.name }}</span>
+							</div>
+						</div>
+						<div class="linkinfo">
+
+							<div class="header">
+								<div v-if="application.meta.image">
+									<bgimage :src="application.meta.image" />
+								</div>
+
+								<div class="header-text">
+									<span class="title" v-if="application.meta.title || application.meta.titlePage">{{ application.meta.title || application.meta.titlePage}}</span>
+									<span class="description" v-if="application.meta.description || application.meta.descriptionPage || application.application.manifest.descriptions['en']">{{ application.meta.description || application.meta.descriptionPage || application.application.manifest.descriptions['en'] }}</span>
+								</div>
+							</div>
+							
+						</div>
+					</template>
+					<div class="link">
+						<i class="fas fa-link"></i> <span>{{ url }}</span>
+					</div>
+				</div>
+			</div>
+			<div class="openlink" v-if="gotopn">
+				<button
+					class="button orange small rounded"
+					@click="openlinkiframe(url)"
+				>
+					{{ $t("caption.open") }}
+				</button>
+			</div>
+
+
+		</div>
+
+		<div class="pocketnet_iframe_wrapper" v-if="iframe && !miniapplink">
 			<div class="pocketnet_iframe" ref="iframe"></div>
 
 			<div class="openlink" v-if="gotopn">
@@ -78,6 +128,9 @@ export default {
 			txt: String,
 			gotopn: false,
 			module: {},
+
+			application : null,
+			applicationLoading : false
 		};
 	},
 	computed: {
@@ -107,6 +160,17 @@ export default {
 			const ratio = this.w / this.imageWidth;
 
 			return this.h / ratio || 300;
+		},
+
+		miniapplink(){
+			if(this.type === 'pocketnet'){
+				if(window.POCKETNETINSTANCE && window.POCKETNETINSTANCE.apps && window.POCKETNETINSTANCE.apps){
+					
+					var appinfo = window.POCKETNETINSTANCE.apps.isApplicationLink(this.url)
+
+					return appinfo
+				}
+			}
 		},
 
 		iframe() {
@@ -140,25 +204,59 @@ export default {
 		}, 200)
 	},
 	mounted() {
-		if (this.type === "pocketnet" && this.$refs.iframe) {
-			let widget = new Widgets();
+		if (this.type === "pocketnet" && !this.miniapplink) {
 
-			if (this.$refs.iframe)
-				this.gotopn = widget.makefromurl(
-					this.$refs.iframe,
-					this.url,
-					(before) => {
-						this.updatedSize(before);
-					},
-					{
-						theme: this.core.vm.ctheme || this.$store.state.theme,
-					},
-					(p, m) => {
-						this.module.d = m;
-						this.loaded(m);
-					}
-				);
+			setTimeout(() => {
+				if(this.$refs.iframe){
+					let widget = new Widgets();
+
+					this.gotopn = widget.makefromurl(
+						this.$refs.iframe,
+						this.url,
+						(before) => {
+							this.updatedSize(before);
+						},
+						{
+							theme: this.core.vm.ctheme || this.$store.state.theme,
+						},
+						(p, m) => {
+							this.module.d = m;
+							this.loaded(m);
+						}
+					);
+				}
+				
+			}, 50)
+			
 		}
+
+		if (this.type === "pocketnet" && this.miniapplink) {
+
+			this.gotopn = true
+			this.applicationLoading = true
+
+			console.log('this.miniapplink', this.miniapplink)
+
+			window.POCKETNETINSTANCE.apps.get.applicationAny(this.miniapplink).then(r => {
+
+				console.log("application result 333", r)
+
+				this.application = r || {}
+
+			}).catch(e => {
+
+				console.error(e)
+				
+			}).finally(() => {
+				this.gotopn = true
+				this.applicationLoading = false
+				this.loaded(null);
+				console.log('this.miniapplink2', this.miniapplink)
+
+				console.log('this.application', this.application)
+			})
+		}
+
 	},
 
 	methods: {

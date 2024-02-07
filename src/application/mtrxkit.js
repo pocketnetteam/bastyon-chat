@@ -17,8 +17,13 @@ class MTRXKIT {
 		var users = this.core.mtrx.chatUsersInfo(m_chat.roomId);
 		var tt = false;
 
+		
+
 		if (users.length == 2) {
-			tt = m_chat.name == "#" + this.tetatetid(users[0], users[1]);
+
+			var tid = this.tetatetid(users[0], users[1])
+
+			tt = m_chat.name == "#" + tid || (m_chat.getCanonicalAlias() || "").indexOf(tid) > -1;
 		}
 		if (users.length > 1) m_chat.tetatet = tt;
 
@@ -31,6 +36,24 @@ class MTRXKIT {
 		if (user1.id == user2.id) return null;
 
 		var id = parseInt(user1.id, 16) * parseInt(user2.id, 16) * seed;
+
+		if (cachestorage[id]) return cachestorage[id];
+
+		var hash = f.sha224(id.toString()).toString("hex");
+
+		cachestorage[id] = hash;
+
+		return hash;
+	}
+
+	groupideq(users){
+		var seed = 2;
+
+		var id = 1 * seed
+
+		_.each(users, (u) => {
+			id = id * parseInt(u.id, 16)
+		})
 
 		if (cachestorage[id]) return cachestorage[id];
 
