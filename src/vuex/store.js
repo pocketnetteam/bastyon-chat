@@ -174,7 +174,7 @@ var store = new Vuex.Store({
 		icon(state, value) {
 			state.icon = value;
 
-			var mv = f.deep(window, "window.POCKETNETINSTANCE.mobile.vibration");
+			var mv = f.deep(window, "POCKETNETINSTANCE.mobile.vibration");
 
 			if (mv) {
 				mv.small();
@@ -734,6 +734,14 @@ var store = new Vuex.Store({
 				}
 				r.summary.key = r.summary.roomId + ':' + r.summary.lastModified
 				r.summary.stream = hv?.event?.content?.history_visibility === "world_readable";
+				r.summary.miniappchat = null
+
+				var mnid = f.getminiappid(r.getCanonicalAlias())
+
+				if (mnid && window.POCKETNETINSTANCE && window.POCKETNETINSTANCE.apps){
+					r.summary.miniappchat = window.POCKETNETINSTANCE.apps.get.installed()[mnid] || null
+				}
+
 
 				return r.summary;
 			});

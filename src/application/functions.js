@@ -1161,6 +1161,17 @@ var getTxt = function (data) {
 		""
 	);
 };
+var getminiappid = function(str = ''){
+	var a = getmatrixidFA(str)
+
+	if(!a) return ''
+
+	var ap = a.split("@")
+
+	if(ap[1]) return ap[1]
+
+	return ''
+}
 var getmatrixidFA = function (str) {
 	return str?.split(":")[0];
 };
@@ -2088,4 +2099,5 @@ f.copytext = copytext;
 f.md5 = md5;
 f.knsite = knsite;
 f.stringify = stringify;
+f.getminiappid = getminiappid
 export default f;

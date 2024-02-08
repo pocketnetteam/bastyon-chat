@@ -3,30 +3,42 @@
 		<div class="iconGroup" v-if="isShowGroupIcon">
 			<i class="fas fa-user-friends"></i>
 		</div>
+		<div class="miniappicon" v-if="miniappicon">
+			<bgimage :src="miniappicon" />
+		</div>
 		<div class="nameofchat" >{{convertedName}}</div>
 	</div>
 </template>
 
 <style scoped lang="sass">
 .nameofchat
-  white-space: nowrap
+  	white-space: nowrap
 .nameline
-  display: flex
-  align-items: flex-end
+  	display: flex
+  	align-items: flex-end
+
+.miniappicon
+	margin-right: 0.5 * $r
+	margin-block: 0.5 * $r
+
+	.bgimage
+		width : 12px
+		height: 12px
+		border-radius: 2px
 
 .iconGroup
-  font-size: 0.4em
-  width: 16px
-  min-width: 16px
-  text-align: center
-  height: 16px
-  line-height: 16px
-  border-radius: 8px
-  background: srgb(--neutral-grad-2)
-  margin-right: $r
-  margin-block: 0.5 * $r
-  i
-    color: srgb(--neutral-grad-1)
+  	font-size: 0.4em
+  	width: 16px
+  	min-width: 16px
+  	text-align: center
+  	height: 16px
+  	line-height: 16px
+  	border-radius: 8px
+  	background: srgb(--neutral-grad-2)
+  	margin-right: $r
+  	margin-block: 0.5 * $r
+  	i
+    	color: srgb(--neutral-grad-1)
 </style>
 
 <script>
@@ -97,8 +109,15 @@ export default {
 		},
 
 		isShowGroupIcon() {
-			return this.m_chat.name.slice(0, 1) === "@";
+			
+			return !this.chat.miniappchat && this.m_chat.name.slice(0, 1) === "@";
 		},
+
+		miniappicon(){
+			return this.chat.miniappchat ? this.chat.miniappchat.icon : null
+		}
+
+		
 	},
 
 	mounted: function () {},
