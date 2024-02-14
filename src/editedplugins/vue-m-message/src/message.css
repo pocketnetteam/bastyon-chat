@@ -54,6 +54,12 @@
   height: 100%;
   pointer-events: all;
 }
+.m-message-container .close {
+  width: 44px;
+  height: 44px;
+  line-height: 44px;
+  text-align: center;
+}
 .m-message-wrapper {
   display: inline-block;
   max-width: 500px;

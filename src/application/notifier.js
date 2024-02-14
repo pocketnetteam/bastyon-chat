@@ -190,6 +190,7 @@ class Notifier {
 			formatIcon =  replaceArchiveInImage(formatIcon);
 		};
 
+
 		this.core.vm.$message({
 			event: info.event,
 			title: info.title,

@@ -4,7 +4,6 @@
     background: srgb(--neutral-grad-1)
     line-height: 44px
     text-align: center
-    font-size: 0.8em
     color : srgb(--neutral-grad-2)
     position: relative
 
@@ -47,8 +46,7 @@
 .charAvatar
     text-transform: uppercase
 
-.charAvatar,
-.statusIcon
+.charAvatar
     position: absolute
     left : 0
     right : 0
@@ -58,23 +56,31 @@
     align-items: center
     text-align: center
     z-index: 2
-    font-size: 1.5em
-    opacity: 0.7
+    opacity: 0.9
+    span,
+    i
+        flex-grow: 1
+        color : srgb(--neutral-grad-2)
+
+.statusIcon
+    position: absolute
+    right : -10%
+    bottom : -10%
+    display: flex
+    align-items: center
+    text-align: center
+    z-index: 2
+    border-radius: 50%
+    background: srgba(--neutral-grad-4, 1)
+    width: 4 * $r
+    height: 4 * $r
+    font-size: 0.6em
     span,
     i
         flex-grow: 1
         color : srgb(--neutral-grad-2)
 
 .invite
-    &:after
-        content : ""
-        position: absolute
-        left : 0
-        right : 0
-        top : 0
-        bottom : 0
-        background: srgba(--color-txt-ac-1, 0.3)
-        border-radius : 50%
     i
         display: flex
         height: 100%

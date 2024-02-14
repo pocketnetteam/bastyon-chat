@@ -17,13 +17,21 @@
 
 .nameWrapper
 	display: flex
-	align-items: center
+	align-items: flex-end
 	justify-content: center
 .roomMuted
-	margin-left: 0.5 * $r
-	color: srgb(--neutral-grad-4)
+	font-size: 0.5em
+	width: 16px
+	min-width: 16px
+	text-align: center
+	height: 16px
+	line-height: 16px
+	border-radius: 8px
+	background: srgb(--neutral-grad-2)
+	margin-left: $r
+	margin-block: 0.5 * $r
 	i
-		font-size: 0.8em
+		color: srgb(--neutral-grad-1)
 
 .editButton
 	display: flex

@@ -54,9 +54,7 @@
 									v-if="item"
 									@click="(e) => itemClick(item)"
 								>
-									
-										<preview v-if="active" :chat="item" />
-									
+									<preview v-if="active" :chat="item" />
 								</div>
 							</template>
 						</RecycleScroller>

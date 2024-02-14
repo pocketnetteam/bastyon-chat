@@ -12,13 +12,19 @@
       </div>
 
       <event :event="event" :chat="chat" :preview="true" v-if="event && chat"/>
+
       <div class="m-message--body" v-else>
         <slot name="message">
-<!--          {{ message }}-->
         </slot>
       </div>
-      <!--  <listPreview :event="event" :decryptEvent="decrypt" :chat="chat" :notificationPreview="true" />-->
+     
     </div>
+
+    <div class="close" @click="handleClose">
+      <i class="fas fa-times"></i>
+    </div>
+
+
   </div>
 </template>
 

@@ -14,9 +14,9 @@
 			:class="{ opacity: groupAvatar }"
 		/>
 
-		<div class="unknowngroupusersicon" v-if="unknowngroupusers">
+		<!--<div class="unknowngroupusersicon" v-if="unknowngroupusers">
 			<i class="fas fa-question"></i>
-		</div>
+		</div>-->
 	</div>
 </template>
 
@@ -38,7 +38,6 @@
 	justify-content: center
 	align-items: center
 	color: #fff
-	text-shadow: 0px 0px 2px rgba(0, 11, 58, 0.714), 0 0 3px rgba(0, 8, 43, 0.519)
 
 .unknowngroupusers
 	/deep/

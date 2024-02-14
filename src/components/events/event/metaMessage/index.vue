@@ -20,11 +20,11 @@
 						</div>
 						<div class="linkinfo">
 
-							<div class="header">
-								<div v-if="application.meta.image">
-									<bgimage :src="application.meta.image" />
-								</div>
+							<div class="imagePreview" v-if="application.meta.image">
+								<bgimage :src="application.meta.image" />
+							</div>
 
+							<div class="header">
 								<div class="header-text">
 									<span class="title" v-if="application.meta.title || application.meta.titlePage">{{ application.meta.title || application.meta.titlePage}}</span>
 									<span class="description" v-if="application.meta.description || application.meta.descriptionPage || application.application.manifest.descriptions['en']">{{ application.meta.description || application.meta.descriptionPage || application.application.manifest.descriptions['en'] }}</span>
@@ -130,9 +130,20 @@ export default {
 			module: {},
 
 			application : null,
-			applicationLoading : false
+			applicationLoading : false,
+			playingVideo : null
 		};
 	},
+
+	watch: {
+		hiddenInParent: function (v) {
+			console.log('playing hiddenInParent', v)
+			if (this.hiddenInParent && this.playingVideo){
+				this.playingVideo.pause()
+			}
+		},
+	},
+
 	computed: {
 		smallsize() {
 			if (this.url) {
@@ -184,6 +195,10 @@ export default {
 				return true;
 			}
 		},
+
+		hiddenInParent(){
+			return this.$store.state.hiddenInParent || false
+		}
 	},
 
 	beforeMount() {},
@@ -218,6 +233,10 @@ export default {
 						},
 						{
 							theme: this.core.vm.ctheme || this.$store.state.theme,
+							playingClbk : (video) => {
+								console.log('playing Clbk', video)
+								this.playingVideo = video
+							}
 						},
 						(p, m) => {
 							this.module.d = m;

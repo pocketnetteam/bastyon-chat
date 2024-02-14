@@ -686,6 +686,29 @@ var store = new Vuex.Store({
 
 			if (!images) images = [];
 
+			var externalGallery = f.deep(window, 'POCKETNETINSTANCE.platform.ui.images')
+
+			if (externalGallery){
+
+				if(images.length){
+
+					images = _.map(images, (v) => {
+						return v.src
+					})
+
+					var iv = images[index]
+
+					console.log('iv', iv, images, index)
+
+					externalGallery(images, iv, null, {
+						removeWhenShare : true
+					})
+				}
+
+				
+				return
+			}
+
 			if (images.length) {
 				commit("GALLERY", {
 					images: images,

@@ -15,10 +15,13 @@
 				<div class="infoWrapper">
 					<div class="summaryLine" v-if="!dummy && ready">
 						<div class="caption flexBlock">
-							<chatName :preview="true" :chat="chat" :m_chat="m_chat" />
+
 							<div class="roomMuted" v-if="roomMuted">
 								<i class="fas fa-bell-slash"></i>
 							</div>
+							
+							<chatName :preview="true" :chat="chat" :m_chat="m_chat" />
+							
 						</div>
 
 						<div class="time">

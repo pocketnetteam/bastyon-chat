@@ -102,12 +102,18 @@
   
 
 .roomMuted
-  position: relative
-  top: -3px
-  left: 6px
-
+  font-size: 0.5em
+  width: 16px
+  min-width: 16px
+  text-align: center
+  height: 16px
+  line-height: 16px
+  border-radius: 8px
+  background: srgb(--neutral-grad-2)
+  margin-right: 0.5 *$r
+  margin-block: 0.5 * $r
   i
-    font-size: 0.7em
+    color: srgb(--neutral-grad-1)
 
 .summaryLine
   display: flex
@@ -134,7 +140,7 @@
   .caption
     flex-grow: 1
     display: flex
-    align-items: center
+    align-items: flex-end
 
     /deep/ .nameofchat
       overflow: hidden

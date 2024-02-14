@@ -1,7 +1,10 @@
 <template functional>
 	<div class="userpic">
 		<div class="userpicSquareWrapper">
+	
 			<div class="userpicSquareInnerWrapper" :class="props.status">
+
+				
 				<bgimage v-if="props.image" :src="props.image" />
 
 				<template v-else>
@@ -13,11 +16,11 @@
 							!props.userinfo.image &&
 							props.userinfo.name &&
 							props.status != 'blocked' &&
-							props.status != 'invite' &&
 							props.status != 'ban'
 						"
 						class="charAvatar"
 					>
+					
 						<span>{{ props.userinfo.name.charAt(0) }}</span>
 					</div>
 

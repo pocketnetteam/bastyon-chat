@@ -269,7 +269,7 @@
 				</div>
 			</div>
 		</div>
-		<!--sdfsf-->
+
 		<div class="messagePreview" v-if="preview">
 			<listPreview
 				:my="my"

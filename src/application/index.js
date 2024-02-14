@@ -459,6 +459,12 @@ class Core {
 		});
 	}
 
+	gopage(route) {
+		this.mtrx.wait().then(() => {
+			this.vm.$router.push(route).catch((e) => {});
+		});
+	}
+
 	activeChange(value){
 		if (this.activeState) this.activeState(value);
 	}

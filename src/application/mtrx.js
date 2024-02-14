@@ -1044,6 +1044,7 @@ class MTRX {
 				promises.push(promise);
 			});
 
+
 			_.each(share.download, ({event, chat}) => {
 
 				var promise = () => this.core.mtrx.kit.prepareChat(chat).then(() => {

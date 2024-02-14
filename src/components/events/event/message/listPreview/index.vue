@@ -1,7 +1,8 @@
 <template>
 	<div class="listPreview">
+
 		<div v-if="urlpreview && metaPreviewLink" class="previewMessage">
-			<span class="sname txt" v-if="senderName">{{ senderName == 'You' ? $t("caption.you") : senderName}}&nbsp;</span>
+			<span class="sname txt" v-if="senderName">{{ senderName == 'You' ? core.vm.$i18n.t("caption.you") : senderName}}&nbsp;</span>
 			<span class="linkTitle txt">sent link: {{ meta["og:title"] }} </span>
 
 			<span v-if="meta['og:site_name'] === 'Pocketnet'" class="pocketnetLink">
@@ -13,43 +14,43 @@
 		</div>
 
 		<div v-if="content.msgtype === 'm.file'" class="previewMessage">
-			<span class="sname txt" v-if="senderName">{{ senderName == 'You' ? $t("caption.you") : senderName }}&nbsp;</span>
-			<span class="txt"> {{ $t("caption.sentfile") }} {{ JSON.parse(content.body).name }} </span>
+			<span class="sname txt" v-if="senderName">{{ senderName == 'You' ? core.vm.$i18n.t("caption.you") : senderName }}&nbsp;</span>
+			<span class="txt"> {{ core.vm.$i18n.t("caption.sentfile") }} {{ JSON.parse(content.body).name }} </span>
 		</div>
 
 		<div v-if="content.msgtype === 'm.bad.encrypted'" class="previewMessage">
 			<span>
-				{{ $t("caption.unabletoDecrypt") }}
+				{{ core.vm.$i18n.t("caption.unabletoDecrypt") }}
 			</span>
 		</div>
 
 		<div v-if="event.event.type === 'm.room.redaction'" class="previewMessage">
 			<span class="txt">
-				<i class="fas fa-eraser"></i> {{ $t("caption.messageDeleted") }}
+				<i class="fas fa-eraser"></i> {{ core.vm.$i18n.t("caption.messageDeleted") }}
 			</span>
 		</div>
 		<div
 			v-if="event.event.type === 'm.room.power_levels'"
 			class="previewMessage"
 		>
-			<span v-if="senderName" class="txt sname">{{ senderName == 'You' ? $t("caption.you") : senderName }}:&nbsp;</span>
+			<span v-if="senderName" class="txt sname">{{ senderName == 'You' ? core.vm.$i18n.t("caption.you") : senderName }}:&nbsp;</span>
 			<span class="txt">
 				{{ powerLevels }}
 			</span>
 		</div>
 
 		<div v-if="content.msgtype === 'm.image'" class="previewMessage">
-			<span v-if="senderName" class="txt sname">{{ senderName == 'You' ? $t("caption.you") : senderName }}:&nbsp;</span
-			><span class="txt">{{ $t("caption.sentImage") }}</span>
+			<span v-if="senderName" class="txt sname">{{ senderName == 'You' ? core.vm.$i18n.t("caption.you") : senderName }}:&nbsp;</span
+			><span class="txt">{{ core.vm.$i18n.t("caption.sentImage") }}</span>
 		</div>
 
 		<div v-if="content.msgtype === 'm.audio'" class="previewMessage">
-			<span v-if="senderName" class="txt sname">{{ senderName == 'You' ? $t("caption.you") : senderName}}:&nbsp;</span
-			><span class="txt">{{ $t("caption.sentVoiceMessage") }}</span>
+			<span v-if="senderName" class="txt sname">{{ senderName == 'You' ? core.vm.$i18n.t("caption.you") : senderName}}:&nbsp;</span
+			><span class="txt">{{ core.vm.$i18n.t("caption.sentVoiceMessage") }}</span>
 		</div>
 
 		<div v-if="content.call_id" class="previewMessage">
-			<span class="txt">{{ $t(event.event.type) }}</span>
+			<span class="txt">{{ core.vm.$i18n.t(event.event.type) }}</span>
 		</div>
 
 		<div
@@ -64,7 +65,7 @@
 			class="previewMessage"
 		>
 			<span v-if="senderName && senderName != 'You'" class="txt sname"
-				>{{ senderName == 'You' ? $t("caption.you") : senderName }}:&nbsp;</span
+				>{{ senderName == 'You' ? core.vm.$i18n.t("caption.you") : senderName }}:&nbsp;</span
 			><IncomingMessage
 				:message="content.body"
 				:markedText="markMatches"
@@ -77,7 +78,7 @@
 			class="previewMessage"
 		>
 			<span v-if="senderName && senderName != 'You'" class="txt sname"
-				>{{ senderName == 'You' ? $t("caption.you") : senderName }}:&nbsp;</span
+				>{{ senderName == 'You' ? core.vm.$i18n.t("caption.you") : senderName }}:&nbsp;</span
 			><IncomingMessage
 				:message="decryptEvent.body"
 				:markedText="markMatches"
@@ -86,40 +87,40 @@
 		</div>
 
 		<div v-if="content.membership === 'invite'" class="invitedEvent">
-			<span v-if="senderName" class="txt sname">{{ senderName == 'You' ? $t("caption.you") : senderName }}:&nbsp;</span>
+			<span v-if="senderName" class="txt sname">{{ senderName == 'You' ? core.vm.$i18n.t("caption.you") : senderName }}:&nbsp;</span>
 			<span class="txt" v-if="tetatetchat">{{
-				$t("caption.invitationToChat")
+				core.vm.$i18n.t("caption.invitationToChat")
 			}}</span>
 			<span class="txt" v-if="!tetatetchat">{{
-				$t("caption.invitationToRoom")
+				core.vm.$i18n.t("caption.invitationToRoom")
 			}}</span>
 		</div>
 
 		<div v-if="content.membership === 'leave'" class="previewMessage">
-			<span v-if="senderName" class="txt sname">{{ senderName == 'You' ? $t("caption.you") : senderName }}:&nbsp;</span>
+			<span v-if="senderName" class="txt sname">{{ senderName == 'You' ? core.vm.$i18n.t("caption.you") : senderName }}:&nbsp;</span>
 			<span class="txt sname"> {{ name }} </span>
-			<span class="txt">{{ $t("caption.leftChat") }}</span>
+			<span class="txt">{{ core.vm.$i18n.t("caption.leftChat") }}</span>
 		</div>
 		<div v-if="content.membership === 'ban'">
-			<span v-if="senderName" class="txt sname">{{ senderName == 'You' ? $t("caption.you") : senderName }}&nbsp;</span>
+			<span v-if="senderName" class="txt sname">{{ senderName == 'You' ? core.vm.$i18n.t("caption.you") : senderName }}&nbsp;</span>
 			<span class="txt">banned {{ content.displayname }}</span>
 		</div>
 		<div
 			v-if="content.membership === 'join' && event.getSender() !== userId"
 			class="invitedEvent"
 		>
-			<span v-if="senderName" class="txt sname">{{ senderName == 'You' ? $t("caption.you") : senderName }}&nbsp;</span
-			><span class="txt">{{ $t("caption.joined") }}</span>
+			<span v-if="senderName" class="txt sname">{{ senderName == 'You' ? core.vm.$i18n.t("caption.you") : senderName }}&nbsp;</span
+			><span class="txt">{{ core.vm.$i18n.t("caption.joined") }}</span>
 		</div>
 
 		<div v-if="content.name">
 			<span class="txt"
-				>{{ $t("caption.chatRenamed") }} <b>{{ content.name }}</b></span
+				>{{ core.vm.$i18n.t("caption.chatRenamed") }} <b>{{ content.name }}</b></span
 			>
 		</div>
 		<div v-if="content.topic">
 			<span class="txt"
-				>{{ $t("caption.chatTopic") }}
+				>{{ core.vm.$i18n.t("caption.chatTopic") }}
 				<b>{{ content.topic.replace(/_/g, " ") }}</b></span
 			>
 		</div>
@@ -133,14 +134,13 @@
 </template>
 <script>
 import f from "@/application/functions";
-import IncomingMessage from "../incomingMessage/incomingMessage.vue";
+import IncomingMessage from "@/components/events/event/message/incomingMessage/incomingMessage.vue";
 
 export default {
 	props: {
 		event: {},
 		chat: {},
 		decryptEvent: {},
-		notificationPreview: false,
 		userinfo: Object,
 		readed: Boolean,
 		my: Boolean,
@@ -164,8 +164,6 @@ export default {
 		urlpreview: function () {
 			if (this.content.msgtype !== "m.file") {
 				return "";
-
-				if (this.content.body) return f.getUrl(this.content.body) || "";
 			}
 		},
 

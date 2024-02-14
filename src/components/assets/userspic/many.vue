@@ -68,8 +68,7 @@ export default {
 	.imageSwiper
 		width: 33px
 		min-width: 33px
-.aboutRoomAvatar
-	font-size: 0.5em
+
 
 .userwrapper
 	border-radius: 50%
@@ -85,6 +84,7 @@ export default {
 		width: 50%
 
 .threeAvatars
+	font-size: 0.5em
 	.userwrapper
 
 		&:nth-child(1)
@@ -106,6 +106,7 @@ export default {
 			transform: translate(0, -6.5%)
 
 .twoAvatars
+	font-size: 0.5em
 
 	.userwrapper
 		&:first-child
@@ -120,6 +121,8 @@ export default {
 			transform: translate(-6.5%, -6.5%)
 
 .fourAvatars
+	font-size: 0.5em
+
 
 	.userwrapper
 

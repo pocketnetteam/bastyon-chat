@@ -17,7 +17,6 @@
 					<span class="memberRole" v-if="roles && user.powerLevel">{{
 						$t("caption." + role(user))
 					}}</span>
-					<span class="memberRole" v-if="user.userId == meid">You</span>
 				</div>
 			</div>
 
