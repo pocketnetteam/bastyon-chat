@@ -26,7 +26,7 @@
 
 <script>
 
-var loadedCache = {}
+window.chatImagesLoadedCache = {}
 
 
 export default {
@@ -53,7 +53,7 @@ export default {
 	},
 
 	beforeMount : function(){
-		if (loadedCache[this.src]){
+		if (window.chatImagesLoadedCache[this.src]){
 			this.loaded = true
 		}
 	},
@@ -75,7 +75,7 @@ export default {
 
 				image.src = this.imageSrc;
 				image.onload = () => {
-					loadedCache[this.src] = true
+					window.chatImagesLoadedCache[this.src] = true
 					this.loaded = true;
 				};
 			} 
