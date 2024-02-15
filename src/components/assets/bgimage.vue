@@ -55,30 +55,31 @@ export default {
 	beforeMount : function(){
 		if (loadedCache[this.src]){
 			this.loaded = true
-			this.imageSrc = loadedCache[this.src];
-			
 		}
 	},
 
 	methods: {
 		load: function () {
-			if (this.loaded) return
+			
 
 			if (this.src) {
 				this.imageSrc = this.src;
 			
-			if (this.imageSrc && typeof replaceArchiveInImage != 'undefined') {
-				this.imageSrc =  replaceArchiveInImage(this.imageSrc);
-			};
+				if (this.imageSrc && typeof replaceArchiveInImage != 'undefined') {
+					this.imageSrc =  replaceArchiveInImage(this.imageSrc);
+				};
+
+				if (this.loaded) return
 
 				var image = new Image();
 
 				image.src = this.imageSrc;
 				image.onload = () => {
-					loadedCache[this.src] = this.imageSrc
+					loadedCache[this.src] = true
 					this.loaded = true;
 				};
-			} else this.loaded = true;
+			} 
+			else this.loaded = true;
 		},
 	},
 };
