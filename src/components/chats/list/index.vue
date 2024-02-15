@@ -45,16 +45,16 @@
 							class="scroller"
 							:items="chats"
 							:item-size="pocketnet ? 60 : 70"
-							key-field="key"
+							keyField="key"
 							:buffer="400"
+							@update="onScrollerResize"
 						>
-							<template v-slot="{ item, active }">
+							<template v-slot="{ item }">
 								<div
 									class="card-content"
-									v-if="item"
 									@click="(e) => itemClick(item)"
 								>
-									<preview v-if="active" :chat="item" />
+									<preview :chat="item" />
 								</div>
 							</template>
 						</RecycleScroller>
