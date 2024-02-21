@@ -69,6 +69,7 @@
 			><IncomingMessage
 				:message="content.body"
 				:markedText="markMatches"
+				:preview="true"
 			></IncomingMessage
 			>
 		</div>

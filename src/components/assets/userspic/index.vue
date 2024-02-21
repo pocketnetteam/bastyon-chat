@@ -2,10 +2,9 @@
 	<div
 		class="userspic"
 		:class="{ oneuser: users && users.length === 1 }"
-		v-if="users"
 	>
 		<userpic
-			v-if="users.length === 0"
+			v-if="users && users.length === 0"
 			:userinfo="single"
 			:status="single.status"
 		/>
@@ -13,7 +12,7 @@
 			:status="status[users[0].id]"
 			:userinfo="users[0]"
 			:unseen="unseen"
-			v-if="users.length === 1"
+			v-if="users && users.length === 1"
 		/>
 
 		<many
@@ -21,10 +20,10 @@
 			:status="status"
 			:userinfo="users"
 			:unseen="unseen"
-			v-if="users.length > 1"
+			v-if="users && users.length > 1"
 		/>
 
-		<div class="unseen" v-if="unseen">
+		<div class="unseenupic" v-if="users && unseen">
 			{{ unseen > 99 ? "99" : unseen }}
 		</div>
 	</div>
@@ -66,20 +65,7 @@
   &.active
     color: srgb(--color-txt-ac)
 
-.unseen
-  position: absolute
-  width: 22px
-  height: 22px
-  right: -10%
-  bottom: -10%
-  background: srgba(--color-bg-ac, 0.9)
-  line-height: 22px
-  text-align: center
-  font-weight: 500
-  border-radius: 50%
-  z-index: 5
-  font-size: 0.6em
-  color: srgb(--text-on-bg-ac-color)
+
 
 .userspic
   position: relative

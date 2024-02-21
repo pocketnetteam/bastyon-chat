@@ -95,8 +95,10 @@ export default {
 				let sec, min;
 
 				if (this.currentTime) {
-					sec = Math.floor(this.currentTime);
+
 					min = Math.floor(this.currentTime / 60);
+					sec = Math.floor(this.currentTime - min * 60);
+
 					return `${min}:${sec < 10 ? "0" + sec : sec}`;
 				}
 

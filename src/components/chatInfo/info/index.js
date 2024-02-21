@@ -164,10 +164,7 @@ export default {
 		shareRoomLink: function () {
 			return `https://bastyon.com/welcome?publicroom=${this.chat.roomId}`;
 
-			/*if(this.chat.info.title === '@New Room'){
-		return `https://bastyon.com/welcome?publicroom=${this.chat.roomId}`
-	  }
-	  return `https://bastyon.com/welcome?publicroom=${this.chat.info.title.replace(/ /g, '_')}`*/
+
 		},
 		me: function () {
 			return (
@@ -245,7 +242,15 @@ export default {
 		membersList: function () {
 			return this.core.mtrx
 				.chatUsers(this.chat.roomId)
-				.filter((user) => user.membership !== "leave");
+				.filter((user) => {
+					if(user.membership == "leave") return
+
+					var ui = f.deep(this, "core.store.state.users." + user.userId) || {}
+
+					if(!ui.name) return
+
+					return true
+				});
 		},
 
 		tetatet: function () {

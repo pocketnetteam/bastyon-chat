@@ -21,6 +21,7 @@ export default {
 			default: "",
 		},
 		markedText: String,
+		preview : Boolean
 	},
 	data() {
 		return {
@@ -74,6 +75,9 @@ export default {
 		},
 
 		show: function (chunk) {
+
+			if(this.preview) return
+
 			this.core.mtrx.kit.usersInfoById(chunk.id).then((r) => {
 				core.mtrx.opencontact(r);
 			});

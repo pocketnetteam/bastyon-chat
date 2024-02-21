@@ -500,7 +500,7 @@ export default {
 				if (
 					this.$route.name !== "chats" &&
 					/*this.$route.name !== 'chat' &&*/
-					this.$route.name !== "contact" &&
+					/*this.$route.name !== "contact" &&*/
 					/*this.$route.name !== 'chatInfo' &&*/
 					this.$route.name !== "publicPreview" &&
 					this.$route.name !== "chatSettings" &&
@@ -945,7 +945,7 @@ export default {
 							/*this.$route.name !== 'chatInfo' &&*/
 							this.$route.name !== "publicPreview" &&
 							this.$route.name !== "chatSettings" &&
-							this.$route.name !== "contact" &&
+							/*this.$route.name !== "contact" &&*/
 							core.cancelDefaultRoute !== true
 						) {
 							this.$router.push("/chats").catch((e) => {});

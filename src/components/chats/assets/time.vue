@@ -1,6 +1,6 @@
 <template>
 	<div class="chatTime">
-		<date v-if="time" :date="time" />
+		<date v-if="time" :date="time" :nofuture="true" />
 		<span class="new" v-else>{{ $t("caption.new") }}</span>
 	</div>
 </template>

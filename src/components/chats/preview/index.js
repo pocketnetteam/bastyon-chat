@@ -100,6 +100,7 @@ export default {
 		matrixevent: function () {
 			var e = this.event;
 
+
 			if (e) {
 				return e.get ? e.get() : e;
 			}

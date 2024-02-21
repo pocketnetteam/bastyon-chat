@@ -853,6 +853,10 @@ var store = new Vuex.Store({
 						return false;
 					}
 
+					if (e.event.type === "m.room.encryption"){
+						return false
+					}
+
 					if (e.event.type === "m.room.request_calls_access") {
 						if (e.event.content.accepted !== null) {
 							return false;

@@ -582,11 +582,16 @@ export default {
 		},
 
 		replaceMentions(text) {
+	
 			_.each(this.userlist, function (user) {
+
+				if(!user.name) return
+
 				text = text.replace(
 					new RegExp("@" + user.name, "g"),
 					"@" + user.id + ":" + user.name
 				);
+
 			});
 
 			return text;

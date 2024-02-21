@@ -52,6 +52,7 @@
 							<template v-slot="{ item }">
 								<div
 									class="card-content"
+									:chatkey="item.key"
 									@click="(e) => itemClick(item)"
 								>
 									<preview :chat="item" />

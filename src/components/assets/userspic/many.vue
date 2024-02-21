@@ -1,5 +1,5 @@
 <template>
-	<div class="aboutRoomAvatar" v-if="userinfo.length > 1">
+	<div class="aboutRoomAvatar">
 		<div class="small" v-if="userinfo.length < 5">
 			<div
 				class="userinfopicwrapper"
