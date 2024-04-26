@@ -32,7 +32,7 @@
 				:key="key"
 				:chat="m_chat"
 				:searchresults="searchresults"
-				:filterType.sync="filterType"
+				:filter="filter"
 				@editingEvent="editingEvent"
 				@shareEvent="shareEvent"
 				@replyEvent="replyEvent"
