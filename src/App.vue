@@ -497,6 +497,7 @@ export default {
 			this.$store.commit("minimize", true);
 
 			setTimeout(() => {
+
 				if (
 					this.$route.name !== "chats" &&
 					/*this.$route.name !== 'chat' &&*/

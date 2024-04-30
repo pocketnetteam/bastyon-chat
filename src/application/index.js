@@ -618,6 +618,26 @@ class Core {
 
 			if (existingroom){
 				roomid = existingroom.roomId
+
+				// check my state
+
+				try{
+					var member = existingroom.currentState.members[this.user.userinfo.id]
+
+					if (member && member.membership == 'join'){
+						return this.mtrx.client.joinRoom(roomid)
+					}
+				}
+				catch(e){
+					console.error(e)
+				}
+
+				
+
+				//existingroom.currentState.members[this.user.userinfo.id]?.membership
+
+				
+				
 				
 				return Promise.resolve()
 			}

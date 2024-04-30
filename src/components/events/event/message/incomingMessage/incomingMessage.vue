@@ -65,6 +65,8 @@ export default {
 
 		echotext : function(chunk){
 
+			chunk = chunk.replace(/&amp;/g, '&')
+
 			var text = f.superXSS(chunk)
 
 			if (typeof joypixels != 'undefined'){

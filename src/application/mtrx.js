@@ -212,7 +212,7 @@ class MTRX {
 		localStorage.accessToken = userData.access_token;
 		var store = new sdk.IndexedDBStore({
 			indexedDB: window.indexedDB,
-			dbName: "matrix-js-sdk-v3:" + this.credentials.username,
+			dbName: "matrix-js-sdk-v4:" + this.credentials.username,
 		});
 		await store.startup();
 
