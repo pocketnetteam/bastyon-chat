@@ -764,15 +764,17 @@ export default {
 			const
 				type = f.deep(this.origin, "event.type") || '',
 				menu = [];
+
+			if (type.indexOf('m.call') === -1) {
+				menu.push({
+					action: this.menureply,
+					text: "button.reply",
+					icon: "fas fa-reply",
+				});
+			}
 			
 			if (!this.streamMode) {
 				if (type.indexOf('m.call') === -1) {
-					menu.push({
-						action: this.menureply,
-						text: "button.reply",
-						icon: "fas fa-reply",
-					});
-					
 					menu.push({
 						action: this.menushowMultiSelect,
 						text: "button.select",
