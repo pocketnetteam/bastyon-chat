@@ -403,7 +403,7 @@ export default {
 		},
 		
 		isMenuAllowed: function () {
-			return this.streamMode && !this.my && this.user?.powerLevel >= this.powerLevel.moderator && this.sender?.powerLevel < this.user?.powerLevel ||
+			return this.streamMode && !this.my ||
 						!this.streamMode && !this.content.call_id && this.event.event.type !== 'm.room.request_calls_access';
 		}
 	},
