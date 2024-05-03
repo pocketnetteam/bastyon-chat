@@ -324,7 +324,7 @@ export default {
 				filter.setDefinition({
 					room: {
 						timeline: {
-							contains_url: this.filter.type === "images",
+							contains_url: this.filter?.type === "images",
 							types: ["m.room.message"],
 						},
 					},
@@ -352,7 +352,7 @@ export default {
 
 			var ts;
 
-			switch (this.filter.type) {
+			switch (this.filter?.type) {
 				case "images": {
 					this.scrollType = "custom";
 					ts = await this.customTimelineSet('FILES');
@@ -514,7 +514,7 @@ export default {
 		},
 
 		autoPaginateAll: function () {
-			if (this.filter.type === "images") {
+			if (this.filter?.type === "images") {
 				this.autoPaginate("b");
 			} else {
 				this.autoPaginate("b");
