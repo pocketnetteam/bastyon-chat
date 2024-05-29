@@ -290,14 +290,19 @@ export default {
 					this.core.mtrx
 						.shareInChat(chat.roomId, _share)
 						.then((r) => {
+							
 							this.$store.commit("icon", {
 								icon: "success",
 								message: "",
 							});
 
-							this.$router
-								.push(_share.route || "chat?id=" + chat.roomId)
-								.catch((e) => {});
+							setTimeout(() => {
+								this.$router
+									.push(_share.route || "chat?id=" + chat.roomId)
+									.catch((e) => {});
+							}, 2000)
+
+							
 						})
 						.catch((e) => {
 							console.error(e);

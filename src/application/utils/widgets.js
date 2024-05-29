@@ -30,7 +30,8 @@ var PNWIDGETS = function () {
 		__el,
 		resized,
 		additional,
-		_clbk
+		_clbk,
+		url
 	) {
 		if (!additional) additional = {};
 
@@ -54,6 +55,8 @@ var PNWIDGETS = function () {
 			embeddingSettigns = _.extend(embeddingSettigns, additional);
 
 			elem.addClass("openapipnet");
+
+			additional.url = url
 
 			app.platform.papi[action](id, elem, _clbk, embeddingSettigns, additional);
 
@@ -141,6 +144,7 @@ var PNWIDGETS = function () {
 			id: id,
 			p: p,
 			additional,
+			
 		};
 	};
 
@@ -167,7 +171,8 @@ var PNWIDGETS = function () {
 			el,
 			resized,
 			ps.additional,
-			_clbk
+			_clbk,
+			url
 		);
 	};
 

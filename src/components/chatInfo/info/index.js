@@ -550,15 +550,17 @@ export default {
 		},
 
 		modalInviteUser() {
-			this.inviteUserOpened = true;
+			console.log("AS#")
+			this.$emit("addMember")
+			//this.inviteUserOpened = true;
 		},
 
 		closeModal() {
-			this.inviteUserOpened = false;
+			//this.inviteUserOpened = false;
 		},
 
 		closeContactModal(value) {
-			this.inviteUserOpened = value;
+			//this.inviteUserOpened = value;
 		},
 		addTopic() {
 			this.core.mtrx.client

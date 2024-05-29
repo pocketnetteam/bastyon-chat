@@ -25,6 +25,9 @@
     z-index : 2900
     backdrop-filter : blur(5px)
     background: srgba(--background-total-theme, 0.2)
+    border-radius: 8px
+    border-bottom-left-radius: 0
+    border-bottom-right-radius: 0
     +transition(0.3s)
     .table
         height: 100%
@@ -35,15 +38,15 @@
     +transition(0.3s)
     &.minimized
         .wrapper
-            top : 60px
-            bottom : 100px
+            top : -56px
+            bottom : 51px
 
         &:not(.active)
             opacity: 0
 
     &.active
         .wrapper
-            width: 344px
-            transform: translateX(-300px)
+            width: 345px
+            transform: translateX(-301px)
 
         

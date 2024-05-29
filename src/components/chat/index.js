@@ -117,8 +117,11 @@ export default {
 
 		chatusers: function () {
 			if (this.m_chat && this.m_chat.pcrypto) {
-				this.m_chat.pcrypto.userschanded().then((r) => {
-					this.checkcrypto();
+				this.core.mtrx.kit.allchatmembers([this.m_chat], false, true).then(() => {
+					return this.m_chat.pcrypto.userschanded()
+				})
+				.then((r) => {
+					return this.checkcrypto();
 				});
 			}
 		},

@@ -254,8 +254,6 @@ export default {
 			this.gotopn = true
 			this.applicationLoading = true
 
-			console.log('this.miniapplink', this.miniapplink)
-
 			window.POCKETNETINSTANCE.apps.get.applicationAny(this.miniapplink).then(r => {
 
 				console.log("application result 333", r)
@@ -270,9 +268,6 @@ export default {
 				this.gotopn = true
 				this.applicationLoading = false
 				this.loaded(null);
-				console.log('this.miniapplink2', this.miniapplink)
-
-				console.log('this.application', this.application)
 			})
 		}
 

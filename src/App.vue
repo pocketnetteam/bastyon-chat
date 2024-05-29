@@ -958,10 +958,10 @@ export default {
 			})
 			.catch((g) => {});
 
-		setInterval(() => {
+		/*setInterval(() => {
 			if (this.$store.state.autohide || !this.$store.state.iteraction)
 				this.$store.commit("active", false);
-		}, 3000);
+		}, 3000);*/
 
 		(() => {
 			try {

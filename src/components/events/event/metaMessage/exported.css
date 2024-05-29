@@ -2554,6 +2554,26 @@
   padding: 1em;
   text-align: center;
 }
+.pocketnet_iframe #channel .channel .userinfo .blockWrapper {
+  margin-top: 1em;
+}
+.pocketnet_iframe #channel .channel .userinfo .blockWrapper span {
+  cursor: pointer;
+  text-decoration: underline;
+}
+.pocketnet_iframe #channel .channel .userinfo .blockWrapper .block {
+  color: rgb(var(--color-bad));
+}
+.pocketnet_iframe #channel .channel .userinfo .blockWrapper .unblock {
+  display: none;
+  color: rgb(var(--neutral-grad-4));
+}
+.pocketnet_iframe #channel .channel .userinfo.blocked .blockWrapper .block {
+  display: none;
+}
+.pocketnet_iframe #channel .channel .userinfo.blocked .blockWrapper .unblock {
+  display: inline;
+}
 .pocketnet_iframe .wnd #channel {
   padding-bottom: 3em;
   padding-left: 0.5em;

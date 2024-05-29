@@ -5,9 +5,9 @@
 				<button
 					@click="complete()"
 					class="button small rounded"
-					:class="{ orange: cancomplete, ghost: !cancomplete }"
+					:class="{ orange: cancomplete, gray: !cancomplete }"
 				>
-					Invite
+					{{ $t("caption.invite") }} 
 				</button>
 			</div>
 		</div>

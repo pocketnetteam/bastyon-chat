@@ -43,4 +43,11 @@ export default {
 			}
 		},
 	}),
+
+	methods : {
+		addMember : function(){
+			console.log("ASDASD")
+			this.$emit('addMember')
+		}
+	}
 };

@@ -1,6 +1,6 @@
 <template>
 	<div id="chatInfo" class="maskedtop" :class="{ minimized, active }">
-		<info :chat="chat" />
+		<info :chat="chat" @addMember="addMember"/>
 	</div>
 </template>
 

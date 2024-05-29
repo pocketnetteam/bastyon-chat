@@ -51,8 +51,8 @@ var PcryptoRoom = async function (pcrypto, chat, { ls, lse }) {
 		users = {};
 	};
 
-	var lcachekey = "pcrypto8_" + chat.roomId + "_";
-	var ecachekey = "e_pcrypto8_";
+	var lcachekey = "pcrypto9_" + chat.roomId + "_";
+	var ecachekey = "e_pcrypto9_";
 	var usershashVersion = 12
 	var cache = {};
 
@@ -131,9 +131,9 @@ var PcryptoRoom = async function (pcrypto, chat, { ls, lse }) {
 	};
 
 	self.userschanded = function () {
-		if (!self.cantchat()) {
+		/**if (!self.cantchat()) {
 			return Promise.resolve();
-		}
+		}*/
 
 		self.clear();
 
@@ -165,6 +165,7 @@ var PcryptoRoom = async function (pcrypto, chat, { ls, lse }) {
 		
 			return e.event.event_id
 		}) 
+
 
 		var history = _.filter(
 			_.map(allevents, function (ue) {
