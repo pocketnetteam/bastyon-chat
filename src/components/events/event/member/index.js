@@ -58,7 +58,7 @@ export default {
 				return (
 					this.$i18n.t("caption.banned") +
 					` ${invitedName} ` +
-					this.$i18n.t("caption.andRoom")
+					this.$i18n.t("caption.inRoom")
 				);
 			}
 
