@@ -28,6 +28,7 @@ export default {
 
 	data: function () {
 		return {
+			hintVideo : !localStorage.getItem('hideHintVideo'),
 			menuItems: [
 				{
 					click: "callupVideoHandler",
@@ -260,6 +261,10 @@ export default {
 		},
 	}),
 	methods: {
+		hideHint : function(){
+			localStorage.setItem('hideHintVideo', 'true')
+			this.hintVideo = false;
+		},
 		searchControlKey : function(key){
 			if(key == 'up') this.tobottomsearch()
 			if(key == 'down') this.toupsearch()

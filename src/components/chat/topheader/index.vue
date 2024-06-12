@@ -61,6 +61,22 @@
 					<i class="fas fa-video" v-if="!callloading"></i>
 					<i class="fas fa-spinner fa-spin" v-else></i>
 				</div>
+				<div 
+					v-if="isCallsActive && !isGroup && !callloading && hintVideo"
+					class="tutorial-component up show"
+				>
+					<div>{{$t("videoCall")}}</div>
+					<div class="action-menu">
+						<button 
+							class="default-btn next-btn" 
+							data-ember-action="371"
+							@click="hideHint"
+						>
+							OK
+						</button>
+					</div>
+				
+				</div>
 			</template>
 
 			<template v-slot:right>

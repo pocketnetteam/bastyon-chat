@@ -230,7 +230,7 @@
 	"micaccesscommonproblem": "Sorry, for some reason it is not possible to record voice messages on the device",
 	"micaccesscordova": "Access to the microphone is restricted, please check your device settings.",
 	"micdevicenotfound": "Audio recording device not found",
-
+	"videoCall" : "Start video call",
 	"endedCall": "Call completed",
 	"incomingCall": "Incoming call",
 	"outgoingCall": "Outgoing call",
