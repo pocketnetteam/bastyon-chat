@@ -3,7 +3,6 @@
 		<imageEvents
 			class="roomAboutWrapper"
 			:chat="chat"
-			:filterType="'images'"
 			@eventImage="(e) => galleryImage(e)"
 			@getEvents="eventsList"
 			v-if="!empty"

@@ -35,7 +35,7 @@
 			<chat
 				:chat="chat"
 				:style="style"
-				:filterType.sync="filterType"
+				:filter="{ type: filterType }"
 				v-if="!showMembers"
 			/>
 			<membersList :chat="chat" v-else />

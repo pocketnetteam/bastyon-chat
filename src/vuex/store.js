@@ -738,25 +738,55 @@ var store = new Vuex.Store({
 			var m_chats = f.deep(store._vm, "core.mtrx.store.rooms") || {};
 
 			var id = store._vm.core.user.myMatrixId();
-
-			var chats = _.map(m_chats, function (r) {
-				
+			var isStream = function(r) {
 				const hv = r.currentState.getStateEvents("m.room.history_visibility", "");
-				
+				return hv?.event?.content?.history_visibility === "world_readable";
+			}
+			var lastModified = function(r) {
 				if (r.getLastActiveTimestamp() === -9007199254740991) {
 					if (r.getMember(id)) {
-						r.summary.lastModified =
-							r.getMember(id).events.member.event.origin_server_ts;
+						return r.getMember(id).events.member.event.origin_server_ts;
 					}
 				} else {
-					r.summary.lastModified = r.getLastActiveTimestamp();
+					return r.getLastActiveTimestamp();
 				}
+			}
+			
+			/* Remove streams that last time modified >= 3 days ago */
+			var chats = _.filter(m_chats, function(r) {
+				if (!isStream(r)) return true;
+				
+				const
+					current = Date.now(),
+					expire = (() => {
+						const last = new Date(lastModified(r));
+						last.setDate(last.getDate() + 3);
+						return last.getTime();
+					})(),
+					outdated = isStream(r) && current > expire;
+
+				if (outdated) {
+					core.mtrx.client.leave(r.roomId).then(r => {
+						core.mtrx.client
+							.forget(r.roomId, true)
+							.catch(() => {});
+
+						commit("DELETE_ROOM", r.roomId);
+					});
+				}
+
+				return !outdated;
+			});
+			
+			var rooms = _.map(chats, function (r) {
+				
+				r.summary.lastModified = lastModified(r);
 
 				r.summary.info = {
 					title : r.name
 				}
 				r.summary.key = r.summary.roomId + ':' + r.summary.lastModified
-				r.summary.stream = hv?.event?.content?.history_visibility === "world_readable";
+				r.summary.stream = isStream(r)
 				r.summary.miniappchat = null
 
 				var mnid = f.getminiappid(r.getCanonicalAlias())
@@ -765,22 +795,25 @@ var store = new Vuex.Store({
 					r.summary.miniappchat = window.POCKETNETINSTANCE.apps.get.installed()[mnid] || null
 				}
 
-
 				return r.summary;
 			});
 
+			var notStreams = _.filter(chats, function(r) {
+				return !isStream(r);
+			});
+
 			//commit("SET_PRECHATS_TO_STORE", chats);
-			commit("SET_CHATS_TO_STORE", chats);
+			commit("SET_CHATS_TO_STORE", rooms);
 			
 
-			return store._vm.core.mtrx.kit.allchatmembers(m_chats).then((r) => {
+			return store._vm.core.mtrx.kit.allchatmembers(notStreams).then((r) => {
 
 				commit(
 					"SET_CHATS_USERS",
-					store._vm.core.mtrx.kit.usersFromChats(m_chats)
+					store._vm.core.mtrx.kit.usersFromChats(notStreams)
 				);
 
-				return store._vm.core.mtrx.kit.fillContacts(m_chats);
+				return store._vm.core.mtrx.kit.fillContacts(notStreams);
 				
 			})
 
