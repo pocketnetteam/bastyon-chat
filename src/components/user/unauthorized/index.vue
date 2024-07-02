@@ -87,7 +87,7 @@
 .connect
     padding-top : 4 * $r
 
-    /deep/
+    ::v-deep
         .previewWrapper
             display: block
             max-width: 70%

@@ -13,7 +13,7 @@
         flex-grow: 1
         flex-direction: row
 
-        /deep/ #chatAttachement
+        ::v-deep #chatAttachement
         margin-right: $r
         min-width: 120px
 
@@ -120,7 +120,7 @@
         padding: 0 2 * $r
         padding-top: 0
 
-    /deep/
+    ::v-deep
         .previewMessage
             font-size: 0.9em
 
@@ -160,7 +160,7 @@
             padding-bottom: 0
 
         &:not(.active)
-            /deep/
+            ::v-deep
 
             .statusWrapper
                 width: 33px

@@ -68,7 +68,7 @@
   background: $color-applebuttontext
 
 .chat.mobile
-  /deep/ #maincontent
+  ::v-deep #maincontent
     .headerSpacerWrapper
       bottom: 0
       overflow: visible

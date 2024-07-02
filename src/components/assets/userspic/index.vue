@@ -42,7 +42,7 @@
   color: srgb(--color-bg-ac-2)
   position: relative
 
-  /deep/ .bgimage
+  ::v-deep .bgimage
     border-radius: 50%
 
 .swiperWrapperFlex

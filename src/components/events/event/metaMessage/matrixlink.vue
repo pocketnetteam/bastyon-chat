@@ -14,7 +14,7 @@
 
 <style scoped lang="sass">
 
-/deep/
+::v-deep
     .actionsWrapper
         display: none
 </style>

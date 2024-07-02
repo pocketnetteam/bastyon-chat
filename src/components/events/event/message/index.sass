@@ -100,10 +100,10 @@
 
 
 .fade-enter-active
-  	+transition(0.3s)
+	+transition(0.3s)
 
 .fade-enter-from
-  	opacity: 0
+	opacity: 0
 
 .messageRow
 	display: flex
@@ -115,7 +115,7 @@
 	&.aligncenter
 		align-items: center
 
-	/deep/
+	::v-deep
 		.call
 			border-bottom-left-radius: 0
 			margin-left: 0.5 * $r
@@ -124,7 +124,7 @@
 		padding-left: 0
 		padding-right: $r / 2
 
-		/deep/
+		::v-deep
 			.call
 
 				border-top-right-radius: 0
@@ -148,7 +148,7 @@
 		flex-wrap: wrap
 		+transitionopt(0.3s, background)
 
-		/deep/
+		::v-deep
 		.userpic
 			position: relative
 			&::after
@@ -435,7 +435,7 @@
 		.sendername
 			white-space: nowrap
 
-		/deep/
+		::v-deep
 			.messagePreview
 				font-size: 0.9em
 				height: 22px
@@ -457,7 +457,7 @@
 		display: flex
 		flex-direction: column-reverse
 
-		/deep/
+		::v-deep
 
 			.msgtext
 				text-align: left
@@ -538,7 +538,7 @@
 
 		.messageAudio
 			margin-left: 0
-			/deep/
+			::v-deep
 				.voiceMessage_options,
 				.voiceMessage_wrapper
 					border-top-right-radius: 0

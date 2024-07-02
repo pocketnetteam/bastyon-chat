@@ -18,7 +18,7 @@
 
 <style scoped lang="sass">
 
-/deep/
+::v-deep
   .infoWrapper
     display: flex
     align-items: center

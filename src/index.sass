@@ -99,12 +99,12 @@ input
 
 
 @keyframes gradient
-	0%
-		background-position: 0% 50%
-	50%
-		background-position: 100% 50%
-	100%
-		background-position: 0% 50%
+    0%
+        background-position: 0% 50%
+    50%
+        background-position: 100% 50%
+    100%
+        background-position: 0% 50%
 
 mark
     background-color : srgb(--color-bg-selection) !important
@@ -293,38 +293,38 @@ button.button
             color : srgb(--neutral-grad-3)
 
 .closecsscross
-	position: relative
-	width: 64px
-	height: 64px
-	opacity: 0.5
-	margin: 0 auto
+    position: relative
+    width: 64px
+    height: 64px
+    opacity: 0.5
+    margin: 0 auto
 
-	&:before,
-	&:after
-		position: absolute
-		left: 32px
-		content: ' '
-		height: 64px
-		width: 1px
-		background-color: srgb(--neutral-grad-1)
+    &:before,
+    &:after
+        position: absolute
+        left: 32px
+        content: ' '
+        height: 64px
+        width: 1px
+        background-color: srgb(--neutral-grad-1)
 
-	&:before
-		transform: rotate(45deg)
+    &:before
+        transform: rotate(45deg)
 
-	&:after
-		transform: rotate(-45deg)
+    &:after
+        transform: rotate(-45deg)
 
 .fademodal-enter-active, .fademodal-leave-active
-	+transition(0.3s)
-	.modal
-		+transition(0.3s)
+    +transition(0.3s)
+    .modal
+        +transition(0.3s)
 
 .fademodal-enter, .fademodal-leave-to
-	opacity: 0
+    opacity: 0
 
-	.modal
-		-webkit-transform: translateY(100%)
-		transform: translateY(100%)
+    .modal
+        -webkit-transform: translateY(100%)
+        transform: translateY(100%)
 
 .internalpocketnetlink
     b,
@@ -443,9 +443,8 @@ button.button
                                 padding : 0
 
             &.active
-                .chatwrapper
                 .page .work
-                    padding : 0 $r / 2
+                    padding : 0 0.5 * $r
 
                 .backface
                     top : 0

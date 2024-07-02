@@ -31,7 +31,7 @@
 
 
 .newChat
-  /deep/ #maincontent
+  ::v-deep #maincontent
 
     .headerSpacer,
     .headerSpacerWrapper
@@ -41,7 +41,7 @@
 
 
 .newChat.minimized.active
-  /deep/ #maincontent
+  ::v-deep #maincontent
     .desktopList
       display: none
 </style>

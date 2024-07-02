@@ -1,4 +1,7 @@
-var prependcssvars = `@import "@/styles/variables/common.sass"; @import "@/styles/mixins/common.sass";`;
+var prependcssvars = `
+@import "~@/styles/variables/common.sass"
+@import "~@/styles/mixins/common.sass"
+`
 const path = require("path");
 module.exports = {
 	devServer: {
@@ -15,7 +18,10 @@ module.exports = {
 	css: {
 		loaderOptions: {
 			sass: {
-				prependData: prependcssvars,
+				additionalData: prependcssvars,
+				sassOptions: {
+					independedSyntax: true
+				}
 			},
 		},
 	},

@@ -40,7 +40,7 @@
 	color: #fff
 
 .unknowngroupusers
-	/deep/
+	::v-deep
 	.bgimage
 		transform: scale(0.7)
 .chatGroupIcon

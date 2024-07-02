@@ -40,6 +40,8 @@ var PcryptoRoom = async function (pcrypto, chat, { ls, lse }) {
 
 	var pcryptoFile = new PcryptoFile();
 
+	pcryptoFile.init()
+
 	chat.pcrypto = self;
 
 	self.version = 2 
@@ -50,6 +52,10 @@ var PcryptoRoom = async function (pcrypto, chat, { ls, lse }) {
 		usershistory = [];
 		users = {};
 	};
+
+	self.destroy = function(){
+		pcryptoFile.destroy()
+	}
 
 	var lcachekey = "pcrypto9_" + chat.roomId + "_";
 	var ecachekey = "e_pcrypto9_";
@@ -1040,6 +1046,9 @@ var PcryptoFile = function () {
 	var self = this;
 	var iv = [19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34];
 
+	var queue = []
+	var interval = null
+
 	var readFile = function (file) {
 		let reader = new FileReader();
 
@@ -1196,6 +1205,67 @@ var PcryptoFile = function () {
 			});
 	};
 
+	self.decryptFileQueue = function(file, secret, p, additionalFinfo){
+
+		return new Promise((resolve, reject) => {
+			var qindex = queue.push(() => {
+
+				queue[qindex] = null
+
+				return self.decryptFile(file, secret, p, additionalFinfo).then(resolve).catch(e => {
+
+					reject(e)
+
+					return Promise.resolve()
+				})
+
+			}) - 1
+		})
+		
+	}
+
+	var processQueryItems = function(){
+
+		var flength = queue.length
+
+		f.processArray(queue, (action) => {
+			if(!action) return Promise.resolve()
+
+			return new Promise((resolve, reject) => {
+				setTimeout(() => {
+					action().then(resolve)
+				}, 10)
+				
+			}) 
+		}).then(() => {
+			if (flength == queue.length){
+				queue = []
+			}
+		})
+	}
+
+	
+
+	self.init = function(){
+
+		if (interval){
+			clearInterval(interval)
+		}
+		
+		console.log("INIT INTERVAL")
+
+		/*interval = setInterval(() => {
+			processQueryItems()
+		}, 20)*/
+	}
+
+	self.destroy = function(){
+		if(interval){
+			clearInterval(interval)
+			interval = null
+		}
+	}
+
 	return self;
 };
 
@@ -1237,6 +1307,7 @@ var Pcrypto = function (core, p) {
 	self.destroy = function () {
 		_.each(self.rooms, function (r) {
 			r.clear();
+			r.destroy()
 		});
 
 		self.rooms = {};

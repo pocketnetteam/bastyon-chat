@@ -12,6 +12,7 @@
 </template>
 
 <style scoped lang="sass">
+
 .nameofchat
 	white-space: nowrap
 .nameline
@@ -40,13 +41,13 @@
 	margin-block: 0.5 * $r
 
 	&.public
-        background: srgb(--color-good)
+		background: srgb(--color-good)
 
-        i
-	        color: srgb(--text-on-bg-shadow-color)
+		i
+			color: srgb(--text-on-bg-shadow-color)
 
 	i
-  		color: srgb(--neutral-grad-1)
+		color: srgb(--neutral-grad-1)
 
 
 

@@ -61,43 +61,36 @@
 <script src="./index.js"></script>
 <style scoped lang="sass" src="./index.sass"></style>
 
-<style scoped lang="scss">
-.chatGroupIcon img {
-	width: 50% !important;
-}
-.chatIconWrapper {
-	position: relative;
-	img {
-		width: 100%;
-		height: 100%;
-		object-fit: cover;
-		border-radius: 50%;
-		position: absolute;
-		top: 0;
-		left: 0;
-	}
-}
-.chatIconEditImage {
-	position: absolute;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
-	z-index: 200;
-	opacity: 0.9;
-	display: flex;
-	align-items: center;
-	flex-direction: column;
-	justify-content: center;
-	i {
-		transform: scale(2);
-		color: srgb(--color-bg-ac)
-	}
-}
-.chatIconFile {
-	display: none;
-}
-.userImagebase64 {
-	z-index: 150;
-}
+<style scoped lang="sass">
+.chatGroupIcon img
+  width: 50% !important
+.chatIconWrapper
+  position: relative
+  img
+    width: 100%
+    height: 100%
+    object-fit: cover
+    border-radius: 50%
+    position: absolute
+    top: 0
+    left: 0
+.chatIconEditImage
+  position: absolute
+  top: 0
+  left: 0
+  width: 100%
+  height: 100%
+  z-index: 200
+  opacity: 0.9
+  display: flex
+  align-items: center
+  flex-direction: column
+  justify-content: center
+  i
+    transform: scale(2)
+    color: srgb(--color-bg-ac)
+.chatIconFile
+  display: none
+.userImagebase64
+  z-index: 150
 </style>

@@ -42,31 +42,32 @@ export default {
   }
 </style>
 
-<style lang="scss" scoped>
+<style lang="sass" scoped>
+
 // fade
-@import '../styles/transitions/fade/fade';
-@import '../styles/transitions/fade/fade-in-down';
-@import '../styles/transitions/fade/fade-in-right';
-@import '../styles/transitions/fade/fade-in-up';
-@import '../styles/transitions/fade/fade-in-left';
+@import '../styles/transitions/fade/fade'
+@import '../styles/transitions/fade/fade-in-down'
+@import '../styles/transitions/fade/fade-in-right'
+@import '../styles/transitions/fade/fade-in-up'
+@import '../styles/transitions/fade/fade-in-left'
 
 // zoom
-@import '../styles/transitions/zoom/zoom';
+@import '../styles/transitions/zoom/zoom'
 
 // flip
-@import '../styles/transitions/flip/flip-x';
-@import '../styles/transitions/flip/flip-y';
+@import '../styles/transitions/flip/flip-x'
+@import '../styles/transitions/flip/flip-y'
 
 // overlay
-@import '../styles/transitions/overlay/overlay-right';
-@import '../styles/transitions/overlay/overlay-down';
-@import '../styles/transitions/overlay/overlay-up';
-@import '../styles/transitions/overlay/overlay-left';
-@import '../styles/transitions/overlay/overlay-up-full';
-@import '../styles/transitions/overlay/overlay-right-full';
-@import '../styles/transitions/overlay/overlay-down-full';
-@import '../styles/transitions/overlay/overlay-left-full';
-@import '../styles/transitions/overlay/overlay-up-down';
-@import '../styles/transitions/overlay/overlay-left-right';
+@import '../styles/transitions/overlay/overlay-right'
+@import '../styles/transitions/overlay/overlay-down'
+@import '../styles/transitions/overlay/overlay-up'
+@import '../styles/transitions/overlay/overlay-left'
+@import '../styles/transitions/overlay/overlay-up-full'
+@import '../styles/transitions/overlay/overlay-right-full'
+@import '../styles/transitions/overlay/overlay-down-full'
+@import '../styles/transitions/overlay/overlay-left-full'
+@import '../styles/transitions/overlay/overlay-up-down'
+@import '../styles/transitions/overlay/overlay-left-right'
 </style>
 

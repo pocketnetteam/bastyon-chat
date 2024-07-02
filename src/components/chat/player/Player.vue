@@ -52,7 +52,7 @@ export default {
 </script>
 
 <style lang="sass" scoped>
-/deep/ iframe
+::v-deep iframe
     outline: none
     border : 0
     width : 100%

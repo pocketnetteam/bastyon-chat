@@ -1033,7 +1033,6 @@ export default {
 
 					this.audioContext = this.core.getAudioContext();
 
-					//var startedTime = (new Date()).getTime() / 1000
 
 					var media = (this.cordovaMediaRecorder = new Media(
 						path,
@@ -1061,27 +1060,15 @@ export default {
 								});
 							});
 
-							/*}
-
-					else{
-						fu = f.fetchLocal(path)
-					}*/
+							
 
 							fu.then((r) => {
-								///temp
-								/*if (f.isios())
-							r.duration = (new Date()).getTime() / 1000 - startedTime
-
-
-						/*var e = {
-							data : r.data
-						}*/
 
 								if (media.duration && media.duration > 0) {
 									r.duration = media.duration;
 								}
 
-								this.createVoiceMessage(r, true);
+								this.createVoiceMessage(r, false);
 
 								return Promise.resolve();
 							})

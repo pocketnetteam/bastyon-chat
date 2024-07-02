@@ -328,91 +328,78 @@ export default {
 };
 </script>
 
-<style scoped lang="scss">
-.voiceMessage {
-	-webkit-tap-highlight-color: transparent;
-	display: flex;
-	contain: strict;
-	width: 230px;
-	height: 100%;
-	height: 50px;
+<style scoped lang="sass">
+.voiceMessage
+  -webkit-tap-highlight-color: transparent
+  display: flex
+  contain: strict
+  width: 230px
+  height: 100%
+  height: 50px
 
-	&_wrapper {
-		display: flex;
-		justify-content: flex-end;
-		align-items: center;
-		overflow: hidden;
-		min-width: 10em;
-		padding: 0 0.5em;
-		border-radius: 2em;
-		background: srgba(--neutral-grad-1, 0.8)
-	}
+  &_wrapper
+    display: flex
+    justify-content: flex-end
+    align-items: center
+    overflow: hidden
+    min-width: 10em
+    padding: 0 0.5em
+    border-radius: 2em
+    background: srgba(--neutral-grad-1, 0.8)
 
-	&_toggle {
-		cursor: pointer;
-		height: 33px;
-		width: 33px;
-		min-width: 33px;
-		margin-right: 0.5em;
-		border-radius: 50%;
-		background: srgba(--neutral-grad-2, 0.25);
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		color: srgb(--color-bg-ac);
+  &_toggle
+    cursor: pointer
+    height: 33px
+    width: 33px
+    min-width: 33px
+    margin-right: 0.5em
+    border-radius: 50%
+    background: srgba(--neutral-grad-2, 0.25)
+    display: flex
+    align-items: center
+    justify-content: center
+    color: srgb(--color-bg-ac)
 
-		i {
-			margin-top: 2px;
-			margin-left: 2px;
-			font-size: 0.5em;
-		}
-	}
+    i
+      margin-top: 2px
+      margin-left: 2px
+      font-size: 0.5em
 
-	&_graph {
-		position: relative;
-		cursor: pointer;
-	}
+  &_graph
+    position: relative
+    cursor: pointer
 
-	&_options {
-		display: flex;
-		justify-content: center;
-		margin-left: $r;
-		padding: 0.25 * $r $r;
-		min-width: 4 * $r;
-		background: srgba(--neutral-grad-2, 0.25);
-		border-radius: 2 * $r;
+  &_options
+    display: flex
+    justify-content: center
+    margin-left: $r
+    padding: 0.25 * $r $r
+    min-width: 4 * $r
+    background: srgba(--neutral-grad-2, 0.25)
+    border-radius: 2 * $r
 
-		span {
-			font-size: 0.8em;
-			color: srgb(--neutral-grad-3);
-		}
-	}
+    span
+      font-size: 0.8em
+      color: srgb(--neutral-grad-3)
 
-	&.playing {
-		.voiceMessage_options {
-			span {
-				font-size: 0.8em;
-				color: srgb(--color-bg-ac-bright);
-			}
-		}
-	}
+  &.playing
+    .voiceMessage_options
+      span
+        font-size: 0.8em
+        color: srgb(--color-bg-ac-bright)
 
-	.fa-exclamation-circle {
-		font-size: 0.7em;
-		color: srgb(--color-bad);
-		padding: 0.5em;
-	}
+  .fa-exclamation-circle
+    font-size: 0.7em
+    color: srgb(--color-bad)
+    padding: 0.5em
 
-	.encsign {
-		display: flex;
-		align-items: center;
-		margin-left: $r;
+  .encsign
+    display: flex
+    align-items: center
+    margin-left: $r
 
-		i {
-			font-size: 0.5em;
-			color: srgb(--neutral-grad-2);
-			opacity: 0.6;
-		}
-	}
-}
+    i
+      font-size: 0.5em
+      color: srgb(--neutral-grad-2)
+      opacity: 0.6
 </style>
