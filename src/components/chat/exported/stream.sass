@@ -239,7 +239,7 @@ $bastyon: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTEiIGhlaWdodD0iMTIiIHZpZXd
           display: flex
           flex-basis: 100%
           align-items: center
-          padding: $r / 2 $r * 2 0 $r * 2.5
+          padding: 0.5 * $r $r * 2 0 $r * 2.5
 
           .count
             background-color: srgb(--color-txt-ac)
@@ -249,7 +249,7 @@ $bastyon: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTEiIGhlaWdodD0iMTIiIHZpZXd
             display: grid
             grid-template-columns: auto auto
             grid-gap: $r
-            padding: $r / 2 $r
+            padding: 0.5 * $r $r
 
           .icon
             &.donate
@@ -260,7 +260,7 @@ $bastyon: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTEiIGhlaWdodD0iMTIiIHZpZXd
               color: srgb(--color-bad)
               cursor: pointer
               margin: 0 0 0 $r
-              padding: $r / 2
+              padding: 0.5 * $r
               opacity: .75
               +transitionopt(.25s, opacity)
 
@@ -281,9 +281,9 @@ $bastyon: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTEiIGhlaWdodD0iMTIiIHZpZXd
       display: flex
       align-items: center
       justify-content: space-between
-      margin: $r / 2
+      margin: 0.5 * $r
       margin-bottom: 0
-      padding: $r / 2
+      padding: 0.5 * $r
       padding-left: 1.5 * $r
 
       .caption
