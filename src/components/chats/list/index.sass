@@ -1,5 +1,6 @@
 
-
+.scroller
+  margin-top: 8px
 .chats-list
   .searchWrapperEA
     margin-top : $r
@@ -114,6 +115,8 @@
   width: 100%
   border-radius: 3px
 
+
+
 .inviteUserDivWrapper
   +transition(0.3s)
 
@@ -149,3 +152,7 @@
 .fade-enter-from,
 .fade-leave-to 
   opacity: 0
+
+.card-content
+  &.active 
+    background-color: srgba(--color-bg-ac-bright, 0.5)

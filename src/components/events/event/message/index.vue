@@ -1,7 +1,5 @@
 <template>
 	<div class="eventsMessage">
-
-
 		<div
 			v-touch:touchhold="dropDownMenuShow"
 			:class="{
@@ -37,10 +35,7 @@
 				</span>
 			</div>
 
-			<div
-				class="actionsWrapper"
-				v-if="isMenuAllowed"
-			>
+			<div class="actionsWrapper" v-if="isMenuAllowed">
 				<div
 					v-if="!streamMode && multiSelect"
 					class="multiSelect"
@@ -49,7 +44,7 @@
 					<i v-if="selectedMessage" class="far fa-check-circle"></i>
 					<i v-else class="far fa-circle"></i>
 				</div>
-					<i @click="setmenu" v-else class="fas fa-ellipsis-h setmenu"></i>
+				<i @click="setmenu" v-else class="fas fa-ellipsis-h setmenu"></i>
 			</div>
 
 			<div
@@ -66,13 +61,10 @@
 					@click="showreference"
 					v-if="reference && !preview && !fromreference"
 				>
-					<eventsEvent
-						:event="reference"
-						:chat="chat"
-						:preview="true"
-					/>
+					<eventsEvent :event="reference" :chat="chat" :preview="true" />
 
 					<div class="referenceCaption">
+						dasdadas
 						<span><i class="fas fa-share"></i></span>
 					</div>
 				</div>
@@ -108,11 +100,7 @@
 					@click="showreference"
 					v-if="reference && !preview && !fromreference"
 				>
-					<eventsEvent
-						:event="reference"
-						:chat="chat"
-						:preview="true"
-					/>
+					<eventsEvent :event="reference" :chat="chat" :preview="true" />
 
 					<div class="referenceCaption">
 						<span><i class="fas fa-share"></i></span>
@@ -153,14 +141,12 @@
 				:class="{ my: my }"
 				v-if="
 					this.streamMode ||
-					(content.msgtype === 'm.text' || content.msgtype === 'm.encrypted') &&
-					textWithoutLinks
+					((content.msgtype === 'm.text' ||
+						content.msgtype === 'm.encrypted') &&
+						textWithoutLinks)
 				"
 			>
-				<div
-					class="messageText"
-					:class="donationColor"
-				>
+				<div class="messageText" :class="donationColor">
 					<div class="edited" v-if="edited">
 						<i class="fas fa-pen"></i> {{ $t("caption.edited") }}
 					</div>
@@ -172,9 +158,7 @@
 						class="sendername"
 						v-if="(!content.from && !my && showmeta) || (showmyicon && !my)"
 					>
-						<span class="b"
-							>{{ userinfo.name }}</span
-						>
+						<span class="b">{{ userinfo.name }}</span>
 						&middot;
 						<span>
 							{{ format_date(origin.localTimestamp) || "Now" }}
@@ -185,11 +169,7 @@
 						@click="showreference"
 						v-if="reference && !preview && !fromreference"
 					>
-						<eventsEvent
-							:event="reference"
-							:chat="chat"
-							:preview="true"
-						/>
+						<eventsEvent :event="reference" :chat="chat" :preview="true" />
 
 						<div class="referenceCaption">
 							<span><i class="fas fa-share"></i></span>
@@ -199,11 +179,18 @@
 					<div class="from" v-if="content.from">
 						<div class="fromCaption">
 							<i class="fas fa-share-alt"></i>
-							<span>{{ userinfo.name }}: {{ $t("caption.messagefrom").toLowerCase() }}</span>
+							<span
+								>{{ userinfo.name }}:
+								{{ $t("caption.messagefrom").toLowerCase() }}</span
+							>
 						</div>
 					</div>
 
-					<div class="linkPreview" v-if="streamMode && content.url && urlpreview" v-show="!pkoindisabled">
+					<div
+						class="linkPreview"
+						v-if="streamMode && content.url && urlpreview"
+						v-show="!pkoindisabled"
+					>
 						<template v-if="!sending">
 							<url
 								:url="urlpreview"
@@ -212,7 +199,9 @@
 								@updatedSize="updatedSize"
 								@loaded="urlloaded"
 								@error="urlerror"
-								v-if="!origin.localRedactionEvent() && !origin.getRedactionEvent()"
+								v-if="
+									!origin.localRedactionEvent() && !origin.getRedactionEvent()
+								"
 							/>
 						</template>
 						<div v-else>
@@ -265,7 +254,9 @@
 			>
 				<div class="fromCaption">
 					<i class="fas fa-share-alt"></i>
-					<span>{{ userinfo.name }}: {{ $t("caption.messagefrom").toLowerCase() }} </span>
+					<span
+						>{{ userinfo.name }}: {{ $t("caption.messagefrom").toLowerCase() }}
+					</span>
 				</div>
 			</div>
 		</div>
@@ -281,7 +272,6 @@
 			/>
 		</div>
 
-
 		<div
 			class="statusWrapper"
 			v-if="!streamMode && my && readed && !preview && !fromreference"
@@ -291,7 +281,6 @@
 				<span>{{ $t("caption.messageRead") }}</span>
 			</div>
 		</div>
-
 	</div>
 </template>
 

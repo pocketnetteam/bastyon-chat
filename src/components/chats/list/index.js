@@ -16,7 +16,7 @@ export default {
 			revealed: {},
 			lastEventDescription: "",
 			blocked: false,
-			globalsearch : ''
+			globalsearch: "",
 		};
 	},
 	components: {
@@ -33,16 +33,18 @@ export default {
 			type: String,
 			default: () => {},
 		},
-
-		processid : ''
+		activeRoomId: {
+			type: String,
+			default: () => {},
+		},
+		processid: "",
 	},
 
-	beforeMount: function() {
+	beforeMount: function () {
+		if (this.processid) {
+			var p = this.core.mtrx.searchEngine.getprocess(this.processid);
 
-		if (this.processid){
-			var p = this.core.mtrx.searchEngine.getprocess(this.processid)
-
-			if (p && p.text) this.globalsearch = p.text
+			if (p && p.text) this.globalsearch = p.text;
 		}
 	},
 
@@ -54,12 +56,12 @@ export default {
 		},
 
 		minimized: {
-			immediate : true,
-			handler : function () {
-				console.log('////')
-				this.globalsearch = ''
-			}
-		}
+			immediate: true,
+			handler: function () {
+				console.log("////");
+				this.globalsearch = "";
+			},
+		},
 		//$route: 'getdata'
 	},
 
@@ -117,7 +119,7 @@ export default {
 		chats: function (state) {
 			var self = this;
 			var chats = [];
-			
+
 			_.each(state.chats, (chat) => {
 				if (this.deletedrooms[chat.roomId] || chat.stream) return;
 
@@ -137,9 +139,6 @@ export default {
 				) {
 					return;
 				} else {
-
-					
-
 					/*let rm = this.core.mtrx.client.getRoom(chat.roomId),
 						ts = rm.getLiveTimeline(),
 						tl = new this.core.mtrx.sdk.TimelineWindow(
@@ -175,9 +174,7 @@ export default {
 				this.getEventsAndDecrypt(this.core.mtrx.client.getRoom(chat.roomId), chatevents.timeline)
 			})*/
 
-
-			return chats
-
+			return chats;
 		},
 
 		withoutBlockedChats: function () {
@@ -196,40 +193,38 @@ export default {
 	}),
 	methods: {
 		getEventsAndDecrypt(chat, events) {
+			return this.core.mtrx.kit
+				.prepareChat(chat)
+				.then(() => {
+					return Promise.all(
+						_.map(events, (_e) => {
+							var e = _e.get();
 
-
-			return this.core.mtrx.kit.prepareChat(chat).then(() => {
-				return Promise.all(
-					_.map(events, (_e) => {
-	
-						var e = _e.get()
-	
-	
-						if (e.decrypted) return Promise.resolve();
-						if (f.deep(e, "event.content.msgtype") !== "m.encrypted")
-							return Promise.resolve();
-	
-						return chat.pcrypto
-							.decryptEvent(e)
-							.then((d) => {
-								e.decrypted = d;
-	
+							if (e.decrypted) return Promise.resolve();
+							if (f.deep(e, "event.content.msgtype") !== "m.encrypted")
 								return Promise.resolve();
-							})
-							.catch((e) => {
-								e.decrypted = {
-									msgtype: "m.bad.encrypted",
-								};
-	
-								return Promise.resolve();
-							});
-					})
-				)
-			})
 
-			.then(() => {
-				return Promise.resolve(events);
-			});
+							return chat.pcrypto
+								.decryptEvent(e)
+								.then((d) => {
+									e.decrypted = d;
+
+									return Promise.resolve();
+								})
+								.catch((e) => {
+									e.decrypted = {
+										msgtype: "m.bad.encrypted",
+									};
+
+									return Promise.resolve();
+								});
+						})
+					);
+				})
+
+				.then(() => {
+					return Promise.resolve(events);
+				});
 		},
 
 		invitepnt() {
@@ -290,7 +285,6 @@ export default {
 					this.core.mtrx
 						.shareInChat(chat.roomId, _share)
 						.then((r) => {
-							
 							this.$store.commit("icon", {
 								icon: "success",
 								message: "",
@@ -300,9 +294,7 @@ export default {
 								this.$router
 									.push(_share.route || "chat?id=" + chat.roomId)
 									.catch((e) => {});
-							}, 2000)
-
-							
+							}, 2000);
 						})
 						.catch((e) => {
 							console.error(e);
@@ -415,10 +407,9 @@ export default {
 			this[item] = this[item] ? null : 2;
 		},
 
-		searchall : function(text){
-			this.globalsearch = (text || "").toLowerCase()
-
-		}
+		searchall: function (text) {
+			this.globalsearch = (text || "").toLowerCase();
+		},
 	},
 	mounted() {
 		// ideally should be in some global handler/store

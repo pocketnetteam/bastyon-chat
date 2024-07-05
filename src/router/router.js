@@ -19,11 +19,18 @@ const router = new Router({
 			path: "/chats",
 			name: "chats",
 			component: () => import("@/views/chats"),
-		},
-		{
-			path: "/chat",
-			name: "chat",
-			component: () => import("@/views/chat"),
+			children: [
+				{
+					path: "/chat",
+					name: "chat",
+					component: () => import("@/views/chat"),
+				},
+				{
+					path: "",
+					name: "noChat",
+					component: () => import("@/views/no_chat"),
+				},
+			],
 		},
 		{
 			path: "/publicPreview",
