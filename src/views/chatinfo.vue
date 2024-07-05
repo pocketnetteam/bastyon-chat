@@ -33,7 +33,7 @@
   z-index: 999
 
 .openInviteModal
-  /deep/ #maincontent
+  ::v-deep #maincontent
 
     .headerSpacer,
     .headerSpacerWrapper
@@ -43,7 +43,7 @@
 
 
 .openInviteModal.minimized.active
-  /deep/ #maincontent
+  ::v-deep #maincontent
     .desktopList
       display: none
 </style>

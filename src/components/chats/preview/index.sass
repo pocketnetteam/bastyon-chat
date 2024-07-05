@@ -36,7 +36,7 @@
     align-items: center
     min-width: 44px
 
-    /deep/
+    ::v-deep
     .oneuser
       i
         font-size: 0.7em
@@ -70,28 +70,28 @@
     i
       color: srgb(--neutral-grad-3)
 
-  /deep/ .previewMessage
+  ::v-deep .previewMessage
     max-width: 90%
     overflow: hidden
     text-overflow: ellipsis
 
-  /deep/ .messagePreview
+  ::v-deep .messagePreview
     max-width: 100%
     overflow: hidden
     text-overflow: ellipsis
-  /deep/ .msgtext
+  ::v-deep .msgtext
     display: inline
     font-size: 0.9em
     white-space: nowrap
    
 
-  /deep/ .deletedMessage
+  ::v-deep .deletedMessage
     text-align: left
     font-size: 0.9em
     padding : 0
 
 
-  /deep/ span
+  ::v-deep span
     color: srgb(--text-color)
     opacity: 0.8
     font-size: 0.9em
@@ -132,7 +132,7 @@
       white-space: nowrap
       text-overflow: ellipsis
 
-    /deep/ span
+    ::v-deep span
       font-size: 0.8em
       display: block
 
@@ -142,12 +142,12 @@
     display: flex
     align-items: flex-end
 
-    /deep/ .nameofchat
+    ::v-deep .nameofchat
       overflow: hidden
       text-overflow: ellipsis
       max-width: 150px
 
-    /deep/ span
+    ::v-deep span
       font-size: 1em
       overflow: hidden
       white-space: nowrap

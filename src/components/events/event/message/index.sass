@@ -100,31 +100,31 @@
 
 
 .fade-enter-active
-  	+transition(0.3s)
+	+transition(0.3s)
 
 .fade-enter-from
-  	opacity: 0
+	opacity: 0
 
 .messageRow
 	display: flex
 	align-items: flex-end
-	padding-left: $r / 2
+	padding-left: 0.5 * $r
 	min-height: 34px
 	position: relative
 
 	&.aligncenter
 		align-items: center
 
-	/deep/
+	::v-deep
 		.call
 			border-bottom-left-radius: 0
 			margin-left: 0.5 * $r
 
 	&.my
 		padding-left: 0
-		padding-right: $r / 2
+		padding-right: 0.5 * $r
 
-		/deep/
+		::v-deep
 			.call
 
 				border-top-right-radius: 0
@@ -148,7 +148,7 @@
 		flex-wrap: wrap
 		+transitionopt(0.3s, background)
 
-		/deep/
+		::v-deep
 		.userpic
 			position: relative
 			&::after
@@ -360,7 +360,7 @@
 
 	.statusWrapper
 		order: 5
-		padding: $r $r / 2
+		padding: $r 0.5 * $r
 		opacity: 0.6
 
 		div,
@@ -379,7 +379,7 @@
 	.timeWrapper
 		text-align: left
 		order: 2
-		padding: 0 $r / 2
+		padding: 0 0.5 * $r
 		line-height: 33px
 		opacity: 0.6
 		flex-grow: 1
@@ -435,7 +435,7 @@
 		.sendername
 			white-space: nowrap
 
-		/deep/
+		::v-deep
 			.messagePreview
 				font-size: 0.9em
 				height: 22px
@@ -457,7 +457,7 @@
 		display: flex
 		flex-direction: column-reverse
 
-		/deep/
+		::v-deep
 
 			.msgtext
 				text-align: left
@@ -538,7 +538,7 @@
 
 		.messageAudio
 			margin-left: 0
-			/deep/
+			::v-deep
 				.voiceMessage_options,
 				.voiceMessage_wrapper
 					border-top-right-radius: 0

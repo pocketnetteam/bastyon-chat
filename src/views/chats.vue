@@ -114,7 +114,7 @@ $is-opened-chat: '[data-is-opened-chat="true"]';
   z-index: 999
 
 .newChat
-  /deep/ #maincontent
+  ::v-deep #maincontent
 
     .headerSpacer,
     .headerSpacerWrapper
@@ -123,7 +123,7 @@ $is-opened-chat: '[data-is-opened-chat="true"]';
       overflow: visible !important
 
 .newChat.minimized.active
-  /deep/ #maincontent
+  ::v-deep #maincontent
     .desktopList
       display: none
 </style>

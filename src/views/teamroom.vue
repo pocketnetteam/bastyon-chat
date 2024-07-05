@@ -49,7 +49,7 @@
     width: 30px
     margin-left: .25em
 
-/deep/ .messageRow
+::v-deep .messageRow
   display: flex
   align-items: flex-end
   overflow: hidden

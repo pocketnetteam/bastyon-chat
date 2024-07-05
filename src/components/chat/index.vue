@@ -196,4 +196,3 @@
 <!-- THEMES BEGIN -->
 <!-- THEMES END -->
 
-<style lang="scss"></style>

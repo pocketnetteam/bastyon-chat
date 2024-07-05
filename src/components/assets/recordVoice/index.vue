@@ -31,4 +31,4 @@
 
 <script src="./index.js" />
 
-<style scoped lang="scss" src="./index.scss" />
+<style scoped lang="sass" src="./index.sass" />

@@ -1,5 +1,5 @@
 .eventWrapper
-  /deep/
+  ::v-deep
     .event
       padding : 0.5 * $r 0
 
@@ -9,14 +9,14 @@
   &.fromsearch
     background: srgba(--color-bg-ac-bright, 0.1)
 
-    /deep/
+    ::v-deep
       .allscreen
         background: srgba(--color-bg-ac-bright, 0.1)
 
   &.attention
     background: srgb(--neutral-grad-0)
 
-    /deep/
+    ::v-deep
       .allscreen
         background: srgb(--neutral-grad-0)
 
@@ -127,7 +127,7 @@
 
   &.mobile
     scroll-behavior: smooth
-    /deep/
+    ::v-deep
       .dropdown.visible
         top : -55px
 

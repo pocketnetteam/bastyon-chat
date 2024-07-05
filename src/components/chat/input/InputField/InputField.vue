@@ -502,7 +502,7 @@ export default {
 	padding: 0 2 * $r
 	padding-right: 0
 
-	/deep/ .emoji-mart .emoji-mart-emoji
+	::v-deep .emoji-mart .emoji-mart-emoji
 		width: 12.5%
 		height: 40px
 		cursor: pointer

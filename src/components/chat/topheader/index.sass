@@ -46,21 +46,21 @@
 	white-space: nowrap
 	text-overflow: ellipsis
 
-/deep/
+::v-deep
 	.nameline
 		max-width: 250px
 		overflow: hidden
 		white-space: nowrap
 		text-overflow: ellipsis
 
-/deep/
+::v-deep
 	#topheader
 		&.minimized
 			&.fix
 				background: transparent
 				overflow: inherit
 
-/deep/
+::v-deep
 	#search
 		padding-left: $r
 		padding-right:  $r
@@ -125,7 +125,7 @@
 .encrypted
 	z-index: 2
 	color: srgb(--color-good)
-	padding: $r / 2 $r
+	padding: 0.5 * $r $r
 
 	i
 		font-size: 0.8em
@@ -174,7 +174,7 @@
 		flex-direction: column
 		align-items: center
 		justify-content: center
-		padding: $r / 2 $r / 2
+		padding: 0.5 * $r 0.5 * $r
 		text-align: center
 		span
 			color: srgb(--color-good)
