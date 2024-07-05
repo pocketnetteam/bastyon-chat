@@ -43,63 +43,65 @@
 </template>
 
 <style lang="sass">
-$is-opened-chat: '[data-is-opened-chat="true"]';
+$is-opened-chat: '[data-is-opened-chat="true"]'
 
 .chats[data-viewType="split"]
-	.eventsflex, .noswipepnt .work
-		@media (min-width: $break_xl)
-  		max-width: 50vw !important
+  .eventsflex, .noswipepnt .work
+    @media (min-width: $break_xl)
+      max-width: 50vw !important
 
-	.chat-topheader
-		@media(min-width: $break_md)
-			.leftIcon
-				display: none
-			.work
-				margin: 0
-				border-left: 1px solid srgb(--neutral-grad-0)
-				max-width: 100%
+  .chat-topheader
+    @media(min-width: $break_md)
+      .leftIcon
+        display: none
+      .work
+        margin: 0
+        border-left: 1px solid srgb(--neutral-grad-0)
+        max-width: 100%
 
-	#ChatList
-		#wai-fixedmessageicon
-			@media(min-width: $break_md)
-				display: none !important
-		position: relative
-		height: 100vh
-		width: var(--left-column-width)
-		min-width: var(--left-column-width)
-		max-width: var(--left-column-width)
-		@media(max-width: $break_md)
-			--left-column-width: 100%
-		@media (min-width: $break_md)
-			--left-column-width: 34vw
-		@media (min-width: $break_xl)
-  	  --left-column-width: 25vw
+  #ChatList
+    #wai-fixedmessageicon
+      @media(min-width: $break_md)
+        display: none !important
+    position: relative
+    height: 100vh
+    width: var(--left-column-width)
+    min-width: var(--left-column-width)
+    max-width: var(--left-column-width)
+    @media(max-width: $break_md)
+      --left-column-width: 100%
+    @media (min-width: $break_md)
+      --left-column-width: 34vw
+    @media (min-width: $break_xl)
+      --left-column-width: 25vw
 
-	#ChatContent
-		position: relative
-		width: 100%
-		@media(max-width: $break_md)
-			display: none
-			position: absolute
-			top: 0
-			right: 0
-			z-index: 999
-			left: 0
-			bottom: 0
+  #ChatContent
+    position: relative
+    width: 100%
+    @media(max-width: $break_md)
+      display: none
+      position: absolute
+      top: 0
+      right: 0
+      z-index: 999
+      left: 0
+      bottom: 0
 
 @mixin showChatContent()
-	#ChatContent
-		display: block
-	#ChatList
-		display: none
+  #ChatContent
+    display: block
+  #ChatList
+    display: none
 
 .chats[data-viewType="single"]
-	&#{$is-opened-chat}
-		@include showChatContent()
+  #SelectChatPrompt
+    display: none
+  &#{$is-opened-chat}
+    @include showChatContent()
 
 #{$is-opened-chat}
-	@media(max-width: $break_md)
-		@include showChatContent()
+  @media(max-width: $break_md)
+    @include showChatContent()
 </style>
 
 <style scoped lang="sass">

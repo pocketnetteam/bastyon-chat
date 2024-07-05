@@ -1,5 +1,5 @@
 <template>
-	<div class="wrapper">
+	<div id="SelectChatPrompt" class="wrapper">
 		<div class="chat-prompt">Select a chat to start the communication</div>
 	</div>
 </template>
@@ -11,7 +11,7 @@
   justify-content: center
   height: 100%
   @media(max-width: $break_md)
-	  display: none !important
+    display: none !important
   .chat-prompt
     border-radius: 9999px
     font-size: 0.75em
