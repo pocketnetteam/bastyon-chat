@@ -2,7 +2,7 @@
 	<div
 		class="page chats"
 		style="display: flex"
-		:data-viewtype="this.viewType"
+		:data-viewtype="viewType"
 		:data-is-opened-chat="isOpenedChat"
 		:class="{
 			pocketnet,
@@ -65,15 +65,15 @@ $is-opened-chat: '[data-is-opened-chat="true"]'
         display: none !important
     position: relative
     height: 100vh
-    width: var(--left-column-width)
-    min-width: var(--left-column-width)
-    max-width: var(--left-column-width)
+    width: var(--chat-list-width)
+    min-width: var(--chat-list-width)
+    max-width: var(--chat-list-width)
     @media(max-width: $break_md)
-      --left-column-width: 100%
+      --chat-list-width: 100%
     @media (min-width: $break_md)
-      --left-column-width: 34vw
+      --chat-list-width: 34vw
     @media (min-width: $break_xl)
-      --left-column-width: 25vw
+      --chat-list-width: 25vw
 
   #ChatContent
     position: relative
