@@ -8,7 +8,7 @@ export default {
 	name: "chatList",
 	props: {
 		chat: Object,
-		filterType: String,
+		filter: Object,
 		error: [Object, Error, String],
 		selectedMessages: {
 			type: Array,
@@ -67,7 +67,7 @@ export default {
 			// }
 		},
 
-		filterType: function (value) {
+		'filter.type': function (value) {
 			this.init();
 		}
 	},
@@ -324,7 +324,7 @@ export default {
 				filter.setDefinition({
 					room: {
 						timeline: {
-							contains_url: this.filterType === "images",
+							contains_url: this.filter?.type === "images",
 							types: ["m.room.message"],
 						},
 					},
@@ -352,7 +352,7 @@ export default {
 
 			var ts;
 
-			switch (this.filterType) {
+			switch (this.filter?.type) {
 				case "images": {
 					this.scrollType = "custom";
 					ts = await this.customTimelineSet('FILES');
@@ -514,7 +514,7 @@ export default {
 		},
 
 		autoPaginateAll: function () {
-			if (this.filterType === "images") {
+			if (this.filter?.type === "images") {
 				this.autoPaginate("b");
 			} else {
 				this.autoPaginate("b");

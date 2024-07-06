@@ -13,7 +13,7 @@ export default {
 		u: String,
 		search : String,
 		searchresults : Array,
-		filterType: String,
+		filter: Object,
 		style : ''
 	},
 
