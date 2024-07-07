@@ -43,12 +43,16 @@
 </template>
 
 <style lang="sass">
-$is-opened-chat: '[data-is-opened-chat="true"]'
+$is-opened-chat: '.chats[data-is-opened-chat="true"]'
 
 .chats[data-viewType="split"]
   .eventsflex, .noswipepnt .work
     @media (min-width: $break_xl)
       max-width: 50vw !important
+
+  .joinAction
+      position: sticky
+      bottom: 0
 
   .chat-topheader
     @media(min-width: $break_md)
