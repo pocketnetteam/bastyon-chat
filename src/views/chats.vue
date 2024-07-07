@@ -60,15 +60,16 @@ $is-opened-chat: '.chats[data-is-opened-chat="true"]'
         display: none
       .work
         margin: 0
-        border-left: 1px solid srgb(--neutral-grad-0)
         max-width: 100%
 
   #ChatList
     #wai-fixedmessageicon
       @media(min-width: $break_md)
         display: none !important
+
     position: relative
     height: 100vh
+    border-right: 1px solid srgb(--neutral-grad-0)
     width: var(--chat-list-width)
     min-width: var(--chat-list-width)
     max-width: var(--chat-list-width)
