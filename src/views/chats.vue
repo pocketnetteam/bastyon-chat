@@ -99,7 +99,7 @@ $is-opened-chat: '.chats[data-is-opened-chat="true"]'
     display: none
 
 .chats[data-viewType="single"]
-  #SelectChatPrompt
+  #ChatPrompt
     display: none
   &#{$is-opened-chat}
     @include showChatContent()
