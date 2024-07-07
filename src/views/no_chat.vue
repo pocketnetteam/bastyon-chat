@@ -9,6 +9,7 @@
   display: flex
   align-items: center
   justify-content: center
+  background-color: srgb(--neutral-grad-0)
   height: 100%
   @media(max-width: $break_md)
     display: none !important
