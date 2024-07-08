@@ -162,9 +162,13 @@ export default {
 		if (this.process) this.process.stop();
 	},
 	watch: {
+		"$route.query.search": function (newSearchQuery) {
+			this.searching(newSearchQuery);
+		},
 		search: {
 			immediate: true,
-			handler: function () {
+			handler: function (search) {
+				this.updateSearchQuery(search);
 				pretry(() => {
 					return this.chat;
 				}).then(() => {
@@ -178,6 +182,11 @@ export default {
 			this.focusedevent = event;
 
 			this.$refs["chat"].scrollToEvent(event);
+		},
+		updateSearchQuery(newSearchTerm) {
+			return this.$router.push({
+				query: { ...this.$route.query, search: newSearchTerm },
+			});
 		},
 		searchingProcess() {
 			if (this.search.length > 1 && this.chat) {
