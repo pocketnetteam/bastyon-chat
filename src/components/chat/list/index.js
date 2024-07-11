@@ -16,14 +16,14 @@ export default {
 				return [];
 			},
 		},
-		searchresults : null
+		searchresults: null,
 	},
 
 	components: {
 		events,
 	},
-	
-	inject: ['streamMode'],
+
+	inject: ["streamMode"],
 
 	data: function () {
 		return {
@@ -43,7 +43,7 @@ export default {
 			updateInterval: null,
 			events: [],
 			firstPaginate: true,
-			readPromise : null
+			readPromise: null,
 		};
 	},
 
@@ -69,7 +69,7 @@ export default {
 
 		filterType: function (value) {
 			this.init();
-		}
+		},
 	},
 	computed: mapState({
 		lloading: function () {
@@ -127,7 +127,6 @@ export default {
 	},
 
 	methods: {
-		
 		editingEvent: function ({ event, text }) {
 			this.$emit("editingEvent", { event, text });
 		},
@@ -247,15 +246,12 @@ export default {
 								};
 							});
 						}
-
-						
 					} else {
 						if (subtype == "m.audio") {
 							pr = this.core.mtrx.getAudioUnencrypt(this.chat, e);
 						}
 
 						if (subtype == "m.encrypted") {
-
 							pr = this.chat.pcrypto
 								.decryptEvent(e.event)
 								.then((d) => {
@@ -278,7 +274,6 @@ export default {
 					return pr.catch((e) => {
 						return Promise.resolve();
 					});
-					
 				})
 			).then(() => {
 				return Promise.resolve(events);
@@ -301,7 +296,6 @@ export default {
 						var last = rt.getLastReplacement();
 
 						if (last) {
-
 							e.event.content.body = last.event.content.body;
 							e.event.content.edited = last.event.event_id;
 							e.event.content.block = last.event.content.block;
@@ -316,10 +310,10 @@ export default {
 		},
 		customTimelineSet: async function (name, set) {
 			if (!name) return;
-			
+
 			var filter = new this.core.mtrx.sdk.Filter(client.getUserId());
 
-			if (typeof set === 'function') set(filter);
+			if (typeof set === "function") set(filter);
 			else {
 				filter.setDefinition({
 					room: {
@@ -332,7 +326,7 @@ export default {
 			}
 
 			filter.filterId = await this.core.mtrx.client.getOrCreateFilter(
-				`FILTER_${ name }_` + this.core.mtrx.client.credentials.userId,
+				`FILTER_${name}_` + this.core.mtrx.client.credentials.userId,
 				filter
 			);
 
@@ -343,11 +337,9 @@ export default {
 			this.firstPaginate = true;
 
 			//this.chat.getTimelineForEvent('$FXUvcjIqcvDu0meLTnz-8plloZoNHLIYEb6WGQMWO3s')
-			
-			
+
 			//this.chat.getTimelineForEvent('$FXUvcjIqcvDu0meLTnz-8plloZoNHLIYEb6WGQMWO3s')
-			
-			
+
 			//this.chat.getLiveTimeline();
 
 			var ts;
@@ -355,12 +347,12 @@ export default {
 			switch (this.filterType) {
 				case "images": {
 					this.scrollType = "custom";
-					ts = await this.customTimelineSet('FILES');
+					ts = await this.customTimelineSet("FILES");
 					break;
 				}
-				
+
 				case "text": {
-					ts = await this.customTimelineSet('TEXT', (filter) => {
+					ts = await this.customTimelineSet("TEXT", (filter) => {
 						filter.setDefinition({
 							room: {
 								timeline: {
@@ -371,14 +363,14 @@ export default {
 					});
 					break;
 				}
-				
+
 				case "donate": {
-					ts = await this.customTimelineSet('TEXT', (filter) => {
+					ts = await this.customTimelineSet("TEXT", (filter) => {
 						filter.setDefinition({
 							room: {
 								timeline: {
 									contains_url: true,
-									types: ["m.room.message"]
+									types: ["m.room.message"],
 								},
 							},
 						});
@@ -399,7 +391,7 @@ export default {
 					});
 					break;
 				}*/
-				
+
 				default: {
 					var timeline = this.chat.getLiveTimeline();
 					ts = timeline.getTimelineSet();
@@ -438,38 +430,36 @@ export default {
 			}, 1000)*/
 		},
 
-		paginateToEvent: function(event_id){
+		paginateToEvent: function (event_id) {
 			var event = _.find(this.events, (e) => {
-				return e.event.event_id == event_id
-			})
+				return e.event.event_id == event_id;
+			});
 
-			if (event){
-				return Promise.resolve(event)
-			}
+			if (event) {
+				return Promise.resolve(event);
+			} else {
+				var promise = this.paginate("b");
 
-			else{
-				var promise = this.paginate('b')
-
-				if (promise){
-					return promise.then(() => {
-						return this.paginateToEvent(event_id)
-					}).catch(e => {
-						console.error('EROR', e)
-						if(!event) return Promise.resolve(null)
-					})
-				}
-
-				else{
-					if(!event) return Promise.resolve(null)
+				if (promise) {
+					return promise
+						.then(() => {
+							return this.paginateToEvent(event_id);
+						})
+						.catch((e) => {
+							console.error("EROR", e);
+							if (!event) return Promise.resolve(null);
+						});
+				} else {
+					if (!event) return Promise.resolve(null);
 				}
 			}
 		},
 
 		autoPaginate: function (direction) {
 			if (this.needLoad(direction)) {
-				var pr = this.paginate(direction)
+				var pr = this.paginate(direction);
 
-				if (pr) pr.catch(e => {})
+				if (pr) pr.catch((e) => {});
 			}
 		},
 
@@ -482,7 +472,7 @@ export default {
 
 					let count = /*this.firstPaginate ? 24 : */ 20;
 
-					var error = null
+					var error = null;
 
 					return this.timeline
 						.paginate(direction, count)
@@ -490,7 +480,7 @@ export default {
 							return Promise.resolve();
 						})
 						.catch((e) => {
-							error = e
+							error = e;
 							return Promise.resolve();
 						})
 						.then((r) => {
@@ -502,11 +492,10 @@ export default {
 							this.firstPaginate = false;
 
 							this["p_" + direction] = false;
-						}).catch((e) => {
-							if(e) return Promise.reject(e)
 						})
-
-					
+						.catch((e) => {
+							if (e) return Promise.reject(e);
+						});
 				} else {
 					this.readAll();
 				}
@@ -542,7 +531,7 @@ export default {
 
 		readEvent: function (event) {
 			if (this.streamMode) return;
-			
+
 			var byme = this.core.mtrx.me(event.event.sender);
 
 			if (byme) {
@@ -583,15 +572,14 @@ export default {
 					return r;
 				});
 		},
-		debouncedReadAll : _.debounce(function(){
-
+		debouncedReadAll: _.debounce(function () {
 			if (!this.chat || this.streamMode) return;
-			if (this.readPromise) return
+			if (this.readPromise) return;
 
 			var i = this.chat.timeline.length - 1;
 			var event = null;
 
-			event = this.chat.timeline[i]
+			event = this.chat.timeline[i];
 
 			/*while (i >= 0 && !event) {
 				var e = this.chat.timeline[i];
@@ -621,26 +609,33 @@ export default {
 			}*/
 
 			if (event) {
-
-				if (event.readError){
-					return
+				if (event.readError) {
+					return;
 				}
 
-				var eid = event.event.event_id
+				var eid = event.event.event_id;
 
-				this.readPromise = this.streamMode || this.core.mtrx.client
-					.setRoomReadMarkers(this.chat.currentState.roomId, eid, event/*, {
+				this.readPromise =
+					this.streamMode ||
+					this.core.mtrx.client
+						.setRoomReadMarkers(
+							this.chat.currentState.roomId,
+							eid,
+							event /*, {
 						hidden: !this.settings_read ? true : false,
-					}*/).then((r) => {
-						event.readed = true
-						return r;
-					}).catch(e => {
-						console.error(e)
-						event.readError = e
-					})
-					.finally(() => {
-						this.readPromise = null
-					});
+					}*/
+						)
+						.then((r) => {
+							event.readed = true;
+							return r;
+						})
+						.catch((e) => {
+							console.error(e);
+							event.readError = e;
+						})
+						.finally(() => {
+							this.readPromise = null;
+						});
 			}
 		}, 100),
 		readAll: function () {
@@ -651,10 +646,9 @@ export default {
 				this.chat &&
 				this.chat.getJoinedMemberCount() > 0 &&
 				this.chat.getUnreadNotificationCount() !== 0
-			){
-				this.debouncedReadAll()
+			) {
+				this.debouncedReadAll();
 			}
-			
 		},
 
 		//////////////
@@ -692,31 +686,28 @@ export default {
 			this.$emit("menuIsVisible", isVisible);
 		},
 
-		scrollToEvent: function(reference){
-
+		scrollToEvent: function (reference) {
 			f.pretry(() => {
-				return (!this.loading && this.timeline && !this["p_b"])
-			}).then(() => {
-
-				this.$store.state.globalpreloader = true;
-				
-				return this.paginateToEvent(reference.event.event_id)
-			}).then(event => {
-
-				if (event){
-					setTimeout(() => {
-						this.$refs.eventslist.scrollToEvent(event)
-					}, 300)
-					
-				}
-			}).catch(e => {
-				console.error(e)
-			}).finally(() => {
-				this.$store.state.globalpreloader = false;
-
+				return !this.loading && this.timeline && !this["p_b"];
 			})
-		}
+				.then(() => {
+					this.$store.state.globalpreloader = true;
 
-	
+					return this.paginateToEvent(reference.event.event_id);
+				})
+				.then((event) => {
+					if (event) {
+						setTimeout(() => {
+							this.$refs.eventslist.scrollToEvent(event);
+						}, 300);
+					}
+				})
+				.catch((e) => {
+					console.error(e);
+				})
+				.finally(() => {
+					this.$store.state.globalpreloader = false;
+				});
+		},
 	},
 };

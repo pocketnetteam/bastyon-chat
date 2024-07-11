@@ -10,11 +10,12 @@ export default {
 	name: "chat",
 	props: {
 		chat: Object,
+		share: Object,
 		u: String,
-		search : String,
-		searchresults : Array,
+		search: String,
+		searchresults: Array,
 		filterType: String,
-		style : ''
+		style: "",
 	},
 
 	components: {
@@ -24,11 +25,8 @@ export default {
 		attachement,
 		userRoomStatus,
 	},
-	
-	inject: [
-		"streamMode",
-		"userBanned"
-	],
+
+	inject: ["streamMode", "userBanned"],
 
 	data: function () {
 		return {
@@ -50,19 +48,19 @@ export default {
 			cantchatexc: false,
 			error: null,
 			hoverEncrypt: false,
-			encrypting : false,
+			encrypting: false,
 			showInput: true,
 			showShareMessages: false,
 			selectedMessages: [],
 		};
 	},
 
-	created() { },
+	created() {},
 
 	mounted() {
 		if (!this.streamMode) {
 			this.getuserinfo();
-		
+
 			this.$store.commit("active", true);
 			this.$store.commit("blockactive", { value: true, item: "chat" });
 		}
@@ -70,8 +68,7 @@ export default {
 		this.membershipReactivity = setInterval(() => {
 			if (this.m_chat && !this.streamMode) {
 				if (this.m_chat.timeline.length > 0) {
-					const
-						id = this.core.mtrx.client.credentials.userId,
+					const id = this.core.mtrx.client.credentials.userId,
 						timeline = this.core.mtrx.client.getRoom(this.chat.roomId).timeline,
 						lastEvent = timeline[timeline.length - 1];
 
@@ -85,10 +82,13 @@ export default {
 					}
 				}
 			} else if (this.streamMode) {
-				this.roomUserBanned = this.m_chat?.currentState.members[this.m_chat.myUserId]?.membership === "ban";
+				this.roomUserBanned =
+					this.m_chat?.currentState.members[this.m_chat.myUserId]
+						?.membership === "ban";
 			}
 
-			this.membership = this.m_chat?.currentState.members[this.m_chat.myUserId]?.membership;
+			this.membership =
+				this.m_chat?.currentState.members[this.m_chat.myUserId]?.membership;
 		}, 1000);
 	},
 
@@ -117,12 +117,14 @@ export default {
 
 		chatusers: function () {
 			if (this.m_chat && this.m_chat.pcrypto) {
-				this.core.mtrx.kit.allchatmembers([this.m_chat], false, true).then(() => {
-					return this.m_chat.pcrypto.userschanded()
-				})
-				.then((r) => {
-					return this.checkcrypto();
-				});
+				this.core.mtrx.kit
+					.allchatmembers([this.m_chat], false, true)
+					.then(() => {
+						return this.m_chat.pcrypto.userschanded();
+					})
+					.then((r) => {
+						return this.checkcrypto();
+					});
 			}
 		},
 
@@ -141,7 +143,7 @@ export default {
 							this.checkcrypto();
 						});
 				}
-			}
+			},
 		},
 
 		chat: {
@@ -154,23 +156,24 @@ export default {
 					this.$store.commit("SET_CURRENT_ROOM", this.chat.roomId);
 					this.$store.commit("SET_LAST_ROOM", this.chat.roomId);
 				} else this.$store.commit("SET_CURRENT_ROOM", false);
-			}
+			},
 		},
 
 		userBanned: {
 			immediate: true,
 			deep: true,
 			handler: function () {
-				this.membership = this.m_chat?.currentState?.members[this.m_chat.myUserId]?.membership;
-			}
-		}
+				this.membership =
+					this.m_chat?.currentState?.members[this.m_chat.myUserId]?.membership;
+			},
+		},
 	},
 
 	computed: mapState({
 		pocketnet: (state) => state.pocketnet,
 		minimized: (state) => state.minimized,
 		auth: (state) => state.auth,
-		active: function(state) {
+		active: function (state) {
 			return this.streamMode || state.active;
 		},
 		m_chat: function () {
@@ -201,13 +204,13 @@ export default {
 				this.keyproblem == "younotgen" && this.cantchat && !this.cantchatexc
 			);
 		},
-		
+
 		allowedToRead: function () {
-			return this.membership === 'join' || this.streamMode;
+			return this.membership === "join" || this.streamMode;
 		},
-		
+
 		allowedToJoin: function () {
-			return this.membership === 'invite' || this.streamMode;
+			return this.membership === "invite" || this.streamMode;
 		},
 
 		blockedUser: function () {
@@ -258,12 +261,12 @@ export default {
 			}
 		},
 
-		clbkencrypt : function () {
-			this.encrypting = true
+		clbkencrypt: function () {
+			this.encrypting = true;
 		},
 
-		clbkencrypted : function () {
-			this.encrypting = false
+		clbkencrypted: function () {
+			this.encrypting = false;
 		},
 
 		checkcrypto: function () {
@@ -351,7 +354,6 @@ export default {
 		},
 
 		replyEvent: function ({ event }) {
-
 			this.relationEvent = {
 				type: "m.reference",
 				event: event,
@@ -364,12 +366,12 @@ export default {
 
 		shareEvent: function ({ event }) {
 			this.relationEvent = {
-				type: 'm.reference',
+				type: "m.reference",
 				event: event,
-				action: this.$i18n.t('caption.shareMessage'),
+				action: this.$i18n.t("caption.shareMessage"),
 			};
-			if (this.$refs['chatInput']) {
-				this.$refs['chatInput'].focus();
+			if (this.$refs["chatInput"]) {
+				this.$refs["chatInput"].focus();
 			}
 		},
 
@@ -479,18 +481,22 @@ export default {
 		},
 
 		shareDataMessages: function () {
+			var messages = _.map(
+				_.sortBy(this.selectedMessages, (m) => {
+					return m.time;
+				}),
+				(m) => {
+					return m.sharing;
+				}
+			);
 
-			var messages = _.map(_.sortBy(this.selectedMessages, (m) => {
-				return m.time
-			}), (m) => {
-				return m.sharing
-			})
-
-			this.core.share({
-				multiple : messages
-			}).then(() => {
-				this.selectedMessages = [];
-			})
+			this.core
+				.share({
+					multiple: messages,
+				})
+				.then(() => {
+					this.selectedMessages = [];
+				});
 
 			/*let allMessages = [];
 
@@ -511,74 +517,63 @@ export default {
 		},
 
 		removeDataMessages: function () {
-			
-
 			this.$store.commit("icon", {
 				icon: "loading",
 				message: "",
 				manual: true,
 			});
 
+			Promise.all(
+				_.map(this.selectedMessages, (message) => {
+					return this.core.mtrx.client.redactEvent(
+						this.chat.roomId,
+						message.message_id,
+						null,
+						{
+							reason: "messagedeleting",
+						}
+					);
+				})
+			)
+				.then((r) => {
+					this.$store.commit("icon", {
+						icon: "success",
+						message: "",
+					});
 
+					this.selectedMessages = [];
+				})
+				.catch((e) => {
+					console.error(e);
 
-			Promise.all(_.map(this.selectedMessages, (message) => {
+					this.selectedMessages = [];
 
-				return this.core.mtrx.client.redactEvent(
-					this.chat.roomId,
-					message.message_id,
-					null,
-					{
-						reason: "messagedeleting",
-					}
-				);
-
-			})).then(r => {
-
-				this.$store.commit("icon", {
-					icon: "success",
-					message: "",
+					this.$store.commit("icon", {
+						icon: "error",
+						message: "",
+					});
+				})
+				.finally(() => {
+					this.force();
 				});
-
-				this.selectedMessages = [];
-
-			}).catch(e => {
-
-				console.error(e)
-
-				this.selectedMessages = [];
-
-				this.$store.commit("icon", {
-					icon: "error",
-					message: "",
-				});
-
-			}).finally(() => {
-				this.force()
-			})
-
-
-			
 		},
 
 		cancelDataMessages: function () {
 			this.selectedMessages = [];
 		},
 
-
-		scrollToEvent : function(event){
-
+		scrollToEvent: function (event) {
 			f.pretry(() => {
-				return this.$refs["list"]
+				return this.$refs["list"];
 			}).then(() => {
 				this.$refs["list"].scrollToEvent(event);
-			})
-			
+			});
 		},
-		
+
 		joined: function () {
 			/*Trigger chat reactivity*/
-			this.$set(this.chat, 'joined', +new Date());
+			this.$set(this.chat, "joined", +new Date());
 			this.userBanned.set(false);
-		}
-	}
+		},
+	},
 };

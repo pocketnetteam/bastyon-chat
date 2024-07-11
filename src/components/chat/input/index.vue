@@ -1,11 +1,13 @@
 <template>
 	<div id="chatInput" class="noswipepnt">
 		<div class="work" v-if="ready">
-			<div
-				class="inputWrapper"
-				:class="{ donate }"
-				v-if="chat"
-			>
+			<embeddedMessage
+				v-if="isShareMessagePresent"
+				@embedded-cancel="cancelShare"
+				:messageTittle="embeddedShareMessageTitle"
+				:messageText="embeddedShareMessageText"
+			/>
+			<div class="inputWrapper" :class="{ donate }" v-if="chat">
 				<div class="tipusers" v-if="tipusers.length">
 					<div
 						@click="insertuser(user)"
@@ -18,7 +20,7 @@
 					</div>
 				</div>
 
-				<div class="center">
+				<div class="center" :class="{ embedded: hasEmbedded }">
 					<record-progress
 						v-if="voiceEnable && (isRecording || record)"
 						:recordTime="recordTime"
@@ -30,6 +32,7 @@
 					<InputField
 						v-else
 						ref="newinput"
+						:can-send="isShareMessagePresent"
 						@chatMessage="sendinput"
 						@emptyInput="emitInputData"
 						@FilledInput="HideUploadPic"
@@ -49,7 +52,11 @@
 						:class="{ extended: voiceEnable }"
 						v-if="!streamMode && upload && chat"
 					>
-						<div v-if="!isRecording && !record" class="iconbutton" @click="showinputmenu">
+						<div
+							v-if="!isRecording && !record"
+							class="iconbutton"
+							@click="showinputmenu"
+						>
 							<i class="icon fas fa-plus"></i>
 						</div>
 
@@ -65,7 +72,6 @@
 									@canceling="setOpacity"
 								/>
 							</div>
-
 						</template>
 
 						<div
@@ -93,7 +99,6 @@
 				</div>
 			</div>
 		</div>
-
 		<div class="notready" v-else>
 			<linepreloader />
 		</div>

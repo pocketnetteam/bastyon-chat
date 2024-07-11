@@ -122,14 +122,16 @@
 		"contactsempty": "아직 연락처가 없습니다. 검색에서 찾으십시오",
 		"chatsearchingempty": "No chats found for the specified filter",
 		"sendmessage": "Send message",
-		"messages" : "Messages",
-		"you" : "You",
-		"sentfile" : "sent file:",
+		"messages": "Messages",
+		"you": "You",
+		"sentfile": "sent file:",
 		"administrators": "소유자",
 		"moderators": "중재자",
 		"participants": "참가자들",
 		"streamChat": "스트림 채팅",
-		"membersList": "회원 목록"
+		"membersList": "회원 목록",
+		"forwardMessage": "Forward Message | Forward {n} Messages",
+		"from": "From"
 	},
 
 	"input": {
