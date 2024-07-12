@@ -72,6 +72,7 @@ $sizeLeftIcon: 35px
     width: 100%
 
   .embedded-cancel
+    cursor: pointer
     display: flex
     align-content: center
     justify-content: center
