@@ -3,7 +3,7 @@ import InputField from "./InputField/InputField.vue";
 import EmbeddedMessage from "./EmbeddedMessage/EmbeddedMessage.vue";
 
 import recordVoice from "@/components/assets/recordVoice/index.vue";
-import { mapState } from "vuex";
+import { mapState, mapGetters } from "vuex";
 import Images from "@/application/utils/images.js";
 
 import contacts from "@/components/contacts/list/index.vue";
@@ -172,7 +172,9 @@ export default {
 		},
 
 		...mapState(["chats", "share"]),
-
+		...mapGetters({
+			hasEmbedded: "hasInputChatEmbedded",
+		}),
 		userlist: function () {
 			if (!this.chat) return [];
 
@@ -223,9 +225,6 @@ export default {
 		stateChat: function () {
 			var id = this.$route.query.id;
 			return this.$store.state.chatsMap[id];
-		},
-		hasEmbedded() {
-			return this.isShareMessagePresent;
 		},
 		invited: function () {
 			if (!this.chat) {
