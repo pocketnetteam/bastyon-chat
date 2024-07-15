@@ -28,7 +28,7 @@ import { mapState } from "vuex";
 
 export default {
 	data: function () {
-		return { types };
+		return {  };
 	},
 	computed: {
 		currentMessage() {
