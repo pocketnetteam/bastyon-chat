@@ -337,7 +337,7 @@ export default {
 		/**
 		 * @type {'single' | 'split'}
 		 */
-		viewType: {
+		viewtype: {
 			type: String,
 			default: "single",
 		},
@@ -653,7 +653,7 @@ export default {
 		// this.iscallsenabled = true;
 
 		this.$store.commit("setCallsEnabled", this.iscallsenabled);
-		this.$store.commit("setViewType", this.viewType);
+		this.$store.commit("setViewType", this.viewtype);
 		this.$store.commit("setPocketnet", this.pocketnet);
 		this.$store.commit("setMobile", this.mobile);
 		this.$store.commit("setVoiceMessagesEnabled", this.recording);
