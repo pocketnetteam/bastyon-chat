@@ -43,12 +43,16 @@
 </template>
 
 <style lang="sass">
-$is-opened-chat: '[data-is-opened-chat="true"]'
+$is-opened-chat: '.chats[data-is-opened-chat="true"]'
 
 .chats[data-viewType="split"]
   .eventsflex, .noswipepnt .work
     @media (min-width: $break_xl)
       max-width: 50vw !important
+
+  .joinAction
+      position: sticky
+      bottom: 0
 
   .chat-topheader
     @media(min-width: $break_md)
@@ -56,15 +60,16 @@ $is-opened-chat: '[data-is-opened-chat="true"]'
         display: none
       .work
         margin: 0
-        border-left: 1px solid srgb(--neutral-grad-0)
         max-width: 100%
 
   #ChatList
     #wai-fixedmessageicon
       @media(min-width: $break_md)
         display: none !important
+
     position: relative
     height: 100vh
+    border-right: 1px solid srgb(--neutral-grad-0)
     width: var(--chat-list-width)
     min-width: var(--chat-list-width)
     max-width: var(--chat-list-width)
@@ -94,7 +99,7 @@ $is-opened-chat: '[data-is-opened-chat="true"]'
     display: none
 
 .chats[data-viewType="single"]
-  #SelectChatPrompt
+  #ChatPrompt
     display: none
   &#{$is-opened-chat}
     @include showChatContent()

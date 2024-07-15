@@ -27,8 +27,8 @@ const router = new Router({
 				},
 				{
 					path: "",
-					name: "noChat",
-					component: () => import("@/views/no_chat"),
+					name: "chatPrompt",
+					component: () => import("@/views/chatPrompt"),
 				},
 			],
 		},
