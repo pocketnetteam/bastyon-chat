@@ -7,7 +7,7 @@
 			<div class="message-title text-ellipsis">
 				{{ messageTittle }}
 			</div>
-			<div class="text-message-wrapper text-ellipsis">
+			<div class="text-message-wrapper text-ellipsis" v-if="messageText">
 				{{ messageText }}
 			</div>
 		</div>

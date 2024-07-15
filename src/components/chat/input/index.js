@@ -206,6 +206,7 @@ export default {
 		},
 		embeddedShareMessageText() {
 			const sharedUserNames = this.getSharedUserNames();
+			if (!sharedUserNames) return;
 			const firstMessage = this.share?.messages?.at(0);
 			const canShowMessage = !this.isMultipleShares && firstMessage;
 			if (canShowMessage) {
