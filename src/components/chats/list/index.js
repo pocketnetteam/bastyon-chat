@@ -33,7 +33,10 @@ export default {
 			type: String,
 			default: () => {},
 		},
-
+		activeRoomId: {
+			type: String,
+			default: () => {},
+		},
 		processid: "",
 	},
 

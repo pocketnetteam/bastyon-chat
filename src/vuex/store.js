@@ -24,6 +24,7 @@ var store = new Vuex.Store({
 	state: {
 		contacts: {},
 		contactsFromMatrix: {},
+		viewType: "",
 		contactsMap: {},
 		chats: [],
 		prechats: [],
@@ -288,6 +289,10 @@ var store = new Vuex.Store({
 		},
 		setMobile(state, mobile) {
 			state.mobile = mobile;
+		},
+
+		setViewType(state, viewType) {
+			state.viewType = viewType;
 		},
 
 		setVoiceMessagesEnabled(state, voiceMessagesEnabled) {

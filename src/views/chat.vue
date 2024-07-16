@@ -2,7 +2,7 @@
 	<div class="page chat" :class="{ mobile }">
 		<topheader
 			:key="k"
-			class="topheader"
+			class="topheader chat-topheader"
 			v-show="!hideHeader || !ios"
 			:u="u"
 			:chat="chat"
@@ -53,10 +53,12 @@
 
 <style scoped lang="sass">
 
+
 .topheader
   width: 100%
-  top: 0
   z-index: 999
+  top: 0
+
 
 .aboutContact
   position: absolute
@@ -112,10 +114,8 @@ export default {
 		},
 		chat() {
 			var id = this.$route.query.id;
-
 			return this.$store.state.chatsMap[id];
 		},
-
 		k() {
 			return this.u + this.$route.query.id;
 		},
@@ -162,9 +162,13 @@ export default {
 		if (this.process) this.process.stop();
 	},
 	watch: {
+		"$route.query.search": function (newSearchQuery) {
+			this.searching(newSearchQuery);
+		},
 		search: {
 			immediate: true,
-			handler: function () {
+			handler: function (search) {
+				this.updateSearchQuery(search);
 				pretry(() => {
 					return this.chat;
 				}).then(() => {
@@ -178,6 +182,11 @@ export default {
 			this.focusedevent = event;
 
 			this.$refs["chat"].scrollToEvent(event);
+		},
+		updateSearchQuery(newSearchTerm) {
+			return this.$router.push({
+				query: { ...this.$route.query, search: newSearchTerm },
+			});
 		},
 		searchingProcess() {
 			if (this.search.length > 1 && this.chat) {

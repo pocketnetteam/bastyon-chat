@@ -9,11 +9,10 @@
 			active,
 			empty,
 		}"
-
 	>
 		<div v-if="!unauthorized">
 			<div class="searchWrapperEA" v-if="!minimized || active">
-				<simpleSearch :value="globalsearch" @search="searchall"/>
+				<simpleSearch :value="globalsearch" @search="searchall" />
 			</div>
 
 			<teamroom
@@ -52,6 +51,7 @@
 							<template v-slot="{ item }">
 								<div
 									class="card-content"
+									:class="[activeRoomId === item.roomId && 'active']"
 									:chatkey="item.key"
 									@click="(e) => itemClick(item)"
 								>
@@ -61,7 +61,11 @@
 						</RecycleScroller>
 					</div>
 					<div v-else class="searchresults">
-						<AllContacts :chats="chats" :search="globalsearch" @clearsearch="() => searchall('')" />
+						<AllContacts
+							:chats="chats"
+							:search="globalsearch"
+							@clearsearch="() => searchall('')"
+						/>
 					</div>
 				</div>
 			</div>
