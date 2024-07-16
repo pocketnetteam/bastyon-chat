@@ -122,13 +122,15 @@
 		"contactsempty": "Todavía no tienes contactos, encuéntralos en la búsqueda",
 		"chatsearchingempty": "No chats found for the specified filter",
 		"sendmessage": "Send message",
-		"you" : "You",
-		"sentfile" : "sent file:",
+		"you": "You",
+		"sentfile": "sent file:",
 		"administrators": "Dueño",
 		"moderators": "Moderadores",
 		"participants": "Participantes",
 		"streamChat": "Transmitir chat",
-		"membersList": "Lista de miembros"
+		"membersList": "Lista de miembros",
+		"forwardMessage": "Forward Message | Forward {n} Messages",
+		"from": "From"
 	},
 
 	"input": {

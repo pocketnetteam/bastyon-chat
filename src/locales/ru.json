@@ -138,16 +138,18 @@
 		"You": "Вы",
 		"chatsearchingempty": "Чатов по данному фильтру не найдено",
 		"sendmessage": "Отправить сообщение",
-		"messages" : "Сообщения",
-		"you" : "Вы",
-		"sentfile" : "прислал файл:",
+		"messages": "Сообщения",
+		"you": "Вы",
+		"sentfile": "прислал файл:",
 		"administrators": "Владелец",
 		"moderators": "Модераторы",
 		"participants": "Участники",
 		"streamChat": "Чат стрима",
 		"membersList": "Список участников",
-		"needjointowrite" : "Присоединитесь, чтобы писать",
-		"streamisover" : "Стрим завершен"
+		"needjointowrite": "Присоединитесь, чтобы писать",
+		"streamisover": "Стрим завершен",
+		"forwardMessage": "Переслать {n} сообщений | Переслать {n} сообщение | Переслать {n} сообщения | Переслать {n} сообщений",
+		"from": "От"
 	},
 
 	"input": {

@@ -1,6 +1,7 @@
 <template>
 	<div
 		id="events"
+		:data-chat-input-embedded="hasInputChatEmbedded"
 		class="maskedtop"
 		:class="{
 			mobile,
@@ -17,7 +18,7 @@
 			:class="{ mobile, ios, menuOpen }"
 		>
 			<div class="ewr">
-				<div class="errorWrapper" v-if="stringifyiedError" >
+				<div class="errorWrapper" v-if="stringifyiedError">
 					<div class="error">
 						<div>{{ $t("sendingerror") }}</div>
 						<div class="btnwrp">
@@ -30,7 +31,7 @@
 
 				<div
 					class="eventWrapper"
-					:class="{fromsearch : eventinsearchresult(event)}"
+					:class="{ fromsearch: eventinsearchresult(event) }"
 					v-for="(event, i) in events"
 					:key="event.event.event_id"
 					:event="event.event.event_id"
@@ -54,8 +55,6 @@
 						@mounted="emounted"
 						@menuIsVisible="menuIsVisibleHandler"
 						@toreference="toreference"
-
-						
 					/>
 				</div>
 			</div>

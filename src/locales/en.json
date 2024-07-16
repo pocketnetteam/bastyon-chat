@@ -137,17 +137,18 @@
 		"You": "You",
 		"chatsearchingempty": "No chats found for the specified filter",
 		"sendmessage": "Send message",
-		"messages" : "Messages",
-		"you" : "You",
-		"sentfile" : "sent file:",
+		"messages": "Messages",
+		"you": "You",
+		"sentfile": "sent file:",
 		"administrators": "Owner",
 		"moderators": "Moderators",
 		"participants": "Participants",
 		"streamChat": "Stream chat",
 		"membersList": "Members list",
-		"needjointowrite" : "You need join to write",
-		"streamisover" : "This stream is over"
-
+		"needjointowrite": "You need join to write",
+		"streamisover": "This stream is over",
+		"forwardMessage": "Forward Message | Forward {n} Messages",
+		"from": "From"
 	},
 
 	"input": {
