@@ -91,7 +91,7 @@ export default {
 
 	computed: {
 		voiceEnable() {
-			return this.$store.state.voiceMessagesEnabled;
+			return this.$store.state.voiceMessagesEnabled && !this.hasEmbedded;
 		},
 		isShareMessagePresent() {
 			return !!this.share;
