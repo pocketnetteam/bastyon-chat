@@ -109,7 +109,6 @@ export default {
       margin: 1em 0 0
       width: 130px
       max-width: 40%
-      &.ok
       &.bad
         background-color: rgba(235, 87, 87, 1)
         border-color: rgba(235, 87, 87, 1)

@@ -90,9 +90,6 @@ export default {
 			opacity: 0.8
 
 	.filecontent
-		.name
-			
-
 		span
 			font-size: 0.8em
 

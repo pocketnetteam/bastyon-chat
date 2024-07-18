@@ -75,7 +75,6 @@
     opacity: 0.6
     overflow: hidden
     font-size: 0.7em
-    span
 
   .messageText
     margin-left: $r
