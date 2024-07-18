@@ -118,7 +118,6 @@ export default {
   .encryptedDataIcon
     color : srgb(--neutral-grad-3)
     text-shadow: none
-    color
     right: 0
     left : auto
 

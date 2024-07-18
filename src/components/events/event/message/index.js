@@ -414,10 +414,7 @@ export default {
 
 		isMenuAllowed: function () {
 			return (
-				(this.streamMode &&
-					!this.my &&
-					this.user?.powerLevel >= this.powerLevel.moderator &&
-					this.sender?.powerLevel < this.user?.powerLevel) ||
+				(this.streamMode && !this.my) ||
 				(!this.streamMode &&
 					!this.content.call_id &&
 					this.event.event.type !== "m.room.request_calls_access")
@@ -802,14 +799,18 @@ export default {
 			const type = f.deep(this.origin, "event.type") || "",
 				menu = [];
 
-			if (!this.streamMode) {
-				if (type.indexOf("m.call") === -1 && !this.hasError) {
-					menu.push({
-						action: this.menureply,
-						text: "button.reply",
-						icon: "fas fa-reply",
-					});
+			const canProcessMessage = type.indexOf("m.call") === -1 && !this.hasError;
 
+			if (canProcessMessage) {
+				menu.push({
+					action: this.menureply,
+					text: "button.reply",
+					icon: "fas fa-reply",
+				});
+			}
+
+			if (!this.streamMode) {
+				if (canProcessMessage) {
 					menu.push({
 						action: this.menushowMultiSelect,
 						text: "button.select",
