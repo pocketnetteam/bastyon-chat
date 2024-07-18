@@ -28,14 +28,13 @@ class MTRX {
 		this.dversion = "2";
 		this.backup = {};
 		this.db = null;
-		this.device = p.device
-
+		this.device = p.device;
 
 		this.customrequest = true;
 
 		this.devicekey = "m8_device";
 
-		this.searchEngine = new SearchEngine(this)
+		this.searchEngine = new SearchEngine(this);
 	}
 
 	async setCredentials() {
@@ -173,12 +172,11 @@ class MTRX {
 			baseUrl: this.baseUrl,
 		};
 
-		if (this.device){
-			opts.deviceId = this.device
+		if (this.device) {
+			opts.deviceId = this.device;
 		}
 
 		if (this.customrequest) opts.request = this.request;
-
 
 		var client = this.createMtrxClient(opts);
 
@@ -186,7 +184,7 @@ class MTRX {
 			var userData = await client.login("m.login.password", {
 				user: this.credentials.username,
 				password: this.credentials.password,
-				device_id : this.device
+				device_id: this.device,
 			});
 		} catch (e) {
 			if (e && e.indexOf && e.indexOf("M_USER_DEACTIVATED") > -1) {
@@ -233,7 +231,7 @@ class MTRX {
 
 		this.client = userClient;
 
-		this.initEvents()
+		this.initEvents();
 
 		await userClient.startClient({
 			pollTimeout: 60000,
@@ -241,8 +239,6 @@ class MTRX {
 		});
 
 		this.access = userClientData;
-
-		
 
 		return userClient;
 	}
@@ -281,7 +277,7 @@ class MTRX {
 			this.store = this.client.store;
 			this.ready = true;
 		} catch (e) {
-			console.error(e)
+			console.error(e);
 			this.error = e;
 		}
 
@@ -321,14 +317,11 @@ class MTRX {
 	}
 
 	reciepts(event) {
-
 		var room = (this.core.mtrx.store.rooms || {})[event.getRoomId()];
 
-
-		if (room){
-			return room.getReceiptsForEvent(event)
+		if (room) {
+			return room.getReceiptsForEvent(event);
 		}
-
 	}
 
 	storeFileLocal(url, file) {
@@ -412,14 +405,13 @@ class MTRX {
 	}
 
 	isReaded(event, me) {
-
-		var reciepts = this.reciepts(event)
+		var reciepts = this.reciepts(event);
 
 		return _.find(reciepts, (reciept) => {
 			var m = this.me(reciept.userId);
 
 			return reciept.type == "m.read" && ((me && m) || (!m && !me));
-		})
+		});
 	}
 
 	initEvents() {
@@ -439,7 +431,6 @@ class MTRX {
 		});
 
 		this.client.on("Room.timeline", (message, member) => {
-
 			if (!this.chatsready) return;
 
 			if (!message.event.content) return;
@@ -469,17 +460,11 @@ class MTRX {
 		this.client.on("sync", (state, prevState, res) => {
 			this.setready();
 
-			this.core.store.dispatch("FETCH_CHATS").then((r) => {
-				
-			});
+			this.core.store.dispatch("FETCH_CHATS").then((r) => {});
 
 			this.core.store.dispatch("FETCH_EVENTS");
 
-			this.core.store.commit(
-				"ALL_NOTIFICATIONS_COUNT",
-				this.client.getRooms()
-			);
-			
+			this.core.store.commit("ALL_NOTIFICATIONS_COUNT", this.client.getRooms());
 		});
 	}
 
@@ -526,9 +511,8 @@ class MTRX {
 	}
 
 	destroy() {
+		this.searchEngine.destroy();
 
-		this.searchEngine.destroy()
-		
 		if (this.client) {
 			// Before client is stopped, delete the pusher if needed
 			if (window.cordova) {
@@ -541,8 +525,6 @@ class MTRX {
 		this.chatsready = false;
 		this.ready = false;
 		this.error = false;
-
-		
 	}
 
 	// Try to delete the current pusher if needed
@@ -591,9 +573,9 @@ class MTRX {
 		return this.client
 			.uploadContent(file)
 			.then((src) => {
-
-
-				return Promise.resolve(this.core.mtrx.client.mxcUrlToHttp(src.content_uri));
+				return Promise.resolve(
+					this.core.mtrx.client.mxcUrlToHttp(src.content_uri)
+				);
 			})
 			.then((url) => {
 				if (save) {
@@ -646,24 +628,21 @@ class MTRX {
 
 	textEvent(chat, text, clbks = {}) {
 		if (chat.pcrypto.canBeEncrypt()) {
- 
-			if(clbks.encryptEvent) clbks.encryptEvent()
+			if (clbks.encryptEvent) clbks.encryptEvent();
 
 			return chat.pcrypto.encryptEvent(text).then((e) => {
+				if (clbks.encryptedEvent) clbks.encryptedEvent(e);
 
-				if(clbks.encryptedEvent) clbks.encryptedEvent(e)
-
-				return Promise.resolve(e)
-
-			})
+				return Promise.resolve(e);
+			});
 		}
 
 		return Promise.resolve(this.sdk.ContentHelpers.makeTextMessage(text));
 	}
 
 	sendtext(chat, text, { relation, from, donateLink }, clbks) {
-
-		if(window.findAndReplaceLinkClearReverse) text = window.findAndReplaceLinkClearReverse(text)
+		if (window.findAndReplaceLinkClearReverse)
+			text = window.findAndReplaceLinkClearReverse(text);
 
 		return this.textEvent(chat, text, clbks).then((r) => {
 			if (relation) {
@@ -672,6 +651,8 @@ class MTRX {
 					event_id: this.clearEventId(relation.event),
 				};
 			}
+
+			r.resendMessage = () => this.sendtext(...arguments);
 
 			if (from) {
 				r["from"] = from;
@@ -715,16 +696,11 @@ class MTRX {
 				return promise;
 			})
 			.then((src) => {
-
-
 				if (meta.aborted) return Promise.reject("aborted");
 
 				return Promise.resolve(this.client.mxcUrlToHttp(src.content_uri));
 			})
 			.then((url) => {
-
-
-
 				fileInfo.url = url;
 
 				let body = JSON.stringify(fileInfo);
@@ -733,6 +709,8 @@ class MTRX {
 					body: body,
 					msgtype: "m.file",
 				};
+
+				r.resendMessage = () => this.sendFile(...arguments);
 
 				if (relation) {
 					r["m.relates_to"] = {
@@ -803,16 +781,16 @@ class MTRX {
 			.then((image) => {
 				if (meta.aborted) return Promise.reject("aborted");
 
-				
-
 				var content = {
-					msgtype: 'm.image',
+					msgtype: "m.image",
 					url: image,
-					
+
 					body: "Image",
 
-					info
-				}
+					info,
+				};
+
+				content.resendMessage = () => this.sendImage(...arguments);
 
 				if (relation) {
 					content["m.relates_to"] = {
@@ -856,11 +834,13 @@ class MTRX {
 				if (meta.aborted) return Promise.reject("aborted");
 
 				var content = {
-					msgtype: 'm.audio',
+					msgtype: "m.audio",
 					url: audio,
 					body: "Audio",
-					info
-				}
+					info,
+				};
+
+				content.resendMessage = () => this.sendAudio(...arguments);
 
 				if (relation) {
 					content["m.relates_to"] = {
@@ -870,8 +850,6 @@ class MTRX {
 				}
 
 				return this.client.sendMessage(chat.roomId, content);
-
-				return this.client.sendAudioMessage(chat.roomId, audio, info, "Audio");
 			});
 	}
 
@@ -886,13 +864,14 @@ class MTRX {
 
 		return this.download(event.event.content.pbody.url)
 			.then((blob) => {
-
-
-				return chat.pcrypto.decryptFile(blob, decryptKey, null, event.event.content.pbody);
+				return chat.pcrypto.decryptFile(
+					blob,
+					decryptKey,
+					null,
+					event.event.content.pbody
+				);
 			})
 			.then((r) => {
-
-
 				return Promise.resolve({
 					file: r,
 					name: event.event.content.pbody.name,
@@ -908,18 +887,21 @@ class MTRX {
 			.then((r) => {
 				if (window.cordova && f.saveFileCordova) {
 					return new Promise((resolve, reject) => {
-						f.saveFileCordova(r.file, r.name, function (i = {}, e) {
-							if (e) {
-								console.error(e);
-							}
+						f.saveFileCordova(
+							r.file,
+							r.name,
+							function (i = {}, e) {
+								if (e) {
+									console.error(e);
+								}
 
-							if (!e) {
-
-								i.type = r.type
-								resolve(i);
-							}
-							else reject("unable");
-						}, true);
+								if (!e) {
+									i.type = r.type;
+									resolve(i);
+								} else reject("unable");
+							},
+							true
+						);
 					});
 				}
 
@@ -932,8 +914,6 @@ class MTRX {
 	}
 
 	async getAudioUnencrypt(chat, event) {
-
-
 		if (event.event.content.audioData) {
 			return Promise.resolve(event.event.content.audioData);
 		}
@@ -1012,13 +992,10 @@ class MTRX {
 	}
 
 	shareInChat(id, share) {
-
-		if (share.multiple){
-
+		if (share.multiple) {
 			return f.processArray(share.multiple, (share) => {
-				return this.shareInChat(id, share)
-			})
-
+				return this.shareInChat(id, share);
+			});
 		}
 
 		var m_chat = this.client.getRoom(id);
@@ -1027,42 +1004,38 @@ class MTRX {
 
 		//// https://github.com/j3k0/cordova-plugin-openwith (item.type ---> resize)
 
-		if(!m_chat) return Promise.reject("chat:notfound")
+		if (!m_chat) return Promise.reject("chat:notfound");
 
 		return this.core.mtrx.kit.prepareChat(m_chat).then((r) => {
 			var promises = [];
 
 			//// todo resize images.resize.fit
 			_.each(share.images, (base64) => {
-				var promise = () => this.sendImageBase64(
-					m_chat,
-					base64,
-					{},
-					{ from: share.from }
-				);
+				var promise = () =>
+					this.sendImageBase64(m_chat, base64, {}, { from: share.from });
 
 				promises.push(promise);
 			});
 
-
-			_.each(share.download, ({event, chat}) => {
-
-				var promise = () => this.core.mtrx.kit.prepareChat(chat).then(() => {
-
-					return this.core.mtrx.getFile(chat, event)
-
-				}).then((r) => {
-
-					return this.sendFile(m_chat, r.file, {}, { from: share.from })
-					
-				})
+			_.each(share.download, ({ event, chat }) => {
+				var promise = () =>
+					this.core.mtrx.kit
+						.prepareChat(chat)
+						.then(() => {
+							return this.core.mtrx.getFile(chat, event);
+						})
+						.then((r) => {
+							return this.sendFile(m_chat, r.file, {}, { from: share.from });
+						});
 
 				///this.sendFile(m_chat, file, {}, { from: share.from })
 				promises.push(promise);
 			});
 
 			_.each(share.files, (file) => {
-				promises.push(() => this.sendFile(m_chat, file, {}, { from: share.from }));
+				promises.push(() =>
+					this.sendFile(m_chat, file, {}, { from: share.from })
+				);
 			});
 
 			_.each(share.urls, (url) => {
@@ -1077,16 +1050,14 @@ class MTRX {
 				var base64 =
 					"data:audio/mpeg;base64," + f._arrayBufferToBase64(arraybuffer);
 
-				promises.push(
-					() => this.sendAudioBase64(m_chat, base64, {}, { from: share.from })
+				promises.push(() =>
+					this.sendAudioBase64(m_chat, base64, {}, { from: share.from })
 				);
 			});
 
 			return f.processArray(promises, (promise) => {
-				return promise()
-			})
-
-			return Promise.all(promises);
+				return promise();
+			});
 		});
 	}
 
