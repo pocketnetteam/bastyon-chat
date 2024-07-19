@@ -1,11 +1,7 @@
 <template>
 	<div id="chatInput" class="noswipepnt">
 		<div class="work" v-if="ready">
-			<div
-				class="inputWrapper"
-				:class="{ donate }"
-				v-if="chat"
-			>
+			<div class="inputWrapper" :class="{ donate }" v-if="chat">
 				<div class="tipusers" v-if="tipusers.length">
 					<div
 						@click="insertuser(user)"
@@ -29,6 +25,7 @@
 					/>
 					<InputField
 						v-else
+						:sending="isSending"
 						ref="newinput"
 						@chatMessage="sendinput"
 						@emptyInput="emitInputData"
@@ -49,7 +46,11 @@
 						:class="{ extended: voiceEnable }"
 						v-if="!streamMode && upload && chat"
 					>
-						<div v-if="!isRecording && !record" class="iconbutton" @click="showinputmenu">
+						<div
+							v-if="!isRecording && !record"
+							class="iconbutton"
+							@click="showinputmenu"
+						>
 							<i class="icon fas fa-plus"></i>
 						</div>
 
@@ -65,7 +66,6 @@
 									@canceling="setOpacity"
 								/>
 							</div>
-
 						</template>
 
 						<div
@@ -83,7 +83,6 @@
 						</div>
 					</div>
 				</div>
-
 				<div class="bottom" v-if="donate">
 					<div class="count">
 						<i class="icon donate">Donate</i>
