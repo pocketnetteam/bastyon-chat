@@ -109,6 +109,4 @@ export default {
     font-size: 0.8em
     display: flex
     flex-direction: column
-    &_title
-    &_duration
 </style>

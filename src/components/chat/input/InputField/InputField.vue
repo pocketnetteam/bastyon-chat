@@ -20,11 +20,7 @@
 					@paste="paste_image"
 					:placeholder="$t('caption.sendmessage')"
 				></textarea>
-				<transition
-					name="fade"
-					mode="out-in"
-					v-if="/* !streamMode && */ !mobile && emojiIndex"
-				>
+				<transition name="fade" mode="out-in" v-if="/* !streamMode && */ !mobile && emojiIndex">
 					<picker
 						:data="emojiIndex"
 						v-show="display_emoji"
@@ -49,7 +45,7 @@
 		<div
 			class="iconbutton emojipicker"
 			@click="toggle_emoji_picker()"
-			v-if="!streamMode && !mobile"
+			v-if="/* !streamMode && */ !mobile"
 		>
 			<div class="leftdummy">
 				<div class="idummy">
@@ -510,7 +506,7 @@ export default {
 	justify-content: center
 	align-items: center
 	padding: 0 2 * $r
-	padding-right: 0
+	padding-right: $r
 
 	::v-deep .emoji-mart .emoji-mart-emoji
 		width: 12.5%
