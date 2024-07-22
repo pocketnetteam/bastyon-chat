@@ -128,7 +128,7 @@ export default {
 						current = Date.now(),
 						expire = (() => {
 							const
-								id = store._vm.core.user.myMatrixId(),
+								id = this.$store._vm.core.user.myMatrixId(),
 								last = new Date((() => {
 									if (m_chat.getLastActiveTimestamp() === -9007199254740991) {
 										if (m_chat.getMember(id)) {
@@ -146,8 +146,8 @@ export default {
 						outdated = current > expire;
 
 					if (outdated) {
-						core.mtrx.client.leave(chat.roomId).then(() => {
-							core.mtrx.client
+						this.core.mtrx.client.leave(chat.roomId).then(() => {
+							this.core.mtrx.client
 								.forget(chat.roomId, true)
 								.catch(() => {});
 
