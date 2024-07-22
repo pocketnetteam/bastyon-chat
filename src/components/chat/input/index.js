@@ -690,20 +690,24 @@ export default {
 					}
 
 					const sendText = (text, params) => {
-							return this.core.mtrx.sendtext(
-								this.chat,
-								text,
-								Object.assign(
+							return this.core.mtrx
+								.sendtext(
+									this.chat,
+									text,
+									Object.assign(
+										{
+											relation: this.relationEvent,
+										},
+										params || {}
+									),
 									{
-										relation: this.relationEvent,
-									},
-									params || {}
-								),
-								{
-									encryptEvent: this.clbkEncrypt,
-									encryptedEvent: this.clbkEncrypted,
-								}
-							);
+										encryptEvent: this.clbkEncrypt,
+										encryptedEvent: this.clbkEncrypted,
+									}
+								)
+								.then(() => {
+									this.setSendStatus(SendStatus.Sent);
+								});
 						},
 						data = {};
 
