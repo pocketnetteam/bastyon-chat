@@ -678,7 +678,6 @@ class MTRX {
 
 		var encpromise = (() => Promise.resolve(file))();
 		var promise = null;
-
 		if (chat.pcrypto.canBeEncrypt() && !notenc) {
 			encpromise = chat.pcrypto.encryptFile(file).then((r) => {
 				fileInfo.secrets = r.secrets;
@@ -690,9 +689,7 @@ class MTRX {
 		return encpromise
 			.then((file) => {
 				promise = this.client.uploadContent(file);
-
 				if (promise.abort) meta.abort = promise.abort;
-
 				return promise;
 			})
 			.then((src) => {
@@ -702,9 +699,9 @@ class MTRX {
 			})
 			.then((url) => {
 				fileInfo.url = url;
-
+			})
+			.finally(() => {
 				let body = JSON.stringify(fileInfo);
-
 				var r = {
 					body: body,
 					msgtype: "m.file",
@@ -753,7 +750,7 @@ class MTRX {
 
 		var i = new images();
 		var info = {};
-
+		let imageUrl = base64;
 		if (!meta) meta = {};
 
 		return i
@@ -780,10 +777,13 @@ class MTRX {
 			})
 			.then((image) => {
 				if (meta.aborted) return Promise.reject("aborted");
-
+				imageUrl = image;
+				//return this.client.sendImageMessage(chat.roomId, image, info, "Image");
+			})
+			.finally(() => {
 				var content = {
 					msgtype: "m.image",
-					url: image,
+					url: imageUrl,
 
 					body: "Image",
 
@@ -800,8 +800,6 @@ class MTRX {
 				}
 
 				return this.client.sendMessage(chat.roomId, content);
-
-				//return this.client.sendImageMessage(chat.roomId, image, info, "Image");
 			});
 	}
 
@@ -809,7 +807,8 @@ class MTRX {
 		if (!file)
 			return this.sendAudioBase64(chat, base64, meta, { relation, from });
 
-		let info = {};
+		let info = {},
+			audioUrl = base64;
 
 		info.from = from;
 
@@ -832,10 +831,12 @@ class MTRX {
 			})
 			.then((audio) => {
 				if (meta.aborted) return Promise.reject("aborted");
-
+				audioUrl = audio;
+			})
+			.finally(() => {
 				var content = {
 					msgtype: "m.audio",
-					url: audio,
+					url: audioUrl,
 					body: "Audio",
 					info,
 				};

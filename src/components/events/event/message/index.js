@@ -250,7 +250,7 @@ export default {
 
 		imageUrl: function () {
 			if (this.content.msgtype === "m.image") {
-				if (this.encryptedData) {
+				if (this.encryptedData && !this.hasError) {
 					return this.decryptedInfo;
 				} else {
 					return this.content && this.content.url;
@@ -260,11 +260,9 @@ export default {
 
 		audioUrl: function () {
 			if (this.content.msgtype === "m.audio") {
+				if (this.hasError) return this.content?.url;
 				if (this.encryptedData && this.decryptedInfo) return this.decryptedInfo;
-
 				return this.audioBuffer;
-
-				//return this.content && this.content.audioData
 			}
 		},
 
@@ -783,7 +781,6 @@ export default {
 			}
 		},
 		setmenu: function () {
-			console.log("dadsa");
 			if (document.activeElement) document.activeElement.blur();
 			/*this.core.menu({
 				items: this.menu(),

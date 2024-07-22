@@ -8,29 +8,28 @@
 			<div class="size">
 				<span>{{ humanReadableSize(file.size) }}</span>
 			</div>
-
-			<div class="download" v-if="!encryptedData">
-				<a
-					:href="file.url"
-					:download="download"
-					target="_external"
-					class="fileMessage"
-				>
-					<button class="button small rounded">
+			<template v-if="canDownload">
+				<div class="download" v-if="!encryptedData">
+					<a
+						:href="file.url"
+						:download="download"
+						target="_external"
+						class="fileMessage"
+					>
+						<button class="button small rounded">
+							<span v-if="!downloaded">{{ $t("button.download") }}</span>
+							<span v-else>{{ $t("button.downloaded") }}</span>
+						</button>
+					</a>
+				</div>
+				<div class="download" v-else>
+					<button class="button small rounded" @click="download">
 						<span v-if="!downloaded">{{ $t("button.download") }}</span>
 						<span v-else>{{ $t("button.downloaded") }}</span>
 					</button>
-				</a>
-			</div>
-
-			<div class="download" v-else>
-				<button class="button small rounded" @click="download">
-					<span v-if="!downloaded">{{ $t("button.download") }}</span>
-					<span v-else>{{ $t("button.downloaded") }}</span>
-				</button>
-			</div>
+				</div>
+			</template>
 		</div>
-
 		<div class="icon">
 			<a
 				:href="file.url"
@@ -50,6 +49,10 @@ export default {
 	props: {
 		preview: Object,
 		file: Object,
+		canDownload: {
+			type: Boolean,
+			default: true,
+		},
 		encryptedData: Boolean,
 		downloaded: Boolean,
 	},

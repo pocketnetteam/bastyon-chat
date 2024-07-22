@@ -218,6 +218,7 @@
 				<fileMessage
 					:encryptedData="encryptedData"
 					:file="file"
+					:can-download="!hasError"
 					:downloaded="downloaded"
 					@download="download"
 				/>
