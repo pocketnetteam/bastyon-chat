@@ -25,6 +25,7 @@
 					/>
 					<InputField
 						v-else
+						:sending="isSending"
 						ref="newinput"
 						@chatMessage="sendinput"
 						@emptyInput="emitInputData"
@@ -82,7 +83,6 @@
 						</div>
 					</div>
 				</div>
-
 				<div class="bottom" v-if="donate">
 					<div class="count">
 						<i class="icon donate">Donate</i>

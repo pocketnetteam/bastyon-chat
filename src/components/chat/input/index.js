@@ -3,6 +3,7 @@ import InputField from "./InputField/InputField.vue";
 import recordVoice from "@/components/assets/recordVoice/index.vue";
 import { mapState } from "vuex";
 import Images from "@/application/utils/images.js";
+import spinner from "@/components/assets/spinner/index.vue";
 
 import contacts from "@/components/contacts/list/index.vue";
 import preview from "@/components/contacts/preview/index.vue";
@@ -11,6 +12,14 @@ import recordProgress from "@/components/assets/recordProgress/index.vue";
 import upload from "@/components/assets/upload/index.vue";
 
 import { cancelable } from "cancelable-promise";
+
+const SendStatus = {
+	Idle: "idle",
+	Sending: "sending",
+	Sent: "sent",
+	Error: "error",
+};
+
 export default {
 	name: "chatInput",
 	props: {
@@ -20,6 +29,7 @@ export default {
 	},
 
 	components: {
+		spinner,
 		InputField,
 		contacts,
 		preview,
@@ -35,6 +45,7 @@ export default {
 			upload: true,
 			test: [],
 			loading: false,
+			sendStatus: SendStatus.Idle,
 			text: "",
 			file: {},
 			fileInfo: {},
@@ -42,6 +53,7 @@ export default {
 			creating: false,
 			userId: "",
 			showuserselect: null,
+			looading: true,
 			anyUrlMeta: String,
 			joinedMembers: [],
 			tipvalue: null,
@@ -90,7 +102,9 @@ export default {
 		voiceEnable() {
 			return this.$store.state.voiceMessagesEnabled;
 		},
-
+		isSending() {
+			return this.sendStatus === SendStatus.Sending;
+		},
 		connect: function () {
 			return this.$store.state.contact;
 		},
@@ -312,7 +326,9 @@ export default {
 		showuserselected: function (contact, action) {
 			this[action](contact);
 		},
-
+		setSendStatus(status) {
+			this.sendStatus = status;
+		},
 		resizeImage: function (base64) {
 			var ftype = base64.split(";")[0].split("/")[1];
 			var images = new Images();
@@ -598,6 +614,7 @@ export default {
 		},
 
 		send(text) {
+			this.setSendStatus(SendStatus.Sending);
 			if (!this.chat) {
 				this.newchat().catch((e) => {});
 			}
@@ -696,10 +713,10 @@ export default {
 						const txid = await donate.send();
 						data.donateLink = txid;
 					}
-
 					return sendText(text, data);
 				})
 				.catch((e) => {
+					this.setSendStatus(SendStatus.Error);
 					this.$emit("sentMessageError", {
 						error: e,
 					});

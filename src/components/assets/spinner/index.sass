@@ -1,0 +1,23 @@
+$spinner-size: 22px
+  
+@keyframes rotation 
+  0% 
+    transform: rotate(0deg)
+    
+  100% 
+    transform: rotate(360deg)
+    
+  
+.spinner 
+  min-width: $spinner-size
+  max-width: $spinner-size
+  height: $spinner-size
+  border: 2px solid srgb(--color-bg-ac-bright)
+  border-bottom-color: transparent
+  border-radius: 50%
+  display: inline-block
+  box-sizing: border-box
+  animation: rotation 1s linear infinite
+
+
+     
