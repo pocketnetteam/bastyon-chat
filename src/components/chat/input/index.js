@@ -668,7 +668,10 @@ export default {
 
 			if (this.isShareMessagePresent) this.sendShareMessage();
 
-			if (!text.trim()) return;
+			if (!text.trim()) {
+				this.setSendStatus(SendStatus.Sent);
+				return Promise.resolve();
+			}
 
 			if (!this.relationEvent) {
 				this.focus();
@@ -732,24 +735,20 @@ export default {
 					}
 
 					const sendText = (text, params) => {
-							return this.core.mtrx
-								.sendtext(
-									this.chat,
-									text,
-									Object.assign(
-										{
-											relation: this.relationEvent,
-										},
-										params || {}
-									),
+							return this.core.mtrx.sendtext(
+								this.chat,
+								text,
+								Object.assign(
 									{
-										encryptEvent: this.clbkEncrypt,
-										encryptedEvent: this.clbkEncrypted,
-									}
-								)
-								.then(() => {
-									this.setSendStatus(SendStatus.Sent);
-								});
+										relation: this.relationEvent,
+									},
+									params || {}
+								),
+								{
+									encryptEvent: this.clbkEncrypt,
+									encryptedEvent: this.clbkEncrypted,
+								}
+							);
 						},
 						data = {};
 
@@ -759,6 +758,7 @@ export default {
 						const txid = await donate.send();
 						data.donateLink = txid;
 					}
+					this.setSendStatus(SendStatus.Sent);
 					return sendText(text, data);
 				})
 				.catch((e) => {

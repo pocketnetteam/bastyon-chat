@@ -73,7 +73,7 @@
 		<button
 			:disabled="sending"
 			class="iconbutton"
-			v-if="_canSend"
+			v-if="_canSend || sending"
 			@click="send_text($event)"
 		>
 			<div class="sending-spinner-wrapper" v-if="sending">
@@ -156,7 +156,7 @@ export default {
 
 	computed: {
 		_canSend() {
-			return this.canSend || this.send || this.$props.sending;
+			return this.canSend || this.send;
 		},
 		mobile: function () {
 			return !this.$store.state.pocketnet && this.$store.state.mobile;
