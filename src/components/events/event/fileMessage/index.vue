@@ -9,7 +9,7 @@
 				<span>{{ humanReadableSize(file.size) }}</span>
 			</div>
 
-			<div class="download" v-if="!encryptedData">
+			<!--<div class="download" v-if="!encryptedData">
 				<a
 					:href="file.url"
 					:download="download"
@@ -21,9 +21,9 @@
 						<span v-else>{{ $t("button.downloaded") }}</span>
 					</button>
 				</a>
-			</div>
+			</div>-->
 
-			<div class="download" v-else>
+			<div class="download" >
 				<button class="button small rounded" @click="download">
 					<span v-if="!downloaded">{{ $t("button.download") }}</span>
 					<span v-else>{{ $t("button.downloaded") }}</span>

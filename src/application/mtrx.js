@@ -876,22 +876,61 @@ class MTRX {
 	}
 
 	async getFile(chat, event) {
-		try {
-			var decryptKey = await chat.pcrypto.decryptKey(event.event);
 
-			event.event.decryptKey = decryptKey;
-		} catch (e) {
-			return Promise.reject(e);
+		//var needdecrypt = true
+
+		var needdecrypt = chat.pcrypto && f.deep(event, "content.info.secrets.keys") || f.deep(event, "content.pbody.secrets.keys") ? true : false;
+
+		//console.log('chat, event', chat, event)
+
+		console.log('needdecrypt', needdecrypt)
+
+		if (needdecrypt){
+			try {
+				var decryptKey = await chat.pcrypto.decryptKey(event.event);
+	
+				event.event.decryptKey = decryptKey;
+			} catch (e) {
+				return Promise.reject(e);
+			}
 		}
+
+		
 
 		return this.download(event.event.content.pbody.url)
 			.then((blob) => {
 
+				if (needdecrypt){
+					return chat.pcrypto.decryptFile(blob, decryptKey, null, event.event.content.pbody);
+				}
 
-				return chat.pcrypto.decryptFile(blob, decryptKey, null, event.event.content.pbody);
+				else{
+
+					console.log('blob', blob)
+
+					return f.readFile(blob).then((file) => {
+
+						console.log('file', file)
+
+
+						var additionalFinfo = event.event.content.pbody
+
+						var name = file.name || additionalFinfo.name || "decrypted"
+						var type = (additionalFinfo.type || "").replace("encrypted/", "") || (file.type || "").replace("encrypted/", "")
+
+						return new (window.wFile || window.File)([blob], name, {
+							type,
+							name,
+						});
+
+					})
+				}	
+
+				
 			})
 			.then((r) => {
 
+				console.log('result', r)
 
 				return Promise.resolve({
 					file: r,
