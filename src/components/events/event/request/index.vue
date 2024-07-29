@@ -14,7 +14,7 @@
         <button @click="allow" class="btn ok">{{ $t("caption.allow") }}</button>
       </div>
     </template>
-    <template>
+    <template v-else>
       <div class="title">{{ $t("caption.requestCallAccessYou") }}</div>
     </template>
 	</div>
