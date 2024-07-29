@@ -15,8 +15,10 @@ export default {
 	},
 	inject: ["matches", "menuState"],
 	components: {},
+
 	data: function () {
 		return {
+			lastScrollPosition: 0,
 			type: "",
 			tmt: null,
 			lscroll: null,
@@ -51,7 +53,12 @@ export default {
 			},
 		};
 	},
-
+	activated() {
+		this.restoreScrollPosition();
+	},
+	deactivated() {
+		this.saveScrollPosition();
+	},
 	watch: {
 		events: function (ev) {},
 
@@ -133,6 +140,19 @@ export default {
 
 			return false;
 		},
+		restoreScrollPosition() {
+			const container = this.$refs.container;
+			const originalScrollBehavior = container.style.scrollBehavior;
+			container.style.scrollBehavior = "auto";
+
+			this.$nextTick(() => {
+				container.scrollTo({ top: this.lastScrollPosition });
+				container.style.scrollBehavior = originalScrollBehavior;
+			});
+		},
+		saveScrollPosition() {
+			this.lastScrollPosition = this.$refs.container.scrollTop;
+		},
 		scrollToReadMessages: function () {
 			/*if(this.notificationCount > 0) {
 		const elem = document.getElementById("eventWrapper_" + (this.notificationCount + 1));
@@ -143,6 +163,16 @@ export default {
 		},
 		shareEvent: function ({ event }) {
 			this.$emit("shareEvent", { event });
+		},
+		showerror: function () {
+			// stringifyiedError
+
+			return this.$dialog
+				.alert(this.stringifyiedError, {
+					okText: "Ok",
+					backdropClose: true,
+				})
+				.catch((e) => {});
 		},
 
 		dupdated: _.debounce(function () {
