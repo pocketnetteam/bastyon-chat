@@ -502,6 +502,7 @@ export default {
 			}
 
 			sharing.from = this.userinfo.id;
+			sharing.senderName = this.userinfo.name;
 
 			return sharing;
 		},

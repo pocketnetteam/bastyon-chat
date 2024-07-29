@@ -128,7 +128,9 @@
 		"moderators": "Moderadores",
 		"participants": "Participantes",
 		"streamChat": "Transmitir chat",
-		"membersList": "Lista de miembros"
+		"membersList": "Lista de miembros",
+		"forwardMessage": "Forward Message | Forward {n} Messages",
+		"from": "From"
 	},
 
 	"input": {

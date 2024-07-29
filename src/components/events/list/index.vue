@@ -1,6 +1,7 @@
 <template>
 	<div
 		id="events"
+		:data-chat-input-embedded="hasInputChatEmbedded"
 		class="maskedtop"
 		:class="{
 			mobile,

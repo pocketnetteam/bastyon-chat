@@ -146,7 +146,9 @@
 		"streamChat": "Stream chat",
 		"membersList": "Members list",
 		"needjointowrite": "You need join to write",
-		"streamisover": "This stream is over"
+		"streamisover": "This stream is over",
+		"forwardMessage": "Forward Message | Forward {n} Messages",
+		"from": "From"
 	},
 
 	"input": {

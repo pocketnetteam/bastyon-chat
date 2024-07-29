@@ -1,7 +1,9 @@
 import f from "@/application/functions";
 import InputField from "./InputField/InputField.vue";
+import EmbeddedMessage from "./EmbeddedMessage/EmbeddedMessage.vue";
+
 import recordVoice from "@/components/assets/recordVoice/index.vue";
-import { mapState } from "vuex";
+import { mapState, mapGetters } from "vuex";
 import Images from "@/application/utils/images.js";
 import spinner from "@/components/assets/spinner/index.vue";
 
@@ -33,6 +35,7 @@ export default {
 		InputField,
 		contacts,
 		preview,
+		EmbeddedMessage,
 		recordProgress,
 		recordVoice,
 		upload,
@@ -100,7 +103,10 @@ export default {
 
 	computed: {
 		voiceEnable() {
-			return this.$store.state.voiceMessagesEnabled;
+			return this.$store.state.voiceMessagesEnabled && !this.hasEmbedded;
+		},
+		isShareMessagePresent() {
+			return !!this.share;
 		},
 		isSending() {
 			return this.sendStatus === SendStatus.Sending;
@@ -179,8 +185,10 @@ export default {
 			return menuItems;
 		},
 
-		...mapState(["chats"]),
-
+		...mapState(["chats", "share"]),
+		...mapGetters({
+			hasEmbedded: "hasInputChatEmbedded",
+		}),
 		userlist: function () {
 			if (!this.chat) return [];
 
@@ -200,6 +208,9 @@ export default {
 
 			return [];
 		},
+		isMultipleShares() {
+			return !!this.share.multiple;
+		},
 		ausers: function () {
 			if (this.u) {
 				return _.map(this.u.split(","), (u) => {
@@ -208,6 +219,22 @@ export default {
 			}
 
 			return [];
+		},
+		embeddedShareMessageText() {
+			const sharedUserNames = this.getSharedUserNames();
+			if (!sharedUserNames) return;
+			const firstMessage = this.share?.messages?.at(0);
+			const canShowMessage = !this.isMultipleShares && firstMessage;
+			if (canShowMessage) {
+				return `${sharedUserNames}: ${firstMessage}`;
+			}
+			return `${this.$i18n.t("caption.from")}: ${sharedUserNames}`;
+		},
+		embeddedShareMessageTitle() {
+			return this.$i18n.tc(
+				"caption.forwardMessage",
+				this.share.multiple?.length ?? 1
+			);
 		},
 		stateChat: function () {
 			var id = this.$route.query.id;
@@ -322,7 +349,15 @@ export default {
 		tipBySearch: function (value) {
 			this.tipvalue = value;
 		},
+		getSharedUserNames() {
+			if (!this.isMultipleShares) return this.share.senderName;
 
+			const senderNames = this.share.multiple.map(
+				(message) => message.senderName
+			);
+			const uniqueSenderNames = [...new Set(senderNames)];
+			return uniqueSenderNames.join(", ");
+		},
 		showuserselected: function (contact, action) {
 			this[action](contact);
 		},
@@ -612,7 +647,11 @@ export default {
 		clbkEncrypted() {
 			this.$emit("encrypted");
 		},
-
+		sendShareMessage() {
+			const _share = this.share;
+			this.cancelShare();
+			this.core.mtrx.shareInChat(this.chat.roomId, _share);
+		},
 		send(text) {
 			this.setSendStatus(SendStatus.Sending);
 			if (!this.chat) {
@@ -626,6 +665,10 @@ export default {
 			//return
 
 			this.$emit("sending");
+
+			if (this.isShareMessagePresent) this.sendShareMessage();
+
+			if (!text.trim()) return;
 
 			if (!this.relationEvent) {
 				this.focus();
@@ -679,7 +722,6 @@ export default {
 									this.$emit("clearRelationEvent");
 
 									this.$emit("force");
-
 									return Promise.resolve();
 								})
 								.catch((e) => {
@@ -730,7 +772,9 @@ export default {
 		pasteImage(data) {
 			this.sendImage({ base64: data });
 		},
-
+		cancelShare() {
+			this.$store.commit("SHARE", null);
+		},
 		sendImage: function ({ base64, file }) {
 			var id = f.makeid();
 

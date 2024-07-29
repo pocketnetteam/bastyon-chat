@@ -1,5 +1,6 @@
 import { mapState } from "vuex";
 import f from "@/application/functions";
+import { mapGetters } from "vuex/dist/vuex.common.js";
 
 export default {
 	name: "events",
@@ -96,13 +97,14 @@ export default {
 		...mapState({
 			auth: (state) => state.auth,
 			mobile: (state) => state.mobile,
+
 			scrollbottomshow: function () {
 				return this.lscroll && this.lscroll.scrollTop > 500;
 			},
 			minimized: (state) => state.minimized,
 			notificationCount: (state) => state.allnotifications,
 		}),
-
+		...mapGetters(["hasInputChatEmbedded"]),
 		eventsByPages: function () {
 			var ps = [];
 			var pc = 0;

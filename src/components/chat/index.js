@@ -10,6 +10,7 @@ export default {
 	name: "chat",
 	props: {
 		chat: Object,
+		share: Object,
 		u: String,
 		search: String,
 		searchresults: Array,

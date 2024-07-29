@@ -20,7 +20,11 @@
 					@paste="paste_image"
 					:placeholder="$t('caption.sendmessage')"
 				></textarea>
-				<transition name="fade" mode="out-in" v-if="/* !streamMode && */ !mobile && emojiIndex">
+				<transition
+					name="fade"
+					mode="out-in"
+					v-if="!streamMode && !mobile && emojiIndex"
+				>
 					<picker
 						:data="emojiIndex"
 						v-show="display_emoji"
@@ -69,7 +73,7 @@
 		<button
 			:disabled="sending"
 			class="iconbutton"
-			v-if="send || sending"
+			v-if="_canSend"
 			@click="send_text($event)"
 		>
 			<div class="sending-spinner-wrapper" v-if="sending">
@@ -112,7 +116,7 @@ export default {
 		text: {
 			immediately: true,
 			handler: function (current, prev) {
-				if (current) {
+				if (!!current.trim()) {
 					this.send = true;
 					this.$emit("FilledInput");
 				} else {
@@ -127,10 +131,9 @@ export default {
 
 	data() {
 		return {
-			send: false,
-
 			ready: false,
 			text: "",
+			send: false,
 			exclude: ["flags"],
 			display_emoji: false,
 			content_height: 26,
@@ -152,6 +155,9 @@ export default {
 	},
 
 	computed: {
+		_canSend() {
+			return this.canSend || this.send || this.$props.sending;
+		},
 		mobile: function () {
 			return !this.$store.state.pocketnet && this.$store.state.mobile;
 		},
@@ -253,7 +259,7 @@ export default {
 		},
 
 		send_text(event) {
-			if (this.text && this.text !== "\n") {
+			if (this._canSend && this.text !== "\n") {
 				this.display_emoji = false;
 				this.$emit("chatMessage", this.text);
 				this.$emit("emptyInput");
@@ -470,6 +476,7 @@ export default {
 	},
 
 	props: {
+		canSend: Boolean,
 		donate: Object,
 		storagekey: String,
 		sending: Boolean,

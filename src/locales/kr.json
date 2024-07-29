@@ -129,7 +129,9 @@
 		"moderators": "중재자",
 		"participants": "참가자들",
 		"streamChat": "스트림 채팅",
-		"membersList": "회원 목록"
+		"membersList": "회원 목록",
+		"forwardMessage": "Forward Message | Forward {n} Messages",
+		"from": "From"
 	},
 
 	"input": {
