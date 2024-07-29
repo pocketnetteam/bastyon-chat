@@ -34,6 +34,7 @@
 		"disabled": "The user did not give you permission to make calls",
 		"request": "Do you really want to request permission to make calls?",
 		"requestCallAccess": "The user requests permission to make calls",
+		"requestCallAccessYou" : "You have requested permission to make calls",
 		"callAccessWarning": "Accept requests ONLY from trusted people.",
 		"leave": "Leave",
 		"Info": "Info",

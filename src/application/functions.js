@@ -1538,13 +1538,33 @@ f.copyArrayBuffer = function (src) {
 	return dst;
 };
 
-f.readFile = function (file) {
+/*var readFile = function (file) {
 	let reader = new FileReader();
+
+	if (window.cordova) reader = reader._realReader;
 
 	reader.readAsArrayBuffer(file);
 
 	return new Promise((resolve, reject) => {
-		reader.onload = function () {
+		reader.onloadend = function (evt) {
+			resolve(reader.result);
+		};
+
+		reader.onerror = function () {
+			reject(reader.error);
+		};
+	});
+};*/
+
+f.readFile = function (file) {
+	let reader = new FileReader();
+
+	if (window.cordova) reader = reader._realReader;
+
+	reader.readAsArrayBuffer(file);
+
+	return new Promise((resolve, reject) => {
+		reader.onloadend = function (evt) {
 			resolve(reader.result);
 		};
 

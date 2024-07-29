@@ -1049,7 +1049,7 @@ var PcryptoFile = function () {
 	var queue = []
 	var interval = null
 
-	var readFile = function (file) {
+	/*var readFile = function (file) {
 		let reader = new FileReader();
 
 		if (window.cordova) reader = reader._realReader;
@@ -1065,7 +1065,7 @@ var PcryptoFile = function () {
 				reject(reader.error);
 			};
 		});
-	};
+	};*/
 
 	var convertFile = function (blob, file) {
 		return new (window.wFile || window.File)([blob], "encrypted", {
@@ -1076,10 +1076,8 @@ var PcryptoFile = function () {
 
 	var convertDecryptedFile = function (blob, file, additionalFinfo = {}) {
 
-
 		var name = file.name || additionalFinfo.name || "decrypted"
 		var type = (additionalFinfo.type || "").replace("encrypted/", "") || (file.type || "").replace("encrypted/", "")
-
 
 		return new (window.wFile || window.File)([blob], name, {
 			type,
@@ -1130,7 +1128,7 @@ var PcryptoFile = function () {
 	};
 
 	self.encryptFile = function (file, secret, p) {
-		return readFile(file)
+		return f.readFile(file)
 			.then((r) => {
 				return self.encrypt(r, secret, p);
 			})
@@ -1140,7 +1138,7 @@ var PcryptoFile = function () {
 	};
 
 	self.decryptFile = function (file, secret, p, additionalFinfo) {
-		return readFile(file)
+		return f.readFile(file)
 			.then((r) => {
 				return self.decrypt(r, secret, p);
 			})

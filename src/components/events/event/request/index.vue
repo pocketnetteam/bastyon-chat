@@ -1,16 +1,22 @@
 <template>
 	<div class="request">
 		<img src="../img/request.png" class="image" alt="request" />
-		<div class="title">{{ $t("caption.requestCallAccess") }}</div>
-		<div class="description">
-			<div>{{ $t("caption.callAccessWarning") }}</div>
-		</div>
-		<div class="options">
-			<button @click="prohibit" class="btn bad">
-				{{ $t("caption.prohibit") }}
-			</button>
-			<button @click="allow" class="btn ok">{{ $t("caption.allow") }}</button>
-		</div>
+
+    <template  v-if="!me">
+      <div class="title">{{ $t("caption.requestCallAccess") }}</div>
+      <div class="description">
+        <div>{{ $t("caption.callAccessWarning") }}</div>
+      </div>
+      <div class="options">
+        <button @click="prohibit" class="btn bad">
+          {{ $t("caption.prohibit") }}
+        </button>
+        <button @click="allow" class="btn ok">{{ $t("caption.allow") }}</button>
+      </div>
+    </template>
+    <template v-else>
+      <div class="title">{{ $t("caption.requestCallAccessYou") }}</div>
+    </template>
 	</div>
 </template>
 
@@ -22,6 +28,11 @@ export default {
 			type: Object,
 		},
 	},
+  computed : {
+    me : function(){
+      return this.core.mtrx.me(this?.event?.event?.sender) || false
+    }
+  },
 	methods: {
 		allow() {
 			this.core.mtrx.client.sendStateEvent(
