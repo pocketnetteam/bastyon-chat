@@ -153,7 +153,7 @@ export default {
 			});
 		},
 		saveScrollPosition() {
-			this.lastScrollPosition = this.$refs.container.scrollTop;
+			this.lastScrollPosition = this.lscroll.scrollTop;
 		},
 		scrollToReadMessages: function () {
 			/*if(this.notificationCount > 0) {
