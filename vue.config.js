@@ -12,6 +12,8 @@ module.exports = {
 		hotOnly: false,
 	},
 
+	parallel: false,
+
 	publicPath: "/",
 	lintOnSave: false,
 
