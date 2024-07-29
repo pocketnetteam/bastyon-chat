@@ -949,6 +949,9 @@ var store = new Vuex.Store({
 					events[chat.roomId].timeline = [];
 				}
 
+
+				
+
 				if (ev) {
 					if (ev?.event?.content?.accepted === null) {
 						chatStatuses[chat.roomId] = {
@@ -968,16 +971,31 @@ var store = new Vuex.Store({
 					};
 				}
 
+				
+
+				if(chat.roomId == '!LMxFfIZibiOaNOcEXE:test.matrix.pocketnet.app'){
+					console.log('ev', ev)
+					console.log('chatStatuses', chatStatuses, isCallsEnabled)
+				}
+				
+
 				if (isCallsEnabled.length) {
-					chatStatuses[chat.roomId] = {
-						roomId: chat.roomId,
-						enabled: isCallsEnabled.find(
-							(e) =>
-								!store._vm.core.mtrx.me(e?.event?.sender) &&
-								e?.event?.sender.split(":")[0].replace("@", "") ===
-									e?.event?.state_key
-						)?.event?.content?.enabled,
-					};
+
+					var enabled = isCallsEnabled.find(
+						(e) =>
+							!store._vm.core.mtrx.me(e?.event?.sender) &&
+							e?.event?.sender.split(":")[0].replace("@", "") ===
+								e?.event?.state_key
+					)?.event?.content?.enabled
+
+					if(enabled || !chatStatuses[chat.roomId]){
+						chatStatuses[chat.roomId] = {
+							roomId: chat.roomId,
+							enabled: enabled,
+						};
+					}
+
+					
 				}
 			});
 
