@@ -87,7 +87,9 @@ var store = new Vuex.Store({
 		getConnection: (state) => {
 			return state.localMatrixStore;
 		},
-
+		hasInputChatEmbedded(state) {
+			return !!state.share;
+		},
 		getSignedUpUsers: (state) => {
 			return state.signedUpUsers;
 		},

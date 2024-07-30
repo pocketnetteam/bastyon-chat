@@ -24,7 +24,7 @@
 					:u="u"
 					:chat="chat"
 					:toevent="toevent"
-					:key="k"
+					:key="key"
 					:search="search"
 					:searchresults="processresult"
 					@removeBrokenRoom="creatorLeft"
@@ -93,13 +93,18 @@ export default {
 		topheader,
 		contacts,
 	},
-	data: () => {
+	data: function () {
+		const u = this.$route.query.u;
+		const id = this.$route.query.id;
 		return {
 			events: [],
 			openInviteModal: false,
 			brokenRoom: false,
 			hideHeader: false,
+			u,
+			key: u + id,
 			hastoeventscrolled: false,
+			chat: this.$store.state.chatsMap[id],
 			hasprocesscleared: false,
 			searchchanged: undefined,
 			process: null,
@@ -109,17 +114,6 @@ export default {
 	},
 
 	computed: {
-		u() {
-			return this.$route.query.u;
-		},
-		chat() {
-			var id = this.$route.query.id;
-			return this.$store.state.chatsMap[id];
-		},
-		k() {
-			return this.u + this.$route.query.id;
-		},
-
 		processid() {
 			return this.hasprocesscleared ? null : this.$route.query.process;
 		},
@@ -177,12 +171,14 @@ export default {
 			},
 		},
 	},
+
 	methods: {
 		tosearchevent(event) {
 			this.focusedevent = event;
 
 			this.$refs["chat"].scrollToEvent(event);
 		},
+
 		updateSearchQuery(newSearchTerm) {
 			return this.$router.push({
 				query: { ...this.$route.query, search: newSearchTerm },

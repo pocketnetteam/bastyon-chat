@@ -1,3 +1,5 @@
+$hasInputChatEmbedded: '[data-chat-input-embedded="true"]'
+  
 .eventWrapper
   ::v-deep
     .event
@@ -29,6 +31,7 @@
   opacity: 0
 
 #events
+  --events-padding-bottom: 51px
   left : 0
   right : 0
   top : 0
@@ -36,8 +39,10 @@
   padding-bottom : 50px
   position: absolute
   +transition(0.3s)
+  &#{$hasInputChatEmbedded}
+    --events-padding-bottom: 100px
   &.mobile
-    padding-bottom : calc(var(--app-margin-bottom, 0) + 51px)
+    padding-bottom : calc(var(--app-margin-bottom, 0) + var(--events-padding-bottom))
     transform: translate3d(0, calc((var(--keyboardheight, 0) - 1px) * -1), 0)
 
     .scrollbottom
