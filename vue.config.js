@@ -3,6 +3,7 @@ var prependcssvars = `
 @import "~@/styles/mixins/common.sass"
 `
 const path = require("path");
+
 module.exports = {
 	devServer: {
 		open: process.platform === "darwin",
@@ -11,6 +12,8 @@ module.exports = {
 		https: true,
 		hotOnly: false,
 	},
+
+	parallel: false,
 
 	publicPath: "/",
 	lintOnSave: false,
@@ -68,6 +71,6 @@ module.exports = {
 					loaders: ["wasm-loader"],
 				},
 			],
-		},
+		}
 	},
 };
