@@ -21,12 +21,16 @@
 					content.msgtype === 'm.image' ||
 					(showmeta && my) ||
 					file ||
+					hasError ||
 					content.call_id
 				"
 			>
+				<button v-if="hasError" @click="showError" class="error">
+					<i class="fas fa-exclamation"></i>
+				</button>
 				<i
 					:class="'fas fa-fire burn ' + showburn"
-					v-if="!streamMode && showburn"
+					v-else-if="!streamMode && showburn"
 					@click="showwhenburn"
 				></i>
 
@@ -37,7 +41,7 @@
 
 			<div class="actionsWrapper" v-if="isMenuAllowed">
 				<div
-					v-if="!streamMode && multiSelect"
+					v-if="!streamMode && multiSelect && !hasError"
 					class="multiSelect"
 					@click="eventMessage(selectedMessage)"
 				>
@@ -64,7 +68,6 @@
 					<eventsEvent :event="reference" :chat="chat" :preview="true" />
 
 					<div class="referenceCaption">
-						dasdadas
 						<span><i class="fas fa-share"></i></span>
 					</div>
 				</div>
@@ -215,6 +218,7 @@
 				<fileMessage
 					:encryptedData="encryptedData"
 					:file="file"
+					:can-download="!hasError"
 					:downloaded="downloaded"
 					@download="download"
 				/>

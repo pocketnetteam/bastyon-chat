@@ -124,14 +124,16 @@
 		"younotgen": "Please wait a minute, Your encryption keys are being generated...",
 		"chatsearchingempty": "No chats found for the specified filter",
 		"sendmessage": "Send message",
-		"messages" : "Messages",
-		"you" : "You",
-		"sentfile" : "sent file:",
+		"messages": "Messages",
+		"you": "You",
+		"sentfile": "sent file:",
 		"administrators": "Propriétaire",
 		"moderators": "Modérateurs",
 		"participants": "Intervenants",
 		"streamChat": "Chat en streaming",
-		"membersList": "Liste des membres"
+		"membersList": "Liste des membres",
+		"forwardMessage": "Forward Message | Forward {n} Messages",
+		"from": "From"
 	},
 
 	"input": {
@@ -150,6 +152,7 @@
 		"copy": "Copier",
 		"forward": "Transférer",
 		"delete": "Supprimer",
+		"resend": "Resend",
 		"save": "Enregistrer",
 		"reply": "Répondre",
 		"share": "Partager",

@@ -46,6 +46,19 @@
 			.mnwrapper
 				opacity: 1
 
+.error
+	padding: 8px
+	display: flex
+	align-items: center
+	justify-content: center
+	background-color: srgb(--color-bad)
+	width: 24px
+	height: 24px
+	border-radius: 50%
+	font-size: 12px
+	i
+		color: srgb(--background-total-theme)
+
 .burn
 	&.big
 		color: srgb(--color-bad)
@@ -524,6 +537,10 @@
 		.timeWrapper
 			order: -2
 			text-align: right
+			gap: 4px
+			display: flex
+			justify-content: flex-end
+			align-items: center
 
 		.messageText
 			background: srgb(--color-bg-ac-bright)
