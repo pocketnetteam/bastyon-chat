@@ -12,9 +12,16 @@
 				>
 					<i class="fas fa-times"></i>
 				</div>
-				<div class="iconbutton" @click="gotoapp" v-if="!pocketnet && !share">
+				<div
+					class="iconbutton"
+					@click="gotoapp"
+					v-if="canGoToApp"
+				>
 					<i class="fas fa-angle-left"></i>
 				</div>
+				<button class="iconbutton" v-else-if="hasMenu" @click="menuOpen"">
+					<i class="fa fa-bars"></i>
+				</button>
 			</template>
 
 			<template v-slot:leftadd> </template>

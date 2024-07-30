@@ -1,14 +1,12 @@
 import { mapState } from "vuex";
 
-
 export default {
 	name: "chatsTopheader",
 	props: {},
 
 	inject: ["matches"],
 
-	components: {
-	},
+	components: {},
 
 	data: function () {
 		return {
@@ -31,22 +29,34 @@ export default {
 		//$route: 'getdata'
 	},
 
-	computed: mapState({
-		auth: (state) => state.auth,
-		minimized: (state) => state.minimized,
-		pocketnet: (state) => state.pocketnet,
-		active: (state) => state.active,
-
-		...mapState(["share", "closebybg"]),
-
-		window: function () {
-			return window;
+	computed: {
+		hasMenu: function () {
+			return !!window.POCKETNETINSTANCE?.menuOpen;
 		},
-	}),
+		canGoToApp: function () {
+			return !this.pocketnet && !this.share && !this.hasMenu;
+		},
+		...mapState({
+			auth: (state) => state.auth,
+			minimized: (state) => state.minimized,
+			pocketnet: (state) => state.pocketnet,
+			active: (state) => state.active,
+
+			...mapState(["share", "closebybg"]),
+
+			window: function () {
+				return window;
+			},
+		}),
+	},
 
 	methods: {
 		changeCloseByBg: function () {
 			this.$store.commit("closebybg", !this.closebybg);
+		},
+		menuOpen: function () {
+			if (!this.hasMenu) return;
+			window.POCKETNETINSTANCE.menuOpen();
 		},
 		gotoapp: function () {
 			if (this.core.backtoapp) this.core.backtoapp();
