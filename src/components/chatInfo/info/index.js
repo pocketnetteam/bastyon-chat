@@ -413,16 +413,48 @@ export default {
 				.then((dialog) => {
 					this.core.mtrx.client.leave(this.chat.roomId).then((r) => {
 						this.core.mtrx.client
-							.forget(this.chat.roomId, true)
-							.then((r) => {
-								return r;
-							})
-							.then((r) => {
+							.forget(this.chat.roomId, false)
+							.then(() => {
 								this.$store.commit("DELETE_ROOM", this.chat.roomId);
-
-								this.$router.push({ path: "/chats" }).catch((e) => { });
+							})
+							.then(() => {
+								this.$router.push({ path: "/chats" }).catch((e) => {});
 							});
 					});
+				});
+		},
+
+		deleteRoom() {
+			this.$dialog
+				.confirm("Do you really want to delete room?", {
+					okText: this.$i18n.t("yes"),
+					cancelText: this.$i18n.t("cancel"),
+				})
+
+				.then(async () => {
+					try {
+						const members = this.m_chat.currentState.getMembers();
+						
+						for (const member of members) {
+								if (member.userId === this.core.mtrx.client.getUserId()) continue;
+		
+								console.log(`Kicking ${member.userId}...`);
+								await this.core.mtrx.client.kick(this.chat.roomId, member.userId, "Kicking all members");
+						}
+
+						this.core.mtrx.client.leave(this.chat.roomId).then((r) => {
+							this.core.mtrx.client
+								.forget(this.chat.roomId, false)
+								.then(() => {
+									this.$store.commit("DELETE_ROOM", this.chat.roomId);
+								})
+								.then(() => {
+									this.$router.push({ path: "/chats" }).catch((e) => {});
+								});
+						});
+					} catch (error) {
+							console.error("Failed to kick members:", error);
+					}
 				});
 		},
 
