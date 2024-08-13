@@ -124,6 +124,13 @@
 			>
 				{{ $t("caption.leave") }} <i class="fas fa-sign-out-alt"></i>
 			</button>
+			<button
+				class="button small rounded badbutton"
+				@click="deleteRoom()"
+				v-else
+			>
+				{{ $t("caption.leaveAndDelete") }} <i class="fas fa-trash"></i>
+			</button>
 
 			<button
 				class="button small rounded badbutton"
