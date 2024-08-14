@@ -78,7 +78,7 @@ var store = new Vuex.Store({
 		isCallsActive: null,
 		readreciepts: {},
 		ChatStatuses: {},
-		share : null
+		share: null,
 		//share : {url : 'https://yandex.ru/'} //null
 	},
 	getters: {
@@ -87,6 +87,9 @@ var store = new Vuex.Store({
 		},
 		getConnection: (state) => {
 			return state.localMatrixStore;
+		},
+		getChatById: (state) => (id) => {
+			return state.chatsMap[id];
 		},
 		hasInputChatEmbedded(state) {
 			return !!state.share;
@@ -952,9 +955,6 @@ var store = new Vuex.Store({
 					events[chat.roomId].timeline = [];
 				}
 
-
-				
-
 				if (ev) {
 					if (ev?.event?.content?.accepted === null) {
 						chatStatuses[chat.roomId] = {
@@ -974,31 +974,25 @@ var store = new Vuex.Store({
 					};
 				}
 
-				
-
-				if(chat.roomId == '!LMxFfIZibiOaNOcEXE:test.matrix.pocketnet.app'){
-					console.log('ev', ev)
-					console.log('chatStatuses', chatStatuses, isCallsEnabled)
+				if (chat.roomId == "!LMxFfIZibiOaNOcEXE:test.matrix.pocketnet.app") {
+					console.log("ev", ev);
+					console.log("chatStatuses", chatStatuses, isCallsEnabled);
 				}
-				
 
 				if (isCallsEnabled.length) {
-
 					var enabled = isCallsEnabled.find(
 						(e) =>
 							!store._vm.core.mtrx.me(e?.event?.sender) &&
 							e?.event?.sender.split(":")[0].replace("@", "") ===
 								e?.event?.state_key
-					)?.event?.content?.enabled
+					)?.event?.content?.enabled;
 
-					if(enabled || !chatStatuses[chat.roomId]){
+					if (enabled || !chatStatuses[chat.roomId]) {
 						chatStatuses[chat.roomId] = {
 							roomId: chat.roomId,
 							enabled: enabled,
 						};
 					}
-
-					
 				}
 			});
 
