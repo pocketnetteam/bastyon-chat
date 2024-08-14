@@ -101,10 +101,10 @@ export default {
 			openInviteModal: false,
 			brokenRoom: false,
 			hideHeader: false,
-			u,
-			key: u + id,
+			//u,
+			//key: u + id,
 			hastoeventscrolled: false,
-			chat: this.$store.state.chatsMap[id],
+			//chat: this.$store.state.chatsMap[id],
 			hasprocesscleared: false,
 			searchchanged: undefined,
 			process: null,
@@ -114,6 +114,17 @@ export default {
 	},
 
 	computed: {
+		u() {
+			return this.$route.query.u;
+		},
+		chat() {
+			var id = this.$route.query.id;
+			return this.$store.state.chatsMap[id];
+		},
+		key() {
+			return this.u + this.$route.query.id;
+		},
+		
 		processid() {
 			return this.hasprocesscleared ? null : this.$route.query.process;
 		},

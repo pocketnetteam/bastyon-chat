@@ -43,37 +43,45 @@ $borderRadius: 30px
 $sizeLeftIcon: 35px
 
 .embedded-message
-  font-size: 0.8em
-  padding: 0 1em
-  padding-top: 4px
-  display: flex
-  align-items: center
-  border-top-right-radius: $borderRadius
-  border-top-left-radius: $borderRadius
-  background: rgb(var(--background-main))
-  i
-    font-size: 1.2em
-    color: srgb(--color-bg-ac-bright)
+	font-size: 0.8em
+	padding: 0 2 * $r
+	padding-top: 4px
+	display: flex
+	align-items: center
+	border-top-right-radius: $borderRadius
+	border-top-left-radius: $borderRadius
+	background: rgb(var(--background-main))
+	
 
-  .left-icon
-    display: flex
-    justify-content: center
-    align-items: center
-    height: $sizeLeftIcon
-    min-width: $sizeLeftIcon
+	.left-icon
+		display: flex
+		justify-content: center
+		align-items: center
+		height: $sizeLeftIcon
+		width: $sizeLeftIcon
+		min-width: $sizeLeftIcon
+		border-radius: 0.5 * $sizeLeftIcon
+		background: srgb(--color-bg-ac-bright)
+		color : srgb(--text-on-bg-shadow-color)
 
-  .message-wrapper
-    .message-title
-      color: srgb(--color-bg-ac-bright)
-    min-width: 0
-    padding: 3px 3px 3px 6px
-    border-left:  3px solid srgb(--color-bg-ac-bright)
-    border-radius: 4px
-    width: 100%
+		i
+			font-size: 0.8em
 
-  .embedded-cancel
-    cursor: pointer
-    display: flex
-    align-content: center
-    justify-content: center
+	.message-wrapper
+		.message-title
+			color: srgb(--color-bg-ac-bright)
+		min-width: 0
+		padding: 3px 3px 3px 6px
+		width: 100%
+
+	.embedded-cancel
+		cursor: pointer
+		display: flex
+		align-content: center
+		justify-content: center
+		color: srgb(--color-bg-ac-bright)
+
+		i
+			font-size: 1.2em
+			color : srgb(--color-bad)
 </style>

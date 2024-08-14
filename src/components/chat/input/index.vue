@@ -51,7 +51,7 @@
 					<div
 						class="left"
 						:class="{ extended: voiceEnable }"
-						v-if="!streamMode && upload && chat"
+						v-if="!streamMode && upload && chat && !hasEmbedded"
 					>
 						<div
 							v-if="!isRecording && !record"

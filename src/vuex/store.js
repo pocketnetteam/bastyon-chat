@@ -78,6 +78,7 @@ var store = new Vuex.Store({
 		isCallsActive: null,
 		readreciepts: {},
 		ChatStatuses: {},
+		share : null
 		//share : {url : 'https://yandex.ru/'} //null
 	},
 	getters: {

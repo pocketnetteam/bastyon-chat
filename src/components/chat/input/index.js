@@ -1084,6 +1084,9 @@ export default {
 					})
 			);
 
+			
+			
+
 			this.prepareRecording
 				.then(() => {
 					this.microphoneDisabled = false;
@@ -1096,10 +1099,16 @@ export default {
 
 					this.audioContext = this.core.getAudioContext();
 
+					var unsleep = f.deep(window,"POCKETNETINSTANCE.mobile.unsleep")
+
+					if(unsleep) unsleep(true)
+
 					var media = (this.cordovaMediaRecorder = new Media(
 						path,
 						() => {
 							this.recordTime = 0;
+
+							if(unsleep) unsleep(false)
 
 							media.release();
 
@@ -1131,18 +1140,20 @@ export default {
 
 								return Promise.resolve();
 							})
-								.catch((e) => {
-									this.clear();
+							.catch((e) => {
+								this.clear();
 
-									console.error(e);
-								})
-								.finally(() => {});
+								console.error(e);
+							})
+							.finally(() => {});
 						},
 						(e) => {
 							console.error(e);
 
 							this.isRecording = false;
 							this.clear();
+
+							if(unsleep) unsleep(false)
 						}
 					));
 
