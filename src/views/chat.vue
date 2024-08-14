@@ -21,10 +21,10 @@
 					ref="chat"
 					@sending="sending"
 					@newchat="newchat"
-					:u="u"
+					:u="routeParams.u"
 					:chat="chat"
 					:toevent="toevent"
-					:key="key"
+					:key="routeParams.id"
 					:search="search"
 					:searchresults="processresult"
 					@removeBrokenRoom="creatorLeft"
@@ -94,37 +94,31 @@ export default {
 		contacts,
 	},
 	data: function () {
-		const u = this.$route.query.u;
-		const id = this.$route.query.id;
 		return {
 			events: [],
 			openInviteModal: false,
 			brokenRoom: false,
 			hideHeader: false,
-			//u,
-			//key: u + id,
 			hastoeventscrolled: false,
-			//chat: this.$store.state.chatsMap[id],
 			hasprocesscleared: false,
 			searchchanged: undefined,
 			process: null,
+			routeParams: {
+				id: this.$route.query.id,
+				u: this.$route.query.u,
+			},
 			processresult: null,
 			focusedevent: null,
 		};
 	},
 
 	computed: {
-		u() {
-			return this.$route.query.u;
-		},
 		chat() {
-			var id = this.$route.query.id;
-			return this.$store.state.chatsMap[id];
+			return this.$store.getters["getChatById"](this.routeParams.id);
 		},
 		key() {
-			return this.u + this.$route.query.id;
+			return this.routeParams.u + this.routeParams.id;
 		},
-		
 		processid() {
 			return this.hasprocesscleared ? null : this.$route.query.process;
 		},
