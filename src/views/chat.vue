@@ -18,6 +18,7 @@
 		<maincontent>
 			<template v-slot:content>
 				<chat
+					v-once
 					ref="chat"
 					@sending="sending"
 					@newchat="newchat"
@@ -94,17 +95,12 @@ export default {
 		contacts,
 	},
 	data: function () {
-		const u = this.$route.query.u;
-		const id = this.$route.query.id;
 		return {
 			events: [],
 			openInviteModal: false,
 			brokenRoom: false,
 			hideHeader: false,
-			//u,
-			//key: u + id,
 			hastoeventscrolled: false,
-			//chat: this.$store.state.chatsMap[id],
 			hasprocesscleared: false,
 			searchchanged: undefined,
 			process: null,
@@ -124,7 +120,7 @@ export default {
 		key() {
 			return this.u + this.$route.query.id;
 		},
-		
+
 		processid() {
 			return this.hasprocesscleared ? null : this.$route.query.process;
 		},
