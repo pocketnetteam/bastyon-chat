@@ -21,14 +21,14 @@
 						<span v-else>{{ $t("button.downloaded") }}</span>
 					</button>
 				</a>
-			</div>-->
+			</div>
 
 			<div class="download" >
 				<button class="button small rounded" @click="download">
 					<span v-if="!downloaded">{{ $t("button.download") }}</span>
 					<span v-else>{{ $t("button.downloaded") }}</span>
 				</button>
-			</div>
+			</div>-->
 			<template v-if="canDownload">
 				<div class="download" v-if="!encryptedData">
 					<a

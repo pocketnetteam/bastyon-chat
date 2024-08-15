@@ -858,11 +858,11 @@ class MTRX {
 
 		//var needdecrypt = true
 
-		var needdecrypt = chat.pcrypto && f.deep(event, "content.info.secrets.keys") || f.deep(event, "content.pbody.secrets.keys") ? true : false;
+		var needdecrypt = chat.pcrypto && (f.deep(event, "event.content.info.secrets.keys") || f.deep(event, "event.content.pbody.secrets.keys")) ? true : false;
 
 		//console.log('chat, event', chat, event)
 
-		console.log('needdecrypt', needdecrypt)
+		console.log('needdecrypt', needdecrypt, event)
 
 		if (needdecrypt){
 			try {
