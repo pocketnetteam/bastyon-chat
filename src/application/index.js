@@ -820,7 +820,7 @@ class Core {
 				],
 			})
 			.then((chat) => {
-				this.mtrx.client.setRoomRetention(chat.room_id, { max_lifetime: 0 });
+				this.mtrx.client.setRoomRetention(chat.room_id, { max_lifetime: '20y' });
 
 				return this.mtrx.client.setGuestAccess(chat.room_id, {
 					allowJoin: true,
