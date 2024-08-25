@@ -801,6 +801,8 @@ var store = new Vuex.Store({
 					store._vm.core.mtrx.kit.usersFromChats(m_chats)
 				);
 
+				//return Promise.resolve()
+
 				return store._vm.core.mtrx.kit.fillContacts(m_chats);
 			});
 		},

@@ -120,6 +120,11 @@ class MTRXKIT {
 	}
 
 	prepareChat(m_chat) {
+
+		if(m_chat.getJoinRule() === "public"){
+			return Promise.resolve()
+		}
+
 		return this.usersInfoForChatsStore([m_chat]).then(() => {
 			return this.core.pcrypto.addroom(m_chat);
 		});
@@ -127,7 +132,7 @@ class MTRXKIT {
 
 	fillContacts(m_chats) {
 		m_chats = _.filter(m_chats, (ch) => {
-			return ch.selfMembership == "join" && ch.name.length == 57;
+			return ch.selfMembership == "join" && ch.name.length == 57 && ch.getJoinRule() === "public";
 		});
 
 		return this.usersInfoForChatsStore(m_chats).then((i) => {
@@ -144,6 +149,7 @@ class MTRXKIT {
 	}
 
 	usersInfoForChatsStore(m_chats, reload) {
+
 		return this.usersInfoForChats(m_chats, reload)
 			.then((i) => {
 

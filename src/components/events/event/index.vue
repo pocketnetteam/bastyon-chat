@@ -301,31 +301,36 @@ export default {
 				//this.checkReaded();
 				this.relations();
 
-				if (this.encryptedData || this.subtype == "m.encrypted") {
-					f.pretry(
-						() => {
-							return this.chat.pcrypto;
-						},
-						20,
-						10000
-					).then(() => {
-						if (this.encryptedData && this.subtype == "m.image") {
-							this.decryptImage();
-						}
 
-						if (this.encryptedData && this.subtype == "m.audio") {
-							this.decryptAudio();
-						}
+				this.core.mtrx.kit.usersInfoById(this.event.getSender()).then(() => {
+					if (this.encryptedData || this.subtype == "m.encrypted") {
+						f.pretry(
+							() => {
+								return this.chat.pcrypto;
+							},
+							20,
+							10000
+						).then(() => {
+							if (this.encryptedData && this.subtype == "m.image") {
+								this.decryptImage();
+							}
 
-						if (this.subtype == "m.encrypted") {
-							this.decrypt();
+							if (this.encryptedData && this.subtype == "m.audio") {
+								this.decryptAudio();
+							}
+
+							if (this.subtype == "m.encrypted") {
+								this.decrypt();
+							}
+						});
+					} else {
+						if (this.subtype == "m.audio") {
+							this.getAudioUnencrypt();
 						}
-					});
-				} else {
-					if (this.subtype == "m.audio") {
-						this.getAudioUnencrypt();
 					}
-				}
+				})
+
+				
 			},
 		},
 	},

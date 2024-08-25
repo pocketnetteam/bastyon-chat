@@ -210,9 +210,10 @@ class MTRX {
 		localStorage.accessToken = userData.access_token;
 		var store = new sdk.IndexedDBStore({
 			indexedDB: window.indexedDB,
-			dbName: "matrix-js-sdk-v4:" + this.credentials.username,
+			dbName: "matrix-js-sdk-v5:" + this.credentials.username,
+			localStorage: window.localStorage
 		});
-		await store.startup();
+		
 
 		Object.assign(userClientData, {
 			userId: userData.user_id,
@@ -229,6 +230,8 @@ class MTRX {
 		window.client = userClient;
 		window.core = this.core;
 
+		await store.startup();
+
 		this.client = userClient;
 
 		this.initEvents();
@@ -236,6 +239,8 @@ class MTRX {
 		await userClient.startClient({
 			pollTimeout: 60000,
 			resolveInvitesToProfiles: true,
+			initialSyncLimit : 4,
+			disablePresence : true
 		});
 
 		this.access = userClientData;
@@ -458,6 +463,11 @@ class MTRX {
 		});
 
 		this.client.on("sync", (state, prevState, res) => {
+
+			if (state === "PREPARED") {
+				console.log("PREPARED");
+			}
+
 			this.setready();
 
 			this.core.store.dispatch("FETCH_CHATS").then((r) => {});
