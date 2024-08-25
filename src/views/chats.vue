@@ -36,7 +36,7 @@
 		</div>
 		<div id="ChatContent">
 			<transition name="fade">
-				<keep-alive>
+				<keep-alive :max="5">
 					<router-view :key="activeRoomId" />
 				</keep-alive>
 			</transition>
