@@ -10,11 +10,17 @@
 		}"
 	>
 		<div class="searchWrapper">
-			
 			<div class="inputWrapper">
 				<input
 					ref="input"
-					@paste="paste" @keydown="keydown" :placeholder="placeholder || this.$i18n.t('caption.search')" @keyup="change" @input="change" :value="searchTxt" @focus="focused" @blur="blured" type="text"
+					@paste="paste"
+					@keydown="keydown"
+					:placeholder="placeholder || this.$i18n.t('caption.search')"
+					@input="change"
+					:v-model="searchTxt"
+					@focus="focused"
+					@blur="blured"
+					type="text"
 				/>
 			</div>
 
@@ -32,8 +38,6 @@
 						<i class="fas fa-times"></i>
 					</div>
 				</slot>
-				
-
 			</template>
 		</div>
 	</div>
