@@ -132,7 +132,7 @@ class MTRXKIT {
 
 	fillContacts(m_chats) {
 		m_chats = _.filter(m_chats, (ch) => {
-			return ch.selfMembership == "join" && ch.name.length == 57 && ch.getJoinRule() === "public";
+			return ch.selfMembership == "join" && ch.name.length == 57 && ch.getJoinRule() != "public";
 		});
 
 		return this.usersInfoForChatsStore(m_chats).then((i) => {
