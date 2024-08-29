@@ -24,13 +24,13 @@
 				<span v-if="share">{{ $t("caption.shareWith") }}</span>
 			</template>
 
-			<template v-slot:rightadd>
+			<!--<template v-slot:rightadd>
 				<router-link to="settings" v-if="!share">
 					<div class="iconbuttonsmall">
 						<i class="fas fa-cog"></i>
 					</div>
 				</router-link>
-			</template>
+			</template>-->
 
 			<template v-slot:right>
 				<div

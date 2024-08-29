@@ -14,8 +14,8 @@
 		</div>
 
 		<div v-if="content.msgtype === 'm.file'" class="previewMessage">
-			<span class="sname txt" v-if="senderName">{{ senderName == 'You' ? core.vm.$i18n.t("caption.you") : senderName }}&nbsp;</span>
-			<span class="txt"> {{ core.vm.$i18n.t("caption.sentfile") }} {{ JSON.parse(content.body).name }} </span>
+			<span class="sname txt" v-if="senderName && senderName != 'You' && !tetatetchat">{{ senderName == 'You' ? core.vm.$i18n.t("caption.you") : senderName }}&nbsp;</span>
+			<span class="txt">{{ core.vm.$i18n.t("caption.sentfile") }} {{ JSON.parse(content.body).name }} </span>
 		</div>
 
 		<div v-if="content.msgtype === 'm.bad.encrypted'" class="previewMessage">
@@ -33,19 +33,19 @@
 			v-if="event.event.type === 'm.room.power_levels'"
 			class="previewMessage"
 		>
-			<span v-if="senderName" class="txt sname">{{ senderName == 'You' ? core.vm.$i18n.t("caption.you") : senderName }}:&nbsp;</span>
+			<span v-if="senderName && senderName != 'You'" class="txt sname">{{ senderName == 'You' ? core.vm.$i18n.t("caption.you") : senderName }}:&nbsp;</span>
 			<span class="txt">
 				{{ powerLevels }}
 			</span>
 		</div>
 
 		<div v-if="content.msgtype === 'm.image'" class="previewMessage">
-			<span v-if="senderName" class="txt sname">{{ senderName == 'You' ? core.vm.$i18n.t("caption.you") : senderName }}:&nbsp;</span
+			<span v-if="senderName && senderName != 'You' && !tetatetchat" class="txt sname">{{ senderName == 'You' ? core.vm.$i18n.t("caption.you") : senderName }}:&nbsp;</span
 			><span class="txt">{{ core.vm.$i18n.t("caption.sentImage") }}</span>
 		</div>
 
 		<div v-if="content.msgtype === 'm.audio'" class="previewMessage">
-			<span v-if="senderName" class="txt sname">{{ senderName == 'You' ? core.vm.$i18n.t("caption.you") : senderName}}:&nbsp;</span
+			<span v-if="senderName && senderName != 'You' && !tetatetchat" class="txt sname">{{ senderName == 'You' ? core.vm.$i18n.t("caption.you") : senderName}}:&nbsp;</span
 			><span class="txt">{{ core.vm.$i18n.t("caption.sentVoiceMessage") }}</span>
 		</div>
 
@@ -64,7 +64,7 @@
 			v-if="content.msgtype === 'm.text' && !urlpreview"
 			class="previewMessage"
 		>
-			<span v-if="senderName && senderName != 'You'" class="txt sname"
+			<span v-if="senderName && senderName != 'You' && !tetatetchat" class="txt sname"
 				>{{ senderName == 'You' ? core.vm.$i18n.t("caption.you") : senderName }}:&nbsp;</span
 			><IncomingMessage
 				:message="content.body"
@@ -78,7 +78,7 @@
 			v-if="content.msgtype === 'm.encrypted' && !urlpreview"
 			class="previewMessage"
 		>
-			<span v-if="senderName && senderName != 'You'" class="txt sname"
+			<span v-if="senderName && senderName != 'You' && !tetatetchat" class="txt sname"
 				>{{ senderName == 'You' ? core.vm.$i18n.t("caption.you") : senderName }}:&nbsp;</span
 			><IncomingMessage
 				:message="decryptEvent.body"
@@ -88,7 +88,7 @@
 		</div>
 
 		<div v-if="content.membership === 'invite'" class="invitedEvent">
-			<span v-if="senderName" class="txt sname">{{ senderName == 'You' ? core.vm.$i18n.t("caption.you") : senderName }}:&nbsp;</span>
+			<span v-if="senderName && senderName != 'You' && !tetatetchat" class="txt sname">{{ senderName == 'You' ? core.vm.$i18n.t("caption.you") : senderName }}:&nbsp;</span>
 			<span class="txt" v-if="tetatetchat">{{
 				core.vm.$i18n.t("caption.invitationToChat")
 			}}</span>
@@ -98,19 +98,19 @@
 		</div>
 
 		<div v-if="content.membership === 'leave'" class="previewMessage">
-			<span v-if="senderName" class="txt sname">{{ senderName == 'You' ? core.vm.$i18n.t("caption.you") : senderName }}:&nbsp;</span>
+			<span v-if="senderName && senderName != 'You'" class="txt sname">{{ senderName == 'You' ? core.vm.$i18n.t("caption.you") : senderName }}:&nbsp;</span>
 			<span class="txt sname"> {{ name }} </span>
 			<span class="txt">{{ core.vm.$i18n.t("caption.leftChat") }}</span>
 		</div>
 		<div v-if="content.membership === 'ban'">
 			<span v-if="senderName" class="txt sname">{{ senderName == 'You' ? core.vm.$i18n.t("caption.you") : senderName }}&nbsp;</span>
-			<span class="txt">banned {{ content.displayname }}</span>
+			<span class="txt">{{core.vm.$i18n.t("caption.banned")}}: {{ content.displayname }}</span>
 		</div>
 		<div
 			v-if="content.membership === 'join' && event.getSender() !== userId"
 			class="invitedEvent"
 		>
-			<span v-if="senderName" class="txt sname">{{ senderName == 'You' ? core.vm.$i18n.t("caption.you") : senderName }}&nbsp;</span
+			<span v-if="senderName && senderName != 'You'" class="txt sname">{{ senderName == 'You' ? core.vm.$i18n.t("caption.you") : senderName }}&nbsp;</span
 			><span class="txt">{{ core.vm.$i18n.t("caption.joined") }}</span>
 		</div>
 
@@ -126,9 +126,10 @@
 			>
 		</div>
 
-		<div class="statusWrapper" v-if="readed">
-			<div class="my" v-if="my">
-				<i class="fas fa-check-double"></i>
+		<div class="statusWrapper" v-if="my">
+			<div class="my">
+				<i class="fas fa-check-double" v-if="readed"></i>
+				<i class="fas fa-check" v-else></i>
 			</div>
 		</div>
 	</div>
