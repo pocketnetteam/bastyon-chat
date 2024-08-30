@@ -13,11 +13,8 @@ export default {
 	components: {
 		chatPreview,
 	},
-	
-	inject: [
-		"streamMode",
-		"videoMeta"
-	],
+
+	inject: ["streamMode", "videoMeta"],
 
 	data: function () {
 		return {
@@ -28,7 +25,11 @@ export default {
 	},
 
 	created: () => {},
-
+	mounted() {
+		this.core.mtrx.client.peekInRoom(this.m_chat.roomId).then((room) => {
+			console.log("peekInRoom - room:", room);
+		});
+	},
 	watch: {},
 	computed: mapState({
 		hiddenInParent: (state) => state.hiddenInParent,
@@ -48,7 +49,6 @@ export default {
 			}
 		},
 	}),
-	mounted: function () {},
 	methods: {
 		join: function () {
 			if (this.streamMode && !this.videoMeta?.isLive) return;

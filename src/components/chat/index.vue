@@ -25,7 +25,7 @@
 			</div>
 		</div>
 
-		<div class="chatcontent" v-else>
+		<div class="chatcontent">
 			<list
 				ref="list"
 				:error="error"
@@ -39,7 +39,7 @@
 				@eventImage="(e) => galleryImage(e)"
 				@scroll="scroll"
 				@menuIsVisible="menuIsVisibleHandler"
-				v-if="m_chat && allowedToRead && ready"
+				v-if="m_chat"
 				v-show="!userBanned?.value"
 				@getEvents="events"
 				:selectedMessages="selectedMessages"

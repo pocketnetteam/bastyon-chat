@@ -24,7 +24,7 @@
 					:u="routeParams.u"
 					:chat="chat"
 					:toevent="toevent"
-					:key="routeParams.id"
+					:key="key"
 					:search="search"
 					:searchresults="processresult"
 					@removeBrokenRoom="creatorLeft"

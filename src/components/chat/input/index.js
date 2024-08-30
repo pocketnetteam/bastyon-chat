@@ -545,14 +545,23 @@ export default {
 								},
 							},
 						];
+						console.log("||dsad");
 
-						return this.core.mtrx.client.createRoom({
-							room_alias_name: id,
-							visibility: "private",
-							invite: [matrixId],
-							name: "#" + id,
-							initial_state: initialstate,
-						});
+						return this.core.mtrx.client
+							.createRoom({
+								room_alias_name: id,
+								visibility: "private",
+								invite: [matrixId],
+								name: "#" + id,
+								initial_state: initialstate,
+							})
+							.then((room) => {
+								console.log(room, "chat");
+								this.core.mtrx.client.setInvitedAccess(room.room_id, {
+									allowRead: true,
+								});
+								return room;
+							});
 					})
 					.then((_chat) => {
 						chat = _chat;
@@ -1084,9 +1093,6 @@ export default {
 					})
 			);
 
-			
-			
-
 			this.prepareRecording
 				.then(() => {
 					this.microphoneDisabled = false;
@@ -1099,16 +1105,16 @@ export default {
 
 					this.audioContext = this.core.getAudioContext();
 
-					var unsleep = f.deep(window,"POCKETNETINSTANCE.mobile.unsleep")
+					var unsleep = f.deep(window, "POCKETNETINSTANCE.mobile.unsleep");
 
-					if(unsleep) unsleep(true)
+					if (unsleep) unsleep(true);
 
 					var media = (this.cordovaMediaRecorder = new Media(
 						path,
 						() => {
 							this.recordTime = 0;
 
-							if(unsleep) unsleep(false)
+							if (unsleep) unsleep(false);
 
 							media.release();
 
@@ -1140,12 +1146,12 @@ export default {
 
 								return Promise.resolve();
 							})
-							.catch((e) => {
-								this.clear();
+								.catch((e) => {
+									this.clear();
 
-								console.error(e);
-							})
-							.finally(() => {});
+									console.error(e);
+								})
+								.finally(() => {});
 						},
 						(e) => {
 							console.error(e);
@@ -1153,7 +1159,7 @@ export default {
 							this.isRecording = false;
 							this.clear();
 
-							if(unsleep) unsleep(false)
+							if (unsleep) unsleep(false);
 						}
 					));
 

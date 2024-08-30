@@ -403,6 +403,7 @@ export default {
 		},
 
 		events(data) {
+			console.log(data, "getStateEvents - data");
 			this.$emit("getEvents", data);
 			this.chatEvents = data;
 		},
