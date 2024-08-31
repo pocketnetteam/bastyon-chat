@@ -10,6 +10,20 @@ import fileSaver from "file-saver";
 import ChatStorage from "./chatstorage";
 import SearchEngine from "./searchEngine";
 
+import { logger as mxLogger } from 'matrix-js-sdk-bastyon/lib/logger';
+
+// rewrite matrix logger
+mxLogger.info = (...msg) =>
+	console.log('matrix: ' + msg.join(' '));
+mxLogger.log = (...msg) =>
+	console.log('matrix: ' + msg.join(' '));
+mxLogger.warn = (...msg) =>
+	console.log('matrix: ' + msg.join(' '));
+mxLogger.error = (...msg) =>
+	console.error('matrix: ' + msg.join(' '));
+mxLogger.trace = (...msg) =>
+	console.log('matrix: ' + msg.join(' '));
+
 var axios = require("axios");
 
 class MTRX {
@@ -230,7 +244,12 @@ class MTRX {
 		window.client = userClient;
 		window.core = this.core;
 
-		await store.startup();
+		try{
+			await store.startup();
+		}catch(e){
+			console.error('matrix:', e)
+		}
+		
 
 		this.client = userClient;
 
@@ -637,7 +656,7 @@ class MTRX {
 	}
 
 	textEvent(chat, text, clbks = {}) {
-		if (chat.pcrypto.canBeEncrypt()) {
+		if (chat.pcrypto?.canBeEncrypt()) {
 			if (clbks.encryptEvent) clbks.encryptEvent();
 
 			return chat.pcrypto.encryptEvent(text).then((e) => {
@@ -672,7 +691,7 @@ class MTRX {
 				r["url"] = donateLink;
 			}
 
-			if (chat.pcrypto.canBeEncrypt()) {
+			if (chat.pcrypto?.canBeEncrypt()) {
 				return this.client.sendEvent(chat.roomId, "m.room.message", r);
 			} else return this.client.sendMessage(chat.roomId, r);
 		});
@@ -688,7 +707,7 @@ class MTRX {
 
 		var encpromise = (() => Promise.resolve(file))();
 		var promise = null;
-		if (chat.pcrypto.canBeEncrypt() && !notenc) {
+		if (chat.pcrypto?.canBeEncrypt() && !notenc) {
 			encpromise = chat.pcrypto.encryptFile(file).then((r) => {
 				fileInfo.secrets = r.secrets;
 
@@ -770,7 +789,7 @@ class MTRX {
 
 				if (from) info.from = from;
 
-				if (chat.pcrypto.canBeEncrypt()) {
+				if (chat.pcrypto?.canBeEncrypt()) {
 					return chat.pcrypto.encryptFile(file).then((r) => {
 						info.secrets = r.secrets;
 						return Promise.resolve(r.file);
@@ -823,7 +842,7 @@ class MTRX {
 		info.from = from;
 
 		return new Promise((resolve) => {
-			if (chat.pcrypto.canBeEncrypt()) {
+			if (chat.pcrypto?.canBeEncrypt()) {
 				return chat.pcrypto.encryptFile(file).then((r) => {
 					info.secrets = r.secrets;
 					return resolve(r.file);

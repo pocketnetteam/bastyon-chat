@@ -2052,6 +2052,23 @@ f.wordComparison = function (s1, s2) {
 
 }
 
+f.format_date = function(value){
+	var today = moment()
+
+	if ((today.diff(value, 'days')) === 0 && moment(value).day() == today.day()) {
+		if ((today.diff(value, 'hours') < 12)) return moment(moment.utc(value).toDate()).local().fromNow();
+
+		return  new Date(value).toLocaleTimeString([], { hour: '2-digit', minute: "2-digit", hour12: false })
+	}
+
+	var mvalue = moment(value)
+
+	if (today.year() === mvalue.year())
+		return mvalue.local().format('D MMMM, HH:mm')
+
+	return mvalue.local().format('D MMMM YYYY')
+}
+
 f.clientsearch = function (value, arr, exe) {
     var txt = value
     var ctxt = txt.toLowerCase().replace(/[^\p{L}\p{N}\p{Z}]/gu, '')

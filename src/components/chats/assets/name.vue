@@ -84,7 +84,7 @@ export default {
 			) {
 				return this.m_chat.currentState
 					.getStateEvents("m.room.name")[0]
-					.getContent().name;
+					.getContent()?.name;
 			}
 			var users = _.filter(this.users, (user) => {
 				return user.userId != this.core.user.userinfo.id;
@@ -108,8 +108,8 @@ export default {
 				return "-";
 			}
 
-			if (this.m_chat.name.indexOf("@") == 0)
-				return this.m_chat.name.replace("@", "");
+			if (this.m_chat?.name.indexOf("@") == 0)
+				return this.m_chat?.name.replace("@", "");
 
 			return names.join(", ");
 		},
@@ -127,7 +127,7 @@ export default {
 
 		isShowGroupIcon() {
 
-			return !this.chat.miniappchat && this.m_chat.name.slice(0, 1) === "@";
+			return !this.chat.miniappchat && this.m_chat?.name.slice(0, 1) === "@";
 		},
 
 		miniappicon(){

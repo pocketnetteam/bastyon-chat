@@ -43,6 +43,8 @@ export default {
 			events: [],
 			firstPaginate: true,
 			readPromise: null,
+
+			activated : false
 		};
 	},
 
@@ -69,6 +71,23 @@ export default {
 		"filter.type": function () {
 			this.init();
 		},
+
+		activated : {
+			immediate : true, 
+			handler : function(){
+
+				if(this.updateInterval){
+					clearInterval(this.updateInterval)
+					this.updateInterval = null
+				}
+
+				if (this.activated){
+					this.updateInterval = setInterval(this.update, 300);
+				}
+				else{
+				}
+			}
+		}
 	},
 	computed: mapState({
 		lloading: function () {
@@ -115,14 +134,25 @@ export default {
 	}),
 
 	created() {
-		this.updateInterval = setInterval(this.update, 300);
+
+		this.activated = true
 	},
-	destroyed() {
+	beforeDestroy() {
+
+		this.activated = false
+
 		if (this.timeline) {
 			this.timeline.unpaginate(this.timeline._eventCount, true);
 		}
 
-		clearInterval(this.updateInterval);
+	},
+
+	activated(){
+		this.activated = true
+	},
+
+	deactivated(){
+		this.activated = false
 	},
 
 	methods: {
@@ -665,6 +695,7 @@ export default {
 		},
 
 		update: function (e) {
+			if (!this.activated) return
 			if (!this.scrolling) {
 				this.autoPaginateAll();
 			} else {

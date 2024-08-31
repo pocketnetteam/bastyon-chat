@@ -1,284 +1,287 @@
 .attachements
-    position: absolute
-    left: 0
-    top: 0
-    right: 0
-    padding: $r $r
-    overflow-y: scroll
+	position: absolute
+	left: 0
+	top: 0
+	right: 0
+	padding: $r $r
+	overflow-y: scroll
 
-    .attachementsWrapper
-        display: flex
-        align-items: center
-        flex-wrap: nowrap
-        flex-grow: 1
-        flex-direction: row
+	.attachementsWrapper
+		display: flex
+		align-items: center
+		flex-wrap: nowrap
+		flex-grow: 1
+		flex-direction: row
 
-        ::v-deep #chatAttachement
-            margin-right: $r
-            min-width: 120px
+		::v-deep #chatAttachement
+			margin-right: $r
+			min-width: 120px
 
 .joinwrapper
-    position: absolute
-    left: 0
-    top : 0
-    bottom: 0
-    right: 0
-    padding-bottom : 0
-    overflow-x: scroll
+	position: absolute
+	left: 0
+	top : 0
+	bottom: 0
+	right: 0
+	padding-bottom : 0
+	overflow-x: scroll
 
 
 .cantchatmessage
-    padding: 4 * $r
+	padding: 4 * $r
 
-    .proceed
-        padding-top: 2 * $r
+	.proceed
+		padding-top: 2 * $r
 
-        button
-            padding-left: 0
+		button
+			padding-left: 0
 
-    .refresh
-        padding-top: 4 * $r
+	.refresh
+		padding-top: 4 * $r
 
-    .msg
-        font-size: 0.8em
+	.msg
+		font-size: 0.8em
 
 .encryptedInfo
-    position: relative
-    z-index: 9999
-    display: flex
-    justify-content: center
-    align-items: center
-    flex-direction: column
-    
-    #slide
-        padding: 0 $r
-        position: absolute
-        left: -180px
-        top: 0px
-        background: srgb(--background-main)
-        color: srgb(--text-color)
-        border-bottom-right-radius: 8px
-        border-top-right-radius: 8px
-        -webkit-animation: slide 0.1s forwards
-        -webkit-animation-delay: .3s
-        animation: slide 0.1s forwards
-        animation-delay: .3s
-        +shadowSmaller()
+	position: relative
+	z-index: 9999
+	display: flex
+	justify-content: center
+	align-items: center
+	flex-direction: column
+	
+	#slide
+		padding: 0 $r
+		position: absolute
+		left: -180px
+		top: 0px
+		background: srgb(--background-main)
+		color: srgb(--text-color)
+		border-bottom-right-radius: 8px
+		border-top-right-radius: 8px
+		-webkit-animation: slide 0.1s forwards
+		-webkit-animation-delay: .3s
+		animation: slide 0.1s forwards
+		animation-delay: .3s
+		+shadowSmaller()
 
-    @-webkit-keyframes slide
-        100%
-            left: 0px
-    @keyframes slide
-        100%
-            left: 0px
+	@-webkit-keyframes slide
+		100%
+			left: 0px
+	@keyframes slide
+		100%
+			left: 0px
 
-    button
-        cursor: pointer
-        display: flex
-        align-items: center
-        justify-content: flex-start
-        text-align: left
-        i
-            margin-right: 5px
+	button
+		cursor: pointer
+		display: flex
+		align-items: center
+		justify-content: flex-start
+		text-align: left
+		i
+			margin-right: 5px
 
-    .encryptedTxtIcon
-        flex-direction: column
-        align-items: center
-        justify-content: center
-        padding: 0.5 * $r 0.5 * $r
-        text-align: center
-        span
-            color: srgb(--color-good)
-            font-size: 0.8em
-        i
-            color: srgb(--color-good)
-            display: none
+	.encryptedTxtIcon
+		flex-direction: column
+		align-items: center
+		justify-content: center
+		padding: 0.5 * $r 0.5 * $r
+		text-align: center
+		span
+			color: srgb(--color-good)
+			font-size: 0.8em
+		i
+			color: srgb(--color-good)
+			display: none
 
 .blockedcaption
-    text-align: center
+	text-align: center
 
-    span
-        font-size: 0.8em
+	span
+		font-size: 0.8em
 
 .relationEvent
-    display: flex
-    align-items: flex-end
-    width: 100%
+	display: flex
+	align-items: flex-end
+	width: 100%
 
-    .relationEventWrapper
-        padding-bottom: 2 * $r
-    .relationEventCaption
-        padding: 2 * $r 0
-        padding-bottom: $r
-        span
-            font-size: 0.8em
-            font-weight: 700
-            color: srgb(--color-txt-ac)
+	.relationEventWrapper
+		padding-bottom: 2 * $r
+	.relationEventCaption
+		padding: 2 * $r 0
+		padding-bottom: $r
+		span
+			font-size: 0.8em
+			font-weight: 700
+			color: srgb(--color-txt-ac)
 
-    .relationEventPreview
-        flex-grow: 1
-        padding: 0 2 * $r
-        padding-top: 0
+	.relationEventPreview
+		flex-grow: 1
+		padding: 0 2 * $r
+		padding-top: 0
 
-    ::v-deep
-        .previewMessage
-            font-size: 0.9em
+	::v-deep
+		.previewMessage
+			font-size: 0.9em
 
-    .relationEventActions
-        width: 55px
-        min-width: 55px
-        .item
-            width: 100%
-            padding: $r 0
-            cursor: pointer
-            text-align: center
+		.statusWrapper
+			display: none
+
+	.relationEventActions
+		width: 55px
+		min-width: 55px
+		.item
+			width: 100%
+			padding: $r 0
+			cursor: pointer
+			text-align: center
 
 .chatInputWrapper
-    position: absolute
-    z-index: 3
-    bottom: -1px
-    background: transparent
-    left: 0
-    right: 0
-    padding-bottom: calc(var(--app-margin-bottom, 0) + 5px)
-    background: srgb(--background-total-theme)
-    will-change: transform
-    transform: translate3d(0, calc((var(--keyboardheight, 0) - 1px) * -1), 0)
-    +transition(0.3s)
+	position: absolute
+	z-index: 3
+	bottom: -1px
+	background: transparent
+	left: 0
+	right: 0
+	padding-bottom: calc(var(--app-margin-bottom, 0) + 5px)
+	background: srgb(--background-total-theme)
+	will-change: transform
+	transform: translate3d(0, calc((var(--keyboardheight, 0) - 1px) * -1), 0)
+	+transition(0.3s)
 
-    &.bin
-        position: absolute
-        left: 1px
-        right: 1px
-        bottom: 0
-        border-radius: 5px
+	&.bin
+		position: absolute
+		left: 1px
+		right: 1px
+		bottom: 0
+		border-radius: 5px
 
 #chat
-    &.minimized
-        .chatInputWrapper
-            opacity: 0
-            padding-bottom: 0
+	&.minimized
+		.chatInputWrapper
+			opacity: 0
+			padding-bottom: 0
 
-        &:not(.active)
-            .statusWrapper
-                width: 33px
-                i
-                    color: srgb(--color-txt-ac)
+		&:not(.active)
+			.statusWrapper
+				width: 33px
+				i
+					color: srgb(--color-txt-ac)
 
-                    span
-                        display: none
+					span
+						display: none
 
-                .messageRow
-                    padding: 0!important
-                    background: transparent!important
+				.messageRow
+					padding: 0!important
+					background: transparent!important
 
-                .event
-                    padding-bottom: $r
+				.event
+					padding-bottom: $r
 
-                #events
-                    transform: translate3d(0.5 * $r, 30px, 0)
+				#events
+					transform: translate3d(0.5 * $r, 30px, 0)
 
-                .iconWrapper
-                    margin-left: 0 * $r!important
+				.iconWrapper
+					margin-left: 0 * $r!important
 
-                [my="true"]
-                    justify-content: flex-start
-                    .iconWrapper
-                        margin-left: 0 * $r!important
-                        order: -1
-                        align-self: flex-end
+				[my="true"]
+					justify-content: flex-start
+					.iconWrapper
+						margin-left: 0 * $r!important
+						order: -1
+						align-self: flex-end
 
-                /*.event.my,*/
-                .userpic:after,
-                .linkPreview,
-                .labelwrapper,
-                .timeWrapper,
-                .maxcontent,
-                .messageImg,
-                .actionsWrapper,
-                .filePreview
-                    display: none
+				/*.event.my,*/
+				.userpic:after,
+				.linkPreview,
+				.labelwrapper,
+				.timeWrapper,
+				.maxcontent,
+				.messageImg,
+				.actionsWrapper,
+				.filePreview
+					display: none
 
-        &.active
-            padding-bottom: 90px
-            .chatInputWrapper
-                opacity: 1
+		&.active
+			padding-bottom: 90px
+			.chatInputWrapper
+				opacity: 1
 
 .encrypted
-    position: absolute
-    left : 0
-    top : 0
-    z-index: 2
-    color : srgb(--color-good)
-    padding : 0.5 * $r $r
+	position: absolute
+	left : 0
+	top : 0
+	z-index: 2
+	color : srgb(--color-good)
+	padding : 0.5 * $r $r
 
-    i
-        font-size: 0.8em
-        cursor: pointer
+	i
+		font-size: 0.8em
+		cursor: pointer
 
 .roomMuted
-    position: absolute
-    left: 5px
-    top: 20px
-    z-index: 2
-    color: srgb(--neutral-grad-3)
-    i
-        font-size: 0.8em
+	position: absolute
+	left: 5px
+	top: 20px
+	z-index: 2
+	color: srgb(--neutral-grad-3)
+	i
+		font-size: 0.8em
 
 .chatEmpty
-    padding: 8 * $r
-    text-align: center
-    color: srgb(--neutral-grad-3)
+	padding: 8 * $r
+	text-align: center
+	color: srgb(--neutral-grad-3)
 
-    span
-        font-size: 0.8em
+	span
+		font-size: 0.8em
 
 .preview-wrapper
-    max-height: 350px
-    overflow-y: auto
-    border: 1px solid srgb(srgb(--neutral-grad-2))
-    border-radius: 10px
-    margin: 0 auto
-    width: 98%
+	max-height: 350px
+	overflow-y: auto
+	border: 1px solid srgb(srgb(--neutral-grad-2))
+	border-radius: 10px
+	margin: 0 auto
+	width: 98%
 
-    &::-webkit-scrollbar
-        width: 0!important
+	&::-webkit-scrollbar
+		width: 0!important
 
 .shareEventsWrapper
-    .cnt
+	.cnt
 
-        background: srgb(--background-secondary-theme)
-        border-radius: 30px
-        padding: 0.5em 1em
-        max-width: 622px
-        width: 100%
-        margin: 0 auto
-        display: flex
-        align-items: center
-        justify-content: space-between
-        font-size: 0.9em
+		background: srgb(--background-secondary-theme)
+		border-radius: 30px
+		padding: 0.5em 1em
+		max-width: 622px
+		width: 100%
+		margin: 0 auto
+		display: flex
+		align-items: center
+		justify-content: space-between
+		font-size: 0.9em
 
 
 
-        i
-            margin-right: 10px
-            &.fa-trash-alt
-                color: rgb(244, 26, 77)
+		i
+			margin-right: 10px
+			&.fa-trash-alt
+				color: rgb(244, 26, 77)
 
-            &.fa-share-alt
-                color: #00a3f7
+			&.fa-share-alt
+				color: #00a3f7
 
-        div
-            transition: 0.3s
-            opacity: 0.6
-            cursor: pointer
-            margin-left: 2 * $r
-            display: flex
-            align-items: center
-            &:hover
-                transition: 0.3s
-                opacity: 1
+		div
+			transition: 0.3s
+			opacity: 0.6
+			cursor: pointer
+			margin-left: 2 * $r
+			display: flex
+			align-items: center
+			&:hover
+				transition: 0.3s
+				opacity: 1
 
-            &.cancel
-                margin-right: auto
-                margin-left: 0
+			&.cancel
+				margin-right: auto
+				margin-left: 0

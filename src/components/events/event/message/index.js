@@ -605,6 +605,10 @@ export default {
 		},
 
 		format_date(value) {
+
+
+			return this.$f.format_date(value)
+
 			if (value) {
 				if (moment().diff(value, "days") === 0) {
 					return new Date(value).toLocaleTimeString([], {

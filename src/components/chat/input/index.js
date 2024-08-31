@@ -822,7 +822,7 @@ export default {
 		canencryptfilesize: function (file) {
 			var s = 10 * 1024 * 1024;
 
-			if (!this.chat.pcrypto.canBeEncrypt()) {
+			if (!this.chat.pcrypto?.canBeEncrypt()) {
 				return Promise.resolve(false);
 			}
 

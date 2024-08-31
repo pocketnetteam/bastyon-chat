@@ -10,7 +10,7 @@
 						v-if="!empty(user)"
 					>
 						<div class="userinfoWrapper" :class="{ filter: undefinedRoom }">
-							<userView :userinfo="user" v-if="user.name" />
+							<userView :userinfo="user" v-if="user && user.name" />
 						</div>
 					</div>
 				</div>

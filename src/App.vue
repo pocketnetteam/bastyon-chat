@@ -443,6 +443,8 @@ export default {
 				// Update the teamroom messages
 				this.generateTeamroomMessages();
 
+				moment.locale(i18n.locale)
+
 				if (this.core && this.core.exporter) {
 					this.core.exporter.changeLocalization(i18n.locale);
 				}

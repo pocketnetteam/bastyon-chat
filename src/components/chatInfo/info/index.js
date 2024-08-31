@@ -115,7 +115,7 @@ export default {
 					this.core.mtrx.kit.prepareChat(this.m_chat).then((r) => {
 						this.ready = true;
 
-						this.encrypted = this.m_chat.pcrypto.canBeEncrypt();
+						this.encrypted = this.m_chat.pcrypto?.canBeEncrypt();
 					});
 
 

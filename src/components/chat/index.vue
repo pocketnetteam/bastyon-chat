@@ -68,7 +68,7 @@
 			</div>
 
 			<div
-				v-if="!userBanned?.value && (!m_chat || membership === 'join')"
+				v-if="activated && !userBanned?.value && (!m_chat || membership === 'join')"
 				class="chatInputWrapper fixedOnPageBottom"
 				:class="{ bin: pocketnet, bout: !pocketnet }"
 			>
@@ -149,7 +149,7 @@
 
 			<div
 				class="encrypted fixedOnPageTop"
-				v-if="!streamMode && encrypted && membership != 'invite'"
+				v-if="activated && !streamMode && encrypted && membership != 'invite'"
 				@mouseover="(e) => (hoverEncrypt = true)"
 			>
 				<i v-if="!encrypting" class="fas fa-lock"></i>
@@ -183,7 +183,7 @@
 			</div>
 		</div>
 		<userRoomStatus
-			v-if="userBanned?.value || roomUserBanned"
+			v-if="activated && userBanned?.value || roomUserBanned"
 			:chat="chat"
 			:text="`You've have been banned in this room`"
 		/>

@@ -52,12 +52,27 @@ export default {
 			showInput: true,
 			showShareMessages: false,
 			selectedMessages: [],
+			activated : false,
+			membershipReactivity : null
 		};
 	},
 
-	created() {},
+	created() {
+		
+	},
+
+	activated(){
+		this.activated = true
+	},
+
+	deactivated(){
+		this.activated = false
+	},
 
 	mounted() {
+
+		this.activated = true
+
 		if (!this.streamMode) {
 			this.getuserinfo();
 
@@ -65,53 +80,34 @@ export default {
 			this.$store.commit("blockactive", { value: true, item: "chat" });
 		}
 
-		this.membershipReactivity = setInterval(() => {
-			if (this.m_chat && !this.streamMode) {
-				if (this.m_chat.timeline.length > 0) {
-					const id = this.core.mtrx.client.credentials.userId,
-						timeline = this.core.mtrx.client.getRoom(this.chat.roomId).timeline,
-						lastEvent = timeline[timeline.length - 1];
-
-					if (
-						lastEvent.event.state_key === id &&
-						lastEvent.event.content.reason === "admin ban"
-					) {
-						this.roomUserBanned = true;
-					} else {
-						this.roomUserBanned = false;
-					}
-				}
-			} else if (this.streamMode) {
-				this.roomUserBanned =
-					this.m_chat?.currentState.members[this.m_chat.myUserId]
-						?.membership === "ban";
-			}
-
-			this.membership =
-				this.m_chat?.currentState.members[this.m_chat.myUserId]?.membership;
-		}, 1000);
+		this.createMembershipReactivity()
 	},
 
 	destroyed() {
+
 		if (!this.streamMode) {
 			this.$store.commit("blockactive", { value: false, item: "chat" });
 			this.$store.commit("SET_CURRENT_ROOM", false);
 		}
 
-		this.clearintrv();
 		clearInterval(this.membershipReactivity);
 	},
 
+	beforeDestroy(){
+		this.activated = false
+	},
+
 	watch: {
-		needcreatekey: function () {
-			if (this.needcreatekey) {
-				if (!this.intrv) {
-					this.intrv = setInterval(() => {
-						this.refreshkeys(true);
-					}, 20000);
+		activated : {
+			immediate : true, 
+			handler : function(){
+
+				if (this.activated){
+					this.createMembershipReactivity()
 				}
-			} else {
-				this.clearintrv();
+				else{
+					this.destroyMembershipReactivity()
+				}
 			}
 		},
 
@@ -199,11 +195,7 @@ export default {
 			} else return "usernotgen";
 		},
 
-		needcreatekey: function () {
-			return (
-				this.keyproblem == "younotgen" && this.cantchat && !this.cantchatexc
-			);
-		},
+		
 
 		allowedToRead: function () {
 			return this.membership === "join" || this.streamMode;
@@ -254,11 +246,43 @@ export default {
 	}),
 
 	methods: {
-		clearintrv: function () {
-			if (this.intrv) {
-				clearInterval(this.intrv);
-				this.intrv = null;
-			}
+		destroyMembershipReactivity : function(){
+			if(this.membershipReactivity) clearInterval(this.membershipReactivity)
+
+			this.membershipReactivity = null
+		},
+		createMembershipReactivity : function(){
+
+			if(this.membershipReactivity) clearInterval(this.membershipReactivity)
+
+			this.membershipReactivity = setInterval(() => {
+
+				if(!this.activated) return
+				
+				if (this.m_chat && !this.streamMode) {
+					if (this.m_chat.timeline.length > 0) {
+						const id = this.core.mtrx.client.credentials.userId,
+							timeline = this.core.mtrx.client.getRoom(this.chat.roomId).timeline,
+							lastEvent = timeline[timeline.length - 1];
+	
+						if (
+							lastEvent.event.state_key === id &&
+							lastEvent.event.content.reason === "admin ban"
+						) {
+							this.roomUserBanned = true;
+						} else {
+							this.roomUserBanned = false;
+						}
+					}
+				} else if (this.streamMode) {
+					this.roomUserBanned =
+						this.m_chat?.currentState.members[this.m_chat.myUserId]
+							?.membership === "ban";
+				}
+	
+				this.membership =
+					this.m_chat?.currentState.members[this.m_chat.myUserId]?.membership;
+			}, 1000);
 		},
 
 		clbkencrypt: function () {
