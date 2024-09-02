@@ -10,6 +10,7 @@ import fileSaver from "file-saver";
 import ChatStorage from "./chatstorage";
 import SearchEngine from "./searchEngine";
 
+
 import { logger as mxLogger } from 'matrix-js-sdk-bastyon/lib/logger';
 
 // rewrite matrix logger

@@ -102,7 +102,7 @@ export default {
 
 			if (!names.length) {
 				if (this.core.mtrx.chatUsers(this.chat.roomId).length) {
-					return "Empty chat: " + this.chat.roomId;
+					return "-";
 				}
 
 				return "-";
