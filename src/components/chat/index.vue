@@ -32,7 +32,7 @@
 				:key="key"
 				:chat="m_chat"
 				:searchresults="searchresults"
-				:filter="filter"
+				:filterType="filterType"
 				@editingEvent="editingEvent"
 				@shareEvent="shareEvent"
 				@replyEvent="replyEvent"
@@ -68,7 +68,9 @@
 			</div>
 
 			<div
-				v-if="activated && !userBanned?.value && (!m_chat || membership === 'join')"
+				v-if="
+					activated && !userBanned?.value && (!m_chat || membership === 'join')
+				"
 				class="chatInputWrapper fixedOnPageBottom"
 				:class="{ bin: pocketnet, bout: !pocketnet }"
 			>
@@ -183,7 +185,7 @@
 			</div>
 		</div>
 		<userRoomStatus
-			v-if="activated && userBanned?.value || roomUserBanned"
+			v-if="(activated && userBanned?.value) || roomUserBanned"
 			:chat="chat"
 			:text="`You've have been banned in this room`"
 		/>
