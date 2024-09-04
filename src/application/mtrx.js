@@ -10,7 +10,7 @@ import fileSaver from "file-saver";
 import ChatStorage from "./chatstorage";
 import SearchEngine from "./searchEngine";
 
-
+/*
 import { logger as mxLogger } from 'matrix-js-sdk-bastyon/lib/logger';
 
 // rewrite matrix logger
@@ -23,7 +23,7 @@ mxLogger.warn = (...msg) =>
 mxLogger.error = (...msg) =>
 	console.error('matrix: ' + msg.join(' '));
 mxLogger.trace = (...msg) =>
-	console.log('matrix: ' + msg.join(' '));
+	console.log('matrix: ' + msg.join(' '));*/
 
 var axios = require("axios");
 
