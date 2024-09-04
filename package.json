@@ -11,7 +11,7 @@
 		"buildpocketnetdev": "npm run build -- --target wc-async --inline-vue --watch --name matrix-element src/App.vue",
 		"prepare": "husky install",
 		"lint-check": "prettier --check *",
-		"lint-fix": "prettier --write *"
+		"lint-fix": "prettier --write src"
 	},
 	"dependencies": {
 		"another-json": "^0.2.0",
@@ -90,7 +90,7 @@
 		"less": "^3.12.2",
 		"less-loader": "^7.0.2",
 		"lint-staged": "^13.0.3",
-		"prettier": "2.7.1",
+		"prettier": "^3.3.3",
 		"sass": "^1.51.0",
 		"sass-loader": "^10.2.1",
 		"ts-loader": "^8.3.0",

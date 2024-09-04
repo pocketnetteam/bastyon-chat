@@ -1,3 +1,7 @@
 {
-	"useTabs": true
+	"useTabs": true,
+	"arrowParens": "avoid",
+	"bracketSpacing": true,
+	"singleQuote": false,
+	"trailingComma": "none"
 }

@@ -36,7 +36,7 @@
 		</div>
 		<div id="ChatContent">
 			<transition name="fade">
-				<keep-alive :max="5">
+				<keep-alive :include="cachedComponentNames" :max="5">
 					<router-view :key="activeRoomId" />
 				</keep-alive>
 			</transition>
@@ -144,6 +144,8 @@ import { mapState } from "vuex";
 import contacts from "@/components/contacts/index.vue";
 import chatcreate from "@/components/chat/create/index.vue";
 
+const cachedComponentNames = ["pagechat"];
+
 export default {
 	name: "pagechats",
 	components: {
@@ -159,6 +161,7 @@ export default {
 	data: function () {
 		return {
 			newChat: false,
+			cachedComponentNames,
 		};
 	},
 	computed: mapState({
@@ -187,6 +190,12 @@ export default {
 		closeNewChat: function () {
 			this.newChat = false;
 		},
+		clearKeepAliveCache() {
+			this.cachedComponentNames = [];
+			this.$nextTick(() => {
+				this.cachedComponentNames = cachedComponentNames;
+			});
+		},
 		chatcreated: function (chat) {
 			this.$router
 				.push({
@@ -202,10 +211,20 @@ export default {
 	},
 
 	mounted() {
+		window.addEventListener(
+			"refresh-component-cache",
+			this.clearKeepAliveCache
+		);
 		if (this.joinroom) {
 			this.$router.push("/publicPreview?id=" + this.joinroom);
 			this.$store.commit("JOINROOM", null);
 		}
+	},
+	beforeDestroy() {
+		window.removeEventListener(
+			"refresh-component-cache",
+			this.clearKeepAliveCache
+		);
 	},
 };
 </script>

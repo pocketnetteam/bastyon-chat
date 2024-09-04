@@ -89,9 +89,7 @@ class Core {
 		this.hiddenInParent = v;
 		this.store.commit("hiddenInParent", v);
 
-
-		if (v)
-			this.mtrx.searchEngine.stopall()
+		if (v) this.mtrx.searchEngine.stopall();
 
 		/*if(!v)
             this.store.commit('wasunhidden', true)*/
@@ -109,8 +107,6 @@ class Core {
 					getWithLocale: (key) => {
 						return this.vm.$i18n.t(key);
 					},
-
-
 				},
 			};
 
@@ -142,27 +138,24 @@ class Core {
 							document.msExitFullscreen();
 						}
 					}
-					if (p?.parameters?.onInitCall){
-						p.parameters.onInitCall(call)
+					if (p?.parameters?.onInitCall) {
+						p.parameters.onInitCall(call);
 					}
 				});
 				this.mtrx.bastyonCalls.on("error", (err) => {
 					if (p?.parameters?.onError) {
-						p.parameters.onError(err)
+						p.parameters.onError(err);
 					}
-
 				});
 				this.mtrx.bastyonCalls.on("connected", (call) => {
 					if (p?.parameters?.onConnected) {
-						p.parameters.onConnected(call)
+						p.parameters.onConnected(call);
 					}
-
 				});
 				this.mtrx.bastyonCalls.on("ended", (call) => {
 					if (p?.parameters?.onEnded) {
-						p.parameters.onEnded(call)
+						p.parameters.onEnded(call);
 					}
-
 				});
 			}
 
@@ -171,7 +164,6 @@ class Core {
 			console.log(e);
 			return;
 		}
-
 	};
 	canback = function () {
 		return this.store.state.gallery ? false : true;
@@ -208,8 +200,7 @@ class Core {
 
 		this.vm.$destroy();
 
-		if (this.mtrx.bastyonCalls)
-			this.mtrx.bastyonCalls.destroy()
+		if (this.mtrx.bastyonCalls) this.mtrx.bastyonCalls.destroy();
 	};
 
 	init = function () {
@@ -305,7 +296,10 @@ class Core {
 			);
 		});
 	};
-
+	refreshComponentCache = function () {
+		const event = new CustomEvent("refresh-component-cache");
+		window.dispatchEvent(event);
+	};
 	removeEvents = function () {
 		delete this.focusListener.clbks.resume.core;
 		delete this.focusListener.clbks.pause.core;
@@ -362,8 +356,8 @@ class Core {
 			});
 	};
 
-	renderChatToElement = function(element, roomid, p){
-		return this.exporter.chat(element, roomid, p)
+	renderChatToElement = function (element, roomid, p) {
+		return this.exporter.chat(element, roomid, p);
 	};
 
 	joinRoom(roomid) {
@@ -465,7 +459,7 @@ class Core {
 		});
 	}
 
-	activeChange(value){
+	activeChange(value) {
 		if (this.activeState) this.activeState(value);
 	}
 
@@ -557,18 +551,16 @@ class Core {
 		}
 	}
 
+	getOrCreateRoom({ users = [], alliasSuffix = "", parameters = {} }) {
+		var tetatet = false;
+		var roomid = null;
 
-	getOrCreateRoom({users = [], alliasSuffix = '', parameters = {}}){
-
-		var tetatet = false
-		var roomid = null
-
-		if(!users.length){
-			return Promise.reject('users:empty')
+		if (!users.length) {
+			return Promise.reject("users:empty");
 		}
 
-		if (users.length > 10){
-			return Promise.reject('users:max:10')
+		if (users.length > 10) {
+			return Promise.reject("users:max:10");
 		}
 
 		//var cryptoenabled = true
@@ -579,148 +571,151 @@ class Core {
 
 		this.vm.$store.state.globalpreloader = true;
 
-		return this.user.usersInfo(users, true).then((info) => {
+		return this.user
+			.usersInfo(users, true)
+			.then((info) => {
+				console.log("info", info, users);
 
-			console.log('info', info, users)
+				if (info.length != users.length)
+					return Promise.reject("users:info:notloaded");
 
-			if(info.length != users.length) return Promise.reject('users:info:notloaded')
+				var room_alias_name = null;
 
-			var room_alias_name = null
-			
-
-			if (users.length == 1){
-				room_alias_name = this.mtrx.kit.tetatetid(info[0], this.user.userinfo);
-				tetatet = true
-			}
-			else{
-				room_alias_name = this.mtrx.kit.groupideq(info.concat(this.user.userinfo));
-			}
-
-			var inviteids = _.map(info, (i) => {
-				return this.user.matrixId(i.id)
-			})
-
-			var initialstate = [
-				{
-					type: "m.set.encrypted",
-					state_key: "",
-					content: {
-						encrypted: true,
-					},
-				},
-			];
-
-			var commonAliasName = room_alias_name + (alliasSuffix ? '@' + alliasSuffix : '')
-
-			var existingroom = _.find(this.mtrx.client.getRooms(), (r) => {
-				return f.getmatrixidFA(r.getCanonicalAlias()) == '#' + commonAliasName
-			})
-
-			if (existingroom){
-				roomid = existingroom.roomId
-
-				// check my state
-
-				try{
-					var member = existingroom.currentState.members[this.user.userinfo.id]
-
-					if (member && member.membership == 'join'){
-						return this.mtrx.client.joinRoom(roomid)
-					}
-				}
-				catch(e){
-					console.error(e)
-				}
-
-				
-
-				//existingroom.currentState.members[this.user.userinfo.id]?.membership
-
-				
-				
-				
-				return Promise.resolve()
-			}
-
-			var name = ((parameters.name || tetatet) ? "#" : "@") + (parameters.name || f.makeid())
-
-			return this.mtrx.client.createRoom({
-				room_alias_name: commonAliasName, 
-				visibility: "private",
-				invite: inviteids,
-				name: name,
-				initial_state: initialstate
-			}).then((r) => {
-
-				roomid = r.room_id
-	
-				var chat = this.mtrx.client.getRoom(roomid);
-	
-				if(!chat) return Promise.reject('chat:notfound')
-
-				console.log('chat', chat)
-
-	
-				if (tetatet || parameters.equal){
-	
-					let event = chat.currentState.getStateEvents(
-						"m.room.power_levels"
+				if (users.length == 1) {
+					room_alias_name = this.mtrx.kit.tetatetid(
+						info[0],
+						this.user.userinfo
 					);
-	
-					if (event){
-	
-						return Promise.all(_.map(inviteids, (id) => {
-							return this.mtrx.client.setPowerLevel(chat.roomId, id, 100, event[0]).catch((e) => {});
-						}))
-	
-					}
-	
+					tetatet = true;
+				} else {
+					room_alias_name = this.mtrx.kit.groupideq(
+						info.concat(this.user.userinfo)
+					);
 				}
-	
-			})
 
-		}).then(() => {
-			return {
-				roomid
-			}
-		}).finally(() => {
-			this.vm.$store.state.globalpreloader = false;
-		})
+				var inviteids = _.map(info, (i) => {
+					return this.user.matrixId(i.id);
+				});
+
+				var initialstate = [
+					{
+						type: "m.set.encrypted",
+						state_key: "",
+						content: {
+							encrypted: true,
+						},
+					},
+				];
+
+				var commonAliasName =
+					room_alias_name + (alliasSuffix ? "@" + alliasSuffix : "");
+
+				var existingroom = _.find(this.mtrx.client.getRooms(), (r) => {
+					return (
+						f.getmatrixidFA(r.getCanonicalAlias()) == "#" + commonAliasName
+					);
+				});
+
+				if (existingroom) {
+					roomid = existingroom.roomId;
+
+					// check my state
+
+					try {
+						var member =
+							existingroom.currentState.members[this.user.userinfo.id];
+
+						if (member && member.membership == "join") {
+							return this.mtrx.client.joinRoom(roomid);
+						}
+					} catch (e) {
+						console.error(e);
+					}
+
+					//existingroom.currentState.members[this.user.userinfo.id]?.membership
+
+					return Promise.resolve();
+				}
+
+				var name =
+					(parameters.name || tetatet ? "#" : "@") +
+					(parameters.name || f.makeid());
+
+				return this.mtrx.client
+					.createRoom({
+						room_alias_name: commonAliasName,
+						visibility: "private",
+						invite: inviteids,
+						name: name,
+						initial_state: initialstate,
+					})
+					.then((r) => {
+						roomid = r.room_id;
+
+						var chat = this.mtrx.client.getRoom(roomid);
+
+						if (!chat) return Promise.reject("chat:notfound");
+
+						console.log("chat", chat);
+
+						if (tetatet || parameters.equal) {
+							let event = chat.currentState.getStateEvents(
+								"m.room.power_levels"
+							);
+
+							if (event) {
+								return Promise.all(
+									_.map(inviteids, (id) => {
+										return this.mtrx.client
+											.setPowerLevel(chat.roomId, id, 100, event[0])
+											.catch((e) => {});
+									})
+								);
+							}
+						}
+					});
+			})
+			.then(() => {
+				return {
+					roomid,
+				};
+			})
+			.finally(() => {
+				this.vm.$store.state.globalpreloader = false;
+			});
 	}
 
-	sendMessage({roomid, content, alliasSuffix}){
-
+	sendMessage({ roomid, content, alliasSuffix }) {
 		var chat = this.mtrx.client.getRoom(roomid);
 
-		if(!chat){
-			return Promise.reject("chat:notfound")
+		if (!chat) {
+			return Promise.reject("chat:notfound");
 		}
 
 		/*if (alliasSuffix && chat.getCanonicalAlias().indexOf(alliasSuffix) == -1){
 			return Promise.reject("alliasSuffix:notmatch")
 		}*/
 
-		return this.mtrx.shareInChat(roomid, content).then((r) => {
+		return this.mtrx
+			.shareInChat(roomid, content)
+			.then((r) => {
+				this.vm.$store.commit("icon", {
+					icon: "success",
+					message: "",
+				});
 
-			this.vm.$store.commit("icon", {
-				icon: "success",
-				message: "",
+				return Promise.resolve(r);
+			})
+			.catch((e) => {
+				console.error(e);
+
+				this.vm.$store.commit("icon", {
+					icon: "error",
+					message: "",
+				});
+
+				return Promise.reject(e);
 			});
-
-			return Promise.resolve(r)
-
-		}).catch((e) => {
-
-			console.error(e);
-
-			this.vm.$store.commit("icon", {
-				icon: "error",
-				message: "",
-			});
-
-			return Promise.reject(e)
-			
-		});
 	}
 
 	async convertAudioToBase64(blob) {
@@ -757,12 +752,12 @@ class Core {
 
 	initMediaRecorder() {
 		if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-
-			return this.media.permissions({ audio: true }).then(() => {
-				
-				return this.media.get({ audio: true })
-
-			}).then((stream) => {
+			return this.media
+				.permissions({ audio: true })
+				.then(() => {
+					return this.media.get({ audio: true });
+				})
+				.then((stream) => {
 					let mediaRecorder = new AudioRecorder(stream, {
 						audioBitsPerSecond: 32000,
 					});
@@ -794,7 +789,7 @@ class Core {
 
 		return this.audioContext;
 	}
-	
+
 	/**
 	 * Create room for stream
 	 *
@@ -804,11 +799,11 @@ class Core {
 	createStreamRoom(name) {
 		return this.mtrx.client
 			.createRoom({
-				room_alias_name: `${ f.makeid() }/hidden`,
-				visibility: 'public',
+				room_alias_name: `${f.makeid()}/hidden`,
+				visibility: "public",
 				invite: [],
-				name: `@${ name }`,
-				
+				name: `@${name}`,
+
 				initial_state: [
 					{
 						type: "m.room.guest_access",
@@ -816,24 +811,28 @@ class Core {
 						content: {
 							guest_access: "can_join",
 						},
-					}
+					},
 				],
 			})
 			.then((chat) => {
-				this.mtrx.client.setRoomRetention(chat.room_id, { max_lifetime: '20y' });
-
-				return this.mtrx.client.setGuestAccess(chat.room_id, {
-					allowJoin: true,
-					allowRead: true
-				}).then(() => {
-					return Promise.resolve(chat.room_id);
+				this.mtrx.client.setRoomRetention(chat.room_id, {
+					max_lifetime: "20y",
 				});
+
+				return this.mtrx.client
+					.setGuestAccess(chat.room_id, {
+						allowJoin: true,
+						allowRead: true,
+					})
+					.then(() => {
+						return Promise.resolve(chat.room_id);
+					});
 			})
 			.catch((e) => {
 				return Promise.reject(e);
 			});
 	}
-	
+
 	/**
 	 * Remove stream room
 	 *
@@ -841,12 +840,11 @@ class Core {
 	 * @return {*}
 	 */
 	removeStreamRoom(roomId) {
-		return this.mtrx.client
-			.removeRoom(roomId);
+		return this.mtrx.client.removeRoom(roomId);
 	}
 
 	getNotificationsCount() {
-		return this.vm.$store.state.allnotifications
+		return this.vm.$store.state.allnotifications;
 	}
 }
 

@@ -7,7 +7,7 @@ export default {
 	name: "chatList",
 	props: {
 		chat: Object,
-		filter: Object,
+		filterType: String,
 		error: [Object, Error, String],
 		selectedMessages: {
 			type: Array,
@@ -44,7 +44,7 @@ export default {
 			firstPaginate: true,
 			readPromise: null,
 
-			activated : false
+			activated: false,
 		};
 	},
 
@@ -68,91 +68,88 @@ export default {
 			// }
 		},
 
-		"filter.type": function () {
+		filterType: function () {
 			this.init();
 		},
 
-		activated : {
-			immediate : true, 
-			handler : function(){
-
-				if(this.updateInterval){
-					clearInterval(this.updateInterval)
-					this.updateInterval = null
+		activated: {
+			immediate: true,
+			handler: function () {
+				if (this.updateInterval) {
+					clearInterval(this.updateInterval);
+					this.updateInterval = null;
 				}
 
-				if (this.activated){
+				if (this.activated) {
 					this.updateInterval = setInterval(this.update, 300);
+				} else {
 				}
-				else{
-				}
-			}
-		}
+			},
+		},
 	},
-	computed: mapState({
-		lloading: function () {
-			return this.loading || this["p_f"] || this["p_b"];
-		},
+	computed: {
+		...mapState({
+			lloading: function () {
+				return this.loading || this["p_f"] || this["p_b"];
+			},
 
-		auth: (state) => state.auth,
+			auth: (state) => state.auth,
 
-		settings_read: (state) => !state.dontreadreceipts,
+			settings_read: (state) => !state.dontreadreceipts,
 
-		eventsTypes: function () {
-			var types = {
-				"m.room.message": true,
-				"p.room.encrypt.message": true,
-				"p.room.": true,
-				"m.room.image": true,
-				"m.room.audio": true,
-				"m.room.file": true,
-				"m.call.invite": true,
-				"m.room.request_calls_access": true,
-				"m.call.hangup": true,
-				"m.call.reject": true,
-				"m.fully_read": true,
-			};
+			eventsTypes: function () {
+				var types = {
+					"m.room.message": true,
+					"p.room.encrypt.message": true,
+					"p.room.": true,
+					"m.room.image": true,
+					"m.room.audio": true,
+					"m.room.file": true,
+					"m.call.invite": true,
+					"m.room.request_calls_access": true,
+					"m.call.hangup": true,
+					"m.call.reject": true,
+					"m.fully_read": true,
+				};
 
-			if (
-				_.toArray((this.chat && this.chat.currentState.members) || {}).length >
-				2
-			) {
-				types["m.room.member"] = true;
-				types["m.room.power_levels"] = true;
-			}
+				if (
+					_.toArray((this.chat && this.chat.currentState.members) || {})
+						.length > 2
+				) {
+					types["m.room.member"] = true;
+					types["m.room.power_levels"] = true;
+				}
 
-			return types;
-		},
+				return types;
+			},
 
-		pocketnet: (state) => state.pocketnet,
-		minimized: (state) => state.minimized,
-		active: (state) => state.active,
+			pocketnet: (state) => state.pocketnet,
+			minimized: (state) => state.minimized,
+			active: (state) => state.active,
 
-		bin: function (state) {
-			return state.pocketnet;
-		},
-	}),
+			bin: function (state) {
+				return state.pocketnet;
+			},
+		}),
+	},
 
 	created() {
-
-		this.activated = true
+		this.activated = true;
 	},
 	beforeDestroy() {
-
-		this.activated = false
+		this.activated = false;
 
 		if (this.timeline) {
 			this.timeline.unpaginate(this.timeline._eventCount, true);
 		}
-
 	},
 
-	activated(){
-		this.activated = true
+	activated() {
+		this.activated = true;
 	},
 
-	deactivated(){
-		this.activated = false
+	deactivated() {
+		this.activated = false;
 	},
 
 	methods: {
@@ -189,14 +186,7 @@ export default {
 						if (e.event.content.accepted !== null) {
 							return false;
 						} else {
-
 							return true;
-							
-							if (this.core.mtrx.me(e.event.sender)) {
-								return false;
-							} else {
-								return true;
-							}
 						}
 					} else {
 						return false;
@@ -306,7 +296,7 @@ export default {
 					return pr.catch((e) => {
 						return Promise.resolve();
 					});
-				})
+				}),
 			).then(() => {
 				return Promise.resolve(events);
 			});
@@ -321,7 +311,7 @@ export default {
 					var rt = ts.relations.getChildEventsForEvent(
 						e.event.event_id,
 						"m.replace",
-						"m.room.message"
+						"m.room.message",
 					);
 
 					if (rt) {
@@ -350,7 +340,7 @@ export default {
 				filter.setDefinition({
 					room: {
 						timeline: {
-							contains_url: this.filter?.type === "images",
+							contains_url: this.filterType === "images",
 							types: ["m.room.message"],
 						},
 					},
@@ -359,7 +349,7 @@ export default {
 
 			filter.filterId = await this.core.mtrx.client.getOrCreateFilter(
 				`FILTER_${name}_` + this.core.mtrx.client.credentials.userId,
-				filter
+				filter,
 			);
 
 			return this.chat.getOrCreateFilteredTimelineSet(filter);
@@ -376,7 +366,7 @@ export default {
 
 			var ts;
 
-			switch (this.filter?.type) {
+			switch (this.filterType) {
 				case "images": {
 					this.scrollType = "custom";
 					ts = await this.customTimelineSet("FILES");
@@ -432,7 +422,7 @@ export default {
 
 			this.timeline = new this.core.mtrx.sdk.TimelineWindow(
 				this.core.mtrx.client,
-				ts
+				ts,
 			);
 
 			setTimeout(() => {
@@ -535,7 +525,7 @@ export default {
 		},
 
 		autoPaginateAll: function () {
-			if (this.filter?.type === "images") {
+			if (this.filterType === "images") {
 				this.autoPaginate("b");
 			} else {
 				this.autoPaginate("b");
@@ -655,7 +645,7 @@ export default {
 							eid,
 							event /*, {
 						hidden: !this.settings_read ? true : false,
-					}*/
+					}*/,
 						)
 						.then((r) => {
 							event.readed = true;
@@ -695,7 +685,7 @@ export default {
 		},
 
 		update: function (e) {
-			if (!this.activated) return
+			if (!this.activated) return;
 			if (!this.scrolling) {
 				this.autoPaginateAll();
 			} else {
