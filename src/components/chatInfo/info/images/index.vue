@@ -5,6 +5,7 @@
 			:chat="chat"
 			@eventImage="(e) => galleryImage(e)"
 			@getEvents="eventsList"
+			filterType="images"
 			v-if="!empty"
 			ref="list"
 		/>
