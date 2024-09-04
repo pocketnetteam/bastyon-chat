@@ -503,7 +503,7 @@ export default {
 			this.$emit("setMetaUrl", url);
 		},
 
-		newchat() {
+		newchat(alliasSuffix) {
 			if (this.u) {
 				this.$store.state.globalpreloader = true;
 				var matrixId = null;
@@ -531,10 +531,11 @@ export default {
 
 						//return Promise.reject('ny3')
 
-						id = this.core.mtrx.kit.tetatetid(info[0], this.core.user.userinfo);
+						const
+							id = this.core.mtrx.kit.tetatetid(info[0], this.core.user.userinfo),
 
-						matrixId = this.core.user.matrixId(info[0].id);
-						myMatrixId = this.core.user.matrixId(this.core.user.userinfo.id);
+							matrixId = this.core.user.matrixId(info[0].id),
+							myMatrixId = this.core.user.matrixId(this.core.user.userinfo.id);
 
 						var initialstate = [
 							{
@@ -547,10 +548,10 @@ export default {
 						];
 
 						return this.core.mtrx.client.createRoom({
-							room_alias_name: id,
+							room_alias_name: alliasSuffix ? `${ id }_${ alliasSuffix }` : id,
 							visibility: "private",
 							invite: [matrixId],
-							name: "#" + id,
+							name: `#${ id }`,
 							initial_state: initialstate,
 						});
 					})
@@ -585,18 +586,15 @@ export default {
 
 						if (e && e.errcode == "M_ROOM_IN_USE") {
 							return this.core.mtrx.client
-								.joinRoom(
-									"#" +
-										id +
-										":" +
-										this.core.mtrx.baseUrl.replace("https://", "")
-								)
+								.joinRoom(`#${ id }:${ this.core.mtrx.baseUrl.replace("https://", "") }`)
 								.then(() => {})
-								.catch((e) => {});
+								.catch((e) => {
+									return this.newchat((+new Date).toString(36));
+								});
 						}
 
 						return Promise.reject(e);
-					});
+					})
 			} else {
 				return Promise.reject("u");
 			}
