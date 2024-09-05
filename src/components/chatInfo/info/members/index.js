@@ -2,14 +2,11 @@ import f from "@/application/functions.js";
 import chatIcon from "@/components/chats/assets/icon.vue";
 export default {
 	components: {
-		chatIcon,
+		chatIcon
 	},
-	
-	inject: [
-		"streamMode",
-		"menuState"
-	],
-	
+
+	inject: ["streamMode", "menuState"],
+
 	props: {
 		membersList: Array,
 		allMembers: Array,
@@ -18,7 +15,7 @@ export default {
 			default: true
 		}
 	},
-	
+
 	data: function () {
 		return {
 			moderItems: [
@@ -28,21 +25,21 @@ export default {
 					icon: "fas fa-ban",
 
 					upload: {
-						multiple: true,
-					},
+						multiple: true
+					}
 				},
 				{
 					click: "adminKick",
 					title: this.$i18n.t("caption.kick"),
-					icon: "fas fa-user-times",
-				},
+					icon: "fas fa-user-times"
+				}
 			],
-			
+
 			menuItems: [
 				{
 					click: "adminMakeModer",
 					title: this.$i18n.t("caption.makeModerator"),
-					icon: "fas fa-user-shield",
+					icon: "fas fa-user-shield"
 				},
 
 				{
@@ -51,33 +48,33 @@ export default {
 					icon: "fas fa-ban",
 
 					upload: {
-						multiple: true,
-					},
+						multiple: true
+					}
 				},
 				{
 					click: "adminKick",
 					title: this.$i18n.t("caption.kick"),
-					icon: "fas fa-user-times",
-				},
-			],
+					icon: "fas fa-user-times"
+				}
+			]
 		};
 	},
-	
+
 	computed: {
 		meid: function () {
 			return this.core.user.userinfo.id;
 		},
 		me: function () {
 			return (
-				_.find(this.allMembers || this.membersList, (m) => {
+				_.find(this.allMembers || this.membersList, m => {
 					return m.userId === this.meid;
 				}) || {}
 			);
-		},
+		}
 	},
-	
+
 	methods: {
-		userinfo: function (user) {
+		getUserInfo: function (user) {
 			return f.deep(this, "core.store.state.users." + user.userId) || {};
 		},
 		role: function (user) {
@@ -89,8 +86,6 @@ export default {
 			return r;
 		},
 		menu: function (user) {
-
-
 			/*menu.push({
 				action: this.menureply,
 				text: "button.reply",
@@ -101,18 +96,21 @@ export default {
 				setAdmin: {
 					action: () => this.setAdmin(user),
 					text: this.$i18n.t("caption.makeModerator"),
-					icon: "fas fa-user-shield",
+					icon: "fas fa-user-shield"
 				},
 				kick: {
 					action: () => this.kick(user),
 					text: this.$i18n.t("caption.kick"),
-					icon: "fas fa-user-times",
+					icon: "fas fa-user-times"
 				},
 				ban: {
 					action: () => this.ban(user),
-					text: user.membership === "ban" ? this.$i18n.t("caption.removeBan") : this.$i18n.t("caption.ban"),
-					icon: "fas fa-user-times",
-				},
+					text:
+						user.membership === "ban"
+							? this.$i18n.t("caption.removeBan")
+							: this.$i18n.t("caption.ban"),
+					icon: "fas fa-user-times"
+				}
 			};
 
 			var menu = [];
@@ -140,7 +138,7 @@ export default {
 				items.setAdmin.text = this.$i18n.t("caption.cancelModeration");
 				menu = [items.setAdmin, items.ban];
 			}
-			
+
 			return menu;
 		},
 
@@ -157,14 +155,14 @@ export default {
 			});*/
 			this.menuState.set({
 				items: this.menu(user),
-				item: {},
+				item: {}
 			});
 		},
 
 		navigateToProfile(id) {
 			this.$router
 				.push({ path: `/contact?id=${f.getmatrixid(id)}` })
-				.catch((e) => {});
+				.catch(e => {});
 		},
 
 		menuItemClickHandler(item, rowObject, utils) {
@@ -173,17 +171,40 @@ export default {
 			}
 
 			this["menu" + item.click](rowObject)
-				.then((r) => {
+				.then(r => {
 					utils.hidePopup();
 				})
-				.catch((e) => {
+				.catch(e => {
 					utils.showPopup();
 				});
 			return this[item.click](rowObject.user);
 		},
+		openUserPage(user) {
+			const userInfo = this.getUserInfo(user);
+			console.log(userInfo);
 
-		openModal: function(user) {
-			this.core.mtrx.opencontact(this.userinfo(user));
+			const domain = this.getDomain();
+			const userPageUrl = this.generateUserPageUrl(domain, userInfo);
+
+			this.openInAppOrNewTab(userPageUrl);
+		},
+		getDomain() {
+			return window.pocketnetdomain || "pocketnet.app";
+		},
+		generateUserPageUrl(domain, userInfo) {
+			return `https://${domain}/${userInfo.source.name}`;
+		},
+		openInAppOrNewTab(url) {
+			if (this.core.backtoapp) {
+				this.core.backtoapp(url);
+			} else {
+				window.open(url, "_blank");
+			}
+		},
+		openModal: function (user) {
+			console.log();
+
+			this.core.mtrx.opencontact(this.getUserInfo(user));
 		},
 
 		setAdmin(user) {
@@ -197,8 +218,7 @@ export default {
 		ban(user) {
 			this.$emit("ban", user);
 			return Promise.resolve();
-		},
-
+		}
 
 		/*setAdmin: function (user) {
 			this.$emit("setAdmin", user.id);
@@ -215,5 +235,5 @@ export default {
 			this.$emit("adminKick", user.id);
 			return Promise.resolve();
 		},*/
-	},
+	}
 };
