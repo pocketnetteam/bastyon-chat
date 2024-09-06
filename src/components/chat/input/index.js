@@ -479,6 +479,7 @@ export default {
 				receiver: user.source.address,
 				send: !this.streamMode,
 				share: !this.streamMode,
+				donatemode : this.streamMode ? true : false
 			}).then((transaction) => {
 				if (this.streamMode) {
 					this.donate = transaction;
