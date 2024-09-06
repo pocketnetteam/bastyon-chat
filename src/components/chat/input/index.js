@@ -19,7 +19,7 @@ const SendStatus = {
 	Idle: "idle",
 	Sending: "sending",
 	Sent: "sent",
-	Error: "error",
+	Error: "error"
 };
 
 export default {
@@ -27,7 +27,7 @@ export default {
 	props: {
 		chat: Object,
 		u: String,
-		relationEvent: Object,
+		relationEvent: Object
 	},
 
 	components: {
@@ -38,7 +38,7 @@ export default {
 		EmbeddedMessage,
 		recordProgress,
 		recordVoice,
-		upload,
+		upload
 	},
 
 	inject: ["streamMode", "authorId", "menuState"],
@@ -77,14 +77,14 @@ export default {
 
 			cancelledCordovaMediaRecorder: false,
 
-			donate: null,
+			donate: null
 		};
 	},
 
 	watch: {
 		usersForKeysHash: {
 			//immediate: true,
-			handler: function () {},
+			handler: function () {}
 		},
 		tipusers: function () {
 			if (!this.tipusers.length) {
@@ -94,7 +94,7 @@ export default {
 					this.tipuserindex = this.tipusers.length - 1;
 				}
 			}
-		},
+		}
 	},
 
 	beforeDestroy() {
@@ -128,7 +128,7 @@ export default {
 				menuItems.push({
 					action: this.cameraHandlerCustom,
 					text: "button.takePhotoOrVideo",
-					icon: "fas fa-camera",
+					icon: "fas fa-camera"
 				});
 			} else {
 				menuItems.push({
@@ -141,15 +141,15 @@ export default {
 						maxsize: 100,
 						images: {
 							resize: {
-								type: "fit",
-							},
+								type: "fit"
+							}
 						},
 
 						start: this.uploadStart,
 						error: this.uploadError,
 						uploaded: this.uploadUploaded,
-						uploadedAll: this.uploadUploadedAll,
-					},
+						uploadedAll: this.uploadUploadedAll
+					}
 				});
 			}
 
@@ -163,22 +163,22 @@ export default {
 					maxsize: 25,
 					images: {
 						resize: {
-							type: "fit",
-						},
+							type: "fit"
+						}
 					},
 
 					start: this.uploadStart,
 					error: this.uploadError,
 					uploaded: this.uploadUploaded,
-					uploadedAll: this.uploadUploadedAll,
-				},
+					uploadedAll: this.uploadUploadedAll
+				}
 			});
 
 			if (this.transaction && !this.pkoindisabled) {
 				menuItems.unshift({
 					action: this.sendtransactionWrapper,
 					text: "button.sendCoins",
-					icon: "fas fa-wallet",
+					icon: "fas fa-wallet"
 				});
 			}
 
@@ -187,7 +187,7 @@ export default {
 
 		...mapState(["chats", "share"]),
 		...mapGetters({
-			hasEmbedded: "hasInputChatEmbedded",
+			hasEmbedded: "hasInputChatEmbedded"
 		}),
 		userlist: function () {
 			if (!this.chat) return [];
@@ -201,7 +201,7 @@ export default {
 
 		uusers: function () {
 			if (this.u) {
-				return _.map(this.u.split(","), (u) => {
+				return _.map(this.u.split(","), u => {
 					return u;
 				});
 			}
@@ -213,7 +213,7 @@ export default {
 		},
 		ausers: function () {
 			if (this.u) {
-				return _.map(this.u.split(","), (u) => {
+				return _.map(this.u.split(","), u => {
 					return this.core.user.matrixId(u);
 				});
 			}
@@ -300,7 +300,7 @@ export default {
 		me() {
 			/* Compare author and user bastyon id to prevent donate myself */
 			return this.authorId === this.core.user.userinfo?.source.address;
-		},
+		}
 	},
 
 	created() {},
@@ -311,7 +311,7 @@ export default {
 		this.ready = true;
 
 		if (!this.chat && this.core.mtrx.client) {
-			this.newchat().catch((e) => {
+			this.newchat().catch(e => {
 				return Promise.resolve();
 			});
 		}
@@ -353,7 +353,7 @@ export default {
 			if (!this.isMultipleShares) return this.share.senderName;
 
 			const senderNames = this.share.multiple.map(
-				(message) => message.senderName
+				message => message.senderName
 			);
 			const uniqueSenderNames = [...new Set(senderNames)];
 			return uniqueSenderNames.join(", ");
@@ -369,10 +369,10 @@ export default {
 			var images = new Images();
 
 			return images.resize["fit"](base64, 1024, 1024, ftype, 0.95)
-				.then((base64) => {
+				.then(base64 => {
 					return Promise.resolve(base64);
 				})
-				.catch((e) => {
+				.catch(e => {
 					return Promise.reject(e);
 				});
 		},
@@ -385,11 +385,11 @@ export default {
 
 				action: ({ base64 }, resolve) => {
 					return this.resizeImage(base64)
-						.then((base64) => {
-							return f.Base64.toFile(base64).then((file) => {
+						.then(base64 => {
+							return f.Base64.toFile(base64).then(file => {
 								var data = {
 									base64,
-									file,
+									file
 								};
 
 								result.push(data);
@@ -399,15 +399,15 @@ export default {
 								resolve();
 							});
 						})
-						.catch((e) => {
+						.catch(e => {
 							console.error(e);
 							resolve();
 						});
 				},
 
-				onSuccess: (imgs) => {
+				onSuccess: imgs => {
 					this.uploadUploadedAll();
-				},
+				}
 			});
 		},
 
@@ -419,14 +419,14 @@ export default {
 						{
 							id: this.authorId,
 							source: {
-								address: this.authorId,
-							},
-						},
+								address: this.authorId
+							}
+						}
 					];
 				} else {
 					/* Donate to chat participants */
 					return _.filter(
-						_.map(this.joined, (j) => {
+						_.map(this.joined, j => {
 							return (
 								this.$f.deep(
 									this,
@@ -434,7 +434,7 @@ export default {
 								) || null
 							);
 						}),
-						(r) => {
+						r => {
 							return r && r.source && r.id != this.core.user.userinfo?.id;
 						}
 					);
@@ -452,10 +452,10 @@ export default {
 					data: {
 						users: users,
 						action: "sendtransaction",
-						userselected: (c) => {
+						userselected: c => {
 							this.showuserselected(c, "sendtransaction");
-						},
-					},
+						}
+					}
 				});
 
 				/*this.showuserselect = {
@@ -515,7 +515,7 @@ export default {
 				this.creating = true;
 				return this.core.user
 					.usersInfo(this.uusers)
-					.then((info) => {
+					.then(info => {
 						if (this.uusers.length == 1) {
 							var _info = info[0];
 
@@ -542,9 +542,9 @@ export default {
 								type: "m.set.encrypted",
 								state_key: "",
 								content: {
-									encrypted: true,
-								},
-							},
+									encrypted: true
+								}
+							}
 						];
 
 						return this.core.mtrx.client.createRoom({
@@ -552,10 +552,10 @@ export default {
 							visibility: "private",
 							invite: [matrixId],
 							name: "#" + id,
-							initial_state: initialstate,
+							initial_state: initialstate
 						});
 					})
-					.then((_chat) => {
+					.then(_chat => {
 						chat = _chat;
 						this.$store.state.globalpreloader = false;
 
@@ -566,9 +566,9 @@ export default {
 
 						return this.core.mtrx.client
 							.setPowerLevel(chat.room_id, matrixId, 100, event[0])
-							.catch((e) => {});
+							.catch(e => {});
 					})
-					.then((r) => {
+					.then(r => {
 						this.creating = false;
 
 						if (this.connect && this.connect == id) {
@@ -579,7 +579,7 @@ export default {
 
 						return Promise.resolve();
 					})
-					.catch((e) => {
+					.catch(e => {
 						this.creating = false;
 
 						this.$store.state.globalpreloader = false;
@@ -593,7 +593,7 @@ export default {
 										this.core.mtrx.baseUrl.replace("https://", "")
 								)
 								.then(() => {})
-								.catch((e) => {});
+								.catch(e => {});
 						}
 
 						return Promise.reject(e);
@@ -608,13 +608,13 @@ export default {
 		},
 
 		greetings() {
-			this.send("👋").then((r) => {
+			this.send("👋").then(r => {
 				return Promise.resolve(r);
 			});
 		},
 
 		sendinput(text) {
-			this.send(text).then((r) => {
+			this.send(text).then(r => {
 				return Promise.resolve(r);
 			});
 		},
@@ -656,7 +656,7 @@ export default {
 		send(text) {
 			this.setSendStatus(SendStatus.Sending);
 			if (!this.chat) {
-				this.newchat().catch((e) => {});
+				this.newchat().catch(e => {});
 			}
 
 			//return this.chat.pcrypto.getOrCreateCommonKey()
@@ -682,7 +682,7 @@ export default {
 				.pretry(() => {
 					return this.chat && !this.creating;
 				})
-				.then(async (r) => {
+				.then(async r => {
 					this.$emit("sent");
 
 					text = this.replaceMentions(text);
@@ -695,14 +695,14 @@ export default {
 							return this.core.mtrx
 								.textEvent(this.chat, text, {
 									encryptEvent: this.clbkEncrypt,
-									encryptedEvent: this.clbkEncrypted,
+									encryptedEvent: this.clbkEncrypted
 								})
-								.then((r) => {
+								.then(r => {
 									r["m.relates_to"] = {
 										rel_type: "m.replace",
 										event_id:
 											this.core.mtrx.clearEventId(this.relationEvent.event) ||
-											f.makeid(),
+											f.makeid()
 									};
 
 									var editEvent = r;
@@ -720,15 +720,14 @@ export default {
 										editEvent
 									);
 								})
-								.then((r) => {
+								.then(r => {
 									this.core.store.dispatch("FETCH_EVENTS");
-
 									this.$emit("clearRelationEvent");
-
 									this.$emit("force");
+									this.setSendStatus(SendStatus.Sent);
 									return Promise.resolve();
 								})
-								.catch((e) => {
+								.catch(e => {
 									console.error(e);
 									return Promise.reject(e);
 								});
@@ -741,13 +740,13 @@ export default {
 								text,
 								Object.assign(
 									{
-										relation: this.relationEvent,
+										relation: this.relationEvent
 									},
 									params || {}
 								),
 								{
 									encryptEvent: this.clbkEncrypt,
-									encryptedEvent: this.clbkEncrypted,
+									encryptedEvent: this.clbkEncrypted
 								}
 							);
 						},
@@ -762,10 +761,10 @@ export default {
 					this.setSendStatus(SendStatus.Sent);
 					return sendText(text, data);
 				})
-				.catch((e) => {
+				.catch(e => {
 					this.setSendStatus(SendStatus.Error);
 					this.$emit("sentMessageError", {
-						error: e,
+						error: e
 					});
 				});
 		},
@@ -782,7 +781,7 @@ export default {
 			var meta = {
 				type: "image",
 				id: id,
-				base64: base64,
+				base64: base64
 			};
 
 			this.$emit("sendingData", meta);
@@ -795,24 +794,24 @@ export default {
 					if (meta.aborted) return Promise.reject("aborted");
 
 					return this.core.mtrx.sendImage(this.chat, base64, null, meta, {
-						relation: this.relationEvent,
+						relation: this.relationEvent
 					});
 				})
-				.then((r) => {
+				.then(r => {
 					this.$emit("clearRelationEvent");
 
 					this.$emit("sentData", {
-						id: id,
+						id: id
 					});
 
 					return Promise.resolve();
 				})
-				.catch((e) => {
+				.catch(e => {
 					console.error(e);
 
 					this.$emit("sentError", {
 						id: id,
-						error: e,
+						error: e
 					});
 
 					return Promise.resolve();
@@ -833,14 +832,14 @@ export default {
 						"Files larger than 10 megabytes are not encrypted. Do you want to send the file unencrypted?",
 						{
 							okText: "Yes",
-							cancelText: "No, cancel",
+							cancelText: "No, cancel"
 						}
 					)
 
-					.then((dialog) => {
+					.then(dialog => {
 						return Promise.resolve(true);
 					})
-					.catch((e) => {
+					.catch(e => {
 						return Promise.reject("cancel");
 					});
 			}
@@ -856,8 +855,8 @@ export default {
 				id: id,
 				info: {
 					name: file.name,
-					size: file.size,
-				},
+					size: file.size
+				}
 			};
 
 			this.$emit("sendingData", meta);
@@ -869,7 +868,7 @@ export default {
 				.then(() => {
 					return this.canencryptfilesize(file);
 				})
-				.then((notenc) => {
+				.then(notenc => {
 					return this.core.mtrx.sendFile(
 						this.chat,
 						file,
@@ -882,17 +881,17 @@ export default {
 					this.$emit("clearRelationEvent");
 
 					this.$emit("sentData", {
-						id: id,
+						id: id
 					});
 
 					return Promise.resolve();
 				})
-				.catch((e) => {
+				.catch(e => {
 					console.error(e);
 
 					this.$emit("sentError", {
 						id: id,
-						error: e,
+						error: e
 					});
 				});
 		},
@@ -949,7 +948,7 @@ export default {
 		uploadError(item, error) {
 			this.$store.commit("icon", {
 				icon: "error",
-				message: error.text,
+				message: error.text
 			});
 		},
 		getImg() {
@@ -964,7 +963,7 @@ export default {
 				"image/gif",
 				"image/jpeg",
 				"image/png",
-				"image/webp",
+				"image/webp"
 			];
 
 			if (!validImageTypes.includes(data.file.type)) {
@@ -1004,11 +1003,11 @@ export default {
 
 				if (window.cordova) {
 					this.$dialog.confirm(this.$i18n.t("micaccesscordova"), {
-						okText: this.$i18n.t("button.ok"),
+						okText: this.$i18n.t("button.ok")
 					});
 				} else {
 					this.$dialog.confirm(this.$i18n.t("micaccessbrowser"), {
-						okText: this.$i18n.t("button.ok"),
+						okText: this.$i18n.t("button.ok")
 					});
 				}
 
@@ -1017,13 +1016,13 @@ export default {
 
 			if (err.toString && err.toString().indexOf("device not found") > -1) {
 				this.$dialog.confirm(this.$i18n.t("micdevicenotfound"), {
-					okText: this.$i18n.t("button.ok"),
+					okText: this.$i18n.t("button.ok")
 				});
 				return;
 			}
 
 			this.$dialog.confirm(this.$i18n.t("micaccesscommonproblem"), {
-				okText: this.$i18n.t("button.ok"),
+				okText: this.$i18n.t("button.ok")
 			});
 
 			console.error(err);
@@ -1033,17 +1032,17 @@ export default {
 			return new Promise((resolve, reject) => {
 				window.resolveLocalFileSystemURL(
 					path,
-					(entry) => {
+					entry => {
 						if (!entry) {
 							return reject("noentry");
 						}
 
-						entry.file((file) => {
+						entry.file(file => {
 							var reader = new FileReader();
 
 							reader.onloadend = function () {
 								var blob = new Blob([new Uint8Array(this.result)], {
-									type: file.type,
+									type: file.type
 								});
 
 								entry.remove();
@@ -1051,7 +1050,7 @@ export default {
 								resolve(blob);
 							};
 
-							reader.onerror = (e) => {
+							reader.onerror = e => {
 								entry.remove();
 
 								reject(e);
@@ -1060,7 +1059,7 @@ export default {
 							reader.readAsArrayBuffer(file);
 						});
 					},
-					(e) => {
+					e => {
 						reject(e);
 					}
 				);
@@ -1076,7 +1075,7 @@ export default {
 
 						return Promise.resolve();
 					})
-					.catch((err) => {
+					.catch(err => {
 						console.error(err);
 
 						this.catchPermissonsError(err);
@@ -1084,9 +1083,6 @@ export default {
 						return Promise.reject(err);
 					})
 			);
-
-			
-			
 
 			this.prepareRecording
 				.then(() => {
@@ -1100,16 +1096,16 @@ export default {
 
 					this.audioContext = this.core.getAudioContext();
 
-					var unsleep = f.deep(window,"POCKETNETINSTANCE.mobile.unsleep")
+					var unsleep = f.deep(window, "POCKETNETINSTANCE.mobile.unsleep");
 
-					if(unsleep) unsleep(true)
+					if (unsleep) unsleep(true);
 
 					var media = (this.cordovaMediaRecorder = new Media(
 						path,
 						() => {
 							this.recordTime = 0;
 
-							if(unsleep) unsleep(false)
+							if (unsleep) unsleep(false);
 
 							media.release();
 
@@ -1126,13 +1122,13 @@ export default {
 								f.isios()
 									? path
 									: window.cordova.file.externalDataDirectory + path
-							).then((blob) => {
+							).then(blob => {
 								return Promise.resolve({
-									data: blob,
+									data: blob
 								});
 							});
 
-							fu.then((r) => {
+							fu.then(r => {
 								if (media.duration && media.duration > 0) {
 									r.duration = media.duration;
 								}
@@ -1141,20 +1137,20 @@ export default {
 
 								return Promise.resolve();
 							})
-							.catch((e) => {
-								this.clear();
+								.catch(e => {
+									this.clear();
 
-								console.error(e);
-							})
-							.finally(() => {});
+									console.error(e);
+								})
+								.finally(() => {});
 						},
-						(e) => {
+						e => {
 							console.error(e);
 
 							this.isRecording = false;
 							this.clear();
 
-							if(unsleep) unsleep(false)
+							if (unsleep) unsleep(false);
 						}
 					));
 
@@ -1178,7 +1174,7 @@ export default {
 						} else {
 							this.cordovaMediaRecorder.getCurrentAmplitude(
 								// success callback
-								(amp) => {
+								amp => {
 									rmsdata.push(amp * 1000);
 
 									if (rmsdata.length > 50) rmsdata = _.last(rmsdata, 50);
@@ -1204,7 +1200,7 @@ export default {
 
 					this.cordovaMediaRecorder.startRecord();
 				})
-				.catch((e) => {
+				.catch(e => {
 					console.error(e);
 				})
 				.finally(() => {
@@ -1228,25 +1224,25 @@ export default {
 			this.prepareRecording = cancelable(
 				this.core
 					.initMediaRecorder()
-					.then((recorder) => {
+					.then(recorder => {
 						this.microphoneDisabled = false;
 
 						if (this.prepareRecording) {
 							return Promise.resolve(recorder);
 						} else {
-							recorder.stream.getTracks().forEach((track) => {
+							recorder.stream.getTracks().forEach(track => {
 								track.stop();
 							});
 						}
 					})
-					.catch((err) => {
+					.catch(err => {
 						this.catchPermissonsError(err);
 						return Promise.reject(err);
 					})
 			);
 
 			this.prepareRecording
-				.then((recorder) => {
+				.then(recorder => {
 					this.mediaRecorder = recorder;
 
 					this.audioContext = this.core.getAudioContext();
@@ -1320,9 +1316,9 @@ export default {
 		getduration(file) {
 			return new Promise((resolve, reject) => {
 				f.readFile(file)
-					.then((arraybuffer) => {
+					.then(arraybuffer => {
 						try {
-							this.audioContext.decodeAudioData(arraybuffer, (buffer) => {
+							this.audioContext.decodeAudioData(arraybuffer, buffer => {
 								resolve(buffer.duration);
 							});
 						} catch (e) {
@@ -1341,7 +1337,7 @@ export default {
 					{
 						file: event.data,
 						id: f.makeid(),
-						duration: event.duration,
+						duration: event.duration
 					},
 					sendnow
 				);
@@ -1351,12 +1347,12 @@ export default {
 				c();
 			} else {
 				this.getduration(event.data)
-					.then((duration) => {
+					.then(duration => {
 						event.duration = duration;
 
 						c();
 					})
-					.catch((e) => {
+					.catch(e => {
 						console.error(e);
 
 						this.clear();
@@ -1419,7 +1415,7 @@ export default {
 					//this.mediaRecorder.ondataavailable = () => { }
 				} else {
 					var hasdata = false;
-					this.mediaRecorder.addEventListener("dataavailable", (event) => {
+					this.mediaRecorder.addEventListener("dataavailable", event => {
 						if (hasdata) return;
 
 						hasdata = true;
@@ -1430,7 +1426,7 @@ export default {
 
 				this.mediaRecorder.stop();
 
-				this.mediaRecorder.stream.getTracks().forEach((track) => {
+				this.mediaRecorder.stream.getTracks().forEach(track => {
 					track.stop();
 				});
 
@@ -1465,7 +1461,7 @@ export default {
 			const meta = {
 				type: "audio",
 				id: id,
-				base64: base64,
+				base64: base64
 			};
 
 			this.clear();
@@ -1476,16 +1472,16 @@ export default {
 				})
 				.then(() => {
 					return this.core.mtrx.sendAudio(this.chat, base64, null, meta, {
-						relation: this.relationEvent,
+						relation: this.relationEvent
 					});
 				})
 				.then(() => {
 					this.$emit("clearRelationEvent");
 				})
-				.catch((e) => {
+				.catch(e => {
 					this.$emit("sentError", {
 						id: id,
-						error: e,
+						error: e
 					});
 					return Promise.resolve();
 				});
@@ -1507,7 +1503,7 @@ export default {
 
 			if (this.mediaRecorder) {
 				this.mediaRecorder.stop();
-				this.mediaRecorder.stream.getTracks().forEach((track) => {
+				this.mediaRecorder.stream.getTracks().forEach(track => {
 					track.stop();
 				});
 				this.mediaRecorder = null;
@@ -1537,8 +1533,8 @@ export default {
 				items: this.menu,
 			});*/
 			this.menuState.set({
-				items: this.menu,
+				items: this.menu
 			});
-		},
-	},
+		}
+	}
 };
