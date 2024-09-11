@@ -13,77 +13,80 @@ export default {
 		u: String,
 		roomInfo: false,
 		aboutUser: false,
-		search : String,
-		process : String,
-		searchresults : null,
-		focusedevent : null
+		search: String,
+		process: String,
+		searchresults: null,
+		focusedevent: null
 	},
 	inject: ["matches"],
 	components: {
 		chatName,
 		chatIcon,
 		chatTyping,
-		contacts,
+		contacts
 	},
 
 	data: function () {
 		return {
-			menuItems: [
+			callMenuItems: [
 				{
-					click: "callupVideoHandler",
-					title: this.$i18n.t("caption.videocall"),
-					icon: "fas fa-camera",
+					icon: "fa-phone fa fa-flip-horizontal",
+					onClick: () => {
+						this.initiateCall("voice");
+					},
+					text: this.$i18n.t("caption.call")
 				},
-
 				{
-					click: "callupHandler",
-					title: this.$i18n.t("caption.call"),
-					icon: "fas fa-phone",
-				},
+					icon: "fa-video fa",
+					onClick: () => {
+						this.initiateCall("video");
+					},
+					text: this.$i18n.t("caption.videocall")
+				}
 			],
-
+			callModalState: "closed",
 			menuItemsRoom: [
 				{
 					click: "AddMember",
 					title: this.$i18n.t("caption.add"),
-					icon: "fas fa-user-plus",
+					icon: "fas fa-user-plus"
 				},
 
 				{
 					click: "MuteRoom",
 					title: this.$i18n.t("caption.mute"),
-					icon: "fas fa-bell-slash",
+					icon: "fas fa-bell-slash"
 				},
 				{
 					click: "LeaveFromRoom",
 					title: this.$i18n.t("caption.leaveAndDelete"),
-					icon: "fas fa-sign-out-alt",
-				},
+					icon: "fas fa-sign-out-alt"
+				}
 			],
 			menuItemsRoomMuted: [
 				{
 					click: "AddMember",
 					title: this.$i18n.t("caption.add"),
-					icon: "fas fa-user-plus",
+					icon: "fas fa-user-plus"
 				},
 
 				{
 					click: "MuteRoom",
 					title: this.$i18n.t("caption.unmute"),
-					icon: "fas fa-bell",
+					icon: "fas fa-bell"
 				},
 				{
 					click: "LeaveFromRoom",
 					title: this.$i18n.t("caption.leaveAndDelete"),
-					icon: "fas fa-sign-out-alt",
-				},
+					icon: "fas fa-sign-out-alt"
+				}
 			],
 
 			oneToOne: [
 				{
 					click: "MuteRoom",
 					title: this.$i18n.t("caption.mute"),
-					icon: "fas fa-bell-slash",
+					icon: "fas fa-bell-slash"
 				},
 				/*{
           click: "LeaveFromRoom",
@@ -93,32 +96,32 @@ export default {
 				{
 					click: "Donate",
 					title: this.$i18n.t("caption.donate"),
-					icon: "fas fa-money-bill-wave",
-				},
+					icon: "fas fa-money-bill-wave"
+				}
 			],
 			oneToOneMuted: [
 				{
 					click: "MuteRoom",
 					title: this.$i18n.t("caption.unmute"),
-					icon: "fas fa-bell",
+					icon: "fas fa-bell"
 				},
 				{
 					click: "LeaveFromRoom",
 					title: this.$i18n.t("caption.leaveAndDelete"),
-					icon: "fas fa-sign-out-alt",
+					icon: "fas fa-sign-out-alt"
 				},
 				{
 					click: "Donate",
 					title: this.$i18n.t("caption.donate"),
-					icon: "fas fa-money-bill-wave",
-				},
+					icon: "fas fa-money-bill-wave"
+				}
 			],
 			donateMenu: [
 				{
 					click: "Donate",
 					title: this.$i18n.t("caption.donate"),
-					icon: "fas fa-money-bill-wave",
-				},
+					icon: "fas fa-money-bill-wave"
+				}
 			],
 
 			wait: false,
@@ -128,7 +131,7 @@ export default {
 			aboutUserShow: false,
 			roomBanned: false,
 			roomMuted: false,
-			searchactive : false,
+			searchactive: false,
 
 			// --- Variables for the donation part ---
 			// Boolean when the donation modal is open
@@ -152,17 +155,17 @@ export default {
 			feesDirectionPossibleValues: [
 				{
 					value: "include",
-					label: this.$i18n.t("caption.toBePaidByReceiver"),
+					label: this.$i18n.t("caption.toBePaidByReceiver")
 				},
 				{
 					value: "exclude",
-					label: this.$i18n.t("caption.toBePaidBySender"),
-				},
+					label: this.$i18n.t("caption.toBePaidBySender")
+				}
 			],
 
 			hoverEncrypt: false,
 
-			callloading : false
+			callloading: false
 		};
 	},
 
@@ -174,38 +177,36 @@ export default {
 		this.getuserinfo();
 
 		if (this.search) {
-			this.searchactive = true
+			this.searchactive = true;
 		}
 	},
 
 	computed: mapState({
-		focusedeventIndex: function(){
-			if(!this.searchresults || !this.focusedevent){
-				return null
+		focusedeventIndex: function () {
+			if (!this.searchresults || !this.focusedevent) {
+				return null;
 			}
 
-			var i = -1
-			
+			var i = -1;
+
 			_.find(this.searchresults, (e, index) => {
-				if(e.event.event_id == this.focusedevent.event.event_id) {
-					i = index
-					return true
+				if (e.event.event_id == this.focusedevent.event.event_id) {
+					i = index;
+					return true;
 				}
-			}) 
+			});
 
 			//if (i < 1) i = 1
 
-			return i
+			return i;
 		},
-		callsEnabled: (state) => state.isCallsEnabled,
+		callsEnabled: state => state.isCallsEnabled,
 
 		checkCallsEnabled: function () {
-			if (
-				this.$store.state.ChatStatuses[this.m_chat.roomId]?.enabled
-			) {
+			if (this.$store.state.ChatStatuses[this.m_chat.roomId]?.enabled) {
 				this.wait = false;
 				return true;
-			}else if (
+			} else if (
 				this.$store.state.ChatStatuses[this.m_chat.roomId]?.isWaiting
 			) {
 				return "wait";
@@ -215,14 +216,13 @@ export default {
 			}
 		},
 
-
 		isGroup: function () {
 			return this.m_chat?.name.slice(0, 1) === "@";
 		},
 
-		auth: (state) => state.auth,
+		auth: state => state.auth,
 
-		isCallsActive: (state) => state.isCallsActive,
+		isCallsActive: state => state.isCallsActive,
 
 		m_chat: function () {
 			if (this.chat && this.chat.roomId) {
@@ -257,60 +257,70 @@ export default {
 			return this.feesDirection == "include"
 				? this.donationAmount
 				: this.donationAmount + this.calculatedFees;
-		},
+		}
 	}),
 	methods: {
-		searchControlKey : function(key){
-			if(key == 'up') this.tobottomsearch()
-			if(key == 'down') this.toupsearch()
-
+		searchControlKey: function (key) {
+			if (key == "up") this.tobottomsearch();
+			if (key == "down") this.toupsearch();
 		},
-		toupsearch : function(){
-
-			if(!this.searchresults) return 
-
-			var i = this.focusedeventIndex
-
-			if (i <= this.searchresults.length - 2){
-				this.$emit('tosearchevent', this.searchresults[this.focusedeventIndex + 1])
-			}
-			else{
-				this.$emit('tosearchevent', this.searchresults[0])
-
-			}
-
+		openCallModal() {
+			this.callModalState = "opened";
 		},
-		tobottomsearch : function(){
-
-			if(!this.searchresults && this.searchresults.length) return 
-
-			var i = this.focusedeventIndex
-			if (i > 0) this.$emit('tosearchevent', this.searchresults[this.focusedeventIndex - 1])
-			else this.$emit('tosearchevent', this.searchresults[this.searchresults.length - 1])
+		closeCallModal() {
+			this.callModalState = "closed";
 		},
-		backfromsearch : function(){
-			if (this.process){
-				this.$router.push("chats?process=" + this.process).catch((e) => {});
-			}
-			else{
-				this.searchactive = false
-				this.searching('')
+		toupsearch: function () {
+			if (!this.searchresults) return;
+
+			var i = this.focusedeventIndex;
+
+			if (i <= this.searchresults.length - 2) {
+				this.$emit(
+					"tosearchevent",
+					this.searchresults[this.focusedeventIndex + 1]
+				);
+			} else {
+				this.$emit("tosearchevent", this.searchresults[0]);
 			}
 		},
+		tobottomsearch: function () {
+			if (!this.searchresults && this.searchresults.length) return;
 
-		tosearch : function(){
-			this.searchactive = true
+			var i = this.focusedeventIndex;
+			if (i > 0)
+				this.$emit(
+					"tosearchevent",
+					this.searchresults[this.focusedeventIndex - 1]
+				);
+			else
+				this.$emit(
+					"tosearchevent",
+					this.searchresults[this.searchresults.length - 1]
+				);
+		},
+		backfromsearch: function () {
+			if (this.process) {
+				this.$router.push("chats?process=" + this.process).catch(e => {});
+			} else {
+				this.searchactive = false;
+				this.searching("");
+			}
+		},
+
+		tosearch: function () {
+			this.searchactive = true;
 
 			setTimeout(() => {
-				if(this.$refs.search) this.$refs.search.focus()
-			}, 100)
+				if (this.$refs.search) this.$refs.search.focus();
+			}, 100);
 		},
 
-		searching : function(str){
-			this.$emit('searching', str)
+		searching: function (str) {
+			this.$emit("searching", str);
 
-			if(!str){
-				this.searchactive = false
+			if (!str) {
+				this.searchactive = false;
 			}
 		},
 
@@ -319,7 +329,7 @@ export default {
 				this.$dialog
 					.confirm(this.$t("caption.request"), {
 						okText: this.$t("yes"),
-						cancelText: this.$t("cancel"),
+						cancelText: this.$t("cancel")
 					})
 
 					.then(() => {
@@ -338,30 +348,30 @@ export default {
 				return;
 			}
 			let local = document.querySelector("body");
+			this.openCallModal();
+		},
+		/**
+		 * @param {'video' || 'voice'} callType
+		 */
+		initiateCall(type) {
+			if (this.callloading) return;
 
-			if(this.callloading) return
-
-			this.callloading = true
+			this.callloading = true;
 
 			setTimeout(() => {
-				this.core.mtrx.bastyonCalls.initCall(
-					this.chat.roomId,
-					local
-				).then((matrixCall) => {
-	
-	
-					// if (matrixCall) this.$store.dispatch("CALL", matrixCall);
-				}).catch(e => {
-					console.log("error", e);
-				}).finally(() => {
-					this.callloading = false
-				})
-			}, 50 )
-
-			
-
+				this.core.mtrx.bastyonCalls
+					.initCall(this.chat.roomId, type)
+					.then(matrixCall => {
+						// if (matrixCall) this.$store.dispatch("CALL", matrixCall);
+					})
+					.catch(e => {
+						console.log("error", e);
+					})
+					.finally(() => {
+						this.callloading = false;
+					});
+			}, 50);
 		},
-
 		requestCallsAccess() {
 			this.core.mtrx.client.sendStateEvent(
 				this.m_chat.roomId,
@@ -373,11 +383,11 @@ export default {
 		navigateToProfile(id) {
 			this.$router
 				.push({ path: `/contact?id=${f.getmatrixid(id)}` })
-				.catch((e) => {});
+				.catch(e => {});
 		},
 		getuserinfo: function () {
 			if (this.u) {
-				this.core.user.usersInfo(this.u).then((info) => {
+				this.core.user.usersInfo(this.u).then(info => {
 					this.userinfo = info[0];
 				});
 			}
@@ -423,14 +433,14 @@ export default {
 			if (item.click === "LeaveFromRoom") {
 				let self = this;
 
-				this.core.mtrx.client.leave(this.chat.roomId).then((r) => {
+				this.core.mtrx.client.leave(this.chat.roomId).then(r => {
 					this.core.mtrx.client
 						.forget(this.chat.roomId, true)
-						.then((r) => {
+						.then(r => {
 							this.$store.commit("DELETE_ROOM", this.chat.roomId);
 						})
-						.then((r) => {
-							this.$router.push({ path: "/chats" }).catch((e) => {});
+						.then(r => {
+							this.$router.push({ path: "/chats" }).catch(e => {});
 						});
 				});
 
@@ -442,7 +452,7 @@ export default {
 				let banUser = this.findOtherUser();
 				if (banUser && banUser.userId) banUserId = banUser.userId;
 				let roomID = this.chat.roomId;
-				this.core.mtrx.client.ban(roomID, banUserId, "ban").then((r) => {});
+				this.core.mtrx.client.ban(roomID, banUserId, "ban").then(r => {});
 				this.roomBanned = true;
 				this.$refs.dropdownMenu.hidePopup();
 			}
@@ -451,7 +461,7 @@ export default {
 				let banUserId = "";
 				let banUser = this.findOtherUser();
 				if (banUser && banUser.userId) banUserId = banUser.userId;
-				this.core.mtrx.client.unban(this.chat.roomId, banUserId).then((r) => {
+				this.core.mtrx.client.unban(this.chat.roomId, banUserId).then(r => {
 					this.core.mtrx.client.invite(this.chat.roomId, banUserId);
 				});
 				this.roomBanned = false;
@@ -469,7 +479,7 @@ export default {
 					? this.$f.deep(
 							this,
 							"$store.state.users." + this.$f.getmatrixid(receiverObj.name)
-					  )
+						)
 					: null;
 			}
 		},
@@ -504,8 +514,8 @@ export default {
 						var outputs = [
 							{
 								address: self.receiver.source.address,
-								amount: self.donationAmount,
-							},
+								amount: self.donationAmount
+							}
 						];
 						sdk.wallet.txbase(
 							[sdk.address.pnet().address],
@@ -553,7 +563,7 @@ export default {
 			var sdk = window.POCKETNETINSTANCE.platform.sdk;
 			sdk.node.transactions.get.canSpend(
 				sdk.address.pnet().address,
-				(currentBalance) => {
+				currentBalance => {
 					// If balance is too low
 					if (
 						!currentBalance ||
@@ -569,8 +579,8 @@ export default {
 						var outputs = [
 							{
 								address: self.receiver.source.address,
-								amount: self.donationAmount,
-							},
+								amount: self.donationAmount
+							}
 						];
 						sdk.wallet.embed(outputs, self.donationMessage);
 						// Create a transaction
@@ -587,7 +597,7 @@ export default {
 									return reject(err);
 								}
 								var tx = sdk.node.transactions.create.wallet(inputs, _outputs);
-								inputs.forEach((t) => {
+								inputs.forEach(t => {
 									t.cantspend = true;
 								});
 								// Try sending the transaction
@@ -599,7 +609,7 @@ export default {
 										return;
 									}
 									// Transaction has been sent
-									var ids = inputs.map((i) => i.txid);
+									var ids = inputs.map(i => i.txid);
 									sdk.node.transactions.clearUnspents(ids);
 									sdk.wallet.saveTempInfoWallet(d, inputs, _outputs);
 									// Send an event to the chat
@@ -611,7 +621,7 @@ export default {
 											to: self.receiver.id,
 											amount: self.donationAmount,
 											txId: d,
-											msgtype: "m.notice",
+											msgtype: "m.notice"
 										},
 										""
 									);
@@ -633,6 +643,6 @@ export default {
 			this.calculatedFees = null;
 			this.showFeesError = "";
 			this.showTransactionError = "";
-		},
-	},
+		}
+	}
 };

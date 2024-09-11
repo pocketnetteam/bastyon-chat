@@ -314,17 +314,24 @@ button.button
     &:after
         transform: rotate(-45deg)
 
-.fademodal-enter-active, .fademodal-leave-active
+.fademodal-enter-active, .fademodal-leave-active, .slideDownModal-enter-active, .slideDownModal-leave-active
     +transition(0.3s)
     .modal
         +transition(0.3s)
 
 .fademodal-enter, .fademodal-leave-to
     opacity: 0
-
+   
     .modal
         -webkit-transform: translateY(100%)
         transform: translateY(100%)
+
+  
+.slideDownModal-enter, .slideDownModal-leave-to
+    .modal
+        -webkit-transform: translateY(-100%)
+        transform: translateY(-100%)
+
 
 .internalpocketnetlink
     b,
