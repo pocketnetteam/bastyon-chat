@@ -1,5 +1,20 @@
 <template>
 	<div id="chatTopheader">
+		<transition name="slideDownModal">
+			<modal
+				v-if="callModalState === 'opened'"
+				@close="closeCallModal"
+				class="topsearching small active"
+			>
+				<template v-slot:body>
+					<listmenu
+						@click="closeCallModal"
+						:items="callMenuItems"
+						:onlyimit="true"
+					/>
+				</template>
+			</modal>
+		</transition>
 		<topheader v-if="chat || u">
 			<template v-slot:left>
 				<backButton action="chats" />
@@ -45,15 +60,15 @@
 						checkCallsEnabled === 'wait' || wait
 							? 'wait'
 							: checkCallsEnabled
-							? ''
-							: 'disabled'
+								? ''
+								: 'disabled'
 					"
 					:title="
 						checkCallsEnabled === 'wait' || wait
 							? $t('caption.wait')
 							: checkCallsEnabled
-							? ''
-							: $t('caption.disabled')
+								? ''
+								: $t('caption.disabled')
 					"
 					@click="bcCall"
 				>
