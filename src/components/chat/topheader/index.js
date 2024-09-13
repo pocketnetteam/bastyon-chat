@@ -18,7 +18,7 @@ export default {
 		searchresults: null,
 		focusedevent: null
 	},
-	inject: ["matches"],
+	inject: ["matches", "menuState"],
 	components: {
 		chatName,
 		chatIcon,
@@ -31,20 +31,19 @@ export default {
 			callMenuItems: [
 				{
 					icon: "fa-phone fa fa-flip-horizontal",
-					onClick: () => {
+					action: () => {
 						this.initiateCall("voice");
 					},
-					text: this.$i18n.t("caption.call")
+					text: "caption.call"
 				},
 				{
 					icon: "fa-video fa",
-					onClick: () => {
+					action: () => {
 						this.initiateCall("video");
 					},
-					text: this.$i18n.t("caption.videocall")
+					text: "caption.videocall"
 				}
 			],
-			callModalState: "closed",
 			menuItemsRoom: [
 				{
 					click: "AddMember",
@@ -265,11 +264,14 @@ export default {
 			if (key == "down") this.toupsearch();
 		},
 		openCallModal() {
-			this.callModalState = "opened";
+
+			this.menuState.set({
+				fromtop : true,
+				items: this.callMenuItems
+			});
+
 		},
-		closeCallModal() {
-			this.callModalState = "closed";
-		},
+	
 		toupsearch: function () {
 			if (!this.searchresults) return;
 

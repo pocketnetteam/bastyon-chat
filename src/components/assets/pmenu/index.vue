@@ -1,7 +1,7 @@
 <template>
 
-	<transition name="fademodal">
-		<modal v-if="menu" @close="hidePopup" mclass="small likemenu active">
+	<transition v-if="menu" :name="menu.fromtop ? 'slideDownModal' :'fademodal'">
+		<modal  @close="hidePopup" :fromtop="menu.fromtop" :mclass="'small likemenu active' + (menu.fromtop ? ' fromtop' : '')">
 
 			<template v-slot:body>
 				<listmenuwithupload :items="menu.items" :close="hidePopup">

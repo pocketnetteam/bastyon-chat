@@ -110,6 +110,25 @@
             >div
                 padding-bottom: 2 * $r
 
+
+        &.fromtop
+            .modal-wrapper
+                top : 0
+                bottom : auto
+
+            .modal
+                border-radius: 0
+                border-bottom-left-radius: 22px
+                border-bottom-right-radius: 22px
+
+            .modal-body
+                padding: 2 * $r
+                padding-top: calc(60px + var(--app-margin-top, 0))
+
+                >div
+                    padding-bottom: 2 * $r
+
+
     &.withoutheader
         .modal-header
             display: none
