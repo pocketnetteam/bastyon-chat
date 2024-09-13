@@ -245,5 +245,6 @@
 	"m.call.answer": "Active call",
 	"wait": "Waiting for a response",
 	"ended": "Call completed",
-	"reject": "Call rejected"
+	"reject": "Call rejected",
+	"connecting": "Connecting"
 }
