@@ -439,7 +439,6 @@ export default {
 									console.error(err);
 								},
 								success: function () {
-									console.log("SUCCESS");
 								},
 							});
 						}

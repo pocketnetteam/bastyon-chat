@@ -58,7 +58,6 @@ export default {
 		minimized: {
 			immediate: true,
 			handler: function () {
-				console.log("////");
 				this.globalsearch = "";
 			},
 		},

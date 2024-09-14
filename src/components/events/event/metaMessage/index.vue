@@ -137,7 +137,6 @@ export default {
 
 	watch: {
 		hiddenInParent: function (v) {
-			console.log('playing hiddenInParent', v)
 			if (this.hiddenInParent && this.playingVideo){
 				this.playingVideo.pause()
 			}
@@ -234,7 +233,6 @@ export default {
 						{
 							theme: this.core.vm.ctheme || this.$store.state.theme,
 							playingClbk : (video) => {
-								console.log('playing Clbk', video)
 								this.playingVideo = video
 							}
 						},
@@ -255,8 +253,6 @@ export default {
 			this.applicationLoading = true
 
 			window.POCKETNETINSTANCE.apps.get.applicationAny(this.miniapplink).then(r => {
-
-				console.log("application result 333", r)
 
 				this.application = r || {}
 

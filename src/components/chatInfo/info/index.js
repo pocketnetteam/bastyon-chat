@@ -117,7 +117,6 @@ export default {
 						return this.core.mtrx.kit.usersInfoForChatsStore([this.m_chat])
 					}).then((r) => {
 
-						console.log("ALL CHAT MEMBERS", r)
 						this.ready = true;
 						this.encrypted = this.m_chat.pcrypto?.canBeEncrypt();
 					})
@@ -554,7 +553,6 @@ export default {
 		},
 
 		modalInviteUser() {
-			console.log("AS#")
 			this.$emit("addMember")
 			//this.inviteUserOpened = true;
 		},

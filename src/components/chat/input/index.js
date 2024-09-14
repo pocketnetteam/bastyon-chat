@@ -348,15 +348,12 @@ export default {
 
 		tipBySearch: function (value) {
 
-			console.log('tip value', value)
-
 			if (value !== null){
 
 				let m_chat = this.core.mtrx.client.getRoom(this.chat.roomId);
 				
 				if (m_chat){
 					return this.core.mtrx.kit.usersInfoForChatsStore([m_chat]).then((r) => {
-						console.log("THIS USERS", value, r)
 						this.tipvalue = value;
 					})
 				}
@@ -1225,7 +1222,6 @@ export default {
 		},
 
 		initRecording() {
-			console.log("initRecording");
 			if (
 				this.prepareRecording ||
 				this.isRecording ||
@@ -1236,7 +1232,6 @@ export default {
 			if (window.cordova && !f.isios()) {
 				return this.initRecordingCordova();
 			}
-			console.log("dasda");
 			this.prepareRecording = cancelable(
 				this.core
 					.initMediaRecorder()

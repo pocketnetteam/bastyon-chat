@@ -59,7 +59,6 @@ export default {
 
 
         directions : function(){
-            console.log('this.fromtop', this.fromtop)
             return {
                 [this.fromtop ? 'top' : 'bottom'] : {
                     distance : 100,

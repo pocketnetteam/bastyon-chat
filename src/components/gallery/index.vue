@@ -64,7 +64,6 @@ export default {
 
 		sharecordova: function (src) {
 			if (window.plugins && window.plugins.socialsharing) {
-				console.log('src', src)
 				window.plugins.socialsharing.shareWithOptions({
 					files: [src],
 				});

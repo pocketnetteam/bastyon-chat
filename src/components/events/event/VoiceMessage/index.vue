@@ -230,8 +230,6 @@ export default {
 		draw() {
 			const canvas = this.$refs.canvas;
 
-			console.log("DRAW", this.signal, canvas)
-
 			if (!this.signal) return;
 			if (!canvas) return;
 
@@ -318,8 +316,6 @@ export default {
 					this.setTime(0);
 
 					this.signal = [...buffer.getChannelData(0)];
-
-					console.log('buffer', buffer, this.signal)
 
 					this.draw();
 				});
