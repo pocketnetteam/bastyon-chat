@@ -130,6 +130,17 @@ class MTRXKIT {
 		});
 	}
 
+	prepareChatWithUsers(m_chat) {
+
+		if(m_chat.getJoinRule() === "public"){
+			return Promise.resolve()
+		}
+
+		return this.allchatmembers([m_chat], false, true).then((r) => {
+			return this.prepareChat(m_chat);
+		})
+	}
+
 	fillContacts(m_chats) {
 		m_chats = _.filter(m_chats, (ch) => {
 			return ch.selfMembership == "join" && ch.name.length == 57 && ch.getJoinRule() != "public";

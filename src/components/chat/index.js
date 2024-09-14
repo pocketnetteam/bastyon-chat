@@ -122,7 +122,14 @@ export default {
 			immediate: true,
 			handler: function () {
 				if (this.m_chat && !_.isEmpty(this.m_chat)) {
-					this.core.mtrx.kit
+
+					this.core.mtrx.kit.prepareChatWithUsers(this.m_chat).then((r) => {
+						this.ready = true;
+
+						this.checkcrypto();
+					});
+
+					/*this.core.mtrx.kit
 						.allchatmembers([this.m_chat], false, true)
 						.then((r) => {
 							return this.core.mtrx.kit.prepareChat(this.m_chat);
@@ -131,7 +138,7 @@ export default {
 							this.ready = true;
 
 							this.checkcrypto();
-						});
+						});*/
 				}
 			},
 		},
@@ -228,8 +235,7 @@ export default {
 		},
 
 		chatusers: function () {
-			if (this.m_chat)
-				return this.core.store.state.chatusers[this.m_chat.roomId];
+			if (this.m_chat) return this.core.store.state.chatusers[this.m_chat.roomId];
 		},
 
 		localisationTitles: function () {

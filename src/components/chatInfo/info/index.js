@@ -28,6 +28,7 @@ export default {
 			pics: false,
 			fileEvents: [],
 			inputActive: false,
+			ready : false,
 			menuItems: [
 				{
 					click: "adminMakeModer",
@@ -113,10 +114,13 @@ export default {
 			handler: function () {
 				if (this.m_chat && !_.isEmpty(this.m_chat)) {
 					this.core.mtrx.kit.prepareChat(this.m_chat).then((r) => {
-						this.ready = true;
+						return this.core.mtrx.kit.usersInfoForChatsStore([this.m_chat])
+					}).then((r) => {
 
+						console.log("ALL CHAT MEMBERS", r)
+						this.ready = true;
 						this.encrypted = this.m_chat.pcrypto?.canBeEncrypt();
-					});
+					})
 
 
 				}
