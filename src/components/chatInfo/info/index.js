@@ -28,12 +28,12 @@ export default {
 			pics: false,
 			fileEvents: [],
 			inputActive: false,
-			ready : false,
+			ready: false,
 			menuItems: [
 				{
 					click: "adminMakeModer",
 					title: this.$i18n.t("caption.makeModerator"),
-					icon: "fas fa-user-shield",
+					icon: "fas fa-user-shield"
 				},
 
 				{
@@ -42,26 +42,26 @@ export default {
 					icon: "fas fa-ban",
 
 					upload: {
-						multiple: true,
-					},
+						multiple: true
+					}
 				},
 				{
 					click: "adminKick",
 					title: this.$i18n.t("caption.kick"),
-					icon: "fas fa-user-times",
-				},
+					icon: "fas fa-user-times"
+				}
 			],
 			menuItemsModer: [
 				{
 					click: "moderBan",
 					title: this.$i18n.t("caption.ban"),
-					icon: "fas fa-ban",
+					icon: "fas fa-ban"
 				},
 				{
 					click: "moderKick",
 					title: this.$i18n.t("caption.kick"),
-					icon: "fas fa-user-times",
-				},
+					icon: "fas fa-user-times"
+				}
 			],
 			admin: String,
 			imagesList: [],
@@ -75,25 +75,25 @@ export default {
 				index: 0,
 				arrowEl: false,
 				fullscreenEl: false,
-				shareEl: false,
+				shareEl: false
 			},
 			roomName: "",
 			nameEdit: false,
 			accordionList: [
 				{ title: this.$i18n.t("caption.members"), id: "members" },
 				{ title: this.$i18n.t("caption.media"), id: "media" },
-				{ title: this.$i18n.t("caption.files"), id: "files" },
+				{ title: this.$i18n.t("caption.files"), id: "files" }
 			],
 			isActive: null,
 			isActiveAction: null,
 			currentUser: "",
 			actionUser: {},
 			actionUserMenu: false,
-			chatMembers: [],
+			chatMembers: []
 		};
 	},
 	props: {
-		chat: {},
+		chat: {}
 	},
 	components: {
 		images,
@@ -105,7 +105,7 @@ export default {
 		userspic,
 		contacts,
 		chatName,
-		chatIcon,
+		chatIcon
 	},
 
 	watch: {
@@ -113,17 +113,17 @@ export default {
 			immediate: true,
 			handler: function () {
 				if (this.m_chat && !_.isEmpty(this.m_chat)) {
-					this.core.mtrx.kit.prepareChat(this.m_chat).then((r) => {
-						return this.core.mtrx.kit.usersInfoForChatsStore([this.m_chat])
-					}).then((r) => {
-
-						this.ready = true;
-						this.encrypted = this.m_chat.pcrypto?.canBeEncrypt();
-					})
-
-
+					this.core.mtrx.kit
+						.prepareChat(this.m_chat)
+						.then(r => {
+							return this.core.mtrx.kit.usersInfoForChatsStore([this.m_chat]);
+						})
+						.then(r => {
+							this.ready = true;
+							this.encrypted = this.m_chat.pcrypto?.canBeEncrypt();
+						});
 				}
-			},
+			}
 		},
 		chat: {
 			immediate: true,
@@ -132,9 +132,7 @@ export default {
 					this.$store.commit("SET_CURRENT_ROOM", this.chat.roomId);
 				} else this.$store.commit("SET_CURRENT_ROOM", false);
 
-
 				if (this.chat && this.chat.roomId) {
-					
 					let pushRules = this.core.mtrx.client.pushProcessor.getPushRuleById(
 						this.chat.roomId
 					);
@@ -142,10 +140,9 @@ export default {
 					if (pushRules !== null) {
 						this.roomMuted = true;
 					}
-
 				}
-			},
-		},
+			}
+		}
 	},
 
 	computed: {
@@ -163,15 +160,15 @@ export default {
 		canInvite: function () {
 			return !this.tetatet && this.me.powerLevel > 0;
 		},
-
+		isChatCreator: function () {
+			return this.me?.powerLevel === 100;
+		},
 		shareRoomLink: function () {
 			return `https://bastyon.com/welcome?publicroom=${this.chat.roomId}`;
-
-
 		},
 		me: function () {
 			return (
-				_.find(this.membersList, (m) => {
+				_.find(this.membersList, m => {
 					return m.userId == this.core.user.userinfo.id;
 				}) || {}
 			);
@@ -180,20 +177,18 @@ export default {
 			var pushRules = this.core.mtrx.client.pushProcessor.getPushRuleById(
 				this.chat.roomId
 			);
-			let isEnabled = this.m_chat.currentState.getStateEvents(
-				"m.room.callsEnabled"
-			).find(
-				(e) =>
-					!(!this.core.mtrx.me(e?.event?.sender)) &&
-					e?.event?.sender.split(":")[0].replace("@", "") ===
-					e?.event?.state_key
-			)
+			let isEnabled = this.m_chat.currentState
+				.getStateEvents("m.room.callsEnabled")
+				.find(
+					e =>
+						!!this.core.mtrx.me(e?.event?.sender) &&
+						e?.event?.sender.split(":")[0].replace("@", "") ===
+							e?.event?.state_key
+				);
 			if (pushRules !== null) {
 				this.roomMuted = true;
 			}
-			if (
-				isEnabled
-			) {
+			if (isEnabled) {
 				this.roomCallsDisabled = !isEnabled.event.content.enabled;
 			}
 			return this.m_chat.timeline || {};
@@ -235,7 +230,7 @@ export default {
 					imgArr.push({
 						src: event.event.content.url,
 						w: event.event.content.info.w,
-						h: event.event.content.info.h,
+						h: event.event.content.info.h
 					});
 				}
 			});
@@ -243,17 +238,15 @@ export default {
 		},
 
 		membersList: function () {
-			return this.core.mtrx
-				.chatUsers(this.chat.roomId)
-				.filter((user) => {
-					if(user.membership == "leave") return
+			return this.core.mtrx.chatUsers(this.chat.roomId).filter(user => {
+				if (user.membership == "leave") return;
 
-					var ui = f.deep(this, "core.store.state.users." + user.userId) || {}
+				var ui = f.deep(this, "core.store.state.users." + user.userId) || {};
 
-					if(!ui.name) return
+				if (!ui.name) return;
 
-					return true
-				});
+				return true;
+			});
 		},
 
 		tetatet: function () {
@@ -270,7 +263,7 @@ export default {
 				return this.m_chat.currentState.getStateEvents("m.room.avatar")[0].event
 					.content.avatarUrl;
 			}
-		},
+		}
 	},
 	mounted() {
 		const smthconstfortexst = this.events;
@@ -285,13 +278,13 @@ export default {
 		complain: function () {
 			if (this.curation) {
 				var p = {
-					address1: this.core.user.userinfo.source.address,
+					address1: this.core.user.userinfo.source.address
 				};
 
 				if (this.tetatet) {
 					var ui = _.find(
 						this.core.mtrx.chatUsersInfo(this.chat.roomId) || [],
-						(u) => {
+						u => {
 							return u.id != this.core.user.userinfo.id;
 						}
 					);
@@ -308,15 +301,16 @@ export default {
 		},
 
 		getPublicRoom() {
-			this.core.mtrx.client.publicRooms().then((r) => {
+			this.core.mtrx.client.publicRooms().then(r => {
 				this.publicRoom = r.chunk.filter(
-					(room) => room.room_id === this.chat.roomId
+					room => room.room_id === this.chat.roomId
 				)[0];
 				if (this.publicRoom.topic) {
 					return (this.topicTxt = this.publicRoom.topic.replace(/_/g, " "));
 				}
 			});
 		},
+
 		//// ???
 		banForgetRoom() {
 			var banUserId = "";
@@ -331,7 +325,7 @@ export default {
 
 			this.core.mtrx.client
 				.ban(this.chat.roomId, banUserId, "leave")
-				.then((r) => {
+				.then(r => {
 					return r;
 				});
 		},
@@ -339,12 +333,12 @@ export default {
 		muteCalls() {
 			let roomId = this.chat.roomId;
 			const self = this;
-			self.roomCallsDisabled = !self.roomCallsDisabled
+			self.roomCallsDisabled = !self.roomCallsDisabled;
 			if (!self.roomCallsDisabled) {
 				self.core.mtrx.client.sendStateEvent(
-				  roomId,
-				  "m.room.request_calls_access",
-				  { accepted: true }
+					roomId,
+					"m.room.request_calls_access",
+					{ accepted: true }
 				);
 			}
 			self.core.mtrx.client.sendStateEvent(
@@ -374,7 +368,7 @@ export default {
 				return;
 			}
 
-			this.core.mtrx.blockUser(users[0].userId).catch((e) => { });
+			this.core.mtrx.blockUser(users[0].userId).catch(e => {});
 		},
 
 		unblock() {
@@ -384,19 +378,19 @@ export default {
 				return;
 			}
 
-			this.core.mtrx.unblockUser(users[0].userId).catch((e) => { });
+			this.core.mtrx.unblockUser(users[0].userId).catch(e => {});
 		},
 
 		eventsList() {
 			if (typeof this.events.filter == "function") {
 				this.imageEvents = this.events.filter(
-					(event) =>
+					event =>
 						event.event.content.msgtype === "m.image" ||
 						(event.event.type === "m.room.encrypted" &&
 							event.getClearContent().msgtype === "m.image")
 				);
 				this.fileEvents = this.events.filter(
-					(event) => event.event.content.msgtype === "m.file"
+					event => event.event.content.msgtype === "m.file"
 				);
 			}
 		},
@@ -410,22 +404,60 @@ export default {
 			this.$dialog
 				.confirm("Do you really want to leave room?", {
 					okText: this.$i18n.t("yes"),
-					cancelText: this.$i18n.t("cancel"),
+					cancelText: this.$i18n.t("cancel")
 				})
 
-				.then((dialog) => {
-					this.core.mtrx.client.leave(this.chat.roomId).then((r) => {
+				.then(dialog => {
+					this.core.mtrx.client.leave(this.chat.roomId).then(r => {
 						this.core.mtrx.client
 							.forget(this.chat.roomId, true)
-							.then((r) => {
+							.then(r => {
 								return r;
 							})
-							.then((r) => {
+							.then(r => {
 								this.$store.commit("DELETE_ROOM", this.chat.roomId);
 
-								this.$router.push({ path: "/chats" }).catch((e) => { });
+								this.$router.push({ path: "/chats" }).catch(e => {});
 							});
 					});
+				});
+		},
+
+		deleteRoom() {
+			this.$dialog
+				.confirm("Do you really want to delete room?", {
+					okText: this.$i18n.t("yes"),
+					cancelText: this.$i18n.t("cancel")
+				})
+
+				.then(async () => {
+					try {
+						const members = this.m_chat.currentState.getMembers();
+
+						for (const member of members) {
+							if (member.userId === this.core.mtrx.client.getUserId()) continue;
+
+							console.log(`Kicking ${member.userId}...`);
+							this.core.mtrx.client.kick(
+								this.chat.roomId,
+								member.userId,
+								"Kicking all members"
+							);
+						}
+
+						this.core.mtrx.client.leave(this.chat.roomId).then(r => {
+							this.core.mtrx.client
+								.forget(this.chat.roomId, false)
+								.then(() => {
+									this.$store.commit("DELETE_ROOM", this.chat.roomId);
+								})
+								.then(() => {
+									this.$router.push({ path: "/chats" }).catch(e => {});
+								});
+						});
+					} catch (error) {
+						console.error("Failed to kick members:", error);
+					}
 				});
 		},
 
@@ -448,8 +480,7 @@ export default {
 
 		///////////////
 		banUser(user) {
-
-			var promise = null
+			var promise = null;
 
 			this.$store.state.globalpreloader = true;
 
@@ -459,13 +490,13 @@ export default {
 						this.m_chat.roomId,
 						f.getMatrixIdFull(user.userId, this.core.domain)
 					)
-					.then((r) => {
+					.then(r => {
 						this.core.mtrx.client
 							.invite(
 								this.m_chat.roomId,
 								f.getMatrixIdFull(user.userId, this.core.domain)
 							)
-							.then((r) => { });
+							.then(r => {});
 					});
 			} else {
 				promise = this.core.mtrx.client
@@ -474,25 +505,26 @@ export default {
 						f.getMatrixIdFull(user.userId, this.core.domain),
 						"admin ban"
 					)
-					.then((r) => { });
+					.then(r => {});
 			}
 
 			promise.finally(() => {
 				this.$store.state.globalpreloader = false;
-			})
+			});
 		},
 		kickUser(user) {
-
 			this.$store.state.globalpreloader = true;
 
-			this.core.mtrx.client.kick(
-				this.m_chat.roomId,
-				f.getMatrixIdFull(user.userId, this.core.domain),
-				"admin kicked"
-			)
-			.then(this.$nextTick(function () { })).finally(() => {
-				this.$store.state.globalpreloader = false;
-			});
+			this.core.mtrx.client
+				.kick(
+					this.m_chat.roomId,
+					f.getMatrixIdFull(user.userId, this.core.domain),
+					"admin kicked"
+				)
+				.then(this.$nextTick(function () {}))
+				.finally(() => {
+					this.$store.state.globalpreloader = false;
+				});
 		},
 		makeAdmin(user) {
 			var level = 50;
@@ -506,15 +538,16 @@ export default {
 
 			this.$store.state.globalpreloader = true;
 
-			this.core.mtrx.client.setPowerLevel(
-				this.m_chat.roomId,
-				f.getMatrixIdFull(user.userId, this.core.domain),
-				level,
-				event[0]
-			)
-			.finally((r) => {
-				this.$store.state.globalpreloader = false;
-			});
+			this.core.mtrx.client
+				.setPowerLevel(
+					this.m_chat.roomId,
+					f.getMatrixIdFull(user.userId, this.core.domain),
+					level,
+					event[0]
+				)
+				.finally(r => {
+					this.$store.state.globalpreloader = false;
+				});
 		},
 
 		/////////////////
@@ -525,7 +558,7 @@ export default {
 			this.inputActive = true;
 		},
 
-		editRoomName() { },
+		editRoomName() {},
 
 		showPhotoSwipe(index) {
 			this.isOpen = true;
@@ -553,7 +586,7 @@ export default {
 		},
 
 		modalInviteUser() {
-			this.$emit("addMember")
+			this.$emit("addMember");
 			//this.inviteUserOpened = true;
 		},
 
@@ -567,7 +600,7 @@ export default {
 		addTopic() {
 			this.core.mtrx.client
 				.setRoomTopic(this.chat.roomId, this.topicTxt.replace(/ /g, "_"))
-				.then((r) => {
+				.then(r => {
 					this.getPublicRoom();
 				});
 		},
@@ -580,8 +613,8 @@ export default {
 		sharelink() {
 			this.core.share({
 				urls: [this.shareRoomLink],
-				route: "chatInfo?id=" + this.chat.roomId,
+				route: "chatInfo?id=" + this.chat.roomId
 			});
-		},
-	},
+		}
+	}
 };
