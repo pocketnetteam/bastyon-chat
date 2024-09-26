@@ -221,7 +221,9 @@ export default {
 				return m_chat || {};
 			}
 		},
-
+		isMemberJoined: function () {
+			return this.me.membership === "join";
+		},
 		galleryImages: function () {
 			var imgArr = [];
 
@@ -430,14 +432,13 @@ export default {
 					cancelText: this.$i18n.t("cancel")
 				})
 
-				.then(async () => {
+				.then(() => {
 					try {
 						const members = this.m_chat.currentState.getMembers();
 
 						for (const member of members) {
 							if (member.userId === this.core.mtrx.client.getUserId()) continue;
 
-							console.log(`Kicking ${member.userId}...`);
 							this.core.mtrx.client.kick(
 								this.chat.roomId,
 								member.userId,

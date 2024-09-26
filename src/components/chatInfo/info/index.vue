@@ -121,14 +121,13 @@
 						{{ $t("caption.leave") }} <i class="fas fa-sign-out-alt"></i>
 					</button>
 					<button
+						v-if="isChatCreator"
 						class="button small rounded badbutton"
 						@click="deleteRoom()"
-						v-if="isChatCreator"
 					>
 						{{ $t("button.delete") }} <i class="fas fa-trash"></i>
 					</button>
 				</template>
-
 				<button
 					class="button small rounded badbutton"
 					@click="blockUser()"
@@ -152,6 +151,13 @@
 				>
 					{{ $t("button.Complain") }}
 					<i class="fas fa-exclamation-triangle"></i>
+				</button>
+				<button
+					v-if="tetatet && isMemberJoined"
+					class="button small rounded badbutton"
+					@click="deleteRoom()"
+				>
+					{{ $t("caption.leaveAndDelete") }} <i class="fas fa-trash"></i>
 				</button>
 			</div>
 		</template>
