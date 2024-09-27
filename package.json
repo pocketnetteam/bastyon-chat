@@ -32,7 +32,7 @@
 		"file-saver": "^2.0.5",
 		"howler": "^2.2.3",
 		"jquery": "^3.5.1",
-		"matrix-js-sdk-bastyon": "23.1.14",
+		"matrix-js-sdk-bastyon": "23.2.1",
 		"miscreant": "^0.3.2",
 		"pbkdf2": "^3.1.2",
 		"qs": "^6.10.3",

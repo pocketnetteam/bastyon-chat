@@ -597,7 +597,7 @@ class Core {
 					return this.user.matrixId(i.id);
 				});
 
-				var initialstate = [
+				var initialstate = users.length == 1 ? [
 					{
 						type: "m.set.encrypted",
 						state_key: "",
@@ -605,7 +605,7 @@ class Core {
 							encrypted: true,
 						},
 					},
-				];
+				] : [];
 
 				var commonAliasName =
 					room_alias_name + (alliasSuffix ? "@" + alliasSuffix : "");
