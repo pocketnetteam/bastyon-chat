@@ -1155,12 +1155,14 @@ export default {
 									r.duration = media.duration;
 								}
 
-								this.createVoiceMessage(r, false);
+								this.createVoiceMessage(r, true);
 
 								return Promise.resolve();
 							})
 								.catch(e => {
 									this.clear();
+									
+									if (unsleep) unsleep(false);
 
 									console.error(e);
 								})
