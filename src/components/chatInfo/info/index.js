@@ -434,6 +434,7 @@ export default {
 
 				.then(() => {
 					try {
+						this.$store.state.globalpreloader = true;
 						const members = this.m_chat.currentState.getMembers();
 
 						for (const member of members) {
@@ -446,16 +447,21 @@ export default {
 							);
 						}
 
-						this.core.mtrx.client.leave(this.chat.roomId).then(r => {
-							this.core.mtrx.client
-								.forget(this.chat.roomId, false)
-								.then(() => {
-									this.$store.commit("DELETE_ROOM", this.chat.roomId);
-								})
-								.then(() => {
-									this.$router.push({ path: "/chats" }).catch(e => {});
-								});
-						});
+						this.core.mtrx.client
+							.leave(this.chat.roomId)
+							.then(r => {
+								this.core.mtrx.client
+									.forget(this.chat.roomId, false)
+									.then(() => {
+										this.$store.commit("DELETE_ROOM", this.chat.roomId);
+									})
+									.then(() => {
+										this.$router.push({ path: "/chats" }).catch(e => {});
+									});
+							})
+							.finally(() => {
+								this.$store.state.globalpreloader = false;
+							});
 					} catch (error) {
 						console.error("Failed to kick members:", error);
 					}
