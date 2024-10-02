@@ -79,7 +79,7 @@
 							v-if="!isRecording && record"
 							class="iconbutton"
 							@click="
-								(e) => {
+								e => {
 									sendVoiceMessage();
 								}
 							"
@@ -91,10 +91,11 @@
 					</div>
 				</div>
 				<div class="bottom" v-if="donate">
-					<div class="count">
-						<i class="icon donate">Donate</i>
-						<span class="sum">{{ donate.value }} PKOIN</span>
+					<div class="donate-sum">
+						<i class="fas fa-plus-circle"></i>
+						<span class="sum">{{ donate.value }}</span>
 					</div>
+
 					<i class="icon remove fa fa-times" @click="removetransaction"></i>
 				</div>
 			</div>
