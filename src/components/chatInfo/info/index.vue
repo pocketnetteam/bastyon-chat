@@ -9,7 +9,6 @@
 					:m_chat="m_chat"
 					:hideunseen="true"
 				/>
-			
 			</div>
 
 			<chatName
@@ -27,7 +26,6 @@
 		<!--    {{ isRole }}-->
 
 		<template v-if="ready">
-
 			<div class="roomAccordionsList">
 				<div
 					class="accordion"
@@ -118,15 +116,18 @@
 						{{ $t("caption.enableCalls") }} <i class="fas fa-video"></i>
 					</span>
 				</button>
-
-				<button
-					class="button small rounded badbutton"
-					@click="forgetRoom()"
-					v-if="!tetatet"
-				>
-					{{ $t("caption.leave") }} <i class="fas fa-sign-out-alt"></i>
-				</button>
-
+				<template v-if="!tetatet">
+					<button class="button small rounded badbutton" @click="forgetRoom()">
+						{{ $t("caption.leave") }} <i class="fas fa-sign-out-alt"></i>
+					</button>
+					<button
+						v-if="isChatCreator"
+						class="button small rounded badbutton"
+						@click="deleteRoom()"
+					>
+						{{ $t("button.delete") }} <i class="fas fa-trash"></i>
+					</button>
+				</template>
 				<button
 					class="button small rounded badbutton"
 					@click="blockUser()"
@@ -148,17 +149,22 @@
 					@click="complain()"
 					v-if="curation /* && (blockedCheck || !tetatet)*/"
 				>
-					{{ $t("button.Complain") }} <i class="fas fa-exclamation-triangle"></i>
+					{{ $t("button.Complain") }}
+					<i class="fas fa-exclamation-triangle"></i>
+				</button>
+				<button
+					v-if="tetatet && isMemberJoined"
+					class="button small rounded badbutton"
+					@click="deleteRoom()"
+				>
+					{{ $t("caption.leaveAndDelete") }} <i class="fas fa-trash"></i>
 				</button>
 			</div>
-
 		</template>
 
 		<template v-else>
 			<linepreloader />
 		</template>
-
-		
 	</div>
 </template>
 
