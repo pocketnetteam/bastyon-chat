@@ -390,21 +390,28 @@ var store = new Vuex.Store({
 		SET_CHATS_TO_STORE(state, chats) {
 			state.chats = chats;
 
-			chats.forEach(chat => {
-				if (chat && chat.roomId) {
-					if (!state.chatsMap.hasOwnProperty(chat.roomId)) {
-						state.chatsMap = { ...state.chatsMap, [chat.roomId]: chat };
-					} else {
-						state.chatsMap[chat.roomId] = chat;
-					}
+			var chatsMap = {};
 
-					const aid = chat.info?.title?.replace("#", "");
-					if (aid && !state.chatsMap.hasOwnProperty(aid)) {
-						state.chatsMap = { ...state.chatsMap, [aid]: chat };
-					}
+			_.each(chats, function (chat) {
+				var aid = chat.info?.title?.replace("#", "");
+
+				if (!state.chatsMap[chat.roomId] || state.force[chat.roomId]) {
+					Vue.set(state.chatsMap, chat.roomId, chat);
 				}
+
+				if (!state.chatsMap[aid] || state.force[chat.roomId]) {
+					Vue.set(state.chatsMap, aid, chat);
+				}
+
+				chatsMap[chat.roomId] = chat;
+				chatsMap[aid] = chat;
+
+				Vue.delete(state.force, chat.roomId);
 			});
-			//state.chatsMap = chatsMap;
+
+			_.each(state.chatsMap, function (c, id) {
+				if (!chatsMap[id]) Vue.delete(state.chatsMap, id);
+			});
 		},
 		SET_READ_TO_STORE(state, readreciepts) {
 			_.each(readreciepts, (r, chatid) => {
@@ -770,7 +777,6 @@ var store = new Vuex.Store({
 				} else {
 					r.summary.lastModified = r.getLastActiveTimestamp();
 				}
-				console.log(r);
 				r.summary.selfMembership = r.selfMembership;
 				r.summary.info = {
 					title: r.name

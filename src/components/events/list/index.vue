@@ -7,7 +7,7 @@
 			mobile,
 			ios,
 			menuOpen,
-			imagesList: this.scrollType === 'custom' ? 'imagesList' : '',
+			imagesList: this.scrollType === 'custom' ? 'imagesList' : ''
 		}"
 	>
 		<div
@@ -37,10 +37,10 @@
 						@showMultiSelect="showMultiSelect"
 						@selectMessage="selectMessage"
 						@removeMessage="removeMessage"
-						@openImageEvent="(e) => galleryOpen(e)"
-						@removeEvent="(e) => removeEvent(event)"
-						@editing="(text) => editingEvent({ event, text })"
-						@reply="(e) => replyEvent({ event })"
+						@openImageEvent="e => galleryOpen(e)"
+						@removeEvent="e => removeEvent(event)"
+						@editing="text => editingEvent({ event, text })"
+						@reply="e => replyEvent({ event })"
 						@mounted="emounted"
 						@menuIsVisible="menuIsVisibleHandler"
 						@toreference="toreference"

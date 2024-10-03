@@ -6,7 +6,7 @@
 			bout: !pocketnet,
 			minimized,
 			fix: pocketnet,
-			active,
+			active
 		}"
 	>
 		<div class="work" ref="work">
@@ -17,7 +17,7 @@
 					@removeEvent="removeEvent"
 					@editingEvent="editingEvent"
 					@replyEvent="replyEvent"
-					@galleryEventOpen="(e) => imageGallery(e)"
+					@galleryEventOpen="e => imageGallery(e)"
 					@menuIsVisible="menuIsVisibleHandler"
 					@toreference="scrollToEvent"
 					ref="eventslist"

@@ -10,7 +10,7 @@ export default {
 	name: "chatExported",
 
 	components: {
-		Stream: () => import('./stream.vue')
+		Stream: () => import("./stream.vue")
 	},
 
 	provide() {
@@ -30,17 +30,17 @@ export default {
 
 			menuState: {
 				get: () => this.menuState,
-				set: (val) => this.$set(this, "menuState", val)
+				set: val => this.$set(this, "menuState", val)
 			},
 
 			matches: {},
 			markText: () => {},
-			
+
 			userBanned: this.userBanned
-		}
+		};
 	},
 
-	data : function(){
+	data: function () {
 		return {
 			style: null,
 			videoUrl: null,
@@ -56,27 +56,29 @@ export default {
 			userBanned: {
 				value: null,
 				get: () => this.userBanned?.value,
-				set: (val) => {
+				set: val => {
 					this.$set(this.userBanned, "value", val);
 				}
 			}
-		}
+		};
 	},
 
-	created () {
+	created() {
 		if (!this.videoMeta.isLive) {
 			this.leaveRoom();
 		}
 
-		this.userBanned.set((() => {
-			const id = this.m_chat.myUserId;
-			return this.chat.currentState?.members[id]?.membership === "ban";
-		})());
+		this.userBanned.set(
+			(() => {
+				const id = this.m_chat.myUserId;
+				return this.chat.currentState?.members[id]?.membership === "ban";
+			})()
+		);
 	},
 
 	computed: {
 		...mapState({
-			auth: (state) => state.auth
+			auth: state => state.auth
 		}),
 
 		streamMode() {
@@ -91,7 +93,9 @@ export default {
 	methods: {
 		getMember(user) {
 			return this.m_chat.getMember(
-				user.userId.includes("@") ? user.userId : f.getMatrixIdFull(user.userId, this.core.domain)
+				user.userId.includes("@")
+					? user.userId
+					: f.getMatrixIdFull(user.userId, this.core.domain)
 			);
 		},
 
@@ -112,13 +116,12 @@ export default {
 				"m.room.power_levels"
 			);
 
-			this.core.mtrx.client
-				.setPowerLevel(
-					this.chat.roomId,
-					user.userId,
-					user.powerLevel === 50 ? 0 : 50,
-					event[0]
-				);
+			this.core.mtrx.client.setPowerLevel(
+				this.chat.roomId,
+				user.userId,
+				user.powerLevel === 50 ? 0 : 50,
+				event[0]
+			);
 
 			return Promise.resolve();
 		},
@@ -128,31 +131,19 @@ export default {
 
 			if (user.membership === "ban") {
 				this.core.mtrx.client
-					.unban(
-						this.m_chat.roomId,
-						user.userId
-					)
+					.unban(this.m_chat.roomId, user.userId)
 					.then(() => {
-						this.core.mtrx.client
-							.invite(
-								this.m_chat.roomId,
-								user.userId
-							);
+						this.core.mtrx.client.invite(this.m_chat.roomId, user.userId);
 					});
 			} else {
-				this.core.mtrx.client
-					.ban(
-						this.m_chat.roomId,
-						user.userId,
-						"admin ban"
-					);
+				this.core.mtrx.client.ban(this.m_chat.roomId, user.userId, "admin ban");
 			}
 
 			return Promise.resolve();
 		},
 
 		leaveRoom() {
-			this.core.mtrx.client.leave(this.chat.roomId).then((r) => {
+			this.core.mtrx.client.leave(this.chat.roomId).then(r => {
 				/* this.core.mtrx.client
 					.forget(this.chat.roomId, true)
 					.then((r) => {
