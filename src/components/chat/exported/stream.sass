@@ -237,33 +237,30 @@ $bastyon: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTEiIGhlaWdodD0iMTIiIHZpZXd
 
         .bottom
           display: flex
-          flex-basis: 100%
           align-items: center
-          padding: 0.5 * $r $r * 2 0 $r * 2.5
-
-          .count
-            background-color: srgb(--color-txt-ac)
-            border-radius: 6px
-            color: srgb(--text-on-bg-shadow-color)
-            cursor: default
-            display: grid
-            grid-template-columns: auto auto
-            grid-gap: $r
-            padding: 0.5 * $r $r
-
+          .donate-sum
+            display: inline
+            border-radius: 25px
+            padding: .5em
+            padding-left: 1em
+            padding-right: 1em
+            color: rgb(var(--text-on-bg-ac-color))
+            margin-left: .5em
+            font-size: .8em
+            font-weight: 500
+            white-space: nowrap
+            background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab)
+            background-size: 400% 400%
+     
           .icon
-            &.donate
-              background-color: srgb(--text-on-bg-shadow-color)
-              width: 1em
-
+            &.fa-plus-circle
+              margin-right: 5px
             &.remove
               color: srgb(--color-bad)
               cursor: pointer
-              margin: 0 0 0 $r
-              padding: 0.5 * $r
+              padding: 6px
               opacity: .75
               +transitionopt(.25s, opacity)
-
               &:hover
                 opacity: 1
 
