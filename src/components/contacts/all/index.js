@@ -7,7 +7,7 @@ export default {
 
 	components: {
 		previewRoom,
-		previewContact,
+		previewContact
 	},
 
 	props: {
@@ -15,8 +15,8 @@ export default {
 		search: String,
 		mode: {
 			default: "",
-			type: String,
-		},
+			type: String
+		}
 	},
 
 	data: function () {
@@ -35,12 +35,12 @@ export default {
 					key: "messages",
 					view: "roomWithMessage",
 					keepMatches: true,
-					action: "navigateToRoomFromMsg",
-				},
+					action: "navigateToRoomFromMsg"
+				}
 			],
 			processresult: null,
 			searchChanged: true,
-			processing: false,
+			processing: false
 		};
 	},
 
@@ -66,13 +66,13 @@ export default {
 		filteredLists: function () {
 			var object = {};
 
-			_.each(this.lists, (section) => {
+			_.each(this.lists, section => {
 				var items = this.getList(section.key);
 
 				if (items.length) {
 					object[section.key] = {
 						items,
-						section,
+						section
 					};
 				}
 			});
@@ -86,15 +86,15 @@ export default {
 
 			if (this.search && this.processresult) {
 				_.each(this.processresult.results, (results, roomId) => {
-					var chat = _.find(chats, (chat) => {
+					var chat = _.find(chats, chat => {
 						return chat.roomId == roomId;
 					});
 
 					if (chat) {
-						_.each(results, (e) => {
+						_.each(results, e => {
 							expandedResults.push({
 								chat,
-								messages: [e],
+								messages: [e]
 							});
 						});
 					}
@@ -109,7 +109,7 @@ export default {
 
 			if (this.search) {
 				let mc = _.filter(
-					_.map(chats, (c) => {
+					_.map(chats, c => {
 						const users = this.core.mtrx.chatUsersInfo(
 								c.roomId,
 								"anotherChatUsers"
@@ -150,13 +150,13 @@ export default {
 
 						return {
 							chat: mChat,
-							point,
+							point
 						};
 					}),
-					(cc) => cc.point
+					cc => cc.point
 				);
 
-				mc = _.sortBy(mc, (cc) => cc.point).reverse();
+				mc = _.sortBy(mc, cc => cc.point).reverse();
 				chats = mc
 					/*.filter((c) => {
 						
@@ -165,7 +165,7 @@ export default {
 							Object.keys(c.chat.currentState.members || {}).find((f) => f.includes(u.id))
 						).length;
 					})*/
-					.map((c) => c.chat.summary);
+					.map(c => c.chat.summary);
 			}
 
 			return chats;
@@ -174,7 +174,7 @@ export default {
 		filteredContacts() {
 			if (this.share) return [];
 			/*Add my contacts*/
-			this.contacts = _.filter(this.contactsMap, (contact) => {
+			this.contacts = _.filter(this.contactsMap, contact => {
 				return contact.name.toLowerCase().includes(this.search.toLowerCase());
 			});
 
@@ -183,16 +183,16 @@ export default {
 
 		filteredOther() {
 			/*Add bastyon contacts*/
-			this.users = _.filter(this.loadedUsers[this.search] || [], (u) => {
+			this.users = _.filter(this.loadedUsers[this.search] || [], u => {
 				/*Exclude myself and users from contacts*/
 				return (
 					u.id !== this.core.user.userinfo.id &&
-					!_.filter(this.contactsMap, (f) => f.id === u.id).length
+					!_.filter(this.contactsMap, f => f.id === u.id).length
 				);
 			});
 
 			return this.users;
-		},
+		}
 	},
 
 	methods: {
@@ -224,9 +224,41 @@ export default {
 
 				if (this.share) {
 					var _share = this.share;
-					this.$router.push(_share.route || "chat?id=" + chat.roomId);
+
+					this.$store.commit("SHARE", null);
+
+					this.$store.commit("icon", {
+						icon: "loading",
+						message: "",
+						manual: true
+					});
+
+					this.core.mtrx
+						.shareInChat(chat.roomId, _share)
+						.then(r => {
+							this.$store.commit("icon", {
+								icon: "success",
+								message: ""
+							});
+
+							this.$router
+								.push(_share.route || "chat?id=" + chat.roomId)
+								.catch(e => {});
+						})
+						.catch(e => {
+							console.error(e);
+
+							this.$store.commit("icon", {
+								icon: "error",
+								message: ""
+							});
+
+							if (_share.route) {
+								this.$router.push(_share.route).catch(e => {});
+							}
+						});
 				} else {
-					this.$router.push("chat?id=" + chat.roomId).catch((e) => {});
+					this.$router.push("chat?id=" + chat.roomId).catch(e => {});
 				}
 			}
 
@@ -244,7 +276,7 @@ export default {
 							"&toevent=" +
 							e.event.event_id
 					)
-					.catch((e) => {});
+					.catch(e => {});
 			}
 
 			if (!section.keepMatches) {
@@ -255,7 +287,7 @@ export default {
 			if (this.mode === "Select") {
 				this.select(contact);
 			} else {
-				this.$router.push({ path: `/contact?id=${id}` }).catch((e) => {});
+				this.$router.push({ path: `/contact?id=${id}` }).catch(e => {});
 			}
 		},
 
@@ -285,9 +317,9 @@ export default {
 						if (evscount > 25) return true;
 					},
 					{
-						all: (result) => {
+						all: result => {
 							this.processresult = result;
-						},
+						}
 					}
 				);
 
@@ -295,7 +327,7 @@ export default {
 				this.process
 					.execute()
 					.then(() => {})
-					.catch((e) => {
+					.catch(e => {
 						console.error(e);
 					})
 					.finally(() => {
@@ -317,10 +349,10 @@ export default {
 				if (txt.length > 3) {
 					this.loadedingUsers[this.search] = this.core.user
 						.searchContacts(txt)
-						.then((users) => {
+						.then(users => {
 							this.$set(this.loadedUsers, this.search, users);
 						})
-						.catch((e) => {
+						.catch(e => {
 							console.error(e);
 						})
 						.finally(() => {
@@ -330,7 +362,7 @@ export default {
 			} catch (e) {
 				console.error(e);
 			}
-		},
+		}
 	},
 
 	watch: {
@@ -340,7 +372,7 @@ export default {
 				this.loadNewUsers();
 
 				if (!this.share) this.initSearchProcess();
-			},
-		},
-	},
+			}
+		}
+	}
 };
