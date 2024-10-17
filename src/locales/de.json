@@ -186,7 +186,8 @@
 		"2-message2": "Laden Sie jetzt Ihre Freunde ein und werden Sie Teil der großen Zukunft des dezentralen Internets!",
 		"2-button": "Freunde einladen"
 	},
-
+	
+	"error_generic": "Something went wrong, please try again later.",
 	"sendingerror": "An error occurred while sending the message",
 	"details": "Details",
 	"settings_pin": "Pin chat window",
