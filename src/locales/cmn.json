@@ -186,6 +186,7 @@
 		"2-button": "邀请朋友"
 	},
 
+	"error_generic": "Something went wrong, please try again later.",
 	"settings_pin": "Pin chat window",
 	"checked": "Yes",
 	"unchecked": "No",

@@ -90,6 +90,20 @@ export default {
 		},
 	},
 	computed: {
+
+		formattedErrorMessage() {
+			if (!this.error) return;
+
+			if (typeof this.error !== 'string') {
+				return this.$t('caption.unabletoDecrypt');
+			}
+
+			const errorMessage = this.error.includes(':') ?
+				this.error.split(':').slice(1).join(':').trim() :
+				this.error.trim();
+
+			return errorMessage;
+		},
 		pkoindisabled: function () {
 			return this.$store.state.pkoindisabled || false;
 		},
@@ -129,7 +143,7 @@ export default {
 					this.badenctypted) ||
 				this.content.membership ||
 				((this.content.msgtype === "m.text" ||
-					this.content.msgtype === "m.encrypted") &&
+						this.content.msgtype === "m.encrypted") &&
 					this.textWithoutLinks) ||
 				this.file ||
 				this.event.event.type === "m.room.request_calls_access" ||
@@ -240,7 +254,7 @@ export default {
 				this.urlpreview.length < 10 ||
 				(trimmed.indexOf(this.urlpreview) > 0 &&
 					trimmed.indexOf(this.urlpreview) + this.urlpreview.length <
-						trimmed.length)
+					trimmed.length)
 			) {
 				return trimmed;
 			}
@@ -405,8 +419,8 @@ export default {
 		sender: function () {
 			return this.chat.getMember(
 				this.event?.sender?.userId ||
-					this.event?.event?.sender ||
-					this.event.event?.user_id
+				this.event?.event?.sender ||
+				this.event.event?.user_id
 			);
 		},
 
@@ -471,7 +485,6 @@ export default {
 				this.setmenu();
 			}, 200);
 		},
-
 		prepareShare: function () {
 			var sharing = {};
 
@@ -493,12 +506,10 @@ export default {
 			}
 
 			if (this.file) {
-				sharing.download = [
-					{
-						event: this.event,
-						chat: this.chat,
-					},
-				];
+				sharing.download = [{
+					event: this.event,
+					chat: this.chat,
+				}, ];
 			}
 
 			sharing.from = this.userinfo.id;
@@ -555,8 +566,7 @@ export default {
 			return this.core.mtrx.client.redactEvent(
 				this.chat.roomId,
 				this.origin.event.event_id,
-				null,
-				{
+				null, {
 					reason: "messagedeleting",
 				}
 			);
@@ -609,23 +619,6 @@ export default {
 
 			return this.$f.format_date(value)
 
-			if (value) {
-				if (moment().diff(value, "days") === 0) {
-					return new Date(value).toLocaleTimeString([], {
-						hour: "2-digit",
-						minute: "2-digit",
-						hour12: false,
-					});
-				} else {
-					if (moment().year() === moment(value).year()) {
-						return moment(value).locale(this.$i18n.locale).format("D MMMM");
-					} else {
-						return moment(value)
-							.locale(this.$i18n.locale)
-							.format("D MMMM YYYY");
-					}
-				}
-			}
 		},
 
 		download: function () {
@@ -764,7 +757,7 @@ export default {
 			/*Add highlighted parts to search*/
 			this.$nextTick(() => {
 				const localMsg =
-						this.origin.localTimestamp !== this.origin.localTimestamp,
+					this.origin.localTimestamp !== this.origin.localTimestamp,
 					matches = Array.from(this.$el.querySelectorAll("mark"));
 
 				if (localMsg) matches.reverse();

@@ -190,7 +190,7 @@
 		"2-message2": "Invitez dès maintenant vos amis et faites partie du grand avenir de l'internet décentralisé!",
 		"2-button": "Inviter des amis"
 	},
-
+	"error_generic": "Something went wrong, please try again later.",
 	"sendingerror": "An error occurred while sending the message",
 	"details": "Details",
 	"settings_pin": "Pin chat window",
