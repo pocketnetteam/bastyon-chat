@@ -1,6 +1,5 @@
 <template>
 	<div class="listPreview">
-
 		<div v-if="urlpreview && metaPreviewLink" class="previewMessage">
 			<span class="sname txt" v-if="senderName">{{ senderName == 'You' ? core.vm.$i18n.t("caption.you") : senderName}}&nbsp;</span>
 			<span class="linkTitle txt">sent link: {{ meta["og:title"] }} </span>
@@ -129,6 +128,9 @@
 		<div class="statusWrapper" v-if="my">
 			<div class="my">
 				<i class="fas fa-check-double" v-if="readed"></i>
+				<div v-else-if="hasError" class="statusError">
+					<i class="fas fa-exclamation"></i>
+				</div>
 				<i class="fas fa-check" v-else></i>
 			</div>
 		</div>
@@ -190,7 +192,12 @@ export default {
 
 			return this.meta;
 		},
-
+		stringifyiedError: function () {
+			return f.stringify(this.event.error);
+		},
+		hasError: function () {
+			return !!this.stringifyiedError;
+		},
 		ev: function () {
 			return this.event._clearEvent || this.event;
 		},
