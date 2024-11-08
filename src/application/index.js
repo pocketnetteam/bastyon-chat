@@ -247,8 +247,25 @@ class Core {
 
 				this.pcrypto.helpers.checkuser();
 
-				if (f.deep(this.user, "userinfo.name"))
-					this.mtrx.client.setDisplayName(f.deep(this.user, "userinfo.name"));
+				if (f.deep(this.user, "userinfo.name")){
+
+					try{
+						var cuname = f.deep(this.user, "userinfo.name")
+						var dsname = localStorage['dsname_' + this.user.userinfo.id] || ''
+
+						if (cuname != dsname){
+							localStorage['dsname_' + this.user.userinfo.id] = cuname
+							this.mtrx.client.setDisplayName(f.deep(this.user, "userinfo.name"));
+						}
+
+						
+					}catch(e){
+						
+					}
+
+					
+				}
+					
 
 				if (this.vm.$store.state.isCallsEnabled) {
 					this.setCalls();

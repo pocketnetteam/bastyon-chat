@@ -82,6 +82,7 @@ export default {
 
 		this.core.mtrx.wait().then((r) => {
 			this.core.mtrx.client.publicRooms().then((r) => {
+
 				this.ready = true;
 
 				if (this.id[0] === "!") {
