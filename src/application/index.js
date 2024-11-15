@@ -29,9 +29,8 @@ class Core {
 		};
 
 		if (!p.mtrx) p.mtrx = {};
-		p.mtrx.baseUrl = "https://" + p.domain;
 
-		if (p.mtrx.baseUrl == "https://test.matrix.pocketnet.app") {
+		if (p.domain == "test.matrix.pocketnet.app") {
 			this.options.burn = {
 				v: "minutes",
 				w: 120,
@@ -46,6 +45,15 @@ class Core {
 				b: 1,
 			};
 		}
+		
+		p.mtrx.baseUrl = "https://" + p.domain;
+		p.mtrx.mirrors = _.map(p.mirrors || [], (url) => {
+			return "https://" + url
+		});
+
+		//if(p.mtrx.mirrors.length) p.mtrx.baseUrl = "https://" + p.mtrx.mirrors[0]
+
+		
 
 		this.apiHandlers = {
 			error: function () {},

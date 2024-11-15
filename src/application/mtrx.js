@@ -33,6 +33,8 @@ class MTRX {
 
 		this.core = core;
 		this.baseUrl = p.baseUrl;
+		this.baseSdkUrl = p.baseUrl;
+		this.mirrors = p.mirrors || [];
 		this.ready = false;
 		this.error = false;
 		this.kit = new MTRXKIT(this.core, p);
@@ -179,12 +181,18 @@ class MTRX {
 	async getClient() {
 		await this.setCredentials();
 
+		this.baseSdkUrl = await this.pingServers()
+
+		console.log('this.baseUrl', this.baseSdkUrl, this.baseUrl)
+
 		var userClientData = {
-			baseUrl: this.baseUrl,
+			baseUrl: this.baseSdkUrl,
+			idBaseUrl : this.baseUrl
 		};
 
 		var opts = {
-			baseUrl: this.baseUrl,
+			baseUrl: this.baseSdkUrl,
+			idBaseUrl : this.baseUrl
 		};
 
 		if (this.device) {
@@ -294,6 +302,32 @@ class MTRX {
 		}
 
 		localStorage.matrixversion = this.version;
+	}
+
+	async pingServers(){
+		var servers = [].concat([this.baseUrl], this.mirrors)
+		var server = this.baseUrl
+
+		try{
+			if(localStorage['onlymatrixmirrors'] && this.mirrors.length){
+				servers = this.mirrors
+			}
+		}catch(e){}
+
+		return Promise.race(_.map(servers, (url) => {
+			var requestUrl = url + '/_matrix/client/versions'
+			return axios({url : requestUrl}).then((response) => {
+				console.log('response requestUrl', response)
+
+				server = url
+
+			}).catch(e => {
+				console.error(e)
+				return Promise.resolve()
+			})
+		})).then(() => {
+			return server
+		})
 	}
 
 	async createClient() {
@@ -572,7 +606,7 @@ class MTRX {
 				app_id: appName + window.cordova.platformId,
 
 				data: {
-					url: this.core.mtrx.baseUrl + "/_matrix/push/v1/notify",
+					url: this.baseUrl + "/_matrix/push/v1/notify",
 					default_payload: {
 						aps: {
 							sound: "default",
@@ -588,7 +622,7 @@ class MTRX {
 				pushkey: savedToken,
 			};
 
-			this.core.mtrx.client.setPusher(pusherData).then(
+			this.client.setPusher(pusherData).then(
 				() => {
 					localStorage.removeItem("fcmtoken5");
 				},
