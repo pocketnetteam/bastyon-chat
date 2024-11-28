@@ -5,14 +5,13 @@
 			:class="user.membership"
 			v-for="user in membersList"
 			:key="user.userId"
-
 		>
-			<div class="leftWrapper" @click="openModal(user)">
+			<div class="leftWrapper" @click="openUserPage(user)">
 				<div class="avatarNameWrapper">
-					<userpic :userinfo="userinfo(user)" :status="user.membership" />
+					<userpic :userinfo="getUserInfo(user)" :status="user.membership" />
 				</div>
 				<div class="nameRole">
-					<span class="name">{{ userinfo(user).name || "" }}</span>
+					<span class="name">{{ getUserInfo(user).name || "" }}</span>
 
 					<span class="memberRole" v-if="roles && user.powerLevel">{{
 						$t("caption." + role(user))
@@ -22,7 +21,7 @@
 
 			<div v-if="menu(user).length">
 				<div class="rightWrapper">
-					<i @click="e=>setmenu(user)" class="fas fa-ellipsis-h setmenu"></i>
+					<i @click="e => setmenu(user)" class="fas fa-ellipsis-h setmenu"></i>
 					<!--<dropdownMenu
 						@itemClicked="menuItemClickHandler"
 						ref="dropdownMenu"
