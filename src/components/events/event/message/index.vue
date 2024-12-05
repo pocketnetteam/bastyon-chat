@@ -221,13 +221,10 @@
 					:can-download="!hasError"
 					:downloaded="downloaded"
 					@download="download"
+					:error-message="formattedErrorMessage"
 				/>
 				<div class="encryptedDataIcon" v-if="encryptedData">
 					<i class="fas fa-lock"></i>
-				</div>
-
-				<div class="badencrypted" v-if="error">
-					<span>{{ $t("caption.unabletoDecrypt") }}</span>
 				</div>
 			</div>
 
