@@ -314,8 +314,14 @@ export default {
 
 					this.duration = buffer.duration;
 					this.setTime(0);
+					
+					const isFirefox = navigator.userAgent.toLowerCase().includes('firefox');
 
-					this.signal = [...buffer.getChannelData(0)];
+					if (isFirefox) {
+						this.signal = [...buffer.getChannelData(0)];
+					} else {
+						this.signal = buffer.getChannelData(0);
+					}
 
 					this.draw();
 				});

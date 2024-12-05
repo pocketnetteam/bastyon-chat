@@ -402,9 +402,15 @@ class MTRX {
 	}
 
 	download(url) {
+
+		if(!url) return Promise.reject('url _is_empty')
+
 		// Function to download the file
 		var dlFile = () => {
 			return f.fetchLocal(url).then((response) => {
+
+				console.log("FECTCH LOCAL", url, response)
+
 				// Update the storage before returning
 				if (
 					window.POCKETNETINSTANCE &&
@@ -414,6 +420,7 @@ class MTRX {
 					window.POCKETNETINSTANCE.storage.saveFile(url, response.data);
 				} else {
 					if (this.db) {
+						console.log('db set')
 						this.db.set(url, response.data);
 					}
 				}
@@ -765,6 +772,9 @@ class MTRX {
 				fileInfo.url = url;
 			})
 			.finally(() => {
+
+				if(!fileInfo.url) return Promise.reject('dontuploaded')
+
 				let body = JSON.stringify(fileInfo);
 				var r = {
 					body: body,
