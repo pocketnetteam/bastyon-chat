@@ -777,7 +777,7 @@ var store = new Vuex.Store({
 				r.summary.info = {
 					title: r.name,
 				};
-				r.summary.key = r.summary.roomId + ":" + r.summary.lastModified;
+				r.summary.key = r.summary.roomId;
 				r.summary.stream =
 					hv?.event?.content?.history_visibility === "world_readable";
 				r.summary.miniappchat = null;
