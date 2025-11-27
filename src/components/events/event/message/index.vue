@@ -282,6 +282,15 @@
 				<span>{{ $t("caption.messageRead") }}</span>
 			</div>
 		</div>
+
+		<ReactionDisplay
+			v-if="!streamMode && !preview && !fromreference && !my"
+			:event="origin"
+			:chat="chat"
+			:reactions="reactions"
+			@add-reaction="handleAddReaction"
+			@remove-reaction="handleRemoveReaction"
+		/>
 	</div>
 </template>
 
