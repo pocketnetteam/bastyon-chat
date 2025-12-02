@@ -73,7 +73,15 @@ export default {
 		users: function () {
 			if (!this.chat) return [];
 
-			return this.core.mtrx.anotherChatUsers(this.chat.roomId);
+			var u = this.core.mtrx.anotherChatUsers(this.chat.roomId);
+
+			/*u = _.filter(u, (usr) => {
+				if(usr.membership == 'leave') return false
+
+				return true
+			})*/
+
+			return u
 		},
 
 		convertedName: function () {

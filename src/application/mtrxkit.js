@@ -177,9 +177,12 @@ class MTRXKIT {
 		var members = [];
 		var promises = [];
 
+		/*promises = _.map(m_chats, (chat) => {
+			return chat.loadMembersIfNeeded();
+		})*/
 
 		if (withinvite) {
-			var promises = _.map(m_chats, (chat) => {
+			promises = [...promises,..._.map(m_chats, (chat) => {
 
 
 				if (
@@ -231,7 +234,6 @@ class MTRXKIT {
 							return Promise.resolve();
 						})
 						.catch((e) => {
-							console.log("ER", e)
 							chat.summary.membersloading = false;
 
 							return Promise.resolve();
@@ -239,11 +241,12 @@ class MTRXKIT {
 				}
 
 				return Promise.resolve();
-			});
+			})];
 		}
 
 		return Promise.all(promises).then((r) => {
 			_.each(m_chats, (chat) => {
+
 				members = members.concat(
 					_.toArray(chat.currentState.members),
 					chat.summary.members || []
@@ -253,8 +256,6 @@ class MTRXKIT {
 			members = _.uniq(members, function (m) {
 				return m.userId;
 			});
-
-			
 
 			return Promise.resolve(members);
 		});

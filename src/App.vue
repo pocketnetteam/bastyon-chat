@@ -533,7 +533,7 @@ export default {
 				) {
 					this.$router.push("/chats").catch((e) => {});
 				}
-			}, 500);
+			}, 0);
 
 			this.clearMatches();
 		},

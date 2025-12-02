@@ -199,8 +199,6 @@ const ChatStorage = function (storageName, version, time) {
 
 					memorystorage[itemId] = message;
 
-					console.log('item', item)
-
 					/**
 					 * FIXME: It is not the best practice to use
 					 *        here put() instead of add(), but it

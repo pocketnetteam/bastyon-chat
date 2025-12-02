@@ -82,7 +82,7 @@
         position: absolute
         width: 22px
         height: 22px
-        right: -10%
+        right: 0%
         top: -10%
         line-height: 22px
         text-align: center

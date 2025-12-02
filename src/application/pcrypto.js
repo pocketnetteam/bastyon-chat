@@ -30,6 +30,7 @@ var PcryptoRoom = async function (pcrypto, chat, { ls, lse }) {
 	var hashes = {};
 
 	var users = {};
+	var usershistoryhash = ''
 	var m = 12;
 
 	var lsspromises = {}
@@ -57,25 +58,30 @@ var PcryptoRoom = async function (pcrypto, chat, { ls, lse }) {
 		pcryptoFile.destroy()
 	}
 
-	var lcachekey = "pcrypto9_" + chat.roomId + "_";
-	var ecachekey = "e_pcrypto9_";
-	var usershashVersion = 12
+	var lcachekey = "pcrypto10_" + chat.roomId + "_";
+	var ecachekey = "e_pcrypto10_";
+	var usershashVersion = 13
 	var cache = {};
 
 	self.preparedUsers = function (time, v) {
 
+		var r = null 
+
 		if(!v || v <= 1){
-			return _.filter(getusersinfobytime(time), function (ui) {
+			r = _.filter(getusersinfobytime(time), function (ui) {
 				return ui.keys && ui.keys.length >= m;
 			})
 		}
 
 		else{
 
-			return _.sortBy(_.filter(getusersinfobytime(time), function (ui) {
+			r = _.sortBy(_.filter(getusersinfobytime(time), function (ui) {
 				return ui.keys && ui.keys.length >= m;
 			}), (u) => {return u.source.id})
 		}
+
+
+		return r
 
 	};
 
@@ -104,7 +110,7 @@ var PcryptoRoom = async function (pcrypto, chat, { ls, lse }) {
 	};
 
 	self.cantchat = function () {
-		var pu = self.preparedUsers();
+		var pu = self.preparedUsers(undefined, self.version);
 
 		if (pcrypto.core.mtrx.kit.tetatetchat(chat) && pu.length && pu.length < 2) {
 			return true;
@@ -118,7 +124,6 @@ var PcryptoRoom = async function (pcrypto, chat, { ls, lse }) {
 
 		var publicChat = pcrypto.core.mtrx.kit.chatIsPublic(chat);
 
-
 		if (
 			!publicChat &&
 			pcrypto.user &&
@@ -127,8 +132,8 @@ var PcryptoRoom = async function (pcrypto, chat, { ls, lse }) {
 			users[pcrypto.user.userinfo.id] &&
 			//pcrypto.core.mtrx.kit.tetatetchat(chat) &&
 			usersinfoArray.length > 1 &&
-			usersinfoArray.length < 50 &&
-			self.preparedUsers(time).length / usersinfoArray.length > 0.6
+			usersinfoArray.length < 50 
+			//&& self.preparedUsers(time).length / usersinfoArray.length > 0.6
 		) {
 			return true;
 		}
@@ -137,13 +142,16 @@ var PcryptoRoom = async function (pcrypto, chat, { ls, lse }) {
 	};
 
 	self.userschanded = function () {
-		/**if (!self.cantchat()) {
-			return Promise.resolve();
-		}*/
 
-		self.clear();
+		if(needchangeusers()){
+			self.clear();
 
-		return self.prepare();
+			return self.prepare();
+		}
+		else{
+			return Promise.resolve()
+		}
+		
 	};
 
 	var getusersinfo = function () {
@@ -167,8 +175,7 @@ var PcryptoRoom = async function (pcrypto, chat, { ls, lse }) {
 	var getuserseventshistory = function () {
 		var tetatet = pcrypto.core.mtrx.kit.tetatetchat(chat);
 
-		var allevents = _.uniq([].concat(chat.oldState.getStateEvents("m.room.member"), chat.currentState.getStateEvents("m.room.member")), (e) => {
-		
+		var allevents = _.uniq([].concat(chat.currentState.getStateEvents("m.room.member"), chat.oldState.getStateEvents("m.room.member")), (e) => {
 			return e.event.event_id
 		}) 
 
@@ -182,8 +189,7 @@ var PcryptoRoom = async function (pcrypto, chat, { ls, lse }) {
 				if (
 					membership  == "invite" ||
 					membership  == "join" ||
-					(membership == "leave" && !tetatet)// ||
-					//(tetatet && membership == "invite")
+					(membership == "leave" && !tetatet)
 				) {
 					return {
 						time: event.origin_server_ts || 1,
@@ -225,12 +231,24 @@ var PcryptoRoom = async function (pcrypto, chat, { ls, lse }) {
 		return period;
 	};
 
-	var getusershistory = function () {
+	var needchangeusers = function(){
 		var history = getuserseventshistory();
+		var lusershash = f.sha224(JSON.stringify(history)).toString("hex")
 
+
+		if (lusershash == usershistoryhash) return false
+
+		return true
+	}
+
+	var getusershistory = function () {
+		
+		var history = getuserseventshistory();
 		var tetatet = pcrypto.core.mtrx.kit.tetatetchat(chat);
 
 		users = {};
+
+		usershistoryhash = f.sha224(JSON.stringify(history)).toString("hex")
 
 		_.each(history, function (ui) {
 			if (!users[ui.id]) {
@@ -346,8 +364,6 @@ var PcryptoRoom = async function (pcrypto, chat, { ls, lse }) {
 			var k =  ((users ? 'ul+' + orderedIdsHash(users) : period(time)) + "-" + block) + '-' + (v || self.version);
 			var ek = `${lcachekey + pcrypto.user.userinfo.id}-${k}`
 
-			
-
 			if(!lsspromises[ek]) {
 
 
@@ -360,8 +376,7 @@ var PcryptoRoom = async function (pcrypto, chat, { ls, lse }) {
 					.catch(async (e) => {
 
 						const keysPrepared = eaac.aeskeys(time, block, users, v);
-
-						if (self.preparedUsers(time).length > 1) {
+						if (self.preparedUsers(time, v).length > 1) {
 							const itemId = ek;
 
 							await ls
@@ -407,6 +422,8 @@ var PcryptoRoom = async function (pcrypto, chat, { ls, lse }) {
 		userspublics: function (time, block, usersIds, v) {
 			var users = usersIds ? self.preparedUsersById(usersIds, v) : self.preparedUsers(time, v);
 
+			//console.log('userspublics', time, block, usersIds, v, users)
+
 			var sum = {};
 
 			_.each(users, function (user) {
@@ -440,6 +457,8 @@ var PcryptoRoom = async function (pcrypto, chat, { ls, lse }) {
 		scalars: function (time, block, scalars, usersIds, v) {
 			var users = usersIds ? self.preparedUsersById(usersIds, v) : self.preparedUsers(time, v);
 
+			//console.log('scalars', time, block, usersIds, v, users)
+
 			var sum = null;
 
 			for (var i = 0; i < m; i++) {
@@ -461,6 +480,8 @@ var PcryptoRoom = async function (pcrypto, chat, { ls, lse }) {
 
 		points: function (time, block, points, usersIds, v) {
 			var users = usersIds ? self.preparedUsersById(usersIds, v) : self.preparedUsers(time, v);
+
+			//console.log('points', time, block, usersIds, v, users)
 
 
 			var sum = null;
@@ -529,15 +550,23 @@ var PcryptoRoom = async function (pcrypto, chat, { ls, lse }) {
 				console.error("Error clearing item on LS.CLEAR");
 			});
 
+		//console.log('userid, { encrypted, nonce }, time, block, users, v', userid, { encrypted, nonce }, time, block, users, v)
+
 		throw new Error(error);
 	};
 
 	self.encrypt = async function (userid, text, version) {
-		let { keys } = await eaac.aeskeysls(undefined, undefined, undefined, version || undefined);
+		let { keys, k } = await eaac.aeskeysls(undefined, undefined, undefined, version || undefined);
 
 		if (keys[userid]) {
 			return await encrypt(text, keys[userid]);
 		}
+
+		await ls
+			.clear(`${lcachekey + pcrypto.user.userinfo.id}-${k}`)
+			.catch((err) => {
+				console.error("Error clearing item on LS.CLEAR");
+			});
 
 		throw new Error("emptykey");
 	};
@@ -658,11 +687,15 @@ var PcryptoRoom = async function (pcrypto, chat, { ls, lse }) {
 
 	self.encryptKey = async function (key) {
 		var users = self.preparedUsers(undefined, self.version);
-		
+
 
 		var block = pcrypto.currentblock.height;
+		//todo
 
-		if (!pcrypto.core.mtrx.kit.tetatetchat(chat)) block = 10;
+
+		if (!pcrypto.core.mtrx.kit.tetatetchat(chat)) {
+			block = 10;
+		}
 
 		var encrypted = {
 			block: block,
@@ -740,8 +773,6 @@ var PcryptoRoom = async function (pcrypto, chat, { ls, lse }) {
 					return true;
 				}
 			});
-
-			
 		} else {
 			bodyindex = me;
 			keyindex = sender;
@@ -764,7 +795,7 @@ var PcryptoRoom = async function (pcrypto, chat, { ls, lse }) {
 	};
 
 	self.encryptEvent = async function (text) {
-		var users = self.preparedUsers();
+		var users = self.preparedUsers(undefined, self.version);
 
 		if (!pcrypto.core.mtrx.kit.tetatetchat(chat)) {
 			return self.encryptEventGroup(text);
@@ -869,7 +900,7 @@ var PcryptoRoom = async function (pcrypto, chat, { ls, lse }) {
 				var e = getCommonKeyEvent(userid, _hash);
 
 				if (!e) {
-					Promise.reject("m.room.encryption event not found");
+					return Promise.reject("m.room.encryption event not found");
 				}
 
 				return Promise.resolve(e.event);
@@ -930,6 +961,23 @@ var PcryptoRoom = async function (pcrypto, chat, { ls, lse }) {
 			.then((encrypted) => {
 				result.export.keys = encrypted.keys;
 				result.export.block = encrypted.block;
+
+				return self.decryptKey({
+					type : "m.room.encryption",
+					sender : pcrypto.user.myMatrixId(),
+					origin_server_ts : new Date().getTime(),
+					content : {
+						...result.export
+					}
+				}).then(() => {
+
+					return result;
+
+				}).catch(e => {
+					console.error(e)
+
+					return Promise.reject(e)
+				})
 
 				return result;
 			});
@@ -998,9 +1046,11 @@ var PcryptoRoom = async function (pcrypto, chat, { ls, lse }) {
 
 			let utf8Encode = new TextEncoder();
 
+
 			return pcryptoFile
 				.encrypt(utf8Encode.encode(text), info.key)
 				.then((encrypted) => {
+
 					encryptedEvent.body = Buffer.from(encrypted).toString("hex");
 
 					return Promise.resolve(encryptedEvent);
@@ -1250,8 +1300,6 @@ var PcryptoFile = function () {
 			clearInterval(interval)
 		}
 		
-		console.log("INIT INTERVAL")
-
 		/*interval = setInterval(() => {
 			processQueryItems()
 		}, 20)*/

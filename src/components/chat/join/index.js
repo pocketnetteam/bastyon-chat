@@ -57,6 +57,8 @@ export default {
 
 			this.$store.commit("SET_CHAT_TO_FORCE", this.m_chat.roomId);
 
+			this.$store.state.globalpreloader = true;
+
 			this.core.mtrx.client
 				.joinRoom(this.m_chat.roomId)
 				.then(() => {
@@ -64,9 +66,19 @@ export default {
 					this.$emit("joined");
 				})
 				.catch(function (error) {
+
+					this.$store.commit("icon", {
+						icon: "error",
+						message: error
+					})
+
 					self.brokenRoom(true);
+
 					return (self.creatorLeft = true);
-				});
+
+				}).finally(() => {
+				this.$store.state.globalpreloader = false;
+			})
 		},
 		back() {
 			this.$router.go(-1);
@@ -79,19 +91,25 @@ export default {
 				return;
 			}
 
+			this.$store.state.globalpreloader = true;
+
 			this.core.mtrx
 				.blockUser(users[0].userId)
 				.then((r) => {
 					this.$router.go(-1);
 				})
-				.catch((e) => {});
+				.catch((e) => {}).finally(() => {
+				this.$store.state.globalpreloader = false;
+			})
 		},
 
 		decline: function () {
 			this.$store.commit("SET_CHAT_TO_FORCE", this.m_chat.roomId);
 
+			this.$store.state.globalpreloader = true;
+
 			this.core.mtrx.client.leave(this.chat.roomId).then((r) => {
-				this.core.mtrx.client
+				return this.core.mtrx.client
 					.forget(this.chat.roomId, true)
 					.then((r) => {
 						return r;
@@ -101,7 +119,9 @@ export default {
 
 						this.$router.go(-1);
 					});
-			});
+			}).finally(() => {
+				this.$store.state.globalpreloader = false;
+			})
 		},
 		brokenRoom() {
 			this.$emit("creatorLeft", true);
