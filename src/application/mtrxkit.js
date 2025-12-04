@@ -51,6 +51,18 @@ class MTRXKIT {
 
 		var id = 1 * seed
 
+		users = _.uniq(users, (u) => {
+			return u
+		})
+
+		users = _.uniq(users, (u) => {
+			return u
+		})
+
+		users = _.sortBy(users, function (u) {
+            return parseInt(u.id, 16)
+        })
+
 		_.each(users, (u) => {
 			id = id * parseInt(u.id, 16)
 		})
