@@ -10,6 +10,7 @@ import IncomingMessage from "./incomingMessage/incomingMessage.vue";
 import VoiceMessage from "@/components/events/event/VoiceMessage";
 import Call from "@/components/events/event/Call";
 import Request from "@/components/events/event/request";
+import ReactionDisplay from "./reactions/ReactionDisplay.vue";
 
 export default {
 	name: "eventsMessage",
@@ -80,6 +81,7 @@ export default {
 		VoiceMessage,
 		Call,
 		Request,
+		ReactionDisplay,
 	},
 	watch: {
 		readyToRender: {
@@ -431,6 +433,13 @@ export default {
 					!this.content.call_id &&
 					this.event.event.type !== "m.room.request_calls_access")
 			);
+		},
+
+		reactions: function () {
+			if (!this.origin || this.preview || this.fromreference) {
+				return [];
+			}
+			return this.core.mtrx.getReactionsForMessage(this.origin);
 		},
 	},
 
@@ -874,6 +883,24 @@ export default {
 			}
 
 			return menu;
+		},
+
+		handleAddReaction: function (emoji) {
+			return this.core.mtrx
+				.sendReaction(this.chat, this.origin, emoji)
+				.catch((e) => {
+					console.error("Failed to send reaction:", e);
+					this.$store.commit("icon", {
+						icon: "error",
+						message: this.$t("errors.reactionFailed") || "Failed to send reaction",
+					});
+				});
+		},
+
+		handleRemoveReaction: function (reactionEventId) {
+			return this.core.mtrx.removeReaction(this.chat, reactionEventId).catch((e) => {
+				console.error("Failed to remove reaction:", e);
+			});
 		},
 	},
 };
