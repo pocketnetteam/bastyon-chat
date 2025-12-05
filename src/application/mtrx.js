@@ -367,10 +367,6 @@ class MTRX {
 			}
 		}catch(e){}
 
-		return Promise.race(_.map(servers, (url) => {
-			var requestUrl = url + '/_matrix/client/versions'
-			return axios({url : requestUrl}).then((response) => {
-
 		return Promise.race(
 			_.map(servers, url => {
 				var requestUrl = url + "/_matrix/client/versions";
