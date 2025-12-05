@@ -10,11 +10,12 @@ export default {
 	name: "chat",
 	props: {
 		chat: Object,
+		share: Object,
 		u: String,
 		search: String,
 		searchresults: Array,
 		filterType: String,
-		style: ""
+		style: "",
 	},
 
 	components: {
@@ -22,7 +23,7 @@ export default {
 		chatInput: () => import("@/components/chat/input/index.vue"),
 		join,
 		attachement,
-		userRoomStatus
+		userRoomStatus,
 	},
 
 	inject: ["streamMode", "userBanned"],
@@ -52,7 +53,7 @@ export default {
 			showShareMessages: false,
 			selectedMessages: [],
 			activated: false,
-			membershipReactivity: null
+			membershipReactivity: null,
 		};
 	},
 
@@ -101,7 +102,7 @@ export default {
 				} else {
 					this.destroyMembershipReactivity();
 				}
-			}
+			},
 		},
 
 		chatusers: function () {
@@ -111,7 +112,7 @@ export default {
 					.then(() => {
 						return this.m_chat.pcrypto.userschanded();
 					})
-					.then(r => {
+					.then((r) => {
 						return this.checkcrypto();
 					});
 			}
@@ -121,7 +122,8 @@ export default {
 			immediate: true,
 			handler: function () {
 				if (this.m_chat && !_.isEmpty(this.m_chat)) {
-					this.core.mtrx.kit.prepareChatWithUsers(this.m_chat).then(r => {
+
+					this.core.mtrx.kit.prepareChatWithUsers(this.m_chat).then((r) => {
 						this.ready = true;
 
 						this.checkcrypto();
@@ -138,7 +140,7 @@ export default {
 							this.checkcrypto();
 						});*/
 				}
-			}
+			},
 		},
 
 		chat: {
@@ -151,7 +153,7 @@ export default {
 					this.$store.commit("SET_CURRENT_ROOM", this.chat.roomId);
 					this.$store.commit("SET_LAST_ROOM", this.chat.roomId);
 				} else this.$store.commit("SET_CURRENT_ROOM", false);
-			}
+			},
 		},
 
 		userBanned: {
@@ -160,21 +162,21 @@ export default {
 			handler: function () {
 				this.membership =
 					this.m_chat?.currentState?.members[this.m_chat.myUserId]?.membership;
-			}
-		}
+			},
+		},
 	},
 
 	computed: mapState({
-		pocketnet: state => state.pocketnet,
-		minimized: state => state.minimized,
-		auth: state => state.auth,
+		pocketnet: (state) => state.pocketnet,
+		minimized: (state) => state.minimized,
+		auth: (state) => state.auth,
 		active: function (state) {
 			return this.streamMode || state.active;
 		},
 		m_chat: function () {
 			if (this.chat && this.chat.roomId) {
 				let pushRules = this.core.mtrx.client.pushProcessor.getPushRuleById(
-					this.chat.roomId
+					this.chat.roomId,
 				);
 				if (pushRules !== null) {
 					this.roomMuted = true;
@@ -233,13 +235,12 @@ export default {
 		},
 
 		chatusers: function () {
-			if (this.m_chat)
-				return this.core.store.state.chatusers[this.m_chat.roomId];
+			if (this.m_chat) return this.core.store.state.chatusers[this.m_chat.roomId];
 		},
 
 		localisationTitles: function () {
 			return this.$i18n.t("button");
-		}
+		},
 	}),
 
 	methods: {
@@ -258,7 +259,7 @@ export default {
 					if (this.m_chat.timeline.length > 0) {
 						const id = this.core.mtrx.client.credentials.userId,
 							timeline = this.core.mtrx.client.getRoom(
-								this.chat.roomId
+								this.chat.roomId,
 							).timeline,
 							lastEvent = timeline[timeline.length - 1];
 
@@ -319,7 +320,7 @@ export default {
 
 		getuserinfo: function () {
 			if (this.u) {
-				this.core.user.usersInfo(this.u).then(info => {
+				this.core.user.usersInfo(this.u).then((info) => {
 					this.usersinfo = info;
 				});
 			}
@@ -334,9 +335,9 @@ export default {
 		},
 
 		refreshkeys: function () {
-			this.core.user.userInfo(true).then(r => {
+			this.core.user.userInfo(true).then((r) => {
 				if (this.u) {
-					this.core.user.usersInfo(this.u, false, true).then(info => {
+					this.core.user.usersInfo(this.u, false, true).then((info) => {
 						var _info = info[0];
 
 						if (
@@ -355,7 +356,7 @@ export default {
 				} else {
 					this.core.store
 						.dispatch("RELOAD_CHAT_USERS", [this.m_chat])
-						.then(r => {
+						.then((r) => {
 							/*this.m_chat.pcrypto.userschanded()
     
 			this.checkcrypto()*/
@@ -378,7 +379,7 @@ export default {
 			this.relationEvent = {
 				type: "m.reference",
 				event: event,
-				action: this.$i18n.t("caption.replyOnMessage")
+				action: this.$i18n.t("caption.replyOnMessage"),
 			};
 			if (this.$refs["chatInput"]) {
 				this.$refs["chatInput"].focus();
@@ -389,7 +390,7 @@ export default {
 			this.relationEvent = {
 				type: "m.reference",
 				event: event,
-				action: this.$i18n.t("caption.shareMessage")
+				action: this.$i18n.t("caption.shareMessage"),
 			};
 			if (this.$refs["chatInput"]) {
 				this.$refs["chatInput"].focus();
@@ -400,7 +401,7 @@ export default {
 			this.relationEvent = {
 				type: "m.replace",
 				event: event,
-				action: this.$i18n.t("caption.editMessage")
+				action: this.$i18n.t("caption.editMessage"),
 			};
 
 			if (this.$refs["chatInput"]) {
@@ -431,7 +432,7 @@ export default {
 		galleryImage(e) {
 			this.core.store.dispatch("SHOW_GALLERY_FROMEVENTS", {
 				events: this.chatEvents,
-				event: e
+				event: e,
 			});
 		},
 
@@ -503,17 +504,17 @@ export default {
 
 		shareDataMessages: function () {
 			var messages = _.map(
-				_.sortBy(this.selectedMessages, m => {
+				_.sortBy(this.selectedMessages, (m) => {
 					return m.time;
 				}),
-				m => {
+				(m) => {
 					return m.sharing;
-				}
+				},
 			);
 
 			this.core
 				.share({
-					multiple: messages
+					multiple: messages,
 				})
 				.then(() => {
 					this.selectedMessages = [];
@@ -541,37 +542,37 @@ export default {
 			this.$store.commit("icon", {
 				icon: "loading",
 				message: "",
-				manual: true
+				manual: true,
 			});
 
 			Promise.all(
-				_.map(this.selectedMessages, message => {
+				_.map(this.selectedMessages, (message) => {
 					return this.core.mtrx.client.redactEvent(
 						this.chat.roomId,
 						message.message_id,
 						null,
 						{
-							reason: "messagedeleting"
-						}
+							reason: "messagedeleting",
+						},
 					);
-				})
+				}),
 			)
-				.then(r => {
+				.then((r) => {
 					this.$store.commit("icon", {
 						icon: "success",
-						message: ""
+						message: "",
 					});
 
 					this.selectedMessages = [];
 				})
-				.catch(e => {
+				.catch((e) => {
 					console.error(e);
 
 					this.selectedMessages = [];
 
 					this.$store.commit("icon", {
 						icon: "error",
-						message: ""
+						message: "",
 					});
 				})
 				.finally(() => {
@@ -594,9 +595,7 @@ export default {
 		joined: function () {
 			/*Trigger chat reactivity*/
 			this.$set(this.chat, "joined", +new Date());
-			
-			if (this.userBanned)
-				this.userBanned.set(false);
-		}
-	}
+			this.userBanned.set(false);
+		},
+	},
 };

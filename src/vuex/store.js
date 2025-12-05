@@ -389,7 +389,7 @@ var store = new Vuex.Store({
 
 			var chatsMap = {};
 
-			_.each(chats, (chat) => {
+			_.each(chats, function (chat) {
 				var aid = chat.info?.title?.replace("#", "");
 
 				if (!state.chatsMap[chat.roomId] || state.force[chat.roomId]) {
@@ -409,8 +409,6 @@ var store = new Vuex.Store({
 			_.each(state.chatsMap, function (c, id) {
 				if (!chatsMap[id]) Vue.delete(state.chatsMap, id);
 			});
-
-			//state.chatsMap = chatsMap;
 		},
 		SET_READ_TO_STORE(state, readreciepts) {
 			_.each(readreciepts, (r, chatid) => {
@@ -771,11 +769,11 @@ var store = new Vuex.Store({
 				} else {
 					r.summary.lastModified = r.getLastActiveTimestamp();
 				}
-
+				r.summary.selfMembership = r.selfMembership;
 				r.summary.info = {
 					title: r.name,
 				};
-				r.summary.key = r.summary.roomId + ":" + r.summary.lastModified;
+				r.summary.key = r.summary.roomId;
 				r.summary.stream =
 					hv?.event?.content?.history_visibility === "world_readable";
 				r.summary.miniappchat = null;

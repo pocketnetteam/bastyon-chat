@@ -7,23 +7,20 @@ export default {
 		chat: Object,
 		m_chat: {},
 		usersinfo: Array,
-		room: Object,
+		room: Object
 	},
 
 	components: {
-		chatPreview,
+		chatPreview
 	},
-	
-	inject: [
-		"streamMode",
-		"videoMeta"
-	],
+
+	inject: ["streamMode", "videoMeta"],
 
 	data: function () {
 		return {
 			loading: false,
 			joinedMembers: [],
-			creatorLeft: false,
+			creatorLeft: false
 		};
 	},
 
@@ -31,11 +28,11 @@ export default {
 
 	watch: {},
 	computed: mapState({
-		hiddenInParent: (state) => state.hiddenInParent,
-		auth: (state) => state.auth,
-		pocketnet: (state) => state.pocketnet,
-		minimized: (state) => state.minimized,
-		active: (state) => state.active,
+		hiddenInParent: state => state.hiddenInParent,
+		auth: state => state.auth,
+		pocketnet: state => state.pocketnet,
+		minimized: state => state.minimized,
+		active: state => state.active,
 		tetatet: function () {
 			return this.core.mtrx.kit.tetatetchat(this.m_chat);
 		},
@@ -46,7 +43,7 @@ export default {
 			if (users.length == 1) {
 				return this.core.mtrx.blockeduser(users[0].userId);
 			}
-		},
+		}
 	}),
 	mounted: function () {},
 	methods: {
@@ -95,7 +92,7 @@ export default {
 
 			this.core.mtrx
 				.blockUser(users[0].userId)
-				.then((r) => {
+				.then(r => {
 					this.$router.go(-1);
 				})
 				.catch((e) => {}).finally(() => {
@@ -111,10 +108,10 @@ export default {
 			this.core.mtrx.client.leave(this.chat.roomId).then((r) => {
 				return this.core.mtrx.client
 					.forget(this.chat.roomId, true)
-					.then((r) => {
+					.then(r => {
 						return r;
 					})
-					.then((r) => {
+					.then(r => {
 						this.$store.commit("DELETE_ROOM", this.chat.roomId);
 
 						this.$router.go(-1);
@@ -125,6 +122,6 @@ export default {
 		},
 		brokenRoom() {
 			this.$emit("creatorLeft", true);
-		},
-	},
+		}
+	}
 };
