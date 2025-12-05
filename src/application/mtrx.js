@@ -183,16 +183,18 @@ class MTRX {
 	async getClient() {
 		await this.setCredentials();
 
-		this.baseSdkUrl = await this.pingServers()
+		this.baseSdkUrl = await this.pingServers();
+
+		console.log("this.baseUrl", this.baseSdkUrl, this.baseUrl);
 
 		var userClientData = {
 			baseUrl: this.baseSdkUrl,
-			idBaseUrl : this.baseUrl
+			idBaseUrl: this.baseUrl
 		};
 
 		var opts = {
 			baseUrl: this.baseSdkUrl,
-			idBaseUrl : this.baseUrl
+			idBaseUrl: this.baseUrl
 		};
 
 		if (this.device) {
@@ -205,6 +207,11 @@ class MTRX {
 		var userData = null
 
 		try {
+			var userData = await client.login("m.login.password", {
+				user: this.credentials.username,
+				password: this.credentials.password,
+				device_id: this.device
+			});
 
 			var userdataLS = localStorage[lsdatakey + this.credentials.username]
 
@@ -293,7 +300,7 @@ class MTRX {
 
 		try {
 			await store.startup();
-		}catch(e){
+		} catch(e){
 			delete localStorage[lsdatakey + this.credentials.username]
 		}
 
@@ -302,10 +309,11 @@ class MTRX {
 		this.initEvents();
 
 
+
 		try{
 
 			await userClient.startClient({
-				pollTimeout: 55000,
+				pollTimeout: 60000,
 				resolveInvitesToProfiles: true,
 				initialSyncLimit : 4,
 				disablePresence : true,
@@ -349,13 +357,13 @@ class MTRX {
 		localStorage.matrixversion = this.version;
 	}
 
-	async pingServers(){
-		var servers = [].concat([this.baseUrl], this.mirrors)
-		var server = this.baseUrl
+	async pingServers() {
+		var servers = [].concat([this.baseUrl], this.mirrors);
+		var server = this.baseUrl;
 
-		try{
-			if(localStorage['onlymatrixmirrors'] && this.mirrors.length){
-				servers = this.mirrors
+		try {
+			if (localStorage["onlymatrixmirrors"] && this.mirrors.length) {
+				servers = this.mirrors;
 			}
 		}catch(e){}
 
@@ -363,15 +371,23 @@ class MTRX {
 			var requestUrl = url + '/_matrix/client/versions'
 			return axios({url : requestUrl}).then((response) => {
 
-				server = url
+		return Promise.race(
+			_.map(servers, url => {
+				var requestUrl = url + "/_matrix/client/versions";
+				return axios({ url: requestUrl })
+					.then(response => {
+						console.log("response requestUrl", response);
 
-			}).catch(e => {
-				console.error(e)
-				return Promise.resolve()
+						server = url;
+					})
+					.catch(e => {
+						console.error(e);
+						return Promise.resolve();
+					});
 			})
-		})).then(() => {
-			return server
-		})
+		).then(() => {
+			return server;
+		});
 	}
 
 	async createClient() {
@@ -446,12 +462,12 @@ class MTRX {
 	}
 
 	download(url) {
-
-		if(!url) return Promise.reject('url _is_empty')
+		if (!url) return Promise.reject("url _is_empty");
 
 		// Function to download the file
 		var dlFile = () => {
-			return f.fetchLocal(url).then((response) => {
+			return f.fetchLocal(url).then(response => {
+				console.log("FECTCH LOCAL", url, response);
 
 				// Update the storage before returning
 				if (
@@ -462,6 +478,7 @@ class MTRX {
 					window.POCKETNETINSTANCE.storage.saveFile(url, response.data);
 				} else {
 					if (this.db) {
+						console.log("db set");
 						this.db.set(url, response.data);
 					}
 				}
@@ -553,6 +570,12 @@ class MTRX {
 				message.event.content.pbody = JSON.parse(message.event.content.body);
 			}
 
+			if (message.event.type === "m.reaction") {
+				this.core.store.dispatch("FETCH_EVENTS");
+				this.core.store.commit("UPDATE_TIMESTAMP", Date.now());
+				return;
+			}
+
 			if (message.getSender() !== userId) {
 				var m_chat = this.core.mtrx.client.getRoom(message.event.room_id);
 
@@ -572,6 +595,9 @@ class MTRX {
 		});
 
 		this.client.on("sync", (state, prevState, res) => {
+			if (state === "PREPARED") {
+				console.log("PREPARED");
+			}
 
 
 			this.setready();
@@ -824,8 +850,7 @@ class MTRX {
 				fileInfo.url = url;
 			})
 			.finally(() => {
-
-				if(!fileInfo.url) return Promise.reject('dontuploaded')
+				if (!fileInfo.url) return Promise.reject("dontuploaded");
 
 				let body = JSON.stringify(fileInfo);
 				var r = {
@@ -990,6 +1015,8 @@ class MTRX {
 				? true
 				: false;
 
+
+		console.log("needdecrypt", needdecrypt, event);
 
 		if (needdecrypt) {
 			try {
@@ -1315,6 +1342,96 @@ class MTRX {
 		return _.filter(this.chatUsers(roomId), user => {
 			return user.userId != this.core.user.userinfo.id;
 		});
+	}
+
+	sendReaction(chat, messageEvent, emoji) {
+		const content = {
+			"m.relates_to": {
+				rel_type: "m.annotation",
+				event_id: messageEvent.getId(),
+				key: emoji
+			}
+		};
+
+		return this.client.sendEvent(chat.roomId, "m.reaction", content);
+	}
+
+	removeReaction(chat, reactionEventId) {
+		return this.client.redactEvent(chat.roomId, reactionEventId, null, {
+			reason: "reaction_removed"
+		});
+	}
+
+	getReactionsForMessage(messageEvent) {
+		if (!messageEvent) {
+			return [];
+		}
+
+		const messageId = messageEvent.getId();
+		const roomId = messageEvent.event.room_id;
+
+		if (messageEvent.getRelation) {
+			const relations = messageEvent.getRelation("m.annotation");
+			if (relations) {
+				const reactionEvents = relations.getEvents();
+				if (reactionEvents && reactionEvents.length) {
+					return this._processReactionEvents(reactionEvents);
+				}
+			}
+		}
+
+		const room = this.client.getRoom(roomId);
+		if (!room) {
+			return [];
+		}
+
+		const timeline = room.getLiveTimeline().getEvents();
+		const reactionEvents = timeline.filter(event => {
+			return (
+				event.getType() === "m.reaction" &&
+				event.event.content?.["m.relates_to"]?.event_id === messageId &&
+				!event.isRedacted()
+			);
+		});
+
+		return this._processReactionEvents(reactionEvents);
+	}
+
+	_processReactionEvents(reactionEvents) {
+		const grouped = {};
+
+		reactionEvents.forEach(event => {
+			if (event.isRedacted()) return;
+
+			const emoji = event.event.content?.["m.relates_to"]?.key;
+
+			if (!emoji) return;
+
+			if (!grouped[emoji]) {
+				grouped[emoji] = {
+					emoji: emoji,
+					count: 0,
+					users: [],
+					myReaction: null
+				};
+			}
+
+			const sender = event.getSender();
+			const reactionEventId = event.getId();
+
+			grouped[emoji].count++;
+			grouped[emoji].users.push({
+				id: sender,
+				reactionEventId: reactionEventId
+			});
+
+			if (this.me(sender)) {
+				grouped[emoji].myReaction = reactionEventId;
+			}
+		});
+
+		const result = Object.values(grouped).sort((a, b) => b.count - a.count);
+		return result;
 	}
 }
 
