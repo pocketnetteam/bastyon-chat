@@ -177,6 +177,9 @@
 .pocketnet_iframe #lenta .share.fullScreenVideo .video-js {
   max-height: none;
 }
+.pocketnet_iframe #lenta .share .collectionMode {
+  display: none!important;
+}
 .pocketnet_iframe #lenta.loading .loader {
   display: block;
 }

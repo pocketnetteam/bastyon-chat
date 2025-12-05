@@ -354,13 +354,13 @@ var store = new Vuex.Store({
 					0
 				) + count.length;
 
-			if (state.chats.length <= 3) {
+			/*if (state.chats.length <= 3) {
 				// Count notifications from pocketnet team room
 				var pocketMessages = _.filter(state.pocketteammessages, function (m) {
 					return !state.readedteammessages[m.id];
 				}).length;
 				state.allnotifications += pocketMessages;
-			}
+			}*/
 
 			var external =
 				f.deep(store, "_vm.core.external.clbks.ALL_NOTIFICATIONS_COUNT") || {};
@@ -719,8 +719,6 @@ var store = new Vuex.Store({
 
 					var iv = images[index];
 
-					console.log("iv", iv, images, index);
-
 					externalGallery(images, iv, null, {
 						removeWhenShare: true,
 					});
@@ -935,8 +933,6 @@ var store = new Vuex.Store({
 
 				var e = timeline[0];
 
-				//console.log('timeline', e, timeline, chat.roomId)
-
 				if (e) {
 					var rt = ts.relations.getChildEventsForEvent(
 						e.event.event_id,
@@ -974,11 +970,6 @@ var store = new Vuex.Store({
 						roomId: chat.roomId,
 						isWaiting: false,
 					};
-				}
-
-				if (chat.roomId == "!LMxFfIZibiOaNOcEXE:test.matrix.pocketnet.app") {
-					console.log("ev", ev);
-					console.log("chatStatuses", chatStatuses, isCallsEnabled);
 				}
 
 				if (isCallsEnabled.length) {

@@ -399,8 +399,8 @@
 }
 .pocketnet_iframe #comments .list .comments-operations .operations-wrapper .close-comments {
   cursor: pointer;
-  width: 38px;
-  height: 38px;
+  width: 44px;
+  height: 44px;
   background: rgb(var(--background-total-theme));
   border-radius: 30px;
   overflow: hidden;
@@ -409,7 +409,7 @@
   text-align: center;
   vertical-align: middle;
   color: rgb(var(--neutral-grad-3));
-  line-height: 36px;
+  line-height: 42px;
   -moz-transition: 0.3s;
   -o-transition: 0.3s;
   -webkit-transition: 0.3s;
@@ -423,8 +423,8 @@
 }
 .pocketnet_iframe #comments .list .comments-operations .operations-wrapper .refresh-comments {
   cursor: pointer;
-  width: 38px;
-  height: 38px;
+  width: 44px;
+  height: 44px;
   background: rgb(var(--background-total-theme));
   border-radius: 30px;
   overflow: hidden;
@@ -437,7 +437,7 @@
   -o-transition: 0.3s;
   -webkit-transition: 0.3s;
   transition: 0.3s;
-  line-height: 36px;
+  line-height: 42px;
 }
 .pocketnet_iframe #comments .list .comments-operations .operations-wrapper .refresh-comments .icon-wrapper:hover {
   color: rgb(var(--neutral-grad-4));
@@ -488,7 +488,6 @@
 .pocketnet_iframe #comments .list .comments-operations .operations-wrapper .vc_valuecustom .vc_inputWrapper input {
   text-align: center;
   font-size: 0.8em;
-  cursor: pointer !important;
 }
 .pocketnet_iframe #comments .list .showmorecomments {
   text-align: center;
@@ -591,7 +590,7 @@
 }
 .pocketnet_iframe #comments .list .comment .commentPaddingWrapper {
   padding-left: 1.5em;
-  padding-right: 2.5em;
+  padding-right: 1.5em;
 }
 .pocketnet_iframe #comments .list .comment .answer {
   background: rgb(var(--background-total-theme));
@@ -599,7 +598,7 @@
 .pocketnet_iframe #comments .list .comment .answer .postbody {
   border-top: 1px solid rgb(var(--neutral-grad-0));
   padding-left: 1.5em;
-  padding-right: 2.5em;
+  padding-right: 1.5em;
 }
 .pocketnet_iframe #comments .list .comment .answer .postbody .embeddonate {
   display: none;
@@ -750,14 +749,16 @@
 }
 .pocketnet_iframe #comments .list .commentpanel {
   overflow: hidden;
-  margin-top: 0.5em;
 }
 .pocketnet_iframe #comments .list .commentpanel .items {
   display: flex;
   align-items: center;
 }
 .pocketnet_iframe #comments .list .commentpanel .items > div {
-  margin-right: 1em;
+  padding: 0.5em;
+  padding-top: 1em;
+  margin-right: 0.5em;
+  padding-left: 0;
 }
 .pocketnet_iframe #comments .list .commentpanel .items > div .cact {
   cursor: pointer;
@@ -987,7 +988,7 @@
 .pocketnet_iframe #comments .answer,
 .pocketnet_iframe #comments .post {
   padding-left: 1.5em;
-  padding-right: 2.25em;
+  padding-right: 1.5em;
 }
 .pocketnet_iframe #comments .edit .postbody,
 .pocketnet_iframe #comments .answer .postbody,
@@ -997,11 +998,8 @@
 .pocketnet_iframe #comments .edit .postbody .closeAnswer,
 .pocketnet_iframe #comments .answer .postbody .closeAnswer,
 .pocketnet_iframe #comments .post .postbody .closeAnswer {
-  right: 0;
-  top: 0;
-  padding: 0.5em;
-  color: rgba(var(--neutral-grad-1));
-  position: absolute;
+  margin-left: 0.75em;
+  color: rgba(var(--neutral-grad-2));
   cursor: pointer;
   -moz-transition: 0.3s;
   -o-transition: 0.3s;
@@ -1064,6 +1062,11 @@
   padding-left: 0;
   padding-right: 0;
 }
+.pocketnet_iframe #comments .edit .posttable > div .preloader5,
+.pocketnet_iframe #comments .answer .posttable > div .preloader5,
+.pocketnet_iframe #comments .post .posttable > div .preloader5 {
+  height: 40px;
+}
 .pocketnet_iframe #comments .edit .posttable > div.closeWrapper,
 .pocketnet_iframe #comments .answer .posttable > div.closeWrapper,
 .pocketnet_iframe #comments .post .posttable > div.closeWrapper,
@@ -1073,6 +1076,12 @@
   width: 38px;
   min-width: 38px;
 }
+.pocketnet_iframe #comments .edit .posttable > div.closeWrapper .closeAnswer,
+.pocketnet_iframe #comments .answer .posttable > div.closeWrapper .closeAnswer,
+.pocketnet_iframe #comments .post .posttable > div.closeWrapper .closeAnswer,
+.pocketnet_iframe #comments .edit .posttable > div.postCellWrapper .closeAnswer,
+.pocketnet_iframe #comments .answer .posttable > div.postCellWrapper .closeAnswer,
+.pocketnet_iframe #comments .post .posttable > div.postCellWrapper .closeAnswer,
 .pocketnet_iframe #comments .edit .posttable > div.closeWrapper .closeEdit,
 .pocketnet_iframe #comments .answer .posttable > div.closeWrapper .closeEdit,
 .pocketnet_iframe #comments .post .posttable > div.closeWrapper .closeEdit,
@@ -1088,6 +1097,12 @@
   line-height: 40px;
   text-align: center;
 }
+.pocketnet_iframe #comments .edit .posttable > div.closeWrapper .closeAnswer .preloaderWrapper,
+.pocketnet_iframe #comments .answer .posttable > div.closeWrapper .closeAnswer .preloaderWrapper,
+.pocketnet_iframe #comments .post .posttable > div.closeWrapper .closeAnswer .preloaderWrapper,
+.pocketnet_iframe #comments .edit .posttable > div.postCellWrapper .closeAnswer .preloaderWrapper,
+.pocketnet_iframe #comments .answer .posttable > div.postCellWrapper .closeAnswer .preloaderWrapper,
+.pocketnet_iframe #comments .post .posttable > div.postCellWrapper .closeAnswer .preloaderWrapper,
 .pocketnet_iframe #comments .edit .posttable > div.closeWrapper .closeEdit .preloaderWrapper,
 .pocketnet_iframe #comments .answer .posttable > div.closeWrapper .closeEdit .preloaderWrapper,
 .pocketnet_iframe #comments .post .posttable > div.closeWrapper .closeEdit .preloaderWrapper,
@@ -1102,6 +1117,12 @@
 .pocketnet_iframe #comments .post .posttable > div.postCellWrapper .postaction .preloaderWrapper {
   display: none;
 }
+.pocketnet_iframe #comments .edit .posttable > div.closeWrapper .closeAnswer .preloaderWrapper .preloader5,
+.pocketnet_iframe #comments .answer .posttable > div.closeWrapper .closeAnswer .preloaderWrapper .preloader5,
+.pocketnet_iframe #comments .post .posttable > div.closeWrapper .closeAnswer .preloaderWrapper .preloader5,
+.pocketnet_iframe #comments .edit .posttable > div.postCellWrapper .closeAnswer .preloaderWrapper .preloader5,
+.pocketnet_iframe #comments .answer .posttable > div.postCellWrapper .closeAnswer .preloaderWrapper .preloader5,
+.pocketnet_iframe #comments .post .posttable > div.postCellWrapper .closeAnswer .preloaderWrapper .preloader5,
 .pocketnet_iframe #comments .edit .posttable > div.closeWrapper .closeEdit .preloaderWrapper .preloader5,
 .pocketnet_iframe #comments .answer .posttable > div.closeWrapper .closeEdit .preloaderWrapper .preloader5,
 .pocketnet_iframe #comments .post .posttable > div.closeWrapper .closeEdit .preloaderWrapper .preloader5,
@@ -1116,6 +1137,12 @@
 .pocketnet_iframe #comments .post .posttable > div.postCellWrapper .postaction .preloaderWrapper .preloader5 {
   display: block;
 }
+.pocketnet_iframe #comments .edit .posttable > div.closeWrapper .closeAnswer .icon,
+.pocketnet_iframe #comments .answer .posttable > div.closeWrapper .closeAnswer .icon,
+.pocketnet_iframe #comments .post .posttable > div.closeWrapper .closeAnswer .icon,
+.pocketnet_iframe #comments .edit .posttable > div.postCellWrapper .closeAnswer .icon,
+.pocketnet_iframe #comments .answer .posttable > div.postCellWrapper .closeAnswer .icon,
+.pocketnet_iframe #comments .post .posttable > div.postCellWrapper .closeAnswer .icon,
 .pocketnet_iframe #comments .edit .posttable > div.closeWrapper .closeEdit .icon,
 .pocketnet_iframe #comments .answer .posttable > div.closeWrapper .closeEdit .icon,
 .pocketnet_iframe #comments .post .posttable > div.closeWrapper .closeEdit .icon,
@@ -1135,6 +1162,12 @@
   transition: 0.3s;
   color: rgb(var(--neutral-grad-2));
 }
+.pocketnet_iframe #comments .edit .posttable > div.closeWrapper .closeAnswer .icon:hover,
+.pocketnet_iframe #comments .answer .posttable > div.closeWrapper .closeAnswer .icon:hover,
+.pocketnet_iframe #comments .post .posttable > div.closeWrapper .closeAnswer .icon:hover,
+.pocketnet_iframe #comments .edit .posttable > div.postCellWrapper .closeAnswer .icon:hover,
+.pocketnet_iframe #comments .answer .posttable > div.postCellWrapper .closeAnswer .icon:hover,
+.pocketnet_iframe #comments .post .posttable > div.postCellWrapper .closeAnswer .icon:hover,
 .pocketnet_iframe #comments .edit .posttable > div.closeWrapper .closeEdit .icon:hover,
 .pocketnet_iframe #comments .answer .posttable > div.closeWrapper .closeEdit .icon:hover,
 .pocketnet_iframe #comments .post .posttable > div.closeWrapper .closeEdit .icon:hover,
@@ -1235,11 +1268,15 @@
   border-radius: 3px;
   padding: 8px;
   padding-left: 1em;
-  padding-right: 66px;
-  padding-right: 94px;
+  padding-right: 64px;
   outline: 0;
   border: 0;
   min-height: 36px;
+}
+.pocketnet_iframe #comments .edit .donateactive .emojionearea-editor,
+.pocketnet_iframe #comments .answer .donateactive .emojionearea-editor,
+.pocketnet_iframe #comments .post .donateactive .emojionearea-editor {
+  padding-right: 114px;
 }
 .pocketnet_iframe #comments .edit .emojionearea-button,
 .pocketnet_iframe #comments .answer .emojionearea-button,
@@ -1334,6 +1371,11 @@
 .pocketnet_iframe #comments .answer .hasemoji.hasembedimage .embeddonate,
 .pocketnet_iframe #comments .post .hasemoji.hasembedimage .embeddonate {
   right: 80px;
+}
+.pocketnet_iframe #comments .edit .hasemoji.hasdonate.hasembedimage .emojionearea-editor,
+.pocketnet_iframe #comments .answer .hasemoji.hasdonate.hasembedimage .emojionearea-editor,
+.pocketnet_iframe #comments .post .hasemoji.hasdonate.hasembedimage .emojionearea-editor {
+  padding-right: 110px;
 }
 .pocketnet_iframe #comments .edit .commentPanel,
 .pocketnet_iframe #comments .answer .commentPanel,
@@ -1448,7 +1490,7 @@
   cursor: pointer;
 }
 .pocketnet_iframe .commentmenu .menuitem > div {
-  padding: 0.5em;
+  padding: 1em;
   border-bottom: 1px solid rgb(var(--neutral-grad-0));
   -moz-transition: 0.3s;
   -o-transition: 0.3s;
@@ -1517,7 +1559,7 @@
     padding-right: 0.5em;
   }
   .pocketnet_iframe #comments .list .comment .answers .commentPaddingWrapper {
-    padding-left: 0.5em;
+    padding-left: 1em;
     padding-right: 0.5em;
   }
   .pocketnet_iframe #comments .list .comment .answersWrapper {
@@ -1640,16 +1682,18 @@
     padding: 0;
     position: relative;
   }
-  .pocketnet_iframe #comments .answer .postbody .closeAnswer,
-  .pocketnet_iframe #comments .post .postbody .closeAnswer {
-    display: none;
-  }
   .pocketnet_iframe #comments .answer .posttable > div.postCellWrapper .postaction,
   .pocketnet_iframe #comments .post .posttable > div.postCellWrapper .postaction {
     text-align: center;
   }
   .pocketnet_iframe #comments .answer {
     padding: 0;
+  }
+  .pocketnet_iframe #comments .answer .iconWrapper {
+    display: none;
+  }
+  .pocketnet_iframe #comments .answer .closeAnswer {
+    margin-left: 0 !important;
   }
   .pocketnet_iframe #comments .answers .comment .commentPaddingWrapper {
     padding-left: 0;
@@ -1674,21 +1718,6 @@
   .pocketnet_iframe #comments .answer.active .postbody .posttable > div.postCellWrapper,
   .pocketnet_iframe #comments .post.active .postbody .posttable > div.postCellWrapper {
     padding-left: 0;
-  }
-  .pocketnet_iframe #comments .answer .postbody .closeAnswer {
-    position: absolute;
-    left: 0;
-    right: auto;
-    top: 0;
-    display: block !important;
-    padding: 1em 0.5em;
-    width: auto;
-    text-align: center;
-  }
-  .pocketnet_iframe #comments .answer .postbody .closeAnswer i {
-    line-height: 38px;
-    width: 38px;
-    height: 38px;
   }
   .pocketnet_iframe #comments .answer .postbody .posttable > div.iconWrapper .icon .usericon {
     display: none;
@@ -2490,15 +2519,71 @@
   text-align: center;
 }
 .pocketnet_iframe #channel .channel {
-  background: rgb(var(--background-total-theme));
-  padding: 0 0.5em;
+  max-width: 640px;
+  background: rgb(var(--background-secondary-theme));
+}
+.pocketnet_iframe #channel .channel .bgwallpaperWrapper {
+  overflow: hidden;
+  height: 135px;
+  z-index: 0;
+  position: relative;
+  border-bottom-left-radius: 12px;
+  border-bottom-right-radius: 12px;
+  filter: brightness(90%);
+}
+.pocketnet_iframe #channel .channel .bgwallpaperWrapper .bgwallpaper {
+  width: 100%;
+  height: 100%;
+  background: #051b48;
+  opacity: 1 !important;
+}
+.pocketnet_iframe #channel .channel .bgwallpaperWrapper .bgwallpaper[imageloaded="true"] [circle="circle"] {
+  opacity: 0;
+}
+.pocketnet_iframe #channel .channel .bgwallpaperWrapper .bgwallpaper [circle="circle"] {
+  -moz-transition: opacity 0.3s;
+  -o-transition: opacity 0.3s;
+  -webkit-transition: opacity 0.3s;
+  transition: opacity 0.3s;
+}
+.pocketnet_iframe #channel .channel .bgwallpaperWrapper .bgwallpaper.deleted,
+.pocketnet_iframe #channel .channel .bgwallpaperWrapper .bgwallpaper.blocked {
+  background: #48052b;
+}
+.pocketnet_iframe #channel .channel .bgwallpaperWrapper .bgwallpaper.deleted .grad,
+.pocketnet_iframe #channel .channel .bgwallpaperWrapper .bgwallpaper.blocked .grad {
+  background: #010101;
+  background: linear-gradient(180deg, rgba(236, 30, 215, 0.3), rgba(1, 1, 1, 0.1), rgba(1, 1, 1, 0.2));
+}
+.pocketnet_iframe #channel .channel .bgwallpaperWrapper .bgwallpaper.reputationBlocked {
+  background: #ff0090;
+}
+.pocketnet_iframe #channel .channel .bgwallpaperWrapper .bgwallpaper.reputationBlocked .grad {
+  background: #010101;
+  background: linear-gradient(180deg, rgba(255, 0, 123, 0.3), rgba(1, 1, 1, 0.1), rgba(1, 1, 1, 0.2));
+}
+.pocketnet_iframe #channel .channel .bgwallpaperWrapper .grad {
+  pointer-events: none;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  background: #010101;
+  background: linear-gradient(180deg, rgba(30, 141, 236, 0.3), rgba(1, 1, 1, 0.1), rgba(1, 1, 1, 0.2));
+  z-index: 0;
+  height: 100%;
 }
 .pocketnet_iframe #channel .channel .userinfo {
+  position: relative;
+  top: -35px;
   padding: 0.5em 0;
-  display: flex;
+  margin-left: 0.5em;
+  margin-right: 0.5em;
+  border-radius: 12px;
+  background: rgb(var(--background-hidden-layer));
 }
 .pocketnet_iframe #channel .channel .userinfo .name {
-  font-size: 1.75em;
+  text-align: center;
   font-weight: 700;
   padding-bottom: 0.5em;
 }
@@ -2509,52 +2594,62 @@
   vertical-align: bottom;
   display: inline-block;
 }
-.pocketnet_iframe #channel .channel .userinfo .nameinfo {
-  padding-left: 1em;
-  flex-grow: 2;
-}
 .pocketnet_iframe #channel .channel .userinfo .openprofilebuttonwrapper {
+  text-align: center;
   padding-bottom: 1em;
 }
 .pocketnet_iframe #channel .channel .userinfo .openprofilebutton {
   min-width: 200px;
 }
 .pocketnet_iframe #channel .channel .userinfo .additional {
+  padding: 1em;
   margin-top: 0.5em;
   padding-top: 1em;
   padding-bottom: 1em;
   border-top: 1px solid rgb(var(--neutral-grad-0));
 }
 .pocketnet_iframe #channel .channel .panel {
-  margin: 0 auto;
-  max-width: 600px;
   display: flex;
-  flex-direction: column;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
 }
-.pocketnet_iframe #channel .channel .panel .usermenuitem {
-  padding: 0.5em 0;
+.pocketnet_iframe #channel .channel .panel > div {
   cursor: pointer;
   white-space: nowrap;
+  margin-right: 0.5em;
+  margin-bottom: 0.5em;
+  border-radius: 12px;
+  padding: 0.5em 1em;
+  background: rgb(var(--background-secondary-theme));
+  box-shadow: 0 5px 7px -5px rgba(var(--color-shadow-base), 0.4);
 }
 .pocketnet_iframe #channel .channel .panel > div i {
   text-align: center;
   width: 30px;
   font-size: 0.8em;
 }
-.pocketnet_iframe #channel .channel .usericon {
-  width: 40px;
-  height: 40px;
-  line-height: 40px;
-  margin: 0 auto;
+.pocketnet_iframe #channel .channel .nameinfo {
+  padding-top: 4.5em;
 }
-.pocketnet_iframe #channel .channel .usericon.letter {
-  font-size: 1.5em;
+.pocketnet_iframe #channel .channel .usericon {
+  font-size: 2.5em;
+  border: 1px solid rgb(var(--background-total-theme));
+  position: absolute;
+  top: -1.25em;
+  left: 50%;
+  margin-left: -1.5em;
+}
+.pocketnet_iframe #channel .channel .uiwrapper {
+  position: relative;
 }
 .pocketnet_iframe #channel .channel .action {
   padding: 1em;
   text-align: center;
 }
 .pocketnet_iframe #channel .channel .userinfo .blockWrapper {
+  padding-left: 1em;
+  padding-right: 1em;
   margin-top: 1em;
 }
 .pocketnet_iframe #channel .channel .userinfo .blockWrapper span {
@@ -2574,10 +2669,8 @@
 .pocketnet_iframe #channel .channel .userinfo.blocked .blockWrapper .unblock {
   display: inline;
 }
-.pocketnet_iframe .wnd #channel {
-  padding-bottom: 3em;
-  padding-left: 0.5em;
-  padding-right: 0.5em;
+.pocketnet_iframe .wnd.channelwnd .wndcontent {
+  padding-top: 0;
 }
 .pocketnet_iframe .lentaWrapper > div#post {
   background: transparent;
@@ -2587,6 +2680,22 @@
 }
 .pocketnet_iframe #post.preshell {
   background: transparent;
+}
+.pocketnet_iframe .poctelc .lockedaccount,
+.pocketnet_iframe .poctelc .empty {
+  text-align: center;
+  padding: 5em;
+}
+.pocketnet_iframe .poctelc .lockedaccount span,
+.pocketnet_iframe .poctelc .empty span {
+  font-size: 2em;
+  font-weight: 100;
+}
+.pocketnet_iframe .poctelc .lockedaccount.allb,
+.pocketnet_iframe .poctelc .empty.allb {
+  background: rgb(var(--background-main));
+  margin: 0 auto;
+  border-radius: 12px;
 }
 .pocketnet_iframe #post {
   background: rgb(var(--background-main));
@@ -2604,6 +2713,9 @@
   position: relative;
   overflow: hidden;
 }
+.pocketnet_iframe #post .videoWrapper.verticalVideo {
+  max-width: 350px;
+}
 .pocketnet_iframe #post .lockedaccount,
 .pocketnet_iframe #post .empty {
   text-align: center;
@@ -2618,8 +2730,6 @@
 .pocketnet_iframe #post .empty.allb {
   background: rgb(var(--background-main));
   margin: 0 auto;
-  margin-top: 5em;
-  max-width: 400px;
   border-radius: 12px;
 }
 .pocketnet_iframe #post #chatExported .caption {
@@ -2693,13 +2803,13 @@
   display: none;
 }
 .pocketnet_iframe #post .share .images {
-  max-width: 620px;
+  max-width: 768px;
 }
 .pocketnet_iframe #post .share .sharecaption {
   max-width: 620px;
 }
 .pocketnet_iframe #post .share .message {
-  max-width: 620px;
+  max-width: 768px;
 }
 .pocketnet_iframe #post.videomainpost {
   padding-top: 0;
@@ -2820,9 +2930,6 @@
   border-radius: 12px;
   background: #000;
 }
-.pocketnet_iframe #post.videomainpost .statswrapperExtended {
-  display: none;
-}
 .pocketnet_iframe #post.videomainpost .share {
   margin: 0 auto;
 }
@@ -2848,6 +2955,16 @@
   margin-left: 0.25em;
   padding: 0 0.5em;
   overflow: hidden;
+}
+.pocketnet_iframe #post .recomandationsFromContent .streambgwrapper #transactionview {
+  height: auto;
+}
+.pocketnet_iframe #post .recomandationsFromContent .streambgwrapper .inputWrapper button {
+  background: transparent;
+  border: 0;
+}
+.pocketnet_iframe #post .recomandationsFromContent .streambgwrapper .inputWrapper .emojipicker {
+  width: 35px;
 }
 .pocketnet_iframe #post .recomandationsFromContent .streambgwrapper .toggle-chat {
   background: rgba(0, 0, 0, 0.04);
@@ -2987,17 +3104,18 @@
 .pocketnet_iframe #post .sharearticle .sharepanel {
   padding-right: 0.5em;
 }
-.pocketnet_iframe #post .sharearticle .translateApi {
+.pocketnet_iframe #post .sharearticle .shareBgCaption .translateApi {
   margin-bottom: 0;
 }
-.pocketnet_iframe #post .sharearticle .translateApi .translateto {
+.pocketnet_iframe #post .sharearticle .shareBgCaption .translateApi .translateto {
+  height: 3.5em;
   margin-right: 0;
   background: transparent;
 }
-.pocketnet_iframe #post .sharearticle .translateApi .translateto span {
+.pocketnet_iframe #post .sharearticle .shareBgCaption .translateApi .translateto span {
   color: rgb(var(--text-on-bg-shadow-color));
 }
-.pocketnet_iframe #post .sharearticle .translateApi .translateto.active span {
+.pocketnet_iframe #post .sharearticle .shareBgCaption .translateApi .translateto.active span {
   color: rgb(var(--color-bg-ac-bright));
 }
 .pocketnet_iframe #post .sharearticle .shareBgCaption .author,
@@ -3326,6 +3444,35 @@
 .pocketnet_iframe html.mobileview .wnd.normalizedmobile.articlewindow .wndinner .wndcontent {
   max-width: none;
 }
+.pocketnet_iframe html.allcontentvideo #post.videomainpost .forurl {
+  margin-bottom: 2em;
+}
+.pocketnet_iframe html.allcontentvideo #post.videomainpost.recommendationsenabled .share {
+  max-width: 100%;
+}
+.pocketnet_iframe html.allcontentvideo #post.videomainpost.recommendationsenabled .postWrapper {
+  display: block;
+}
+.pocketnet_iframe html.allcontentvideo #post.videomainpost.recommendationsenabled .recomandationsFromContent {
+  margin-left: 0;
+  width: 100%;
+  max-width: 100%;
+}
+.pocketnet_iframe html.allcontentvideo #post.videomainpost .video-js {
+  max-height: 100vh;
+  height: 100vh;
+}
+.pocketnet_iframe html.allcontentvideo #post.videomainpost .jsPlayerLoading,
+.pocketnet_iframe html.allcontentvideo #post.videomainpost .js-player {
+  max-height: 100vh;
+  height: 100vh;
+}
+.pocketnet_iframe html.allcontentvideo #post.videomainpost .videoWrapper {
+  border-radius: 0;
+}
+.pocketnet_iframe html.allcontentvideo #post.videomainpost .forurl .url {
+  border-radius: 0;
+}
 @media only screen and (max-width: 1920px) {
   .pocketnet_iframe #content > div#post.sharec .widthcontainer {
     width: 100%;
@@ -3362,9 +3509,16 @@
   }
   .pocketnet_iframe #post .sharearticle .shareBgCaption:not(.verticalcover) {
     height: auto;
+    contain: none;
+  }
+  .pocketnet_iframe #post .sharearticle .shareBgCaption:not(.verticalcover) .translateApi .translateto span {
+    color: rgb(var(--text-color));
+  }
+  .pocketnet_iframe #post .sharearticle .shareBgCaption:not(.verticalcover) .translateApi .translateto.active span {
+    color: rgb(var(--color-bg-ac-bright));
   }
   .pocketnet_iframe #post .sharearticle .shareBgCaption:not(.verticalcover) .captioncnt {
-    padding-bottom: 2em;
+    padding-bottom: 3em;
     padding-left: 1em;
     padding-right: 1em;
     display: flex;
@@ -3547,6 +3701,9 @@
     padding-top: 0.5em;
     padding-left: 0.5em;
     padding-right: 0;
+  }
+  .pocketnet_iframe #post .eventMember .iconWrapper {
+    width: 33px;
   }
   .pocketnet_iframe #post .openoriginallabel {
     display: none;
@@ -4093,6 +4250,23 @@
 .pocketnet_iframe #lenta.mainvideo .share .url .videoWrapper .js-player {
   height: 100%;
 }
+.pocketnet_iframe #lenta.mainvideo .share .hiddenpost {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background: #000;
+  color: #fff;
+  margin-top: 0;
+  margin-bottom: 0;
+  padding: 2em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-flow: column;
+  border-radius: 18px;
+}
 .pocketnet_iframe #lenta.mainvideo .share .urlcnt {
   display: none;
 }
@@ -4146,7 +4320,8 @@
   height: 63%;
 }
 .pocketnet_iframe #lenta.mainvideo .share .shareTable .boostedlabel {
-  display: none;
+  color: rgb(var(--color-star-yellow));
+  margin-left: 0.25em;
 }
 .pocketnet_iframe #lenta.mainvideo .share .shareTable .anothercntswrk {
   position: absolute;
@@ -4221,6 +4396,17 @@
 .pocketnet_iframe #lenta.mainvideo .shares .showmorebyauthor {
   display: none;
 }
+.pocketnet_iframe #lenta.byauthor.mainvideo .shares .authorgroup {
+  width: 50%;
+  clear: none;
+}
+.pocketnet_iframe #lenta.byauthor.mainvideo .shares .authorgroup:nth-child(2n+1) {
+  clear: left;
+}
+.pocketnet_iframe html.television #lenta.mainvideo .shares {
+  display: block;
+  overflow: hidden;
+}
 .pocketnet_iframe #lenta.horizontal {
   display: flex;
   flex-grow: 1;
@@ -4254,6 +4440,9 @@
   flex-wrap: nowrap;
   flex-grow: 1;
   flex-direction: row;
+  margin-right: 0.5em;
+}
+.pocketnet_iframe #lenta.horizontal .authorgroup {
   margin-right: 0.5em;
 }
 .pocketnet_iframe #lenta.horizontal .loader,
@@ -4419,6 +4608,13 @@
 @media only screen and (max-width: 1180px) {
   .pocketnet_iframe #lenta.mainvideo .shares .authorgroup {
     width: 50%;
+    clear: none;
+  }
+  .pocketnet_iframe #lenta.mainvideo .shares .authorgroup:nth-child(3n+1) {
+    clear: none;
+  }
+  .pocketnet_iframe #lenta.mainvideo .shares .authorgroup:nth-child(2n+1) {
+    clear: left;
   }
 }
 @media only screen and (max-width: 1920px) {

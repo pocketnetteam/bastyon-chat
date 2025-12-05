@@ -606,7 +606,9 @@ export default {
 										this.core.mtrx.baseUrl.replace("https://", "")
 								)
 								.then(() => {})
-								.catch(e => {});
+								.catch(e => {
+									
+								});
 						}
 
 						return Promise.reject(e);
@@ -708,7 +710,8 @@ export default {
 							return this.core.mtrx
 								.textEvent(this.chat, text, {
 									encryptEvent: this.clbkEncrypt,
-									encryptedEvent: this.clbkEncrypted
+									encryptedEvent: this.clbkEncrypted,
+									encryptedEventError : this.clbkEncrypted
 								})
 								.then(r => {
 									r["m.relates_to"] = {
@@ -759,7 +762,8 @@ export default {
 								),
 								{
 									encryptEvent: this.clbkEncrypt,
-									encryptedEvent: this.clbkEncrypted
+									encryptedEvent: this.clbkEncrypted,
+									encryptedEventError : this.clbkEncrypted
 								}
 							);
 						},
@@ -771,14 +775,24 @@ export default {
 						const txid = await donate.send();
 						data.donateLink = txid;
 					}
+
 					this.setSendStatus(SendStatus.Sent);
+
 					return sendText(text, data);
 				})
 				.catch(e => {
+
+
 					this.setSendStatus(SendStatus.Error);
+
+					this.$dialog.confirm(this.$i18n.t("sendingerror"), {
+						okText: this.$i18n.t("button.ok")
+					});
+
 					this.$emit("sentMessageError", {
 						error: e
 					});
+
 				});
 		},
 

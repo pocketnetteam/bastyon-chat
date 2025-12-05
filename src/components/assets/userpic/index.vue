@@ -24,10 +24,14 @@
 						<span>{{ props.userinfo.name.charAt(0) }}</span>
 					</div>
 
-					<div class="statusIcon" v-if="props.status == 'blocked' || props.status == 'ban' || props.status == 'invite'">
+					<div class="statusIcon" v-if="props.status == 'blocked' || props.status == 'ban' || props.status == 'invite' || props.status == 'leave'">
 						<i
 							v-if="props.status == 'blocked' || props.status == 'ban'"
 							class="fas fa-ban"
+						></i>
+						<i
+							v-if="props.status == 'leave'"
+							class="fas fa-times"
 						></i>
 						<i v-if="props.status == 'invite'" class="fas fa-user-plus"></i>
 					</div>

@@ -93,8 +93,13 @@
 					</div>
 				</div>
 
-				<div class="preloaderImage" :style="imagePaddingStyle(content)" v-else>
+				<div class="preloaderImage" :style="imagePaddingStyle(content)" v-if="!imageUrl && !hasError">
 					<div class="abswrapper"><linepreloader /></div>
+				</div>
+
+				<div class="errorImage" v-if="!imageUrl && hasError">
+					<div class="abswrapper">{{stringifyiedError}}</div>
+
 				</div>
 			</div>
 			<div class="messageAudio" v-if="content.msgtype === 'm.audio'">
@@ -161,7 +166,7 @@
 						class="sendername"
 						v-if="(!content.from && !my && showmeta) || (showmyicon && !my)"
 					>
-						<span class="b">{{ userinfo.name }}</span>
+						<span class="b" v-if="userinfo">{{ userinfo.name }}</span>
 						&middot;
 						<span>
 							{{ format_date(origin.localTimestamp) || "Now" }}
@@ -182,7 +187,7 @@
 					<div class="from" v-if="content.from">
 						<div class="fromCaption">
 							<i class="fas fa-share-alt"></i>
-							<span
+							<span v-if="userinfo"
 								>{{ userinfo.name }}:
 								{{ $t("caption.messagefrom").toLowerCase() }}</span
 							>
@@ -255,7 +260,7 @@
 			>
 				<div class="fromCaption">
 					<i class="fas fa-share-alt"></i>
-					<span
+					<span v-if="userinfo"
 						>{{ userinfo.name }}: {{ $t("caption.messagefrom").toLowerCase() }}
 					</span>
 				</div>

@@ -69,6 +69,15 @@ export default {
 		window.removeEventListener("keyup", this.onKeyUp);
 	},
 
+	activated() {
+		if (this.$refs["scroller"]){
+			this.$refs["scroller"].$forceUpdate();
+		}
+	},
+
+	deactivated() {
+	},
+
 	computed: mapState({
 		window: function () {
 			return window;

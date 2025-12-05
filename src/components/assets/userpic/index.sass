@@ -69,7 +69,7 @@
     display: flex
     align-items: center
     text-align: center
-    z-index: 2
+    z-index: 3
     border-radius: 50%
     background: srgba(--neutral-grad-4, 1)
     width: 4 * $r
@@ -87,7 +87,7 @@
         justify-content: center
         align-items: center
 
-.blocked, .ban
+.blocked, .ban, .leave
     &:after
         content : ""
         position: absolute
@@ -98,5 +98,6 @@
         background: srgb(--neutral-grad-2)!important
         opacity: .7
         border-radius : 50%
+        z-index: 2
 
 
