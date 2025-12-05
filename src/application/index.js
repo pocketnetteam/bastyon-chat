@@ -29,9 +29,8 @@ class Core {
 		};
 
 		if (!p.mtrx) p.mtrx = {};
-		p.mtrx.baseUrl = "https://" + p.domain;
 
-		if (p.mtrx.baseUrl == "https://test.matrix.pocketnet.app") {
+		if (p.domain == "test.matrix.pocketnet.app") {
 			this.options.burn = {
 				v: "minutes",
 				w: 120,
@@ -46,6 +45,15 @@ class Core {
 				b: 1,
 			};
 		}
+		
+		p.mtrx.baseUrl = "https://" + p.domain;
+		p.mtrx.mirrors = _.map(p.mirrors || [], (url) => {
+			return "https://" + url
+		});
+
+		//if(p.mtrx.mirrors.length) p.mtrx.baseUrl = "https://" + p.mtrx.mirrors[0]
+
+		
 
 		this.apiHandlers = {
 			error: function () {},
@@ -247,8 +255,25 @@ class Core {
 
 				this.pcrypto.helpers.checkuser();
 
-				if (f.deep(this.user, "userinfo.name"))
-					this.mtrx.client.setDisplayName(f.deep(this.user, "userinfo.name"));
+				if (f.deep(this.user, "userinfo.name")){
+
+					try{
+						var cuname = f.deep(this.user, "userinfo.name")
+						var dsname = localStorage['dsname_' + this.user.userinfo.id] || ''
+
+						if (cuname != dsname){
+							localStorage['dsname_' + this.user.userinfo.id] = cuname
+							this.mtrx.client.setDisplayName(f.deep(this.user, "userinfo.name"));
+						}
+
+						
+					}catch(e){
+						
+					}
+
+					
+				}
+					
 
 				if (this.vm.$store.state.isCallsEnabled) {
 					this.setCalls();
@@ -459,6 +484,14 @@ class Core {
 		});
 	}
 
+	gopagev2(route) {
+		this.mtrx.wait().then(() => {
+			this.vm.$router.push(route).catch((e) => {});
+			this.vm.$store.commit("active", true);
+			this.vm.$store.commit("setiteraction", true);
+		});
+	}
+
 	activeChange(value) {
 		if (this.activeState) this.activeState(value);
 	}
@@ -574,7 +607,6 @@ class Core {
 		return this.user
 			.usersInfo(users, true)
 			.then((info) => {
-				console.log("info", info, users);
 
 				if (info.length != users.length)
 					return Promise.reject("users:info:notloaded");
@@ -655,8 +687,6 @@ class Core {
 						var chat = this.mtrx.client.getRoom(roomid);
 
 						if (!chat) return Promise.reject("chat:notfound");
-
-						console.log("chat", chat);
 
 						if (tetatet || parameters.equal) {
 							let event = chat.currentState.getStateEvents(

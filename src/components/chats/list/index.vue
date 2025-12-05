@@ -15,10 +15,10 @@
 				<simpleSearch :value="globalsearch" @search="searchall" />
 			</div>
 
-			<teamroom
+			<!--<teamroom
 				v-if="!matches.value && this.chats.length <= 2 && chatsready === true"
 				@click="openTeamRoom"
-			></teamroom>
+			></teamroom>-->
 
 			<div class="listChatLoading" v-if="chatsready !== true">
 				<dummypreviews />
@@ -47,6 +47,7 @@
 							keyField="key"
 							:buffer="400"
 							@update="onScrollerResize"
+							ref="scroller"
 						>
 							<template v-slot="{ item }">
 								<div

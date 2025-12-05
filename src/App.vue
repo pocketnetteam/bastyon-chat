@@ -533,7 +533,7 @@ export default {
 				) {
 					this.$router.push("/chats").catch((e) => {});
 				}
-			}, 500);
+			}, 0);
 
 			this.clearMatches();
 		},
@@ -912,9 +912,8 @@ export default {
 
 		*/
 
-		var domain =
-			f.deep(window, "POCKETNETINSTANCE.options.matrix") ||
-			"test.matrix.pocketnet.app";
+		var domain = f.deep(window, "POCKETNETINSTANCE.options.matrix") || "test.matrix.pocketnet.app";
+		var mirrors = f.deep(window, "POCKETNETINSTANCE.options.matrixMirrors") || [];
 
 		core = new Core(this, {
 			domain: domain,
@@ -924,6 +923,8 @@ export default {
 			},
 
 			listofproxies: listofproxies,
+
+			mirrors,
 
 			servers: {
 				pocketnet: "https://pocketnet.app:8888",

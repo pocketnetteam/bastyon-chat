@@ -82,13 +82,14 @@ export default {
 
 		this.core.mtrx.wait().then((r) => {
 			this.core.mtrx.client.publicRooms().then((r) => {
+
 				this.ready = true;
 
 				if (this.id[0] === "!") {
-					return (this.room = r["chunk"].filter((i) => i.room_id === this.id));
+					return (this.room = r["chunk"].filter((i) =>{return  i.room_id.toLowerCase() == this.id.toLowerCase()}));
 				} else {
 					return (this.room = r["chunk"].filter(
-						(i) => i.name === this.id.replace(/_/g, " ")
+						(i) => {return i.name.toLowerCase() == this.id.toLowerCase().replace(/_/g, " ")}
 					));
 				}
 			});

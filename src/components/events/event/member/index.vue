@@ -9,7 +9,7 @@
 		</div>
 		<div class="labelwrapper">
 			<span class="label"
-				><b>{{ userinfo.name || "Somebody" }}:</b> {{ keyword }}</span
+				><b>{{ userinfo?.name || "Somebody" }}:</b> {{ keyword }}</span
 			>
 		</div>
 	</div>

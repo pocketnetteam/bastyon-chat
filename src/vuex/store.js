@@ -7,7 +7,7 @@ Vue.use(Vuex);
 var themes = {
 	white: "White",
 	black: "Dark",
-	classic: "Classic"
+	classic: "Classic",
 };
 
 var mex = {
@@ -15,7 +15,7 @@ var mex = {
 		if (themes[value]) {
 			state.theme = value;
 		}
-	}
+	},
 };
 
 var activetimeout = null;
@@ -78,34 +78,31 @@ var store = new Vuex.Store({
 		isCallsActive: null,
 		readreciepts: {},
 		ChatStatuses: {},
-		share: null
+		share: null,
 		//share : {url : 'https://yandex.ru/'} //null
 	},
 	getters: {
-		getUser: state => {
+		getUser: (state) => {
 			return state.user;
 		},
-		getConnection: state => {
+		getConnection: (state) => {
 			return state.localMatrixStore;
 		},
-		getChatById: state => id => {
-			const chat = state.chatsMap[id];
-			if (!chat) return null;
-			const canInteract = store._vm.core.mtrx.kit.canInteractWithRoom(chat);
-			return canInteract ? chat : null;
+		getChatById: (state) => (id) => {
+			return state.chatsMap[id];
 		},
 		hasInputChatEmbedded(state) {
 			return !!state.share;
 		},
-		getSignedUpUsers: state => {
+		getSignedUpUsers: (state) => {
 			return state.signedUpUsers;
-		}
+		},
 	},
 	mutations: {
 		SET_CHAT_STATUSES(state, payload) {
 			state.ChatStatuses = {
 				...state.ChatStatuses,
-				[payload.roomId]: { ...state.ChatStatuses[payload.roomId], ...payload }
+				[payload.roomId]: { ...state.ChatStatuses[payload.roomId], ...payload },
 			};
 		},
 		SET_CHAT_STATUSES_ALL(state, ChatStatuses) {
@@ -225,7 +222,7 @@ var store = new Vuex.Store({
 			else
 				state.lastroom = {
 					id: value,
-					time: new Date()
+					time: new Date(),
 				};
 		},
 
@@ -327,7 +324,7 @@ var store = new Vuex.Store({
 		ALL_NOTIFICATIONS_COUNT(state, rooms) {
 			var n = new Date();
 
-			var count = _.filter(rooms, room => {
+			var count = _.filter(rooms, (room) => {
 				if (room._selfMembership === "invite" && !room.summary.stream) {
 					var users = store._vm.core.mtrx.anotherChatUsers(room);
 
@@ -357,13 +354,13 @@ var store = new Vuex.Store({
 					0
 				) + count.length;
 
-			if (state.chats.length <= 3) {
+			/*if (state.chats.length <= 3) {
 				// Count notifications from pocketnet team room
 				var pocketMessages = _.filter(state.pocketteammessages, function (m) {
 					return !state.readedteammessages[m.id];
 				}).length;
 				state.allnotifications += pocketMessages;
-			}
+			}*/
 
 			var external =
 				f.deep(store, "_vm.core.external.clbks.ALL_NOTIFICATIONS_COUNT") || {};
@@ -446,10 +443,10 @@ var store = new Vuex.Store({
 							room_id: e.room_id,
 							sender: e.sender,
 							state_key: e.state_key,
-							type: e.type
+							type: e.type,
 						},
 
-						get: () => __e
+						get: () => __e,
 					};
 
 					timeline.push(_e);
@@ -559,7 +556,7 @@ var store = new Vuex.Store({
 		OPEN_MODAL(state, modal) {
 			if (
 				modal.one &&
-				_.find(state.modals, m => {
+				_.find(state.modals, (m) => {
 					return m.id == modal.id;
 				})
 			)
@@ -654,7 +651,7 @@ var store = new Vuex.Store({
 
 		SET_VOICERECORDING(state, v) {
 			state.voicerecording = v;
-		}
+		},
 	},
 	actions: {
 		SET_CHAT_MEMBERS({ commit }, chat) {},
@@ -673,7 +670,7 @@ var store = new Vuex.Store({
 				return f.deep(event, "event.content.info.secrets") ? true : false;
 			};
 
-			_.each(events, event => {
+			_.each(events, (event) => {
 				if (event.event.content.msgtype === "m.image") {
 					var url = event.event.content.url;
 
@@ -685,7 +682,7 @@ var store = new Vuex.Store({
 						src: url,
 						w: event.event.content.info.w || 500,
 						h: event.event.content.info.h || 500,
-						eventId: event.event.event_id
+						eventId: event.event.event_id,
 					});
 				}
 			});
@@ -714,16 +711,14 @@ var store = new Vuex.Store({
 
 			if (externalGallery) {
 				if (images.length) {
-					images = _.map(images, v => {
+					images = _.map(images, (v) => {
 						return v.src;
 					});
 
 					var iv = images[index];
 
-					console.log("iv", iv, images, index);
-
 					externalGallery(images, iv, null, {
-						removeWhenShare: true
+						removeWhenShare: true,
 					});
 				}
 
@@ -733,7 +728,7 @@ var store = new Vuex.Store({
 			if (images.length) {
 				commit("GALLERY", {
 					images: images,
-					index: index
+					index: index,
 				});
 			} else {
 				commit("GALLERY", null);
@@ -743,23 +738,20 @@ var store = new Vuex.Store({
 		RELOAD_CHAT_USERS({ commit }, m_chats) {
 			return store._vm.core.mtrx.kit
 				.usersInfoForChats(m_chats, true)
-				.then(i => {
+				.then((i) => {
 					commit(
 						"SET_CHATS_USERS",
 						store._vm.core.mtrx.kit.usersFromChats(m_chats)
 					);
 					return Promise.resolve();
 				})
-				.catch(e => {
+				.catch((e) => {
 					return Promise.resolve();
 				});
 		},
 
 		FETCH_CHATS({ commit }) {
-			console.log("sync");
-
 			var m_chats = f.deep(store._vm, "core.mtrx.store.rooms") || {};
-			console.log(m_chats, "m_chats");
 
 			var id = store._vm.core.user.myMatrixId();
 
@@ -779,7 +771,7 @@ var store = new Vuex.Store({
 				}
 				r.summary.selfMembership = r.selfMembership;
 				r.summary.info = {
-					title: r.name
+					title: r.name,
 				};
 				r.summary.key = r.summary.roomId + ":" + r.summary.lastModified;
 				r.summary.stream =
@@ -799,7 +791,7 @@ var store = new Vuex.Store({
 			//commit("SET_PRECHATS_TO_STORE", chats);
 			commit("SET_CHATS_TO_STORE", chats);
 
-			return store._vm.core.mtrx.kit.allchatmembers(m_chats).then(r => {
+			return store._vm.core.mtrx.kit.allchatmembers(m_chats).then((r) => {
 				commit(
 					"SET_CHATS_USERS",
 					store._vm.core.mtrx.kit.usersFromChats(m_chats)
@@ -842,7 +834,7 @@ var store = new Vuex.Store({
 
 				let ev = chat.currentState
 					.getStateEvents("m.room.request_calls_access")
-					.find(e => store._vm.core.mtrx.me(e?.event?.sender));
+					.find((e) => store._vm.core.mtrx.me(e?.event?.sender));
 
 				timeline = _.filter(timeline, (e, i) => {
 					if (
@@ -911,10 +903,10 @@ var store = new Vuex.Store({
 
 				var lastread = null;
 
-				_.find(timeline, event => {
+				_.find(timeline, (event) => {
 					var reciepts = chat.getReceiptsForEvent(event);
 
-					var lastreadr2 = _.find(reciepts, reciept => {
+					var lastreadr2 = _.find(reciepts, (reciept) => {
 						var m = store._vm.core.mtrx.me(reciept.userId);
 
 						return reciept.type == "m.read" && !m;
@@ -929,17 +921,15 @@ var store = new Vuex.Store({
 				if (lastread) {
 					readreciepts[chat.roomId] = {
 						ts: lastread.data.ts,
-						ev: _.find(timeline, event => {
+						ev: _.find(timeline, (event) => {
 							return event.event.origin_server_ts < lastread.data.ts;
-						})
+						}),
 					};
 				} else {
 					readreciepts[chat.roomId] = null;
 				}
 
 				var e = timeline[0];
-
-				//console.log('timeline', e, timeline, chat.roomId)
 
 				if (e) {
 					var rt = ts.relations.getChildEventsForEvent(
@@ -965,29 +955,24 @@ var store = new Vuex.Store({
 					if (ev?.event?.content?.accepted === null) {
 						chatStatuses[chat.roomId] = {
 							roomId: chat.roomId,
-							isWaiting: true
+							isWaiting: true,
 						};
 					} else {
 						chatStatuses[chat.roomId] = {
 							roomId: chat.roomId,
-							isWaiting: false
+							isWaiting: false,
 						};
 					}
 				} else {
 					chatStatuses[chat.roomId] = {
 						roomId: chat.roomId,
-						isWaiting: false
+						isWaiting: false,
 					};
-				}
-
-				if (chat.roomId == "!LMxFfIZibiOaNOcEXE:test.matrix.pocketnet.app") {
-					console.log("ev", ev);
-					console.log("chatStatuses", chatStatuses, isCallsEnabled);
 				}
 
 				if (isCallsEnabled.length) {
 					var enabled = isCallsEnabled.find(
-						e =>
+						(e) =>
 							!store._vm.core.mtrx.me(e?.event?.sender) &&
 							e?.event?.sender.split(":")[0].replace("@", "") ===
 								e?.event?.state_key
@@ -996,7 +981,7 @@ var store = new Vuex.Store({
 					if (enabled || !chatStatuses[chat.roomId]) {
 						chatStatuses[chat.roomId] = {
 							roomId: chat.roomId,
-							enabled: enabled
+							enabled: enabled,
 						};
 					}
 				}
@@ -1005,8 +990,8 @@ var store = new Vuex.Store({
 			commit("SET_EVENTS_TO_STORE", events);
 			commit("SET_READ_TO_STORE", readreciepts);
 			commit("SET_CHAT_STATUSES_ALL", chatStatuses);
-		}
-	}
+		},
+	},
 });
 
 export default store;

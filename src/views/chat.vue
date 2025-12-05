@@ -91,7 +91,7 @@ export default {
 	components: {
 		chat,
 		topheader,
-		contacts
+		contacts,
 	},
 	data: function () {
 		return {
@@ -105,10 +105,10 @@ export default {
 			process: null,
 			routeParams: {
 				id: this.$route.query.id,
-				u: this.$route.query.u
+				u: this.$route.query.u,
 			},
 			processresult: null,
-			focusedevent: null
+			focusedevent: null,
 		};
 	},
 
@@ -140,10 +140,10 @@ export default {
 		},
 
 		...mapState({
-			pocketnet: state => state.pocketnet,
-			minimized: state => state.minimized,
-			mobile: state => state.mobile
-		})
+			pocketnet: (state) => state.pocketnet,
+			minimized: (state) => state.minimized,
+			mobile: (state) => state.mobile,
+		}),
 	},
 
 	mounted() {
@@ -164,11 +164,6 @@ export default {
 		"$route.query.search": function (newSearchQuery) {
 			this.searching(newSearchQuery);
 		},
-		chat: function (chat) {
-			if (!chat) {
-				this.$router.push("/chats");
-			}
-		},
 		search: {
 			immediate: true,
 			handler: function (search) {
@@ -178,8 +173,8 @@ export default {
 				}).then(() => {
 					this.searchingProcess();
 				});
-			}
-		}
+			},
+		},
 	},
 
 	methods: {
@@ -191,7 +186,7 @@ export default {
 
 		updateSearchQuery(newSearchTerm) {
 			return this.$router.push({
-				query: { ...this.$route.query, search: newSearchTerm }
+				query: { ...this.$route.query, search: newSearchTerm },
 			});
 		},
 		searchingProcess() {
@@ -210,14 +205,14 @@ export default {
 						return false;
 					},
 					{
-						chat: result => {
+						chat: (result) => {
 							this.processresult = result.results[this.chat.roomId] || null;
 
 							if (!this.processresult) return;
 
 							if (!this.focusedevent && this.processresult[0]) {
 								if (this.toevent) {
-									var e = _.find(this.processresult, e => {
+									var e = _.find(this.processresult, (e) => {
 										return e.event.event_id == this.toevent;
 									});
 
@@ -229,11 +224,11 @@ export default {
 									this.tosearchevent(this.processresult[0]);
 								}
 							}
-						}
+						},
 					}
 				);
 
-				this.process.execute().catch(e => {
+				this.process.execute().catch((e) => {
 					console.error(e);
 				});
 			} else {
@@ -278,13 +273,13 @@ export default {
 
 		leaveIfBroken() {
 			if (this.brokenRoom) {
-				this.core.mtrx.client.leave(from.query.id).then(r => {
+				this.core.mtrx.client.leave(from.query.id).then((r) => {
 					this.core.mtrx.client
 						.forget(from.query.id, true)
-						.then(r => {
+						.then((r) => {
 							return r;
 						})
-						.then(r => {
+						.then((r) => {
 							this.$store.commit("DELETE_ROOM", from.query.id);
 						});
 				});
@@ -293,7 +288,7 @@ export default {
 			} else {
 				return false;
 			}
-		}
-	}
+		},
+	},
 };
 </script>

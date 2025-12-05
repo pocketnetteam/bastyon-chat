@@ -27,12 +27,16 @@ mxLogger.trace = (...msg) =>
 
 var axios = require("axios");
 
+var lsdatakey = 'userData_v3_'
+
 class MTRX {
 	constructor(core, p) {
 		if (!p) p = {};
 
 		this.core = core;
 		this.baseUrl = p.baseUrl;
+		this.baseSdkUrl = p.baseUrl;
+		this.mirrors = p.mirrors || [];
 		this.ready = false;
 		this.error = false;
 		this.kit = new MTRXKIT(this.core, p);
@@ -179,12 +183,16 @@ class MTRX {
 	async getClient() {
 		await this.setCredentials();
 
+		this.baseSdkUrl = await this.pingServers()
+
 		var userClientData = {
-			baseUrl: this.baseUrl
+			baseUrl: this.baseSdkUrl,
+			idBaseUrl : this.baseUrl
 		};
 
 		var opts = {
-			baseUrl: this.baseUrl
+			baseUrl: this.baseSdkUrl,
+			idBaseUrl : this.baseUrl
 		};
 
 		if (this.device) {
@@ -194,14 +202,53 @@ class MTRX {
 		if (this.customrequest) opts.request = this.request;
 
 		var client = this.createMtrxClient(opts);
+		var userData = null
 
 		try {
-			var userData = await client.login("m.login.password", {
-				user: this.credentials.username,
-				password: this.credentials.password,
-				device_id: this.device
-			});
+
+			var userdataLS = localStorage[lsdatakey + this.credentials.username]
+
+			if (userdataLS){
+
+				try{
+					var userdataPearsed = JSON.parse(userdataLS)
+
+					var d = ((new Date).getTime()) - 1000 * 60 * 60 * 24 * 31
+
+					if(userdataPearsed.date > d){
+						userData = userdataPearsed.data
+					}
+
+					
+				}
+				catch(e){
+					console.error(e)
+				}
+
+				
+			}
+
+			if(!userData){
+				userData = await client.login("m.login.password", {
+					user: this.credentials.username,
+					password: this.credentials.password,
+					device_id: this.device,
+				});
+
+				if(!userData.expires_in_ms){
+					localStorage[lsdatakey + this.credentials.username] =  JSON.stringify({
+						data : userData,
+						date : ((new Date).getTime())
+					})
+				}
+				
+
+				console.log("SET lsdatakey", lsdatakey)
+			}
+
+
 		} catch (e) {
+			console.error(e)
 			if (e && e.indexOf && e.indexOf("M_USER_DEACTIVATED") > -1) {
 				this.error = "M_USER_DEACTIVATED";
 				return null;
@@ -217,12 +264,12 @@ class MTRX {
 						//signature : this.core.user.signature('matrix')
 					}
 				);
+
 			} else {
 				throw "Signup error, username is not available: " + e;
 			}
 		}
 
-		localStorage.accessToken = userData.access_token;
 		var store = new sdk.IndexedDBStore({
 			indexedDB: window.indexedDB,
 			dbName: "matrix-js-sdk-v6:" + this.credentials.username,
@@ -246,20 +293,28 @@ class MTRX {
 
 		try {
 			await store.startup();
-		} catch (e) {
-			console.error("matrix:", e);
+		}catch(e){
+			delete localStorage[lsdatakey + this.credentials.username]
 		}
 
 		this.client = userClient;
 
 		this.initEvents();
 
-		await userClient.startClient({
-			pollTimeout: 60000,
-			resolveInvitesToProfiles: true,
-			initialSyncLimit: 4,
-			disablePresence: true
-		});
+
+		try{
+
+			await userClient.startClient({
+				pollTimeout: 55000,
+				resolveInvitesToProfiles: true,
+				initialSyncLimit : 4,
+				disablePresence : true,
+				//lazyLoadMembers : true
+			});
+
+		}catch(e){
+			delete localStorage[lsdatakey + this.credentials.username]
+		}
 
 		this.access = userClientData;
 
@@ -292,6 +347,31 @@ class MTRX {
 		}
 
 		localStorage.matrixversion = this.version;
+	}
+
+	async pingServers(){
+		var servers = [].concat([this.baseUrl], this.mirrors)
+		var server = this.baseUrl
+
+		try{
+			if(localStorage['onlymatrixmirrors'] && this.mirrors.length){
+				servers = this.mirrors
+			}
+		}catch(e){}
+
+		return Promise.race(_.map(servers, (url) => {
+			var requestUrl = url + '/_matrix/client/versions'
+			return axios({url : requestUrl}).then((response) => {
+
+				server = url
+
+			}).catch(e => {
+				console.error(e)
+				return Promise.resolve()
+			})
+		})).then(() => {
+			return server
+		})
 	}
 
 	async createClient() {
@@ -366,9 +446,13 @@ class MTRX {
 	}
 
 	download(url) {
+
+		if(!url) return Promise.reject('url _is_empty')
+
 		// Function to download the file
 		var dlFile = () => {
-			return f.fetchLocal(url).then(response => {
+			return f.fetchLocal(url).then((response) => {
+
 				// Update the storage before returning
 				if (
 					window.POCKETNETINSTANCE &&
@@ -445,12 +529,19 @@ class MTRX {
 		this.client.on("RoomMember.membership", (event, member) => {
 			if (!this.chatsready) return;
 
+			var m_chat = this.core.mtrx.client.getRoom(event.event.room_id);
+
 			if (
 				(member.membership === "invite" || member.membership === "join") &&
 				event.getSender() !== userId
 			) {
-				this.core.notifier.event(event);
+				this.core.notifier.event(event, m_chat);
 			}
+
+			if (m_chat && m_chat.pcrypto){
+				m_chat.pcrypto.userschanded()
+			}
+			
 		});
 
 		this.client.on("Room.timeline", (message, member) => {
@@ -481,9 +572,7 @@ class MTRX {
 		});
 
 		this.client.on("sync", (state, prevState, res) => {
-			if (state === "PREPARED") {
-				console.log("PREPARED");
-			}
+
 
 			this.setready();
 
@@ -569,7 +658,7 @@ class MTRX {
 				app_id: appName + window.cordova.platformId,
 
 				data: {
-					url: this.core.mtrx.baseUrl + "/_matrix/push/v1/notify",
+					url: this.baseUrl + "/_matrix/push/v1/notify",
 					default_payload: {
 						aps: {
 							sound: "default",
@@ -585,7 +674,7 @@ class MTRX {
 				pushkey: savedToken
 			};
 
-			this.core.mtrx.client.setPusher(pusherData).then(
+			this.client.setPusher(pusherData).then(
 				() => {
 					localStorage.removeItem("fcmtoken5");
 				},
@@ -661,7 +750,14 @@ class MTRX {
 				if (clbks.encryptedEvent) clbks.encryptedEvent(e);
 
 				return Promise.resolve(e);
-			});
+			}).catch(e => {
+
+				console.error(e)
+
+				if (clbks.encryptedEventError) clbks.encryptedEventError(e);
+
+				return Promise.reject(e)
+			})
 		}
 
 		return Promise.resolve(this.sdk.ContentHelpers.makeTextMessage(text));
@@ -728,6 +824,9 @@ class MTRX {
 				fileInfo.url = url;
 			})
 			.finally(() => {
+
+				if(!fileInfo.url) return Promise.reject('dontuploaded')
+
 				let body = JSON.stringify(fileInfo);
 				var r = {
 					body: body,
@@ -891,9 +990,6 @@ class MTRX {
 				? true
 				: false;
 
-		//console.log('chat, event', chat, event)
-
-		console.log("needdecrypt", needdecrypt, event);
 
 		if (needdecrypt) {
 			try {
@@ -1052,6 +1148,7 @@ class MTRX {
 					return Promise.reject(e);
 				});
 		} catch (e) {
+			console.error(e)
 			return Promise.reject(e);
 		}
 	}

@@ -6,7 +6,7 @@
 			bout: !pocketnet,
 			minimized,
 			fix: pocketnet,
-			active
+			active,
 		}"
 	>
 		<div class="cantchatmessage" v-if="cantchat && !cantchatexc">
@@ -36,7 +36,7 @@
 				@editingEvent="editingEvent"
 				@shareEvent="shareEvent"
 				@replyEvent="replyEvent"
-				@eventImage="e => galleryImage(e)"
+				@eventImage="(e) => galleryImage(e)"
 				@scroll="scroll"
 				@menuIsVisible="menuIsVisibleHandler"
 				v-if="m_chat && allowedToRead && ready"
@@ -50,7 +50,7 @@
 					m_chat &&
 					!userBanned?.value &&
 					(membership || streamMode) &&
-					!['join', 'ban', 'leave'].includes(membership)
+					!['join', 'ban'].includes(membership)
 				"
 				class="joinwrapper"
 			>
@@ -152,7 +152,7 @@
 			<div
 				class="encrypted fixedOnPageTop"
 				v-if="activated && !streamMode && encrypted && membership != 'invite'"
-				@mouseover="e => (hoverEncrypt = true)"
+				@mouseover="(e) => (hoverEncrypt = true)"
 			>
 				<i v-if="!encrypting" class="fas fa-lock"></i>
 				<i v-else class="fas fa-spinner fa-spin"></i>
@@ -161,9 +161,9 @@
 			<div
 				v-if="hoverEncrypt"
 				class="encryptedInfo fixedOnPageTop"
-				@mouseover="e => (hoverEncrypt = true)"
-				@mouseleave="e => (hoverEncrypt = false)"
-				@click="e => (hoverEncrypt = !hoverEncrypt)"
+				@mouseover="(e) => (hoverEncrypt = true)"
+				@mouseleave="(e) => (hoverEncrypt = false)"
+				@click="(e) => (hoverEncrypt = !hoverEncrypt)"
 			>
 				<div id="slide">
 					<div class="encryptedTxtIcon">
@@ -176,7 +176,7 @@
 			<div class="attachements" v-if="attachements.length">
 				<div class="attachementsWrapper">
 					<attachement
-						@cancel="e => abortSending(attachement.id)"
+						@cancel="(e) => abortSending(attachement.id)"
 						v-for="attachement in attachements"
 						:key="attachement.id"
 						:attachement="attachement"

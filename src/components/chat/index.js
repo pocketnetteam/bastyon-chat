@@ -10,7 +10,6 @@ export default {
 	name: "chat",
 	props: {
 		chat: Object,
-		share: Object,
 		u: String,
 		search: String,
 		searchresults: Array,
@@ -595,7 +594,9 @@ export default {
 		joined: function () {
 			/*Trigger chat reactivity*/
 			this.$set(this.chat, "joined", +new Date());
-			this.userBanned.set(false);
+			
+			if (this.userBanned)
+				this.userBanned.set(false);
 		}
 	}
 };
