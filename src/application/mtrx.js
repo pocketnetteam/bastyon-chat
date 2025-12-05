@@ -1015,7 +1015,6 @@ class MTRX {
 				? true
 				: false;
 
-		//console.log('chat, event', chat, event)
 
 		console.log("needdecrypt", needdecrypt, event);
 
@@ -1030,17 +1029,21 @@ class MTRX {
 		}
 
 		return this.download(event.event.content.pbody.url)
-			.then((blob) => {
+			.then(blob => {
+				if (needdecrypt) {
+					return chat.pcrypto.decryptFile(
+						blob,
+						decryptKey,
+						null,
+						event.event.content.pbody
+					);
+				} else {
+					console.log("blob", blob);
 
-				if (needdecrypt){
-					return chat.pcrypto.decryptFile(blob, decryptKey, null, event.event.content.pbody);
-				}
+					return f.readFile(blob).then(file => {
+						console.log("file", file);
 
-				else{
-
-					return f.readFile(blob).then((file) => {
-
-						var additionalFinfo = event.event.content.pbody
+						var additionalFinfo = event.event.content.pbody;
 
 						var name = file.name || additionalFinfo.name || "decrypted";
 						var type =
@@ -1054,7 +1057,8 @@ class MTRX {
 					});
 				}
 			})
-			.then((r) => {
+			.then(r => {
+				console.log("result", r);
 
 				return Promise.resolve({
 					file: r,
@@ -1167,8 +1171,7 @@ class MTRX {
 					);
 					return Promise.resolve(event.event.decryptedImage);
 				})
-				.catch((e) => {
-					console.error(e)
+				.catch(e => {
 					return Promise.reject(e);
 				});
 		} catch (e) {
