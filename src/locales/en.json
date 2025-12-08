@@ -185,7 +185,8 @@
 		"blockUser": "Block user",
 		"Complain": "Complain",
 		"chat": "Chat",
-		"donations": "Donations"
+		"donations": "Donations",
+		"addReaction": "Add Reaction"
 	},
 
 	"type": {
@@ -218,7 +219,7 @@
 		"2-message2": "Invite your friends now and be a part of the big future of decentralized internet!",
 		"2-button": "Invite friends"
 	},
-	
+
 	"error_generic": "Something went wrong, please try again later.",
 	"sendingerror": "An error occurred while sending the message",
 	"details": "Details",

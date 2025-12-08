@@ -81,3 +81,25 @@
   .iconWrapper
     width: 44px
     text-align: center
+
+.quickReactionsRow
+  display: flex
+  justify-content: center
+  gap: 8px
+  padding: $r 2 * $r
+  margin-bottom: $r
+  border-bottom: 1px solid srgba(--neutral-grad-2, 0.3)
+
+  .quickReactionEmoji
+    font-size: 24px
+    cursor: pointer
+    padding: 4px 6px
+    border-radius: 8px
+    transition: all 0.15s ease-out
+
+    &:hover
+      background: srgba(--neutral-grad-1, 0.5)
+      transform: scale(1.15)
+
+    &:active
+      transform: scale(0.95)

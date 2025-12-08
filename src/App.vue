@@ -10,7 +10,7 @@
 				minimized,
 				active,
 				mobile,
-				unselect,
+				unselect
 			}"
 		>
 			<div class="chatwrapper" @click="iteraction">
@@ -236,7 +236,7 @@ Vue.directive("click-outside", {
 	},
 	unbind: function (el) {
 		document.body.removeEventListener("click", el.clickOutsideEvent);
-	},
+	}
 });
 
 /// localization
@@ -246,11 +246,11 @@ function loadMessages() {
 
 	const messages = context
 		.keys()
-		.map((key) => ({ key, locale: key.match(/[a-z0-9-_]+/i)[0] }))
+		.map(key => ({ key, locale: key.match(/[a-z0-9-_]+/i)[0] }))
 		.reduce(
 			(messages, { key, locale }) => ({
 				...messages,
-				[locale]: context(key),
+				[locale]: context(key)
 			}),
 			{}
 		);
@@ -284,8 +284,8 @@ const i18n = new VueI18n({
 	messages: messages,
 	silentTranslationWarn: true,
 	pluralRules: {
-		ru: plularSlavicLanguages,
-	},
+		ru: plularSlavicLanguages
+	}
 });
 
 ///
@@ -297,9 +297,9 @@ var g = {
 		Object.defineProperty(Vue.prototype, "core", {
 			get() {
 				return core;
-			},
+			}
 		});
-	},
+	}
 };
 
 Vue.use(g);
@@ -312,7 +312,7 @@ var availableLocales = {
 	cmn: true,
 	it: true,
 	es: true,
-	kr: true,
+	kr: true
 };
 
 var scriptsadded = false;
@@ -324,7 +324,7 @@ export default {
 	name: "App",
 	components: {
 		MainWrapper,
-		userUnauthorized,
+		userUnauthorized
 	},
 
 	provide() {
@@ -335,53 +335,53 @@ export default {
 			streamMode: this.streamMode,
 			menuState: {
 				get: () => this.menuState,
-				set: (val) => this.$set(this, "menuState", val),
+				set: val => this.$set(this, "menuState", val)
 			},
 			adminActions: {},
-			powerLevel: {},
+			powerLevel: {}
 		};
 	},
 
 	props: {
 		address: {
 			type: String,
-			default: "",
+			default: ""
 		},
 		privatekey: {
 			type: String,
-			defautt: "",
+			defautt: ""
 		},
 
 		pocketnet: {
 			type: String,
-			default: "",
+			default: ""
 		},
 		/**
 		 * @type {'single' | 'split'}
 		 */
 		viewtype: {
 			type: String,
-			default: "single",
+			default: "single"
 		},
 
 		mobile: {
 			type: String,
-			default: "",
+			default: ""
 		},
 
 		recording: {
 			type: String,
-			default: "",
+			default: ""
 		},
 
 		iscallsenabled: {
 			type: String,
-			default: "false",
+			default: "false"
 		},
 
 		pkoindisabled: {
 			type: String,
-			default: "",
+			default: ""
 		},
 
 		ctheme: String,
@@ -392,15 +392,15 @@ export default {
 
 		pip: {
 			type: Boolean,
-			default: false,
+			default: false
 		},
 
 		device: String,
 
 		cssrules: {
 			type: String,
-			default: [],
-		},
+			default: []
+		}
 	},
 
 	data: function () {
@@ -408,7 +408,7 @@ export default {
 			/*Stack for "encrypted" chat icon*/
 			isChatEncrypted: {
 				value: false,
-				state: this.isChatEncryptedState,
+				state: this.isChatEncryptedState
 			},
 
 			/*Stack for global search*/
@@ -419,10 +419,10 @@ export default {
 				search: this.search,
 				prepend: this.prependMatch,
 				append: this.appendMatch,
-				clear: this.clearMatches,
+				clear: this.clearMatches
 			},
 
-			menuState: false,
+			menuState: false
 		};
 	},
 
@@ -443,12 +443,12 @@ export default {
 				// Update the teamroom messages
 				this.generateTeamroomMessages();
 
-				moment.locale(i18n.locale)
+				moment.locale(i18n.locale);
 
 				if (this.core && this.core.exporter) {
 					this.core.exporter.changeLocalization(i18n.locale);
 				}
-			},
+			}
 		},
 
 		mobile: function () {
@@ -456,7 +456,7 @@ export default {
 			this.$store.commit("minimize");
 
 			setTimeout(() => {
-				this.$router.push("/chats").catch((e) => {});
+				this.$router.push("/chats").catch(e => {});
 			}, 300);
 
 			this.clearMatches();
@@ -464,7 +464,7 @@ export default {
 		pocketnet: function () {
 			this.$store.commit("setPocketnet", this.pocketnet);
 			this.$store.commit("minimize");
-		},
+		}
 	},
 
 	computed: {
@@ -514,7 +514,7 @@ export default {
 
 		unselect: function () {
 			return this.$store.state.voicerecording;
-		},
+		}
 	},
 
 	methods: {
@@ -531,7 +531,7 @@ export default {
 					this.$route.name !== "chatSettings" &&
 					core.cancelDefaultRoute !== true
 				) {
-					this.$router.push("/chats").catch((e) => {});
+					this.$router.push("/chats").catch(e => {});
 				}
 			}, 0);
 
@@ -550,11 +550,11 @@ export default {
 			// If we need to set a new pusher, or delete one
 			if (savedToken != fcmtoken) {
 				// Wait for Matrix client
-				this.core.mtrx.wait().then((r) => {
+				this.core.mtrx.wait().then(r => {
 					this.core.mtrx.deletePusher();
 
 					var data = {
-						url: this.core.mtrx.baseUrl + "/_matrix/push/v1/notify",
+						url: this.core.mtrx.baseUrl + "/_matrix/push/v1/notify"
 					};
 
 					var appName = "pocketnet";
@@ -567,14 +567,14 @@ export default {
 							window.device.manufacturer + " " + window.device.model,
 						kind: "http",
 						lang: localStorage.getItem("loc") || "en",
-						pushkey: fcmtoken,
+						pushkey: fcmtoken
 					};
 
 					this.core.mtrx.client.setPusher(pusherData).then(
 						() => {
 							localStorage.setItem("fcmtoken5", fcmtoken);
 						},
-						(err) => {
+						err => {
 							console.log(err);
 						}
 					);
@@ -594,7 +594,7 @@ export default {
 								<li class="mt">${this.$i18n.t("teamMessages.1-list3")}</li>
 							</ul>
 						`,
-					previewText: this.$i18n.t("teamMessages.1-title"),
+					previewText: this.$i18n.t("teamMessages.1-title")
 				},
 
 				//<li class="mt">${this.$i18n.t('teamMessages.1-list4')}</li>
@@ -626,8 +626,8 @@ export default {
 							</ul>
 							<span>${this.$i18n.t("teamMessages.2-message2")}</span>
 						`,
-					previewText: this.$i18n.t("teamMessages.2-title"),
-				},
+					previewText: this.$i18n.t("teamMessages.2-title")
+				}
 			]);
 		},
 
@@ -655,15 +655,15 @@ export default {
 
 		markText: function (text, highlight) {
 			return this.matches.value && text.includes(this.matches.value)
-				? text.replace(new RegExp(`(${this.matches.value})`, "gi"), (match) => {
+				? text.replace(new RegExp(`(${this.matches.value})`, "gi"), match => {
 						const str = `<mark class="match${
 							highlight ? " current" : ""
 						}">${match}</mark>`;
 						highlight = null;
 						return str;
-				  })
+					})
 				: null;
-		},
+		}
 	},
 
 	beforeCreate() {
@@ -671,10 +671,10 @@ export default {
 	},
 
 	created() {
-		/*this.pocketnet = false;
+		this.pocketnet = false;
 		this.mobile = !this.pocketnet;
 		this.recording = true;
-		this.iscallsenabled = true;*/
+		this.iscallsenabled = true;
 
 		this.$store.commit("setCallsEnabled", this.iscallsenabled);
 		this.$store.commit("setViewType", this.viewtype);
@@ -695,202 +695,202 @@ export default {
 			matrixMan: {
 				address: f.hexEncode("PToMRMsMVh9dj4Cpa7yu1pB5iq65g4jrVC"),
 				privateKey:
-					"510aa931cdee36b9ac467ad04a2619f46be88815812b46e976e36bc8dbcdc41b",
+					"510aa931cdee36b9ac467ad04a2619f46be88815812b46e976e36bc8dbcdc41b"
 			},
 			ltme: {
 				address: f.hexEncode("PKszvjHwMWubQpeEKnQhRonGBVFWcJDbNJ"),
 				privateKey:
-					"513bc6a5014e7dd203537227fb0a78f7b974853478fcf95103125f6d793a5f8b",
+					"513bc6a5014e7dd203537227fb0a78f7b974853478fcf95103125f6d793a5f8b"
 			},
 			travisnoscot1: {
 				address: f.hexEncode("PDjvHUQjcDX8Vq6rtpKveUDPtwPVUZEW7m"),
 				privateKey:
-					"63d91d001f7b5167a707dd4ee7e2638fc13e1fa3ff7171b040b432bcd1054e28",
+					"63d91d001f7b5167a707dd4ee7e2638fc13e1fa3ff7171b040b432bcd1054e28"
 			},
 			mobRoocky: {
 				address: f.hexEncode("PCMnk8T3Edu81iGcTEpVCFq8FQd6UBXi2y"),
 				privateKey:
-					"0bbf6fb0dbf78a26f00345f6f96d4f76f52e0093417c51a1b7bccb7ca92e55df",
+					"0bbf6fb0dbf78a26f00345f6f96d4f76f52e0093417c51a1b7bccb7ca92e55df"
 			},
 			user1: {
 				address: f.hexEncode("PKxqtUuK3B6qwAxs6HLhvxrQVExuMwKWd5"),
 				privateKey:
-					"28f0fdc30094d517bc08abca3f219d77fc32230e313bbf0b699ecd42f80de82a0",
+					"28f0fdc30094d517bc08abca3f219d77fc32230e313bbf0b699ecd42f80de82a0"
 			},
 			user2: {
 				address: f.hexEncode("PGe4xVAJRJtbD8swPipE2ug9Zk1rhSTa1y"),
 				privateKey:
-					"0b4562275da7e60a57e10432bdc7e3318dd9699b8b928224ba360b9fb951c77b",
+					"0b4562275da7e60a57e10432bdc7e3318dd9699b8b928224ba360b9fb951c77b"
 			},
 			FakeBadash: {
 				address: f.hexEncode("PDWPDFikMhLJHtiKLLXZGzfgphRcd19eHe"),
 				privateKey:
-					"99d8ce99383ccc5d6404535b98f2b43ce5ab939a28bfc52a442565b2351039fa",
+					"99d8ce99383ccc5d6404535b98f2b43ce5ab939a28bfc52a442565b2351039fa"
 			},
 			Faketravis: {
 				address: f.hexEncode("PGURYzvoXuSvuwCuDty2wW37omjiKgzV5a"),
 				privateKey:
-					"93641f20095aa15b89b78d395ebe0a5a9b149ea2b54c57d896091c0ea9b86dfd",
+					"93641f20095aa15b89b78d395ebe0a5a9b149ea2b54c57d896091c0ea9b86dfd"
 			},
 			fakeRocky: {
 				address: f.hexEncode("PRDKVP4yvF2wW8p5FUVkzrCvXYE8SMGkQK"),
 				privateKey:
-					"80d213d272405d4ff51752f91e79c639919f5f9f302583bdaa1c767b044ce2c0",
+					"80d213d272405d4ff51752f91e79c639919f5f9f302583bdaa1c767b044ce2c0"
 			},
 			fakeFuture2: {
 				address: "PBHvKTH5TGQYDbRHgQHTTvaBf7tuww6ho7",
 				privateKey:
-					"71cacb25f90b18e356e33bc12c428c2e8b6b7c6e2950ab6344412f226aab0b2c",
+					"71cacb25f90b18e356e33bc12c428c2e8b6b7c6e2950ab6344412f226aab0b2c"
 			},
 			fakeFuture: {
 				address: f.hexEncode("PBHvKTH5TGQYDbRHgQHTTvaBf7tuww6ho7"),
 				privateKey:
-					"71cacb25f90b18e356e33bc12c428c2e8b6b7c6e2950ab6344412f226aab0b2c",
+					"71cacb25f90b18e356e33bc12c428c2e8b6b7c6e2950ab6344412f226aab0b2c"
 			},
 			encMan: {
 				address: f.hexEncode("PEkKrb7WJgfU3rCkkU9JYT8jbGiQsw8Qy8"),
 				privateKey:
-					"616fd57f7610288978f4c01797a90d56b0c30392e598a2504b98c7a7246569a5",
+					"616fd57f7610288978f4c01797a90d56b0c30392e598a2504b98c7a7246569a5"
 			},
 			harisCalvin: {
 				address: f.hexEncode("PXEWRce8siwbQWArQWyjnooogAEieHwhVd"),
 				privateKey:
-					"218bcb76df20438c1431c0394a42947f78f279bea987d7b238bfbd1cb1533b62",
+					"218bcb76df20438c1431c0394a42947f78f279bea987d7b238bfbd1cb1533b62"
 			},
 			oneSomeoneNigga: {
 				address: f.hexEncode("PGyjEoqmmK2tm6xmg69hGoSNM6hUrc4VfE"),
 				privateKey:
-					"254f5b9394f0490e78b41c6bf615bfd8e290fde3fb6d862f166b181b35764b06",
+					"254f5b9394f0490e78b41c6bf615bfd8e290fde3fb6d862f166b181b35764b06"
 			},
 			gomer: {
 				address: f.hexEncode("PVSdoFQqAg86p6tbAW8Y6CGGGjhiXkr4qh"),
 				privateKey:
-					"105de1935fa665bdc23b1b02bcdb3f62e01a3ad48823d5348edb5b94ec1b4526",
+					"105de1935fa665bdc23b1b02bcdb3f62e01a3ad48823d5348edb5b94ec1b4526"
 			},
 			bart: {
 				address: f.hexEncode("PWioUw52q4iNpMQUauNYaWg9JpsPE1u9Ut"),
 				privateKey:
-					"a74bc4ee63290dd051d659fe46962176d2b9193e04104dea63116d25703bad72",
+					"a74bc4ee63290dd051d659fe46962176d2b9193e04104dea63116d25703bad72"
 			},
 			edSheeran: {
 				address: f.hexEncode("PVeqjqJk2GthxBK6QdhCCfQVEX1SAK92As"),
 				privateKey:
-					"d89952018721e6762de13fa2f1891b0dc2d1f1e75402ba483251086b2ba181ac",
+					"d89952018721e6762de13fa2f1891b0dc2d1f1e75402ba483251086b2ba181ac"
 			},
 			duftPunkMan: {
 				address: f.hexEncode("PFnN8SExxLsUjMKzs2avdvBdcA3ZKXPPkF"),
 				privateKey:
-					"7d1a31cc49a05692cfd992359cd27e8b3783cd186d98053ea0b9307b00a19018",
+					"7d1a31cc49a05692cfd992359cd27e8b3783cd186d98053ea0b9307b00a19018"
 			},
 			jcole: {
 				address: f.hexEncode("P93cWU7X31wqn3R9GcUZ7c3fD11asXum5y"),
 				privateKey:
-					"900099127ad048d64523c4701d72d67b5b7f2afb18debbfdc53587f04a29c808",
+					"900099127ad048d64523c4701d72d67b5b7f2afb18debbfdc53587f04a29c808"
 			},
 			flowMan: {
 				address: f.hexEncode("PM4gVCcWnTmysUXhMukoQA2mT7GpfWQvck"),
 				privateKey:
-					"12d28e4c950193665dcaaa32129c061b2213e736ffe20918f0f13b6a2857cc32",
+					"12d28e4c950193665dcaaa32129c061b2213e736ffe20918f0f13b6a2857cc32"
 			},
 			JokeMan: {
 				address: f.hexEncode("PMSULgjrsCsEnWgNigCga5jSjhCvYBFSA8"),
 				privateKey:
-					"f7a2518393db3779a4394f4084473847bc4260a5aad20859eff9d32ab03c310e",
+					"f7a2518393db3779a4394f4084473847bc4260a5aad20859eff9d32ab03c310e"
 			},
 			omgMan: {
 				address: f.hexEncode("P9R3aNvyjRbqTWfy5q1h5qvXFYaDtqaRi2"),
 				privateKey:
-					"80b4350df8c033a63fd7c6b71516ae05ab3a23a604a39afba5874b87b4effbf8",
+					"80b4350df8c033a63fd7c6b71516ae05ab3a23a604a39afba5874b87b4effbf8"
 			},
 			nineBot: {
 				address: f.hexEncode("PNcvYsMXzf4RVmS9AjRYEqeeGjk1PiDjvF"),
 				privateKey:
-					"447554f94a3512a420ef6d089411dff3bc6d170f65e246cc52fc30aa9ed2216c",
+					"447554f94a3512a420ef6d089411dff3bc6d170f65e246cc52fc30aa9ed2216c"
 			},
 			tenBot: {
 				address: f.hexEncode("PS9F8hzGSxeL1Lc2VGvPoqXHotZvpoVkkX"),
 				privateKey:
-					"659bd118d33e541bb042015723cab1e6b644a9d330a988b10e6d593f9abe3542",
+					"659bd118d33e541bb042015723cab1e6b644a9d330a988b10e6d593f9abe3542"
 			},
 			bikeBot: {
 				address: f.hexEncode("PBK1GDpiLNVFrKsPVAaNLU92byFY5P5KBr"),
 				privateKey:
-					"4c1ee4ae821a1ca885d77db84518b4dcbcd4efbed69603c8706b9557618529f9",
+					"4c1ee4ae821a1ca885d77db84518b4dcbcd4efbed69603c8706b9557618529f9"
 			},
 			angryBot: {
 				address: f.hexEncode("PBMcLRBQNWtNQZYUbRZZAd5FuZ8yb7HMX2"),
 				privateKey:
-					"87bec25e930671a06e032dca484083d4b79e23aa985781995882d5d4594f8d8d",
+					"87bec25e930671a06e032dca484083d4b79e23aa985781995882d5d4594f8d8d"
 			},
 
 			test099090: {
 				address: f.hexEncode("PP582V47P8vCvXjdV3inwYNgxScZCuTWsq"),
 				privateKey:
-					"14ede296d13f8111c77a1da82519939329ee1b81ab23203da48df3f5e52fee3d",
+					"14ede296d13f8111c77a1da82519939329ee1b81ab23203da48df3f5e52fee3d"
 			},
 			tony: {
 				address: f.hexEncode("TLENU8HFyz8PqzpKBDWeN6Xix6rM8wjYKd"),
 				privateKey:
-					"8cf816c1c7a51cbc114db9aac8896b8654260f9b3a985232f27cf32823c7f45f",
+					"8cf816c1c7a51cbc114db9aac8896b8654260f9b3a985232f27cf32823c7f45f"
 			},
 			invoker: {
 				address: f.hexEncode("TPjN8Dy4BpGDezMNw2ePuEdHiHetTvR3Mb"),
 				privateKey:
-					"a7ded16bd9d3350d6c3d233e6905b51e61bd879ba152ae24d0f8def76c4581c7",
+					"a7ded16bd9d3350d6c3d233e6905b51e61bd879ba152ae24d0f8def76c4581c7"
 			},
 			drowRanger: {
 				address: f.hexEncode("TU8fAf96kSfQzmxmpjRDSSqvCiPWzWt67J"),
 				privateKey:
-					"38484a2047b5c8170847a97fc5cddf3d485c934c6532a51a73f64ec7e4659891",
+					"38484a2047b5c8170847a97fc5cddf3d485c934c6532a51a73f64ec7e4659891"
 			},
 			nevermore: {
 				address: f.hexEncode("TKJ7xAC18XC4zQBvkNAWhkr3i7cARu11Uv"),
 				privateKey:
-					"8ec7f71d16b07d29bb49b3bc3054b5a4d2e65fb559e0ae695503568227584f53",
+					"8ec7f71d16b07d29bb49b3bc3054b5a4d2e65fb559e0ae695503568227584f53"
 			},
 			stormSpirit: {
 				address: f.hexEncode("TZBHmnZwLedPtHcJfJnFsbxobGuDKGf9uA"),
 				privateKey:
-					"642aaa706fe94ea77239468cb9aad6b463472793a2c4e1f60acf22078770c45f",
+					"642aaa706fe94ea77239468cb9aad6b463472793a2c4e1f60acf22078770c45f"
 			},
 			morph: {
 				address: f.hexEncode("TXyieuLsCntT1p4ougtiKURtYTxcdvWN1L"),
 				privateKey:
-					"8f59a6a6b7b8c1f63be47a6f571a11d726e9d7cde2baff52a51dc72326b6abb4",
+					"8f59a6a6b7b8c1f63be47a6f571a11d726e9d7cde2baff52a51dc72326b6abb4"
 			},
 			alchemist: {
 				address: f.hexEncode("TT2CeQuHiM8E8hG4rkJcaMKQ8gWqhZmNUH"),
 				privateKey:
-					"957ad5e2a009e4c0f06f0ae2737ea4c36c48fa8312555fcd104ca9cff7db6848",
+					"957ad5e2a009e4c0f06f0ae2737ea4c36c48fa8312555fcd104ca9cff7db6848"
 			},
 			public_user_test: {
 				address: f.hexEncode("TLMXdC2UYSfMVbLzKtmJJTi4oK9LNHNVju"),
 				privateKey:
-					"509b219c5cead9545039ae38d428813af6671dbee3e37cadd2cd22f152013f2a",
+					"509b219c5cead9545039ae38d428813af6671dbee3e37cadd2cd22f152013f2a"
 			},
 			cleanUser: {
 				address: f.hexEncode("THCRHFtVAoeDGLg548C4bQxXeDg9bwrs5K"),
 				privateKey:
-					"666919a742eb63bededea3fddc44b526148d8b0eb1126b0aaff480a2af888d92",
+					"666919a742eb63bededea3fddc44b526148d8b0eb1126b0aaff480a2af888d92"
 			},
 			userwithoutavatar: {
 				address: f.hexEncode("TVcPMgVQ9TxgpzNrQyEAei5cnnR9jzXtzE"),
 				privateKey:
-					"2a3e96562c23a40e3d439b823453fb8fe6f8fb2c0267e8d2411734b3bdff90dd",
+					"2a3e96562c23a40e3d439b823453fb8fe6f8fb2c0267e8d2411734b3bdff90dd"
 			},
 			unnamed: {
 				address: f.hexEncode("THsA8rwdeAkq5bePA71Nw5CGtFg2duyDSq"),
 				privateKey:
-					"27b42dfba3d20ae7a945e09dd0688137fa7963fd48b94f7b4027dc4eed874a96",
-			},
+					"27b42dfba3d20ae7a945e09dd0688137fa7963fd48b94f7b4027dc4eed874a96"
+			}
 		};
 
 		var actualUser = {
 			address: this.address ? f.hexEncode(this.address) : "",
-			privateKey: this.privatekey,
+			privateKey: this.privatekey
 		};
 
-		var username = "nevermore";
+		var username = "tony";
 
 		var user =
 			this.address && this.privatekey ? actualUser : testUsers[`${username}`];
@@ -902,8 +902,8 @@ export default {
 			{
 				host: "test.pocketnet.app",
 				port: 8899,
-				wss: 8099,
-			},
+				wss: 8099
+			}
 		];
 
 		/*
@@ -912,14 +912,17 @@ export default {
 
 		*/
 
-		var domain = f.deep(window, "POCKETNETINSTANCE.options.matrix") || "test.matrix.pocketnet.app";
-		var mirrors = f.deep(window, "POCKETNETINSTANCE.options.matrixMirrors") || [];
+		var domain =
+			f.deep(window, "POCKETNETINSTANCE.options.matrix") ||
+			"test.matrix.pocketnet.app";
+		var mirrors =
+			f.deep(window, "POCKETNETINSTANCE.options.matrixMirrors") || [];
 
 		core = new Core(this, {
 			domain: domain,
 			mtrx: {
 				device: this.device,
-				logger: function () {},
+				logger: function () {}
 			},
 
 			listofproxies: listofproxies,
@@ -927,8 +930,8 @@ export default {
 			mirrors,
 
 			servers: {
-				pocketnet: "https://pocketnet.app:8888",
-			},
+				pocketnet: "https://pocketnet.app:8888"
+			}
 		});
 
 		core.init();
@@ -957,7 +960,7 @@ export default {
 
 		core
 			.initWithUser(user)
-			.then((r) => {
+			.then(r => {
 				return core.mtrx.wait().then(() => {
 					if (!this.streamMode) core.user.getContacts();
 
@@ -971,14 +974,14 @@ export default {
 							/*this.$route.name !== "contact" &&*/
 							core.cancelDefaultRoute !== true
 						) {
-							this.$router.push("/chats").catch((e) => {});
+							this.$router.push("/chats").catch(e => {});
 						}
 					}, 100);
 
 					//this.connectCustomRecorder();
 				});
 			})
-			.catch((g) => {});
+			.catch(g => {});
 
 		/*setInterval(() => {
 			if (this.$store.state.autohide || !this.$store.state.iteraction)
@@ -991,7 +994,7 @@ export default {
 			} catch {
 				return ["https://use.fontawesome.com/releases/v5.2.0/css/all.css"];
 			}
-		})().forEach((rule) => {
+		})().forEach(rule => {
 			this.$nextTick(() => {
 				const link = document.createElement("link");
 				link.setAttribute("rel", "stylesheet");
@@ -1002,7 +1005,7 @@ export default {
 		});
 
 		window.matrixchat = core;
-	},
+	}
 };
 
 if (module.hot) {
@@ -1010,8 +1013,8 @@ if (module.hot) {
 		const { messages: newMessages } = loadMessages();
 
 		Object.keys(newMessages)
-			.filter((locale) => messages[locale] !== newMessages[locale])
-			.forEach((locale) => {
+			.filter(locale => messages[locale] !== newMessages[locale])
+			.forEach(locale => {
 				messages[locale] = newMessages[locale];
 				i18n.setLocaleMessage(locale, messages[locale]);
 			});
