@@ -162,7 +162,7 @@
 			>
 				<div class="messageText" :class="donationColor">
 					<!-- Quick reactions bar on hover -->
-					<div
+					<!--<div
 						v-if="!streamMode && isHovering"
 						class="quickReactionsBar"
 						:class="{ my: my }"
@@ -176,7 +176,7 @@
 							@click.stop="handleQuickReaction(emoji)"
 							>{{ emoji }}</span
 						>
-					</div>
+					</div>-->
 
 					<div class="edited" v-if="edited">
 						<i class="fas fa-pen"></i> {{ $t("caption.edited") }}
@@ -311,7 +311,7 @@
 			</div>
 		</div>
 
-		<ReactionDisplay
+		<!--<ReactionDisplay
 			v-if="!preview && !fromreference"
 			class="messageReactions"
 			:class="{ my: my }"
@@ -322,7 +322,7 @@
 			:my="my"
 			@add-reaction="handleAddReaction"
 			@remove-reaction="handleRemoveReaction"
-		/>
+		/>-->
 	</div>
 </template>
 

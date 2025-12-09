@@ -866,7 +866,7 @@ export default {
 
 			// Quick reactions at the top (like Telegram)
 			if (!this.streamMode && canProcessMessage) {
-				menu.quickReactions = ["👍", "❤️", "🔥", "👎", "😊", "👏", "😢"];
+				//menu.quickReactions = ["👍", "❤️", "🔥", "👎", "😊", "👏", "😢"];
 			}
 
 			if (canProcessMessage) {
