@@ -1,5 +1,5 @@
 <template>
-	<div class="eventsMessage">
+	<div class="eventsMessage" :class="{ hovering: isHovering }">
 		<div
 			v-touch:touchhold="dropDownMenuShow"
 			:class="{
@@ -9,9 +9,12 @@
 				urlpreview: urlpreview,
 				allscreen: urlpreview || content.msgtype === 'm.image' || file,
 				aligncenter: content.msgtype === 'm.audio',
+				isHovering: isHovering
 			}"
 			:my="!streamMode && my"
 			v-if="!preview && content.msgtype !== 'm.notice'"
+			@mouseenter="onMessageHover(true)"
+			@mouseleave="onMessageHover(false)"
 		>
 			<div
 				class="timeWrapper"
@@ -93,13 +96,16 @@
 					</div>
 				</div>
 
-				<div class="preloaderImage" :style="imagePaddingStyle(content)" v-if="!imageUrl && !hasError">
+				<div
+					class="preloaderImage"
+					:style="imagePaddingStyle(content)"
+					v-if="!imageUrl && !hasError"
+				>
 					<div class="abswrapper"><linepreloader /></div>
 				</div>
 
 				<div class="errorImage" v-if="!imageUrl && hasError">
-					<div class="abswrapper">{{stringifyiedError}}</div>
-
+					<div class="abswrapper">{{ stringifyiedError }}</div>
 				</div>
 			</div>
 			<div class="messageAudio" v-if="content.msgtype === 'm.audio'">
@@ -155,6 +161,23 @@
 				"
 			>
 				<div class="messageText" :class="donationColor">
+					<!-- Quick reactions bar on hover -->
+					<div
+						v-if="!streamMode && isHovering"
+						class="quickReactionsBar"
+						:class="{ my: my }"
+						@mouseenter="onMessageHover(true)"
+						@mouseleave="onMessageHover(false)"
+					>
+						<span
+							v-for="emoji in quickReactionEmojis"
+							:key="emoji"
+							class="quickEmoji"
+							@click.stop="handleQuickReaction(emoji)"
+							>{{ emoji }}</span
+						>
+					</div>
+
 					<div class="edited" v-if="edited">
 						<i class="fas fa-pen"></i> {{ $t("caption.edited") }}
 					</div>
@@ -289,10 +312,14 @@
 		</div>
 
 		<ReactionDisplay
-			v-if="!streamMode && !preview && !fromreference && !my"
+			v-if="!streamMode && !preview && !fromreference"
+			class="messageReactions"
+			:class="{ my: my }"
 			:event="origin"
 			:chat="chat"
 			:reactions="reactions"
+			:show-add-button="false"
+			:my="my"
 			@add-reaction="handleAddReaction"
 			@remove-reaction="handleRemoveReaction"
 		/>
