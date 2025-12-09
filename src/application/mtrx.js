@@ -27,7 +27,7 @@ mxLogger.trace = (...msg) =>
 
 var axios = require("axios");
 
-var lsdatakey = 'userData_v3_'
+var lsdatakey = "userData_v3_";
 
 class MTRX {
 	constructor(core, p) {
@@ -204,7 +204,7 @@ class MTRX {
 		if (this.customrequest) opts.request = this.request;
 
 		var client = this.createMtrxClient(opts);
-		var userData = null
+		var userData = null;
 
 		try {
 			var userData = await client.login("m.login.password", {
@@ -213,49 +213,40 @@ class MTRX {
 				device_id: this.device
 			});
 
-			var userdataLS = localStorage[lsdatakey + this.credentials.username]
+			var userdataLS = localStorage[lsdatakey + this.credentials.username];
 
-			if (userdataLS){
+			if (userdataLS) {
+				try {
+					var userdataPearsed = JSON.parse(userdataLS);
 
-				try{
-					var userdataPearsed = JSON.parse(userdataLS)
+					var d = new Date().getTime() - 1000 * 60 * 60 * 24 * 31;
 
-					var d = ((new Date).getTime()) - 1000 * 60 * 60 * 24 * 31
-
-					if(userdataPearsed.date > d){
-						userData = userdataPearsed.data
+					if (userdataPearsed.date > d) {
+						userData = userdataPearsed.data;
 					}
-
-					
+				} catch (e) {
+					console.error(e);
 				}
-				catch(e){
-					console.error(e)
-				}
-
-				
 			}
 
-			if(!userData){
+			if (!userData) {
 				userData = await client.login("m.login.password", {
 					user: this.credentials.username,
 					password: this.credentials.password,
-					device_id: this.device,
+					device_id: this.device
 				});
 
-				if(!userData.expires_in_ms){
-					localStorage[lsdatakey + this.credentials.username] =  JSON.stringify({
-						data : userData,
-						date : ((new Date).getTime())
-					})
+				if (!userData.expires_in_ms) {
+					localStorage[lsdatakey + this.credentials.username] = JSON.stringify({
+						data: userData,
+						date: new Date().getTime()
+					});
 				}
-				
 
-				console.log("SET lsdatakey", lsdatakey)
+				console.log("SET lsdatakey", lsdatakey);
 			}
-
-
 		} catch (e) {
-			console.error(e)
+			console.error(e);
 			if (e && e.indexOf && e.indexOf("M_USER_DEACTIVATED") > -1) {
 				this.error = "M_USER_DEACTIVATED";
 				return null;
@@ -271,7 +262,6 @@ class MTRX {
 						//signature : this.core.user.signature('matrix')
 					}
 				);
-
 			} else {
 				throw "Signup error, username is not available: " + e;
 			}
@@ -300,28 +290,24 @@ class MTRX {
 
 		try {
 			await store.startup();
-		} catch(e){
-			delete localStorage[lsdatakey + this.credentials.username]
+		} catch (e) {
+			delete localStorage[lsdatakey + this.credentials.username];
 		}
 
 		this.client = userClient;
 
 		this.initEvents();
 
-
-
-		try{
-
+		try {
 			await userClient.startClient({
 				pollTimeout: 60000,
 				resolveInvitesToProfiles: true,
-				initialSyncLimit : 4,
-				disablePresence : true,
+				initialSyncLimit: 4,
+				disablePresence: true
 				//lazyLoadMembers : true
 			});
-
-		}catch(e){
-			delete localStorage[lsdatakey + this.credentials.username]
+		} catch (e) {
+			delete localStorage[lsdatakey + this.credentials.username];
 		}
 
 		this.access = userClientData;
@@ -365,7 +351,7 @@ class MTRX {
 			if (localStorage["onlymatrixmirrors"] && this.mirrors.length) {
 				servers = this.mirrors;
 			}
-		}catch(e){}
+		} catch (e) {}
 
 		return Promise.race(
 			_.map(servers, url => {
@@ -551,10 +537,9 @@ class MTRX {
 				this.core.notifier.event(event, m_chat);
 			}
 
-			if (m_chat && m_chat.pcrypto){
-				m_chat.pcrypto.userschanded()
+			if (m_chat && m_chat.pcrypto) {
+				m_chat.pcrypto.userschanded();
 			}
-			
 		});
 
 		this.client.on("Room.timeline", (message, member) => {
@@ -594,7 +579,6 @@ class MTRX {
 			if (state === "PREPARED") {
 				console.log("PREPARED");
 			}
-
 
 			this.setready();
 
@@ -665,10 +649,7 @@ class MTRX {
 		this.error = false;
 	}
 
-	// Try to delete the current pusher if needed
 	deletePusher() {
-		// Try to get a saved token
-
 		if (!window.cordova) return;
 
 		var savedToken;
@@ -768,18 +749,20 @@ class MTRX {
 		if (chat.pcrypto?.canBeEncrypt()) {
 			if (clbks.encryptEvent) clbks.encryptEvent();
 
-			return chat.pcrypto.encryptEvent(text).then(e => {
-				if (clbks.encryptedEvent) clbks.encryptedEvent(e);
+			return chat.pcrypto
+				.encryptEvent(text)
+				.then(e => {
+					if (clbks.encryptedEvent) clbks.encryptedEvent(e);
 
-				return Promise.resolve(e);
-			}).catch(e => {
+					return Promise.resolve(e);
+				})
+				.catch(e => {
+					console.error(e);
 
-				console.error(e)
+					if (clbks.encryptedEventError) clbks.encryptedEventError(e);
 
-				if (clbks.encryptedEventError) clbks.encryptedEventError(e);
-
-				return Promise.reject(e)
-			})
+					return Promise.reject(e);
+				});
 		}
 
 		return Promise.resolve(this.sdk.ContentHelpers.makeTextMessage(text));
@@ -1011,6 +994,7 @@ class MTRX {
 				? true
 				: false;
 
+		//console.log('chat, event', chat, event)
 
 		console.log("needdecrypt", needdecrypt, event);
 
@@ -1171,7 +1155,7 @@ class MTRX {
 					return Promise.reject(e);
 				});
 		} catch (e) {
-			console.error(e)
+			console.error(e);
 			return Promise.reject(e);
 		}
 	}
@@ -1364,16 +1348,10 @@ class MTRX {
 		}
 
 		const messageId = messageEvent.getId();
-		const roomId = messageEvent.event.room_id;
+		const roomId = messageEvent.event?.room_id || messageEvent.getRoomId?.();
 
-		if (messageEvent.getRelation) {
-			const relations = messageEvent.getRelation("m.annotation");
-			if (relations) {
-				const reactionEvents = relations.getEvents();
-				if (reactionEvents && reactionEvents.length) {
-					return this._processReactionEvents(reactionEvents);
-				}
-			}
+		if (!roomId || !messageId) {
+			return [];
 		}
 
 		const room = this.client.getRoom(roomId);
@@ -1381,49 +1359,104 @@ class MTRX {
 			return [];
 		}
 
-		const timeline = room.getLiveTimeline().getEvents();
-		const reactionEvents = timeline.filter(event => {
-			return (
-				event.getType() === "m.reaction" &&
-				event.event.content?.["m.relates_to"]?.event_id === messageId &&
-				!event.isRedacted()
-			);
-		});
+		try {
+			if (
+				messageEvent.getRelation &&
+				typeof messageEvent.getRelation === "function"
+			) {
+				const relations = messageEvent.getRelation("m.annotation");
+				if (relations) {
+					const reactionEvents = relations.getEvents?.();
+					if (reactionEvents && reactionEvents.length) {
+						return this._processReactionEvents(reactionEvents);
+					}
+				}
+			}
+		} catch (e) {}
+
+		try {
+			const timelineSet =
+				room.getUnfilteredTimelineSet?.() ||
+				room.getLiveTimeline?.().getTimelineSet?.();
+			if (timelineSet && timelineSet.relations) {
+				const relations = timelineSet.relations.getChildEventsForEvent?.(
+					messageId,
+					"m.annotation",
+					"m.reaction"
+				);
+				if (relations) {
+					const reactionEvents = relations.getRelations?.() || [];
+					if (reactionEvents.length) {
+						return this._processReactionEvents(reactionEvents);
+					}
+				}
+			}
+		} catch (e) {}
+
+		const reactionEvents = [];
+
+		try {
+			const timelines =
+				room.getTimelines?.() || [room.getLiveTimeline?.()].filter(Boolean);
+
+			for (const timeline of timelines) {
+				const events = timeline.getEvents?.() || [];
+				for (const event of events) {
+					if (
+						event.getType?.() === "m.reaction" &&
+						event.event?.content?.["m.relates_to"]?.event_id === messageId &&
+						!event.isRedacted?.()
+					) {
+						reactionEvents.push(event);
+					}
+				}
+			}
+		} catch (e) {
+			console.warn("Failed to get reactions from timelines:", e);
+		}
 
 		return this._processReactionEvents(reactionEvents);
 	}
 
 	_processReactionEvents(reactionEvents) {
+		if (!reactionEvents || !Array.isArray(reactionEvents)) {
+			return [];
+		}
+
 		const grouped = {};
 
 		reactionEvents.forEach(event => {
-			if (event.isRedacted()) return;
+			try {
+				if (event.isRedacted?.()) return;
 
-			const emoji = event.event.content?.["m.relates_to"]?.key;
+				const emoji = event.event?.content?.["m.relates_to"]?.key;
 
-			if (!emoji) return;
+				if (!emoji) return;
 
-			if (!grouped[emoji]) {
-				grouped[emoji] = {
-					emoji: emoji,
-					count: 0,
-					users: [],
-					myReaction: null
-				};
-			}
+				if (!grouped[emoji]) {
+					grouped[emoji] = {
+						emoji: emoji,
+						count: 0,
+						users: [],
+						myReaction: null
+					};
+				}
 
-			const sender = event.getSender();
-			const reactionEventId = event.getId();
+				const sender = event.getSender?.();
+				const reactionEventId = event.getId?.();
 
-			grouped[emoji].count++;
-			grouped[emoji].users.push({
-				id: sender,
-				reactionEventId: reactionEventId
-			});
+				if (!sender || !reactionEventId) return;
 
-			if (this.me(sender)) {
-				grouped[emoji].myReaction = reactionEventId;
-			}
+				grouped[emoji].count++;
+				grouped[emoji].users.push({
+					id: sender,
+					reactionEventId: reactionEventId
+				});
+
+				if (this.me(sender)) {
+					grouped[emoji].myReaction = reactionEventId;
+				}
+			} catch (e) {}
 		});
 
 		const result = Object.values(grouped).sort((a, b) => b.count - a.count);

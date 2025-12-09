@@ -25,7 +25,7 @@ export default {
 		downloaded: Boolean,
 		baseImg: {
 			type: String,
-			default: "empty",
+			default: "empty"
 		},
 		filePreview: Object,
 		imgEvent: {},
@@ -42,16 +42,16 @@ export default {
 		fromreference: Boolean,
 		multiSelect: {
 			default: false,
-			type: Boolean,
+			type: Boolean
 		},
 		selectedMessages: {
 			default: [],
-			type: Array,
+			type: Array
 		},
-		audioBuffer: null,
+		audioBuffer: null
 	},
 	directives: {
-		imagesLoaded,
+		imagesLoaded
 	},
 
 	data: function () {
@@ -60,6 +60,10 @@ export default {
 			markedText: null,
 			hasurlerror: null,
 			donationColor: null,
+			isHovering: false,
+			reactionUpdateTrigger: 0,
+			hoverTimeout: null,
+			pendingRemovals: []
 		};
 	},
 	inject: [
@@ -68,7 +72,7 @@ export default {
 		"streamMode",
 		"powerLevel",
 		"adminActions",
-		"menuState",
+		"menuState"
 	],
 	components: {
 		actions,
@@ -81,30 +85,31 @@ export default {
 		VoiceMessage,
 		Call,
 		Request,
-		ReactionDisplay,
+		ReactionDisplay
 	},
 	watch: {
 		readyToRender: {
 			immediate: true,
 			handler: function () {
 				if (this.readyToRender) this.$emit("readyToRender");
-			},
-		},
+			}
+		}
 	},
 	computed: {
-
 		formattedErrorMessage() {
 			if (!this.error) return;
 
-			if (typeof this.error !== 'string') {
-				return this.$t('caption.unabletoDecrypt');
+			try {
+				const error = JSON.parse(this.error); // Try to parse if it's a JSON string
+				return (
+					error.error ||
+					error.message ||
+					error.errcode ||
+					this.$t("caption.error")
+				);
+			} catch (e) {
+				return this.error; // Return as is if not JSON
 			}
-
-			const errorMessage = this.error.includes(':') ?
-				this.error.split(':').slice(1).join(':').trim() :
-				this.error.trim();
-
-			return errorMessage;
 		},
 		pkoindisabled: function () {
 			return this.$store.state.pkoindisabled || false;
@@ -145,7 +150,7 @@ export default {
 					this.badenctypted) ||
 				this.content.membership ||
 				((this.content.msgtype === "m.text" ||
-						this.content.msgtype === "m.encrypted") &&
+					this.content.msgtype === "m.encrypted") &&
 					this.textWithoutLinks) ||
 				this.file ||
 				this.event.event.type === "m.room.request_calls_access" ||
@@ -256,7 +261,7 @@ export default {
 				this.urlpreview.length < 10 ||
 				(trimmed.indexOf(this.urlpreview) > 0 &&
 					trimmed.indexOf(this.urlpreview) + this.urlpreview.length <
-					trimmed.length)
+						trimmed.length)
 			) {
 				return trimmed;
 			}
@@ -323,19 +328,19 @@ export default {
 				menu.push({
 					click: "reply",
 					title: this.$i18n.t("button.reply"),
-					icon: "fas fa-reply",
+					icon: "fas fa-reply"
 				});
 
 				menu.push({
 					click: "showMultiSelect",
 					title: this.$i18n.t("button.select"),
-					icon: "fas fa-check-circle",
+					icon: "fas fa-check-circle"
 				});
 
 				menu.push({
 					click: "share",
 					title: this.$i18n.t("button.share"),
-					icon: "fas fa-share-alt",
+					icon: "fas fa-share-alt"
 				});
 			}
 
@@ -343,7 +348,7 @@ export default {
 				menu.push({
 					click: "delete",
 					title: this.$i18n.t("button.delete"),
-					icon: "far fa-trash-alt",
+					icon: "far fa-trash-alt"
 				});
 			}
 
@@ -351,14 +356,14 @@ export default {
 				menu.unshift({
 					click: "copy",
 					title: this.$i18n.t("button.copy"),
-					icon: "far fa-copy",
+					icon: "far fa-copy"
 				});
 
 				if (this.my && this.canediting)
 					menu.unshift({
 						click: "edit",
 						title: this.$i18n.t("button.edit"),
-						icon: "far fa-edit",
+						icon: "far fa-edit"
 					});
 			}
 
@@ -409,7 +414,7 @@ export default {
 
 		selectedMessage: function () {
 			const elem = this.selectedMessages.filter(
-				(item) => item.message_id === this.origin.event.event_id
+				item => item.message_id === this.origin.event.event_id
 			);
 			return elem[0]?.message_id === this.origin.event.event_id ? true : false;
 		},
@@ -421,8 +426,8 @@ export default {
 		sender: function () {
 			return this.chat.getMember(
 				this.event?.sender?.userId ||
-				this.event?.event?.sender ||
-				this.event.event?.user_id
+					this.event?.event?.sender ||
+					this.event.event?.user_id
 			);
 		},
 
@@ -436,16 +441,72 @@ export default {
 		},
 
 		reactions: function () {
+			// Dependency on reactionUpdateTrigger to force re-computation
+			this.reactionUpdateTrigger;
+
 			if (!this.origin || this.preview || this.fromreference) {
 				return [];
 			}
-			return this.core.mtrx.getReactionsForMessage(this.origin);
+			const reactions = this.core.mtrx.getReactionsForMessage(this.origin);
+
+			if (this.pendingRemovals.length) {
+				// Filter out pending removals
+				return reactions
+					.map(r => {
+						if (r.myReaction && this.pendingRemovals.includes(r.myReaction)) {
+							// Clone the reaction object to avoid mutating the source
+							const newR = { ...r };
+							newR.count--;
+							newR.myReaction = null;
+							newR.users = newR.users.filter(
+								u => !this.pendingRemovals.includes(u.reactionEventId)
+							);
+							return newR;
+						}
+						return r;
+					})
+					.filter(r => r.count > 0);
+			}
+
+			return reactions;
 		},
+
+		quickReactionEmojis: function () {
+			return ["👍", "❤️", "🔥", "👎", "😊", "👏"];
+		}
 	},
 
-	mounted() {},
+	mounted() {
+		if (this.origin) {
+			console.log(
+				"Adding listener to origin:",
+				this.origin.getId ? this.origin.getId() : "no-id"
+			);
+			this.origin.on("Event.relations", this.onEventRelationsChange);
+			// Also listen for local re-dating or property changes
+			this.origin.on("MatrixEvent.relations", this.onEventRelationsChange);
+		}
+	},
+
+	beforeDestroy() {
+		if (this.origin) {
+			this.origin.removeListener(
+				"Event.relations",
+				this.onEventRelationsChange
+			);
+			this.origin.removeListener(
+				"MatrixEvent.relations",
+				this.onEventRelationsChange
+			);
+		}
+	},
 
 	methods: {
+		onEventRelationsChange(e) {
+			console.log("Event.relations triggered!", e);
+			this.reactionUpdateTrigger++;
+		},
+
 		gotoreference: function () {
 			var id = this.reference.getId();
 
@@ -457,9 +518,9 @@ export default {
 			return this.$dialog
 				.alert(this.stringifyiedError, {
 					okText: "Ok",
-					backdropClose: true,
+					backdropClose: true
 				})
-				.catch((e) => {});
+				.catch(e => {});
 		},
 		showwhenburn: function () {
 			var text = "";
@@ -474,7 +535,7 @@ export default {
 
 			this.$store.commit("icon", {
 				icon: "info",
-				message: text,
+				message: text
 			});
 		},
 
@@ -515,10 +576,12 @@ export default {
 			}
 
 			if (this.file) {
-				sharing.download = [{
-					event: this.event,
-					chat: this.chat,
-				}, ];
+				sharing.download = [
+					{
+						event: this.event,
+						chat: this.chat
+					}
+				];
 			}
 
 			sharing.from = this.userinfo.id;
@@ -575,8 +638,9 @@ export default {
 			return this.core.mtrx.client.redactEvent(
 				this.chat.roomId,
 				this.origin.event.event_id,
-				null, {
-					reason: "messagedeleting",
+				null,
+				{
+					reason: "messagedeleting"
 				}
 			);
 		},
@@ -584,12 +648,12 @@ export default {
 			return this.$dialog
 				.confirm("Do you really want to delete message?", {
 					okText: this.$i18n.t("yes"),
-					cancelText: this.$i18n.t("cancel"),
+					cancelText: this.$i18n.t("cancel")
 				})
 				.then(() => {
 					return this.deleteMessage();
 				})
-				.catch((e) => {
+				.catch(e => {
 					return Promise.resolve();
 				});
 		},
@@ -597,8 +661,8 @@ export default {
 			p.hidePopup();
 
 			this["menu" + item.click]()
-				.then((r) => {})
-				.catch((e) => {
+				.then(r => {})
+				.catch(e => {
 					p.showPopup();
 				});
 		},
@@ -624,10 +688,7 @@ export default {
 		},
 
 		format_date(value) {
-
-
-			return this.$f.format_date(value)
-
+			return this.$f.format_date(value);
 		},
 
 		download: function () {
@@ -684,12 +745,12 @@ export default {
 			this.$emit("selectMessage", {
 				message_id: this.origin.event.event_id,
 				sharing,
-				time: this.origin._localTimestamp,
+				time: this.origin._localTimestamp
 			});
 		},
 		removeMessage: function () {
 			this.$emit("removeMessage", {
-				message_id: this.origin.event.event_id,
+				message_id: this.origin.event.event_id
 			});
 		},
 
@@ -718,7 +779,7 @@ export default {
 					0.6: "violette",
 					0.7: "cyan",
 					0.8: "orange",
-					0.9: "pink",
+					0.9: "pink"
 				};
 
 			holder?.on("DOMSubtreeModified", () => {
@@ -730,7 +791,7 @@ export default {
 					Object.keys(colors)
 						.slice()
 						.reverse()
-						.every((amount) => {
+						.every(amount => {
 							if (value >= amount) {
 								this.donationColor = `donation-message donation-color-${colors[amount]}`;
 								return false;
@@ -745,7 +806,7 @@ export default {
 							window.app.platform.donateAnimation.inqueue({
 								senderName: this.sender.name,
 								senderMessage: this.body,
-								value: value.toFixed(2),
+								value: value.toFixed(2)
 							});
 						}
 					}
@@ -766,7 +827,7 @@ export default {
 			/*Add highlighted parts to search*/
 			this.$nextTick(() => {
 				const localMsg =
-					this.origin.localTimestamp !== this.origin.localTimestamp,
+						this.origin.localTimestamp !== this.origin.localTimestamp,
 					matches = Array.from(this.$el.querySelectorAll("mark"));
 
 				if (localMsg) matches.reverse();
@@ -789,13 +850,11 @@ export default {
 		},
 		setmenu: function () {
 			if (document.activeElement) document.activeElement.blur();
-			/*this.core.menu({
-				items: this.menu(),
-				item: {},
-			});*/
 			this.menuState.set({
 				items: this.menu(),
-				item: {},
+				item: {
+					handleQuickReaction: this.handleQuickReaction
+				}
 			});
 		},
 
@@ -805,11 +864,16 @@ export default {
 
 			const canProcessMessage = type.indexOf("m.call") === -1 && !this.hasError;
 
+			// Quick reactions at the top (like Telegram)
+			if (!this.streamMode && canProcessMessage) {
+				menu.quickReactions = ["👍", "❤️", "🔥", "👎", "😊", "👏", "😢"];
+			}
+
 			if (canProcessMessage) {
 				menu.push({
 					action: this.menureply,
 					text: "button.reply",
-					icon: "fas fa-reply",
+					icon: "fas fa-reply"
 				});
 			}
 
@@ -818,13 +882,13 @@ export default {
 					menu.push({
 						action: this.menushowMultiSelect,
 						text: "button.select",
-						icon: "fas fa-check-circle",
+						icon: "fas fa-check-circle"
 					});
 
 					menu.push({
 						action: this.menushare,
 						text: "button.share",
-						icon: "fas fa-share-alt",
+						icon: "fas fa-share-alt"
 					});
 				}
 
@@ -832,14 +896,14 @@ export default {
 					menu.push({
 						action: this.menudelete,
 						text: "button.delete",
-						icon: "far fa-trash-alt",
+						icon: "far fa-trash-alt"
 					});
 
 					if (this.hasError) {
 						menu.push({
 							action: this.menuresend,
 							text: "button.resend",
-							icon: "fa fa-redo",
+							icon: "fa fa-redo"
 						});
 					}
 				}
@@ -848,14 +912,14 @@ export default {
 					menu.unshift({
 						action: this.menucopy,
 						text: "button.copy",
-						icon: "far fa-copy",
+						icon: "far fa-copy"
 					});
 
 					if (this.my && this.canediting)
 						menu.unshift({
 							action: this.menuedit,
 							text: "button.edit",
-							icon: "far fa-edit",
+							icon: "far fa-edit"
 						});
 				}
 			} else {
@@ -867,7 +931,7 @@ export default {
 								? "cancelModeration"
 								: "makeModerator"
 						}`,
-						icon: "fas fa-user-shield",
+						icon: "fas fa-user-shield"
 					});
 				}
 
@@ -877,7 +941,7 @@ export default {
 						text: `caption.${
 							this.sender.membership === "ban" ? "removeBan" : "ban"
 						}`,
-						icon: "fas fa-user-times",
+						icon: "fas fa-user-times"
 					});
 				}
 			}
@@ -888,19 +952,56 @@ export default {
 		handleAddReaction: function (emoji) {
 			return this.core.mtrx
 				.sendReaction(this.chat, this.origin, emoji)
-				.catch((e) => {
+				.then(() => {
+					this.reactionUpdateTrigger++;
+				})
+				.catch(e => {
 					console.error("Failed to send reaction:", e);
 					this.$store.commit("icon", {
 						icon: "error",
-						message: this.$t("errors.reactionFailed") || "Failed to send reaction",
+						message:
+							this.$t("errors.reactionFailed") || "Failed to send reaction"
 					});
 				});
 		},
 
 		handleRemoveReaction: function (reactionEventId) {
-			return this.core.mtrx.removeReaction(this.chat, reactionEventId).catch((e) => {
-				console.error("Failed to remove reaction:", e);
-			});
+			// Optimistically remove
+			this.pendingRemovals.push(reactionEventId);
+			this.reactionUpdateTrigger++;
+
+			return this.core.mtrx
+				.removeReaction(this.chat, reactionEventId)
+				.then(() => {
+					this.pendingRemovals = this.pendingRemovals.filter(
+						id => id !== reactionEventId
+					);
+					this.reactionUpdateTrigger++;
+				})
+				.catch(e => {
+					console.error("Failed to remove reaction:", e);
+					// Revert on failure
+					this.pendingRemovals = this.pendingRemovals.filter(
+						id => id !== reactionEventId
+					);
+					this.reactionUpdateTrigger++;
+				});
 		},
-	},
+
+		handleQuickReaction: function (emoji) {
+			return this.handleAddReaction(emoji);
+		},
+
+		onMessageHover: function (isHovering) {
+			if (this.hoverTimeout) clearTimeout(this.hoverTimeout);
+
+			if (isHovering) {
+				this.isHovering = true;
+			} else {
+				this.hoverTimeout = setTimeout(() => {
+					this.isHovering = false;
+				}, 200);
+			}
+		}
+	}
 };
