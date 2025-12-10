@@ -312,7 +312,7 @@
 		</div>
 
 		<ReactionDisplay
-			v-if="!streamMode && !preview && !fromreference"
+			v-if="showReactions"
 			class="messageReactions"
 			:class="{ my: my }"
 			:event="origin"

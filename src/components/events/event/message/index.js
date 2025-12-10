@@ -63,7 +63,9 @@ export default {
 			isHovering: false,
 			reactionUpdateTrigger: 0,
 			hoverTimeout: null,
-			pendingRemovals: []
+			pendingRemovals: [],
+			pendingAdditions: [],
+			cancelledPendingAdditions: []
 		};
 	},
 	inject: [
@@ -100,7 +102,7 @@ export default {
 			if (!this.error) return;
 
 			try {
-				const error = JSON.parse(this.error); // Try to parse if it's a JSON string
+				const error = JSON.parse(this.error);
 				return (
 					error.error ||
 					error.message ||
@@ -108,7 +110,7 @@ export default {
 					this.$t("caption.error")
 				);
 			} catch (e) {
-				return this.error; // Return as is if not JSON
+				return this.error;
 			}
 		},
 		pkoindisabled: function () {
@@ -204,7 +206,6 @@ export default {
 				this.streamMode ||
 				this.showmyicontrue ||
 				this.content.msgtype === "m.image" ||
-				/*this.content.msgtype === 'm.audio' ||*/
 				this.content.msgtype === "m.file" ||
 				this.urlpreview ||
 				(!this.$store.state.active && this.$store.state.minimized)
@@ -423,12 +424,25 @@ export default {
 			return this.chat.getMember(this.chat.myUserId);
 		},
 
-		sender: function () {
-			return this.chat.getMember(
-				this.event?.sender?.userId ||
-					this.event?.event?.sender ||
-					this.event.event?.user_id
-			);
+		isBanned: function () {
+			const id = this.event.event.user_id ?? this.event.event.sender,
+				state = this.chat.currentState?.members[id]?.membership === "ban";
+
+			if (this.my) this.userBanned.set(state);
+
+			return state;
+		},
+
+		showReactions: function () {
+			if (this.streamMode || this.preview || this.fromreference) {
+				return false;
+			}
+
+			const isRedacted =
+				(this.origin.getRedactionEvent && this.origin.getRedactionEvent()) ||
+				(this.origin.localRedactionEvent && this.origin.localRedactionEvent());
+
+			return !isRedacted;
 		},
 
 		isMenuAllowed: function () {
@@ -441,7 +455,6 @@ export default {
 		},
 
 		reactions: function () {
-			// Dependency on reactionUpdateTrigger to force re-computation
 			this.reactionUpdateTrigger;
 
 			if (!this.origin || this.preview || this.fromreference) {
@@ -449,12 +462,24 @@ export default {
 			}
 			const reactions = this.core.mtrx.getReactionsForMessage(this.origin);
 
+			let processedReactions = reactions;
+
 			if (this.pendingRemovals.length) {
-				// Filter out pending removals
-				return reactions
+				const currentReactionIds = new Set();
+				processedReactions.forEach(r => {
+					r.users.forEach(u => currentReactionIds.add(u.reactionEventId));
+				});
+
+				const stillPending = this.pendingRemovals.filter(id =>
+					currentReactionIds.has(id)
+				);
+
+				if (stillPending.length !== this.pendingRemovals.length) {
+				}
+
+				processedReactions = processedReactions
 					.map(r => {
 						if (r.myReaction && this.pendingRemovals.includes(r.myReaction)) {
-							// Clone the reaction object to avoid mutating the source
 							const newR = { ...r };
 							newR.count--;
 							newR.myReaction = null;
@@ -468,11 +493,44 @@ export default {
 					.filter(r => r.count > 0);
 			}
 
-			return reactions;
+			if (this.pendingAdditions.length) {
+				const reactionMap = new Map();
+				processedReactions.forEach(r => reactionMap.set(r.emoji, { ...r }));
+
+				this.pendingAdditions.forEach(emoji => {
+					let r = reactionMap.get(emoji);
+
+					if (r) {
+						if (!r.myReaction) {
+							r.count++;
+							r.myReaction = "pending_add_" + emoji;
+							r.users = [
+								...r.users,
+								{ id: this.userinfo.id, reactionEventId: "pending" }
+							];
+						}
+					} else {
+						r = {
+							emoji: emoji,
+							count: 1,
+							myReaction: "pending_add_" + emoji,
+							users: [{ id: this.userinfo.id, reactionEventId: "pending" }]
+						};
+					}
+
+					reactionMap.set(emoji, r);
+				});
+
+				processedReactions = Array.from(reactionMap.values()).sort(
+					(a, b) => b.count - a.count
+				);
+			}
+
+			return processedReactions;
 		},
 
 		quickReactionEmojis: function () {
-			return ["👍", "❤️", "🔥", "👎", "😊", "👏"];
+			return ["👍", "❤️", "😂", "😮", "😢", "🔥"];
 		}
 	},
 
@@ -483,7 +541,6 @@ export default {
 				this.origin.getId ? this.origin.getId() : "no-id"
 			);
 			this.origin.on("Event.relations", this.onEventRelationsChange);
-			// Also listen for local re-dating or property changes
 			this.origin.on("MatrixEvent.relations", this.onEventRelationsChange);
 		}
 	},
@@ -513,8 +570,6 @@ export default {
 			this.$emit("gotoreference", id);
 		},
 		showError: function () {
-			// stringifyiedError
-
 			return this.$dialog
 				.alert(this.stringifyiedError, {
 					okText: "Ok",
@@ -529,8 +584,6 @@ export default {
 				text = this.$i18n.t("messagewasburn");
 			} else {
 				text = this.$i18n.t("messagewillburn");
-
-				//this.willburn.locale(this.$i18n.locale).format('DD MMMM YYYY')
 			}
 
 			this.$store.commit("icon", {
@@ -768,13 +821,10 @@ export default {
 		},
 
 		urlloaded: function (data) {
-			/* Parse donation link */
-
 			if (!data) return;
 
 			const holder = data?.el.find(".txcnt"),
 				colors = {
-					/* amt: color */
 					0.5: "blue",
 					0.6: "violette",
 					0.7: "cyan",
@@ -800,7 +850,6 @@ export default {
 							return true;
 						});
 
-					/* Play donate animation */
 					if (this.event?.event?.unsigned?.age < 5000) {
 						if (window.app.platform.donateAnimation) {
 							window.app.platform.donateAnimation.inqueue({
@@ -819,12 +868,10 @@ export default {
 		},
 
 		markMatches: function (content) {
-			/*Highlight matched text*/
 			if (!this.matches || !this.markText) return;
 
 			this.markedText = this.markText(content);
 
-			/*Add highlighted parts to search*/
 			this.$nextTick(() => {
 				const localMsg =
 						this.origin.localTimestamp !== this.origin.localTimestamp,
@@ -864,9 +911,12 @@ export default {
 
 			const canProcessMessage = type.indexOf("m.call") === -1 && !this.hasError;
 
-			// Quick reactions at the top (like Telegram)
-			if (!this.streamMode && canProcessMessage) {
-				menu.quickReactions = ["👍", "❤️", "🔥", "👎", "😊", "👏", "😢"];
+			const isRedacted =
+				(this.origin.getRedactionEvent && this.origin.getRedactionEvent()) ||
+				(this.origin.localRedactionEvent && this.origin.localRedactionEvent());
+
+			if (!this.streamMode && canProcessMessage && !isRedacted) {
+				menu.quickReactions = ["👍", "❤️", "😂", "😮", "😢", "🔥"];
 			}
 
 			if (canProcessMessage) {
@@ -950,37 +1000,111 @@ export default {
 		},
 
 		handleAddReaction: function (emoji) {
-			return this.core.mtrx
+			if (this.pendingAdditions.includes(emoji)) {
+				return Promise.resolve();
+			}
+
+			this.pendingAdditions.push(emoji);
+			this.reactionUpdateTrigger++;
+
+			const promise = this.core.mtrx
 				.sendReaction(this.chat, this.origin, emoji)
-				.then(() => {
+				.then(response => {
+					if (this.cancelledPendingAdditions.includes(emoji)) {
+						this.cancelledPendingAdditions =
+							this.cancelledPendingAdditions.filter(e => e !== emoji);
+						this.pendingAdditions = this.pendingAdditions.filter(
+							e => e !== emoji
+						);
+
+						const eventId = response && response.event_id;
+						if (eventId) {
+							this.pendingRemovals = [...this.pendingRemovals, eventId];
+
+							return this.core.mtrx
+								.removeReaction(this.chat, eventId)
+								.then(() => {});
+						}
+					}
+
 					this.reactionUpdateTrigger++;
 				})
 				.catch(e => {
 					console.error("Failed to send reaction:", e);
+					const currentPending = this.pendingAdditions;
+					this.pendingAdditions = currentPending.filter(e => e !== emoji);
+
+					this.cancelledPendingAdditions =
+						this.cancelledPendingAdditions.filter(e => e !== emoji);
+
+					this.reactionUpdateTrigger++;
+					this.$forceUpdate();
+
 					this.$store.commit("icon", {
 						icon: "error",
 						message:
 							this.$t("errors.reactionFailed") || "Failed to send reaction"
 					});
 				});
+
+			return promise;
 		},
 
 		handleRemoveReaction: function (reactionEventId) {
-			// Optimistically remove
+			if (
+				typeof reactionEventId === "string" &&
+				reactionEventId.startsWith("pending_add_")
+			) {
+				const emoji = reactionEventId.replace("pending_add_", "");
+
+				this.cancelledPendingAdditions.push(emoji);
+
+				const index = this.pendingAdditions.indexOf(emoji);
+				if (index > -1) {
+					this.pendingAdditions.splice(index, 1);
+				}
+
+				this.reactionUpdateTrigger++;
+				return Promise.resolve();
+			}
+
+			if (!reactionEventId) {
+				console.error("handleRemoveReaction called with null/undefined ID");
+				return Promise.resolve();
+			}
+
+			try {
+				const reactions = this.core.mtrx.getReactionsForMessage(this.origin);
+				let foundEmoji = null;
+
+				for (const r of reactions) {
+					const userReaction = r.users.find(
+						u => u.reactionEventId === reactionEventId
+					);
+					if (userReaction) {
+						foundEmoji = r.emoji;
+						break;
+					}
+				}
+
+				if (foundEmoji) {
+					this.pendingAdditions = this.pendingAdditions.filter(
+						e => e !== foundEmoji
+					);
+				}
+			} catch (e) {}
+
 			this.pendingRemovals.push(reactionEventId);
+
 			this.reactionUpdateTrigger++;
 
 			return this.core.mtrx
 				.removeReaction(this.chat, reactionEventId)
 				.then(() => {
-					this.pendingRemovals = this.pendingRemovals.filter(
-						id => id !== reactionEventId
-					);
 					this.reactionUpdateTrigger++;
 				})
 				.catch(e => {
 					console.error("Failed to remove reaction:", e);
-					// Revert on failure
 					this.pendingRemovals = this.pendingRemovals.filter(
 						id => id !== reactionEventId
 					);
