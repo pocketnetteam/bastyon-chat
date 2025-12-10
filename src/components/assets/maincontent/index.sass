@@ -3,7 +3,7 @@
     .expandp
         position: absolute
         left: 0
-        right: -$r
+        right: 0
         top : 0
         bottom : 0
         cursor: pointer
@@ -102,12 +102,11 @@
         &.fix
 
             .headerSpacerWrapper
-                overflow-y: inherit
-                overflow-x: inherit
+                overflow: hidden
                 top : 0
                 bottom : 56px
                 will-change: transform
-                +transitionopt(0.3s, transform)
+                
                 
 
             &:not(.active):not(.unauthorized)
@@ -126,7 +125,7 @@
                 height: 100%
                 overflow: visible
                 will-change: transform
-                +transitionopt(0.3s, transform)
+                
 
             .headerSpacer
                 position: absolute
@@ -145,11 +144,14 @@
 
                 .headerSpacerWrapper
                     /*top : 60px*/
+                    overflow: inherit
                     transform: translate3d(0, 0, 0)
                     z-index: 130
+                    +transitionopt(0.3s, transform)
 
                 .headerSpacerWrapperOvf
                     transform: translate3d(-300px, 4px, 0)
+                    +transitionopt(0.3s, transform)
 
                     .headerSpacer
                         border-radius: 8px

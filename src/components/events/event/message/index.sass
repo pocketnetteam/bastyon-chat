@@ -46,6 +46,11 @@
 			.mnwrapper
 				opacity: 1
 
+		.quickReactionsBar
+			position: absolute
+			top: -24px
+			right: 0
+
 .error
 	display: flex
 	align-items: center
@@ -80,7 +85,7 @@
 		text-align: center
 		align-items: center
 		justify-content: center
-
+.errorImage,
 .preloaderImage
 	padding-bottom: 100px
 	border-radius: 10px
@@ -470,6 +475,7 @@
 		white-space: normal
 		display: flex
 		flex-direction: column-reverse
+		position: relative
 
 		::v-deep
 
@@ -483,9 +489,70 @@
 			opacity: 0.5
 			text-align: right
 
+		.quickReactionsBar
+			position: absolute
+			top: -12px
+			right: 0
+			display: flex
+			gap: 2px
+			background: srgb(--neutral-grad-0)
+			border-radius: 16px
+			padding: 4px 8px
+			box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15)
+			z-index: 100
+			
+			// Default (Incoming) -> Place on Right side
+			left: 100%
+			right: auto
+			margin-left: 6px
+
+			// Bridge for Incoming (connects to the left)
+			&::before
+				content: ''
+				position: absolute
+				top: 0
+				left: -20px
+				width: 20px
+				height: 100%
+				background: transparent
+				z-index: 1
+
+			// My Message (Outgoing) -> Place on Left side
+			&.my
+				left: auto
+				right: 100%
+				margin-left: 0
+				margin-right: 6px
+
+				// Bridge for My (connects to the right)
+				&::before
+					left: auto
+					right: -20px
+
+			.quickEmoji
+				font-size: 18px
+				cursor: pointer
+				padding: 2px 4px
+				border-radius: 6px
+				transition: all 0.1s ease-out
+
+				&:hover
+					background: srgba(--neutral-grad-1, 0.6)
+					transform: scale(1.2)
+
+				&:active
+					transform: scale(0.9)
+
 		div
 			overflow: hidden
 			text-overflow: ellipsis
+
+	.messageReactions
+		margin-left: calc(33px + 0.5 * $r)
+
+		&.my
+			margin-left: auto
+			margin-right: calc(33px + $r)
 
 	.badenctyptedText
 		margin-left: $r
@@ -609,3 +676,13 @@
 			width: 30px
 			text-align: center
 			font-size: 0.8em
+
+.eventsMessage
+	position: relative
+	
+	&.hovering
+		z-index: 200
+
+	.messageRow
+		position: relative
+		// z-index handled by parent active state

@@ -279,7 +279,14 @@ export default {
 				var ref = cordova.InAppBrowser.open(url, "_system");
 				return false;
 			} else {
-				window.open(url, "_blank");
+
+				if (window.electron && window.electron.shell && window.electron.shell.openExternal){
+					window.electron.shell.openExternal(url);
+				}
+
+				else{
+					window.open(url, "_blank");
+				}
 			}
 		},
 

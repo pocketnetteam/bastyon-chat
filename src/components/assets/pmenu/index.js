@@ -2,28 +2,28 @@ import simpleMenu from "@/components/assets/simpleMenu/simpleMenu.vue";
 import { mapState } from "vuex";
 export default {
 	name: "pmenu",
-	
+
 	components: {
-		simpleMenu,
+		simpleMenu
 	},
-	
+
 	inject: ["menuState"],
 
 	data: function () {
 		return {
-			last: null,
+			last: null
 		};
 	},
 
 	computed: {
 		...mapState({
-			pocketnet: (state) => state.pocketnet,
-			minimized: (state) => state.minimized,
-			mobile: (state) => state.mobile,
-			active: (state) => state.active,
-			hiddenInParent: (state) => state.hiddenInParent
+			pocketnet: state => state.pocketnet,
+			minimized: state => state.minimized,
+			mobile: state => state.mobile,
+			active: state => state.active,
+			hiddenInParent: state => state.hiddenInParent
 		}),
-		
+
 		menu() {
 			return this.menuState.get();
 		}
@@ -36,7 +36,7 @@ export default {
 
 				this.menu.handler(item, this.menu.item, {
 					hidePopup: this.hidePopup,
-					showPopup: this.showPopup,
+					showPopup: this.showPopup
 				});
 
 				// this.$emit('itemClicked', item, this.menu.item, );
@@ -46,14 +46,21 @@ export default {
 		showPopup: function () {
 			if (this.last) {
 				this.menuState.set(this.last);
-				this.$emit('setmenu', this.last);
+				this.$emit("setmenu", this.last);
 				this.last = null;
 			}
 		},
 
 		hidePopup() {
 			this.menuState.set(null);
-			this.$emit('setmenu', null);
+			this.$emit("setmenu", null);
 		},
-	},
+
+		selectQuickReaction(emoji) {
+			if (this.menu && this.menu.item && this.menu.item.handleQuickReaction) {
+				this.menu.item.handleQuickReaction(emoji);
+			}
+			this.hidePopup();
+		}
+	}
 };

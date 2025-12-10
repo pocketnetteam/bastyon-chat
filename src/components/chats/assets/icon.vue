@@ -148,9 +148,7 @@ export default {
 			var us = {};
 
 			_.each(this.users, (u) => {
-				us[u.userId] = this.core.mtrx.blockeduser(u.userId)
-					? "blocked"
-					: u.membership;
+				us[u.userId] = this.core.mtrx.blockeduser(u.userId) ? "blocked" : u.membership;
 			});
 
 			return us;

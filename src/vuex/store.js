@@ -354,13 +354,13 @@ var store = new Vuex.Store({
 					0
 				) + count.length;
 
-			if (state.chats.length <= 3) {
+			/*if (state.chats.length <= 3) {
 				// Count notifications from pocketnet team room
 				var pocketMessages = _.filter(state.pocketteammessages, function (m) {
 					return !state.readedteammessages[m.id];
 				}).length;
 				state.allnotifications += pocketMessages;
-			}
+			}*/
 
 			var external =
 				f.deep(store, "_vm.core.external.clbks.ALL_NOTIFICATIONS_COUNT") || {};
@@ -389,7 +389,7 @@ var store = new Vuex.Store({
 
 			var chatsMap = {};
 
-			_.each(chats, (chat) => {
+			_.each(chats, function (chat) {
 				var aid = chat.info?.title?.replace("#", "");
 
 				if (!state.chatsMap[chat.roomId] || state.force[chat.roomId]) {
@@ -409,8 +409,6 @@ var store = new Vuex.Store({
 			_.each(state.chatsMap, function (c, id) {
 				if (!chatsMap[id]) Vue.delete(state.chatsMap, id);
 			});
-
-			//state.chatsMap = chatsMap;
 		},
 		SET_READ_TO_STORE(state, readreciepts) {
 			_.each(readreciepts, (r, chatid) => {
@@ -719,8 +717,6 @@ var store = new Vuex.Store({
 
 					var iv = images[index];
 
-					console.log("iv", iv, images, index);
-
 					externalGallery(images, iv, null, {
 						removeWhenShare: true,
 					});
@@ -773,11 +769,11 @@ var store = new Vuex.Store({
 				} else {
 					r.summary.lastModified = r.getLastActiveTimestamp();
 				}
-
+				r.summary.selfMembership = r.selfMembership;
 				r.summary.info = {
 					title: r.name,
 				};
-				r.summary.key = r.summary.roomId + ":" + r.summary.lastModified;
+				r.summary.key = r.summary.roomId;
 				r.summary.stream =
 					hv?.event?.content?.history_visibility === "world_readable";
 				r.summary.miniappchat = null;
@@ -935,8 +931,6 @@ var store = new Vuex.Store({
 
 				var e = timeline[0];
 
-				//console.log('timeline', e, timeline, chat.roomId)
-
 				if (e) {
 					var rt = ts.relations.getChildEventsForEvent(
 						e.event.event_id,
@@ -974,11 +968,6 @@ var store = new Vuex.Store({
 						roomId: chat.roomId,
 						isWaiting: false,
 					};
-				}
-
-				if (chat.roomId == "!LMxFfIZibiOaNOcEXE:test.matrix.pocketnet.app") {
-					console.log("ev", ev);
-					console.log("chatStatuses", chatStatuses, isCallsEnabled);
 				}
 
 				if (isCallsEnabled.length) {
