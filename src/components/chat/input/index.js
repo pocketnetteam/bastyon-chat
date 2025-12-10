@@ -347,17 +347,14 @@ export default {
 		},
 
 		tipBySearch: function (value) {
-
-			if (value !== null){
-
+			if (value !== null) {
 				let m_chat = this.core.mtrx.client.getRoom(this.chat.roomId);
-				
-				if (m_chat){
-					return this.core.mtrx.kit.usersInfoForChatsStore([m_chat]).then((r) => {
+
+				if (m_chat) {
+					return this.core.mtrx.kit.usersInfoForChatsStore([m_chat]).then(r => {
 						this.tipvalue = value;
-					})
+					});
 				}
-				
 			}
 
 			this.tipvalue = value;
@@ -492,8 +489,8 @@ export default {
 				receiver: user.source.address,
 				send: !this.streamMode,
 				share: !this.streamMode,
-				donatemode : this.streamMode ? true : false
-			}).then((transaction) => {
+				donatemode: this.streamMode ? true : false
+			}).then(transaction => {
 				if (this.streamMode) {
 					this.donate = transaction;
 				}
@@ -545,12 +542,34 @@ export default {
 
 						//return Promise.reject('ny3')
 
-						id = this.core.mtrx.kit.tetatetid(info[0], this.core.user.userinfo);
+						const version = Date.now();
+
+						id = this.core.mtrx.kit.tetatetid(
+							info[0],
+							this.core.user.userinfo,
+							version
+						);
 
 						matrixId = this.core.user.matrixId(info[0].id);
 						myMatrixId = this.core.user.matrixId(this.core.user.userinfo.id);
 
 						var initialstate = [
+							{
+								type: "m.room.power_levels",
+								state_key: "",
+								content: {
+									users: {
+										[myMatrixId]: 100
+									},
+									users_default: 100,
+									events_default: 100,
+									state_default: 100,
+									ban: 100,
+									kick: 100,
+									redact: 100,
+									invite: 100
+								}
+							},
 							{
 								type: "m.set.encrypted",
 								state_key: "",
@@ -568,21 +587,11 @@ export default {
 							initial_state: initialstate
 						});
 					})
-					.then(_chat => {
-						chat = _chat;
+					.then(r => {
 						this.$store.state.globalpreloader = false;
 
-						let m_chat = this.core.mtrx.client.getRoom(_chat.room_id);
-						let event = m_chat.currentState.getStateEvents(
-							"m.room.power_levels"
-						);
-
-						return this.core.mtrx.client
-							.setPowerLevel(chat.room_id, matrixId, 100, event[0])
-							.catch(e => {});
-					})
-					.then(r => {
 						this.creating = false;
+						this.$router.push({ query: { id } });
 
 						if (this.connect && this.connect == id) {
 							this.greetings();

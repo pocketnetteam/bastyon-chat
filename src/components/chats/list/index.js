@@ -16,7 +16,7 @@ export default {
 			revealed: {},
 			lastEventDescription: "",
 			blocked: false,
-			globalsearch: "",
+			globalsearch: ""
 		};
 	},
 	components: {
@@ -25,19 +25,19 @@ export default {
 		/* SwipeOut,*
 		 SwipeList,*/
 		dummypreviews,
-		teamroom,
+		teamroom
 	},
 
 	props: {
 		user_data: {
 			type: String,
-			default: () => {},
+			default: () => {}
 		},
 		activeRoomId: {
 			type: String,
-			default: () => {},
+			default: () => {}
 		},
-		processid: "",
+		processid: ""
 	},
 
 	beforeMount: function () {
@@ -59,8 +59,8 @@ export default {
 			immediate: true,
 			handler: function () {
 				this.globalsearch = "";
-			},
-		},
+			}
+		}
 		//$route: 'getdata'
 	},
 
@@ -82,7 +82,7 @@ export default {
 		window: function () {
 			return window;
 		},
-		auth: (state) => state.auth,
+		auth: state => state.auth,
 
 		teamNotifications: function () {
 			var self = this;
@@ -104,9 +104,8 @@ export default {
 			"readedteammessages",
 			"deletedrooms",
 			"hideOptimization",
-			"wasunhidden",
+			"wasunhidden"
 		]),
-
 		showchatslist: function () {
 			return !this.hideOptimization; // || this.wasunhidden
 		},
@@ -128,24 +127,23 @@ export default {
 			var self = this;
 			var chats = [];
 
-			_.each(state.chats, (chat) => {
+			_.each(state.chats, chat => {
 				/* Remove streams that last time modified >= 3 days ago */
 				if (chat.stream) {
-					const
-						m_chat = this.core.mtrx.client.getRoom(chat.roomId),
+					const m_chat = this.core.mtrx.client.getRoom(chat.roomId),
 						current = Date.now(),
 						expire = (() => {
-							const
-								id = this.$store._vm.core.user.myMatrixId(),
-								last = new Date((() => {
+							const id = this.$store._vm.core.user.myMatrixId(),
+								last = new Date(() => {
 									if (m_chat.getLastActiveTimestamp() === -9007199254740991) {
 										if (m_chat.getMember(id)) {
-											return m_chat.getMember(id).events.member.event.origin_server_ts;
+											return m_chat.getMember(id).events.member.event
+												.origin_server_ts;
 										}
 									} else {
 										return m_chat.getLastActiveTimestamp();
 									}
-								}));
+								});
 
 							last.setDate(last.getDate() + 3);
 
@@ -155,9 +153,7 @@ export default {
 
 					if (outdated) {
 						this.core.mtrx.client.leave(chat.roomId).then(() => {
-							this.core.mtrx.client
-								.forget(chat.roomId, true)
-								.catch(() => {});
+							this.core.mtrx.client.forget(chat.roomId, true).catch(() => {});
 
 							commit("DELETE_ROOM", chat.roomId);
 						});
@@ -210,6 +206,7 @@ export default {
 				return o.lastModified;
 			}).reverse();
 
+			chats = chats.filter(chat => chat.selfMembership !== "leave");
 			/*_.each(chats, (chat) => {
 				var chatevents = state.events[chat.roomId] || {}
 
@@ -232,7 +229,7 @@ export default {
 
 		hmode() {
 			return this.pocketnet && this.minimized && !this.active;
-		},
+		}
 	}),
 	methods: {
 		getEventsAndDecrypt(chat, events) {
@@ -240,7 +237,7 @@ export default {
 				.prepareChat(chat)
 				.then(() => {
 					return Promise.all(
-						_.map(events, (_e) => {
+						_.map(events, _e => {
 							var e = _e.get();
 
 							if (e.decrypted) return Promise.resolve();
@@ -249,14 +246,14 @@ export default {
 
 							return chat.pcrypto
 								.decryptEvent(e)
-								.then((d) => {
+								.then(d => {
 									e.decrypted = d;
 
 									return Promise.resolve();
 								})
-								.catch((e) => {
+								.catch(e => {
 									e.decrypted = {
-										msgtype: "m.bad.encrypted",
+										msgtype: "m.bad.encrypted"
 									};
 
 									return Promise.resolve();
@@ -289,7 +286,7 @@ export default {
 			this.$set(
 				this.mockSwipeList,
 				this.page,
-				this.mockSwipeList[this.page].filter((i) => i !== item)
+				this.mockSwipeList[this.page].filter(i => i !== item)
 			);
 		},
 
@@ -297,7 +294,7 @@ export default {
 			this.lastEventDescription = {
 				name,
 				index,
-				id: item.id,
+				id: item.id
 			};
 		},
 
@@ -318,7 +315,7 @@ export default {
 					var _share = this.share;
 					this.$router.push(_share.route || "chat?id=" + chat.roomId);
 				} else {
-					this.$router.push("chat?id=" + chat.roomId).catch((e) => {});
+					this.$router.push("chat?id=" + chat.roomId).catch(e => {});
 				}
 			}
 		},
@@ -338,7 +335,7 @@ export default {
 					);
 				}, 500);
 
-				this.$router.push("/teamroom").catch((e) => {});
+				this.$router.push("/teamroom").catch(e => {});
 			}
 		},
 		// keyboard
@@ -354,19 +351,19 @@ export default {
 			this.$dialog
 				.confirm("Do you really want to leave room?", {
 					okText: this.$i18n.t("yes"),
-					cancelText: this.$i18n.t("cancel"),
+					cancelText: this.$i18n.t("cancel")
 				})
 
-				.then((dialog) => {
-					this.core.mtrx.client.leave(room).then((r) => {
+				.then(dialog => {
+					this.core.mtrx.client.leave(room).then(r => {
 						this.core.mtrx.client
 							.forget(room, true)
-							.then((r) => {
+							.then(r => {
 								return r;
 							})
-							.then((r) => {
+							.then(r => {
 								this.$store.commit("DELETE_ROOM", room);
-								this.$router.push({ path: "/chats" }).catch((e) => {});
+								this.$router.push({ path: "/chats" }).catch(e => {});
 							});
 					});
 				});
@@ -394,7 +391,7 @@ export default {
 					this.$store.commit("icon", {
 						icon: "warning",
 						message:
-							"At the moment, you can add no more than 10 users to the chat",
+							"At the moment, you can add no more than 10 users to the chat"
 					});
 
 					return;
@@ -418,7 +415,7 @@ export default {
 
 		searchall: function (text) {
 			this.globalsearch = (text || "").toLowerCase();
-		},
+		}
 	},
 	mounted() {
 		// ideally should be in some global handler/store
@@ -429,5 +426,5 @@ export default {
 			this.$store.commit("SET_LAST_ROOM", null);
 		} else {
 		}
-	},
+	}
 };
