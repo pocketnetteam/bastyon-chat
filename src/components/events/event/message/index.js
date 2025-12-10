@@ -424,6 +424,12 @@ export default {
 			return this.chat.getMember(this.chat.myUserId);
 		},
 
+		sender: function () {
+			return this.chat.getMember(
+				this.event?.sender?.userId ||
+					this.event?.event?.sender ||
+					this.event.event?.user_id
+			);
 		isBanned: function () {
 			const id = this.event.event.user_id ?? this.event.event.sender,
 				state = this.chat.currentState?.members[id]?.membership === "ban";
