@@ -64,7 +64,7 @@ class MTRXKIT {
         })
 
 		_.each(users, (u) => {
-			id = id * parseInt(u.id, 16)
+			id = id + parseInt(u.id, 16)
 		})
 
 		if (cachestorage[id]) return cachestorage[id];
