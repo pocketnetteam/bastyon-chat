@@ -31,16 +31,16 @@ $hasInputChatEmbedded: '[data-chat-input-embedded="true"]'
   opacity: 0
 
 #events
-  --events-padding-bottom: 51px
+  --events-padding-bottom: 77px
   left : 0
   right : 0
   top : 0
   bottom : 0
-  padding-bottom : 50px
+  padding-bottom : 55px
   position: absolute
   +transition(0.3s)
   &#{$hasInputChatEmbedded}
-    --events-padding-bottom: 100px
+    --events-padding-bottom: 112px
   &.mobile
     padding-bottom : calc(var(--app-margin-bottom, 0) + var(--events-padding-bottom))
     transform: translate3d(0, calc((var(--keyboardheight, 0) - 1px) * -1), 0)

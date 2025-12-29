@@ -37,9 +37,9 @@
     display: flex
     align-items: center
     justify-content: center
-    width: 35px
-    height: 35px
-    line-height: 35px !important
+    width: 44px
+    height: 44px
+    line-height: 44px !important
     background: transparent
     border-radius: 50%
     outline: none
@@ -60,7 +60,7 @@
         top: -30px
         content: ""
         border-radius: 50%
-        border: 35px solid srgba(--color-bg-ac, 0.5)
+        border: 44px solid srgba(--color-bg-ac, 0.5)
         animation: pulse 1.2s infinite
 
     &.disabled
@@ -82,3 +82,15 @@
     opacity: 0.8
   100%
     opacity: 1
+
+
+@media only screen and (max-width: 768px)
+  .recordButton
+    &_main
+      width: 55px
+      height: 55px
+      line-height: 55px !important
+      &.active
+
+        &:before
+          border: 55px solid srgba(--color-bg-ac, 0.5)

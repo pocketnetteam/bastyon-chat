@@ -16,7 +16,7 @@
 
 
   .left
-    width: 35px
+    width: 44px
     display: flex
     justify-content: flex-end
     align-items: center
@@ -29,8 +29,8 @@
       display: flex
       align-items: center
       justify-content: center
-      height: 35px
-      width: 35px
+      height: 44px
+      width: 44px
       -webkit-tap-highlight-color: transparent
 
       &.donate
@@ -47,7 +47,7 @@
         overflow: hidden
 
   .extended
-    width: 70px
+    width: 88px
 
   .leftdummy
     width: $r
@@ -149,11 +149,30 @@
   display: flex
   justify-content: center
   align-items: center
-  width: 35px
-  height: 35px
+  width: 44px
+  height: 44px
   color: srgb(--neutral-grad-3)
 
   i
     padding-top: 1px
 
 
+@media only screen and (max-width: 768px)
+  #chatInput
+ 
+  .inputWrapper
+   
+    .left
+      width: 55px
+
+      .iconbutton
+        height: 55px
+        width: 55px
+
+
+    .extended
+      width: 110px
+
+  .disabled
+    width: 55px
+    height: 55px

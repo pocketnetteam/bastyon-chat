@@ -553,18 +553,18 @@ export default {
 			align-items: center
 
 		.leftdummy
-			width: 20px
+			width: 44px
 
 		.rightdummy
-			width: 35px
+			width: 44px
 
 		.idummy
 			width: 100%
-			height: 35px
-			line-height: 35px
+			height: 44px
+			line-height: 44px
 
 			i
-				line-height: 35px !important
+				line-height: 44px !important
 
 	.previews
 		width: 100%
@@ -603,6 +603,24 @@ export default {
 
 .fade-enter, .fade-leave-to
 	opacity: 0
+
+
+@media only screen and (max-width: 768px)
+	.input_component
+		.iconbutton
+			.leftdummy
+				width: 55px
+
+			.rightdummy
+				width: 55px
+
+			.idummy
+				height: 55px
+				line-height: 55px
+
+				i
+					line-height: 55px !important
+
 </style>
 
 <style>
