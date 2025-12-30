@@ -50,8 +50,6 @@ export default {
 		join: function () {
 			if (this.streamMode && !this.videoMeta?.isLive) return;
 
-			var self = this;
-
 			this.$store.commit("SET_CHAT_TO_FORCE", this.m_chat.roomId);
 
 			this.$store.state.globalpreloader = true;
@@ -62,16 +60,16 @@ export default {
 					//this.$store.commit('SET_CHAT_TO_STORE', this.m_chat.summary)
 					this.$emit("joined");
 				})
-				.catch(function (error) {
+				.catch(e => {
 
 					this.$store.commit("icon", {
 						icon: "error",
-						message: error
+						message: e
 					})
 
-					self.brokenRoom(true);
+					this.brokenRoom(true);
 
-					return (self.creatorLeft = true);
+					return (this.creatorLeft = true);
 
 				}).finally(() => {
 				this.$store.state.globalpreloader = false;
