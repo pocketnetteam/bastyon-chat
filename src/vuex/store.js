@@ -389,6 +389,8 @@ var store = new Vuex.Store({
 
 			var chatsMap = {};
 
+			console.log("DEBUG 1501:", 'SET_CHATS_TO_STORE')
+
 			_.each(chats, function (chat) {
 				var aid = chat.info?.title?.replace("#", "");
 
@@ -403,12 +405,17 @@ var store = new Vuex.Store({
 				chatsMap[chat.roomId] = chat;
 				chatsMap[aid] = chat;
 
-				Vue.delete(state.force, chat.roomId);
+				if (state.force[chat.roomId]){
+					Vue.delete(state.force, chat.roomId);
+				}
+				
 			});
 
 			_.each(state.chatsMap, function (c, id) {
 				if (!chatsMap[id]) Vue.delete(state.chatsMap, id);
 			});
+
+
 		},
 		SET_READ_TO_STORE(state, readreciepts) {
 			_.each(readreciepts, (r, chatid) => {
@@ -426,6 +433,9 @@ var store = new Vuex.Store({
 
 		SET_EVENTS_TO_STORE(state, events) {
 			//state.events = events
+
+			console.log("DEBUG 1501:", 'SET_EVENTS_TO_STORE')
+
 
 			_.each(events, function (ev, k) {
 				var timeline = [];
@@ -753,6 +763,9 @@ var store = new Vuex.Store({
 		FETCH_CHATS({ commit }) {
 			var m_chats = f.deep(store._vm, "core.mtrx.store.rooms") || {};
 
+			console.log("DEBUG 1501:", 'FETCH_CHATS')
+			console.log("DEBUG 1501: m_chats", _.toArray(m_chats))
+
 			var id = store._vm.core.user.myMatrixId();
 
 			var chats = _.map(m_chats, function (r) {
@@ -805,6 +818,8 @@ var store = new Vuex.Store({
 
 		FETCH_EVENTS({ commit }) {
 			var m_chats = f.deep(store._vm, "core.mtrx.store.rooms") || {};
+
+			console.log("DEBUG 1501:", 'FETCH_EVENTS')
 
 			var events = {};
 			var readreciepts = {};

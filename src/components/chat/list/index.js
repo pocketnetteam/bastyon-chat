@@ -140,7 +140,8 @@ export default {
 		this.activated = false;
 
 		if (this.timeline) {
-			this.timeline.unpaginate(this.timeline._eventCount, true);
+			this.timeline.tl.unpaginate(this.timeline.tl._eventCount, true);
+			this.timeline = null
 		}
 	},
 
@@ -167,7 +168,7 @@ export default {
 			if (this.esize.clientHeight) return this.esize.clientHeight;
 		},
 		getEvents: function () {
-			var events = this.timeline.getEvents();
+			var events = this.timeline.tl.getEvents();
 
 			var lastCallAccess = events
 				.filter((e) => {
@@ -303,7 +304,7 @@ export default {
 		},
 
 		relations: function (events) {
-			var ts = this.timeline.timelineSet;
+			var ts = this.timeline.tl.timelineSet;
 
 			_.each(events, (e) => {
 				try {
@@ -357,6 +358,10 @@ export default {
 		init: async function () {
 			this.loading = true;
 			this.firstPaginate = true;
+
+			console.log("DEBUG 1501: init")
+
+			var inittime = performance.now()
 
 			//this.chat.getTimelineForEvent('$FXUvcjIqcvDu0meLTnz-8plloZoNHLIYEb6WGQMWO3s')
 
@@ -420,13 +425,29 @@ export default {
 				}
 			}
 
-			this.timeline = new this.core.mtrx.sdk.TimelineWindow(
+			console.log("DEBUG 1501: init before timeline", performance.now() - inittime)
+
+
+			this.timeline = {
+				inited : true,
+				
+			}
+
+			this.timeline.tl = new this.core.mtrx.sdk.TimelineWindow(
 				this.core.mtrx.client,
 				ts,
-			);
+			)
+
+
+
+			console.log("DEBUG 1501: init after timeline", performance.now() - inittime)
+			console.log("DEBUG 1501: timeline", this.timeline)
+
+
+			var inittime = performance.now()
 
 			setTimeout(() => {
-				this.timeline
+				this.timeline.tl
 					.load(/*null, (this.wh() || 600)*/)
 					.then((r) => {
 						return this.getEventsAndEncrypt();
@@ -489,14 +510,14 @@ export default {
 			//$(this.$el).find('.eventsflex')[0]
 
 			if (!this.loading && this.timeline && !this["p_" + direction]) {
-				if (this.timeline.canPaginate(direction) || rnd) {
+				if (this.timeline.tl.canPaginate(direction) || rnd) {
 					this["p_" + direction] = true;
 
 					let count = /*this.firstPaginate ? 24 : */ 20;
 
 					var error = null;
 
-					return this.timeline
+					return this.timeline.tl
 						.paginate(direction, count)
 						.then((e) => {
 							return Promise.resolve();
@@ -564,16 +585,18 @@ export default {
 
 		readFirst: function () {
 			if (this.streamMode) return;
+			if(!this.timeline) return
 
-			var events = this.timeline.getEvents();
+			var events = this.timeline.tl.getEvents();
 
 			this.readEvent(events[0]);
 		},
 
 		readLast: function () {
 			if (this.streamMode) return;
+			if(!this.timeline) return
 
-			var events = this.timeline.getEvents();
+			var events = this.timeline.tl.getEvents();
 
 			this.readEvent(events[events.length - 1]);
 		},

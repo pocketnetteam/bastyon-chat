@@ -303,7 +303,7 @@ class MTRX {
 				pollTimeout: 60000,
 				resolveInvitesToProfiles: true,
 				initialSyncLimit: 4,
-				disablePresence: true
+				disablePresence: true,
 				//lazyLoadMembers : true
 			});
 		} catch (e) {
@@ -526,6 +526,9 @@ class MTRX {
 		let userId = this.core.mtrx.client.credentials.userId;
 
 		this.client.on("RoomMember.membership", (event, member) => {
+
+			console.log("DEBUG 1501:", 'timeline membership set')
+
 			if (!this.chatsready) return;
 
 			var m_chat = this.core.mtrx.client.getRoom(event.event.room_id);
@@ -543,6 +546,9 @@ class MTRX {
 		});
 
 		this.client.on("Room.timeline", (message, member) => {
+
+			console.log("DEBUG 1501:", 'timeline message set')
+
 			if (!this.chatsready) return;
 
 			if (!message.event.content) return;
@@ -579,6 +585,8 @@ class MTRX {
 			if (state === "PREPARED") {
 				console.log("PREPARED");
 			}
+
+			console.log("DEBUG 1501:", 'sync')
 
 			this.setready();
 
