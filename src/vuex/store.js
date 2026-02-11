@@ -863,6 +863,9 @@ var store = new Vuex.Store({
 					if (e.event.type === "m.room.redaction") {
 						return false;
 					}
+					if (e.event.type === "m.reaction") {
+						return false;
+					}
 					if (e.event.type === "m.room.callsEnabled") {
 						return false;
 					}
