@@ -481,6 +481,8 @@ class Core {
 	gopage(route) {
 		this.mtrx.wait().then(() => {
 			this.vm.$router.push(route).catch((e) => {});
+			this.vm.$store.commit("active", true);
+			this.vm.$store.commit("setiteraction", true);
 		});
 	}
 
