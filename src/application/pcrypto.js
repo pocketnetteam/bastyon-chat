@@ -196,10 +196,7 @@ var PcryptoRoom = async function (pcrypto, chat, { ls, lse }) {
 
 						membership: membership,
 
-						id:
-							membership == "invite"
-								? f.getmatrixid(event.state_key)
-								: f.getmatrixid(event.sender),
+						id: f.getmatrixid(event.state_key || event.sender),
 					};
 				}
 

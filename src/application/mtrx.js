@@ -527,8 +527,6 @@ class MTRX {
 
 		this.client.on("RoomMember.membership", (event, member) => {
 
-			console.log("DEBUG 1501:", 'timeline membership set')
-
 			if (!this.chatsready) return;
 
 			var m_chat = this.core.mtrx.client.getRoom(event.event.room_id);
@@ -546,8 +544,6 @@ class MTRX {
 		});
 
 		this.client.on("Room.timeline", (message, member) => {
-
-			console.log("DEBUG 1501:", 'timeline message set')
 
 			if (!this.chatsready) return;
 
@@ -585,8 +581,6 @@ class MTRX {
 			if (state === "PREPARED") {
 				console.log("PREPARED");
 			}
-
-			console.log("DEBUG 1501:", 'sync')
 
 			this.setready();
 

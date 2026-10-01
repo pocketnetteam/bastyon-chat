@@ -357,8 +357,6 @@ export default {
 		relations() {
 			if (this.timeline && this.timeline.tl) {
 
-				console.log("DEBUG 1501: HERE")
-
 				var ts = this.timeline.tl.timelineSet;
 				var e = this.event;
 
