@@ -69,8 +69,10 @@ export default {
 		flex-wrap: wrap
 		align-items: center
 		gap: 0
+		padding-left: 37.4px
 
 	&.my
 		.reactionsList
+			padding-left: 0px
 			justify-content: flex-end
 </style>
