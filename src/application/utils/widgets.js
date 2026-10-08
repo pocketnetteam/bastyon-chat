@@ -137,7 +137,16 @@ var PNWIDGETS = function () {
 			action = "transaction";
 		}
 
-		
+		var collectionid = parsed_url.searchParams.get("c");
+
+		if (collectionid && /(^|\/)collection\/?$/i.test(parsed_url.host + parsed_url.pathname)) {
+			///https://bastyon.com/collection?c=txid, bastyon://collection?c=txid
+			///preview only: header of the collection without publications
+
+			id = collectionid;
+			action = "collectionpreview";
+		}
+
 
 		return {
 			action: action,
