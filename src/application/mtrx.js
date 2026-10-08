@@ -655,7 +655,7 @@ class MTRX {
 		if (!window.cordova) return;
 
 		var savedToken;
-		if (localStorage) savedToken = localStorage.getItem("fcmtoken5");
+		if (localStorage) savedToken = localStorage.getItem("fcmtoken7");
 		if (savedToken && this.client.setPusher) {
 			var appName = "pocketnet";
 			var pusherData = {
@@ -681,7 +681,8 @@ class MTRX {
 
 			this.client.setPusher(pusherData).then(
 				() => {
-					localStorage.removeItem("fcmtoken5");
+					localStorage.removeItem("fcmtoken7");
+					localStorage.removeItem("fcmtoken7time");
 				},
 				err => {
 					console.log(err);

@@ -546,12 +546,19 @@ export default {
 		setPusher(fcmtoken) {
 			// Try to get a saved token
 			var savedToken;
-			if (localStorage) savedToken = localStorage.getItem("fcmtoken5");
+			var savedTime = 0;
+			if (localStorage) {
+				savedToken = localStorage.getItem("fcmtoken7");
+				savedTime = Number(localStorage.getItem("fcmtoken7time")) || 0;
+			}
+			// The server can drop the pusher while the token stays the same, so refresh it every 3 days
+			var expired = Date.now() - savedTime > 3 * 24 * 60 * 60 * 1000;
 			// If we need to set a new pusher, or delete one
-			if (savedToken != fcmtoken) {
+			if (savedToken != fcmtoken || expired) {
 				// Wait for Matrix client
 				this.core.mtrx.wait().then(r => {
-					this.core.mtrx.deletePusher();
+					// Deleting the same pushkey would race with the refresh below
+					if (savedToken != fcmtoken) this.core.mtrx.deletePusher();
 
 					var data = {
 						url: this.core.mtrx.baseUrl + "/_matrix/push/v1/notify"
@@ -572,7 +579,8 @@ export default {
 
 					this.core.mtrx.client.setPusher(pusherData).then(
 						() => {
-							localStorage.setItem("fcmtoken5", fcmtoken);
+							localStorage.setItem("fcmtoken7", fcmtoken);
+							localStorage.setItem("fcmtoken7time", Date.now());
 						},
 						err => {
 							console.log(err);
