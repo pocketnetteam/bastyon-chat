@@ -232,6 +232,10 @@ export default {
 
 			var content = bc.pbody || bc.body || "";
 
+			var transfer = f.parseTransfer(content);
+
+			if (transfer) return f.transferUrl(transfer);
+
 			if (
 				window.findAndReplaceLinkClear &&
 				(typeof content === "string" || content instanceof String)

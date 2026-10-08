@@ -93,13 +93,23 @@ class Notifier {
 			ctype = "encrypted";
 
 		var c = () => {
+			var body = event.event.content.body;
+			var transfer = f.parseTransfer(body);
+
+			if (transfer) {
+				body =
+					this.core.vm.$i18n.t("caption.sent") +
+					(transfer.amount ? " " + transfer.amount : "") +
+					" PKOIN";
+			}
+
 			var msg = {
 				title: user.name,
 				event: event,
 				message:
 					event.event.content.type == "m.encrypted"
 						? "***"
-						: event.event.content.body, // event.content.body,
+						: body, // event.content.body,
 				roomId: event.event.room_id,
 				icon: user.image,
 				chat: chat,

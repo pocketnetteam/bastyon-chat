@@ -59,8 +59,14 @@
 			<span class="txt">{{ core.vm.$i18n.t("caption.requestCallAccess")}}</span>
 		</div>
 
+		<div v-if="transfer" class="previewMessage">
+			<span v-if="senderName && senderName != 'You' && !tetatetchat" class="txt sname"
+				>{{ senderName == 'You' ? core.vm.$i18n.t("caption.you") : senderName }}:&nbsp;</span
+			><span class="txt"><i class="fas fa-wallet"></i> {{ transferText }}</span>
+		</div>
+
 		<div
-			v-if="content.msgtype === 'm.text' && !urlpreview"
+			v-if="content.msgtype === 'm.text' && !urlpreview && !transfer"
 			class="previewMessage"
 		>
 			<span v-if="senderName && senderName != 'You' && !tetatetchat" class="txt sname"
@@ -74,7 +80,7 @@
 		</div>
 
 		<div
-			v-if="content.msgtype === 'm.encrypted' && !urlpreview"
+			v-if="content.msgtype === 'm.encrypted' && !urlpreview && !transfer"
 			class="previewMessage"
 		>
 			<span v-if="senderName && senderName != 'You' && !tetatetchat" class="txt sname"
@@ -203,6 +209,22 @@ export default {
 		},
 		content: function () {
 			return this.event.event.content;
+		},
+		transfer: function () {
+			if (this.content.msgtype === "m.text")
+				return f.parseTransfer(this.content.body);
+
+			if (this.content.msgtype === "m.encrypted")
+				return f.parseTransfer(this.decryptEvent?.body);
+
+			return null;
+		},
+		transferText: function () {
+			var t = this.core.vm.$i18n.t("caption.sent");
+
+			if (this.transfer.amount) t += " " + this.transfer.amount;
+
+			return t + " PKOIN";
 		},
 		name: function () {
 			var n =
