@@ -54,6 +54,23 @@
   position: relative
   height: 25px
   contain: strict
+
+  &.withReaction
+    display: flex
+    align-items: center
+
+    > :last-child
+      flex: 1
+      min-width: 0
+
+  .reactionChip
+    flex: none
+    margin-right: 0.5 * $r
+    padding: 0 6px
+    border-radius: 10px
+    background: srgba(--neutral-grad-1, 0.6)
+    font-size: 0.8em
+    line-height: 20px
   /*&.maxwidth
     overflow: hidden
     max-width: 80%*/

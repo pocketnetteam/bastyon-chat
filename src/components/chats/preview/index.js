@@ -108,6 +108,15 @@ export default {
 			}
 		},
 
+		lastReaction: function () {
+			// Recompute when any reaction is added or redacted
+			this.$store.state.reactionsVersion;
+
+			if (this.messages || !this.matrixevent) return null;
+
+			return this.core.mtrx.getLastReaction(this.matrixevent);
+		},
+
 		event: function () {
 			if (this.chat && this.chat.roomId) {
 				if (this.messages) {

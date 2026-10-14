@@ -1353,20 +1353,38 @@ class MTRX {
 		});
 	}
 
-	getReactionsForMessage(messageEvent) {
-		if (!messageEvent) return [];
+	getReactionRelations(messageEvent) {
+		if (!messageEvent?.event?.content) return null;
 
-		const roomId = messageEvent.getRoomId?.() || messageEvent.event?.room_id;
+		const roomId = messageEvent.getRoomId?.() || messageEvent.event.room_id;
 		const room = roomId && this.client.getRoom(roomId);
 
-		if (!room || !room.relations) return [];
+		if (!room || !room.relations) return null;
 
 		// Reactions target the original event, also when the message was edited
-		const relations = room.relations.getChildEventsForEvent(
+		return room.relations.getChildEventsForEvent(
 			this.clearEventId(messageEvent),
 			"m.annotation",
 			"m.reaction"
 		);
+	}
+
+	/** Emoji of the newest reaction on the message, for the chat list preview */
+	getLastReaction(messageEvent) {
+		const events =
+			this.getReactionRelations(messageEvent)?.getRelations?.() || [];
+
+		const last = events.reduce((newest, event) => {
+			if (event.isRedacted()) return newest;
+
+			return !newest || event.getTs() > newest.getTs() ? event : newest;
+		}, null);
+
+		return last?.getRelation?.()?.key || null;
+	}
+
+	getReactionsForMessage(messageEvent) {
+		const relations = this.getReactionRelations(messageEvent);
 
 		const sorted = relations?.getSortedAnnotationsByKey?.() || [];
 		const result = [];

@@ -36,18 +36,11 @@ export default {
 <style scoped lang="sass">
 .reactionDisplay
 	display: flex
-	flex-direction: column
-	margin-top: 6px
-	margin-bottom: 4px
 	font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", "Android Emoji", "EmojiSymbols", "EmojiOne Mozilla", "Twemoji Mozilla", "Segoe UI Symbol", "Noto Color Emoji Compat", emoji, sans-serif
 
 	.reactionsList
 		display: flex
-		flex-wrap: wrap
+		flex-wrap: nowrap
 		align-items: center
-		gap: 0
-
-	&.my
-		.reactionsList
-			justify-content: flex-end
+		gap: 2px
 </style>

@@ -29,7 +29,14 @@
 						</div>
 					</div>
 
-					<div class="eventsLine maxwidth" v-if="!dummy && ready">
+					<div
+						class="eventsLine maxwidth"
+						:class="{ withReaction: lastReaction }"
+						v-if="!dummy && ready"
+					>
+						<span class="reactionChip" v-if="lastReaction">{{
+							lastReaction
+						}}</span>
 						<eventsEvent
 							:event="matrixevent"
 							:chat="m_chat"

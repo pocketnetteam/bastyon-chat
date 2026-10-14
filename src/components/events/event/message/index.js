@@ -476,6 +476,29 @@ export default {
 			return reactions;
 		},
 
+		// The bubble the reactions badge hangs off; one per message, the lowest
+		// bubble wins when a text comes with a link card
+		reactionsHost: function () {
+			if (!this.reactions.length) return null;
+
+			const msgtype = this.content.msgtype;
+
+			if (!this.streamMode && this.urlpreview) return "link";
+
+			if (
+				this.streamMode ||
+				((msgtype === "m.text" || msgtype === "m.encrypted") &&
+					this.textWithoutLinks)
+			)
+				return "text";
+
+			if (msgtype === "m.image") return "image";
+			if (msgtype === "m.audio") return "audio";
+			if (this.file) return "file";
+
+			return null;
+		},
+
 		quickReactionEmojis: function () {
 			return ["👍", "❤️", "🔥", "👎", "😊", "👏"];
 		}

@@ -9,7 +9,8 @@
 				urlpreview: urlpreview,
 				allscreen: urlpreview || content.msgtype === 'm.image' || file,
 				aligncenter: content.msgtype === 'm.audio',
-				isHovering: isHovering
+				isHovering: isHovering,
+				withReactions: !!reactionsHost
 			}"
 			:my="!streamMode && my"
 			v-if="!preview && content.msgtype !== 'm.notice'"
@@ -107,6 +108,13 @@
 				<div class="errorImage" v-if="!imageUrl && hasError">
 					<div class="abswrapper">{{ stringifyiedError }}</div>
 				</div>
+
+				<ReactionDisplay
+					v-if="reactionsHost === 'image'"
+					class="messageReactions"
+					:reactions="reactions"
+					:my="my"
+				/>
 			</div>
 			<div class="messageAudio" v-if="content.msgtype === 'm.audio'">
 				<div
@@ -126,6 +134,13 @@
 					:audioBuffer="audioUrl"
 					:decryptedInfo="decryptedInfo"
 					:id="event.localTimestamp || Date.now()"
+				/>
+
+				<ReactionDisplay
+					v-if="reactionsHost === 'audio'"
+					class="messageReactions"
+					:reactions="reactions"
+					:my="my"
 				/>
 			</div>
 
@@ -240,6 +255,13 @@
 						</div>
 					</div>
 				</div>
+
+				<ReactionDisplay
+					v-if="reactionsHost === 'text'"
+					class="messageReactions"
+					:reactions="reactions"
+					:my="my"
+				/>
 			</div>
 
 			<div class="filePreview" v-if="file">
@@ -254,6 +276,13 @@
 				<div class="encryptedDataIcon" v-if="encryptedData">
 					<i class="fas fa-lock"></i>
 				</div>
+
+				<ReactionDisplay
+					v-if="reactionsHost === 'file'"
+					class="messageReactions"
+					:reactions="reactions"
+					:my="my"
+				/>
 			</div>
 
 			<div class="linkPreview" v-if="!streamMode && urlpreview">
@@ -270,6 +299,13 @@
 				<div v-else>
 					<linepreloader />
 				</div>
+
+				<ReactionDisplay
+					v-if="reactionsHost === 'link'"
+					class="messageReactions"
+					:reactions="reactions"
+					:my="my"
+				/>
 			</div>
 
 			<div
@@ -310,14 +346,6 @@
 				<span>{{ $t("caption.messageRead") }}</span>
 			</div>
 		</div>
-
-		<ReactionDisplay
-			v-if="!preview && !fromreference"
-			class="messageReactions"
-			:class="{ my: my }"
-			:reactions="reactions"
-			:my="my"
-		/>
 	</div>
 </template>
 

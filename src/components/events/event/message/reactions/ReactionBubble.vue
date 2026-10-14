@@ -1,7 +1,7 @@
 <template>
 	<div class="reactionBubble" :class="{ active: isOwnReaction }">
 		<span class="emoji">{{ emoji }}</span>
-		<span class="count">{{ count }}</span>
+		<span class="count" v-if="count > 1">{{ count }}</span>
 	</div>
 </template>
 
@@ -29,41 +29,28 @@ export default {
 .reactionBubble
 	display: inline-flex
 	align-items: center
-	gap: 5px
-	padding: 3px 10px
-	border-radius: 16px
-	background: rgba(var(--neutral-grad-1), 0.15)
-	border: 1.5px solid rgba(var(--neutral-grad-2), 0.3)
+	gap: 3px
+	height: 22px
+	padding: 0 6px
+	border-radius: 11px
+	background: rgb(var(--background-main))
+	border: 1px solid rgba(var(--neutral-grad-2), 0.5)
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12)
+	box-sizing: border-box
 	user-select: none
-	position: relative
-	margin: 3px 4px 3px 0
-	min-height: 28px
+	white-space: nowrap
 
 	&.active
-		background: rgba(var(--color-bg-ac), 0.2)
-		border-color: rgba(var(--color-bg-ac), 0.5)
-		box-shadow: 0 0 0 2px rgba(var(--color-bg-ac), 0.1)
+		border-color: rgba(var(--color-bg-ac), 0.8)
 
 	.emoji
-		font-size: 15px
+		font-size: 13px
 		line-height: 1
-		display: inline-block
 
 	.count
-		font-size: 12px
+		font-size: 11px
 		font-weight: 600
 		color: rgb(var(--text-color))
 		line-height: 1
-		opacity: 0.9
-
-@media (max-width: 768px)
-	.reactionBubble
-		padding: 5px 12px
-		min-height: 34px
-
-		.emoji
-			font-size: 17px
-
-		.count
-			font-size: 13px
+		opacity: 0.8
 </style>

@@ -315,7 +315,6 @@
 	.filePreview
 		width: 90%
 		border: 1px solid srgb(--neutral-grad-1)
-		overflow: hidden
 		border-radius: 10px
 		position: relative
 		margin-top: $r
@@ -323,6 +322,8 @@
 
 		.table
 			height: 100%
+			border-radius: 9px
+			overflow: hidden
 
 	.linkPreview
 		width: 100%
@@ -547,12 +548,26 @@
 			overflow: hidden
 			text-overflow: ellipsis
 
+	// Reactions hang off the bottom outer corner of the bubble (the side the
+	// bubble is aligned to); the row reserves room for the overhang
+	&.withReactions
+		padding-bottom: 14px
+
+	.maxcontent,
+	.messageAudio,
+	.linkPreview
+		position: relative
+
 	.messageReactions
-		margin-left: calc(33px + 0.5 * $r)
+		position: absolute
+		bottom: 0
+		left: calc(0.5 * $r + 8px)
+		transform: translateY(65%)
+		z-index: 2
 
 		&.my
-			margin-left: auto
-			margin-right: calc(33px + $r)
+			left: auto
+			right: 8px
 
 	.badenctyptedText
 		margin-left: $r
