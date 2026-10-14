@@ -555,7 +555,7 @@ class MTRX {
 
 			if (message.event.type === "m.reaction") {
 				this.core.store.dispatch("FETCH_EVENTS");
-				this.core.store.commit("UPDATE_TIMESTAMP", Date.now());
+				this.core.store.commit("REACTIONS_UPDATED");
 				return;
 			}
 
@@ -571,6 +571,14 @@ class MTRX {
 				if (m_chat && this.core.pcrypto.rooms[message.event.room_id])
 					this.core.notifier.event(message, m_chat);
 			}
+		});
+
+		// A removed reaction arrives as a redaction; the SDK drops it from
+		// room.relations before emitting Room.redaction
+		this.client.on("Room.redaction", () => {
+			if (!this.chatsready) return;
+
+			this.core.store.commit("REACTIONS_UPDATED");
 		});
 
 		this.client.on("RoomMember.typing", (event, member) => {
@@ -1346,124 +1354,50 @@ class MTRX {
 	}
 
 	getReactionsForMessage(messageEvent) {
-		if (!messageEvent) {
-			return [];
-		}
+		if (!messageEvent) return [];
 
-		const messageId = messageEvent.getId();
-		const roomId = messageEvent.event?.room_id || messageEvent.getRoomId?.();
+		const roomId = messageEvent.getRoomId?.() || messageEvent.event?.room_id;
+		const room = roomId && this.client.getRoom(roomId);
 
-		if (!roomId || !messageId) {
-			return [];
-		}
+		if (!room || !room.relations) return [];
 
-		const room = this.client.getRoom(roomId);
-		if (!room) {
-			return [];
-		}
+		// Reactions target the original event, also when the message was edited
+		const relations = room.relations.getChildEventsForEvent(
+			this.clearEventId(messageEvent),
+			"m.annotation",
+			"m.reaction"
+		);
 
-		try {
-			if (
-				messageEvent.getRelation &&
-				typeof messageEvent.getRelation === "function"
-			) {
-				const relations = messageEvent.getRelation("m.annotation");
-				if (relations) {
-					const reactionEvents = relations.getEvents?.();
-					if (reactionEvents && reactionEvents.length) {
-						return this._processReactionEvents(reactionEvents);
-					}
-				}
-			}
-		} catch (e) {}
+		const sorted = relations?.getSortedAnnotationsByKey?.() || [];
+		const result = [];
 
-		try {
-			const timelineSet =
-				room.getUnfilteredTimelineSet?.() ||
-				room.getLiveTimeline?.().getTimelineSet?.();
-			if (timelineSet && timelineSet.relations) {
-				const relations = timelineSet.relations.getChildEventsForEvent?.(
-					messageId,
-					"m.annotation",
-					"m.reaction"
-				);
-				if (relations) {
-					const reactionEvents = relations.getRelations?.() || [];
-					if (reactionEvents.length) {
-						return this._processReactionEvents(reactionEvents);
-					}
-				}
-			}
-		} catch (e) {}
+		sorted.forEach(([emoji, events]) => {
+			const reaction = {
+				emoji,
+				count: 0,
+				users: [],
+				myReaction: null
+			};
 
-		const reactionEvents = [];
-
-		try {
-			const timelines =
-				room.getTimelines?.() || [room.getLiveTimeline?.()].filter(Boolean);
-
-			for (const timeline of timelines) {
-				const events = timeline.getEvents?.() || [];
-				for (const event of events) {
-					if (
-						event.getType?.() === "m.reaction" &&
-						event.event?.content?.["m.relates_to"]?.event_id === messageId &&
-						!event.isRedacted?.()
-					) {
-						reactionEvents.push(event);
-					}
-				}
-			}
-		} catch (e) {
-			console.warn("Failed to get reactions from timelines:", e);
-		}
-
-		return this._processReactionEvents(reactionEvents);
-	}
-
-	_processReactionEvents(reactionEvents) {
-		if (!reactionEvents || !Array.isArray(reactionEvents)) {
-			return [];
-		}
-
-		const grouped = {};
-
-		reactionEvents.forEach(event => {
-			try {
+			events.forEach(event => {
 				if (event.isRedacted?.()) return;
 
-				const emoji = event.event?.content?.["m.relates_to"]?.key;
-
-				if (!emoji) return;
-
-				if (!grouped[emoji]) {
-					grouped[emoji] = {
-						emoji: emoji,
-						count: 0,
-						users: [],
-						myReaction: null
-					};
-				}
-
 				const sender = event.getSender?.();
-				const reactionEventId = event.getId?.();
 
-				if (!sender || !reactionEventId) return;
+				// One vote per user per emoji
+				if (!sender || reaction.users.some(user => user.id === sender))
+					return;
 
-				grouped[emoji].count++;
-				grouped[emoji].users.push({
-					id: sender,
-					reactionEventId: reactionEventId
-				});
+				reaction.users.push({ id: sender, reactionEventId: event.getId() });
+				reaction.count++;
 
-				if (this.me(sender)) {
-					grouped[emoji].myReaction = reactionEventId;
-				}
-			} catch (e) {}
+				if (this.me(sender)) reaction.myReaction = event.getId();
+			});
+
+			if (reaction.count) result.push(reaction);
 		});
 
-		const result = Object.values(grouped).sort((a, b) => b.count - a.count);
-		return result;
+		return result.sort((a, b) => b.count - a.count);
 	}
 }
 

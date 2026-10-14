@@ -7,8 +7,6 @@
 				:emoji="reaction.emoji"
 				:count="reaction.count"
 				:is-own-reaction="!!reaction.myReaction"
-				:users="reaction.users"
-				@toggle="toggleReaction(reaction)"
 			/>
 		</div>
 	</div>
@@ -23,34 +21,13 @@ export default {
 		ReactionBubble
 	},
 	props: {
-		event: {
-			type: Object,
-			required: true
-		},
-		chat: {
-			type: Object,
-			required: true
-		},
 		reactions: {
 			type: Array,
 			default: () => []
 		},
-		showAddButton: {
-			type: Boolean,
-			default: false
-		},
 		my: {
 			type: Boolean,
 			default: false
-		}
-	},
-	methods: {
-		toggleReaction(reaction) {
-			if (reaction.myReaction) {
-				this.$emit("remove-reaction", reaction.myReaction);
-			} else {
-				this.$emit("add-reaction", reaction.emoji);
-			}
 		}
 	}
 };

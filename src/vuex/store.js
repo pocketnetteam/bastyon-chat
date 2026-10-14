@@ -78,6 +78,7 @@ var store = new Vuex.Store({
 		isCallsActive: null,
 		readreciepts: {},
 		ChatStatuses: {},
+		reactionsVersion: 0,
 		share: null,
 		//share : {url : 'https://yandex.ru/'} //null
 	},
@@ -99,6 +100,9 @@ var store = new Vuex.Store({
 		},
 	},
 	mutations: {
+		REACTIONS_UPDATED(state) {
+			state.reactionsVersion++;
+		},
 		SET_CHAT_STATUSES(state, payload) {
 			state.ChatStatuses = {
 				...state.ChatStatuses,
@@ -852,6 +856,9 @@ var store = new Vuex.Store({
 						return false;
 					}
 					if (e.event.type === "m.room.redaction") {
+						return false;
+					}
+					if (e.event.type === "m.reaction") {
 						return false;
 					}
 					if (e.event.type === "m.room.callsEnabled") {

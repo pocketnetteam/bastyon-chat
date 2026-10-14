@@ -445,7 +445,8 @@ export default {
 		},
 
 		reactions: function () {
-			// Dependency on reactionUpdateTrigger to force re-computation
+			// Recompute when any reaction is added or redacted
+			this.$store.state.reactionsVersion;
 			this.reactionUpdateTrigger;
 
 			if (!this.origin || this.preview || this.fromreference) {
@@ -480,37 +481,7 @@ export default {
 		}
 	},
 
-	mounted() {
-		if (this.origin) {
-			console.log(
-				"Adding listener to origin:",
-				this.origin.getId ? this.origin.getId() : "no-id"
-			);
-			this.origin.on("Event.relations", this.onEventRelationsChange);
-			// Also listen for local re-dating or property changes
-			this.origin.on("MatrixEvent.relations", this.onEventRelationsChange);
-		}
-	},
-
-	beforeDestroy() {
-		if (this.origin) {
-			this.origin.removeListener(
-				"Event.relations",
-				this.onEventRelationsChange
-			);
-			this.origin.removeListener(
-				"MatrixEvent.relations",
-				this.onEventRelationsChange
-			);
-		}
-	},
-
 	methods: {
-		onEventRelationsChange(e) {
-			console.log("Event.relations triggered!", e);
-			this.reactionUpdateTrigger++;
-		},
-
 		gotoreference: function () {
 			var id = this.reference.getId();
 

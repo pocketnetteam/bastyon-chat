@@ -311,18 +311,13 @@
 			</div>
 		</div>
 
-		<!--<ReactionDisplay
+		<ReactionDisplay
 			v-if="!preview && !fromreference"
 			class="messageReactions"
 			:class="{ my: my }"
-			:event="origin"
-			:chat="chat"
 			:reactions="reactions"
-			:show-add-button="false"
 			:my="my"
-			@add-reaction="handleAddReaction"
-			@remove-reaction="handleRemoveReaction"
-		/>-->
+		/>
 	</div>
 </template>
 
